@@ -25,7 +25,7 @@ interface GameState {
   mode: GameMode;
   levelIndex: number;
   selectedCell: { row: number; col: number } | null;
-  lastMatches: { deity: DeityId; count: number }[];
+  lastMatches: { deity: DeityId; count: number; combo: number }[];
   firstMatchMade: boolean;
   maxGemTypes: number;
 }
@@ -136,7 +136,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const japasByDeity = { ...get().japasByDeity };
     const gameMode = get().mode;
     const japaStore = useJapaStore.getState();
-    const lastMatches: { deity: DeityId; count: number }[] = [];
+    const lastMatches: { deity: DeityId; count: number; combo: number }[] = [];
 
     while (true) {
       const matches = findMatches(board);
@@ -154,9 +154,9 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
         if (shouldCountJapa) {
           japasThisLevel += count;
           japasByDeity[deity] = (japasByDeity[deity] ?? 0) + count;
-          lastMatches.push({ deity, count: 1 });
           japaStore.addJapa(deity, count);
         }
+        lastMatches.push({ deity, count: 1, combo: comboLevel });
       }
 
       totalScore += calculateScore(matches, comboLevel);

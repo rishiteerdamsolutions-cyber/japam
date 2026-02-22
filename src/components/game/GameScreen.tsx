@@ -33,11 +33,16 @@ export function GameScreen({ mode, levelIndex, onBack }: GameScreenProps) {
     }
     const newMatches = lastMatches.slice(prevLengthRef.current);
     prevLengthRef.current = lastMatches.length;
-    for (let i = 0; i < newMatches.length; i++) {
-      const { deity } = newMatches[i]!;
-      setTimeout(() => playMantra(deity), i * 120);
+
+    const toPlay = mode === 'general'
+      ? newMatches.filter(m => m.combo === 1)
+      : newMatches;
+
+    for (let i = 0; i < toPlay.length; i++) {
+      const { deity } = toPlay[i]!;
+      setTimeout(() => playMantra(deity), i * 200);
     }
-  }, [lastMatches, playMantra]);
+  }, [lastMatches, playMantra, mode]);
 
   const handleNext = () => {
     initGame(mode as 'general', Math.min(levelIndex + 1, 49));

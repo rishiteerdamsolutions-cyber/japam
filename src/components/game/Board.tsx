@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import { Gem } from './Gem';
 import { useGameStore } from '../../store/gameStore';
 import { primeAudio } from '../../hooks/useSound';
@@ -11,17 +11,26 @@ export function Board() {
   const status = useGameStore(s => s.status);
   const mode = useGameStore(s => s.mode);
   const firstMatchMade = useGameStore(s => s.firstMatchMade);
+  const matchHighlightPositions = useGameStore(s => s.matchHighlightPositions);
+  const isAnimatingMatch = matchHighlightPositions != null;
+  const matchSet = useMemo(
+    () =>
+      matchHighlightPositions
+        ? new Set(matchHighlightPositions.map((p) => `${p.row},${p.col}`))
+        : new Set<string>(),
+    [matchHighlightPositions]
+  );
   const dragStartRef = useRef<{ row: number; col: number } | null>(null);
   const handlePointerDown = useCallback((e: React.PointerEvent, row: number, col: number) => {
-    if (status !== 'playing') return;
+    if (status !== 'playing' || isAnimatingMatch) return;
     primeAudio();
     dragStartRef.current = { row, col };
     (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
-  }, [status]);
+  }, [status, isAnimatingMatch]);
 
   const handlePointerMove = useCallback((e: React.PointerEvent) => {
     const start = dragStartRef.current;
-    if (!start || status !== 'playing') return;
+    if (!start || status !== 'playing' || isAnimatingMatch) return;
     if (e.pointerType === 'mouse' && e.buttons !== 1) return;
     const el = document.elementFromPoint(e.clientX, e.clientY);
     const key = el?.closest('[data-cell]')?.getAttribute('data-cell');
@@ -34,12 +43,12 @@ export function Board() {
         dragStartRef.current = null;
       }
     }
-  }, [status, swap]);
+  }, [status, swap, isAnimatingMatch]);
 
   const handlePointerUp = useCallback((e: React.PointerEvent) => {
     const start = dragStartRef.current;
     dragStartRef.current = null;
-    if (!start || status !== 'playing') return;
+    if (!start || status !== 'playing' || isAnimatingMatch) return;
     const el = document.elementFromPoint(e.clientX, e.clientY);
     const key = el?.closest('[data-cell]')?.getAttribute('data-cell');
     if (key) {
@@ -50,12 +59,12 @@ export function Board() {
         swap(r, c, start.row, start.col);
       }
     }
-  }, [status, swap]);
+  }, [status, swap, isAnimatingMatch]);
 
   const handleClick = useCallback((row: number, col: number) => {
-    if (status !== 'playing') return;
+    if (status !== 'playing' || isAnimatingMatch) return;
     selectCell(row, col);
-  }, [status, selectCell]);
+  }, [status, selectCell, isAnimatingMatch]);
 
   if (!board.length) return null;
 
@@ -82,7 +91,7 @@ export function Board() {
             <div
               key={`${r}-${c}`}
               data-cell={`${r},${c}`}
-              className="cursor-grab active:cursor-grabbing touch-none"
+              className={`touch-none ${isAnimatingMatch ? 'pointer-events-none' : 'cursor-grab active:cursor-grabbing'}`}
               onPointerDown={(e) => handlePointerDown(e, r, c)}
               onPointerMove={handlePointerMove}
               onPointerUp={handlePointerUp}
@@ -95,6 +104,7 @@ export function Board() {
                 col={c}
                 selected={selectedCell?.row === r && selectedCell?.col === c}
                 sparkle={showSparkle && cell === mode}
+                matched={matchSet.has(`${r},${c}`)}
                 onClick={() => handleClick(r, c)}
               />
             </div>

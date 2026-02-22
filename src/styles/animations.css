@@ -19,6 +19,10 @@
   animation: match-pop 0.3s ease-out forwards;
 }
 
+.gem-match-highlight {
+  filter: brightness(1.15) drop-shadow(0 0 8px currentColor);
+}
+
 .gem-fall {
   animation: gem-fall 0.25s ease-out;
 }

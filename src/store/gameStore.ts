@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Board } from '../engine/types';
+import type { Board, Match, Position } from '../engine/types';
 import type { DeityId } from '../data/deities';
 import type { GameMode } from '../types';
 import { createBoard, swapGems, removeMatches, fillGaps } from '../engine/board';
@@ -30,6 +30,9 @@ interface GameState {
   matchGeneration: number;
   firstMatchMade: boolean;
   maxGemTypes: number;
+  matchHighlightPositions: Position[] | null;
+  pendingMatchBatch: Match[] | null;
+  matchAnimationTimeoutId: ReturnType<typeof setTimeout> | null;
 }
 
 const getLevel = (index: number) => LEVELS[index] ?? LEVELS[0];
@@ -38,7 +41,9 @@ interface GameActions {
   initGame: (mode: GameMode, levelIndex?: number) => void;
   selectCell: (row: number, col: number) => void;
   swap: (toRow: number, toCol: number, fromRow?: number, fromCol?: number) => boolean;
-  processMatches: () => void;
+  processMatches: (accumulated?: { deity: DeityId; count: number; combo: number }[]) => void;
+  commitMatch: (accumulated: { deity: DeityId; count: number; combo: number }[]) => void;
+  finalizeMatchChain: (accumulated: { deity: DeityId; count: number; combo: number }[]) => void;
   reset: () => void;
 }
 
@@ -62,9 +67,14 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   matchGeneration: 0,
   firstMatchMade: false,
   maxGemTypes: 8,
+  matchHighlightPositions: null,
+  pendingMatchBatch: null,
+  matchAnimationTimeoutId: null,
 
   initGame: (mode, levelIndex = 0) => {
     stopAllMantras();
+    const { matchAnimationTimeoutId } = get();
+    if (matchAnimationTimeoutId != null) clearTimeout(matchAnimationTimeoutId);
     const level = getLevel(levelIndex);
     const maxGemTypes = level.maxGemTypes ?? 8;
     const deityMode = mode !== 'general' ? (mode as DeityId) : undefined;
@@ -87,7 +97,10 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       lastSwappedTypes: null,
       matchGeneration: 0,
       firstMatchMade: false,
-      maxGemTypes
+      maxGemTypes,
+      matchHighlightPositions: null,
+      pendingMatchBatch: null,
+      matchAnimationTimeoutId: null
     });
   },
 
@@ -133,67 +146,99 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       lastSwappedTypes: gemA && gemB ? [gemA, gemB] : null
     });
 
-    get().processMatches();
+    get().processMatches([]);
     return true;
   },
 
-  processMatches: () => {
-    let board = get().board;
-    let comboLevel = 0;
-    let totalScore = get().score;
-    let japasThisLevel = get().japasThisLevel;
-    const japasByDeity = { ...get().japasByDeity };
+  processMatches: (accumulated = []) => {
+    const { matchAnimationTimeoutId } = get();
+    if (matchAnimationTimeoutId != null) return;
+    const board = get().board;
+    const matches = findMatches(board);
+    if (matches.length === 0) {
+      get().finalizeMatchChain(accumulated);
+      return;
+    }
+    const comboLevel = accumulated.length === 0 ? 1 : Math.max(...accumulated.map(m => m.combo)) + 1;
+    const positions = getAllMatchPositions(matches);
+    const deityMatches = new Map<DeityId, number>();
+    for (const m of matches) {
+      deityMatches.set(m.deity, (deityMatches.get(m.deity) ?? 0) + 1);
+    }
+    const batchEntries: { deity: DeityId; count: number; combo: number }[] = [];
+    for (const [deity] of deityMatches) {
+      batchEntries.push({ deity, count: 1, combo: comboLevel });
+    }
+    const nextAccumulated = [...accumulated, ...batchEntries];
+    set({
+      matchHighlightPositions: positions,
+      pendingMatchBatch: matches
+    });
+    const id = setTimeout(() => get().commitMatch(nextAccumulated), 300);
+    set({ matchAnimationTimeoutId: id });
+  },
+
+  commitMatch: (accumulated) => {
+    const { pendingMatchBatch, matchAnimationTimeoutId } = get();
+    if (matchAnimationTimeoutId != null) {
+      clearTimeout(matchAnimationTimeoutId);
+      set({ matchAnimationTimeoutId: null });
+    }
+    if (!pendingMatchBatch || pendingMatchBatch.length === 0) {
+      set({ matchHighlightPositions: null, pendingMatchBatch: null });
+      get().processMatches(accumulated);
+      return;
+    }
     const gameMode = get().mode;
     const japaStore = useJapaStore.getState();
-    const lastMatches: { deity: DeityId; count: number; combo: number }[] = [];
-
-    while (true) {
-      const matches = findMatches(board);
-      if (matches.length === 0) break;
-
-      comboLevel++;
-      const positions = getAllMatchPositions(matches);
-      const deityMatches = new Map<DeityId, number>();
-      for (const m of matches) {
-        deityMatches.set(m.deity, (deityMatches.get(m.deity) ?? 0) + 1);
-      }
-
-      for (const [deity, count] of deityMatches) {
-        const shouldCountJapa = gameMode === 'general' || gameMode === deity;
-        if (shouldCountJapa) {
-          japasThisLevel += count;
-          japasByDeity[deity] = (japasByDeity[deity] ?? 0) + count;
-          japaStore.addJapa(deity, count);
-        }
-        lastMatches.push({ deity, count: 1, combo: comboLevel });
-      }
-
-      totalScore += calculateScore(matches, comboLevel);
-      board = removeMatches(board, positions);
-      const { board: afterGravity } = applyGravity(board);
-      const deityMode = get().mode !== 'general' ? (get().mode as DeityId) : undefined;
-      const { board: filled } = fillGaps(afterGravity, get().maxGemTypes, deityMode);
-      board = filled;
-
-      set({
-        board,
-        score: totalScore,
-        japasThisLevel,
-        japasByDeity,
-        lastMatches: [...lastMatches],
-        firstMatchMade: true
-      });
+    const japasByDeity = { ...get().japasByDeity };
+    let board = get().board;
+    const comboLevel = accumulated[accumulated.length - 1]?.combo ?? 1;
+    const deityMatches = new Map<DeityId, number>();
+    for (const m of pendingMatchBatch) {
+      deityMatches.set(m.deity, (deityMatches.get(m.deity) ?? 0) + 1);
     }
+    for (const [deity, count] of deityMatches) {
+      const shouldCountJapa = gameMode === 'general' || gameMode === deity;
+      if (shouldCountJapa) {
+        japasByDeity[deity] = (japasByDeity[deity] ?? 0) + count;
+        japaStore.addJapa(deity, count);
+      }
+    }
+    const totalScore = get().score + calculateScore(pendingMatchBatch, comboLevel);
+    const japasThisLevel = get().japasThisLevel + Array.from(deityMatches.entries()).reduce(
+      (a, [deity, count]) => a + (gameMode === 'general' || gameMode === deity ? count : 0),
+      0
+    );
+    const positions = getAllMatchPositions(pendingMatchBatch);
+    board = removeMatches(board, positions);
+    const { board: afterGravity } = applyGravity(board);
+    const deityMode = get().mode !== 'general' ? (get().mode as DeityId) : undefined;
+    const { board: filled } = fillGaps(afterGravity, get().maxGemTypes, deityMode);
+    set({
+      board: filled,
+      score: totalScore,
+      japasThisLevel,
+      japasByDeity,
+      firstMatchMade: true,
+      matchHighlightPositions: null,
+      pendingMatchBatch: null
+    });
+    get().processMatches(accumulated);
+  },
 
+  finalizeMatchChain: (accumulated) => {
     const level = getLevel(get().levelIndex);
     const deityTarget = get().mode !== 'general' ? (get().mode as DeityId) : undefined;
-    const japasNeeded = deityTarget ? (japasByDeity[deityTarget] ?? 0) : japasThisLevel;
+    const japasByDeity = get().japasByDeity;
+    const japasNeeded = deityTarget ? (japasByDeity[deityTarget] ?? 0) : get().japasThisLevel;
     const japaTarget = level.japaTarget;
     const moves = get().moves;
 
     let status: GameStatus = 'playing';
     if (japasNeeded >= japaTarget) {
       status = 'won';
+      const totalScore = get().score;
       const stars = getStars(japasNeeded, japaTarget, moves);
       const mode = get().mode;
       useProgressStore.getState().saveLevel(mode, level.id, {
@@ -207,9 +252,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       status = 'lost';
     }
 
-    let finalBoard = board;
-    if (status === 'playing' && !hasValidMoves(board)) {
-      const level = getLevel(get().levelIndex);
+    let finalBoard = get().board;
+    if (status === 'playing' && !hasValidMoves(finalBoard)) {
       const maxGemTypes = get().maxGemTypes;
       const deityMode = get().mode !== 'general' ? (get().mode as DeityId) : undefined;
       finalBoard = createBoard(level.rows, level.cols, maxGemTypes, deityMode);
@@ -222,7 +266,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       board: finalBoard,
       comboLevel: 0,
       status,
-      matchGeneration: lastMatches.length > 0 ? get().matchGeneration + 1 : get().matchGeneration
+      lastMatches: accumulated,
+      matchGeneration: accumulated.length > 0 ? get().matchGeneration + 1 : get().matchGeneration
     });
   },
 

@@ -5,6 +5,7 @@ import { GameOverlay } from './GameOverlay';
 import { useGameStore } from '../../store/gameStore';
 import { useSound, stopAllMantras } from '../../hooks/useSound';
 import { useSettingsStore } from '../../store/settingsStore';
+import type { DeityId } from '../../data/deities';
 
 interface GameScreenProps {
   mode: 'general' | string;

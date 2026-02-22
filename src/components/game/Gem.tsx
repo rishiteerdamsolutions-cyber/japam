@@ -8,10 +8,11 @@ interface GemProps {
   col: number;
   selected: boolean;
   sparkle?: boolean;
+  matched?: boolean;
   onClick: () => void;
 }
 
-export const Gem = memo(function Gem({ deity, selected, onClick, sparkle }: GemProps) {
+export const Gem = memo(function Gem({ deity, selected, onClick, sparkle, matched }: GemProps) {
   const d = getDeity(deity);
   return (
     <button
@@ -23,10 +24,17 @@ export const Gem = memo(function Gem({ deity, selected, onClick, sparkle }: GemP
         shadow-inner transition-transform duration-150 touch-none
         ${selected ? 'ring-2 ring-white ring-offset-1 scale-105' : 'active:scale-95'}
         ${sparkle ? 'animate-sparkle' : ''}
+        ${matched ? 'gem-match gem-match-highlight pointer-events-none' : ''}
       `}
       style={{
         backgroundColor: d.color,
-        boxShadow: selected ? `0 0 12px ${d.color}` : sparkle ? `0 0 16px ${d.color}, inset 0 0 8px rgba(255,255,255,0.4)` : `inset 0 2px 4px rgba(0,0,0,0.2)`
+        boxShadow: matched
+          ? `0 0 16px ${d.color}, 0 0 24px rgba(255,255,255,0.8), inset 0 0 8px rgba(255,255,255,0.5)`
+          : selected
+            ? `0 0 12px ${d.color}`
+            : sparkle
+              ? `0 0 16px ${d.color}, inset 0 0 8px rgba(255,255,255,0.4)`
+              : `inset 0 2px 4px rgba(0,0,0,0.2)`
       }}
     >
       <img

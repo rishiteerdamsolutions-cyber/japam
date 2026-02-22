@@ -120,11 +120,11 @@ export function primeAudio() {
 
 let bgMusicAudio: HTMLAudioElement | null = null;
 
-function startBgMusic() {
+function startBgMusic(volume: number) {
   if (bgMusicAudio) return;
   bgMusicAudio = new Audio('/sounds/background.mp3');
   bgMusicAudio.loop = true;
-  bgMusicAudio.volume = 0.25;
+  bgMusicAudio.volume = volume;
   bgMusicAudio.play().catch(() => {});
 }
 
@@ -135,7 +135,7 @@ function stopBgMusic() {
   }
 }
 
-export function useSound(bgMusicEnabled: boolean) {
+export function useSound(bgMusicEnabled: boolean, bgMusicVolume = 0.25) {
   const bgStarted = useRef(false);
 
   useEffect(() => {
@@ -145,14 +145,20 @@ export function useSound(bgMusicEnabled: boolean) {
       return;
     }
     if (!bgStarted.current) {
-      startBgMusic();
+      startBgMusic(bgMusicVolume);
       bgStarted.current = true;
     }
     return () => {
       stopBgMusic();
       bgStarted.current = false;
     };
-  }, [bgMusicEnabled]);
+  }, [bgMusicEnabled, bgMusicVolume]);
+
+  useEffect(() => {
+    if (bgMusicAudio) {
+      bgMusicAudio.volume = bgMusicVolume;
+    }
+  }, [bgMusicVolume]);
 
   useEffect(() => {
     preloadMantras();

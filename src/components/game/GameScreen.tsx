@@ -20,7 +20,8 @@ export function GameScreen({ mode, levelIndex, onBack }: GameScreenProps) {
   const currentLevelIndex = useGameStore(s => s.levelIndex);
   const prevLengthRef = useRef(0);
   const bgMusicEnabled = useSettingsStore(s => s.backgroundMusicEnabled);
-  const { playMantra } = useSound(bgMusicEnabled);
+  const bgMusicVolume = useSettingsStore(s => s.backgroundMusicVolume);
+  const { playMantra } = useSound(bgMusicEnabled, bgMusicVolume);
 
   useEffect(() => {
     initGame(mode as 'general', levelIndex);

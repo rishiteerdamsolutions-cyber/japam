@@ -7,7 +7,7 @@ interface SettingsProps {
 }
 
 export function Settings({ onBack }: SettingsProps) {
-  const { backgroundMusicEnabled, load, setBackgroundMusic } = useSettingsStore();
+  const { backgroundMusicEnabled, backgroundMusicVolume, load, setBackgroundMusic, setBackgroundMusicVolume } = useSettingsStore();
 
   useEffect(() => {
     load();
@@ -26,14 +26,33 @@ export function Settings({ onBack }: SettingsProps) {
       </div>
 
       <div className="space-y-4 text-amber-200">
-        <div className="flex items-center justify-between bg-black/20 rounded-xl p-4">
-          <span className="text-sm">Background Music</span>
-          <button
-            onClick={() => setBackgroundMusic(!backgroundMusicEnabled)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium ${backgroundMusicEnabled ? 'bg-amber-500 text-white' : 'bg-black/40 text-amber-300'}`}
-          >
-            {backgroundMusicEnabled ? 'ON' : 'OFF'}
-          </button>
+        <div className="bg-black/20 rounded-xl p-4 space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-sm">Background Music</span>
+            <button
+              onClick={() => setBackgroundMusic(!backgroundMusicEnabled)}
+              className={`px-4 py-2 rounded-lg text-sm font-medium ${backgroundMusicEnabled ? 'bg-amber-500 text-white' : 'bg-black/40 text-amber-300'}`}
+            >
+              {backgroundMusicEnabled ? 'ON' : 'OFF'}
+            </button>
+          </div>
+
+          <div className={`flex items-center gap-3 ${backgroundMusicEnabled ? '' : 'opacity-50'}`}>
+            <span className="text-xs text-amber-200/80 w-10">Vol</span>
+            <input
+              type="range"
+              min={0}
+              max={100}
+              step={1}
+              value={Math.round((backgroundMusicVolume ?? 0.25) * 100)}
+              disabled={!backgroundMusicEnabled}
+              onChange={(e) => setBackgroundMusicVolume(Number(e.target.value) / 100)}
+              className="w-full accent-amber-500"
+            />
+            <span className="text-xs text-amber-200/80 w-10 text-right">
+              {Math.round((backgroundMusicVolume ?? 0.25) * 100)}%
+            </span>
+          </div>
         </div>
         <p className="text-amber-200/60 text-xs mt-2">
           Mantra audio plays on every match (always on)

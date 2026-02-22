@@ -17,6 +17,7 @@ export function GameScreen({ mode, levelIndex, onBack }: GameScreenProps) {
   const status = useGameStore(s => s.status);
   const reset = useGameStore(s => s.reset);
   const lastMatches = useGameStore(s => s.lastMatches);
+  const currentLevelIndex = useGameStore(s => s.levelIndex);
   const prevLengthRef = useRef(0);
   const bgMusicEnabled = useSettingsStore(s => s.backgroundMusicEnabled);
   const { playMantra } = useSound(bgMusicEnabled);
@@ -58,7 +59,7 @@ export function GameScreen({ mode, levelIndex, onBack }: GameScreenProps) {
   }, [lastMatches, playMantra, mode]);
 
   const handleNext = () => {
-    initGame(mode as 'general', Math.min(levelIndex + 1, 49));
+    initGame(mode as 'general', Math.min(currentLevelIndex + 1, 49));
   };
 
   return (

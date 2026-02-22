@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useJapaStore } from '../../store/japaStore';
 import { DEITIES } from '../../data/deities';
 import { DAILY_GOAL_JAPAS } from '../../data/levels';
@@ -9,11 +8,7 @@ interface JapaDashboardProps {
 }
 
 export function JapaDashboard({ onBack }: JapaDashboardProps) {
-  const { counts, load, loaded } = useJapaStore();
-
-  useEffect(() => {
-    load();
-  }, [load]);
+  const { counts, loaded } = useJapaStore();
 
   const total = counts.total;
   const maxDeity = Math.max(...DEITIES.map(d => counts[d.id]), 1);

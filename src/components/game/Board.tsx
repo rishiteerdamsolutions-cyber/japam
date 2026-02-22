@@ -1,6 +1,7 @@
 import { useCallback, useRef } from 'react';
 import { Gem } from './Gem';
 import { useGameStore } from '../../store/gameStore';
+import { primeAudio } from '../../hooks/useSound';
 
 export function Board() {
   const board = useGameStore(s => s.board);
@@ -13,6 +14,8 @@ export function Board() {
   const dragStartRef = useRef<{ row: number; col: number } | null>(null);
   const handlePointerDown = useCallback((e: React.PointerEvent, row: number, col: number) => {
     if (status !== 'playing') return;
+    // Unlock audio on mobile browsers (iOS/Safari) on first user gesture
+    primeAudio();
     dragStartRef.current = { row, col };
     (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
   }, [status]);

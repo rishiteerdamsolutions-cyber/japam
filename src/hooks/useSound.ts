@@ -50,6 +50,10 @@ async function preloadMantras() {
   if (mantraLoadAttempted) return;
   mantraLoadAttempted = true;
   const ctx = getAudioContext();
+  if (ctx.state === 'suspended') {
+    // decodeAudioData + playback are more reliable after resume
+    await ctx.resume().catch(() => {});
+  }
   const deities: DeityId[] = ['rama', 'shiva', 'ganesh', 'surya', 'shakthi', 'krishna', 'shanmukha', 'venkateswara'];
   for (const id of deities) {
     try {
@@ -99,6 +103,19 @@ export function stopAllMantras() {
     try { s.stop(); } catch {}
   }
   activeSources.length = 0;
+}
+
+/**
+ * Call this from a direct user gesture (pointer down / click) to unlock audio on iOS/Safari.
+ * After priming, matches can reliably play mantras even if triggered from effects/timers.
+ */
+export function primeAudio() {
+  const ctx = getAudioContext();
+  if (ctx.state === 'suspended') {
+    ctx.resume().catch(() => {});
+  }
+  // Kick off preload in background (non-blocking)
+  preloadMantras().catch(() => {});
 }
 
 let bgMusicAudio: HTMLAudioElement | null = null;

@@ -17,6 +17,7 @@ export function GameScreen({ mode, levelIndex, onBack }: GameScreenProps) {
   const status = useGameStore(s => s.status);
   const reset = useGameStore(s => s.reset);
   const lastMatches = useGameStore(s => s.lastMatches);
+  const lastSwappedTypes = useGameStore(s => s.lastSwappedTypes);
   const matchGeneration = useGameStore(s => s.matchGeneration);
   const currentLevelIndex = useGameStore(s => s.levelIndex);
   const prevGenerationRef = useRef(0);
@@ -41,11 +42,17 @@ export function GameScreen({ mode, levelIndex, onBack }: GameScreenProps) {
     if (lastMatches.length === 0 || matchGeneration === prevGenerationRef.current) return;
     prevGenerationRef.current = matchGeneration;
 
+    const swapped = lastSwappedTypes;
     let filtered: typeof lastMatches;
     if (mode === 'general') {
-      filtered = lastMatches.filter(m => m.combo === 1);
+      filtered = lastMatches.filter(m =>
+        m.combo === 1 && (!swapped || swapped.includes(m.deity))
+      );
     } else {
-      filtered = lastMatches.filter(m => m.deity === mode);
+      const userSwappedTarget = swapped ? swapped.includes(mode as DeityId) : false;
+      filtered = userSwappedTarget
+        ? lastMatches.filter(m => m.deity === mode && m.combo === 1)
+        : [];
     }
 
     const deduped: typeof filtered = [];
@@ -68,7 +75,7 @@ export function GameScreen({ mode, levelIndex, onBack }: GameScreenProps) {
     return () => {
       clearPendingAudio();
     };
-  }, [lastMatches, matchGeneration, playMantra, mode]);
+  }, [lastMatches, matchGeneration, lastSwappedTypes, playMantra, mode]);
 
   const handleNext = () => {
     initGame(mode as 'general', Math.min(currentLevelIndex + 1, 49));

@@ -26,6 +26,7 @@ interface GameState {
   levelIndex: number;
   selectedCell: { row: number; col: number } | null;
   lastMatches: { deity: DeityId; count: number; combo: number }[];
+  lastSwappedTypes: [DeityId, DeityId] | null;
   matchGeneration: number;
   firstMatchMade: boolean;
   maxGemTypes: number;
@@ -57,6 +58,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   levelIndex: 0,
   selectedCell: null,
   lastMatches: [],
+  lastSwappedTypes: null,
   matchGeneration: 0,
   firstMatchMade: false,
   maxGemTypes: 8,
@@ -82,6 +84,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       levelIndex,
       selectedCell: null,
       lastMatches: [],
+      lastSwappedTypes: null,
       matchGeneration: 0,
       firstMatchMade: false,
       maxGemTypes
@@ -113,6 +116,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       ? { row: fromRow, col: fromCol }
       : selectedCell;
     if (!from || status !== 'playing' || moves <= 0) return false;
+    const gemA = board[from.row]?.[from.col];
+    const gemB = board[toRow]?.[toCol];
     const nextBoard = swapGems(board, from, { row: toRow, col: toCol });
     const matches = findMatches(nextBoard);
 
@@ -124,7 +129,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     set({
       board: nextBoard,
       moves: moves - 1,
-      selectedCell: null
+      selectedCell: null,
+      lastSwappedTypes: gemA && gemB ? [gemA, gemB] : null
     });
 
     get().processMatches();

@@ -3,7 +3,7 @@ import { Board } from './Board';
 import { HUD } from './HUD';
 import { GameOverlay } from './GameOverlay';
 import { useGameStore } from '../../store/gameStore';
-import { useSound } from '../../hooks/useSound';
+import { useSound, stopAllMantras } from '../../hooks/useSound';
 import { useSettingsStore } from '../../store/settingsStore';
 
 interface GameScreenProps {
@@ -17,30 +17,35 @@ export function GameScreen({ mode, levelIndex, onBack }: GameScreenProps) {
   const status = useGameStore(s => s.status);
   const reset = useGameStore(s => s.reset);
   const lastMatches = useGameStore(s => s.lastMatches);
+  const matchGeneration = useGameStore(s => s.matchGeneration);
   const currentLevelIndex = useGameStore(s => s.levelIndex);
-  const prevLengthRef = useRef(0);
+  const prevGenerationRef = useRef(0);
+  const pendingTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const bgMusicEnabled = useSettingsStore(s => s.backgroundMusicEnabled);
   const bgMusicVolume = useSettingsStore(s => s.backgroundMusicVolume);
   const { playMantra } = useSound(bgMusicEnabled, bgMusicVolume);
 
+  const clearPendingAudio = () => {
+    for (const id of pendingTimersRef.current) clearTimeout(id);
+    pendingTimersRef.current = [];
+    stopAllMantras();
+  };
+
   useEffect(() => {
+    clearPendingAudio();
     initGame(mode as 'general', levelIndex);
-    prevLengthRef.current = 0;
+    prevGenerationRef.current = 0;
   }, [mode, levelIndex, initGame]);
 
   useEffect(() => {
-    if (lastMatches.length === 0) return;
-    if (lastMatches.length < prevLengthRef.current) {
-      prevLengthRef.current = 0;
-    }
-    const newMatches = lastMatches.slice(prevLengthRef.current);
-    prevLengthRef.current = lastMatches.length;
+    if (lastMatches.length === 0 || matchGeneration === prevGenerationRef.current) return;
+    prevGenerationRef.current = matchGeneration;
 
-    let filtered: typeof newMatches;
+    let filtered: typeof lastMatches;
     if (mode === 'general') {
-      filtered = newMatches.filter(m => m.combo === 1);
+      filtered = lastMatches.filter(m => m.combo === 1);
     } else {
-      filtered = newMatches.filter(m => m.deity === mode);
+      filtered = lastMatches.filter(m => m.deity === mode);
     }
 
     const deduped: typeof filtered = [];
@@ -53,27 +58,47 @@ export function GameScreen({ mode, levelIndex, onBack }: GameScreenProps) {
       }
     }
 
+    pendingTimersRef.current = [];
     for (let i = 0; i < deduped.length; i++) {
       const { deity } = deduped[i]!;
-      setTimeout(() => playMantra(deity), i * 200);
+      const id = setTimeout(() => playMantra(deity), i * 200);
+      pendingTimersRef.current.push(id);
     }
-  }, [lastMatches, playMantra, mode]);
+
+    return () => {
+      clearPendingAudio();
+    };
+  }, [lastMatches, matchGeneration, playMantra, mode]);
 
   const handleNext = () => {
     initGame(mode as 'general', Math.min(currentLevelIndex + 1, 49));
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#1a1a2e] to-[#16213e] flex flex-col items-center justify-center p-4 pb-[env(safe-area-inset-bottom)] relative">
-      <button
-        onClick={onBack}
-        className="absolute top-4 left-4 text-amber-400 text-sm"
-      >
-        ← Back
-      </button>
+    <div className="fixed inset-0 bg-gradient-to-b from-[#1a1a2e] to-[#16213e] flex flex-col items-center overflow-hidden"
+      style={{
+        paddingTop: 'calc(1rem + env(safe-area-inset-top, 0px))',
+        paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom, 0px))',
+        paddingLeft: 'calc(1rem + env(safe-area-inset-left, 0px))',
+        paddingRight: 'calc(1rem + env(safe-area-inset-right, 0px))',
+      }}
+    >
+      <div className="w-full max-w-md flex items-center justify-between shrink-0 mb-1">
+        <button
+          onClick={onBack}
+          className="text-amber-400 text-sm py-1 px-2"
+        >
+          ← Back
+        </button>
+      </div>
 
-      <HUD />
-      <Board />
+      <div className="shrink-0 w-full max-w-md">
+        <HUD />
+      </div>
+
+      <div className="flex-1 w-full max-w-md min-h-0 flex items-center justify-center">
+        <Board />
+      </div>
 
       {status === 'won' && (
         <GameOverlay

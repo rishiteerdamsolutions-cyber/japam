@@ -21,7 +21,6 @@ export const Gem = memo(function Gem({ deity, selected, onClick, sparkle }: GemP
         w-full aspect-square rounded-lg flex items-center justify-center
         overflow-hidden relative
         shadow-inner transition-transform duration-150 touch-none
-        min-w-[44px] min-h-[44px]
         ${selected ? 'ring-2 ring-white ring-offset-1 scale-105' : 'active:scale-95'}
         ${sparkle ? 'animate-sparkle' : ''}
       `}

@@ -26,6 +26,7 @@ interface GameState {
   levelIndex: number;
   selectedCell: { row: number; col: number } | null;
   lastMatches: { deity: DeityId; count: number; combo: number }[];
+  matchGeneration: number;
   firstMatchMade: boolean;
   maxGemTypes: number;
 }
@@ -56,6 +57,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   levelIndex: 0,
   selectedCell: null,
   lastMatches: [],
+  matchGeneration: 0,
   firstMatchMade: false,
   maxGemTypes: 8,
 
@@ -80,6 +82,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       levelIndex,
       selectedCell: null,
       lastMatches: [],
+      matchGeneration: 0,
       firstMatchMade: false,
       maxGemTypes
     });
@@ -212,7 +215,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     set({
       board: finalBoard,
       comboLevel: 0,
-      status
+      status,
+      matchGeneration: lastMatches.length > 0 ? get().matchGeneration + 1 : get().matchGeneration
     });
   },
 

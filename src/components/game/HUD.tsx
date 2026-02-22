@@ -9,7 +9,7 @@ export function HUD() {
   const japaTarget = level?.japaTarget ?? 15;
 
   return (
-    <div className="flex justify-between items-center w-full max-w-[min(95vw,400px)] px-2 py-2">
+    <div className="flex justify-between items-center w-full px-2 py-1">
       <div className="text-amber-200 text-sm">
         <div>Japas: {japasNeeded} / {japaTarget}</div>
         <div className="text-amber-400/80">Score: {score}</div>

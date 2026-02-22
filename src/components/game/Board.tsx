@@ -14,7 +14,6 @@ export function Board() {
   const dragStartRef = useRef<{ row: number; col: number } | null>(null);
   const handlePointerDown = useCallback((e: React.PointerEvent, row: number, col: number) => {
     if (status !== 'playing') return;
-    // Unlock audio on mobile browsers (iOS/Safari) on first user gesture
     primeAudio();
     dragStartRef.current = { row, col };
     (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
@@ -66,13 +65,12 @@ export function Board() {
 
   return (
     <div
-      className="grid gap-1 p-2 rounded-2xl bg-black/20 select-none touch-none"
+      className="grid gap-[2px] p-1 rounded-2xl bg-black/20 select-none touch-none w-full"
       style={{
         gridTemplateColumns: `repeat(${cols}, 1fr)`,
         gridTemplateRows: `repeat(${rows}, 1fr)`,
         aspectRatio: `${cols} / ${rows}`,
-        maxWidth: 'min(95vw, 400px)',
-        maxHeight: 'min(95vw, 400px)'
+        maxHeight: '100%',
       }}
       onPointerUp={handlePointerUp}
       onPointerLeave={handlePointerUp}

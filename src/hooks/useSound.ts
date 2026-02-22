@@ -43,6 +43,8 @@ function playDeityTone(ctx: AudioContext, deity: DeityId) {
   osc2.stop(now + 0.3);
 }
 
+const playingMantras: HTMLAudioElement[] = [];
+
 function playMantraAudio(deity: DeityId) {
   const ctx = getAudioContext();
   if (ctx.state === 'suspended') {
@@ -52,7 +54,20 @@ function playMantraAudio(deity: DeityId) {
   const src = d.mantraAudio.startsWith('/') ? d.mantraAudio : '/' + d.mantraAudio;
   const audio = new Audio(src);
   audio.volume = 0.8;
+  playingMantras.push(audio);
+  audio.addEventListener('ended', () => {
+    const i = playingMantras.indexOf(audio);
+    if (i >= 0) playingMantras.splice(i, 1);
+  });
   audio.play().catch(() => playDeityTone(ctx, deity));
+}
+
+export function stopAllMantras() {
+  for (const a of playingMantras) {
+    a.pause();
+    a.currentTime = 0;
+  }
+  playingMantras.length = 0;
 }
 
 let bgMusicAudio: HTMLAudioElement | null = null;

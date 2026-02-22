@@ -8,6 +8,7 @@ import { JapaDashboard } from './components/dashboard/JapaDashboard';
 import { Settings } from './components/Settings';
 import { SignInRequired } from './components/auth/SignInRequired';
 import { useProgressStore } from './store/progressStore';
+import { useGameStore } from './store/gameStore';
 import { useSettingsStore } from './store/settingsStore';
 import { useJapaStore } from './store/japaStore';
 import { useAuthStore } from './store/authStore';
@@ -28,6 +29,7 @@ function App() {
   const user = useAuthStore(s => s.user);
   const authLoading = useAuthStore(s => s.loading);
   const getCurrentLevelIndex = useProgressStore(s => s.getCurrentLevelIndex);
+  const initGame = useGameStore(s => s.initGame);
 
   const needsSignIn = isFirebaseConfigured && !user && !authLoading;
 
@@ -62,8 +64,10 @@ function App() {
               setScreen('signin');
               return;
             }
+            const idx = getCurrentLevelIndex(mode);
+            initGame(mode, idx);
             setGameMode(mode);
-            setLevelIndex(getCurrentLevelIndex(mode));
+            setLevelIndex(idx);
             setScreen('game');
           }}
           onOpenMap={() => {
@@ -94,6 +98,7 @@ function App() {
         <WorldMap
           mode={gameMode}
           onSelectLevel={(idx, mode) => {
+            initGame(mode, idx);
             setGameMode(mode);
             setLevelIndex(idx);
             setScreen('game');

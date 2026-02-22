@@ -9,6 +9,7 @@ import { calculateScore, getStars } from '../engine/scorer';
 import { LEVELS } from '../data/levels';
 import { useJapaStore } from './japaStore';
 import { useProgressStore } from './progressStore';
+import { stopAllMantras } from '../hooks/useSound';
 
 export type { GameMode };
 export type GameStatus = 'playing' | 'won' | 'lost';
@@ -59,6 +60,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   maxGemTypes: 8,
 
   initGame: (mode, levelIndex = 0) => {
+    stopAllMantras();
     const level = getLevel(levelIndex);
     const maxGemTypes = level.maxGemTypes ?? 8;
     const deityMode = mode !== 'general' ? (mode as DeityId) : undefined;
@@ -152,7 +154,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
         if (shouldCountJapa) {
           japasThisLevel += count;
           japasByDeity[deity] = (japasByDeity[deity] ?? 0) + count;
-          lastMatches.push({ deity, count });
+          lastMatches.push({ deity, count: 1 });
           japaStore.addJapa(deity, count);
         }
       }

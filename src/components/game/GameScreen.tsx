@@ -33,12 +33,9 @@ export function GameScreen({ mode, levelIndex, onBack }: GameScreenProps) {
     }
     const newMatches = lastMatches.slice(prevLengthRef.current);
     prevLengthRef.current = lastMatches.length;
-    for (const { deity, count } of newMatches) {
-      if (count > 0) {
-        for (let i = 0; i < count; i++) {
-          setTimeout(() => playMantra(deity), i * 180);
-        }
-      }
+    for (let i = 0; i < newMatches.length; i++) {
+      const { deity } = newMatches[i]!;
+      setTimeout(() => playMantra(deity), i * 120);
     }
   }, [lastMatches, playMantra]);
 

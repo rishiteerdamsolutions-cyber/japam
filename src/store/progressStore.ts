@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import { get, set } from 'idb-keyval';
 import type { GameMode } from '../types';
+import { loadUserProgress, saveUserProgress } from '../lib/firestore';
+import { useAuthStore } from './authStore';
 
 const STORAGE_KEY = 'japam-progress';
 
@@ -15,7 +17,7 @@ interface ProgressState {
   levelProgress: Record<string, LevelProgress>;
   currentLevelByMode: Record<string, number>;
   loaded: boolean;
-  load: () => Promise<void>;
+  load: (userId?: string) => Promise<void>;
   saveLevel: (mode: GameMode, levelId: string, progress: LevelProgress) => Promise<void>;
   getCurrentLevelIndex: (mode: GameMode) => number;
   setCurrentLevel: (mode: GameMode, index: number) => void;
@@ -30,9 +32,15 @@ export const useProgressStore = create<ProgressState>((setState, getState) => ({
   currentLevelByMode: {},
   loaded: false,
 
-  load: async () => {
+  load: async (userId?: string) => {
     try {
-      const stored = await get<{ levelProgress: Record<string, LevelProgress>; currentLevelByMode: Record<string, number> }>(STORAGE_KEY);
+      let stored: { levelProgress: Record<string, LevelProgress>; currentLevelByMode: Record<string, number> } | null = null;
+      if (userId) {
+        stored = await loadUserProgress(userId);
+      }
+      if (!stored) {
+        stored = (await get<{ levelProgress: Record<string, LevelProgress>; currentLevelByMode: Record<string, number> }>(STORAGE_KEY)) ?? null;
+      }
       if (stored) {
         setState({
           levelProgress: stored.levelProgress ?? {},
@@ -60,9 +68,14 @@ export const useProgressStore = create<ProgressState>((setState, getState) => ({
         completed: true
       }
     };
+    const nextLevelByMode = { ...state.currentLevelByMode };
     setState({ levelProgress: next });
     try {
-      await set(STORAGE_KEY, { levelProgress: next, currentLevelByMode: state.currentLevelByMode });
+      await set(STORAGE_KEY, { levelProgress: next, currentLevelByMode: nextLevelByMode });
+      const uid = useAuthStore.getState().user?.uid;
+      if (uid) {
+        await saveUserProgress(uid, { levelProgress: next, currentLevelByMode: nextLevelByMode });
+      }
     } catch {}
   },
 
@@ -70,9 +83,16 @@ export const useProgressStore = create<ProgressState>((setState, getState) => ({
     return getState().currentLevelByMode[mode] ?? 0;
   },
 
-  setCurrentLevel: (mode, index) => {
-    const next = { ...getState().currentLevelByMode, [mode]: index };
+  setCurrentLevel: async (mode, index) => {
+    const state = getState();
+    const next = { ...state.currentLevelByMode, [mode]: index };
     setState({ currentLevelByMode: next });
-    set(STORAGE_KEY, { levelProgress: getState().levelProgress, currentLevelByMode: next }).catch(() => {});
+    try {
+      await set(STORAGE_KEY, { levelProgress: state.levelProgress, currentLevelByMode: next });
+      const uid = useAuthStore.getState().user?.uid;
+      if (uid) {
+        await saveUserProgress(uid, { levelProgress: state.levelProgress, currentLevelByMode: next });
+      }
+    } catch {}
   }
 }));

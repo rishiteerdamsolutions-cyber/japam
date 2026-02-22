@@ -15,12 +15,13 @@ export const isFirebaseConfigured = Boolean(
 );
 
 let auth: Auth;
+let app: ReturnType<typeof initializeApp> | null = null;
 if (isFirebaseConfigured) {
-  const app = initializeApp(firebaseConfig);
+  app = initializeApp(firebaseConfig);
   auth = getAuth(app);
 } else {
   auth = null as unknown as Auth;
 }
 
-export { auth };
+export { auth, app };
 export const googleProvider = new GoogleAuthProvider();

@@ -1,8 +1,17 @@
 import type { Board, GemType } from './types';
 import { DEITY_IDS } from '../data/deities';
+import type { DeityId } from '../data/deities';
 
-export function createBoard(rows: number, cols: number, maxGemTypes = 8): Board {
-  const types = DEITY_IDS.slice(0, Math.min(maxGemTypes, DEITY_IDS.length));
+/** When deityMode is set, that deity's gem is always included (required for deity-specific games). */
+export function createBoard(rows: number, cols: number, maxGemTypes = 8, deityMode?: DeityId): Board {
+  let types: GemType[];
+  if (deityMode) {
+    const others = DEITY_IDS.filter(id => id !== deityMode);
+    const pool = [deityMode, ...others.slice(0, Math.min(maxGemTypes - 1, others.length))];
+    types = [...new Set(pool)] as GemType[];
+  } else {
+    types = DEITY_IDS.slice(0, Math.min(maxGemTypes, DEITY_IDS.length));
+  }
   const board: Board = [];
   for (let r = 0; r < rows; r++) {
     const rowData: (GemType | null)[] = [];
@@ -75,8 +84,14 @@ export function removeMatches(board: Board, positions: { row: number; col: numbe
   return next;
 }
 
-export function fillGaps(board: Board, maxGemTypes = 8): { board: Board; newGems: { row: number; col: number; gem: GemType }[] } {
-  const types = DEITY_IDS.slice(0, Math.min(maxGemTypes, DEITY_IDS.length));
+export function fillGaps(board: Board, maxGemTypes = 8, deityMode?: DeityId): { board: Board; newGems: { row: number; col: number; gem: GemType }[] } {
+  let types: GemType[];
+  if (deityMode) {
+    const others = DEITY_IDS.filter(id => id !== deityMode);
+    types = [deityMode, ...others.slice(0, Math.min(maxGemTypes - 1, others.length))] as GemType[];
+  } else {
+    types = DEITY_IDS.slice(0, Math.min(maxGemTypes, DEITY_IDS.length));
+  }
   const rows = board.length;
   const cols = board[0]?.length ?? 0;
   const next = board.map(r => [...r]);

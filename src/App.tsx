@@ -6,13 +6,15 @@ import { GameScreen } from './components/game/GameScreen';
 import { WorldMap } from './components/map/WorldMap';
 import { JapaDashboard } from './components/dashboard/JapaDashboard';
 import { Settings } from './components/Settings';
+import { SignInRequired } from './components/auth/SignInRequired';
 import { useProgressStore } from './store/progressStore';
 import { useSettingsStore } from './store/settingsStore';
 import { useJapaStore } from './store/japaStore';
 import { useAuthStore } from './store/authStore';
+import { isFirebaseConfigured } from './lib/firebase';
 import type { GameMode } from './types';
 
-type Screen = 'splash' | 'menu' | 'game' | 'map' | 'japa' | 'settings';
+type Screen = 'splash' | 'menu' | 'game' | 'map' | 'japa' | 'settings' | 'signin';
 
 function App() {
   const [screen, setScreen] = useState<Screen>('splash');
@@ -23,13 +25,24 @@ function App() {
   const loadJapa = useJapaStore(s => s.load);
   const loadSettings = useSettingsStore(s => s.load);
   const authInit = useAuthStore(s => s.init);
+  const user = useAuthStore(s => s.user);
+  const authLoading = useAuthStore(s => s.loading);
   const getCurrentLevelIndex = useProgressStore(s => s.getCurrentLevelIndex);
+
+  const needsSignIn = isFirebaseConfigured && !user && !authLoading;
 
   useEffect(() => {
     loadProgress();
     loadJapa();
     loadSettings();
   }, [loadProgress, loadJapa, loadSettings]);
+
+  useEffect(() => {
+    if (!authLoading) {
+      loadProgress(user?.uid);
+      loadJapa(user?.uid);
+    }
+  }, [user?.uid, authLoading, loadProgress, loadJapa]);
 
   useEffect(() => {
     const unsubscribe = authInit();
@@ -45,12 +58,28 @@ function App() {
       {screen === 'menu' && (
         <MainMenu
           onSelect={(mode) => {
+            if (needsSignIn) {
+              setScreen('signin');
+              return;
+            }
             setGameMode(mode);
             setLevelIndex(getCurrentLevelIndex(mode));
             setScreen('game');
           }}
-          onOpenMap={() => setScreen('map')}
-          onOpenJapaDashboard={() => setScreen('japa')}
+          onOpenMap={() => {
+            if (needsSignIn) {
+              setScreen('signin');
+              return;
+            }
+            setScreen('map');
+          }}
+          onOpenJapaDashboard={() => {
+            if (needsSignIn) {
+              setScreen('signin');
+              return;
+            }
+            setScreen('japa');
+          }}
           onOpenSettings={() => setScreen('settings')}
         />
       )}
@@ -74,6 +103,12 @@ function App() {
       )}
       {screen === 'japa' && <JapaDashboard onBack={() => setScreen('menu')} />}
       {screen === 'settings' && <Settings onBack={() => setScreen('menu')} />}
+      {screen === 'signin' && (
+        <SignInRequired
+          onBack={() => setScreen('menu')}
+          message="Sign in with Google to play and save your progress"
+        />
+      )}
       <InstallPrompt />
     </>
   );

@@ -46,6 +46,7 @@ Until these files are added, the app uses a placeholder tone. Update `src/data/d
 3. Add your app (Web) and copy the config
 4. Create `.env` from `.env.example` and fill in the Firebase values
 5. Add authorized domains in Firebase Auth: `localhost` (for dev) and your production domain
+6. Enable **Firestore Database** in Firebase Console (Build → Firestore Database → Create database) for saving progress per user
 
 Without Firebase config, the app runs normally but the Google Sign-In button is hidden.
 

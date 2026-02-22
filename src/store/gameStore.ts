@@ -61,9 +61,10 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   initGame: (mode, levelIndex = 0) => {
     const level = getLevel(levelIndex);
     const maxGemTypes = level.maxGemTypes ?? 8;
-    let board = createBoard(level.rows, level.cols, maxGemTypes);
+    const deityMode = mode !== 'general' ? (mode as DeityId) : undefined;
+    let board = createBoard(level.rows, level.cols, maxGemTypes, deityMode);
     while (!hasValidMoves(board)) {
-      board = createBoard(level.rows, level.cols, maxGemTypes);
+      board = createBoard(level.rows, level.cols, maxGemTypes, deityMode);
     }
     set({
       board,
@@ -159,7 +160,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       totalScore += calculateScore(matches, comboLevel);
       board = removeMatches(board, positions);
       const { board: afterGravity } = applyGravity(board);
-      const { board: filled } = fillGaps(afterGravity, get().maxGemTypes);
+      const deityMode = get().mode !== 'general' ? (get().mode as DeityId) : undefined;
+      const { board: filled } = fillGaps(afterGravity, get().maxGemTypes, deityMode);
       board = filled;
 
       set({
@@ -198,9 +200,10 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     if (status === 'playing' && !hasValidMoves(board)) {
       const level = getLevel(get().levelIndex);
       const maxGemTypes = get().maxGemTypes;
-      finalBoard = createBoard(level.rows, level.cols, maxGemTypes);
+      const deityMode = get().mode !== 'general' ? (get().mode as DeityId) : undefined;
+      finalBoard = createBoard(level.rows, level.cols, maxGemTypes, deityMode);
       while (!hasValidMoves(finalBoard)) {
-        finalBoard = createBoard(level.rows, level.cols, maxGemTypes);
+        finalBoard = createBoard(level.rows, level.cols, maxGemTypes, deityMode);
       }
     }
 

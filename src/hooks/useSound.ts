@@ -44,11 +44,15 @@ function playDeityTone(ctx: AudioContext, deity: DeityId) {
 }
 
 function playMantraAudio(deity: DeityId) {
+  const ctx = getAudioContext();
+  if (ctx.state === 'suspended') {
+    ctx.resume().catch(() => {});
+  }
   const d = getDeity(deity);
   const src = d.mantraAudio.startsWith('/') ? d.mantraAudio : '/' + d.mantraAudio;
   const audio = new Audio(src);
   audio.volume = 0.8;
-  audio.play().catch(() => playDeityTone(getAudioContext(), deity));
+  audio.play().catch(() => playDeityTone(ctx, deity));
 }
 
 let bgMusicAudio: HTMLAudioElement | null = null;

@@ -171,7 +171,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
         score: totalScore,
         japasThisLevel,
         japasByDeity,
-        lastMatches,
+        lastMatches: [...lastMatches],
         firstMatchMade: true
       });
     }

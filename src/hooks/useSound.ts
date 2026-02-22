@@ -43,31 +43,62 @@ function playDeityTone(ctx: AudioContext, deity: DeityId) {
   osc2.stop(now + 0.3);
 }
 
-const playingMantras: HTMLAudioElement[] = [];
+const mantraBuffers = new Map<DeityId, AudioBuffer>();
+let mantraLoadAttempted = false;
+
+async function preloadMantras() {
+  if (mantraLoadAttempted) return;
+  mantraLoadAttempted = true;
+  const ctx = getAudioContext();
+  const deities: DeityId[] = ['rama', 'shiva', 'ganesh', 'surya', 'shakthi', 'krishna', 'shanmukha', 'venkateswara'];
+  for (const id of deities) {
+    try {
+      const d = getDeity(id);
+      const src = d.mantraAudio.startsWith('/') ? d.mantraAudio : '/' + d.mantraAudio;
+      const resp = await fetch(src);
+      const buf = await resp.arrayBuffer();
+      const decoded = await ctx.decodeAudioData(buf);
+      mantraBuffers.set(id, decoded);
+    } catch {}
+  }
+}
+
+const activeSources: AudioBufferSourceNode[] = [];
 
 function playMantraAudio(deity: DeityId) {
   const ctx = getAudioContext();
   if (ctx.state === 'suspended') {
     ctx.resume().catch(() => {});
   }
-  const d = getDeity(deity);
-  const src = d.mantraAudio.startsWith('/') ? d.mantraAudio : '/' + d.mantraAudio;
-  const audio = new Audio(src);
-  audio.volume = 0.8;
-  playingMantras.push(audio);
-  audio.addEventListener('ended', () => {
-    const i = playingMantras.indexOf(audio);
-    if (i >= 0) playingMantras.splice(i, 1);
-  });
-  audio.play().catch(() => playDeityTone(ctx, deity));
+
+  const buffer = mantraBuffers.get(deity);
+  if (buffer) {
+    const source = ctx.createBufferSource();
+    const gain = ctx.createGain();
+    source.buffer = buffer;
+    gain.gain.value = 0.8;
+    source.connect(gain);
+    gain.connect(ctx.destination);
+    source.start();
+    activeSources.push(source);
+    source.onended = () => {
+      const i = activeSources.indexOf(source);
+      if (i >= 0) activeSources.splice(i, 1);
+    };
+  } else {
+    const d = getDeity(deity);
+    const src = d.mantraAudio.startsWith('/') ? d.mantraAudio : '/' + d.mantraAudio;
+    const audio = new Audio(src);
+    audio.volume = 0.8;
+    audio.play().catch(() => playDeityTone(ctx, deity));
+  }
 }
 
 export function stopAllMantras() {
-  for (const a of playingMantras) {
-    a.pause();
-    a.currentTime = 0;
+  for (const s of activeSources) {
+    try { s.stop(); } catch {}
   }
-  playingMantras.length = 0;
+  activeSources.length = 0;
 }
 
 let bgMusicAudio: HTMLAudioElement | null = null;
@@ -105,6 +136,10 @@ export function useSound(bgMusicEnabled: boolean) {
       bgStarted.current = false;
     };
   }, [bgMusicEnabled]);
+
+  useEffect(() => {
+    preloadMantras();
+  }, []);
 
   const playMantra = useCallback((deity: DeityId) => {
     try {

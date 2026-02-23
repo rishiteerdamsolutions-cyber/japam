@@ -85,3 +85,48 @@ export function getAllMatchPositions(matches: Match[]): Position[] {
     return { row, col };
   });
 }
+
+/** Whether this batch has overlapping horizontal + vertical matches (L or T shape) for same deity */
+export function hasLOrTShape(matches: Match[]): boolean {
+  const byDeity = new Map<Match['deity'], Match[]>();
+  for (const m of matches) {
+    const arr = byDeity.get(m.deity) ?? [];
+    arr.push(m);
+    byDeity.set(m.deity, arr);
+  }
+  for (const arr of byDeity.values()) {
+    if (arr.length < 2) continue;
+    const posSet = (m: Match) => new Set(m.positions.map(p => `${p.row},${p.col}`));
+    for (let i = 0; i < arr.length; i++) {
+      for (let j = i + 1; j < arr.length; j++) {
+        const a = arr[i]!;
+        const b = arr[j]!;
+        const aHor = a.positions.every(p => p.row === a.positions[0]!.row);
+        const bHor = b.positions.every(p => p.row === b.positions[0]!.row);
+        if (aHor === bHor) continue;
+        const aSet = posSet(a);
+        const bSet = posSet(b);
+        const shared = [...aSet].some(k => bSet.has(k));
+        if (shared) return true;
+      }
+    }
+  }
+  return false;
+}
+
+export type MatchBonusAudio = 'none' | 'bells' | 'conch' | 'conch_bells';
+
+/** 5+ → conch_bells, L/T → conch, 4 → bells */
+export function getMatchBonusAudio(matches: Match[]): MatchBonusAudio {
+  let has5 = false;
+  let has4 = false;
+  for (const m of matches) {
+    const n = m.positions.length;
+    if (n >= 5) has5 = true;
+    if (n === 4) has4 = true;
+  }
+  if (has5) return 'conch_bells';
+  if (hasLOrTShape(matches)) return 'conch';
+  if (has4) return 'bells';
+  return 'none';
+}

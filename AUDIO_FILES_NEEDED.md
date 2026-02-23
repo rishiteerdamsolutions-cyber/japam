@@ -2,7 +2,13 @@
 
 Place these audio files in `public/sounds/`.
 
-**Background music:** `background.mp3` (loops during gameplay) Each file plays when that deity's candies are matched.
+**Background music:** `background.mp3` (loops during gameplay)
+
+**Matching bonus (special matches):**
+- `temple-bells.mp3` – Hindu temple bells (plays on 4-candy match, and with conch on 5-candy match)
+- `conch.mp3` – Hindu conch sound (plays on 5-candy match, L/T-shaped match, and with bells on 5-candy match)
+
+Each deity file below plays when that deity's candies are matched.
 
 | # | Candy (Deity) | Mantra to Record | Filename |
 |---|---------------|------------------|----------|

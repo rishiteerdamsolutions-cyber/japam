@@ -105,6 +105,46 @@ export function stopAllMantras() {
   activeSources.length = 0;
 }
 
+export type MatchBonusAudioType = 'none' | 'bells' | 'conch' | 'conch_bells';
+
+const activeBonusAudios: HTMLAudioElement[] = [];
+
+function playMatchBonusAudioInternal(type: MatchBonusAudioType) {
+  if (type === 'none') return;
+  const ctx = getAudioContext();
+  if (ctx.state === 'suspended') ctx.resume().catch(() => {});
+
+  const play = (path: string) => {
+    const audio = new Audio(path);
+    audio.volume = 0.7;
+    activeBonusAudios.push(audio);
+    audio.play().catch(() => {});
+    audio.onended = () => {
+      const i = activeBonusAudios.indexOf(audio);
+      if (i >= 0) activeBonusAudios.splice(i, 1);
+    };
+  };
+
+  if (type === 'bells') {
+    play('/sounds/temple-bells.mp3');
+  } else if (type === 'conch') {
+    play('/sounds/conch.mp3');
+  } else {
+    play('/sounds/conch.mp3');
+    setTimeout(() => play('/sounds/temple-bells.mp3'), 200);
+  }
+}
+
+export function stopMatchBonusAudio() {
+  for (const a of activeBonusAudios) {
+    try {
+      a.pause();
+      a.currentTime = 0;
+    } catch {}
+  }
+  activeBonusAudios.length = 0;
+}
+
 /**
  * Call this from a direct user gesture (pointer down / click) to unlock audio on iOS/Safari.
  * After priming, matches can reliably play mantras even if triggered from effects/timers.
@@ -172,5 +212,9 @@ export function useSound(bgMusicEnabled: boolean, bgMusicVolume = 0.25) {
     }
   }, []);
 
-  return { playMantra };
+  const playMatchBonusAudio = useCallback((type: MatchBonusAudioType) => {
+    playMatchBonusAudioInternal(type);
+  }, []);
+
+  return { playMantra, playMatchBonusAudio };
 }

@@ -3,7 +3,8 @@ import type { Board, Match, Position } from '../engine/types';
 import type { DeityId } from '../data/deities';
 import type { GameMode } from '../types';
 import { createBoard, swapGems, removeMatches, fillGaps } from '../engine/board';
-import { findMatches, getAllMatchPositions, hasValidMoves } from '../engine/matcher';
+import { findMatches, getAllMatchPositions, getMatchBonusAudio, hasValidMoves } from '../engine/matcher';
+import type { MatchBonusAudio } from '../engine/matcher';
 import { applyGravity } from '../engine/gravity';
 import { calculateScore, getStars } from '../engine/scorer';
 import { LEVELS } from '../data/levels';
@@ -33,6 +34,7 @@ interface GameState {
   matchHighlightPositions: Position[] | null;
   pendingMatchBatch: Match[] | null;
   matchAnimationTimeoutId: ReturnType<typeof setTimeout> | null;
+  matchBonusAudio: MatchBonusAudio;
 }
 
 const getLevel = (index: number) => LEVELS[index] ?? LEVELS[0];
@@ -70,6 +72,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   matchHighlightPositions: null,
   pendingMatchBatch: null,
   matchAnimationTimeoutId: null,
+  matchBonusAudio: 'none',
 
   initGame: (mode, levelIndex = 0) => {
     stopAllMantras();
@@ -100,7 +103,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       maxGemTypes,
       matchHighlightPositions: null,
       pendingMatchBatch: null,
-      matchAnimationTimeoutId: null
+      matchAnimationTimeoutId: null,
+      matchBonusAudio: 'none'
     });
   },
 
@@ -170,11 +174,13 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       batchEntries.push({ deity, count: 1, combo: comboLevel });
     }
     const nextAccumulated = [...accumulated, ...batchEntries];
+    const matchBonusAudio = accumulated.length === 0 ? getMatchBonusAudio(matches) : get().matchBonusAudio;
     set({
       matchHighlightPositions: positions,
-      pendingMatchBatch: matches
+      pendingMatchBatch: matches,
+      matchBonusAudio
     });
-    const id = setTimeout(() => get().commitMatch(nextAccumulated), 300);
+    const id = setTimeout(() => get().commitMatch(nextAccumulated), 500);
     set({ matchAnimationTimeoutId: id });
   },
 
@@ -267,7 +273,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       comboLevel: 0,
       status,
       lastMatches: accumulated,
-      matchGeneration: accumulated.length > 0 ? get().matchGeneration + 1 : get().matchGeneration
+      matchGeneration: accumulated.length > 0 ? get().matchGeneration + 1 : get().matchGeneration,
+      matchBonusAudio: 'none'
     });
   },
 

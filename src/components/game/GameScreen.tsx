@@ -3,7 +3,7 @@ import { Board } from './Board';
 import { HUD } from './HUD';
 import { GameOverlay } from './GameOverlay';
 import { useGameStore } from '../../store/gameStore';
-import { useSound, stopAllMantras } from '../../hooks/useSound';
+import { useSound, stopAllMantras, stopMatchBonusAudio } from '../../hooks/useSound';
 import { useSettingsStore } from '../../store/settingsStore';
 import type { DeityId } from '../../data/deities';
 
@@ -20,17 +20,19 @@ export function GameScreen({ mode, levelIndex, onBack }: GameScreenProps) {
   const lastMatches = useGameStore(s => s.lastMatches);
   const lastSwappedTypes = useGameStore(s => s.lastSwappedTypes);
   const matchGeneration = useGameStore(s => s.matchGeneration);
+  const matchBonusAudio = useGameStore(s => s.matchBonusAudio);
   const currentLevelIndex = useGameStore(s => s.levelIndex);
   const prevGenerationRef = useRef(0);
   const pendingTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const bgMusicEnabled = useSettingsStore(s => s.backgroundMusicEnabled);
   const bgMusicVolume = useSettingsStore(s => s.backgroundMusicVolume);
-  const { playMantra } = useSound(bgMusicEnabled, bgMusicVolume);
+  const { playMantra, playMatchBonusAudio } = useSound(bgMusicEnabled, bgMusicVolume);
 
   const clearPendingAudio = () => {
     for (const id of pendingTimersRef.current) clearTimeout(id);
     pendingTimersRef.current = [];
     stopAllMantras();
+    stopMatchBonusAudio();
   };
 
   useEffect(() => {
@@ -72,11 +74,16 @@ export function GameScreen({ mode, levelIndex, onBack }: GameScreenProps) {
       const id = setTimeout(() => playMantra(deity), i * 200);
       pendingTimersRef.current.push(id);
     }
+    if (matchBonusAudio !== 'none') {
+      const bonusDelay = Math.max(600, deduped.length * 200 + 400);
+      const id = setTimeout(() => playMatchBonusAudio(matchBonusAudio), bonusDelay);
+      pendingTimersRef.current.push(id);
+    }
 
     return () => {
       clearPendingAudio();
     };
-  }, [lastMatches, matchGeneration, lastSwappedTypes, playMantra, mode]);
+  }, [lastMatches, matchGeneration, lastSwappedTypes, matchBonusAudio, playMantra, playMatchBonusAudio, mode]);
 
   const handleNext = () => {
     initGame(mode as 'general', Math.min(currentLevelIndex + 1, 49));

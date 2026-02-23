@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Splash } from './components/Splash';
 import { Landing } from './components/landing/Landing';
 import { InstallPrompt } from './components/ui/InstallPrompt';
@@ -8,7 +9,6 @@ import { WorldMap } from './components/map/WorldMap';
 import { JapaDashboard } from './components/dashboard/JapaDashboard';
 import { Settings } from './components/Settings';
 import { SignInRequired } from './components/auth/SignInRequired';
-import { AdminPanel } from './components/admin/AdminPanel';
 import { Paywall } from './components/payment/Paywall';
 import { useProgressStore } from './store/progressStore';
 import { useGameStore } from './store/gameStore';
@@ -20,9 +20,10 @@ import { FIRST_LOCKED_LEVEL_INDEX } from './store/unlockStore';
 import { isFirebaseConfigured } from './lib/firebase';
 import type { GameMode } from './types';
 
-type Screen = 'splash' | 'landing' | 'menu' | 'game' | 'map' | 'japa' | 'settings' | 'signin' | 'admin';
+type Screen = 'splash' | 'landing' | 'menu' | 'game' | 'map' | 'japa' | 'settings' | 'signin';
 
 function App() {
+  const navigate = useNavigate();
   const [screen, setScreen] = useState<Screen>('splash');
   const [gameMode, setGameMode] = useState<GameMode>('general');
   const [levelIndex, setLevelIndex] = useState(0);
@@ -140,10 +141,9 @@ function App() {
       {screen === 'settings' && (
         <Settings
           onBack={() => setScreen('menu')}
-          onOpenAdmin={() => setScreen('admin')}
+          onOpenAdmin={() => navigate('/admin')}
         />
       )}
-      {screen === 'admin' && <AdminPanel onBack={() => setScreen('settings')} />}
       {paywallPending != null && (
         <Paywall
           onClose={() => setPaywallPending(null)}

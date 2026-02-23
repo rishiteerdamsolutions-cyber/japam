@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Splash } from './components/Splash';
+import { Landing } from './components/landing/Landing';
 import { InstallPrompt } from './components/ui/InstallPrompt';
 import { MainMenu } from './components/menu/MainMenu';
 import { GameScreen } from './components/game/GameScreen';
@@ -15,7 +16,7 @@ import { useAuthStore } from './store/authStore';
 import { isFirebaseConfigured } from './lib/firebase';
 import type { GameMode } from './types';
 
-type Screen = 'splash' | 'menu' | 'game' | 'map' | 'japa' | 'settings' | 'signin';
+type Screen = 'splash' | 'landing' | 'menu' | 'game' | 'map' | 'japa' | 'settings' | 'signin';
 
 function App() {
   const [screen, setScreen] = useState<Screen>('splash');
@@ -52,7 +53,11 @@ function App() {
   }, [authInit]);
 
   if (screen === 'splash') {
-    return <Splash onComplete={() => setScreen('menu')} />;
+    return <Splash onComplete={() => setScreen('landing')} />;
+  }
+
+  if (screen === 'landing') {
+    return <Landing onEnterApp={() => setScreen('menu')} />;
   }
 
   return (

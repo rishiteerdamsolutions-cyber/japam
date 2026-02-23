@@ -4,7 +4,7 @@
  *
  * Default unlock price: UNLOCK_PRICE_PAISE. Can be overridden by admin dashboard (saved to Firestore).
  */
-export const UNLOCK_PRICE_PAISE = 9900; // ₹99 — default; admin can override via /admin dashboard
+export const UNLOCK_PRICE_PAISE = 9900; // ₹99 default (Razorpay uses paise); admin can override via /admin in rupees
 
 import crypto from 'crypto';
 import admin from 'firebase-admin';

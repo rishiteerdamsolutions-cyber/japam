@@ -16,7 +16,7 @@ interface AdminPanelProps {
 export function AdminPanel({ onBack, passwordAuth, adminToken, onLogout }: AdminPanelProps) {
   const user = useAuthStore((s) => s.user);
   const [isAdmin, setIsAdmin] = useState<boolean | null>(passwordAuth ? true : null);
-  const [pricePaise, setPricePaise] = useState<string>('');
+  const [priceRupees, setPriceRupees] = useState<string>('');
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
@@ -34,17 +34,18 @@ export function AdminPanel({ onBack, passwordAuth, adminToken, onLogout }: Admin
 
   useEffect(() => {
     loadPricingConfig().then((c) => {
-      if (c) setPricePaise(String(c.unlockPricePaise));
-      else setPricePaise('9900');
+      const paise = c?.unlockPricePaise ?? 9900;
+      setPriceRupees(String((paise / 100).toFixed(0)));
     });
   }, []);
 
   const handleSave = async () => {
-    const paise = Math.round(Number(pricePaise));
-    if (paise < 100) {
-      setMessage('Minimum ₹1 (100 paise)');
+    const rupees = Number(priceRupees);
+    if (!Number.isFinite(rupees) || rupees < 1) {
+      setMessage('Minimum ₹1');
       return;
     }
+    const paise = Math.round(rupees * 100);
     setSaving(true);
     setMessage(null);
     try {
@@ -61,10 +62,10 @@ export function AdminPanel({ onBack, passwordAuth, adminToken, onLogout }: Admin
           if (res.status === 401 && onLogout) onLogout();
           return;
         }
-        setMessage('Saved. Unlock price = ₹' + (paise / 100).toFixed(0));
+        setMessage('Saved. Unlock price = ₹' + rupees.toFixed(0));
       } else {
         await savePricingConfig(paise);
-        setMessage('Saved. Unlock price = ₹' + (paise / 100).toFixed(0));
+        setMessage('Saved. Unlock price = ₹' + rupees.toFixed(0));
       }
     } catch (e) {
       setMessage('Failed to save (check Firestore rules or API)');
@@ -105,15 +106,17 @@ export function AdminPanel({ onBack, passwordAuth, adminToken, onLogout }: Admin
         )}
       </div>
       <h1 className="text-2xl font-bold text-amber-400 mb-6">Admin – Unlock price</h1>
-      <p className="text-amber-200/80 text-sm mb-2">Price in paise (e.g. 9900 = ₹99)</p>
+      <p className="text-amber-200/80 text-sm mb-2">Price in rupees (e.g. 99)</p>
       <input
         type="number"
-        min={100}
-        value={pricePaise}
-        onChange={(e) => setPricePaise(e.target.value)}
+        min={1}
+        step={1}
+        value={priceRupees}
+        onChange={(e) => setPriceRupees(e.target.value)}
         className="w-full max-w-xs px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30 mb-4"
+        placeholder="99"
       />
-      <p className="text-amber-200/60 text-xs mb-4">= ₹{(Number(pricePaise) || 0) / 100}</p>
+      <p className="text-amber-200/60 text-xs mb-4">₹{Number(priceRupees) || 0}</p>
       <button
         type="button"
         onClick={handleSave}

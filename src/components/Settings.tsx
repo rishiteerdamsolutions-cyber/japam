@@ -1,5 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSettingsStore } from '../store/settingsStore';
+import { useAuthStore } from '../store/authStore';
+import { loadIsAdmin } from '../lib/firestore';
 import { GoogleSignIn } from './auth/GoogleSignIn';
 
 const WHATSAPP_LINK = 'https://wa.me/919505009699';
@@ -7,14 +9,22 @@ const BG_IMAGE = '/images/settingspagebg.png';
 
 interface SettingsProps {
   onBack: () => void;
+  onOpenAdmin?: () => void;
 }
 
-export function Settings({ onBack }: SettingsProps) {
+export function Settings({ onBack, onOpenAdmin }: SettingsProps) {
   const { backgroundMusicEnabled, backgroundMusicVolume, load, setBackgroundMusic, setBackgroundMusicVolume } = useSettingsStore();
+  const user = useAuthStore((s) => s.user);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     load();
   }, [load]);
+
+  useEffect(() => {
+    if (user?.uid) loadIsAdmin(user.uid).then(setIsAdmin);
+    else setIsAdmin(false);
+  }, [user?.uid]);
 
   return (
     <div
@@ -84,6 +94,18 @@ export function Settings({ onBack }: SettingsProps) {
         <p className="text-amber-200/50 text-xs mt-4">
           Mantra audio plays on every match (always on)
         </p>
+
+        {isAdmin && onOpenAdmin && (
+          <div className="mt-6 pt-4 border-t border-amber-500/20">
+            <button
+              type="button"
+              onClick={onOpenAdmin}
+              className="text-amber-400 text-sm font-medium hover:text-amber-300"
+            >
+              Admin – Set unlock price
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

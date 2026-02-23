@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useProgressStore, progressKey } from '../../store/progressStore';
+import { useUnlockStore, FIRST_LOCKED_LEVEL_INDEX } from '../../store/unlockStore';
 import { LEVELS } from '../../data/levels';
 import { EPISODES } from '../../data/episodes';
 import { DEITIES } from '../../data/deities';
@@ -14,6 +15,7 @@ interface WorldMapProps {
 export function WorldMap({ mode: initialMode, onSelectLevel, onBack }: WorldMapProps) {
   const [mapMode, setMapMode] = useState<GameMode>(initialMode);
   const { levelProgress, getCurrentLevelIndex } = useProgressStore();
+  const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
   const currentLevelIndex = getCurrentLevelIndex(mapMode);
 
   return (
@@ -53,20 +55,23 @@ export function WorldMap({ mode: initialMode, onSelectLevel, onBack }: WorldMapP
               {LEVELS.filter(l => l.episode === ep.id).map((level, i) => {
                 const idx = (ep.id - 1) * 10 + i;
                 const progress = levelProgress[progressKey(mapMode, level.id)];
-                const unlocked = idx <= currentLevelIndex;
+                const canPlay = idx <= currentLevelIndex && (idx < FIRST_LOCKED_LEVEL_INDEX || levelsUnlocked === true);
+                const isPaywalled = idx >= FIRST_LOCKED_LEVEL_INDEX && idx <= currentLevelIndex && levelsUnlocked !== true;
                 return (
                   <button
                     key={level.id}
-                    onClick={() => unlocked && onSelectLevel(idx, mapMode)}
-                    disabled={!unlocked}
+                    onClick={() => (canPlay || isPaywalled) && onSelectLevel(idx, mapMode)}
+                    disabled={!canPlay && !isPaywalled}
                     className={`
                       aspect-square rounded-xl flex flex-col items-center justify-center
                       font-medium text-sm
-                      ${unlocked ? 'bg-amber-500/30 text-amber-200' : 'bg-black/20 text-gray-500'}
+                      ${canPlay ? 'bg-amber-500/30 text-amber-200' : isPaywalled ? 'bg-amber-500/20 text-amber-300' : 'bg-black/20 text-gray-500'}
                     `}
+                    title={isPaywalled ? 'Pay to unlock' : undefined}
                   >
                     <span>{idx + 1}</span>
-                    {progress && (
+                    {isPaywalled && <span className="text-xs">🔒</span>}
+                    {progress && canPlay && (
                       <span className="text-amber-400 text-xs">
                         {'★'.repeat(progress.stars)}
                       </span>

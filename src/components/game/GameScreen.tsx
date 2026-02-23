@@ -11,9 +11,10 @@ interface GameScreenProps {
   mode: 'general' | string;
   levelIndex: number;
   onBack: () => void;
+  onNextLevel?: (mode: 'general' | string, levelIndex: number) => void;
 }
 
-export function GameScreen({ mode, levelIndex, onBack }: GameScreenProps) {
+export function GameScreen({ mode, levelIndex, onBack, onNextLevel }: GameScreenProps) {
   const initGame = useGameStore(s => s.initGame);
   const status = useGameStore(s => s.status);
   const reset = useGameStore(s => s.reset);
@@ -86,7 +87,12 @@ export function GameScreen({ mode, levelIndex, onBack }: GameScreenProps) {
   }, [lastMatches, matchGeneration, lastSwappedTypes, matchBonusAudio, playMantra, playMatchBonusAudio, mode]);
 
   const handleNext = () => {
-    initGame(mode as 'general', Math.min(currentLevelIndex + 1, 49));
+    const nextIndex = Math.min(currentLevelIndex + 1, 49);
+    if (onNextLevel) {
+      onNextLevel(mode, nextIndex);
+    } else {
+      initGame(mode as 'general', nextIndex);
+    }
   };
 
   return (

@@ -95,6 +95,13 @@ export function Settings({ onBack, onOpenAdmin }: SettingsProps) {
           Mantra audio plays on every match (always on)
         </p>
 
+        {user?.uid && (
+          <p className="text-amber-200/40 text-xs mt-3 break-all">
+            Your user ID: {user.uid}
+            {!isAdmin && ' — Add this UID to Firestore config/admins (field uids, array) to see Admin.'}
+          </p>
+        )}
+
         {isAdmin && onOpenAdmin && (
           <div className="mt-6 pt-4 border-t border-amber-500/20">
             <button

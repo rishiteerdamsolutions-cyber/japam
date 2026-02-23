@@ -104,7 +104,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       matchHighlightPositions: null,
       pendingMatchBatch: null,
       matchAnimationTimeoutId: null,
-      matchBonusAudio: 'none'
+      matchBonusAudio: 'none' /* clear so new game doesn't use previous move's bonus */
     });
   },
 
@@ -273,8 +273,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       comboLevel: 0,
       status,
       lastMatches: accumulated,
-      matchGeneration: accumulated.length > 0 ? get().matchGeneration + 1 : get().matchGeneration,
-      matchBonusAudio: 'none'
+      matchGeneration: accumulated.length > 0 ? get().matchGeneration + 1 : get().matchGeneration
+      /* matchBonusAudio left as-is so the audio effect can read it; cleared on next move or initGame */
     });
   },
 

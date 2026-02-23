@@ -31,19 +31,28 @@ export function MainMenu({ onSelect, onOpenMap, onOpenJapaDashboard, onOpenSetti
           General Game
         </motion.button>
 
-        <div className="grid grid-cols-2 gap-2 mt-4">
+        <div className="grid grid-cols-2 gap-3 mt-4">
           {DEITIES.map((deity, i) => (
             <motion.button
               key={deity.id}
+              type="button"
               whileTap={{ scale: 0.98 }}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.03 }}
-              className="py-3 px-4 rounded-xl font-medium text-white shadow-md"
-              style={{ backgroundColor: deity.color }}
+              className="flex flex-col items-center rounded-xl overflow-hidden shadow-lg bg-black/20 border border-white/10"
               onClick={() => onSelect(deity.id)}
             >
-              {deity.name}
+              <div className="w-full aspect-square relative bg-black/30">
+                <img
+                  src={deity.image}
+                  alt={deity.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <span className="py-2 px-2 text-sm font-medium text-amber-100 w-full text-center truncate">
+                {deity.name}
+              </span>
             </motion.button>
           ))}
         </div>

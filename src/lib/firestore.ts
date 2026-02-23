@@ -35,16 +35,46 @@ export async function savePricingConfig(unlockPricePaise: number): Promise<void>
   await setDoc(doc(db, 'config', 'pricing'), { unlockPricePaise });
 }
 
+function getAdminUids(data: Record<string, unknown> | null): string[] {
+  if (!data) return [];
+  if (Array.isArray(data.uids)) return data.uids.map(String);
+  const single = data.uid ?? data.userId ?? data.user_id ?? data.UID;
+  if (single != null && single !== '') return [String(single)];
+  return [];
+}
+
 /** Check if current user is admin */
 export async function loadIsAdmin(uid: string): Promise<boolean> {
   if (!db) return false;
   try {
     const snap = await getDoc(doc(db, 'config', 'admins'));
     if (!snap.exists()) return false;
-    const uids = (snap.data() as { uids?: string[] }).uids ?? [];
+    const uids = getAdminUids(snap.data() as Record<string, unknown>);
     return uids.includes(uid);
   } catch {
     return false;
+  }
+}
+
+/** Debug: why admin check might fail (for Settings message) */
+export async function loadAdminCheckDebug(uid: string): Promise<{
+  ok: boolean;
+  docExists: boolean;
+  uidsLength: number;
+  yourUidInList: boolean;
+  error?: string;
+}> {
+  if (!db) return { ok: false, docExists: false, uidsLength: 0, yourUidInList: false, error: 'Firebase not configured' };
+  try {
+    const snap = await getDoc(doc(db, 'config', 'admins'));
+    const docExists = snap.exists();
+    const data = snap.exists() ? (snap.data() as Record<string, unknown>) : null;
+    const uids = getAdminUids(data);
+    const yourUidInList = uids.includes(uid);
+    return { ok: docExists && yourUidInList, docExists, uidsLength: uids.length, yourUidInList };
+  } catch (e) {
+    const error = e instanceof Error ? e.message : String(e);
+    return { ok: false, docExists: false, uidsLength: 0, yourUidInList: false, error };
   }
 }
 

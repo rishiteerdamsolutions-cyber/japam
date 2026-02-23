@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSettingsStore } from '../store/settingsStore';
 import { useAuthStore } from '../store/authStore';
-import { loadIsAdmin } from '../lib/firestore';
+import { loadIsAdmin, loadAdminCheckDebug } from '../lib/firestore';
 import { GoogleSignIn } from './auth/GoogleSignIn';
 
 const WHATSAPP_LINK = 'https://wa.me/919505009699';
@@ -16,14 +16,27 @@ export function Settings({ onBack, onOpenAdmin }: SettingsProps) {
   const { backgroundMusicEnabled, backgroundMusicVolume, load, setBackgroundMusic, setBackgroundMusicVolume } = useSettingsStore();
   const user = useAuthStore((s) => s.user);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [adminDebug, setAdminDebug] = useState<{
+    docExists: boolean;
+    uidsLength: number;
+    yourUidInList: boolean;
+    error?: string;
+  } | null>(null);
 
   useEffect(() => {
     load();
   }, [load]);
 
   useEffect(() => {
-    if (user?.uid) loadIsAdmin(user.uid).then(setIsAdmin);
-    else setIsAdmin(false);
+    if (user?.uid) {
+      loadIsAdmin(user.uid).then(setIsAdmin);
+      loadAdminCheckDebug(user.uid).then((d) =>
+        setAdminDebug({ docExists: d.docExists, uidsLength: d.uidsLength, yourUidInList: d.yourUidInList, error: d.error })
+      );
+    } else {
+      setIsAdmin(false);
+      setAdminDebug(null);
+    }
   }, [user?.uid]);
 
   return (
@@ -89,6 +102,22 @@ export function Settings({ onBack, onOpenAdmin }: SettingsProps) {
               Contact on WhatsApp
             </a>
           </div>
+
+          {onOpenAdmin && (
+            <div className="rounded-2xl bg-black/40 border border-amber-500/30 p-4 backdrop-blur-sm">
+              <h2 className="text-amber-200 font-semibold text-sm mb-2">Admin</h2>
+              <button
+                type="button"
+                onClick={onOpenAdmin}
+                className="inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-amber-500 text-white font-semibold hover:bg-amber-600 transition-colors"
+              >
+                Set unlock price
+              </button>
+              {!isAdmin && (
+                <p className="text-amber-200/50 text-xs mt-2">If you see “Access denied”, add your user ID below to Firestore config/admins.</p>
+              )}
+            </div>
+          )}
         </div>
 
         <p className="text-amber-200/50 text-xs mt-4">
@@ -96,23 +125,20 @@ export function Settings({ onBack, onOpenAdmin }: SettingsProps) {
         </p>
 
         {user?.uid && (
-          <p className="text-amber-200/40 text-xs mt-3 break-all">
-            Your user ID: {user.uid}
-            {!isAdmin && ' — Add this UID to Firestore config/admins (field uids, array) to see Admin.'}
-          </p>
-        )}
-
-        {isAdmin && onOpenAdmin && (
-          <div className="mt-6 pt-4 border-t border-amber-500/20">
-            <button
-              type="button"
-              onClick={onOpenAdmin}
-              className="text-amber-400 text-sm font-medium hover:text-amber-300"
-            >
-              Admin – Set unlock price
-            </button>
+          <div className="text-amber-200/40 text-xs mt-3 space-y-1">
+            <p className="break-all">Your user ID: {user.uid}</p>
+            {!isAdmin && adminDebug != null && (
+              <p className="text-amber-300/80">
+                Admin check: doc exists {adminDebug.docExists ? '✓' : '✗'}, uids in list: {adminDebug.uidsLength}, your UID in list: {adminDebug.yourUidInList ? '✓' : '✗'}
+                {adminDebug.error && ` — Error: ${adminDebug.error}`}
+              </p>
+            )}
+            {!isAdmin && adminDebug == null && (
+              <p>Add this UID to Firestore config/admins (field &quot;uids&quot;, type array) to see Admin.</p>
+            )}
           </div>
         )}
+
       </div>
     </div>
   );

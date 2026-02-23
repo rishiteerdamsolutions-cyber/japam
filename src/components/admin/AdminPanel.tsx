@@ -2,24 +2,35 @@ import { useState, useEffect } from 'react';
 import { useAuthStore } from '../../store/authStore';
 import { loadPricingConfig, savePricingConfig, loadIsAdmin } from '../../lib/firestore';
 
+const API_BASE = import.meta.env.VITE_API_URL ?? '';
+
 interface AdminPanelProps {
   onBack: () => void;
+  /** When true, skip Firestore check and show panel (used for /admin password login) */
+  passwordAuth?: boolean;
+  /** Token from backend admin-login; required when passwordAuth */
+  adminToken?: string | null;
+  onLogout?: () => void;
 }
 
-export function AdminPanel({ onBack }: AdminPanelProps) {
+export function AdminPanel({ onBack, passwordAuth, adminToken, onLogout }: AdminPanelProps) {
   const user = useAuthStore((s) => s.user);
-  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(passwordAuth ? true : null);
   const [pricePaise, setPricePaise] = useState<string>('');
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
+    if (passwordAuth) {
+      setIsAdmin(true);
+      return;
+    }
     if (!user?.uid) {
       setIsAdmin(false);
       return;
     }
     loadIsAdmin(user.uid).then(setIsAdmin);
-  }, [user?.uid]);
+  }, [user?.uid, passwordAuth]);
 
   useEffect(() => {
     loadPricingConfig().then((c) => {
@@ -37,10 +48,25 @@ export function AdminPanel({ onBack }: AdminPanelProps) {
     setSaving(true);
     setMessage(null);
     try {
-      await savePricingConfig(paise);
-      setMessage('Saved. Unlock price = ₹' + (paise / 100).toFixed(0));
+      if (passwordAuth && adminToken && API_BASE) {
+        const res = await fetch(`${API_BASE}/api/admin/set-price`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${adminToken}` },
+          body: JSON.stringify({ unlockPricePaise: paise }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          setMessage(data.error || 'Failed to save');
+          if (res.status === 401 && onLogout) onLogout();
+          return;
+        }
+        setMessage('Saved. Unlock price = ₹' + (paise / 100).toFixed(0));
+      } else {
+        await savePricingConfig(paise);
+        setMessage('Saved. Unlock price = ₹' + (paise / 100).toFixed(0));
+      }
     } catch (e) {
-      setMessage('Failed to save (check Firestore rules)');
+      setMessage('Failed to save (check Firestore rules or API)');
     } finally {
       setSaving(false);
     }
@@ -67,9 +93,16 @@ export function AdminPanel({ onBack }: AdminPanelProps) {
 
   return (
     <div className="min-h-screen bg-[#1a1a2e] p-4 pb-[env(safe-area-inset-bottom)]">
-      <button onClick={onBack} className="text-amber-400 text-sm mb-6">
-        ← Back
-      </button>
+      <div className="flex items-center justify-between mb-6">
+        <button onClick={onBack} className="text-amber-400 text-sm">
+          ← Back
+        </button>
+        {onLogout && (
+          <button onClick={onLogout} className="text-amber-200/80 text-sm">
+            Log out
+          </button>
+        )}
+      </div>
       <h1 className="text-2xl font-bold text-amber-400 mb-6">Admin – Unlock price</h1>
       <p className="text-amber-200/80 text-sm mb-2">Price in paise (e.g. 9900 = ₹99)</p>
       <input

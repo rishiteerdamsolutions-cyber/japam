@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import Razorpay from 'razorpay';
@@ -24,6 +25,30 @@ if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
 
 const razorpay = new Razorpay({ key_id: RAZORPAY_KEY_ID, key_secret: RAZORPAY_KEY_SECRET });
 
+const ADMIN_ID = process.env.ADMIN_ID || '';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
+const ADMIN_SECRET = process.env.ADMIN_SECRET || process.env.JWT_SECRET || 'change-me-in-production';
+
+function createAdminToken() {
+  const payload = JSON.stringify({ admin: true, exp: Date.now() + 60 * 60 * 1000 });
+  const sig = crypto.createHmac('sha256', ADMIN_SECRET).update(payload).digest('base64url');
+  return Buffer.from(payload).toString('base64url') + '.' + sig;
+}
+
+function verifyAdminToken(token) {
+  if (!token || typeof token !== 'string') return false;
+  const [raw, sig] = token.split('.');
+  if (!raw || !sig) return false;
+  try {
+    const payload = JSON.parse(Buffer.from(raw, 'base64url').toString());
+    if (payload.exp < Date.now()) return false;
+    const expected = crypto.createHmac('sha256', ADMIN_SECRET).update(raw).digest('base64url');
+    return sig === expected;
+  } catch {
+    return false;
+  }
+}
+
 async function getUnlockPricePaise() {
   if (!db) return 9900;
   const snap = await db.doc('config/pricing').get();
@@ -45,6 +70,44 @@ app.post('/api/create-order', async (req, res) => {
   } catch (e) {
     console.error('create-order', e);
     res.status(500).send(e.message || 'Failed to create order');
+  }
+});
+
+app.post('/api/admin-login', (req, res) => {
+  try {
+    const { adminId, password } = req.body || {};
+    if (!ADMIN_ID || !ADMIN_PASSWORD) return res.status(503).json({ error: 'Admin not configured' });
+    if (String(adminId).trim() !== ADMIN_ID || password !== ADMIN_PASSWORD) {
+      return res.status(401).json({ error: 'Wrong Admin ID or password' });
+    }
+    const token = createAdminToken();
+    res.json({ token });
+  } catch (e) {
+    console.error('admin-login', e);
+    res.status(500).json({ error: 'Login failed' });
+  }
+});
+
+function getAdminToken(req) {
+  const auth = req.headers.authorization;
+  if (auth && auth.startsWith('Bearer ')) return auth.slice(7);
+  return (req.body && req.body.token) || null;
+}
+
+app.post('/api/admin/set-price', async (req, res) => {
+  try {
+    const token = getAdminToken(req);
+    if (!verifyAdminToken(token)) return res.status(401).json({ error: 'Invalid or expired session' });
+    const unlockPricePaise = Math.round(Number(req.body?.unlockPricePaise));
+    if (!Number.isFinite(unlockPricePaise) || unlockPricePaise < 100) {
+      return res.status(400).json({ error: 'Invalid price (min 100 paise)' });
+    }
+    if (!db) return res.status(503).json({ error: 'Database not configured' });
+    await db.doc('config/pricing').set({ unlockPricePaise });
+    res.json({ ok: true });
+  } catch (e) {
+    console.error('admin set-price', e);
+    res.status(500).json({ error: e.message || 'Failed to save' });
   }
 });
 

@@ -48,8 +48,9 @@ export function AdminPanel({ onBack, passwordAuth, adminToken, onLogout }: Admin
     setSaving(true);
     setMessage(null);
     try {
-      if (passwordAuth && adminToken && API_BASE) {
-        const res = await fetch(`${API_BASE}/api/admin/set-price`, {
+      if (passwordAuth && adminToken) {
+        const url = API_BASE ? `${API_BASE}/api/admin/set-price` : '/api/admin/set-price';
+        const res = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${adminToken}` },
           body: JSON.stringify({ unlockPricePaise: paise }),

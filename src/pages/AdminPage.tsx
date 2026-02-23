@@ -41,15 +41,16 @@ export function AdminPage() {
     e.preventDefault();
     setError(null);
     setLoading(true);
+    const url = API_BASE ? `${API_BASE}/api/admin-login` : '/api/admin-login';
     try {
-      const res = await fetch(`${API_BASE}/api/admin-login`, {
+      const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ adminId: adminId.trim(), password }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setError(data.error || 'Login failed');
+        setError(data.error || (res.status === 404 ? 'Login API not found. Redeploy the project on Vercel so /api routes are live.' : 'Login failed'));
         return;
       }
       if (data.token) {
@@ -60,7 +61,7 @@ export function AdminPage() {
         setError('Login failed');
       }
     } catch {
-      setError('Network error. Is the server running?');
+      setError('Network error. On Vercel this usually works without any extra setup.');
     } finally {
       setLoading(false);
     }
@@ -85,7 +86,7 @@ export function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#1a1a2e] p-4 flex flex-col items-center justify-center">
+    <div className="min-h-screen bg-[#1a1a2e] p-6 flex flex-col items-center justify-center">
       <h1 className="text-2xl font-bold text-amber-400 mb-6">Admin login</h1>
       <form onSubmit={handleLogin} className="w-full max-w-xs space-y-4">
         <div>
@@ -119,9 +120,9 @@ export function AdminPage() {
           {loading ? 'Logging in…' : 'Log in'}
         </button>
       </form>
-      {!API_BASE && (
-        <p className="text-amber-200/60 text-xs mt-2 text-center">Set VITE_API_URL in .env to your backend URL.</p>
-      )}
+      <p className="text-amber-200/50 text-xs mt-4 text-center max-w-xs">
+        On Vercel, leave VITE_API_URL empty. Use the Admin ID and password you set in Vercel env.
+      </p>
       <button
         type="button"
         onClick={() => navigate('/', { replace: true })}

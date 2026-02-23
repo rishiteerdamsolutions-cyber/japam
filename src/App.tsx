@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Splash } from './components/Splash';
 import { Landing } from './components/landing/Landing';
 import { InstallPrompt } from './components/ui/InstallPrompt';
@@ -23,7 +22,6 @@ import type { GameMode } from './types';
 type Screen = 'splash' | 'landing' | 'menu' | 'game' | 'map' | 'japa' | 'settings' | 'signin';
 
 function App() {
-  const navigate = useNavigate();
   const [screen, setScreen] = useState<Screen>('splash');
   const [gameMode, setGameMode] = useState<GameMode>('general');
   const [levelIndex, setLevelIndex] = useState(0);
@@ -139,10 +137,7 @@ function App() {
       )}
       {screen === 'japa' && <JapaDashboard onBack={() => setScreen('menu')} />}
       {screen === 'settings' && (
-        <Settings
-          onBack={() => setScreen('menu')}
-          onOpenAdmin={() => navigate('/admin')}
-        />
+        <Settings onBack={() => setScreen('menu')} />
       )}
       {paywallPending != null && (
         <Paywall

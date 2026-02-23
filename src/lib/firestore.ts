@@ -16,8 +16,20 @@ export async function loadUserUnlock(uid: string): Promise<boolean> {
   }
 }
 
-/** Pricing config (unlock price in paise) - readable by all */
+const API_BASE = import.meta.env.VITE_API_URL ?? '';
+
+/** Unlock price in paise. Tries /api/price first (price set in code), then Firestore. */
 export async function loadPricingConfig(): Promise<{ unlockPricePaise: number } | null> {
+  try {
+    const url = API_BASE ? `${API_BASE}/api/price` : '/api/price';
+    const res = await fetch(url);
+    if (res.ok) {
+      const data = (await res.json()) as { unlockPricePaise?: number };
+      if (data?.unlockPricePaise != null) return { unlockPricePaise: data.unlockPricePaise };
+    }
+  } catch {
+    // fallback to Firestore if API not available
+  }
   if (!db) return null;
   try {
     const snap = await getDoc(doc(db, 'config', 'pricing'));
@@ -29,7 +41,7 @@ export async function loadPricingConfig(): Promise<{ unlockPricePaise: number } 
   }
 }
 
-/** Save pricing (admin only - secure with Firestore rules) */
+/** Save pricing to Firestore (legacy; unlock price is now set in api/_lib.js) */
 export async function savePricingConfig(unlockPricePaise: number): Promise<void> {
   if (!db) return;
   await setDoc(doc(db, 'config', 'pricing'), { unlockPricePaise });

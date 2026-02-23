@@ -28,6 +28,7 @@ export const Gem = memo(function Gem({ deity, selected, onClick, sparkle, matche
       `}
       style={{
         backgroundColor: d.color,
+        border: `1px solid ${d.color}`,
         boxShadow: matched
           ? `0 0 16px ${d.color}, 0 0 24px rgba(255,255,255,0.8), inset 0 0 8px rgba(255,255,255,0.5)`
           : selected

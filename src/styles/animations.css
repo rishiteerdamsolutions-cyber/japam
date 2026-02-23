@@ -35,3 +35,23 @@
 .animate-sparkle {
   animation: sparkle 1s ease-in-out infinite;
 }
+
+/* Landing: neon title */
+.text-neon {
+  color: #fff;
+  text-shadow:
+    0 0 4px #fff,
+    0 0 8px #fff,
+    0 0 12px #fbbf24,
+    0 0 24px #f59e0b,
+    0 0 40px #f59e0b;
+}
+
+@keyframes neon-pulse {
+  0%, 100% { opacity: 1; filter: brightness(1); }
+  50% { opacity: 0.95; filter: brightness(1.1); }
+}
+
+.animate-neon-pulse {
+  animation: neon-pulse 2s ease-in-out infinite;
+}

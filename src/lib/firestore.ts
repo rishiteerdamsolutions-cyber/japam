@@ -1,12 +1,40 @@
 import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
-import { app, isFirebaseConfigured } from './firebase';
+import { app, auth, isFirebaseConfigured } from './firebase';
 import type { LevelProgress } from '../store/progressStore';
 import type { JapaCounts } from '../store/japaStore';
 
 const db = isFirebaseConfigured && app ? getFirestore(app) : null;
 
+const API_BASE = import.meta.env.VITE_API_URL ?? '';
+
+async function getFirebaseIdToken(): Promise<string | null> {
+  try {
+    const user = auth?.currentUser;
+    if (!user) return null;
+    return await user.getIdToken();
+  } catch {
+    return null;
+  }
+}
+
+function apiUrl(path: string) {
+  return API_BASE ? `${API_BASE}${path}` : path;
+}
+
 /** Unlock status for levels 6+ (payment) */
 export async function loadUserUnlock(uid: string): Promise<boolean> {
+  try {
+    const token = await getFirebaseIdToken();
+    if (token) {
+      const res = await fetch(apiUrl('/api/user/unlock'), { headers: { Authorization: `Bearer ${token}` } });
+      if (res.ok) {
+        const data = (await res.json()) as { levelsUnlocked?: boolean };
+        return Boolean(data?.levelsUnlocked);
+      }
+    }
+  } catch {
+    // fall back to client Firestore
+  }
   if (!db) return false;
   try {
     const snap = await getDoc(doc(db, 'users', uid, 'data', 'unlock'));
@@ -15,8 +43,6 @@ export async function loadUserUnlock(uid: string): Promise<boolean> {
     return false;
   }
 }
-
-const API_BASE = import.meta.env.VITE_API_URL ?? '';
 
 const DEFAULT_UNLOCK_PRICE_PAISE = 1000; // ₹10
 const DEFAULT_DISPLAY_PRICE_PAISE = 9900; // ₹99 strikethrough
@@ -108,6 +134,18 @@ export async function loadAdminCheckDebug(uid: string): Promise<{
 }
 
 export async function loadUserProgress(uid: string): Promise<{ levelProgress: Record<string, LevelProgress>; currentLevelByMode: Record<string, number> } | null> {
+  try {
+    const token = await getFirebaseIdToken();
+    if (token) {
+      const res = await fetch(apiUrl('/api/user/progress'), { headers: { Authorization: `Bearer ${token}` } });
+      if (res.ok) {
+        const data = (await res.json()) as { levelProgress?: Record<string, LevelProgress>; currentLevelByMode?: Record<string, number> };
+        return { levelProgress: data?.levelProgress ?? {}, currentLevelByMode: data?.currentLevelByMode ?? {} };
+      }
+    }
+  } catch {
+    // fall back to client Firestore
+  }
   if (!db) return null;
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
@@ -122,6 +160,19 @@ export async function loadUserProgress(uid: string): Promise<{ levelProgress: Re
 }
 
 export async function saveUserProgress(uid: string, data: { levelProgress: Record<string, LevelProgress>; currentLevelByMode: Record<string, number> }): Promise<void> {
+  try {
+    const token = await getFirebaseIdToken();
+    if (token) {
+      const res = await fetch(apiUrl('/api/user/progress'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify(data),
+      });
+      if (res.ok) return;
+    }
+  } catch {
+    // fall back to client Firestore
+  }
   if (!db) return;
   try {
     await setDoc(doc(db, 'users', uid, 'data', 'progress'), data);

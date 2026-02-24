@@ -85,6 +85,17 @@ export async function verifyFirebaseUser(request) {
   }
 }
 
+/** Check if user has paid (unlocked). Uses unlockedUsers collection. */
+export async function isUserUnlocked(db, uid) {
+  if (!uid) return false;
+  try {
+    const snap = await db.collection('unlockedUsers').doc(uid).get();
+    return snap.exists;
+  } catch {
+    return false;
+  }
+}
+
 export function getRazorpay() {
   if (razorpay) return razorpay;
   const keyId = process.env.RAZORPAY_KEY_ID || 'rzp_test_SIglcNEf6QAT2M';

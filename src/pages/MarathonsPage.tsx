@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import INDIA_REGIONS from '../data/indiaRegions.json';
 import { DEITIES } from '../data/deities';
 import { useAuthStore } from '../store/authStore';
+import { auth } from '../lib/firebase';
 
 const STATES = [...INDIA_REGIONS.states, ...INDIA_REGIONS.union_territories];
 
@@ -35,6 +36,7 @@ export function MarathonsPage() {
   const [marathonsByTemple, setMarathonsByTemple] = useState<Record<string, Marathon[]>>({});
   const [loading, setLoading] = useState(false);
   const [joining, setJoining] = useState<string | null>(null);
+  const [joinError, setJoinError] = useState<string | null>(null);
 
   const state = STATES.find((s) => s.name === stateName) || null;
   const districts = state?.districts ?? [];
@@ -79,15 +81,21 @@ export function MarathonsPage() {
       navigate('/');
       return;
     }
+    setJoinError(null);
     setJoining(marathonId);
     try {
+      const idToken = await auth?.currentUser?.getIdToken?.().catch(() => null);
+      if (!idToken) {
+        setJoinError('Please sign in again to join.');
+        return;
+      }
       const url = API_BASE ? `${API_BASE}/api/marathons/join` : '/api/marathons/join';
       const res = await fetch(url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ marathonId, userId: user.uid }),
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
+        body: JSON.stringify({ marathonId }),
       });
-      await res.json().catch(() => ({}));
+      const data = (await res.json().catch(() => ({}))) as { error?: string };
       if (res.ok) {
         setMarathonsByTemple((prev) => {
           const next = { ...prev };
@@ -98,6 +106,12 @@ export function MarathonsPage() {
           }
           return next;
         });
+      } else if (res.status === 403) {
+        setJoinError(data?.error ?? 'Only users who have unlocked the game can join marathons.');
+      } else if (res.status === 401) {
+        setJoinError('Please sign in to join a marathon.');
+      } else {
+        setJoinError(data?.error ?? 'Failed to join.');
       }
     } finally {
       setJoining(null);
@@ -119,6 +133,13 @@ export function MarathonsPage() {
       </div>
 
       <p className="text-amber-200/80 text-sm mb-4">Discover marathons by location and join to contribute your japas.</p>
+
+      {joinError && (
+        <div className="mb-4 p-3 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-200 text-sm">
+          {joinError}
+          <button type="button" onClick={() => setJoinError(null)} className="ml-2 underline">Dismiss</button>
+        </div>
+      )}
 
       {step === 'state' && (
         <div>

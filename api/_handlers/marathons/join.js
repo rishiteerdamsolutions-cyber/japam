@@ -1,17 +1,27 @@
-import { getDb, jsonResponse } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, isUserUnlocked } from '../_lib.js';
 
-/** POST /api/marathons/join - User joins a marathon. Body: { marathonId, userId } */
+/** POST /api/marathons/join - User joins a marathon. Requires Firebase auth; only paid (unlocked) users can join. Body: { marathonId } */
 export async function POST(request) {
   try {
+    const uid = await verifyFirebaseUser(request);
+    if (!uid) return jsonResponse({ error: 'Sign in to join a marathon' }, 401);
+
     const body = await request.json().catch(() => ({}));
-    const { marathonId, userId } = body;
-    if (!marathonId || !userId) {
-      return jsonResponse({ error: 'marathonId and userId required' }, 400);
-    }
+    const marathonId = body.marathonId;
+    if (!marathonId) return jsonResponse({ error: 'marathonId required' }, 400);
+
     const db = getDb();
     if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
 
-    const participationRef = db.doc(`marathonParticipations/${marathonId}_${userId}`);
+    const unlocked = await isUserUnlocked(db, uid);
+    if (!unlocked) {
+      return jsonResponse(
+        { error: 'Only users who have unlocked the game can join marathons. Unlock in the app first.' },
+        403
+      );
+    }
+
+    const participationRef = db.doc(`marathonParticipations/${marathonId}_${uid}`);
     const existing = await participationRef.get();
     if (existing.exists) {
       return jsonResponse({ ok: true, alreadyJoined: true });
@@ -19,7 +29,7 @@ export async function POST(request) {
 
     await participationRef.set({
       marathonId,
-      userId,
+      userId: uid,
       joinedAt: new Date().toISOString(),
       japasCount: 0,
     });

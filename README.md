@@ -50,6 +50,19 @@ Until these files are added, the app uses a placeholder tone. Update `src/data/d
 
 Without Firebase config, the app runs normally but the Google Sign-In button is hidden.
 
+## Scalability (10k users, 100 priests)
+
+The app is built to handle many concurrent users and priests without breaking:
+
+- **Firebase Auth** – Handles millions of users; 10k concurrent users is well within limits.
+- **Firestore** – Reads/writes are per-document and spread across many docs (e.g. `users/{uid}/data/progress`, `marathons`, `marathonParticipations`). No single hot document; 10k users and 100 priests are within Firestore’s scale.
+- **Backend API (Vercel serverless)** – Each request is a separate invocation. With 10k users and 100 priests the main limits are:
+  - **Vercel Hobby**: Invocation count and execution time caps. For sustained high traffic, use **Vercel Pro** (or run the API on a different host with higher limits).
+  - **Cold starts**: First request after idle can be slower; keep the serverless functions warm if you need low latency (e.g. cron ping or Vercel Pro).
+- **Client** – The game and UI run in the browser; there is no shared in-memory server state, so adding more users does not slow the app.
+
+**Recommendation**: For 10k users and 100 priests using the app and marathons at the same time, use **Vercel Pro** (or equivalent) and ensure Firebase/Firestore quotas are sufficient. The architecture (stateless API + Firestore) scales; the main thing to verify is your hosting plan’s invocation and concurrency limits.
+
 ## Tech Stack
 
 - Vite + React 18 + TypeScript

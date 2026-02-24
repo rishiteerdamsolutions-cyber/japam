@@ -17,6 +17,7 @@ import * as priestLinkHandler from './_handlers/priest/link.js';
 import * as marathonsDiscoverHandler from './_handlers/marathons/discover.js';
 import * as marathonsJoinHandler from './_handlers/marathons/join.js';
 import * as userProgressHandler from './_handlers/user/progress.js';
+import * as userJapaHandler from './_handlers/user/japa.js';
 import * as userUnlockHandler from './_handlers/user/unlock.js';
 
 function getPathSegments(request) {
@@ -58,6 +59,8 @@ const HANDLERS = {
   'POST marathons/join': marathonsJoinHandler,
   'GET user/progress': userProgressHandler,
   'POST user/progress': userProgressHandler,
+  'GET user/japa': userJapaHandler,
+  'POST user/japa': userJapaHandler,
   'GET user/unlock': userUnlockHandler,
 };
 

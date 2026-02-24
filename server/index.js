@@ -182,6 +182,31 @@ app.post('/api/admin/set-price', async (req, res) => {
   }
 });
 
+app.post('/api/priest/link', async (req, res) => {
+  try {
+    const { userId, priestUsername, priestPassword } = req.body || {};
+    if (!userId?.trim() || !priestUsername?.trim() || !priestPassword) {
+      return res.status(400).json({ error: 'userId, priestUsername and priestPassword required' });
+    }
+    if (!db) return res.status(503).json({ error: 'Database not configured' });
+    const snap = await db.collection('temples').where('priestUsername', '==', priestUsername.trim()).limit(1).get();
+    if (snap.empty) return res.status(401).json({ error: 'Invalid username or password' });
+    const doc = snap.docs[0];
+    const data = doc.data();
+    const templeId = doc.id;
+    const templeName = data.name || '';
+    if (!verifyPassword(priestPassword, data.priestPasswordHash)) {
+      return res.status(401).json({ error: 'Invalid username or password' });
+    }
+    await doc.ref.update({ priestUserId: userId.trim() });
+    const token = createPriestToken(templeId, templeName);
+    res.json({ ok: true, token, templeId, templeName });
+  } catch (e) {
+    console.error('priest link', e);
+    res.status(500).json({ error: e.message });
+  }
+});
+
 app.post('/api/priest-login', async (req, res) => {
   try {
     const { username, password } = req.body || {};
@@ -208,38 +233,55 @@ app.post('/api/priest-login', async (req, res) => {
   }
 });
 
+function generatePriestUsername(templeName) {
+  const slug = (templeName || '').toLowerCase().replace(/[^a-z0-9\s]/g, '').trim().replace(/\s+/g, '-').slice(0, 30) || 'temple';
+  const base = `pujari@${slug}`;
+  return base.length >= 12 && base.length <= 50 ? base : `pujari@${slug}-${Date.now().toString(36).slice(-4)}`;
+}
+
+function generatePriestPassword() {
+  const caps = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+  const digits = '23456789';
+  const small = 'abcdefghjkmnpqrstuvwxyz';
+  const symbols = '@!#$%&*';
+  const pick = (s, n) => Array.from({ length: n }, () => s[Math.floor(Math.random() * s.length)]).join('');
+  const parts = [pick(caps, 2), pick(digits, 2), pick(small, 2), pick(symbols, 2)];
+  const rest = pick(caps + digits + small + symbols, 4);
+  return [...parts.join(''), ...rest].sort(() => Math.random() - 0.5).join('');
+}
+
 app.post('/api/admin/create-temple', async (req, res) => {
   try {
     const token = getAdminToken(req);
     if (!verifyAdminToken(token)) return res.status(401).json({ error: 'Invalid or expired session' });
-    const { state, district, cityTownVillage, area, templeName, priestUsername, priestPassword } = req.body || {};
-    if (!state || !district || !cityTownVillage || !area?.trim() || !templeName?.trim() || !priestUsername?.trim() || !priestPassword) {
+    const { state, district, cityTownVillage, area, templeName } = req.body || {};
+    if (!state || !district || !cityTownVillage || !area?.trim() || !templeName?.trim()) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
-    if (!validatePriestUsername(priestUsername.trim())) {
-      return res.status(400).json({ error: 'Username must be pujari@templename (e.g. pujari@venkateswara)' });
-    }
-    if (!validatePriestPassword(priestPassword)) {
-      return res.status(400).json({ error: 'Password: 2 caps, 2 digits, 2 small, 2 symbols; 10-20 chars' });
-    }
     if (!db) return res.status(503).json({ error: 'Database not configured' });
-    const existing = await db.collection('temples').where('priestUsername', '==', priestUsername.trim()).limit(1).get();
-    if (!existing.empty) {
-      return res.status(400).json({ error: 'Username already exists' });
+    const name = templeName.trim();
+    let priestUsername = generatePriestUsername(name);
+    let priestPassword = generatePriestPassword();
+    let attempts = 0;
+    while (attempts < 5) {
+      const existing = await db.collection('temples').where('priestUsername', '==', priestUsername).limit(1).get();
+      if (existing.empty) break;
+      priestUsername = generatePriestUsername(name + '-' + attempts);
+      attempts++;
     }
     const priestPasswordHash = hashPassword(priestPassword);
     const temple = {
-      name: templeName.trim(),
+      name,
       state,
       district,
       cityTownVillage,
       area: area.trim(),
-      priestUsername: priestUsername.trim(),
+      priestUsername,
       priestPasswordHash,
       createdAt: new Date().toISOString(),
     };
     const docRef = await db.collection('temples').add(temple);
-    res.json({ ok: true, templeId: docRef.id });
+    res.json({ ok: true, templeId: docRef.id, priestUsername, priestPassword });
   } catch (e) {
     console.error('admin create-temple', e);
     res.status(500).json({ error: e.message || 'Failed to create temple' });

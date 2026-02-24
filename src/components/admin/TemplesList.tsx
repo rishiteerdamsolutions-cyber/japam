@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { getState, getDistrict, getCity } from '../../data/regions';
 
 const API_BASE = import.meta.env.VITE_API_URL ?? '';
 
@@ -50,11 +49,8 @@ export function TemplesList({ adminToken, refreshTrigger }: TemplesListProps) {
   }, [adminToken, refreshTrigger]);
 
   const getLocationLabel = (t: Temple) => {
-    const state = getState(t.state);
-    const district = state && getDistrict(t.state, t.district);
-    const city = district && getCity(t.state, t.district, t.cityTownVillage);
-    const parts = [state?.name, district?.name, city?.name].filter(Boolean);
-    return parts.join(', ') || t.state;
+    const parts = [t.state, t.district, t.cityTownVillage].filter(Boolean);
+    return parts.join(', ');
   };
 
   if (loading) return <p className="text-amber-200/70 text-sm">Loading temples…</p>;

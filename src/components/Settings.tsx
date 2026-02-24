@@ -1,20 +1,64 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useSettingsStore } from '../store/settingsStore';
+import { useAuthStore } from '../store/authStore';
 import { GoogleSignIn } from './auth/GoogleSignIn';
 
 const WHATSAPP_LINK = 'https://wa.me/919505009699';
 const BG_IMAGE = '/images/settingspagebg.png';
+const API_BASE = import.meta.env.VITE_API_URL ?? '';
+const PRIEST_TOKEN_KEY = 'japam_priest_token';
+const PRIEST_TEMPLE_KEY = 'japam_priest_temple';
 
 interface SettingsProps {
   onBack: () => void;
 }
 
 export function Settings({ onBack }: SettingsProps) {
+  const user = useAuthStore((s) => s.user);
   const { backgroundMusicEnabled, backgroundMusicVolume, load, setBackgroundMusic, setBackgroundMusicVolume } = useSettingsStore();
+  const [priestUsername, setPriestUsername] = useState('');
+  const [priestPassword, setPriestPassword] = useState('');
+  const [priestLinking, setPriestLinking] = useState(false);
+  const [priestMessage, setPriestMessage] = useState<string | null>(null);
 
   useEffect(() => {
     load();
   }, [load]);
+
+  const handlePriestLink = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user?.uid || !priestUsername.trim() || !priestPassword) {
+      setPriestMessage('Sign in with Google first, then enter priest credentials');
+      return;
+    }
+    setPriestLinking(true);
+    setPriestMessage(null);
+    try {
+      const url = API_BASE ? `${API_BASE}/api/priest/link` : '/api/priest/link';
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.uid, priestUsername: priestUsername.trim(), priestPassword }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setPriestMessage(data.error || 'Invalid credentials');
+        return;
+      }
+      if (data.token && data.templeId) {
+        localStorage.setItem(PRIEST_TOKEN_KEY, data.token);
+        localStorage.setItem(PRIEST_TEMPLE_KEY, JSON.stringify({ templeId: data.templeId, templeName: data.templeName || '' }));
+        setPriestMessage('Linked! Go to Priest dashboard.');
+        setPriestUsername('');
+        setPriestPassword('');
+      }
+    } catch {
+      setPriestMessage('Failed to link');
+    } finally {
+      setPriestLinking(false);
+    }
+  };
 
   return (
     <div
@@ -63,6 +107,38 @@ export function Settings({ onBack }: SettingsProps) {
                 {Math.round((backgroundMusicVolume ?? 0.25) * 100)}%
               </span>
             </div>
+          </div>
+
+          <div className="rounded-2xl bg-black/40 border border-amber-500/20 p-4 backdrop-blur-sm">
+            <h2 className="text-amber-200 font-semibold text-sm mb-2">Priest login</h2>
+            <p className="text-amber-200/70 text-xs mb-3">Sign in with Google above, then enter your priest username and password (given by admin) to link your account.</p>
+            <form onSubmit={handlePriestLink} className="space-y-2 mb-3">
+              <input
+                type="text"
+                value={priestUsername}
+                onChange={(e) => setPriestUsername(e.target.value)}
+                placeholder="Priest username (e.g. pujari@venkateswara)"
+                className="w-full px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30 text-sm"
+              />
+              <input
+                type="text"
+                value={priestPassword}
+                onChange={(e) => setPriestPassword(e.target.value)}
+                placeholder="Priest password (visible)"
+                className="w-full px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30 text-sm"
+              />
+              <button
+                type="submit"
+                disabled={priestLinking || !user}
+                className="w-full py-2 rounded-xl bg-amber-500 text-white text-sm font-semibold disabled:opacity-50"
+              >
+                {priestLinking ? 'Linking…' : 'Link priest account'}
+              </button>
+            </form>
+            {priestMessage && <p className="text-amber-200 text-xs">{priestMessage}</p>}
+            {user && (
+              <Link to="/priest" className="inline-block text-amber-400 text-sm underline mt-1">Go to Priest dashboard →</Link>
+            )}
           </div>
 
           <div className="rounded-2xl bg-black/40 border border-amber-500/20 p-4 backdrop-blur-sm">

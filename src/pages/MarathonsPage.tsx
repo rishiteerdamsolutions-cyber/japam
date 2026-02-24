@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { REGIONS, getState, getDistrict } from '../data/regions';
+import INDIA_REGIONS from '../data/indiaRegions.json';
 import { DEITIES } from '../data/deities';
 import { useAuthStore } from '../store/authStore';
+
+const STATES = [...INDIA_REGIONS.states, ...INDIA_REGIONS.union_territories];
 
 const API_BASE = import.meta.env.VITE_API_URL ?? '';
 
@@ -26,38 +28,33 @@ export function MarathonsPage() {
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
   const [step, setStep] = useState<'state' | 'district' | 'city' | 'temples'>('state');
-  const [stateId, setStateId] = useState('');
-  const [districtId, setDistrictId] = useState('');
-  const [cityId, setCityId] = useState('');
+  const [stateName, setStateName] = useState('');
+  const [districtName, setDistrictName] = useState('');
+  const [cityName, setCityName] = useState('');
   const [temples, setTemples] = useState<Temple[]>([]);
   const [marathonsByTemple, setMarathonsByTemple] = useState<Record<string, Marathon[]>>({});
   const [loading, setLoading] = useState(false);
   const [joining, setJoining] = useState<string | null>(null);
 
-  const state = stateId ? getState(stateId) : null;
-  const district = state && districtId ? getDistrict(stateId, districtId) : null;
-  const cities = district?.cities ?? [];
+  const state = STATES.find((s) => s.name === stateName) || null;
+  const districts = state?.districts ?? [];
 
   useEffect(() => {
-    setDistrictId('');
-    setCityId('');
+    setDistrictName('');
+    setCityName('');
     setStep('state');
-  }, [stateId]);
+  }, [stateName]);
 
   useEffect(() => {
-    setCityId('');
+    setCityName('');
     setStep('district');
-  }, [districtId]);
+  }, [districtName]);
 
   useEffect(() => {
-    setStep('city');
-  }, [cityId]);
-
-  useEffect(() => {
-    if (!stateId || !districtId || !cityId) return;
+    if (!stateName || !districtName || !cityName.trim()) return;
     let cancelled = false;
     setLoading(true);
-    const params = new URLSearchParams({ state: stateId, district: districtId, cityTownVillage: cityId });
+    const params = new URLSearchParams({ state: stateName, district: districtName, cityTownVillage: cityName.trim() });
     const url = API_BASE ? `${API_BASE}/api/marathons/discover?${params}` : `/api/marathons/discover?${params}`;
     fetch(url)
       .then((r) => r.json())
@@ -75,7 +72,7 @@ export function MarathonsPage() {
         if (!cancelled) setLoading(false);
       });
     return () => { cancelled = true; };
-  }, [stateId, districtId, cityId]);
+  }, [stateName, districtName, cityName]);
 
   const handleJoin = async (marathonId: string) => {
     if (!user?.uid) {
@@ -116,7 +113,7 @@ export function MarathonsPage() {
           ← Back
         </button>
         <h1 className="text-xl font-bold text-amber-400">Japa Marathons</h1>
-        <a href="/priest/login" className="text-amber-200/70 text-xs">
+        <a href="/settings" className="text-amber-200/70 text-xs">
           Priest
         </a>
       </div>
@@ -127,13 +124,13 @@ export function MarathonsPage() {
         <div>
           <label className="text-amber-200/80 text-sm block mb-2">State</label>
           <select
-            value={stateId}
-            onChange={(e) => setStateId(e.target.value)}
+            value={stateName}
+            onChange={(e) => setStateName(e.target.value)}
             className="w-full max-w-xs px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30"
           >
             <option value="">Select State</option>
-            {REGIONS.map((s) => (
-              <option key={s.id} value={s.id}>{s.name}</option>
+            {STATES.map((s) => (
+              <option key={s.name} value={s.name}>{s.name}</option>
             ))}
           </select>
         </div>
@@ -143,31 +140,28 @@ export function MarathonsPage() {
         <div>
           <label className="text-amber-200/80 text-sm block mb-2">District</label>
           <select
-            value={districtId}
-            onChange={(e) => setDistrictId(e.target.value)}
+            value={districtName}
+            onChange={(e) => setDistrictName(e.target.value)}
             className="w-full max-w-xs px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30"
           >
             <option value="">Select District</option>
-            {state.districts.map((d) => (
-              <option key={d.id} value={d.id}>{d.name}</option>
+            {districts.map((d) => (
+              <option key={d} value={d}>{d}</option>
             ))}
           </select>
         </div>
       )}
 
-      {step === 'city' && district && (
+      {step === 'city' && districtName && (
         <div>
           <label className="text-amber-200/80 text-sm block mb-2">City / Town / Village</label>
-          <select
-            value={cityId}
-            onChange={(e) => setCityId(e.target.value)}
+          <input
+            type="text"
+            value={cityName}
+            onChange={(e) => setCityName(e.target.value)}
+            placeholder="City / Town / Village"
             className="w-full max-w-xs px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30"
-          >
-            <option value="">Select City</option>
-            {cities.map((c) => (
-              <option key={c.id} value={c.id}>{c.name}</option>
-            ))}
-          </select>
+          />
         </div>
       )}
 

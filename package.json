@@ -13,6 +13,7 @@
     "@tailwindcss/vite": "^4.2.0",
     "firebase": "^12.9.0",
     "firebase-admin": "^13.0.1",
+    "india-states-districts": "^1.8.0",
     "jspdf": "^4.2.0",
     "razorpay": "^2.9.2",
     "react": "^19.2.0",

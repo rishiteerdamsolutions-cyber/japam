@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { DEITIES } from '../data/deities';
-import { PriestLoginPage, PRIEST_TOKEN_KEY, PRIEST_TEMPLE_KEY } from './PriestLoginPage';
 
 const API_BASE = import.meta.env.VITE_API_URL ?? '';
+const PRIEST_TOKEN_KEY = 'japam_priest_token';
+const PRIEST_TEMPLE_KEY = 'japam_priest_temple';
 
 interface Marathon {
   id: string;
@@ -67,7 +68,7 @@ export function PriestPage() {
     localStorage.removeItem(PRIEST_TEMPLE_KEY);
     setToken(null);
     setTemple(null);
-    navigate('/priest/login', { replace: true });
+    navigate('/settings', { replace: true });
   };
 
   const handleCreate = async (e: React.FormEvent) => {
@@ -115,7 +116,20 @@ export function PriestPage() {
   };
 
   if (!token) {
-    return <PriestLoginPage />;
+    return (
+      <div className="min-h-screen bg-[#1a1a2e] p-6 flex flex-col items-center justify-center">
+        <h1 className="text-2xl font-bold text-amber-400 mb-4">Priest Dashboard</h1>
+        <p className="text-amber-200/80 text-center mb-6 max-w-sm">
+          Sign in with Google first, then link your priest account in Settings.
+        </p>
+        <Link to="/settings" className="px-6 py-3 rounded-xl bg-amber-500 text-white font-semibold">
+          Go to Settings
+        </Link>
+        <Link to="/" className="text-amber-200/70 text-sm mt-4 underline">
+          ← Back to game
+        </Link>
+      </div>
+    );
   }
 
   const deityName = (id: string) => DEITIES.find((d) => d.id === id)?.name ?? id;

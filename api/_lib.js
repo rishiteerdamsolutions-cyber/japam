@@ -88,6 +88,31 @@ export async function getPricing() {
 
 const PRIEST_SECRET = process.env.PRIEST_SECRET || process.env.ADMIN_SECRET || process.env.JWT_SECRET || 'change-me-in-production';
 
+/** Generate priest username from temple name: pujari@slug */
+export function generatePriestUsername(templeName) {
+  const slug = (templeName || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .slice(0, 30) || 'temple';
+  const base = `pujari@${slug}`;
+  return base.length >= 12 && base.length <= 50 ? base : `pujari@${slug}-${Date.now().toString(36).slice(-4)}`;
+}
+
+/** Generate random priest password: 2 caps, 2 digits, 2 small, 2 symbols; 10-20 chars */
+export function generatePriestPassword() {
+  const caps = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+  const digits = '23456789';
+  const small = 'abcdefghjkmnpqrstuvwxyz';
+  const symbols = '@!#$%&*';
+  const pick = (s, n) => Array.from({ length: n }, () => s[Math.floor(Math.random() * s.length)]).join('');
+  const parts = [pick(caps, 2), pick(digits, 2), pick(small, 2), pick(symbols, 2)];
+  const rest = pick(caps + digits + small + symbols, 4);
+  const shuffled = [...parts.join(''), ...rest].sort(() => Math.random() - 0.5).join('');
+  return shuffled;
+}
+
 /** Hash password for priest (scrypt). Returns "salt:hash" hex. */
 export function hashPassword(password) {
   const salt = crypto.randomBytes(16).toString('hex');

@@ -1,6 +1,6 @@
 /**
  * Single API handler for Vercel — keeps deployment under the 12 serverless function limit (Hobby).
- * All /api/* requests are rewritten to /api/proxy?path=... ; this file routes to api-handlers/ by path and method.
+ * All /api/* requests are rewritten to /api/proxy?path=... ; this file routes to api/_handlers/ by path and method.
  */
 function getPathSegments(request) {
   const url = new URL(request.url);
@@ -25,20 +25,20 @@ function jsonResponse(data, status = 404) {
 }
 
 const ROUTES = {
-  'GET price': '../api-handlers/price.js',
-  'POST create-order': '../api-handlers/create-order.js',
-  'POST verify-unlock': '../api-handlers/verify-unlock.js',
-  'POST admin-login': '../api-handlers/admin-login.js',
-  'POST priest-login': '../api-handlers/priest-login.js',
-  'POST admin/set-price': '../api-handlers/admin/set-price.js',
-  'POST admin/create-temple': '../api-handlers/admin/create-temple.js',
-  'GET admin/list-temples': '../api-handlers/admin/list-temples.js',
-  'GET admin/marathons': '../api-handlers/admin/marathons.js',
-  'GET priest/marathons': '../api-handlers/priest/marathons.js',
-  'POST priest/marathons': '../api-handlers/priest/marathons.js',
-  'POST priest/link': '../api-handlers/priest/link.js',
-  'GET marathons/discover': '../api-handlers/marathons/discover.js',
-  'POST marathons/join': '../api-handlers/marathons/join.js',
+  'GET price': './_handlers/price.js',
+  'POST create-order': './_handlers/create-order.js',
+  'POST verify-unlock': './_handlers/verify-unlock.js',
+  'POST admin-login': './_handlers/admin-login.js',
+  'POST priest-login': './_handlers/priest-login.js',
+  'POST admin/set-price': './_handlers/admin/set-price.js',
+  'POST admin/create-temple': './_handlers/admin/create-temple.js',
+  'GET admin/list-temples': './_handlers/admin/list-temples.js',
+  'GET admin/marathons': './_handlers/admin/marathons.js',
+  'GET priest/marathons': './_handlers/priest/marathons.js',
+  'POST priest/marathons': './_handlers/priest/marathons.js',
+  'POST priest/link': './_handlers/priest/link.js',
+  'GET marathons/discover': './_handlers/marathons/discover.js',
+  'POST marathons/join': './_handlers/marathons/join.js',
 };
 
 async function route(request, method, pathSegments) {

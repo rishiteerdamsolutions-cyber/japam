@@ -91,7 +91,7 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
       <div className="bg-[#1a1a2e] rounded-2xl border border-amber-500/30 p-6 max-w-sm w-full shadow-xl">
         <h2 className="text-xl font-bold text-amber-400 mb-2">Unlock all levels</h2>
         <p className="text-amber-200/90 text-sm mb-4">
-          You’ve completed the first 5 levels (108 japas). Pay once to unlock levels 6–50.
+          You’ve completed the first 2 levels. Pay once to unlock levels 3–50.
         </p>
         {loading ? (
           <p className="text-amber-200/70 text-sm">Loading…</p>

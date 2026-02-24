@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { loadUserUnlock } from '../lib/firestore';
 import { useAuthStore } from './authStore';
 
-export const FIRST_LOCKED_LEVEL_INDEX = 5; // Level 6 and above need payment
+export const FIRST_LOCKED_LEVEL_INDEX = 2; // Level 3 and above need payment (pay after 2nd level)
 
 interface UnlockState {
   levelsUnlocked: boolean | null;

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { OpeningVideoModal } from './OpeningVideoModal';
+import { JapamLogo } from '../ui/JapamLogo';
 
 const A_LOGO_SRC = '/images/A-logo.png';
 const BG_IMAGE = '/images/landingpagebg.png';
@@ -27,10 +28,18 @@ export function Landing({ onEnterApp }: LandingProps) {
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/55 to-black/75" aria-hidden />
         <div className="relative z-10 flex flex-col min-h-screen">
           <header className="pt-16 sm:pt-24 pb-6 px-4 text-center">
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.4 }}
+              className="mx-auto mb-4 drop-shadow-[0_0_20px_rgba(251,191,36,0.4)]"
+            >
+              <JapamLogo size={112} />
+            </motion.div>
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
               className="text-5xl sm:text-6xl font-bold text-white mb-2 tracking-tight drop-shadow-[0_0_20px_rgba(251,191,36,0.5)]"
               style={{ fontFamily: 'serif' }}
             >

@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
 import { DEITIES } from '../../data/deities';
 import { GoogleSignIn } from '../auth/GoogleSignIn';
+import { JapamLogo } from '../ui/JapamLogo';
+import { useAuthStore } from '../../store/authStore';
 import type { GameMode } from '../../store/gameStore';
 
 const BG_IMAGE = '/images/game%20menupagebg.png';
@@ -13,6 +15,9 @@ interface MainMenuProps {
 }
 
 export function MainMenu({ onSelect, onOpenMap, onOpenJapaDashboard, onOpenSettings }: MainMenuProps) {
+  const user = useAuthStore((s) => s.user);
+  const displayName = user?.displayName || user?.email?.split('@')[0] || '';
+
   return (
     <div
       className="relative min-h-screen flex flex-col items-center p-4 pb-[env(safe-area-inset-bottom)] bg-cover bg-center"
@@ -20,7 +25,15 @@ export function MainMenu({ onSelect, onOpenMap, onOpenJapaDashboard, onOpenSetti
     >
       <div className="absolute inset-0 bg-black/60" aria-hidden />
       <div className="relative z-10 w-full max-w-sm flex flex-col items-center">
-        <h1 className="text-4xl font-bold text-amber-400 mt-10 mb-1 drop-shadow-lg" style={{ fontFamily: 'serif' }}>
+        <div className="w-full flex justify-end items-center mt-2 mb-1">
+          {displayName && (
+            <span className="text-amber-200/90 text-sm truncate max-w-[180px]" title={displayName}>
+              {displayName}
+            </span>
+          )}
+        </div>
+        <JapamLogo size={100} className="mt-4 drop-shadow-lg" />
+        <h1 className="text-4xl font-bold text-amber-400 mt-2 mb-1 drop-shadow-lg" style={{ fontFamily: 'serif' }}>
           Japam
         </h1>
         <p className="text-amber-200/90 text-sm mb-6">Match & Chant</p>

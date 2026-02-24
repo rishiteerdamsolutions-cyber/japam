@@ -1,41 +1,19 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AdminPanel } from '../components/admin/AdminPanel';
+import { getStoredAdminToken, setStoredAdminToken } from '../lib/adminAuth';
 
-const ADMIN_TOKEN_KEY = 'japam_admin_token';
 const API_BASE = import.meta.env.VITE_API_URL ?? '';
-
-function getStoredToken(): string | null {
-  try {
-    return sessionStorage.getItem(ADMIN_TOKEN_KEY);
-  } catch {
-    return null;
-  }
-}
-
-function setStoredToken(token: string): void {
-  try {
-    sessionStorage.setItem(ADMIN_TOKEN_KEY, token);
-  } catch {}
-}
-
-function clearStoredToken(): void {
-  try {
-    sessionStorage.removeItem(ADMIN_TOKEN_KEY);
-  } catch {}
-}
 
 export function AdminPage() {
   const navigate = useNavigate();
-  const [token, setToken] = useState<string | null>(getStoredToken);
   const [adminId, setAdminId] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setToken(getStoredToken());
-  }, []);
+    if (getStoredAdminToken()) navigate('/admin/pricing', { replace: true });
+  }, [navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,9 +32,9 @@ export function AdminPage() {
         return;
       }
       if (data.token) {
-        setStoredToken(data.token);
-        setToken(data.token);
+        setStoredAdminToken(data.token);
         setPassword('');
+        navigate('/admin/pricing', { replace: true });
       } else {
         setError('Login failed');
       }
@@ -66,24 +44,6 @@ export function AdminPage() {
       setLoading(false);
     }
   };
-
-  const handleLogout = () => {
-    clearStoredToken();
-    setToken(null);
-    setAdminId('');
-    setPassword('');
-  };
-
-  if (token) {
-    return (
-      <AdminPanel
-        onBack={() => navigate('/', { replace: true })}
-        passwordAuth
-        adminToken={token}
-        onLogout={handleLogout}
-      />
-    );
-  }
 
   return (
     <div className="min-h-screen bg-[#1a1a2e] p-6 flex flex-col items-center justify-center">

@@ -123,7 +123,7 @@ export function MarathonsPage() {
   return (
     <div className="min-h-screen bg-[#1a1a2e] p-4 pb-[env(safe-area-inset-bottom)]">
       <div className="flex items-center justify-between mb-6">
-        <button onClick={() => navigate('/')} className="text-amber-400 text-sm">
+        <button onClick={() => navigate(-1)} className="text-amber-400 text-sm">
           ← Back
         </button>
         <h1 className="text-xl font-bold text-amber-400">Japa Marathons</h1>

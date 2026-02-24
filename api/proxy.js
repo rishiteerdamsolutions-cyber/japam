@@ -1,10 +1,23 @@
 /**
  * Single API handler for Vercel — keeps deployment under the 12 serverless function limit (Hobby).
- * All /api/* requests are rewritten to /api/proxy?path=... ; this file routes to api/_handlers/ by path and method.
+ * All /api/* requests are rewritten to /api/proxy?path=... ; routes via static imports so handlers are bundled.
  */
+import * as priceHandler from './_handlers/price.js';
+import * as createOrderHandler from './_handlers/create-order.js';
+import * as verifyUnlockHandler from './_handlers/verify-unlock.js';
+import * as adminLoginHandler from './_handlers/admin-login.js';
+import * as priestLoginHandler from './_handlers/priest-login.js';
+import * as adminSetPriceHandler from './_handlers/admin/set-price.js';
+import * as adminCreateTempleHandler from './_handlers/admin/create-temple.js';
+import * as adminListTemplesHandler from './_handlers/admin/list-temples.js';
+import * as adminMarathonsHandler from './_handlers/admin/marathons.js';
+import * as priestMarathonsHandler from './_handlers/priest/marathons.js';
+import * as priestLinkHandler from './_handlers/priest/link.js';
+import * as marathonsDiscoverHandler from './_handlers/marathons/discover.js';
+import * as marathonsJoinHandler from './_handlers/marathons/join.js';
+
 function getPathSegments(request) {
   const url = new URL(request.url);
-  // Rewrite sends /api/price -> /api/proxy?path=price, /api/admin/set-price -> /api/proxy?path=admin/set-price
   const pathParam = url.searchParams.get('path');
   if (pathParam) {
     const segments = pathParam.split('/').filter(Boolean);
@@ -24,30 +37,29 @@ function jsonResponse(data, status = 404) {
   });
 }
 
-const ROUTES = {
-  'GET price': './_handlers/price.js',
-  'POST create-order': './_handlers/create-order.js',
-  'POST verify-unlock': './_handlers/verify-unlock.js',
-  'POST admin-login': './_handlers/admin-login.js',
-  'POST priest-login': './_handlers/priest-login.js',
-  'POST admin/set-price': './_handlers/admin/set-price.js',
-  'POST admin/create-temple': './_handlers/admin/create-temple.js',
-  'GET admin/list-temples': './_handlers/admin/list-temples.js',
-  'GET admin/marathons': './_handlers/admin/marathons.js',
-  'GET priest/marathons': './_handlers/priest/marathons.js',
-  'POST priest/marathons': './_handlers/priest/marathons.js',
-  'POST priest/link': './_handlers/priest/link.js',
-  'GET marathons/discover': './_handlers/marathons/discover.js',
-  'POST marathons/join': './_handlers/marathons/join.js',
+const HANDLERS = {
+  'GET price': priceHandler,
+  'POST create-order': createOrderHandler,
+  'POST verify-unlock': verifyUnlockHandler,
+  'POST admin-login': adminLoginHandler,
+  'POST priest-login': priestLoginHandler,
+  'POST admin/set-price': adminSetPriceHandler,
+  'POST admin/create-temple': adminCreateTempleHandler,
+  'GET admin/list-temples': adminListTemplesHandler,
+  'GET admin/marathons': adminMarathonsHandler,
+  'GET priest/marathons': priestMarathonsHandler,
+  'POST priest/marathons': priestMarathonsHandler,
+  'POST priest/link': priestLinkHandler,
+  'GET marathons/discover': marathonsDiscoverHandler,
+  'POST marathons/join': marathonsJoinHandler,
 };
 
 async function route(request, method, pathSegments) {
   const pathKey = pathSegments.join('/');
   const routeKey = `${method} ${pathKey}`;
-  const modulePath = ROUTES[routeKey];
-  if (!modulePath) return jsonResponse({ error: 'Not found' }, 404);
+  const mod = HANDLERS[routeKey];
+  if (!mod) return jsonResponse({ error: 'Not found' }, 404);
   try {
-    const mod = await import(modulePath);
     const handler = mod[method];
     if (typeof handler !== 'function') return jsonResponse({ error: 'Method not allowed' }, 405);
     return await handler(request);

@@ -1,0 +1,40 @@
+import { getDb, jsonResponse } from '../_lib.js';
+
+/** POST /api/marathons/join - User joins a marathon. Body: { marathonId, userId } */
+export async function POST(request) {
+  try {
+    const body = await request.json().catch(() => ({}));
+    const { marathonId, userId } = body;
+    if (!marathonId || !userId) {
+      return jsonResponse({ error: 'marathonId and userId required' }, 400);
+    }
+    const db = getDb();
+    if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
+
+    const participationRef = db.doc(`marathonParticipations/${marathonId}_${userId}`);
+    const existing = await participationRef.get();
+    if (existing.exists) {
+      return jsonResponse({ ok: true, alreadyJoined: true });
+    }
+
+    await participationRef.set({
+      marathonId,
+      userId,
+      joinedAt: new Date().toISOString(),
+      japasCount: 0,
+    });
+
+    const marathonRef = db.doc(`marathons/${marathonId}`);
+    const marathonSnap = await marathonRef.get();
+    if (marathonSnap.exists) {
+      const data = marathonSnap.data();
+      const joinedCount = (data.joinedCount ?? 0) + 1;
+      await marathonRef.update({ joinedCount });
+    }
+
+    return jsonResponse({ ok: true });
+  } catch (e) {
+    console.error('marathons join', e);
+    return jsonResponse({ error: e.message || 'Failed' }, 500);
+  }
+}

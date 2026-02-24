@@ -19,40 +19,49 @@ export async function loadUserUnlock(uid: string): Promise<boolean> {
 const API_BASE = import.meta.env.VITE_API_URL ?? '';
 
 const DEFAULT_UNLOCK_PRICE_PAISE = 1000; // ₹10
+const DEFAULT_DISPLAY_PRICE_PAISE = 9900; // ₹99 strikethrough
 
-/** Unlock price in paise. Tries /api/price first, then Firestore. Never returns 0 (uses default if missing/invalid). */
-export async function loadPricingConfig(): Promise<{ unlockPricePaise: number }> {
-  let paise: number | null = null;
+/** Unlock + display price in paise. Tries /api/price first, then Firestore. */
+export async function loadPricingConfig(): Promise<{ unlockPricePaise: number; displayPricePaise: number }> {
+  let unlock: number | null = null;
+  let display: number | null = null;
   try {
     const url = API_BASE ? `${API_BASE}/api/price` : '/api/price';
     const res = await fetch(url);
     if (res.ok) {
-      const data = (await res.json()) as { unlockPricePaise?: number };
-      const p = data?.unlockPricePaise;
-      if (typeof p === 'number' && p >= 100) paise = Math.round(p);
+      const data = (await res.json()) as { unlockPricePaise?: number; displayPricePaise?: number };
+      const u = data?.unlockPricePaise;
+      const d = data?.displayPricePaise;
+      if (typeof u === 'number' && u >= 100) unlock = Math.round(u);
+      if (typeof d === 'number' && d >= 100) display = Math.round(d);
     }
   } catch {
     // fallback to Firestore if API not available
   }
-  if (paise == null && db) {
+  if ((unlock == null || display == null) && db) {
     try {
       const snap = await getDoc(doc(db, 'config', 'pricing'));
       if (snap.exists()) {
-        const d = snap.data() as { unlockPricePaise?: number };
-        const p = d?.unlockPricePaise;
-        if (typeof p === 'number' && p >= 100) paise = Math.round(p);
+        const d = snap.data() as { unlockPricePaise?: number; displayPricePaise?: number };
+        if (unlock == null && typeof d?.unlockPricePaise === 'number' && d.unlockPricePaise >= 100) unlock = Math.round(d.unlockPricePaise);
+        if (display == null && typeof d?.displayPricePaise === 'number' && d.displayPricePaise >= 100) display = Math.round(d.displayPricePaise);
       }
     } catch {
       // ignore
     }
   }
-  return { unlockPricePaise: paise != null ? paise : DEFAULT_UNLOCK_PRICE_PAISE };
+  return {
+    unlockPricePaise: unlock ?? DEFAULT_UNLOCK_PRICE_PAISE,
+    displayPricePaise: display ?? DEFAULT_DISPLAY_PRICE_PAISE,
+  };
 }
 
-/** Save pricing to Firestore (legacy; unlock price is now set in api/_lib.js) */
-export async function savePricingConfig(unlockPricePaise: number): Promise<void> {
+/** Save pricing to Firestore (legacy; when not using backend set-price) */
+export async function savePricingConfig(unlockPricePaise: number, displayPricePaise?: number): Promise<void> {
   if (!db) return;
-  await setDoc(doc(db, 'config', 'pricing'), { unlockPricePaise });
+  const data: { unlockPricePaise: number; displayPricePaise?: number } = { unlockPricePaise };
+  if (typeof displayPricePaise === 'number' && displayPricePaise >= 100) data.displayPricePaise = displayPricePaise;
+  await setDoc(doc(db, 'config', 'pricing'), data, { merge: true });
 }
 
 function getAdminUids(data: Record<string, unknown> | null): string[] {

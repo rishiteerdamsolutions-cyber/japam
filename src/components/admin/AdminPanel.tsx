@@ -1,8 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useAuthStore } from '../../store/authStore';
 import { loadPricingConfig, savePricingConfig, loadIsAdmin } from '../../lib/firestore';
+import { AddTempleForm } from './AddTempleForm';
+import { TemplesList } from './TemplesList';
+import { AdminMarathonsList } from './AdminMarathonsList';
 
 const API_BASE = import.meta.env.VITE_API_URL ?? '';
+
+type AdminTab = 'pricing' | 'temples' | 'marathons';
 
 interface AdminPanelProps {
   onBack: () => void;
@@ -16,9 +21,12 @@ interface AdminPanelProps {
 export function AdminPanel({ onBack, passwordAuth, adminToken, onLogout }: AdminPanelProps) {
   const user = useAuthStore((s) => s.user);
   const [isAdmin, setIsAdmin] = useState<boolean | null>(passwordAuth ? true : null);
+  const [tab, setTab] = useState<AdminTab>('pricing');
   const [priceRupees, setPriceRupees] = useState<string>('');
+  const [displayPriceRupees, setDisplayPriceRupees] = useState<string>('99');
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [templesRefresh, setTemplesRefresh] = useState(0);
 
   useEffect(() => {
     if (passwordAuth) {
@@ -32,26 +40,33 @@ export function AdminPanel({ onBack, passwordAuth, adminToken, onLogout }: Admin
     loadIsAdmin(user.uid).then(setIsAdmin);
   }, [user?.uid, passwordAuth]);
 
-  // Load saved price from server when admin panel is shown (so it shows after login)
+  // Load saved prices from server when admin panel is shown (so it shows after login)
   useEffect(() => {
     if (isAdmin !== true) return;
     let cancelled = false;
     loadPricingConfig().then((c) => {
       if (cancelled) return;
-      const paise = c.unlockPricePaise;
-      const valid = typeof paise === 'number' && paise >= 100 ? paise : 1000;
-      setPriceRupees(String(Math.round(valid / 100)));
+      const unlock = c.unlockPricePaise;
+      const display = c.displayPricePaise;
+      setPriceRupees(String(Math.round((typeof unlock === 'number' && unlock >= 100 ? unlock : 1000) / 100)));
+      setDisplayPriceRupees(String(Math.round((typeof display === 'number' && display >= 100 ? display : 9900) / 100)));
     });
     return () => { cancelled = true; };
   }, [isAdmin]);
 
   const handleSave = async () => {
     const rupees = Number(priceRupees);
+    const displayRupees = Number(displayPriceRupees);
     if (!Number.isFinite(rupees) || rupees < 1) {
-      setMessage('Minimum ₹1');
+      setMessage('Minimum ₹1 for actual price');
+      return;
+    }
+    if (!Number.isFinite(displayRupees) || displayRupees < 1) {
+      setMessage('Minimum ₹1 for display price');
       return;
     }
     const paise = Math.round(rupees * 100);
+    const displayPaise = Math.round(displayRupees * 100);
     setSaving(true);
     setMessage(null);
     try {
@@ -60,7 +75,7 @@ export function AdminPanel({ onBack, passwordAuth, adminToken, onLogout }: Admin
         const res = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${adminToken}` },
-          body: JSON.stringify({ unlockPricePaise: paise }),
+          body: JSON.stringify({ unlockPricePaise: paise, displayPricePaise: displayPaise }),
         });
         const data = await res.json().catch(() => ({}));
         if (!res.ok) {
@@ -68,10 +83,10 @@ export function AdminPanel({ onBack, passwordAuth, adminToken, onLogout }: Admin
           if (res.status === 401 && onLogout) onLogout();
           return;
         }
-        setMessage('Saved. Unlock price = ₹' + rupees.toFixed(0));
+        setMessage('Saved. Paywall: ~~₹' + displayRupees.toFixed(0) + '~~ ₹' + rupees.toFixed(0));
       } else {
-        await savePricingConfig(paise);
-        setMessage('Saved. Unlock price = ₹' + rupees.toFixed(0));
+        await savePricingConfig(paise, displayPaise);
+        setMessage('Saved. Paywall: ~~₹' + displayRupees.toFixed(0) + '~~ ₹' + rupees.toFixed(0));
       }
     } catch (e) {
       setMessage('Failed to save (check Firestore rules or API)');
@@ -111,18 +126,57 @@ export function AdminPanel({ onBack, passwordAuth, adminToken, onLogout }: Admin
           </button>
         )}
       </div>
+      <div className="flex gap-4 mb-6">
+        <button
+          type="button"
+          onClick={() => setTab('pricing')}
+          className={`text-sm font-medium ${tab === 'pricing' ? 'text-amber-400 underline' : 'text-amber-200/70 hover:text-amber-200'}`}
+        >
+          Pricing
+        </button>
+        {passwordAuth && adminToken && (
+          <>
+            <button
+              type="button"
+              onClick={() => setTab('temples')}
+              className={`text-sm font-medium ${tab === 'temples' ? 'text-amber-400 underline' : 'text-amber-200/70 hover:text-amber-200'}`}
+            >
+              Temples
+            </button>
+            <button
+              type="button"
+              onClick={() => setTab('marathons')}
+              className={`text-sm font-medium ${tab === 'marathons' ? 'text-amber-400 underline' : 'text-amber-200/70 hover:text-amber-200'}`}
+            >
+              Marathons
+            </button>
+          </>
+        )}
+      </div>
+      {tab === 'pricing' && (
+        <>
       <h1 className="text-2xl font-bold text-amber-400 mb-6">Admin – Unlock price</h1>
-      <p className="text-amber-200/80 text-sm mb-2">Price in rupees (e.g. 99)</p>
+      <p className="text-amber-200/80 text-sm mb-2">Actual price (charged to user) in rupees</p>
       <input
         type="number"
         min={1}
         step={1}
         value={priceRupees}
         onChange={(e) => setPriceRupees(e.target.value)}
-        className="w-full max-w-xs px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30 mb-4"
+        className="w-full max-w-xs px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30 mb-2"
+        placeholder="10"
+      />
+      <p className="text-amber-200/80 text-sm mb-2 mt-4">Display price (strikethrough) in rupees</p>
+      <input
+        type="number"
+        min={1}
+        step={1}
+        value={displayPriceRupees}
+        onChange={(e) => setDisplayPriceRupees(e.target.value)}
+        className="w-full max-w-xs px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30 mb-2"
         placeholder="99"
       />
-      <p className="text-amber-200/60 text-xs mb-4">₹{Number(priceRupees) || 0}</p>
+      <p className="text-amber-200/60 text-xs mb-4">Paywall: ~~₹{Number(displayPriceRupees) || 99}~~ ₹{Number(priceRupees) || 0}</p>
       <button
         type="button"
         onClick={handleSave}
@@ -132,6 +186,21 @@ export function AdminPanel({ onBack, passwordAuth, adminToken, onLogout }: Admin
         {saving ? 'Saving…' : 'Save'}
       </button>
       {message && <p className="mt-4 text-amber-200 text-sm">{message}</p>}
+        </>
+      )}
+      {tab === 'temples' && passwordAuth && adminToken && (
+        <>
+          <h1 className="text-2xl font-bold text-amber-400 mb-4">Add Temple / Priest</h1>
+          <AddTempleForm adminToken={adminToken} onSuccess={() => setTemplesRefresh((k) => k + 1)} onLogout={onLogout} />
+          <TemplesList adminToken={adminToken} refreshTrigger={templesRefresh} />
+        </>
+      )}
+      {tab === 'marathons' && passwordAuth && adminToken && (
+        <>
+          <h1 className="text-2xl font-bold text-amber-400 mb-4">Active Marathons</h1>
+          <AdminMarathonsList adminToken={adminToken} />
+        </>
+      )}
     </div>
   );
 }

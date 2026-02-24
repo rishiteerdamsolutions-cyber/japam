@@ -15,6 +15,7 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
   const user = useAuthStore((s) => s.user);
   const loadUnlock = useUnlockStore((s) => s.load);
   const [pricePaise, setPricePaise] = useState<number | null>(null);
+  const [displayPricePaise, setDisplayPricePaise] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [paying, setPaying] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -25,7 +26,9 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
       const config = await loadPricingConfig();
       if (!cancelled) {
         const p = config.unlockPricePaise;
+        const d = config.displayPricePaise;
         setPricePaise(typeof p === 'number' && p >= 100 ? p : 1000);
+        setDisplayPricePaise(typeof d === 'number' && d >= 100 ? d : 9900);
         setLoading(false);
       }
     })();
@@ -86,6 +89,8 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
   };
 
   const priceRupees = pricePaise != null ? (pricePaise / 100).toFixed(0) : '—';
+  const displayRupees = displayPricePaise != null ? (displayPricePaise / 100).toFixed(0) : '99';
+  const showStrikethrough = pricePaise != null && displayPricePaise != null && displayPricePaise > pricePaise;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
@@ -98,7 +103,16 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
           <p className="text-amber-200/70 text-sm">Loading…</p>
         ) : (
           <>
-            <p className="text-2xl font-bold text-white mb-4">₹{priceRupees}</p>
+            <p className="text-2xl font-bold text-white mb-4">
+              {showStrikethrough ? (
+                <>
+                  <span className="line-through text-amber-200/70 mr-2">₹{displayRupees}</span>
+                  <span>₹{priceRupees}</span>
+                </>
+              ) : (
+                <>₹{priceRupees}</>
+              )}
+            </p>
             {error && <p className="text-red-400 text-sm mb-2">{error}</p>}
             <div className="flex gap-2">
               <button

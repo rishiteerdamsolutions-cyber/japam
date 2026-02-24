@@ -17,9 +17,11 @@ export async function POST(request) {
     if (!Number.isFinite(unlockPricePaise) || unlockPricePaise < 100) {
       return jsonResponse({ error: 'Invalid price (min 100 paise)' }, 400);
     }
+    const displayPricePaise = Math.round(Number(body?.displayPricePaise ?? 9900));
+    const safeDisplay = Number.isFinite(displayPricePaise) && displayPricePaise >= 100 ? displayPricePaise : 9900;
     const db = getDb();
     if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
-    await db.doc('config/pricing').set({ unlockPricePaise });
+    await db.doc('config/pricing').set({ unlockPricePaise, displayPricePaise: safeDisplay }, { merge: true });
     return jsonResponse({ ok: true });
   } catch (e) {
     console.error('admin set-price', e);

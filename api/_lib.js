@@ -60,18 +60,94 @@ export function getRazorpay() {
   return razorpay;
 }
 
+const DEFAULT_DISPLAY_PRICE_PAISE = 9900; // ₹99 strikethrough
+
 /** Current price: Firestore config/pricing if set by admin, else UNLOCK_PRICE_PAISE. Never returns < 100 (Razorpay minimum). */
 export async function getUnlockPricePaise() {
+  const { unlockPricePaise } = await getPricing();
+  return unlockPricePaise;
+}
+
+/** Returns both unlock (actual) and display (strikethrough) price in paise. */
+export async function getPricing() {
   const database = getDb();
   if (database) {
     try {
       const snap = await database.doc('config/pricing').get();
       const data = snap?.data();
-      const p = data?.unlockPricePaise;
-      if (typeof p === 'number' && p >= 100) return Math.round(p);
+      const unlock = data?.unlockPricePaise;
+      const display = data?.displayPricePaise;
+      return {
+        unlockPricePaise: typeof unlock === 'number' && unlock >= 100 ? Math.round(unlock) : UNLOCK_PRICE_PAISE,
+        displayPricePaise: typeof display === 'number' && display >= 100 ? Math.round(display) : DEFAULT_DISPLAY_PRICE_PAISE,
+      };
     } catch {}
   }
-  return UNLOCK_PRICE_PAISE;
+  return { unlockPricePaise: UNLOCK_PRICE_PAISE, displayPricePaise: DEFAULT_DISPLAY_PRICE_PAISE };
+}
+
+const PRIEST_SECRET = process.env.PRIEST_SECRET || process.env.ADMIN_SECRET || process.env.JWT_SECRET || 'change-me-in-production';
+
+/** Hash password for priest (scrypt). Returns "salt:hash" hex. */
+export function hashPassword(password) {
+  const salt = crypto.randomBytes(16).toString('hex');
+  const hash = crypto.scryptSync(password, salt, 64).toString('hex');
+  return `${salt}:${hash}`;
+}
+
+/** Validate priest username: pujari@templename */
+export function validatePriestUsername(username) {
+  if (!username || typeof username !== 'string') return false;
+  const u = username.trim();
+  return /^pujari@[a-zA-Z0-9_-]+$/.test(u) && u.length >= 12 && u.length <= 50;
+}
+
+/** Validate priest password: 2 caps, 2 digits, 2 small, 2 symbols; 10-20 chars */
+export function validatePriestPassword(password) {
+  if (!password || typeof password !== 'string') return false;
+  const p = password;
+  if (p.length < 10 || p.length > 20) return false;
+  const caps = (p.match(/[A-Z]/g) || []).length;
+  const digits = (p.match(/[0-9]/g) || []).length;
+  const small = (p.match(/[a-z]/g) || []).length;
+  const symbols = (p.match(/[^A-Za-z0-9]/g) || []).length;
+  return caps >= 2 && digits >= 2 && small >= 2 && symbols >= 2;
+}
+
+/** Verify priest password against stored "salt:hash". */
+export function verifyPassword(password, stored) {
+  if (!password || !stored || typeof stored !== 'string') return false;
+  const [salt, hash] = stored.split(':');
+  if (!salt || !hash) return false;
+  try {
+    const derived = crypto.scryptSync(password, salt, 64).toString('hex');
+    return derived === hash;
+  } catch {
+    return false;
+  }
+}
+
+/** Create priest JWT with templeId. */
+export function createPriestToken(templeId, templeName) {
+  const payload = JSON.stringify({ templeId, templeName, priest: true, exp: Date.now() + 24 * 60 * 60 * 1000 });
+  const sig = crypto.createHmac('sha256', PRIEST_SECRET).update(payload).digest('base64url');
+  return Buffer.from(payload).toString('base64url') + '.' + sig;
+}
+
+/** Verify priest token, return { templeId, templeName } or null. */
+export function verifyPriestToken(token) {
+  if (!token || typeof token !== 'string') return null;
+  const [raw, sig] = token.split('.');
+  if (!raw || !sig) return null;
+  try {
+    const payload = JSON.parse(Buffer.from(raw, 'base64url').toString());
+    if (payload.exp < Date.now() || !payload.templeId) return null;
+    const expected = crypto.createHmac('sha256', PRIEST_SECRET).update(raw).digest('base64url');
+    if (sig !== expected) return null;
+    return { templeId: payload.templeId, templeName: payload.templeName || '' };
+  } catch {
+    return null;
+  }
 }
 
 export function jsonResponse(data, status = 200) {

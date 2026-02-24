@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { DEITIES } from '../../data/deities';
 import { GoogleSignIn } from '../auth/GoogleSignIn';
 import { JapamLogo } from '../ui/JapamLogo';
@@ -15,6 +16,7 @@ interface MainMenuProps {
 }
 
 export function MainMenu({ onSelect, onOpenMap, onOpenJapaDashboard, onOpenSettings }: MainMenuProps) {
+  const navigate = useNavigate();
   const { user, loading, signOut } = useAuthStore();
   const displayName = user?.displayName ?? user?.email ?? '';
 
@@ -99,7 +101,13 @@ export function MainMenu({ onSelect, onOpenMap, onOpenJapaDashboard, onOpenSetti
           ))}
         </div>
 
-        <div className="flex gap-4 mt-2 mb-8">
+        <div className="flex flex-wrap gap-4 mt-2 mb-8">
+          <button
+            onClick={() => navigate('/marathons')}
+            className="text-amber-200 font-medium text-sm hover:text-amber-400 transition-colors"
+          >
+            Japa Marathons
+          </button>
           <button
             onClick={onOpenJapaDashboard}
             className="text-amber-200 font-medium text-sm hover:text-amber-400 transition-colors"

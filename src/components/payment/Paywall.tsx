@@ -35,19 +35,30 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
     return () => { cancelled = true; };
   }, []);
 
+  async function getErrorMessage(res: Response, fallback: string): Promise<string> {
+    try {
+      const text = await res.text();
+      const data = JSON.parse(text) as { error?: string };
+      return typeof data?.error === 'string' && data.error ? data.error : text || fallback;
+    } catch {
+      return fallback;
+    }
+  }
+
   const handlePay = async () => {
     if (!user?.uid || pricePaise == null || paying) return;
     setError(null);
     setPaying(true);
     try {
-      const res = await fetch(`${API_BASE}/api/create-order`, {
+      const createUrl = API_BASE ? `${API_BASE}/api/create-order` : '/api/create-order';
+      const res = await fetch(createUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: user.uid })
       });
       if (!res.ok) {
-        const t = await res.text();
-        throw new Error(t || 'Failed to create order');
+        const msg = await getErrorMessage(res, 'Failed to create order');
+        throw new Error(msg);
       }
       const { orderId } = (await res.json()) as { orderId: string };
       await loadRazorpayScript();
@@ -57,10 +68,11 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
         currency: 'INR',
         order_id: orderId,
         name: 'Japam',
-        description: 'Unlock levels 6–50',
+        description: 'Unlock levels 3–50',
         handler: async (data) => {
           try {
-            const vRes = await fetch(`${API_BASE}/api/verify-unlock`, {
+            const verifyUrl = API_BASE ? `${API_BASE}/api/verify-unlock` : '/api/verify-unlock';
+            const vRes = await fetch(verifyUrl, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
@@ -70,7 +82,10 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
                 razorpay_signature: data.razorpay_signature
               })
             });
-            if (!vRes.ok) throw new Error('Verification failed');
+            if (!vRes.ok) {
+              const msg = await getErrorMessage(vRes, 'Verification failed');
+              throw new Error(msg);
+            }
             await loadUnlock(user.uid);
             onUnlocked?.();
           } catch (e) {

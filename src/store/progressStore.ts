@@ -30,6 +30,35 @@ export function progressKey(mode: GameMode, levelId: string) {
   return `${mode}-${levelId}`;
 }
 
+type ProgressData = { levelProgress: Record<string, LevelProgress>; currentLevelByMode: Record<string, number> };
+
+function mergeProgress(...sources: (ProgressData | null | undefined)[]): ProgressData {
+  const levelProgress: Record<string, LevelProgress> = {};
+  const currentLevelByMode: Record<string, number> = {};
+  for (const src of sources) {
+    if (!src?.levelProgress) continue;
+    for (const [key, p] of Object.entries(src.levelProgress)) {
+      const existing = levelProgress[key];
+      if (!existing) levelProgress[key] = { ...p };
+      else
+        levelProgress[key] = {
+          stars: Math.max(existing.stars, p.stars),
+          japasCompleted: Math.max(existing.japasCompleted, p.japasCompleted),
+          bestScore: Math.max(existing.bestScore, p.bestScore),
+          completed: existing.completed || p.completed,
+        };
+    }
+  }
+  for (const src of sources) {
+    if (!src?.currentLevelByMode) continue;
+    for (const [mode, idx] of Object.entries(src.currentLevelByMode)) {
+      const n = typeof idx === 'number' ? idx : 0;
+      currentLevelByMode[mode] = Math.max(currentLevelByMode[mode] ?? 0, n);
+    }
+  }
+  return { levelProgress, currentLevelByMode };
+}
+
 export const useProgressStore = create<ProgressState>((setState, getState) => ({
   levelProgress: {},
   currentLevelByMode: {},
@@ -37,24 +66,24 @@ export const useProgressStore = create<ProgressState>((setState, getState) => ({
 
   load: async (userId?: string) => {
     try {
-      let stored: { levelProgress: Record<string, LevelProgress>; currentLevelByMode: Record<string, number> } | null = null;
+      let stored: ProgressData;
       if (userId) {
-        stored = await loadUserProgress(userId);
-        if (!stored) {
-          stored = (await get<{ levelProgress: Record<string, LevelProgress>; currentLevelByMode: Record<string, number> }>(storageKey(userId))) ?? null;
+        const fromFirestore = await loadUserProgress(userId);
+        const fromLocalUid = (await get<ProgressData>(storageKey(userId))) ?? null;
+        const fromLocalAnon = (await get<ProgressData>(storageKey())) ?? null;
+        stored = mergeProgress(fromFirestore, fromLocalUid, fromLocalAnon);
+        const hadLocalOnly = !fromFirestore && (fromLocalUid || fromLocalAnon);
+        if (hadLocalOnly && (Object.keys(stored.levelProgress).length > 0 || Object.keys(stored.currentLevelByMode).length > 0)) {
+          saveUserProgress(userId, stored).catch(() => {});
         }
       } else {
-        stored = (await get<{ levelProgress: Record<string, LevelProgress>; currentLevelByMode: Record<string, number> }>(storageKey())) ?? null;
+        stored = (await get<ProgressData>(storageKey())) ?? { levelProgress: {}, currentLevelByMode: {} };
       }
-      if (stored) {
-        setState({
-          levelProgress: stored.levelProgress ?? {},
-          currentLevelByMode: stored.currentLevelByMode ?? {},
-          loaded: true
-        });
-      } else {
-        setState({ levelProgress: {}, currentLevelByMode: {}, loaded: true });
-      }
+      setState({
+        levelProgress: stored.levelProgress ?? {},
+        currentLevelByMode: stored.currentLevelByMode ?? {},
+        loaded: true
+      });
     } catch {
       setState({ levelProgress: {}, currentLevelByMode: {}, loaded: true });
     }

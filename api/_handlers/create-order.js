@@ -34,10 +34,11 @@ export async function POST(request) {
     }
 
     const razorpay = getRazorpay();
+    const receipt = `japam-${String(userId).slice(-14)}-${Date.now().toString(36).slice(-6)}`.slice(0, 40);
     const order = await razorpay.orders.create({
       amount,
       currency: 'INR',
-      receipt: `japam-unlock-${userId}-${Date.now()}`,
+      receipt,
     });
     return jsonResponse({ orderId: order.id, amount, keyId: RAZORPAY_KEY_ID });
   } catch (e) {

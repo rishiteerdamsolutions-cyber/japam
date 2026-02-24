@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { loadPricingConfig } from '../../lib/firestore';
-import { loadRazorpayScript, RAZORPAY_KEY_ID } from '../../lib/razorpay';
+import { loadRazorpayScript } from '../../lib/razorpay';
 import { useAuthStore } from '../../store/authStore';
 import { useUnlockStore } from '../../store/unlockStore';
 
@@ -60,11 +60,14 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
         const msg = await getErrorMessage(res, 'Failed to create order');
         throw new Error(msg);
       }
-      const { orderId } = (await res.json()) as { orderId: string };
+      const { orderId, keyId, amount } = (await res.json()) as { orderId: string; keyId?: string; amount?: number };
       await loadRazorpayScript();
+      const checkoutKey = keyId || import.meta.env.VITE_RAZORPAY_KEY_ID || '';
+      const checkoutAmount = typeof amount === 'number' && amount >= 100 ? amount : pricePaise;
+      if (!checkoutKey) throw new Error('Payment not configured (missing Razorpay key)');
       const rp = new window.Razorpay({
-        key: RAZORPAY_KEY_ID,
-        amount: pricePaise,
+        key: checkoutKey,
+        amount: checkoutAmount,
         currency: 'INR',
         order_id: orderId,
         name: 'Japam',
@@ -72,11 +75,11 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
         handler: async (data) => {
           try {
             const verifyUrl = API_BASE ? `${API_BASE}/api/verify-unlock` : '/api/verify-unlock';
+            const idToken = await user.getIdToken();
             const vRes = await fetch(verifyUrl, {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+              headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
               body: JSON.stringify({
-                userId: user.uid,
                 razorpay_order_id: data.razorpay_order_id,
                 razorpay_payment_id: data.razorpay_payment_id,
                 razorpay_signature: data.razorpay_signature

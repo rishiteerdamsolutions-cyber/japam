@@ -26,7 +26,7 @@ export async function loadUserUnlock(uid: string): Promise<boolean> {
   try {
     const token = await getFirebaseIdToken();
     if (token) {
-      const res = await fetch(apiUrl('/api/user/unlock'), { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch('/api/user/unlock', { headers: { Authorization: `Bearer ${token}` } });
       if (res.ok) {
         const data = (await res.json()) as { levelsUnlocked?: boolean };
         return Boolean(data?.levelsUnlocked);
@@ -137,7 +137,7 @@ export async function loadUserProgress(uid: string): Promise<{ levelProgress: Re
   try {
     const token = await getFirebaseIdToken();
     if (token) {
-      const res = await fetch(apiUrl('/api/user/progress'), { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch('/api/user/progress', { headers: { Authorization: `Bearer ${token}` } });
       if (res.ok) {
         const data = (await res.json()) as { levelProgress?: Record<string, LevelProgress>; currentLevelByMode?: Record<string, number> };
         return { levelProgress: data?.levelProgress ?? {}, currentLevelByMode: data?.currentLevelByMode ?? {} };
@@ -163,7 +163,7 @@ export async function saveUserProgress(uid: string, data: { levelProgress: Recor
   try {
     const token = await getFirebaseIdToken();
     if (token) {
-      const res = await fetch(apiUrl('/api/user/progress'), {
+      const res = await fetch('/api/user/progress', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify(data),

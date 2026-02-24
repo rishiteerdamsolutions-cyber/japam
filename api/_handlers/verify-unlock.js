@@ -1,13 +1,20 @@
 import crypto from 'crypto';
-import { getDb, jsonResponse } from './_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser } from './_lib.js';
 
-const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || 'iDY2XaMKT5k22g39pOU27X1t';
+const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || '';
 
 export async function POST(request) {
   try {
+    const uid = await verifyFirebaseUser(request);
+    if (!uid) return jsonResponse({ error: 'Unauthorized' }, 401);
+
+    if (!RAZORPAY_KEY_SECRET) {
+      return jsonResponse({ error: 'Payment not configured (missing RAZORPAY_KEY_SECRET)' }, 503);
+    }
+
     const body = await request.json().catch(() => ({}));
-    const { userId, razorpay_order_id, razorpay_payment_id, razorpay_signature } = body;
-    if (!userId || !razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = body;
+    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
       return jsonResponse({ error: 'Missing fields' }, 400);
     }
     const sigBody = `${razorpay_order_id}|${razorpay_payment_id}`;
@@ -17,7 +24,7 @@ export async function POST(request) {
     }
     const db = getDb();
     if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
-    await db.doc(`users/${userId}/data/unlock`).set({ levelsUnlocked: true });
+    await db.doc(`users/${uid}/data/unlock`).set({ levelsUnlocked: true }, { merge: true });
     return jsonResponse({ ok: true });
   } catch (e) {
     console.error('verify-unlock', e);

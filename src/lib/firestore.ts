@@ -17,10 +17,6 @@ async function getFirebaseIdToken(): Promise<string | null> {
   }
 }
 
-function apiUrl(path: string) {
-  return API_BASE ? `${API_BASE}${path}` : path;
-}
-
 /** Unlock status for levels 6+ (payment) */
 export async function loadUserUnlock(uid: string): Promise<boolean> {
   try {

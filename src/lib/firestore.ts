@@ -109,19 +109,28 @@ export async function loadAdminCheckDebug(uid: string): Promise<{
 
 export async function loadUserProgress(uid: string): Promise<{ levelProgress: Record<string, LevelProgress>; currentLevelByMode: Record<string, number> } | null> {
   if (!db) return null;
-  try {
-    const snap = await getDoc(doc(db, 'users', uid, 'data', 'progress'));
-    return snap.exists() ? (snap.data() as { levelProgress: Record<string, LevelProgress>; currentLevelByMode: Record<string, number> }) : null;
-  } catch {
-    return null;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const snap = await getDoc(doc(db, 'users', uid, 'data', 'progress'));
+      return snap.exists() ? (snap.data() as { levelProgress: Record<string, LevelProgress>; currentLevelByMode: Record<string, number> }) : null;
+    } catch (e) {
+      if (attempt === 1) return null;
+      await new Promise((r) => setTimeout(r, 300));
+    }
   }
+  return null;
 }
 
 export async function saveUserProgress(uid: string, data: { levelProgress: Record<string, LevelProgress>; currentLevelByMode: Record<string, number> }): Promise<void> {
   if (!db) return;
   try {
     await setDoc(doc(db, 'users', uid, 'data', 'progress'), data);
-  } catch {}
+  } catch (e) {
+    try {
+      await new Promise((r) => setTimeout(r, 500));
+      await setDoc(doc(db, 'users', uid, 'data', 'progress'), data);
+    } catch {}
+  }
 }
 
 export async function loadUserJapa(uid: string): Promise<JapaCounts | null> {

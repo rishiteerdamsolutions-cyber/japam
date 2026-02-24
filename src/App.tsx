@@ -55,10 +55,8 @@ function App() {
   };
 
   useEffect(() => {
-    loadProgress();
-    loadJapa();
     loadSettings();
-  }, [loadProgress, loadJapa, loadSettings]);
+  }, [loadSettings]);
 
   useEffect(() => {
     if (!authLoading) {

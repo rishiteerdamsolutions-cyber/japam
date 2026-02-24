@@ -160,53 +160,41 @@ export async function saveUserProgress(_uid: string, data: { levelProgress: Reco
   }
 }
 
-/** Japa counts. Logged-in: backend API first (same on all devices). Fallback: client Firestore then null. */
+/** Japa. Logged-in: backend API only (one source, same on all devices). No client Firestore. */
 export async function loadUserJapa(uid: string): Promise<JapaCounts | null> {
   const token = await getFirebaseIdToken();
-  if (token) {
-    for (let attempt = 0; attempt < 2; attempt++) {
-      try {
-        const res = await fetch('/api/user/japa', { headers: { Authorization: `Bearer ${token}` } });
-        if (res.ok) {
-          const data = (await res.json()) as { counts?: JapaCounts | null };
-          const counts = data?.counts;
-          return counts && typeof counts === 'object' ? (counts as JapaCounts) : null;
-        }
-      } catch {
-        if (attempt === 1) break;
-        await new Promise((r) => setTimeout(r, 400));
+  if (!token) return null;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const res = await fetch('/api/user/japa', { headers: { Authorization: `Bearer ${token}` } });
+      if (res.ok) {
+        const data = (await res.json()) as { counts?: JapaCounts | null };
+        const counts = data?.counts;
+        return counts && typeof counts === 'object' ? (counts as JapaCounts) : null;
       }
+    } catch {
+      if (attempt === 1) return null;
+      await new Promise((r) => setTimeout(r, 400));
     }
   }
-  if (!db) return null;
-  try {
-    const snap = await getDoc(doc(db, 'users', uid, 'data', 'japa'));
-    return snap.exists() ? (snap.data() as JapaCounts) : null;
-  } catch {
-    return null;
-  }
+  return null;
 }
 
-/** Save japa. Logged-in: backend API (single source of truth). Else: client Firestore if available. */
+/** Save japa. Logged-in: backend API only. */
 export async function saveUserJapa(uid: string, counts: JapaCounts): Promise<void> {
   const token = await getFirebaseIdToken();
-  if (token) {
-    for (let attempt = 0; attempt < 2; attempt++) {
-      try {
-        const res = await fetch('/api/user/japa', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-          body: JSON.stringify(counts),
-        });
-        if (res.ok) return;
-      } catch {
-        if (attempt === 1) break;
-        await new Promise((r) => setTimeout(r, 500));
-      }
+  if (!token) return;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const res = await fetch('/api/user/japa', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify(counts),
+      });
+      if (res.ok) return;
+    } catch {
+      if (attempt === 1) return;
+      await new Promise((r) => setTimeout(r, 500));
     }
   }
-  if (!db) return;
-  try {
-    await setDoc(doc(db, 'users', uid, 'data', 'japa'), counts);
-  } catch {}
 }

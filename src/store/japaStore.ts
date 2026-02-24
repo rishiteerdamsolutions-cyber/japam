@@ -1,13 +1,7 @@
 import { create } from 'zustand';
-import { get, set } from 'idb-keyval';
 import type { DeityId } from '../data/deities';
 import { loadUserJapa, saveUserJapa } from '../lib/firestore';
 import { useAuthStore } from './authStore';
-
-const STORAGE_KEY_BASE = 'japam-japa-counter';
-function storageKey(uid?: string) {
-  return uid ? `${STORAGE_KEY_BASE}-${uid}` : STORAGE_KEY_BASE;
-}
 
 export interface JapaCounts {
   rama: number;
@@ -46,15 +40,11 @@ export const useJapaStore = create<JapaStore>((setState, getState) => ({
 
   load: async (userId?: string) => {
     try {
-      let stored: JapaCounts | null = null;
-      if (userId) {
-        stored = await loadUserJapa(userId);
-        if (!stored) {
-          stored = (await get<JapaCounts>(storageKey(userId))) ?? null;
-        }
-      } else {
-        stored = (await get<JapaCounts>(storageKey())) ?? null;
+      if (!userId) {
+        setState({ counts: { ...initial }, loaded: true });
+        return;
       }
+      const stored = await loadUserJapa(userId);
       if (stored) {
         const total = Object.entries(stored).filter(([k]) => k !== 'total').reduce((a, [, v]) => a + (typeof v === 'number' ? v : 0), 0);
         setState({ counts: { ...initial, ...stored, total }, loaded: true });
@@ -75,9 +65,6 @@ export const useJapaStore = create<JapaStore>((setState, getState) => ({
     };
     setState({ counts: next });
     const uid = useAuthStore.getState().user?.uid;
-    set(storageKey(uid), next).catch(() => {});
-    if (uid) {
-      saveUserJapa(uid, next).catch(() => {});
-    }
+    if (uid) saveUserJapa(uid, next).catch(() => {});
   }
 }));

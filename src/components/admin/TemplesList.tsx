@@ -15,9 +15,10 @@ interface Temple {
 interface TemplesListProps {
   adminToken: string | null;
   refreshTrigger?: number;
+  onUnauthorized?: () => void;
 }
 
-export function TemplesList({ adminToken, refreshTrigger }: TemplesListProps) {
+export function TemplesList({ adminToken, refreshTrigger, onUnauthorized }: TemplesListProps) {
   const [temples, setTemples] = useState<Temple[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -30,6 +31,10 @@ export function TemplesList({ adminToken, refreshTrigger }: TemplesListProps) {
       const url = API_BASE ? `${API_BASE}/api/admin/list-temples` : '/api/admin/list-temples';
       const res = await fetch(url, { headers: { Authorization: `Bearer ${adminToken}` } });
       const data = await res.json().catch(() => ({}));
+      if (res.status === 401) {
+        onUnauthorized?.();
+        return;
+      }
       if (!res.ok) {
         setError(data.error || 'Failed to load');
         setTemples([]);

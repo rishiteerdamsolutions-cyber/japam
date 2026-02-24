@@ -1,17 +1,11 @@
-import { getDb, verifyAdminToken, jsonResponse } from '../_lib.js';
+import { getDb, verifyAdminToken, jsonResponse, getAdminTokenFromRequest } from '../_lib.js';
 
 const DEITY_NAMES = { rama: 'Rama', shiva: 'Shiva', ganesh: 'Ganesh', surya: 'Surya', shakthi: 'Shakthi', krishna: 'Krishna', shanmukha: 'Shanmukha', venkateswara: 'Venkateswara' };
-
-function getAdminToken(request) {
-  const auth = request.headers.get('authorization');
-  if (auth && auth.startsWith('Bearer ')) return auth.slice(7);
-  return null;
-}
 
 /** GET /api/admin/marathons - List active marathons with creator and top participants */
 export async function GET(request) {
   try {
-    const token = getAdminToken(request);
+    const token = getAdminTokenFromRequest(request);
     if (!verifyAdminToken(token)) return jsonResponse({ error: 'Invalid or expired session' }, 401);
     const db = getDb();
     if (!db) return jsonResponse({ error: 'Database not configured' }, 503);

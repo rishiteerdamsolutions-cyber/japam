@@ -11,6 +11,7 @@ import * as adminSetPriceHandler from './_handlers/admin/set-price.js';
 import * as adminCreateTempleHandler from './_handlers/admin/create-temple.js';
 import * as adminListTemplesHandler from './_handlers/admin/list-temples.js';
 import * as adminMarathonsHandler from './_handlers/admin/marathons.js';
+import * as adminUnlockedUsersHandler from './_handlers/admin/unlocked-users.js';
 import * as priestMarathonsHandler from './_handlers/priest/marathons.js';
 import * as priestLinkHandler from './_handlers/priest/link.js';
 import * as marathonsDiscoverHandler from './_handlers/marathons/discover.js';
@@ -49,6 +50,7 @@ const HANDLERS = {
   'POST admin/create-temple': adminCreateTempleHandler,
   'GET admin/list-temples': adminListTemplesHandler,
   'GET admin/marathons': adminMarathonsHandler,
+  'GET admin/unlocked-users': adminUnlockedUsersHandler,
   'GET priest/marathons': priestMarathonsHandler,
   'POST priest/marathons': priestMarathonsHandler,
   'POST priest/link': priestLinkHandler,

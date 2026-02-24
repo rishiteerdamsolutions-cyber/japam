@@ -12,8 +12,10 @@ let razorpay = null;
 
 const ADMIN_SECRET = process.env.ADMIN_SECRET || process.env.JWT_SECRET || 'change-me-in-production';
 
+const ADMIN_TOKEN_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+
 export function createAdminToken() {
-  const payload = JSON.stringify({ admin: true, exp: Date.now() + 60 * 60 * 1000 });
+  const payload = JSON.stringify({ admin: true, exp: Date.now() + ADMIN_TOKEN_TTL_MS });
   const sig = crypto.createHmac('sha256', ADMIN_SECRET).update(payload).digest('base64url');
   return Buffer.from(payload).toString('base64url') + '.' + sig;
 }
@@ -29,6 +31,18 @@ export function verifyAdminToken(token) {
     return sig === expected;
   } catch {
     return false;
+  }
+}
+
+/** Get admin token from request (header or query). Use for admin API handlers. */
+export function getAdminTokenFromRequest(request) {
+  const auth = request?.headers?.get?.('authorization') || request?.headers?.get?.('Authorization');
+  if (auth && typeof auth === 'string' && auth.startsWith('Bearer ')) return auth.slice(7);
+  try {
+    const url = new URL(request.url);
+    return url.searchParams.get('token') || null;
+  } catch {
+    return null;
   }
 }
 

@@ -7,7 +7,7 @@ import { AdminMarathonsList } from './AdminMarathonsList';
 
 const API_BASE = import.meta.env.VITE_API_URL ?? '';
 
-type AdminTab = 'pricing' | 'temples' | 'marathons';
+type AdminTab = 'pricing' | 'temples' | 'marathons' | 'users';
 
 interface AdminPanelProps {
   onBack: () => void;
@@ -27,6 +27,9 @@ export function AdminPanel({ onBack, passwordAuth, adminToken, onLogout }: Admin
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [templesRefresh, setTemplesRefresh] = useState(0);
+  const [paidUsers, setPaidUsers] = useState<{ uid: string; email: string | null; unlockedAt: string | null }[]>([]);
+  const [paidUsersLoading, setPaidUsersLoading] = useState(false);
+  const [paidUsersTotal, setPaidUsersTotal] = useState<number | null>(null);
 
   useEffect(() => {
     if (passwordAuth) {
@@ -150,6 +153,32 @@ export function AdminPanel({ onBack, passwordAuth, adminToken, onLogout }: Admin
             >
               Marathons
             </button>
+            <button
+              type="button"
+              onClick={() => {
+                setTab('users');
+                setPaidUsersLoading(true);
+                const url = API_BASE ? `${API_BASE}/api/admin/unlocked-users` : '/api/admin/unlocked-users';
+                fetch(url, { headers: { Authorization: `Bearer ${adminToken}` } })
+                  .then((r) => {
+                    if (r.status === 401) {
+                      onLogout?.();
+                      return null;
+                    }
+                    return r.json();
+                  })
+                  .then((data: { users?: { uid: string; email: string | null; unlockedAt: string | null }[]; total?: number } | null) => {
+                    if (data == null) return;
+                    setPaidUsers(data.users ?? []);
+                    setPaidUsersTotal(data.total ?? 0);
+                  })
+                  .catch(() => setPaidUsers([]))
+                  .finally(() => setPaidUsersLoading(false));
+              }}
+              className={`text-sm font-medium ${tab === 'users' ? 'text-amber-400 underline' : 'text-amber-200/70 hover:text-amber-200'}`}
+            >
+              Paid users
+            </button>
           </>
         )}
       </div>
@@ -192,13 +221,47 @@ export function AdminPanel({ onBack, passwordAuth, adminToken, onLogout }: Admin
         <>
           <h1 className="text-2xl font-bold text-amber-400 mb-4">Add Temple / Priest</h1>
           <AddTempleForm adminToken={adminToken} onSuccess={() => setTemplesRefresh((k) => k + 1)} onLogout={onLogout} />
-          <TemplesList adminToken={adminToken} refreshTrigger={templesRefresh} />
+          <TemplesList adminToken={adminToken} refreshTrigger={templesRefresh} onUnauthorized={onLogout} />
         </>
       )}
       {tab === 'marathons' && passwordAuth && adminToken && (
         <>
           <h1 className="text-2xl font-bold text-amber-400 mb-4">Active Marathons</h1>
-          <AdminMarathonsList adminToken={adminToken} />
+          <AdminMarathonsList adminToken={adminToken} onUnauthorized={onLogout} />
+        </>
+      )}
+      {tab === 'users' && passwordAuth && adminToken && (
+        <>
+          <h1 className="text-2xl font-bold text-amber-400 mb-4">Users who paid (unlock)</h1>
+          {paidUsersTotal !== null && (
+            <p className="text-amber-200/80 text-sm mb-4">Total: {paidUsersTotal}</p>
+          )}
+          {paidUsersLoading ? (
+            <p className="text-amber-200/70">Loading…</p>
+          ) : paidUsers.length === 0 ? (
+            <p className="text-amber-200/70">No paid users yet. New payments will appear here.</p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm text-amber-200 border border-amber-500/30 rounded-lg overflow-hidden">
+                <thead>
+                  <tr className="bg-amber-500/20">
+                    <th className="px-3 py-2">Email</th>
+                    <th className="px-3 py-2">User ID</th>
+                    <th className="px-3 py-2">Paid at</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paidUsers.map((u) => (
+                    <tr key={u.uid} className="border-t border-amber-500/20">
+                      <td className="px-3 py-2">{u.email || '—'}</td>
+                      <td className="px-3 py-2 font-mono text-xs">{u.uid.slice(0, 12)}…</td>
+                      <td className="px-3 py-2">{u.unlockedAt ? new Date(u.unlockedAt).toLocaleString() : '—'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </>
       )}
     </div>

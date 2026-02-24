@@ -21,9 +21,10 @@ interface Marathon {
 
 interface AdminMarathonsListProps {
   adminToken: string | null;
+  onUnauthorized?: () => void;
 }
 
-export function AdminMarathonsList({ adminToken }: AdminMarathonsListProps) {
+export function AdminMarathonsList({ adminToken, onUnauthorized }: AdminMarathonsListProps) {
   const [marathons, setMarathons] = useState<Marathon[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -35,8 +36,15 @@ export function AdminMarathonsList({ adminToken }: AdminMarathonsListProps) {
     fetch(API_BASE ? `${API_BASE}/api/admin/marathons` : '/api/admin/marathons', {
       headers: { Authorization: `Bearer ${adminToken}` },
     })
-      .then((r) => r.json())
+      .then((r) => {
+        if (r.status === 401) {
+          onUnauthorized?.();
+          return null;
+        }
+        return r.json();
+      })
       .then((data) => {
+        if (data == null) return;
         if (data.error) {
           setError(data.error);
           setMarathons([]);

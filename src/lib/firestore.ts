@@ -17,27 +17,20 @@ async function getFirebaseIdToken(): Promise<string | null> {
   }
 }
 
-/** Unlock status for levels 6+ (payment) */
-export async function loadUserUnlock(uid: string): Promise<boolean> {
+/** Unlock (paid) status. Logged-in: only backend API — same on all devices. No client Firestore fallback. */
+export async function loadUserUnlock(_uid: string): Promise<boolean> {
+  const token = await getFirebaseIdToken();
+  if (!token) return false;
   try {
-    const token = await getFirebaseIdToken();
-    if (token) {
-      const res = await fetch('/api/user/unlock', { headers: { Authorization: `Bearer ${token}` } });
-      if (res.ok) {
-        const data = (await res.json()) as { levelsUnlocked?: boolean };
-        return Boolean(data?.levelsUnlocked);
-      }
+    const res = await fetch('/api/user/unlock', { headers: { Authorization: `Bearer ${token}` } });
+    if (res.ok) {
+      const data = (await res.json()) as { levelsUnlocked?: boolean };
+      return Boolean(data?.levelsUnlocked);
     }
   } catch {
-    // fall back to client Firestore
+    // no fallback: treat as not unlocked so paywall can show
   }
-  if (!db) return false;
-  try {
-    const snap = await getDoc(doc(db, 'users', uid, 'data', 'unlock'));
-    return snap.exists() && Boolean((snap.data() as { levelsUnlocked?: boolean }).levelsUnlocked);
-  } catch {
-    return false;
-  }
+  return false;
 }
 
 const DEFAULT_UNLOCK_PRICE_PAISE = 1000; // ₹10
@@ -129,54 +122,41 @@ export async function loadAdminCheckDebug(uid: string): Promise<{
   }
 }
 
-export async function loadUserProgress(uid: string): Promise<{ levelProgress: Record<string, LevelProgress>; currentLevelByMode: Record<string, number> } | null> {
-  try {
-    const token = await getFirebaseIdToken();
-    if (token) {
+/** Progress. Logged-in: only backend API — same on all devices. No client Firestore fallback. */
+export async function loadUserProgress(_uid: string): Promise<{ levelProgress: Record<string, LevelProgress>; currentLevelByMode: Record<string, number> } | null> {
+  const token = await getFirebaseIdToken();
+  if (!token) return null;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
       const res = await fetch('/api/user/progress', { headers: { Authorization: `Bearer ${token}` } });
       if (res.ok) {
         const data = (await res.json()) as { levelProgress?: Record<string, LevelProgress>; currentLevelByMode?: Record<string, number> };
         return { levelProgress: data?.levelProgress ?? {}, currentLevelByMode: data?.currentLevelByMode ?? {} };
       }
-    }
-  } catch {
-    // fall back to client Firestore
-  }
-  if (!db) return null;
-  for (let attempt = 0; attempt < 2; attempt++) {
-    try {
-      const snap = await getDoc(doc(db, 'users', uid, 'data', 'progress'));
-      return snap.exists() ? (snap.data() as { levelProgress: Record<string, LevelProgress>; currentLevelByMode: Record<string, number> }) : null;
-    } catch (e) {
+    } catch {
       if (attempt === 1) return null;
-      await new Promise((r) => setTimeout(r, 300));
+      await new Promise((r) => setTimeout(r, 400));
     }
   }
   return null;
 }
 
-export async function saveUserProgress(uid: string, data: { levelProgress: Record<string, LevelProgress>; currentLevelByMode: Record<string, number> }): Promise<void> {
-  try {
-    const token = await getFirebaseIdToken();
-    if (token) {
+/** Save progress. Logged-in: only backend API — single source of truth. No client Firestore write. */
+export async function saveUserProgress(_uid: string, data: { levelProgress: Record<string, LevelProgress>; currentLevelByMode: Record<string, number> }): Promise<void> {
+  const token = await getFirebaseIdToken();
+  if (!token) return;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
       const res = await fetch('/api/user/progress', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify(data),
       });
       if (res.ok) return;
-    }
-  } catch {
-    // fall back to client Firestore
-  }
-  if (!db) return;
-  try {
-    await setDoc(doc(db, 'users', uid, 'data', 'progress'), data);
-  } catch (e) {
-    try {
+    } catch {
+      if (attempt === 1) return;
       await new Promise((r) => setTimeout(r, 500));
-      await setDoc(doc(db, 'users', uid, 'data', 'progress'), data);
-    } catch {}
+    }
   }
 }
 

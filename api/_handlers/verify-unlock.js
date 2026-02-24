@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import admin from 'firebase-admin';
 import { getDb, jsonResponse, verifyFirebaseUser } from './_lib.js';
 
 const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || '';
@@ -25,6 +26,17 @@ export async function POST(request) {
     const db = getDb();
     if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
     await db.doc(`users/${uid}/data/unlock`).set({ levelsUnlocked: true }, { merge: true });
+
+    let email = null;
+    try {
+      const userRecord = await admin.auth().getUser(uid);
+      email = userRecord.email || null;
+    } catch {}
+    await db.collection('unlockedUsers').doc(uid).set(
+      { uid, email, unlockedAt: new Date().toISOString() },
+      { merge: true }
+    );
+
     return jsonResponse({ ok: true });
   } catch (e) {
     console.error('verify-unlock', e);

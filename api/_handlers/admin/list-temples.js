@@ -1,15 +1,8 @@
-import { getDb, verifyAdminToken, jsonResponse } from '../_lib.js';
-
-function getAdminToken(request) {
-  const auth = request.headers.get('authorization');
-  if (auth && auth.startsWith('Bearer ')) return auth.slice(7);
-  const url = new URL(request.url);
-  return url.searchParams.get('token') || null;
-}
+import { getDb, verifyAdminToken, jsonResponse, getAdminTokenFromRequest } from '../_lib.js';
 
 export async function GET(request) {
   try {
-    const token = getAdminToken(request);
+    const token = getAdminTokenFromRequest(request);
     if (!verifyAdminToken(token)) {
       return jsonResponse({ error: 'Invalid or expired session' }, 401);
     }

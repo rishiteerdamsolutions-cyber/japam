@@ -18,27 +18,35 @@ export async function loadUserUnlock(uid: string): Promise<boolean> {
 
 const API_BASE = import.meta.env.VITE_API_URL ?? '';
 
-/** Unlock price in paise. Tries /api/price first (price set in code), then Firestore. */
-export async function loadPricingConfig(): Promise<{ unlockPricePaise: number } | null> {
+const DEFAULT_UNLOCK_PRICE_PAISE = 1000; // ₹10
+
+/** Unlock price in paise. Tries /api/price first, then Firestore. Never returns 0 (uses default if missing/invalid). */
+export async function loadPricingConfig(): Promise<{ unlockPricePaise: number }> {
+  let paise: number | null = null;
   try {
     const url = API_BASE ? `${API_BASE}/api/price` : '/api/price';
     const res = await fetch(url);
     if (res.ok) {
       const data = (await res.json()) as { unlockPricePaise?: number };
-      if (data?.unlockPricePaise != null) return { unlockPricePaise: data.unlockPricePaise };
+      const p = data?.unlockPricePaise;
+      if (typeof p === 'number' && p >= 100) paise = Math.round(p);
     }
   } catch {
     // fallback to Firestore if API not available
   }
-  if (!db) return null;
-  try {
-    const snap = await getDoc(doc(db, 'config', 'pricing'));
-    if (!snap.exists()) return null;
-    const d = snap.data() as { unlockPricePaise?: number };
-    return d.unlockPricePaise != null ? { unlockPricePaise: d.unlockPricePaise } : null;
-  } catch {
-    return null;
+  if (paise == null && db) {
+    try {
+      const snap = await getDoc(doc(db, 'config', 'pricing'));
+      if (snap.exists()) {
+        const d = snap.data() as { unlockPricePaise?: number };
+        const p = d?.unlockPricePaise;
+        if (typeof p === 'number' && p >= 100) paise = Math.round(p);
+      }
+    } catch {
+      // ignore
+    }
   }
+  return { unlockPricePaise: paise != null ? paise : DEFAULT_UNLOCK_PRICE_PAISE };
 }
 
 /** Save pricing to Firestore (legacy; unlock price is now set in api/_lib.js) */

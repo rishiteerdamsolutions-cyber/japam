@@ -32,12 +32,18 @@ export function AdminPanel({ onBack, passwordAuth, adminToken, onLogout }: Admin
     loadIsAdmin(user.uid).then(setIsAdmin);
   }, [user?.uid, passwordAuth]);
 
+  // Load saved price from server when admin panel is shown (so it shows after login)
   useEffect(() => {
+    if (isAdmin !== true) return;
+    let cancelled = false;
     loadPricingConfig().then((c) => {
-      const paise = c?.unlockPricePaise ?? 9900;
-      setPriceRupees(String((paise / 100).toFixed(0)));
+      if (cancelled) return;
+      const paise = c.unlockPricePaise;
+      const valid = typeof paise === 'number' && paise >= 100 ? paise : 1000;
+      setPriceRupees(String(Math.round(valid / 100)));
     });
-  }, []);
+    return () => { cancelled = true; };
+  }, [isAdmin]);
 
   const handleSave = async () => {
     const rupees = Number(priceRupees);

@@ -24,7 +24,8 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
     (async () => {
       const config = await loadPricingConfig();
       if (!cancelled) {
-        setPricePaise(config?.unlockPricePaise ?? 9900);
+        const p = config.unlockPricePaise;
+        setPricePaise(typeof p === 'number' && p >= 100 ? p : 1000);
         setLoading(false);
       }
     })();

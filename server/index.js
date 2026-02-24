@@ -49,12 +49,30 @@ function verifyAdminToken(token) {
   }
 }
 
+const DEFAULT_PRICE_PAISE = 1000; // ₹10
+
 async function getUnlockPricePaise() {
-  if (!db) return 9900;
-  const snap = await db.doc('config/pricing').get();
-  const data = snap.data();
-  return data?.unlockPricePaise ?? 9900;
+  if (!db) return DEFAULT_PRICE_PAISE;
+  try {
+    const snap = await db.doc('config/pricing').get();
+    const data = snap.data();
+    const p = data?.unlockPricePaise;
+    if (typeof p === 'number' && p >= 100) return Math.round(p);
+  } catch (e) {
+    console.error('getUnlockPricePaise', e);
+  }
+  return DEFAULT_PRICE_PAISE;
 }
+
+app.get('/api/price', async (req, res) => {
+  try {
+    const amount = await getUnlockPricePaise();
+    res.json({ unlockPricePaise: amount });
+  } catch (e) {
+    console.error('get price', e);
+    res.status(500).json({ unlockPricePaise: DEFAULT_PRICE_PAISE });
+  }
+});
 
 app.post('/api/create-order', async (req, res) => {
   try {

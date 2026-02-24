@@ -15,7 +15,7 @@ interface MainMenuProps {
 }
 
 export function MainMenu({ onSelect, onOpenMap, onOpenJapaDashboard, onOpenSettings }: MainMenuProps) {
-  const { user, loading, signInWithGoogle, signOut } = useAuthStore();
+  const { user, loading, signOut } = useAuthStore();
   const displayName = user?.displayName ?? user?.email ?? '';
 
   return (

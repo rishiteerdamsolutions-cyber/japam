@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { useSettingsStore } from '../store/settingsStore';
 import { GoogleSignIn } from './auth/GoogleSignIn';
 
@@ -79,12 +78,6 @@ export function Settings({ onBack }: SettingsProps) {
               </svg>
               Contact on WhatsApp
             </a>
-          </div>
-
-          <div className="rounded-2xl bg-black/40 border border-amber-500/20 p-4 backdrop-blur-sm">
-            <Link to="/admin" className="text-amber-400 text-sm font-medium hover:text-amber-300">
-              Admin – Set unlock price (login at /admin)
-            </Link>
           </div>
         </div>
 

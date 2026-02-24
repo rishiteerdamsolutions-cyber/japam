@@ -41,7 +41,10 @@ function App() {
   const needsSignIn = isFirebaseConfigured && !user && !authLoading;
 
   const tryStartGame = (mode: GameMode, idx: number) => {
-    if (idx >= FIRST_LOCKED_LEVEL_INDEX && levelsUnlocked !== true) {
+    // Level 6+ (index 5+) require one-time payment unless already unlocked
+    const isLockedLevel = idx >= FIRST_LOCKED_LEVEL_INDEX;
+    const hasUnlocked = levelsUnlocked === true;
+    if (isLockedLevel && !hasUnlocked) {
       setPaywallPending({ mode, levelIndex: idx });
       return;
     }

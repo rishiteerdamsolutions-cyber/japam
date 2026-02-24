@@ -15,8 +15,8 @@ interface MainMenuProps {
 }
 
 export function MainMenu({ onSelect, onOpenMap, onOpenJapaDashboard, onOpenSettings }: MainMenuProps) {
-  const user = useAuthStore((s) => s.user);
-  const displayName = user?.displayName || user?.email?.split('@')[0] || '';
+  const { user, loading, signInWithGoogle, signOut } = useAuthStore();
+  const displayName = user?.displayName ?? user?.email ?? '';
 
   return (
     <div
@@ -25,22 +25,42 @@ export function MainMenu({ onSelect, onOpenMap, onOpenJapaDashboard, onOpenSetti
     >
       <div className="absolute inset-0 bg-black/60" aria-hidden />
       <div className="relative z-10 w-full max-w-sm flex flex-col items-center">
-        <div className="w-full flex justify-end items-center mt-2 mb-1">
-          {displayName && (
-            <span className="text-amber-200/90 text-sm truncate max-w-[180px]" title={displayName}>
-              {displayName}
-            </span>
+        {/* Top right: user photo, name, sign out */}
+        <div className="w-full flex justify-end items-center gap-2 mt-2 mb-1 min-h-[40px]">
+          {!loading && user && (
+            <div className="flex items-center gap-2">
+              {user.photoURL && (
+                <img
+                  src={user.photoURL}
+                  alt=""
+                  className="w-9 h-9 rounded-full border-2 border-amber-500/40"
+                />
+              )}
+              <span className="text-amber-200/90 text-sm truncate max-w-[120px]" title={displayName}>
+                {displayName}
+              </span>
+              <button
+                type="button"
+                onClick={() => signOut()}
+                className="text-amber-400/80 text-xs font-medium hover:text-amber-400 whitespace-nowrap"
+              >
+                Sign out
+              </button>
+            </div>
           )}
         </div>
+
         <JapamLogo size={100} className="mt-4 drop-shadow-lg" />
         <h1 className="text-4xl font-bold text-amber-400 mt-2 mb-1 drop-shadow-lg" style={{ fontFamily: 'serif' }}>
           Japam
         </h1>
         <p className="text-amber-200/90 text-sm mb-6">Match & Chant</p>
 
-        <div className="mb-6">
-          <GoogleSignIn />
-        </div>
+        {!user && (
+          <div className="mb-6">
+            <GoogleSignIn />
+          </div>
+        )}
 
         <motion.button
           whileHover={{ scale: 1.02 }}

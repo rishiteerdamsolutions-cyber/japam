@@ -161,7 +161,7 @@ export async function saveUserProgress(_uid: string, data: { levelProgress: Reco
 }
 
 /** Japa. Logged-in: backend API only (one source, same on all devices). No client Firestore. */
-export async function loadUserJapa(uid: string): Promise<JapaCounts | null> {
+export async function loadUserJapa(_uid: string): Promise<JapaCounts | null> {
   const token = await getFirebaseIdToken();
   if (!token) return null;
   for (let attempt = 0; attempt < 2; attempt++) {
@@ -181,7 +181,7 @@ export async function loadUserJapa(uid: string): Promise<JapaCounts | null> {
 }
 
 /** Save japa. Logged-in: backend API only. */
-export async function saveUserJapa(uid: string, counts: JapaCounts): Promise<void> {
+export async function saveUserJapa(_uid: string, counts: JapaCounts): Promise<void> {
   const token = await getFirebaseIdToken();
   if (!token) return;
   for (let attempt = 0; attempt < 2; attempt++) {

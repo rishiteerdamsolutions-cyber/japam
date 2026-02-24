@@ -158,8 +158,11 @@ export function AdminPanel({ onBack, passwordAuth, adminToken, onLogout }: Admin
               onClick={() => {
                 setTab('users');
                 setPaidUsersLoading(true);
-                const url = API_BASE ? `${API_BASE}/api/admin/unlocked-users` : '/api/admin/unlocked-users';
-                fetch(url, { headers: { Authorization: `Bearer ${adminToken}` } })
+                const base = API_BASE ? `${API_BASE}/api/admin/unlocked-users` : '/api/admin/unlocked-users';
+                const url = `${base}${base.includes('?') ? '&' : '?'}token=${encodeURIComponent(adminToken)}`;
+                fetch(url, {
+                  headers: { Authorization: `Bearer ${adminToken}`, 'X-Admin-Token': adminToken },
+                })
                   .then((r) => {
                     if (r.status === 401) {
                       onLogout?.();

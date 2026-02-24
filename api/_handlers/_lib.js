@@ -34,10 +34,12 @@ export function verifyAdminToken(token) {
   }
 }
 
-/** Get admin token from request (header or query). Use for admin API handlers. */
+/** Get admin token from request (header, X-Admin-Token, or query). Use for admin API handlers. */
 export function getAdminTokenFromRequest(request) {
   const auth = request?.headers?.get?.('authorization') || request?.headers?.get?.('Authorization');
   if (auth && typeof auth === 'string' && auth.startsWith('Bearer ')) return auth.slice(7);
+  const xToken = request?.headers?.get?.('x-admin-token') || request?.headers?.get?.('X-Admin-Token');
+  if (xToken && typeof xToken === 'string') return xToken;
   try {
     const url = new URL(request.url);
     return url.searchParams.get('token') || null;

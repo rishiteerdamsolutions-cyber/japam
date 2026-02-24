@@ -1,4 +1,4 @@
-import { getDb, verifyAdminToken, jsonResponse, hashPassword, generatePriestUsername, generatePriestPassword } from '../../_lib.js';
+import { getDb, verifyAdminToken, jsonResponse, hashPassword, generatePriestUsername, generatePriestPassword } from '../_lib.js';
 
 function getAdminToken(request, body) {
   const auth = request.headers.get('authorization');

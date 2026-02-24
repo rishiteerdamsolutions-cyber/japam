@@ -1,4 +1,4 @@
-import { getDb, verifyAdminToken, jsonResponse } from '../../_lib.js';
+import { getDb, verifyAdminToken, jsonResponse } from '../_lib.js';
 
 const DEITY_NAMES = { rama: 'Rama', shiva: 'Shiva', ganesh: 'Ganesh', surya: 'Surya', shakthi: 'Shakthi', krishna: 'Krishna', shanmukha: 'Shanmukha', venkateswara: 'Venkateswara' };
 

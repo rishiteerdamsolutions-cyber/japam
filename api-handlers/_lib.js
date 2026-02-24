@@ -1,8 +1,5 @@
 /**
- * Shared helpers for Vercel serverless API routes.
- * File is prefixed with _ so Vercel does not expose it as a route.
- *
- * Default unlock price: UNLOCK_PRICE_PAISE. Can be overridden by admin dashboard (saved to Firestore).
+ * Shared helpers for API handlers (used by single api/[[...path]].js router).
  */
 export const UNLOCK_PRICE_PAISE = 1000; // ₹10 default (Razorpay uses paise); admin can override via /admin in rupees
 

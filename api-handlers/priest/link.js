@@ -1,4 +1,4 @@
-import { getDb, verifyPassword, createPriestToken, jsonResponse } from '../../_lib.js';
+import { getDb, verifyPassword, createPriestToken, jsonResponse } from '../_lib.js';
 
 /** POST /api/priest/link - Link Google user to priest account. Body: { userId, priestUsername, priestPassword } */
 export async function POST(request) {

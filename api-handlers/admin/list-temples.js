@@ -1,10 +1,4 @@
-import { getDb, verifyAdminToken, jsonResponse } from '../../_lib.js';
-
-function getAdminToken(request, body) {
-  const auth = request.headers.get('authorization');
-  if (auth && auth.startsWith('Bearer ')) return auth.slice(7);
-  return body?.token || null;
-}
+import { getDb, verifyAdminToken, jsonResponse } from '../_lib.js';
 
 function getAdminToken(request) {
   const auth = request.headers.get('authorization');

@@ -1,0 +1,82 @@
+/**
+ * POST /api/admin/data - Single admin endpoint: token + type in body.
+ * Body: { token, type: "temples" | "marathons" | "users" }
+ * Avoids rewrite/body issues: one endpoint, body always read here.
+ */
+import { getDb, verifyAdminToken, jsonResponse } from '../_lib.js';
+
+const DEITY_NAMES = { rama: 'Rama', shiva: 'Shiva', ganesh: 'Ganesh', surya: 'Surya', shakthi: 'Shakthi', krishna: 'Krishna', shanmukha: 'Shanmukha', venkateswara: 'Venkateswara' };
+
+export async function POST(request) {
+  try {
+    const body = await request.json().catch(() => ({}));
+    const token = body?.token;
+    if (!token || typeof token !== 'string') return jsonResponse({ error: 'Missing token' }, 401);
+    if (!verifyAdminToken(token)) return jsonResponse({ error: 'Invalid or expired session' }, 401);
+
+    const db = getDb();
+    if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
+
+    const type = body?.type;
+
+    if (type === 'temples') {
+      const snap = await db.collection('temples').orderBy('createdAt', 'desc').get();
+      const temples = snap.docs.map((d) => ({
+        id: d.id,
+        name: d.data().name,
+        state: d.data().state,
+        district: d.data().district,
+        cityTownVillage: d.data().cityTownVillage,
+        area: d.data().area,
+        priestUsername: d.data().priestUsername,
+      }));
+      return jsonResponse({ temples });
+    }
+
+    if (type === 'marathons') {
+      const marathonsSnap = await db.collection('marathons').get();
+      const marathons = [];
+      for (const d of marathonsSnap.docs) {
+        const data = d.data();
+        const templeSnap = await db.doc(`temples/${data.templeId}`).get();
+        const temple = templeSnap.exists ? templeSnap.data() : null;
+        const participationsSnap = await db.collection('marathonParticipations').where('marathonId', '==', d.id).get();
+        const participants = participationsSnap.docs.map((p) => {
+          const pData = p.data();
+          return { userId: pData.userId, displayName: pData.userId?.slice(0, 12) || '—', japasCount: pData.japasCount ?? 0 };
+        });
+        participants.sort((a, b) => (b.japasCount || 0) - (a.japasCount || 0));
+        marathons.push({
+          id: d.id,
+          templeId: data.templeId,
+          templeName: temple?.name || '—',
+          priestUsername: temple?.priestUsername || '—',
+          deityId: data.deityId,
+          deityName: DEITY_NAMES[data.deityId] || data.deityId,
+          targetJapas: data.targetJapas,
+          startDate: data.startDate,
+          joinedCount: data.joinedCount ?? 0,
+          topParticipants: participants.slice(0, 10),
+        });
+      }
+      marathons.sort((a, b) => (b.startDate || '').localeCompare(a.startDate || ''));
+      return jsonResponse({ marathons });
+    }
+
+    if (type === 'users') {
+      const snap = await db.collection('unlockedUsers').get();
+      const users = snap.docs
+        .map((d) => {
+          const data = d.data();
+          return { uid: data.uid || d.id, email: data.email || null, unlockedAt: data.unlockedAt || null };
+        })
+        .sort((a, b) => (b.unlockedAt || '').localeCompare(a.unlockedAt || ''));
+      return jsonResponse({ users, total: users.length });
+    }
+
+    return jsonResponse({ error: 'Invalid type. Use temples, marathons, or users.' }, 400);
+  } catch (e) {
+    console.error('admin data', e);
+    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+  }
+}

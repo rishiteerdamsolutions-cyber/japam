@@ -158,10 +158,11 @@ export function AdminPanel({ onBack, passwordAuth, adminToken, onLogout }: Admin
               onClick={() => {
                 setTab('users');
                 setPaidUsersLoading(true);
-                const base = API_BASE ? `${API_BASE}/api/admin/unlocked-users` : '/api/admin/unlocked-users';
-                const url = `${base}${base.includes('?') ? '&' : '?'}token=${encodeURIComponent(adminToken)}`;
+                const url = API_BASE ? `${API_BASE}/api/admin/data` : '/api/admin/data';
                 fetch(url, {
-                  headers: { Authorization: `Bearer ${adminToken}`, 'X-Admin-Token': adminToken },
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ token: adminToken, type: 'users' }),
                 })
                   .then((r) => {
                     if (r.status === 401) {

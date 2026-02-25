@@ -46,6 +46,27 @@ export async function POST(request) {
       { merge: true },
     );
 
+    // Keep marathon leaderboards consistent: update all existing participations for this user.
+    // This makes the new displayName show everywhere immediately (until the user changes again).
+    try {
+      const partsSnap = await db.collection('marathonParticipations').where('userId', '==', uid).get();
+      let batch = db.batch();
+      let ops = 0;
+      for (const d of partsSnap.docs) {
+        batch.set(d.ref, { displayName }, { merge: true });
+        ops += 1;
+        if (ops >= 450) {
+          // Firestore batch limit is 500; keep headroom.
+          await batch.commit();
+          batch = db.batch();
+          ops = 0;
+        }
+      }
+      if (ops > 0) await batch.commit();
+    } catch (e) {
+      console.error('user profile POST: update marathon participations failed', e?.message || e);
+    }
+
     return jsonResponse({ ok: true, displayName }, 200);
   } catch (e) {
     console.error('user profile POST', e);

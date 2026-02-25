@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
 import { useUnlockStore } from '../../store/unlockStore';
 import { DonateModal } from '../donation/DonateModal';
+import { useProfileStore } from '../../store/profileStore';
 
 interface AppHeaderProps {
   title: string;
@@ -16,9 +17,11 @@ export function AppHeader({ title, showBack, onBack, rightElement }: AppHeaderPr
   const navigate = useNavigate();
   const { user, loading, signOut } = useAuthStore();
   const tier = useUnlockStore((s) => s.tier);
+  const profileName = useProfileStore((s) => s.displayName);
   const [showDonate, setShowDonate] = useState(false);
 
-  const displayName = user?.displayName ?? user?.email ?? 'Signed in';
+  const fallbackName = user?.displayName ?? user?.email ?? null;
+  const displayName = profileName ?? fallbackName ?? 'Signed in';
   const isPro = tier === 'pro';
   const isPremium = tier === 'premium';
   const initial = (displayName && displayName.charAt(0).toUpperCase()) || '?';

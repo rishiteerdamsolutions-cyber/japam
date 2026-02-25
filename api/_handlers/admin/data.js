@@ -49,7 +49,13 @@ export async function POST(request) {
         const participationsSnap = await db.collection('marathonParticipations').where('marathonId', '==', d.id).get();
         const participants = participationsSnap.docs.map((p) => {
           const pData = p.data();
-          return { userId: pData.userId, displayName: pData.userId?.slice(0, 12) || '—', japasCount: pData.japasCount ?? 0 };
+          return {
+            userId: pData.userId,
+            displayName: (typeof pData.displayName === 'string' && pData.displayName.trim())
+              ? pData.displayName.trim()
+              : (pData.userId?.slice(0, 12) || '—'),
+            japasCount: pData.japasCount ?? 0
+          };
         });
         participants.sort((a, b) => (b.japasCount || 0) - (a.japasCount || 0));
         marathons.push({

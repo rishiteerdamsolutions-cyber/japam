@@ -1,5 +1,7 @@
 import { create } from 'zustand';
 import { auth } from '../lib/firebase';
+import { getApiBase } from '../lib/apiBase';
+import { updateProfile } from 'firebase/auth';
 
 interface ProfileState {
   displayName: string | null;
@@ -8,7 +10,10 @@ interface ProfileState {
   setDisplayName: (name: string) => Promise<void>;
 }
 
-const API_BASE = import.meta.env.VITE_API_URL ?? '';
+function apiUrl(path: string): string {
+  const base = getApiBase();
+  return base ? `${base}${path.startsWith('/') ? path : `/${path}`}` : path;
+}
 
 export const useProfileStore = create<ProfileState>((setState) => ({
   displayName: null,
@@ -26,7 +31,7 @@ export const useProfileStore = create<ProfileState>((setState) => ({
         setState({ displayName: null, loaded: true });
         return;
       }
-      const url = API_BASE ? `${API_BASE}/api/user/profile` : '/api/user/profile';
+      const url = apiUrl('/api/user/profile');
       const res = await fetch(url, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -39,6 +44,11 @@ export const useProfileStore = create<ProfileState>((setState) => ({
         ? data.displayName.trim()
         : null;
       setState({ displayName: name, loaded: true });
+
+      // Keep Firebase auth profile in sync so other UI paths using user.displayName stay consistent.
+      if (name && user.displayName !== name) {
+        updateProfile(user, { displayName: name }).catch(() => {});
+      }
     } catch {
       setState({ displayName: null, loaded: true });
     }
@@ -52,15 +62,19 @@ export const useProfileStore = create<ProfileState>((setState) => ({
       if (!user || !trimmed) return;
       const token = await user.getIdToken().catch(() => null);
       if (!token) return;
-      const url = API_BASE ? `${API_BASE}/api/user/profile` : '/api/user/profile';
-      await fetch(url, {
+      const url = apiUrl('/api/user/profile');
+      const res = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ displayName: trimmed }),
-      }).catch(() => {});
+      }).catch(() => null);
+
+      if (res && res.ok) {
+        updateProfile(user, { displayName: trimmed }).catch(() => {});
+      }
     } catch {
       // ignore errors; UI already updated optimistically
     }

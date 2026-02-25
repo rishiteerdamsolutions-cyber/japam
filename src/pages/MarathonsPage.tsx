@@ -154,8 +154,10 @@ export function MarathonsPage() {
       }
 
       const amber = '#FBBF24';
-      const ink = '#111827';
-      const inkSoft = '#334155';
+      // Darker shades of the same warm palette (avoid pure black)
+      const saffronDark = '#7C2D12';
+      const saffronMid = '#92400E';
+      const berryDark = '#831843';
 
       const truncate = (text: string, maxWidth: number) => {
         const t = String(text || '');
@@ -163,6 +165,17 @@ export function MarathonsPage() {
         let out = t;
         while (out.length > 1 && ctx.measureText(`${out}…`).width > maxWidth) out = out.slice(0, -1);
         return `${out}…`;
+      };
+
+      // Fit text to width (prevents any letter overlap)
+      const fitFontPx = (weight: number, maxPx: number, text: string, maxWidth: number) => {
+        let px = maxPx;
+        while (px > 14) {
+          ctx.font = `${weight} ${px}px system-ui, -apple-system, BlinkMacSystemFont, sans-serif`;
+          if (ctx.measureText(text).width <= maxWidth) return px;
+          px -= 2;
+        }
+        return px;
       };
 
       // Top overlay so dark text stays readable on bright backgrounds
@@ -177,47 +190,63 @@ export function MarathonsPage() {
       }
 
       // Header (centered, dark, larger)
+      let headerBottomY = padding + 10;
       {
         const centerX = width / 2;
         const maxW = width - padding * 2;
+        const title = 'JAPA MARATHON';
+        const temple = truncate(opts.templeName || 'Temple', maxW);
+        const deity = truncate(`${opts.deityName} Japa`, maxW);
         ctx.save();
         ctx.textAlign = 'center';
         ctx.textBaseline = 'top';
 
-        ctx.fillStyle = ink;
-        ctx.font = '900 26px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
-        ctx.fillText('JAPA MARATHON', centerX, padding + 10);
+        const titlePx = fitFontPx(950, 30, title, maxW);
+        const templePx = fitFontPx(950, 54, temple, maxW);
+        const deityPx = fitFontPx(900, 32, deity, maxW);
 
-        ctx.fillStyle = ink;
-        ctx.font = '900 44px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
-        ctx.fillText(truncate(opts.templeName || 'Temple', maxW), centerX, padding + 46);
+        const y0 = padding + 10;
+        const y1 = y0 + titlePx + 8;
+        const y2 = y1 + templePx + 10;
 
-        ctx.fillStyle = inkSoft;
-        ctx.font = '800 28px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
-        ctx.fillText(truncate(`${opts.deityName} Japa`, maxW), centerX, padding + 102);
+        ctx.fillStyle = saffronMid;
+        ctx.font = `950 ${titlePx}px system-ui, -apple-system, BlinkMacSystemFont, sans-serif`;
+        ctx.fillText(title, centerX, y0);
+
+        ctx.fillStyle = saffronDark;
+        ctx.font = `950 ${templePx}px system-ui, -apple-system, BlinkMacSystemFont, sans-serif`;
+        ctx.fillText(temple, centerX, y1);
+
+        ctx.fillStyle = saffronMid;
+        ctx.font = `900 ${deityPx}px system-ui, -apple-system, BlinkMacSystemFont, sans-serif`;
+        ctx.fillText(deity, centerX, y2);
 
         ctx.restore();
+
+        // Leaderboard title starts after header content (no overlap)
+        headerBottomY = y2 + deityPx;
       }
 
       // Leaderboard title (tighter so card fills frame)
-      const listTopY = padding + 190;
+      const listTopY = Math.max(padding + 190, headerBottomY + 24);
       ctx.save();
       ctx.textAlign = 'center';
-      ctx.fillStyle = ink;
-      ctx.font = '900 28px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
+      ctx.fillStyle = saffronDark;
+      ctx.font = '950 30px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
       ctx.fillText('Top participants', width / 2, listTopY);
       ctx.restore();
 
-      const rowH = 64;
-      const rowGap = 14;
-      const boxPadding = 14;
+      // Two-column arena: 5 + 5 entries (bigger text, uses space better)
+      const rowH = 96;
+      const rowGap = 18;
+      const boxPadding = 18;
       const boxX = padding;
       const boxY = listTopY + 16;
       const boxW = width - padding * 2;
-      const boxH = boxPadding * 2 + 10 * rowH + 9 * rowGap;
+      const boxH = boxPadding * 2 + 5 * rowH + 4 * rowGap;
 
       // Dark panel for readability (white text pops)
-      ctx.fillStyle = 'rgba(0,0,0,0.78)';
+      ctx.fillStyle = 'rgba(0,0,0,0.82)';
       ctx.beginPath();
       const r = 16;
       ctx.moveTo(boxX + r, boxY);
@@ -227,61 +256,79 @@ export function MarathonsPage() {
       ctx.arcTo(boxX, boxY, boxX + boxW, boxY, r);
       ctx.closePath();
       ctx.fill();
-      ctx.strokeStyle = 'rgba(251,191,36,0.20)';
-      ctx.lineWidth = 2;
+      ctx.strokeStyle = 'rgba(251,191,36,0.28)';
+      ctx.lineWidth = 3;
       ctx.stroke();
 
       const entries = opts.leaderboard.slice(0, 10);
       const curUid = opts.currentUserUid;
 
-      for (let i = 0; i < 10; i++) {
-        const p = entries[i] || { rank: i + 1, uid: '', name: 'Vacant', japasCount: 0 };
-        const isCurrent = p.uid && p.uid === curUid;
-        const isVacant = !p.uid;
+      const colGap = 18;
+      const colW = (boxW - colGap) / 2;
 
-        const y = boxY + boxPadding + i * rowH;
+      for (let row = 0; row < 5; row++) {
+        for (let col = 0; col < 2; col++) {
+          const idx = row + col * 5;
+          const p = entries[idx] || { rank: idx + 1, uid: '', name: 'Vacant', japasCount: 0 };
+          const isCurrent = p.uid && p.uid === curUid;
+          const isVacant = !p.uid;
 
-        if (isCurrent) {
-          ctx.fillStyle = 'rgba(251,191,36,0.15)';
-          ctx.fillRect(boxX + 10, y + 6, boxW - 20, rowH - 12);
+          const colX = boxX + col * (colW + colGap);
+          const y = boxY + boxPadding + row * (rowH + rowGap);
+
+          if (isCurrent) {
+            ctx.fillStyle = 'rgba(251,191,36,0.18)';
+            ctx.fillRect(colX + 10, y + 8, colW - 20, rowH - 16);
+          }
+
+          // rank circle
+          const cx = colX + 30;
+          const cy = y + rowH / 2;
+          ctx.beginPath();
+          ctx.arc(cx, cy, 18, 0, Math.PI * 2);
+          ctx.closePath();
+          ctx.fillStyle = isCurrent ? amber : 'rgba(55,65,81,0.95)';
+          ctx.fill();
+
+          ctx.fillStyle = isCurrent ? '#1F2937' : '#FFFFFF';
+          ctx.font = '950 18px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(String(p.rank), cx, cy);
+          ctx.textAlign = 'left';
+          ctx.textBaseline = 'alphabetic';
+
+          // name + japas
+          const textX = colX + 62;
+          const rightPad = 16;
+          const nameMaxW = colW - (textX - colX) - rightPad;
+
+          ctx.fillStyle = isVacant ? 'rgba(255,255,255,0.78)' : '#FFFFFF';
+          const baseName = isVacant ? 'Vacant' : String(p.name || '');
+          const namePx = fitFontPx(950, 28, baseName, nameMaxW);
+          ctx.font = `950 ${namePx}px system-ui, -apple-system, BlinkMacSystemFont, sans-serif`;
+          const name = isVacant ? 'Vacant' : truncate(baseName, nameMaxW);
+          const nameY = y + 40;
+          ctx.fillText(name, textX, nameY);
+
+          if (isCurrent) {
+            ctx.fillStyle = '#FCD34D';
+            ctx.font = `900 ${Math.max(14, Math.floor(namePx * 0.68))}px system-ui, -apple-system, BlinkMacSystemFont, sans-serif`;
+            const youX = textX + ctx.measureText(name).width + 10;
+            const youMaxX = colX + colW - rightPad;
+            if (youX + ctx.measureText('(You)').width <= youMaxX) {
+              ctx.fillText('(You)', youX, nameY);
+            }
+          }
+
+          ctx.fillStyle = 'rgba(255,255,255,0.92)';
+          ctx.font = '800 18px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
+          ctx.fillText(isVacant ? '—' : `${p.japasCount} japas`, textX, y + 72);
         }
-
-        // rank circle
-        const cx = boxX + 28;
-        const cy = y + rowH / 2;
-        ctx.beginPath();
-        ctx.arc(cx, cy, 16, 0, Math.PI * 2);
-        ctx.closePath();
-        ctx.fillStyle = isCurrent ? amber : 'rgba(55,65,81,0.9)';
-        ctx.fill();
-
-        ctx.fillStyle = isCurrent ? '#111827' : '#FFFFFF';
-        ctx.font = '900 16px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(String(p.rank), cx, cy);
-        ctx.textAlign = 'left';
-        ctx.textBaseline = 'alphabetic';
-
-        // name + japas
-        const textX = boxX + 56;
-        ctx.fillStyle = isVacant ? 'rgba(255,255,255,0.85)' : '#FFFFFF';
-        ctx.font = '900 22px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
-        const name = isVacant ? 'Vacant' : truncate(p.name, boxW - 56 - 24);
-        ctx.fillText(name, textX, y + 28);
-        if (isCurrent) {
-          ctx.fillStyle = '#FCD34D';
-          ctx.font = '600 14px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
-          ctx.fillText('(You)', textX + ctx.measureText(name).width + 8, y + 28);
-        }
-
-        ctx.fillStyle = 'rgba(255,255,255,0.9)';
-        ctx.font = '700 16px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
-        ctx.fillText(isVacant ? '—' : `${p.japasCount} japas`, textX, y + 50);
       }
 
       // Footer moved up so card fills frame (no big empty space at bottom)
-      const footerY = boxY + boxH + 22;
+      const footerY = boxY + boxH + 28;
       const footerLine1 = 'Match, chant, and climb the leaderboard.';
       const joinText = 'Join at www.japam.digital';
 
@@ -296,17 +343,6 @@ export function MarathonsPage() {
         ctx.fillRect(0, startY, width, height - startY);
       }
 
-      // Fit text to width (keeps it huge but prevents overflow)
-      const fitFontPx = (weight: number, maxPx: number, text: string, maxWidth: number) => {
-        let px = maxPx;
-        while (px > 18) {
-          ctx.font = `${weight} ${px}px system-ui, -apple-system, BlinkMacSystemFont, sans-serif`;
-          if (ctx.measureText(text).width <= maxWidth) return px;
-          px -= 2;
-        }
-        return px;
-      };
-
       ctx.save();
       ctx.textAlign = 'center';
       ctx.textBaseline = 'top';
@@ -315,17 +351,23 @@ export function MarathonsPage() {
       const line1Px = fitFontPx(900, 72, footerLine1, maxFooterW);
       const line2Px = fitFontPx(950, 104, joinText, maxFooterW);
 
-      ctx.lineWidth = 10;
-      ctx.strokeStyle = 'rgba(255,255,255,0.78)';
-      ctx.fillStyle = ink;
+      ctx.lineWidth = 12;
+      ctx.strokeStyle = 'rgba(255,255,255,0.82)';
+      ctx.fillStyle = berryDark;
 
       ctx.font = `900 ${line1Px}px system-ui, -apple-system, BlinkMacSystemFont, sans-serif`;
       ctx.strokeText(footerLine1, width / 2, footerY);
       ctx.fillText(footerLine1, width / 2, footerY);
 
       const y2 = footerY + line1Px + 14;
+      // Make the website line more attractive: warm gradient fill
+      const joinGrad = ctx.createLinearGradient(padding, 0, width - padding, 0);
+      joinGrad.addColorStop(0, saffronDark);
+      joinGrad.addColorStop(0.5, '#6D28D9');
+      joinGrad.addColorStop(1, berryDark);
       ctx.font = `950 ${line2Px}px system-ui, -apple-system, BlinkMacSystemFont, sans-serif`;
       ctx.strokeText(joinText, width / 2, y2);
+      ctx.fillStyle = joinGrad;
       ctx.fillText(joinText, width / 2, y2);
 
       ctx.restore();

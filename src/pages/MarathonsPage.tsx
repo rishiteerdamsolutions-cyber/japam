@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import INDIA_REGIONS from '../data/indiaRegions.json';
 import { DEITIES } from '../data/deities';
@@ -7,8 +7,6 @@ import { useUnlockStore } from '../store/unlockStore';
 import { auth } from '../lib/firebase';
 import { DonateThankYouBox } from '../components/donation/DonateThankYouBox';
 import { AppHeader } from '../components/layout/AppHeader';
-import { LeaderboardShareCard } from '../components/marathons/LeaderboardShareCard';
-import html2canvas from 'html2canvas';
 
 const STATES = [...INDIA_REGIONS.states, ...INDIA_REGIONS.union_territories];
 
@@ -62,9 +60,7 @@ export function MarathonsPage() {
   const [joinError, setJoinError] = useState<string | null>(null);
   const [joinedMarathonIds, setJoinedMarathonIds] = useState<Set<string>>(new Set());
   const [myMarathons, setMyMarathons] = useState<MyMarathon[]>([]);
-  const [shareContext, setShareContext] = useState<{ marathon: Marathon; temple: Temple } | null>(null);
   const [sharing, setSharing] = useState(false);
-  const shareCardRef = useRef<HTMLDivElement | null>(null);
   const [openMyLeaderboard, setOpenMyLeaderboard] = useState<Set<string>>(new Set());
   const [shareResult, setShareResult] = useState<{ blob: Blob; url: string; shareText: string } | null>(null);
   const [shareError, setShareError] = useState<string | null>(null);
@@ -114,6 +110,143 @@ export function MarathonsPage() {
       const bytes = new Uint8Array(bin.length);
       for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
       return new Blob([bytes], { type: mime });
+    } catch {
+      return null;
+    }
+  };
+
+  const renderRankCardBlob = (opts: {
+    templeName: string;
+    deityName: string;
+    leaderboard: { rank: number; uid: string; name: string; japasCount: number }[];
+    currentUserUid: string;
+  }): Blob | null => {
+    try {
+      const width = 720;
+      const height = 1280;
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return null;
+
+      const padding = 32;
+      const bg = ctx.createLinearGradient(0, 0, 0, height);
+      bg.addColorStop(0, '#1a1a2e');
+      bg.addColorStop(1, '#16213e');
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, width, height);
+
+      const amber = '#FBBF24';
+      const softAmber = '#FDE68A';
+      const gray = '#D1D5DB';
+
+      const truncate = (text: string, maxWidth: number) => {
+        const t = String(text || '');
+        if (ctx.measureText(t).width <= maxWidth) return t;
+        let out = t;
+        while (out.length > 1 && ctx.measureText(`${out}…`).width > maxWidth) out = out.slice(0, -1);
+        return `${out}…`;
+      };
+
+      // Header
+      ctx.fillStyle = amber;
+      ctx.font = '600 18px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
+      ctx.fillText('JAPA MARATHON', padding, padding + 18);
+
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = '700 28px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
+      ctx.fillText(truncate(opts.templeName || 'Temple', width - padding * 2), padding, padding + 18 + 40);
+
+      ctx.fillStyle = softAmber;
+      ctx.font = '500 18px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
+      ctx.fillText(truncate(`${opts.deityName} Japa`, width - padding * 2), padding, padding + 18 + 40 + 28);
+
+      // Leaderboard title
+      const listTopY = padding + 160;
+      ctx.fillStyle = amber;
+      ctx.font = '600 20px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
+      ctx.fillText('Top participants', padding, listTopY);
+
+      // List container
+      const boxX = padding;
+      const boxY = listTopY + 18;
+      const boxW = width - padding * 2;
+      const rowH = 70;
+      const boxPadding = 16;
+      const boxH = boxPadding * 2 + rowH * 10;
+
+      ctx.fillStyle = 'rgba(0,0,0,0.35)';
+      ctx.beginPath();
+      const r = 16;
+      ctx.moveTo(boxX + r, boxY);
+      ctx.arcTo(boxX + boxW, boxY, boxX + boxW, boxY + boxH, r);
+      ctx.arcTo(boxX + boxW, boxY + boxH, boxX, boxY + boxH, r);
+      ctx.arcTo(boxX, boxY + boxH, boxX, boxY, r);
+      ctx.arcTo(boxX, boxY, boxX + boxW, boxY, r);
+      ctx.closePath();
+      ctx.fill();
+
+      const entries = opts.leaderboard.slice(0, 10);
+      const curUid = opts.currentUserUid;
+
+      for (let i = 0; i < 10; i++) {
+        const p = entries[i] || { rank: i + 1, uid: '', name: 'Vacant', japasCount: 0 };
+        const isCurrent = p.uid && p.uid === curUid;
+        const isVacant = !p.uid;
+
+        const y = boxY + boxPadding + i * rowH;
+
+        if (isCurrent) {
+          ctx.fillStyle = 'rgba(251,191,36,0.15)';
+          ctx.fillRect(boxX + 10, y + 6, boxW - 20, rowH - 12);
+        }
+
+        // rank circle
+        const cx = boxX + 28;
+        const cy = y + rowH / 2;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 14, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.fillStyle = isCurrent ? amber : 'rgba(55,65,81,0.9)';
+        ctx.fill();
+
+        ctx.fillStyle = isCurrent ? '#111827' : '#FFFFFF';
+        ctx.font = '700 14px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(String(p.rank), cx, cy);
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'alphabetic';
+
+        // name + japas
+        const textX = boxX + 56;
+        ctx.fillStyle = isVacant ? 'rgba(255,255,255,0.7)' : '#FFFFFF';
+        ctx.font = '700 16px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
+        const name = isVacant ? 'Vacant' : truncate(p.name, boxW - 56 - 24);
+        ctx.fillText(name, textX, y + 28);
+        if (isCurrent) {
+          ctx.fillStyle = '#FCD34D';
+          ctx.font = '600 12px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
+          ctx.fillText('(You)', textX + ctx.measureText(name).width + 8, y + 28);
+        }
+
+        ctx.fillStyle = gray;
+        ctx.font = '500 13px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
+        ctx.fillText(isVacant ? '—' : `${p.japasCount} japas`, textX, y + 50);
+      }
+
+      // Footer
+      const footerY = height - padding - 40;
+      ctx.fillStyle = gray;
+      ctx.font = '500 14px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
+      ctx.fillText('Match, chant, and climb the leaderboard.', padding, footerY);
+      ctx.fillStyle = amber;
+      ctx.font = '600 16px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
+      ctx.fillText('Join at www.japam.digital', padding, footerY + 26);
+
+      const dataUrl = canvas.toDataURL('image/png');
+      return dataUrlToBlob(dataUrl);
     } catch {
       return null;
     }
@@ -208,24 +341,18 @@ export function MarathonsPage() {
     setShareError(null);
     setShareNotice(null);
     setSharing(true);
-    // Ensure the hidden share card is rendered before capture.
-    setShareContext({ marathon, temple });
     try {
-      await new Promise((r) => setTimeout(r, 50));
-      if (!shareCardRef.current) throw new Error('Share card not ready');
-
-      const canvas = await html2canvas(shareCardRef.current, { backgroundColor: null, useCORS: true });
-      let blob: Blob | null = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
-      if (!blob) {
-        // Safari/PWA can return null from toBlob; convert locally (no fetch, no network).
-        const dataUrl = canvas.toDataURL('image/png');
-        blob = dataUrlToBlob(dataUrl);
-      }
-      if (!blob) throw new Error('Failed to generate image');
-
       const currentEntry = marathon.leaderboard?.find((p) => p.uid === user.uid);
       const rankText = currentEntry ? `My rank ${currentEntry.rank} in this Japa Marathon! ` : '';
       const shareText = `${rankText}Join at www.japam.digital`;
+
+      const blob = renderRankCardBlob({
+        templeName: temple.name,
+        deityName: deityName(marathon.deityId),
+        leaderboard: paddedLeaderboard(marathon.leaderboard),
+        currentUserUid: user.uid,
+      });
+      if (!blob) throw new Error('Failed to generate image');
 
       const url = URL.createObjectURL(blob);
       setShareResult({ blob, url, shareText });
@@ -243,7 +370,6 @@ export function MarathonsPage() {
       setShareError('Could not generate/download the image. Please try again.');
     } finally {
       setSharing(false);
-      setShareContext(null);
     }
   };
 
@@ -535,18 +661,6 @@ export function MarathonsPage() {
                 </div>
               );
             })
-          )}
-          {shareContext && (
-            <div className="absolute -left-[9999px] -top-[9999px]">
-              <div ref={shareCardRef}>
-                <LeaderboardShareCard
-                  templeName={shareContext.temple.name}
-                  deityName={deityName(shareContext.marathon.deityId)}
-                  leaderboard={paddedLeaderboard(shareContext.marathon.leaderboard ?? [])}
-                  currentUserUid={user?.uid}
-                />
-              </div>
-            </div>
           )}
         </div>
       )}

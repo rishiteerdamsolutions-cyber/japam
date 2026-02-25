@@ -192,8 +192,8 @@ export function MarathonsPage() {
       const boxW = width - padding * 2;
       const boxH = boxPadding * 2 + 10 * rowH + 9 * rowGap;
 
-      // Glassy panel for readability
-      ctx.fillStyle = 'rgba(0,0,0,0.40)';
+      // Dark panel for readability
+      ctx.fillStyle = 'rgba(0,0,0,0.72)';
       ctx.beginPath();
       const r = 16;
       ctx.moveTo(boxX + r, boxY);
@@ -241,18 +241,18 @@ export function MarathonsPage() {
 
         // name + japas
         const textX = boxX + 56;
-        ctx.fillStyle = isVacant ? 'rgba(255,255,255,0.7)' : '#FFFFFF';
-        ctx.font = '700 16px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
+        ctx.fillStyle = isVacant ? 'rgba(255,255,255,0.85)' : '#FFFFFF';
+        ctx.font = '700 20px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
         const name = isVacant ? 'Vacant' : truncate(p.name, boxW - 56 - 24);
         ctx.fillText(name, textX, y + 28);
         if (isCurrent) {
           ctx.fillStyle = '#FCD34D';
-          ctx.font = '600 12px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
+          ctx.font = '600 14px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
           ctx.fillText('(You)', textX + ctx.measureText(name).width + 8, y + 28);
         }
 
-        ctx.fillStyle = gray;
-        ctx.font = '500 13px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
+        ctx.fillStyle = 'rgba(255,255,255,0.9)';
+        ctx.font = '500 15px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
         ctx.fillText(isVacant ? '—' : `${p.japasCount} japas`, textX, y + 50);
       }
 

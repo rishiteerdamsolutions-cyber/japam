@@ -36,13 +36,16 @@ export function GamePage() {
   const isLocked = levelIndex >= FIRST_LOCKED_LEVEL_INDEX && levelsUnlocked !== true;
 
   useEffect(() => {
-    if (isLocked && !paywallPending) {
+    // If a paywall is already pending (e.g. user clicked Next to a locked level),
+    // do not auto-init or clear it here.
+    if (paywallPending) return;
+
+    if (isLocked) {
       setPaywallPending({ mode, levelIndex });
       return;
     }
     const unlocked = levelsUnlocked === true;
     if (!isLocked || unlocked) {
-      setPaywallPending(null);
       initGame(mode, levelIndex);
     }
   }, [mode, levelIndex, isLocked, levelsUnlocked, initGame, paywallPending]);

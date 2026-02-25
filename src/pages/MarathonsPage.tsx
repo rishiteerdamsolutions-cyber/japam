@@ -131,15 +131,152 @@ export function MarathonsPage() {
       if (!ctx) return null;
 
       const padding = 32;
+      const bgTop = '#1a1a2e';
+      const bgBottom = '#0f1b3d';
       const bg = ctx.createLinearGradient(0, 0, 0, height);
-      bg.addColorStop(0, '#1a1a2e');
-      bg.addColorStop(1, '#16213e');
+      bg.addColorStop(0, bgTop);
+      bg.addColorStop(1, bgBottom);
       ctx.fillStyle = bg;
       ctx.fillRect(0, 0, width, height);
 
       const amber = '#FBBF24';
       const softAmber = '#FDE68A';
       const gray = '#D1D5DB';
+
+      const hashString = (s: string) => {
+        let h = 2166136261;
+        for (let i = 0; i < s.length; i++) {
+          h ^= s.charCodeAt(i);
+          h = Math.imul(h, 16777619);
+        }
+        return h >>> 0;
+      };
+
+      const mulberry32 = (seed: number) => {
+        let a = seed >>> 0;
+        return () => {
+          a |= 0;
+          a = (a + 0x6D2B79F5) | 0;
+          let t = Math.imul(a ^ (a >>> 15), 1 | a);
+          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      };
+
+      const seed = hashString(`${opts.templeName}|${opts.deityName}|${opts.currentUserUid}`);
+      const rand = mulberry32(seed);
+
+      const drawGem = (x: number, y: number, size: number, kind: number, color: string, alpha: number) => {
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = color;
+        ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+        ctx.lineWidth = Math.max(1, size * 0.06);
+        ctx.translate(x, y);
+        ctx.rotate((rand() - 0.5) * 0.8);
+        if (kind === 0) {
+          // diamond
+          ctx.beginPath();
+          ctx.moveTo(0, -size);
+          ctx.lineTo(size * 0.9, 0);
+          ctx.lineTo(0, size);
+          ctx.lineTo(-size * 0.9, 0);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+        } else if (kind === 1) {
+          // hex
+          ctx.beginPath();
+          for (let i = 0; i < 6; i++) {
+            const a = (Math.PI / 3) * i - Math.PI / 2;
+            const px = Math.cos(a) * size;
+            const py = Math.sin(a) * size;
+            if (i === 0) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+          }
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+        } else {
+          // circle
+          ctx.beginPath();
+          ctx.arc(0, 0, size * 0.95, 0, Math.PI * 2);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+        }
+        ctx.restore();
+      };
+
+      // Subtle radial glow behind header
+      {
+        const gx = width * 0.55;
+        const gy = 140;
+        const gr = Math.max(width, height) * 0.55;
+        const glow = ctx.createRadialGradient(gx, gy, 0, gx, gy, gr);
+        glow.addColorStop(0, 'rgba(251,191,36,0.18)');
+        glow.addColorStop(0.55, 'rgba(99,102,241,0.08)');
+        glow.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = glow;
+        ctx.fillRect(0, 0, width, height);
+      }
+
+      // Light mandala / rings (no external assets)
+      {
+        ctx.save();
+        ctx.globalAlpha = 0.14;
+        ctx.strokeStyle = 'rgba(251,191,36,0.35)';
+        ctx.lineWidth = 2;
+        const cx = width * 0.82;
+        const cy = 210;
+        for (let i = 0; i < 6; i++) {
+          ctx.beginPath();
+          ctx.arc(cx, cy, 40 + i * 26, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+        ctx.globalAlpha = 0.1;
+        for (let i = 0; i < 24; i++) {
+          const a = (Math.PI * 2 * i) / 24;
+          const r1 = 40;
+          const r2 = 40 + 26 * 5;
+          ctx.beginPath();
+          ctx.moveTo(cx + Math.cos(a) * r1, cy + Math.sin(a) * r1);
+          ctx.lineTo(cx + Math.cos(a) * r2, cy + Math.sin(a) * r2);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      // Game-like gem pattern in the background
+      {
+        const colors = ['rgba(251,191,36,0.55)', 'rgba(16,185,129,0.45)', 'rgba(59,130,246,0.42)', 'rgba(236,72,153,0.40)', 'rgba(167,139,250,0.42)'];
+        const count = 44;
+        for (let i = 0; i < count; i++) {
+          const x = rand() * width;
+          const y = rand() * height;
+          const size = 10 + rand() * 26;
+          const kind = Math.floor(rand() * 3);
+          const col = colors[Math.floor(rand() * colors.length)]!;
+          const alpha = 0.10 + rand() * 0.18;
+          drawGem(x, y, size, kind, col, alpha);
+        }
+      }
+
+      // Bottom “temple silhouette” wave to anchor the card
+      {
+        ctx.save();
+        ctx.globalAlpha = 0.22;
+        ctx.fillStyle = 'rgba(0,0,0,0.55)';
+        ctx.beginPath();
+        ctx.moveTo(0, height);
+        ctx.lineTo(0, height - 140);
+        ctx.quadraticCurveTo(width * 0.25, height - 210, width * 0.55, height - 160);
+        ctx.quadraticCurveTo(width * 0.8, height - 120, width, height - 190);
+        ctx.lineTo(width, height);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      }
 
       const truncate = (text: string, maxWidth: number) => {
         const t = String(text || '');
@@ -176,7 +313,8 @@ export function MarathonsPage() {
       const boxPadding = 16;
       const boxH = boxPadding * 2 + rowH * 10;
 
-      ctx.fillStyle = 'rgba(0,0,0,0.35)';
+      // Glassy panel for readability
+      ctx.fillStyle = 'rgba(0,0,0,0.40)';
       ctx.beginPath();
       const r = 16;
       ctx.moveTo(boxX + r, boxY);
@@ -186,6 +324,9 @@ export function MarathonsPage() {
       ctx.arcTo(boxX, boxY, boxX + boxW, boxY, r);
       ctx.closePath();
       ctx.fill();
+      ctx.strokeStyle = 'rgba(251,191,36,0.20)';
+      ctx.lineWidth = 2;
+      ctx.stroke();
 
       const entries = opts.leaderboard.slice(0, 10);
       const curUid = opts.currentUserUid;

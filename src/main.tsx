@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './index.css'
 import { AuthProvider } from './components/AuthProvider'
+import { BlockedOverlay } from './components/BlockedOverlay'
 import { PWAUpdatePrompt } from './components/PWAUpdatePrompt'
 import App from './App.tsx'
 import { MenuPage } from './pages/MenuPage'
@@ -30,6 +31,7 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
       <AuthProvider>
+      <BlockedOverlay />
       <PWAUpdatePrompt />
       <Suspense fallback={<PageFallback />}>
       <Routes>

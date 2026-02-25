@@ -23,6 +23,7 @@ export interface UserUnlockData {
   levelsUnlocked: boolean;
   tier: UserTier;
   isDonor: boolean;
+  blocked?: boolean;
 }
 
 /** Unlock (paid) status and tier. Logged-in: only backend API — same on all devices. */
@@ -32,6 +33,7 @@ export async function loadUserUnlock(_uid: string): Promise<UserUnlockData> {
   try {
     const url = API_BASE ? `${API_BASE}/api/user/unlock` : '/api/user/unlock';
     const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+    if (res.status === 403) return { levelsUnlocked: false, tier: 'free', isDonor: false, blocked: true };
     if (res.ok) {
       const data = (await res.json()) as { levelsUnlocked?: boolean; tier?: UserTier; isDonor?: boolean };
       return {
@@ -139,14 +141,21 @@ export async function loadAdminCheckDebug(uid: string): Promise<{
 export async function loadUserProgress(_uid: string): Promise<{ levelProgress: Record<string, LevelProgress>; currentLevelByMode: Record<string, number> } | null> {
   const token = await getFirebaseIdToken();
   if (!token) return null;
+  const url = API_BASE ? `${API_BASE}/api/user/progress` : '/api/user/progress';
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
-      const res = await fetch('/api/user/progress', { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+      if (res.status === 403) {
+        const err = new Error('Forbidden') as Error & { status: number };
+        err.status = 403;
+        throw err;
+      }
       if (res.ok) {
         const data = (await res.json()) as { levelProgress?: Record<string, LevelProgress>; currentLevelByMode?: Record<string, number> };
         return { levelProgress: data?.levelProgress ?? {}, currentLevelByMode: data?.currentLevelByMode ?? {} };
       }
-    } catch {
+    } catch (e) {
+      if ((e as Error & { status?: number })?.status === 403) throw e;
       if (attempt === 1) return null;
       await new Promise((r) => setTimeout(r, 400));
     }
@@ -177,15 +186,22 @@ export async function saveUserProgress(_uid: string, data: { levelProgress: Reco
 export async function loadUserJapa(_uid: string): Promise<JapaCounts | null> {
   const token = await getFirebaseIdToken();
   if (!token) return null;
+  const url = API_BASE ? `${API_BASE}/api/user/japa` : '/api/user/japa';
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
-      const res = await fetch('/api/user/japa', { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+      if (res.status === 403) {
+        const err = new Error('Forbidden') as Error & { status: number };
+        err.status = 403;
+        throw err;
+      }
       if (res.ok) {
         const data = (await res.json()) as { counts?: JapaCounts | null };
         const counts = data?.counts;
         return counts && typeof counts === 'object' ? (counts as JapaCounts) : null;
       }
-    } catch {
+    } catch (e) {
+      if ((e as Error & { status?: number })?.status === 403) throw e;
       if (attempt === 1) return null;
       await new Promise((r) => setTimeout(r, 400));
     }

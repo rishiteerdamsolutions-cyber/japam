@@ -51,7 +51,12 @@ export const useJapaStore = create<JapaStore>((setState, getState) => ({
       } else {
         setState({ counts: { ...initial }, loaded: true });
       }
-    } catch {
+    } catch (e: unknown) {
+      const err = e as { status?: number };
+      if (err?.status === 403) {
+        setState({ loaded: true });
+        return;
+      }
       setState({ counts: { ...initial }, loaded: true });
     }
   },

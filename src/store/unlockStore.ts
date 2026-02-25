@@ -8,6 +8,7 @@ interface UnlockState {
   levelsUnlocked: boolean | null;
   tier: UserTier | null;
   isDonor: boolean | null;
+  userBlocked: boolean;
   load: (userId?: string) => Promise<void>;
 }
 
@@ -15,17 +16,22 @@ export const useUnlockStore = create<UnlockState>((set) => ({
   levelsUnlocked: null,
   tier: null,
   isDonor: null,
+  userBlocked: false,
 
   load: async (userId?: string) => {
     if (!userId) {
-      set({ levelsUnlocked: false, tier: 'free', isDonor: false });
+      set({ levelsUnlocked: false, tier: 'free', isDonor: false, userBlocked: false });
       return;
     }
     try {
       const data = await loadUserUnlock(userId);
-      set({ levelsUnlocked: data.levelsUnlocked, tier: data.tier, isDonor: data.isDonor });
+      if (data.blocked) {
+        set({ userBlocked: true });
+        return;
+      }
+      set({ levelsUnlocked: data.levelsUnlocked, tier: data.tier, isDonor: data.isDonor, userBlocked: false });
     } catch {
-      set({ levelsUnlocked: false, tier: 'free', isDonor: false });
+      set({ levelsUnlocked: false, tier: 'free', isDonor: false, userBlocked: false });
     }
   }
 }));

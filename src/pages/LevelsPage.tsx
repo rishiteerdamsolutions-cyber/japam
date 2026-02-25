@@ -21,7 +21,7 @@ export function LevelsPage() {
     <WorldMap
       mode="general"
       onSelectLevel={handleSelectLevel}
-      onBack={() => navigate(-1)}
+      onBack={() => navigate('/menu')}
     />
   );
 }

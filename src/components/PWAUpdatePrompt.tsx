@@ -33,7 +33,7 @@ export function PWAUpdatePrompt() {
     <>
       {needRefresh && (
         <div
-          className="fixed bottom-0 left-0 right-0 z-[100] flex items-center justify-between gap-3 px-4 py-3 bg-amber-600 text-white shadow-lg"
+          className="fixed bottom-0 left-0 right-0 z-[9999] flex items-center justify-between gap-3 px-4 py-3 bg-amber-600 text-white shadow-lg"
           style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
         >
           <span className="text-sm font-medium">Update available</span>
@@ -57,7 +57,7 @@ export function PWAUpdatePrompt() {
       )}
       {offlineReady && (
         <div
-          className="fixed bottom-0 left-0 right-0 z-[100] flex items-center justify-between gap-3 px-4 py-3 bg-green-700 text-white shadow-lg"
+          className="fixed bottom-0 left-0 right-0 z-[9999] flex items-center justify-between gap-3 px-4 py-3 bg-green-700 text-white shadow-lg"
           style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
         >
           <span className="text-sm font-medium">Ready to work offline</span>

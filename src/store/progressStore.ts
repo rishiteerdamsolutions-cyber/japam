@@ -41,7 +41,12 @@ export const useProgressStore = create<ProgressState>((setState, getState) => ({
         currentLevelByMode: stored?.currentLevelByMode ?? {},
         loaded: true
       });
-    } catch {
+    } catch (e: unknown) {
+      const err = e as { status?: number };
+      if (err?.status === 403) {
+        setState({ loaded: true });
+        return;
+      }
       setState({ levelProgress: {}, currentLevelByMode: {}, loaded: true });
     }
   },

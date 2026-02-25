@@ -379,12 +379,27 @@ export function MarathonsPage() {
 
       // Footer
       const footerY = height - padding - 40;
-      ctx.fillStyle = gray;
-      ctx.font = '500 14px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
+      const candyPink = '#FAD1E6'; // creamy baby pink
+      const candyPinkDark = '#C02675'; // outline/shadow
+
+      ctx.save();
+      ctx.shadowColor = 'rgba(250,209,230,0.45)';
+      ctx.shadowBlur = 10;
+
+      ctx.fillStyle = candyPink;
+      ctx.font = '700 18px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
       ctx.fillText('Match, chant, and climb the leaderboard.', padding, footerY);
-      ctx.fillStyle = amber;
-      ctx.font = '600 16px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
-      ctx.fillText('Join at www.japam.digital', padding, footerY + 26);
+
+      // Big call-to-action
+      ctx.shadowBlur = 14;
+      ctx.font = '900 28px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
+      const joinText = 'Join at www.japam.digital';
+      ctx.lineWidth = 6;
+      ctx.strokeStyle = candyPinkDark;
+      ctx.strokeText(joinText, padding, footerY + 44);
+      ctx.fillStyle = candyPink;
+      ctx.fillText(joinText, padding, footerY + 44);
+      ctx.restore();
 
       const dataUrl = canvas.toDataURL('image/png');
       return dataUrlToBlob(dataUrl);

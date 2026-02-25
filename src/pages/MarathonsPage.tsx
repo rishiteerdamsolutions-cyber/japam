@@ -155,7 +155,6 @@ export function MarathonsPage() {
 
       const amber = '#FBBF24';
       const softAmber = '#FDE68A';
-      const gray = '#D1D5DB';
 
       const truncate = (text: string, maxWidth: number) => {
         const t = String(text || '');

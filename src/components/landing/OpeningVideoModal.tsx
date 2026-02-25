@@ -1,18 +1,27 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+
+const OPENING_VIDEO_1 = '/openingvideo1.mp4';
+const OPENING_VIDEO_2 = '/opening video2.mp4';
 
 interface OpeningVideoModalProps {
   onClose: () => void;
+  /** Optional: single source (legacy) or array for sequence. Default: [video1, video2]. */
   videoSrc?: string;
+  videoSrcs?: string[];
 }
 
-const DEFAULT_VIDEO_SRC = '/opening video.mp4';
 const TITLE = 'JAPAM GAME';
 const TYPE_DELAY_MS = 120;
 const BG_IMAGE = '/images/videomodalbg.png';
 
-export function OpeningVideoModal({ onClose, videoSrc = DEFAULT_VIDEO_SRC }: OpeningVideoModalProps) {
+const DEFAULT_SOURCES = [OPENING_VIDEO_1, OPENING_VIDEO_2];
+
+export function OpeningVideoModal({ onClose, videoSrc, videoSrcs }: OpeningVideoModalProps) {
   const [typedLength, setTypedLength] = useState(0);
+  const sources = videoSrcs?.length ? videoSrcs : videoSrc ? [videoSrc] : DEFAULT_SOURCES;
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     if (typedLength >= TITLE.length) return;
@@ -21,8 +30,18 @@ export function OpeningVideoModal({ onClose, videoSrc = DEFAULT_VIDEO_SRC }: Ope
   }, [typedLength]);
 
   const handleEnded = useCallback(() => {
-    onClose();
-  }, [onClose]);
+    const next = currentIndex + 1;
+    if (next < sources.length) {
+      setCurrentIndex(next);
+    } else {
+      onClose();
+    }
+  }, [currentIndex, sources, onClose]);
+
+  useEffect(() => {
+    const el = videoRef.current;
+    if (el) el.play().catch(() => {});
+  }, [currentIndex]);
 
   return (
     <div
@@ -56,7 +75,9 @@ export function OpeningVideoModal({ onClose, videoSrc = DEFAULT_VIDEO_SRC }: Ope
           className="relative w-full max-w-2xl aspect-video rounded-2xl overflow-hidden bg-black/90 shadow-2xl ring-2 ring-amber-400/60 ring-offset-2 ring-offset-transparent"
         >
           <video
-            src={videoSrc}
+            key={currentIndex}
+            ref={videoRef}
+            src={sources[currentIndex]}
             className="w-full h-full object-contain"
             muted
             autoPlay

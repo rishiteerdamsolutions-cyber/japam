@@ -35,8 +35,16 @@ export function MainMenu({ onSelect, onOpenMap, onOpenJapaDashboard, onOpenSetti
     >
       <div className="absolute inset-0 bg-black/60" aria-hidden />
       <div className="relative z-10 w-full max-w-sm flex flex-col items-center">
-        {/* Top right: loading placeholder, or user photo/name, badge, donate, sign in/out */}
-        <div className="w-full flex justify-end items-center gap-2 mt-2 mb-1 min-h-[40px]">
+        {/* Top: back to home (left) and user/sign in (right) */}
+        <div className="w-full flex justify-between items-center gap-2 mt-2 mb-1 min-h-[40px]">
+          <button
+            type="button"
+            onClick={() => navigate('/')}
+            className="text-amber-400/90 text-sm font-medium hover:text-amber-400 shrink-0"
+          >
+            ← Back
+          </button>
+          <div className="flex justify-end items-center gap-2 flex-1 min-w-0">
           {loading && (
             <span className="text-amber-200/60 text-sm">…</span>
           )}
@@ -93,6 +101,7 @@ export function MainMenu({ onSelect, onOpenMap, onOpenJapaDashboard, onOpenSetti
               </button>
             </div>
           )}
+          </div>
         </div>
 
         {showDonate && (

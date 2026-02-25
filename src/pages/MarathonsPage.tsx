@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import INDIA_REGIONS from '../data/indiaRegions.json';
 import { DEITIES } from '../data/deities';
@@ -7,6 +7,8 @@ import { useUnlockStore } from '../store/unlockStore';
 import { auth } from '../lib/firebase';
 import { DonateThankYouBox } from '../components/donation/DonateThankYouBox';
 import { AppHeader } from '../components/layout/AppHeader';
+import { LeaderboardShareCard } from '../components/marathons/LeaderboardShareCard';
+import html2canvas from 'html2canvas';
 
 const STATES = [...INDIA_REGIONS.states, ...INDIA_REGIONS.union_territories];
 
@@ -28,7 +30,7 @@ interface Marathon {
   targetJapas: number;
   startDate: string;
   joinedCount: number;
-  leaderboard?: { rank: number; userId: string; japasCount: number }[];
+  leaderboard?: { rank: number; uid: string; name: string; japasCount: number }[];
 }
 
 interface MyMarathon {
@@ -59,6 +61,9 @@ export function MarathonsPage() {
   const [joinError, setJoinError] = useState<string | null>(null);
   const [joinedMarathonIds, setJoinedMarathonIds] = useState<Set<string>>(new Set());
   const [myMarathons, setMyMarathons] = useState<MyMarathon[]>([]);
+  const [shareContext, setShareContext] = useState<{ marathon: Marathon; temple: Temple } | null>(null);
+  const [sharing, setSharing] = useState(false);
+  const shareCardRef = useRef<HTMLDivElement | null>(null);
 
   const state = STATES.find((s) => s.name === stateName) || null;
 
@@ -161,6 +166,56 @@ export function MarathonsPage() {
   };
 
   const deityName = (id: string) => DEITIES.find((d) => d.id === id)?.name ?? id;
+
+  const handleShare = (marathon: Marathon, temple: Temple) => {
+    if (!user?.uid) return;
+    if (!marathon.leaderboard || marathon.leaderboard.length === 0) return;
+    const hasUser = marathon.leaderboard.some((p) => p.uid === user.uid);
+    if (!hasUser) return;
+    setShareContext({ marathon, temple });
+  };
+
+  useEffect(() => {
+    const generate = async () => {
+      if (!shareContext || !shareCardRef.current || !user?.uid) return;
+      try {
+        setSharing(true);
+        // allow layout to flush
+        await new Promise((r) => setTimeout(r, 50));
+        const canvas = await html2canvas(shareCardRef.current, { backgroundColor: null });
+        const blob: Blob | null = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+        if (!blob) return;
+        const currentEntry = shareContext.marathon.leaderboard?.find((p) => p.uid === user.uid);
+        const rankText = currentEntry ? `My rank ${currentEntry.rank} in this Japa Marathon! ` : '';
+        const shareText = `${rankText}Join at www.japam.digital`;
+
+        const navAny: any = navigator;
+        if (navAny && navAny.canShare && navAny.canShare({ files: [new File([blob], 'japam-marathon.png', { type: 'image/png' })] })) {
+          const file = new File([blob], 'japam-marathon.png', { type: 'image/png' });
+          await navAny.share({
+            files: [file],
+            text: shareText,
+          });
+        } else {
+          // fallback: download image
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'japam-marathon.png';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }
+      } catch {
+        // ignore for now
+      } finally {
+        setSharing(false);
+        setShareContext(null);
+      }
+    };
+    generate();
+  }, [shareContext, user?.uid]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#1a1a2e] to-[#16213e] p-4 pb-[env(safe-area-inset-bottom)] max-w-lg mx-auto">
@@ -272,7 +327,7 @@ export function MarathonsPage() {
       {loading && <p className="text-amber-200/70 text-sm">Loading…</p>}
 
       {searched && !loading && (
-        <div className="space-y-6">
+        <div className="space-y-6 relative">
           {temples.length === 0 ? (
             <p className="text-amber-200/60 text-sm">No temples in this location yet.</p>
           ) : (
@@ -286,36 +341,68 @@ export function MarathonsPage() {
                     <p className="text-amber-200/50 text-sm mt-2">No active marathons</p>
                   ) : (
                     <div className="mt-3 space-y-2">
-                      {marathons.map((m) => (
-                        <div key={m.id} className="py-2 border-t border-amber-500/10">
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="text-amber-200 font-medium">{deityName(m.deityId)} • {m.targetJapas} japas</p>
-                              <p className="text-amber-200/60 text-xs">Started {m.startDate} • {m.joinedCount} joined</p>
+                      {marathons.map((m) => {
+                        const canShare =
+                          !!user?.uid &&
+                          !!m.leaderboard &&
+                          m.leaderboard.some((p) => p.uid === user.uid);
+                        return (
+                          <div key={m.id} className="py-2 border-t border-amber-500/10">
+                            <div className="flex items-center justify-between gap-2">
+                              <div>
+                                <p className="text-amber-200 font-medium">{deityName(m.deityId)} • {m.targetJapas} japas</p>
+                                <p className="text-amber-200/60 text-xs">Started {m.startDate} • {m.joinedCount} joined</p>
+                              </div>
+                              <div className="flex flex-col items-end gap-1">
+                                <button
+                                  onClick={() => handleJoin(m.id)}
+                                  disabled={!!joining || !isPro || joinedMarathonIds.has(m.id)}
+                                  className="px-4 py-2 rounded-lg bg-amber-500 text-white text-sm font-medium disabled:opacity-50"
+                                >
+                                  {joining === m.id ? '…' : joinedMarathonIds.has(m.id) ? 'Joined' : !isPro ? 'Pro required' : 'Join'}
+                                </button>
+                                {canShare && (
+                                  <button
+                                    type="button"
+                                    onClick={() => handleShare(m, temple)}
+                                    disabled={sharing}
+                                    className="text-[11px] text-amber-300 underline disabled:opacity-50"
+                                  >
+                                    {sharing ? 'Preparing…' : 'Share my rank'}
+                                  </button>
+                                )}
+                              </div>
                             </div>
-                            <button
-                              onClick={() => handleJoin(m.id)}
-                              disabled={!!joining || !isPro || joinedMarathonIds.has(m.id)}
-                              className="px-4 py-2 rounded-lg bg-amber-500 text-white text-sm font-medium disabled:opacity-50"
-                            >
-                              {joining === m.id ? '…' : joinedMarathonIds.has(m.id) ? 'Joined' : !isPro ? 'Pro required' : 'Join'}
-                            </button>
+                            {m.leaderboard && m.leaderboard.length > 0 && (
+                              <div className="mt-2 pl-2 border-l-2 border-amber-500/20">
+                                <p className="text-amber-200/70 text-xs font-medium mb-1">Top participants</p>
+                                {m.leaderboard.map((p) => (
+                                  <p key={p.rank} className="text-amber-200/60 text-xs">
+                                    {p.rank}. {p.name} — {p.japasCount} japas
+                                  </p>
+                                ))}
+                              </div>
+                            )}
                           </div>
-                          {m.leaderboard && m.leaderboard.length > 0 && (
-                            <div className="mt-2 pl-2 border-l-2 border-amber-500/20">
-                              <p className="text-amber-200/70 text-xs font-medium mb-1">Top participants</p>
-                              {m.leaderboard.map((p) => (
-                                <p key={p.rank} className="text-amber-200/60 text-xs">{p.rank}. {p.userId} — {p.japasCount} japas</p>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   )}
                 </div>
               );
             })
+          )}
+          {shareContext && (
+            <div className="absolute -left-[9999px] -top-[9999px]">
+              <div ref={shareCardRef}>
+                <LeaderboardShareCard
+                  templeName={shareContext.temple.name}
+                  deityName={deityName(shareContext.marathon.deityId)}
+                  leaderboard={shareContext.marathon.leaderboard ?? []}
+                  currentUserUid={user?.uid}
+                />
+              </div>
+            </div>
           )}
         </div>
       )}

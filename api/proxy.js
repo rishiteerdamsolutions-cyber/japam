@@ -21,6 +21,7 @@ import * as marathonsMyParticipationsHandler from './_handlers/marathons/my-part
 import * as userProgressHandler from './_handlers/user/progress.js';
 import * as userJapaHandler from './_handlers/user/japa.js';
 import * as userUnlockHandler from './_handlers/user/unlock.js';
+import * as userProfileHandler from './_handlers/user/profile.js';
 import * as donateOrderHandler from './_handlers/donate-order.js';
 import * as verifyDonateHandler from './_handlers/verify-donate.js';
 import * as donorsHandler from './_handlers/donors.js';
@@ -85,6 +86,8 @@ const HANDLERS = {
   'GET user/japa': userJapaHandler,
   'POST user/japa': userJapaHandler,
   'GET user/unlock': userUnlockHandler,
+  'GET user/profile': userProfileHandler,
+  'POST user/profile': userProfileHandler,
   'POST donate-order': donateOrderHandler,
   'POST verify-donate': verifyDonateHandler,
   'GET donors': donorsHandler,

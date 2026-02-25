@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSettingsStore } from '../store/settingsStore';
 import { useAuthStore } from '../store/authStore';
+import { useProfileStore } from '../store/profileStore';
 import { GoogleSignIn } from './auth/GoogleSignIn';
 import { DonateThankYouBox } from './donation/DonateThankYouBox';
 import { AppHeader } from './layout/AppHeader';
@@ -19,6 +20,9 @@ interface SettingsProps {
 export function Settings({ onBack }: SettingsProps) {
   const user = useAuthStore((s) => s.user);
   const { backgroundMusicEnabled, backgroundMusicVolume, load, setBackgroundMusic, setBackgroundMusicVolume } = useSettingsStore();
+  const { displayName, setDisplayName } = useProfileStore();
+  const [localName, setLocalName] = useState(displayName ?? '');
+  const [savingName, setSavingName] = useState(false);
   const [priestUsername, setPriestUsername] = useState('');
   const [priestPassword, setPriestPassword] = useState('');
   const [priestLinking, setPriestLinking] = useState(false);
@@ -27,6 +31,21 @@ export function Settings({ onBack }: SettingsProps) {
   useEffect(() => {
     load();
   }, [load]);
+
+  useEffect(() => {
+    setLocalName(displayName ?? '');
+  }, [displayName]);
+
+  const handleNameSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user?.uid) return;
+    setSavingName(true);
+    try {
+      await setDisplayName(localName);
+    } finally {
+      setSavingName(false);
+    }
+  };
 
   const handlePriestLink = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,6 +97,32 @@ export function Settings({ onBack }: SettingsProps) {
         </div>
 
         <div className="space-y-4">
+          {user && (
+            <div className="rounded-2xl bg-black/40 border border-amber-500/20 p-4 space-y-3 backdrop-blur-sm">
+              <h2 className="text-amber-200 font-semibold text-sm">Profile name</h2>
+              <p className="text-amber-200/70 text-xs">
+                This name appears on marathon leaderboards and next to your profile.
+              </p>
+              <form onSubmit={handleNameSave} className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center">
+                <input
+                  type="text"
+                  value={localName}
+                  onChange={(e) => setLocalName(e.target.value)}
+                  maxLength={80}
+                  placeholder={user.displayName || (user.email ? user.email.split('@')[0] : 'Your name')}
+                  className="flex-1 px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30 text-sm"
+                />
+                <button
+                  type="submit"
+                  disabled={savingName || !localName.trim()}
+                  className="px-4 py-2 rounded-xl bg-amber-500 text-white text-sm font-semibold disabled:opacity-50"
+                >
+                  {savingName ? 'Saving…' : 'Save'}
+                </button>
+              </form>
+            </div>
+          )}
+
           <div className="rounded-2xl bg-black/40 border border-amber-500/20 p-4 space-y-3 backdrop-blur-sm">
             <div className="flex justify-between items-center">
               <span className="text-amber-100 font-medium">Background Music</span>

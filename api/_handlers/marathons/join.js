@@ -28,9 +28,21 @@ export async function POST(request) {
       return jsonResponse({ ok: true, alreadyJoined: true });
     }
 
+    let displayName = null;
+    try {
+      const profileSnap = await db.doc(`users/${uid}/data/profile`).get();
+      const profileData = profileSnap.exists ? profileSnap.data() || {} : {};
+      if (typeof profileData.displayName === 'string' && profileData.displayName.trim()) {
+        displayName = profileData.displayName.trim().slice(0, 80);
+      }
+    } catch {
+      displayName = null;
+    }
+
     await participationRef.set({
       marathonId,
       userId: uid,
+      displayName,
       joinedAt: new Date().toISOString(),
       japasCount: 0,
     });

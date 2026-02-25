@@ -49,7 +49,14 @@ export async function GET(request) {
       marathonsByTemple[templeId] = await Promise.all(mSnap.docs.map(async (d) => {
         const data = d.data();
         const partsSnap = await db.collection('marathonParticipations').where('marathonId', '==', d.id).get();
-        const participants = partsSnap.docs.map((p) => ({ userId: p.data().userId, japasCount: p.data().japasCount ?? 0 }));
+        const participants = partsSnap.docs.map((p) => {
+          const pdata = p.data();
+          return {
+            userId: pdata.userId,
+            displayName: typeof pdata.displayName === 'string' ? pdata.displayName : null,
+            japasCount: pdata.japasCount ?? 0,
+          };
+        });
         participants.sort((a, b) => (b.japasCount || 0) - (a.japasCount || 0));
         return {
           id: d.id,
@@ -58,7 +65,12 @@ export async function GET(request) {
           targetJapas: data.targetJapas,
           startDate: data.startDate,
           joinedCount: data.joinedCount ?? 0,
-          leaderboard: participants.slice(0, 10).map((p, i) => ({ rank: i + 1, userId: p.userId?.slice(0, 8), japasCount: p.japasCount })),
+          leaderboard: participants.slice(0, 10).map((p, i) => ({
+            rank: i + 1,
+            uid: p.userId,
+            name: p.displayName || (p.userId ? String(p.userId).slice(0, 8) : '—'),
+            japasCount: p.japasCount,
+          })),
         };
       }));
     }

@@ -8,6 +8,7 @@ import { DonateModal } from '../donation/DonateModal';
 import { useAuthStore } from '../../store/authStore';
 import { useUnlockStore } from '../../store/unlockStore';
 import type { GameMode } from '../../store/gameStore';
+import { useProfileStore } from '../../store/profileStore';
 
 const BG_IMAGE = '/images/game%20menupagebg.png';
 
@@ -23,7 +24,9 @@ export function MainMenu({ onSelect, onOpenMap, onOpenJapaDashboard, onOpenSetti
   const { user, loading, signOut } = useAuthStore();
   const tier = useUnlockStore((s) => s.tier);
   const [showDonate, setShowDonate] = useState(false);
-  const displayName = user?.displayName ?? user?.email ?? 'Signed in';
+  const profileName = useProfileStore((s) => s.displayName);
+  const fallbackName = user?.displayName || (user?.email ? user.email.split('@')[0] : null);
+  const displayName = profileName || fallbackName || 'Signed in';
   const isPro = tier === 'pro';
   const isPremium = tier === 'premium';
   const initial = (displayName && displayName.charAt(0).toUpperCase()) || '?';

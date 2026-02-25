@@ -180,45 +180,50 @@ export function MarathonsPage() {
 
   const deityName = (id: string) => DEITIES.find((d) => d.id === id)?.name ?? id;
 
-  const handleShare = (marathon: Marathon, temple: Temple) => {
+  const handleShare = async (marathon: Marathon, temple: Temple) => {
     if (!user?.uid) return;
     if (!marathon.leaderboard || marathon.leaderboard.length === 0) return;
     const hasUser = marathon.leaderboard.some((p) => p.uid === user.uid);
     if (!hasUser) return;
+    if (sharing) return;
+
     setShareError(null);
+    setSharing(true);
+    // Ensure the hidden share card is rendered before capture.
     setShareContext({ marathon, temple });
-  };
+    try {
+      await new Promise((r) => setTimeout(r, 50));
+      if (!shareCardRef.current) throw new Error('Share card not ready');
 
-  useEffect(() => {
-    const generate = async () => {
-      if (!shareContext || !shareCardRef.current || !user?.uid) return;
-      try {
-        setSharing(true);
-        // allow layout to flush
-        await new Promise((r) => setTimeout(r, 50));
-        const canvas = await html2canvas(shareCardRef.current, { backgroundColor: null });
-        let blob: Blob | null = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
-        if (!blob) {
-          // Fallback for environments where toBlob returns null.
-          const dataUrl = canvas.toDataURL('image/png');
-          blob = await fetch(dataUrl).then((r) => r.blob()).catch(() => null);
-        }
-        if (!blob) throw new Error('Failed to generate image');
-        const currentEntry = shareContext.marathon.leaderboard?.find((p) => p.uid === user.uid);
-        const rankText = currentEntry ? `My rank ${currentEntry.rank} in this Japa Marathon! ` : '';
-        const shareText = `${rankText}Join at www.japam.digital`;
-
-        const url = URL.createObjectURL(blob);
-        setShareResult({ blob, url, shareText });
-      } catch {
-        setShareError('Could not generate image. Please try again.');
-      } finally {
-        setSharing(false);
-        setShareContext(null);
+      const canvas = await html2canvas(shareCardRef.current, { backgroundColor: null });
+      let blob: Blob | null = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+      if (!blob) {
+        const dataUrl = canvas.toDataURL('image/png');
+        blob = await fetch(dataUrl).then((r) => r.blob()).catch(() => null);
       }
-    };
-    generate();
-  }, [shareContext, user?.uid]);
+      if (!blob) throw new Error('Failed to generate image');
+
+      const currentEntry = marathon.leaderboard?.find((p) => p.uid === user.uid);
+      const rankText = currentEntry ? `My rank ${currentEntry.rank} in this Japa Marathon! ` : '';
+      const shareText = `${rankText}Join at www.japam.digital`;
+
+      const url = URL.createObjectURL(blob);
+      setShareResult({ blob, url, shareText });
+
+      // Download immediately (more reliable than waiting for a secondary click).
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'japam-marathon.png';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch {
+      setShareError('Could not generate/download the image. Please try again.');
+    } finally {
+      setSharing(false);
+      setShareContext(null);
+    }
+  };
 
   const downloadShareImage = () => {
     if (!shareResult) return;

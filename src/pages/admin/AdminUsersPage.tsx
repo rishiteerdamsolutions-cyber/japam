@@ -19,7 +19,7 @@ export function AdminUsersPage() {
     const url = API_BASE ? `${API_BASE}/api/admin/data` : '/api/admin/data';
     fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}`, 'X-Admin-Token': token },
       body: JSON.stringify({ token, type: 'users' }),
     })
       .then((r) => {

@@ -31,7 +31,7 @@ export function TemplesList({ adminToken, refreshTrigger, onUnauthorized }: Temp
       const url = API_BASE ? `${API_BASE}/api/admin/data` : '/api/admin/data';
       const res = await fetch(url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${adminToken}`, 'X-Admin-Token': adminToken },
         body: JSON.stringify({ token: adminToken, type: 'temples' }),
       });
       const data = await res.json().catch(() => ({}));

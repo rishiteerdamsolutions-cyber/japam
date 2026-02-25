@@ -1,23 +1,29 @@
 /**
- * POST /api/admin/data - Single admin endpoint: token + type in body.
+ * POST /api/admin/data - Single admin endpoint: token + type in body (or token in header as fallback).
  * Body: { token, type: "temples" | "marathons" | "users" }
- * Avoids rewrite/body issues: one endpoint, body always read here.
+ * Token can also come from Authorization: Bearer <token> or X-Admin-Token (if body is missing).
  */
-import { getDb, verifyAdminToken, jsonResponse } from '../_lib.js';
+import { getDb, verifyAdminToken, jsonResponse, getAdminTokenFromRequest } from '../_lib.js';
 
 const DEITY_NAMES = { rama: 'Rama', shiva: 'Shiva', ganesh: 'Ganesh', surya: 'Surya', shakthi: 'Shakthi', krishna: 'Krishna', shanmukha: 'Shanmukha', venkateswara: 'Venkateswara' };
 
 export async function POST(request) {
   try {
     const body = await request.json().catch(() => ({}));
-    const token = body?.token;
-    if (!token || typeof token !== 'string') return jsonResponse({ error: 'Missing token' }, 401);
+    const token = (body?.token && typeof body.token === 'string') ? body.token : getAdminTokenFromRequest(request);
+    if (!token) return jsonResponse({ error: 'Missing token' }, 401);
     if (!verifyAdminToken(token)) return jsonResponse({ error: 'Invalid or expired session' }, 401);
 
     const db = getDb();
     if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
 
-    const type = body?.type;
+    let type = body?.type;
+    if (!type) {
+      try {
+        const url = new URL(request.url);
+        type = url.searchParams.get('type') || null;
+      } catch {}
+    }
 
     if (type === 'temples') {
       const snap = await db.collection('temples').orderBy('createdAt', 'desc').get();

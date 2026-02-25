@@ -41,6 +41,7 @@ interface MyMarathon {
   targetJapas: number;
   startDate: string;
   japasCount: number;
+  leaderboard?: { rank: number; uid: string; name: string; japasCount: number }[];
 }
 
 export function MarathonsPage() {
@@ -64,6 +65,9 @@ export function MarathonsPage() {
   const [shareContext, setShareContext] = useState<{ marathon: Marathon; temple: Temple } | null>(null);
   const [sharing, setSharing] = useState(false);
   const shareCardRef = useRef<HTMLDivElement | null>(null);
+  const [openMyLeaderboard, setOpenMyLeaderboard] = useState<Set<string>>(new Set());
+  const [shareResult, setShareResult] = useState<{ blob: Blob; url: string; shareText: string } | null>(null);
+  const [shareError, setShareError] = useState<string | null>(null);
 
   const state = STATES.find((s) => s.name === stateName) || null;
 
@@ -172,6 +176,7 @@ export function MarathonsPage() {
     if (!marathon.leaderboard || marathon.leaderboard.length === 0) return;
     const hasUser = marathon.leaderboard.some((p) => p.uid === user.uid);
     if (!hasUser) return;
+    setShareError(null);
     setShareContext({ marathon, temple });
   };
 
@@ -183,32 +188,21 @@ export function MarathonsPage() {
         // allow layout to flush
         await new Promise((r) => setTimeout(r, 50));
         const canvas = await html2canvas(shareCardRef.current, { backgroundColor: null });
-        const blob: Blob | null = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
-        if (!blob) return;
+        let blob: Blob | null = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+        if (!blob) {
+          // Fallback for environments where toBlob returns null.
+          const dataUrl = canvas.toDataURL('image/png');
+          blob = await fetch(dataUrl).then((r) => r.blob()).catch(() => null);
+        }
+        if (!blob) throw new Error('Failed to generate image');
         const currentEntry = shareContext.marathon.leaderboard?.find((p) => p.uid === user.uid);
         const rankText = currentEntry ? `My rank ${currentEntry.rank} in this Japa Marathon! ` : '';
         const shareText = `${rankText}Join at www.japam.digital`;
 
-        const navAny: any = navigator;
-        if (navAny && navAny.canShare && navAny.canShare({ files: [new File([blob], 'japam-marathon.png', { type: 'image/png' })] })) {
-          const file = new File([blob], 'japam-marathon.png', { type: 'image/png' });
-          await navAny.share({
-            files: [file],
-            text: shareText,
-          });
-        } else {
-          // fallback: download image
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = 'japam-marathon.png';
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(url);
-        }
+        const url = URL.createObjectURL(blob);
+        setShareResult({ blob, url, shareText });
       } catch {
-        // ignore for now
+        setShareError('Could not generate image. Please try again.');
       } finally {
         setSharing(false);
         setShareContext(null);
@@ -217,8 +211,71 @@ export function MarathonsPage() {
     generate();
   }, [shareContext, user?.uid]);
 
+  const downloadShareImage = () => {
+    if (!shareResult) return;
+    const a = document.createElement('a');
+    a.href = shareResult.url;
+    a.download = 'japam-marathon.png';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
+  const shareShareImage = async () => {
+    if (!shareResult) return;
+    try {
+      const navAny: any = navigator;
+      const file = new File([shareResult.blob], 'japam-marathon.png', { type: 'image/png' });
+      if (navAny && navAny.canShare && navAny.canShare({ files: [file] })) {
+        await navAny.share({ files: [file], text: shareResult.shareText });
+      } else {
+        downloadShareImage();
+      }
+    } catch {
+      // If share fails (or user cancels), download is still available.
+      downloadShareImage();
+    }
+  };
+
+  const closeShareResult = () => {
+    if (shareResult?.url) URL.revokeObjectURL(shareResult.url);
+    setShareResult(null);
+    setShareError(null);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#1a1a2e] to-[#16213e] p-4 pb-[env(safe-area-inset-bottom)] max-w-lg mx-auto">
+      {shareResult && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 p-4">
+          <div className="bg-[#1a1a2e] rounded-2xl border border-amber-500/30 p-6 max-w-sm w-full shadow-xl">
+            <h2 className="text-xl font-bold text-amber-400 mb-2">Your rank card</h2>
+            <p className="text-amber-200/80 text-sm mb-4">Download or share your leaderboard image.</p>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={downloadShareImage}
+                className="flex-1 py-3 rounded-xl bg-amber-500 text-white font-semibold"
+              >
+                Download PNG
+              </button>
+              <button
+                type="button"
+                onClick={() => void shareShareImage()}
+                className="px-4 py-3 rounded-xl bg-white/10 text-amber-200 font-medium"
+              >
+                Share
+              </button>
+            </div>
+            <button
+              type="button"
+              onClick={closeShareResult}
+              className="mt-3 w-full py-2 rounded-xl bg-white/5 text-amber-200/80 text-sm"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
       <AppHeader
         title="Japa Marathons"
         showBack
@@ -239,6 +296,13 @@ export function MarathonsPage() {
         </div>
       )}
 
+      {shareError && (
+        <div className="mb-4 p-3 rounded-lg bg-red-500/20 border border-red-500/40 text-red-200 text-sm">
+          {shareError}
+          <button type="button" onClick={() => setShareError(null)} className="ml-2 underline">Dismiss</button>
+        </div>
+      )}
+
       <DonateThankYouBox />
 
       {user && isPro && myMarathons.length > 0 && (
@@ -247,18 +311,77 @@ export function MarathonsPage() {
           <p className="text-amber-200/70 text-sm mb-3">Play the japa game for these marathons — your japas count toward the marathon.</p>
           <div className="space-y-2">
             {myMarathons.map((my) => (
-              <div key={my.marathonId} className="flex items-center justify-between py-2 border-t border-amber-500/10 first:border-t-0 first:pt-0">
-                <div>
-                  <p className="text-amber-200 font-medium">{my.templeName || 'Marathon'} • {deityName(my.deityId)}</p>
-                  <p className="text-amber-200/60 text-xs">Target {my.targetJapas} japas • Your japas: {my.japasCount}</p>
+              <div key={my.marathonId} className="py-2 border-t border-amber-500/10 first:border-t-0 first:pt-0">
+                <div className="flex items-center justify-between gap-2">
+                  <div>
+                    <p className="text-amber-200 font-medium">{my.templeName || 'Marathon'} • {deityName(my.deityId)}</p>
+                    <p className="text-amber-200/60 text-xs">Target {my.targetJapas} japas • Your japas: {my.japasCount}</p>
+                  </div>
+                  <div className="flex flex-col items-end gap-1">
+                    <button
+                      type="button"
+                      onClick={() => navigate(`/game?mode=${encodeURIComponent(my.deityId)}&level=0`)}
+                      className="px-4 py-2 rounded-lg bg-green-600 text-white text-sm font-medium"
+                    >
+                      Play
+                    </button>
+                    {!!my.leaderboard && my.leaderboard.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setOpenMyLeaderboard((prev) => {
+                            const next = new Set(prev);
+                            if (next.has(my.marathonId)) next.delete(my.marathonId);
+                            else next.add(my.marathonId);
+                            return next;
+                          });
+                        }}
+                        className="text-[11px] text-amber-300 underline"
+                      >
+                        {openMyLeaderboard.has(my.marathonId) ? 'Hide leaderboard' : 'Show leaderboard'}
+                      </button>
+                    )}
+                  </div>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => navigate(`/game?mode=${encodeURIComponent(my.deityId)}&level=0`)}
-                  className="px-4 py-2 rounded-lg bg-green-600 text-white text-sm font-medium"
-                >
-                  Play
-                </button>
+
+                {openMyLeaderboard.has(my.marathonId) && my.leaderboard && my.leaderboard.length > 0 && (
+                  <div className="mt-2 pl-2 border-l-2 border-amber-500/20">
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="text-amber-200/70 text-xs font-medium mb-1">Top participants</p>
+                      {!!user?.uid && my.leaderboard.some((p) => p.uid === user.uid) && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const marathon: Marathon = {
+                              id: my.marathonId,
+                              templeId: my.templeId,
+                              deityId: my.deityId,
+                              targetJapas: my.targetJapas,
+                              startDate: my.startDate,
+                              joinedCount: 0,
+                              leaderboard: my.leaderboard,
+                            };
+                            const temple: Temple = {
+                              id: my.templeId,
+                              name: my.templeName || 'Temple',
+                              area: '',
+                            };
+                            handleShare(marathon, temple);
+                          }}
+                          disabled={sharing}
+                          className="text-[11px] text-amber-300 underline disabled:opacity-50"
+                        >
+                          {sharing ? 'Preparing…' : 'Share my rank'}
+                        </button>
+                      )}
+                    </div>
+                    {my.leaderboard.map((p) => (
+                      <p key={p.rank} className="text-amber-200/60 text-xs">
+                        {p.rank}. {p.name} — {p.japasCount} japas
+                      </p>
+                    ))}
+                  </div>
+                )}
               </div>
             ))}
           </div>

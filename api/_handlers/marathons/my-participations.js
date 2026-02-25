@@ -30,6 +30,30 @@ export async function GET(request) {
         const templeSnap = await db.doc(`temples/${mData.templeId}`).get();
         if (templeSnap.exists) templeName = templeSnap.data().name || '';
       }
+
+      // Include leaderboard so the app can show it in "Your marathons" without forcing a discover search.
+      let leaderboard = [];
+      try {
+        const partsForMarathonSnap = await db.collection('marathonParticipations').where('marathonId', '==', marathonId).get();
+        const participants = partsForMarathonSnap.docs.map((p) => {
+          const pdata = p.data();
+          return {
+            userId: pdata.userId,
+            displayName: typeof pdata.displayName === 'string' ? pdata.displayName : null,
+            japasCount: pdata.japasCount ?? 0,
+          };
+        });
+        participants.sort((a, b) => (b.japasCount || 0) - (a.japasCount || 0));
+        leaderboard = participants.slice(0, 10).map((p, i) => ({
+          rank: i + 1,
+          uid: p.userId,
+          name: p.displayName || (p.userId ? String(p.userId).slice(0, 8) : '—'),
+          japasCount: p.japasCount,
+        }));
+      } catch {
+        leaderboard = [];
+      }
+
       marathons.push({
         marathonId,
         deityId: mData.deityId,
@@ -38,6 +62,7 @@ export async function GET(request) {
         targetJapas: mData.targetJapas ?? 0,
         startDate: mData.startDate,
         japasCount: data.japasCount ?? 0,
+        leaderboard,
       });
     }
 

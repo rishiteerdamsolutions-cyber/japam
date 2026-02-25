@@ -22,7 +22,7 @@ export const LeaderboardShareCard: FC<LeaderboardShareCardProps> = ({
   leaderboard,
   currentUserUid,
 }) => {
-  const top = leaderboard.slice(0, 5);
+  const top = leaderboard.slice(0, 10);
 
   return (
     <div
@@ -66,6 +66,7 @@ export const LeaderboardShareCard: FC<LeaderboardShareCardProps> = ({
         >
           {top.map((p) => {
             const isCurrent = currentUserUid && p.uid === currentUserUid;
+            const isVacant = !p.uid;
             return (
               <div
                 key={p.rank}
@@ -77,6 +78,7 @@ export const LeaderboardShareCard: FC<LeaderboardShareCardProps> = ({
                   borderRadius: 12,
                   marginBottom: 6,
                   backgroundColor: isCurrent ? 'rgba(251,191,36,0.15)' : 'transparent',
+                  opacity: isVacant ? 0.7 : 1,
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -98,11 +100,11 @@ export const LeaderboardShareCard: FC<LeaderboardShareCardProps> = ({
                   </div>
                   <div>
                     <div style={{ fontSize: 16, fontWeight: 600 }}>
-                      {p.name}
+                      {isVacant ? 'Vacant' : p.name}
                       {isCurrent && <span style={{ marginLeft: 8, fontSize: 12, color: '#FCD34D' }}>(You)</span>}
                     </div>
                     <div style={{ fontSize: 13, color: '#D1D5DB' }}>
-                      {p.japasCount} japas
+                      {isVacant ? '—' : `${p.japasCount} japas`}
                     </div>
                   </div>
                 </div>

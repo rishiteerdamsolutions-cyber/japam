@@ -92,6 +92,15 @@ export function MarathonsPage() {
   }, [user?.uid, isPro]);
   const districts = state?.districts ?? [];
 
+  const paddedLeaderboard = (lb?: { rank: number; uid: string; name: string; japasCount: number }[]) => {
+    const list = Array.isArray(lb) ? lb.slice(0, 10) : [];
+    const out = [...list];
+    for (let i = out.length; i < 10; i++) {
+      out.push({ rank: i + 1, uid: '', name: 'Vacant', japasCount: 0 });
+    }
+    return out;
+  };
+
   const handleSearch = () => {
     if (!stateName.trim()) return;
     setJoinError(null);
@@ -375,9 +384,9 @@ export function MarathonsPage() {
                         </button>
                       )}
                     </div>
-                    {my.leaderboard.map((p) => (
+                    {paddedLeaderboard(my.leaderboard).map((p) => (
                       <p key={p.rank} className="text-amber-200/60 text-xs">
-                        {p.rank}. {p.name} — {p.japasCount} japas
+                        {p.rank}. {p.uid ? `${p.name} — ${p.japasCount} japas` : 'Vacant'}
                       </p>
                     ))}
                   </div>
@@ -499,9 +508,9 @@ export function MarathonsPage() {
                             {m.leaderboard && m.leaderboard.length > 0 && (
                               <div className="mt-2 pl-2 border-l-2 border-amber-500/20">
                                 <p className="text-amber-200/70 text-xs font-medium mb-1">Top participants</p>
-                                {m.leaderboard.map((p) => (
+                                {paddedLeaderboard(m.leaderboard).map((p) => (
                                   <p key={p.rank} className="text-amber-200/60 text-xs">
-                                    {p.rank}. {p.name} — {p.japasCount} japas
+                                    {p.rank}. {p.uid ? `${p.name} — ${p.japasCount} japas` : 'Vacant'}
                                   </p>
                                 ))}
                               </div>
@@ -521,7 +530,7 @@ export function MarathonsPage() {
                 <LeaderboardShareCard
                   templeName={shareContext.temple.name}
                   deityName={deityName(shareContext.marathon.deityId)}
-                  leaderboard={shareContext.marathon.leaderboard ?? []}
+                  leaderboard={paddedLeaderboard(shareContext.marathon.leaderboard ?? [])}
                   currentUserUid={user?.uid}
                 />
               </div>

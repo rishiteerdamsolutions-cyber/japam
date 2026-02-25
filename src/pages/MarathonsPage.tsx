@@ -115,13 +115,13 @@ export function MarathonsPage() {
     }
   };
 
-  const loadLogoImage = (): Promise<HTMLImageElement | null> => {
+  const loadBackgroundImage = (): Promise<HTMLImageElement | null> => {
     return new Promise((resolve) => {
       const img = new Image();
       img.crossOrigin = 'anonymous';
       img.onload = () => resolve(img);
       img.onerror = () => resolve(null);
-      img.src = '/images/japam-logo.png';
+      img.src = '/images/leaderboard-bg.png';
     });
   };
 
@@ -141,167 +141,21 @@ export function MarathonsPage() {
       if (!ctx) return null;
 
       const padding = 24;
-      const bgTop = '#1a1a2e';
-      const bgBottom = '#0f1b3d';
-      const bg = ctx.createLinearGradient(0, 0, 0, height);
-      bg.addColorStop(0, bgTop);
-      bg.addColorStop(1, bgBottom);
-      ctx.fillStyle = bg;
-      ctx.fillRect(0, 0, width, height);
 
-      const logoImg = await loadLogoImage();
-      if (logoImg && logoImg.width > 0) {
-        ctx.save();
-        ctx.globalAlpha = 0.12;
-        const logoSize = 140;
-        const step = 200;
-        for (let yy = -logoSize; yy < height + logoSize; yy += step) {
-          for (let xx = -logoSize; xx < width + logoSize; xx += step) {
-            ctx.drawImage(logoImg, xx, yy, logoSize, logoSize);
-          }
-        }
-        ctx.restore();
+      const bgImg = await loadBackgroundImage();
+      if (bgImg && bgImg.width > 0) {
+        ctx.drawImage(bgImg, 0, 0, width, height);
       } else {
-        const drawOmShape = (cx: number, cy: number, size: number) => {
-          ctx.save();
-          ctx.globalAlpha = 0.14;
-          ctx.strokeStyle = 'rgba(251,191,36,0.5)';
-          ctx.lineWidth = 3;
-          ctx.beginPath();
-          ctx.arc(cx, cy, size, 0, Math.PI * 2);
-          ctx.stroke();
-          ctx.beginPath();
-          ctx.ellipse(cx, cy, size * 0.5, size * 0.8, 0, 0, Math.PI * 2);
-          ctx.stroke();
-          ctx.restore();
-        };
-        drawOmShape(width * 0.5, height * 0.35, 90);
-        drawOmShape(width * 0.78, height * 0.6, 55);
-        drawOmShape(width * 0.22, height * 0.72, 50);
+        const bg = ctx.createLinearGradient(0, 0, 0, height);
+        bg.addColorStop(0, '#1a1a2e');
+        bg.addColorStop(1, '#0f1b3d');
+        ctx.fillStyle = bg;
+        ctx.fillRect(0, 0, width, height);
       }
 
       const amber = '#FBBF24';
       const softAmber = '#FDE68A';
       const gray = '#D1D5DB';
-
-      const hashString = (s: string) => {
-        let h = 2166136261;
-        for (let i = 0; i < s.length; i++) {
-          h ^= s.charCodeAt(i);
-          h = Math.imul(h, 16777619);
-        }
-        return h >>> 0;
-      };
-
-      const mulberry32 = (seed: number) => {
-        let a = seed >>> 0;
-        return () => {
-          a |= 0;
-          a = (a + 0x6D2B79F5) | 0;
-          let t = Math.imul(a ^ (a >>> 15), 1 | a);
-          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-        };
-      };
-
-      const seed = hashString(`${opts.templeName}|${opts.deityName}|${opts.currentUserUid}`);
-      const rand = mulberry32(seed);
-
-      const drawGem = (x: number, y: number, size: number, kind: number, color: string, alpha: number) => {
-        ctx.save();
-        ctx.globalAlpha = alpha;
-        ctx.fillStyle = color;
-        ctx.strokeStyle = 'rgba(255,255,255,0.12)';
-        ctx.lineWidth = Math.max(1, size * 0.06);
-        ctx.translate(x, y);
-        ctx.rotate((rand() - 0.5) * 0.8);
-        if (kind === 0) {
-          // diamond
-          ctx.beginPath();
-          ctx.moveTo(0, -size);
-          ctx.lineTo(size * 0.9, 0);
-          ctx.lineTo(0, size);
-          ctx.lineTo(-size * 0.9, 0);
-          ctx.closePath();
-          ctx.fill();
-          ctx.stroke();
-        } else if (kind === 1) {
-          // hex
-          ctx.beginPath();
-          for (let i = 0; i < 6; i++) {
-            const a = (Math.PI / 3) * i - Math.PI / 2;
-            const px = Math.cos(a) * size;
-            const py = Math.sin(a) * size;
-            if (i === 0) ctx.moveTo(px, py);
-            else ctx.lineTo(px, py);
-          }
-          ctx.closePath();
-          ctx.fill();
-          ctx.stroke();
-        } else {
-          // circle
-          ctx.beginPath();
-          ctx.arc(0, 0, size * 0.95, 0, Math.PI * 2);
-          ctx.closePath();
-          ctx.fill();
-          ctx.stroke();
-        }
-        ctx.restore();
-      };
-
-      // Subtle radial glow behind header
-      {
-        const gx = width * 0.55;
-        const gy = 140;
-        const gr = Math.max(width, height) * 0.55;
-        const glow = ctx.createRadialGradient(gx, gy, 0, gx, gy, gr);
-        glow.addColorStop(0, 'rgba(251,191,36,0.18)');
-        glow.addColorStop(0.55, 'rgba(99,102,241,0.08)');
-        glow.addColorStop(1, 'rgba(0,0,0,0)');
-        ctx.fillStyle = glow;
-        ctx.fillRect(0, 0, width, height);
-      }
-
-      // Light mandala / rings (no external assets)
-      {
-        ctx.save();
-        ctx.globalAlpha = 0.14;
-        ctx.strokeStyle = 'rgba(251,191,36,0.35)';
-        ctx.lineWidth = 2;
-        const cx = width * 0.82;
-        const cy = 210;
-        for (let i = 0; i < 6; i++) {
-          ctx.beginPath();
-          ctx.arc(cx, cy, 40 + i * 26, 0, Math.PI * 2);
-          ctx.stroke();
-        }
-        ctx.globalAlpha = 0.1;
-        for (let i = 0; i < 24; i++) {
-          const a = (Math.PI * 2 * i) / 24;
-          const r1 = 40;
-          const r2 = 40 + 26 * 5;
-          ctx.beginPath();
-          ctx.moveTo(cx + Math.cos(a) * r1, cy + Math.sin(a) * r1);
-          ctx.lineTo(cx + Math.cos(a) * r2, cy + Math.sin(a) * r2);
-          ctx.stroke();
-        }
-        ctx.restore();
-      }
-
-      // Game-like gem pattern in the background
-      {
-        const colors = ['rgba(251,191,36,0.55)', 'rgba(16,185,129,0.45)', 'rgba(59,130,246,0.42)', 'rgba(236,72,153,0.40)', 'rgba(167,139,250,0.42)'];
-        const count = 44;
-        for (let i = 0; i < count; i++) {
-          const x = rand() * width;
-          const y = rand() * height;
-          const size = 10 + rand() * 26;
-          const kind = Math.floor(rand() * 3);
-          const col = colors[Math.floor(rand() * colors.length)]!;
-          const alpha = 0.10 + rand() * 0.18;
-          drawGem(x, y, size, kind, col, alpha);
-        }
-      }
 
       const truncate = (text: string, maxWidth: number) => {
         const t = String(text || '');

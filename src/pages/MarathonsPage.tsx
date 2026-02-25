@@ -102,6 +102,23 @@ export function MarathonsPage() {
     return out;
   };
 
+  const dataUrlToBlob = (dataUrl: string): Blob | null => {
+    try {
+      const parts = dataUrl.split(',');
+      if (parts.length < 2) return null;
+      const header = parts[0] || '';
+      const base64 = parts.slice(1).join(',');
+      const mimeMatch = header.match(/data:([^;]+);base64/i);
+      const mime = mimeMatch?.[1] || 'image/png';
+      const bin = atob(base64);
+      const bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      return new Blob([bytes], { type: mime });
+    } catch {
+      return null;
+    }
+  };
+
   const handleSearch = () => {
     if (!stateName.trim()) return;
     setJoinError(null);
@@ -197,11 +214,12 @@ export function MarathonsPage() {
       await new Promise((r) => setTimeout(r, 50));
       if (!shareCardRef.current) throw new Error('Share card not ready');
 
-      const canvas = await html2canvas(shareCardRef.current, { backgroundColor: null });
+      const canvas = await html2canvas(shareCardRef.current, { backgroundColor: null, useCORS: true });
       let blob: Blob | null = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
       if (!blob) {
+        // Safari/PWA can return null from toBlob; convert locally (no fetch, no network).
         const dataUrl = canvas.toDataURL('image/png');
-        blob = await fetch(dataUrl).then((r) => r.blob()).catch(() => null);
+        blob = dataUrlToBlob(dataUrl);
       }
       if (!blob) throw new Error('Failed to generate image');
 

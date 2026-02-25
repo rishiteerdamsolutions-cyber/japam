@@ -68,6 +68,7 @@ export function MarathonsPage() {
   const [openMyLeaderboard, setOpenMyLeaderboard] = useState<Set<string>>(new Set());
   const [shareResult, setShareResult] = useState<{ blob: Blob; url: string; shareText: string } | null>(null);
   const [shareError, setShareError] = useState<string | null>(null);
+  const [shareNotice, setShareNotice] = useState<string | null>(null);
 
   const state = STATES.find((s) => s.name === stateName) || null;
 
@@ -188,6 +189,7 @@ export function MarathonsPage() {
     if (sharing) return;
 
     setShareError(null);
+    setShareNotice(null);
     setSharing(true);
     // Ensure the hidden share card is rendered before capture.
     setShareContext({ marathon, temple });
@@ -217,6 +219,8 @@ export function MarathonsPage() {
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
+
+      setShareNotice('Downloaded. To post on WhatsApp Status: open WhatsApp → Status → My Status → add the downloaded image.');
     } catch {
       setShareError('Could not generate/download the image. Please try again.');
     } finally {
@@ -235,26 +239,11 @@ export function MarathonsPage() {
     document.body.removeChild(a);
   };
 
-  const shareShareImage = async () => {
-    if (!shareResult) return;
-    try {
-      const navAny: any = navigator;
-      const file = new File([shareResult.blob], 'japam-marathon.png', { type: 'image/png' });
-      if (navAny && navAny.canShare && navAny.canShare({ files: [file] })) {
-        await navAny.share({ files: [file], text: shareResult.shareText });
-      } else {
-        downloadShareImage();
-      }
-    } catch {
-      // If share fails (or user cancels), download is still available.
-      downloadShareImage();
-    }
-  };
-
   const closeShareResult = () => {
     if (shareResult?.url) URL.revokeObjectURL(shareResult.url);
     setShareResult(null);
     setShareError(null);
+    setShareNotice(null);
   };
 
   return (
@@ -263,21 +252,15 @@ export function MarathonsPage() {
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 p-4">
           <div className="bg-[#1a1a2e] rounded-2xl border border-amber-500/30 p-6 max-w-sm w-full shadow-xl">
             <h2 className="text-xl font-bold text-amber-400 mb-2">Your rank card</h2>
-            <p className="text-amber-200/80 text-sm mb-4">Download or share your leaderboard image.</p>
+            <p className="text-amber-200/80 text-sm mb-3">Your leaderboard image is downloaded.</p>
+            <p className="text-amber-200/70 text-xs mb-4">To post it on WhatsApp Status: WhatsApp → Status → My Status → add the downloaded image.</p>
             <div className="flex gap-2">
               <button
                 type="button"
                 onClick={downloadShareImage}
                 className="flex-1 py-3 rounded-xl bg-amber-500 text-white font-semibold"
               >
-                Download PNG
-              </button>
-              <button
-                type="button"
-                onClick={() => void shareShareImage()}
-                className="px-4 py-3 rounded-xl bg-white/10 text-amber-200 font-medium"
-              >
-                Share
+                Download again
               </button>
             </div>
             <button
@@ -314,6 +297,12 @@ export function MarathonsPage() {
         <div className="mb-4 p-3 rounded-lg bg-red-500/20 border border-red-500/40 text-red-200 text-sm">
           {shareError}
           <button type="button" onClick={() => setShareError(null)} className="ml-2 underline">Dismiss</button>
+        </div>
+      )}
+      {shareNotice && (
+        <div className="mb-4 p-3 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-100 text-sm">
+          {shareNotice}
+          <button type="button" onClick={() => setShareNotice(null)} className="ml-2 underline">Dismiss</button>
         </div>
       )}
 

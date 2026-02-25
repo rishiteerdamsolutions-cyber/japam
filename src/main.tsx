@@ -14,6 +14,7 @@ import { AdminPricingPage } from './pages/admin/AdminPricingPage'
 import { AdminTemplesPage } from './pages/admin/AdminTemplesPage'
 import { AdminMarathonsPage } from './pages/admin/AdminMarathonsPage'
 import { AdminUsersPage } from './pages/admin/AdminUsersPage'
+import { AdminLevelsPage } from './pages/admin/AdminLevelsPage'
 import { PriestPage } from './pages/PriestPage'
 import { MarathonsPage } from './pages/MarathonsPage'
 import { SettingsPage } from './pages/SettingsPage'
@@ -34,6 +35,7 @@ createRoot(document.getElementById('root')!).render(
             <Route path="pricing" element={<AdminPricingPage />} />
             <Route path="temples" element={<AdminTemplesPage />} />
             <Route path="marathons" element={<AdminMarathonsPage />} />
+            <Route path="levels" element={<AdminLevelsPage />} />
             <Route path="users" element={<AdminUsersPage />} />
           </Route>
         </Route>

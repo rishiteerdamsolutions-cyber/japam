@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, isUserBlocked } from '../_lib.js';
 
 /** GET /api/user/unlock - Unlock status and tier for current user (Firebase ID token required) */
 export async function GET(request) {
@@ -6,6 +6,7 @@ export async function GET(request) {
   if (!uid) return jsonResponse({ error: 'Unauthorized' }, 401);
   const db = getDb();
   if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
+  if (await isUserBlocked(db, uid)) return jsonResponse({ error: 'Account disabled' }, 403);
   try {
     const [unlockSnap, donorSnap] = await Promise.all([
       db.doc(`users/${uid}/data/unlock`).get(),

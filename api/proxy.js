@@ -24,6 +24,12 @@ import * as userUnlockHandler from './_handlers/user/unlock.js';
 import * as donateOrderHandler from './_handlers/donate-order.js';
 import * as verifyDonateHandler from './_handlers/verify-donate.js';
 import * as donorsHandler from './_handlers/donors.js';
+import * as levelsConfigHandler from './_handlers/levels-config.js';
+import * as adminLevelsHandler from './_handlers/admin/levels.js';
+import * as adminBlockUserHandler from './_handlers/admin/block-user.js';
+import * as adminUnblockUserHandler from './_handlers/admin/unblock-user.js';
+import * as adminDeleteTempleHandler from './_handlers/admin/delete-temple.js';
+import * as adminDeleteMarathonHandler from './_handlers/admin/delete-marathon.js';
 
 function getPathSegments(request) {
   const url = new URL(request.url);
@@ -61,6 +67,13 @@ const HANDLERS = {
   'GET admin/unlocked-users': adminUnlockedUsersHandler,
   'POST admin/unlocked-users': adminUnlockedUsersHandler,
   'POST admin/data': adminDataHandler,
+  'GET admin/levels': adminLevelsHandler,
+  'POST admin/levels': adminLevelsHandler,
+  'POST admin/block-user': adminBlockUserHandler,
+  'POST admin/unblock-user': adminUnblockUserHandler,
+  'POST admin/delete-temple': adminDeleteTempleHandler,
+  'POST admin/delete-marathon': adminDeleteMarathonHandler,
+  'GET levels-config': levelsConfigHandler,
   'GET priest/marathons': priestMarathonsHandler,
   'POST priest/marathons': priestMarathonsHandler,
   'POST priest/link': priestLinkHandler,

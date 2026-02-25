@@ -54,6 +54,29 @@ export function TemplesList({ adminToken, refreshTrigger, onUnauthorized }: Temp
     }
   };
 
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  const handleDelete = async (templeId: string) => {
+    if (!adminToken) return;
+    if (!confirm('Delete this temple and all its marathons? This cannot be undone.')) return;
+    setDeletingId(templeId);
+    try {
+      const url = API_BASE ? `${API_BASE}/api/admin/delete-temple` : '/api/admin/delete-temple';
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${adminToken}`, 'X-Admin-Token': adminToken },
+        body: JSON.stringify({ token: adminToken, templeId }),
+      });
+      if (res.status === 401) {
+        onUnauthorized?.();
+        return;
+      }
+      if (res.ok) loadTemples();
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
   useEffect(() => {
     if (adminToken) loadTemples();
   }, [adminToken, refreshTrigger]);
@@ -71,10 +94,20 @@ export function TemplesList({ adminToken, refreshTrigger, onUnauthorized }: Temp
     <div className="mt-4 space-y-3">
       <p className="text-amber-200/80 text-sm font-medium">{temples.length} temple(s)</p>
       {temples.map((t) => (
-        <div key={t.id} className="p-3 rounded-lg bg-black/30 border border-amber-500/20">
-          <p className="font-medium text-amber-200">{t.name}</p>
-          <p className="text-amber-200/70 text-xs">{getLocationLabel(t)} • {t.area}</p>
-          <p className="text-amber-200/60 text-xs">Priest: {t.priestUsername}</p>
+        <div key={t.id} className="p-3 rounded-lg bg-black/30 border border-amber-500/20 flex flex-wrap items-start justify-between gap-2">
+          <div>
+            <p className="font-medium text-amber-200">{t.name}</p>
+            <p className="text-amber-200/70 text-xs">{getLocationLabel(t)} • {t.area}</p>
+            <p className="text-amber-200/60 text-xs">Priest: {t.priestUsername}</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => handleDelete(t.id)}
+            disabled={deletingId === t.id}
+            className="text-xs px-2 py-1 rounded bg-red-600/80 text-white disabled:opacity-50"
+          >
+            {deletingId === t.id ? 'Deleting…' : 'Delete'}
+          </button>
         </div>
       ))}
     </div>

@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useProgressStore, progressKey } from '../../store/progressStore';
 import { useUnlockStore, FIRST_LOCKED_LEVEL_INDEX } from '../../store/unlockStore';
+import { useLevelsConfigStore } from '../../store/levelsConfigStore';
 import { DonateThankYouBox } from '../donation/DonateThankYouBox';
 import { AppHeader } from '../layout/AppHeader';
 import { LEVELS } from '../../data/levels';
@@ -18,8 +19,18 @@ export function WorldMap({ mode: initialMode, onSelectLevel, onBack }: WorldMapP
   const [mapMode, setMapMode] = useState<GameMode>(initialMode);
   const { levelProgress, getCurrentLevelIndex } = useProgressStore();
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
+  const loadLevelsConfig = useLevelsConfigStore((s) => s.load);
+  const maxRevealedLevelIndex = useLevelsConfigStore((s) => s.maxRevealedLevelIndex);
   const currentLevelIndex = getCurrentLevelIndex(mapMode);
   const levelsTitle = mapMode === 'general' ? 'Levels' : `${mapMode.charAt(0).toUpperCase() + mapMode.slice(1)} Levels`;
+
+  useEffect(() => {
+    loadLevelsConfig();
+  }, [loadLevelsConfig]);
+
+  const revealedMax = maxRevealedLevelIndex ?? 49;
+  const maxEpisodeId = Math.min(100, Math.ceil((revealedMax + 1) / 10));
+  const episodesToShow = EPISODES.filter(ep => ep.id <= maxEpisodeId);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#1a1a2e] to-[#16213e] p-4 pb-[env(safe-area-inset-bottom)] max-w-lg mx-auto">
@@ -47,12 +58,13 @@ export function WorldMap({ mode: initialMode, onSelectLevel, onBack }: WorldMapP
       <DonateThankYouBox />
 
       <div className="space-y-6 mt-4">
-        {EPISODES.map(ep => (
+        {episodesToShow.map(ep => (
           <div key={ep.id}>
             <h2 className="text-amber-300 font-medium mb-2">{ep.name}</h2>
             <div className="grid grid-cols-5 gap-2">
               {LEVELS.filter(l => l.episode === ep.id).map((level, i) => {
                 const idx = (ep.id - 1) * 10 + i;
+                if (idx > revealedMax) return null;
                 const progress = levelProgress[progressKey(mapMode, level.id)];
                 const canPlay = idx <= currentLevelIndex && (idx < FIRST_LOCKED_LEVEL_INDEX || levelsUnlocked === true);
                 const isPaywalled = idx >= FIRST_LOCKED_LEVEL_INDEX && idx <= currentLevelIndex && levelsUnlocked !== true;

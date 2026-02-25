@@ -178,7 +178,12 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       batchEntries.push({ deity, count: 1, combo: comboLevel });
     }
     const nextAccumulated = [...accumulated, ...batchEntries];
-    const matchBonusAudio = accumulated.length === 0 ? getMatchBonusAudio(matches) : get().matchBonusAudio;
+    const currentMode = get().mode;
+    const sourceForBonus =
+      accumulated.length === 0 && currentMode !== 'general'
+        ? matches.filter(m => m.deity === (currentMode as DeityId))
+        : matches;
+    const matchBonusAudio = accumulated.length === 0 ? getMatchBonusAudio(sourceForBonus) : get().matchBonusAudio;
     set({
       matchHighlightPositions: positions,
       pendingMatchBatch: matches,

@@ -27,6 +27,8 @@ export function GameScreen({ mode, levelIndex, onBack, onNextLevel }: GameScreen
   const pendingTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const bgMusicEnabled = useSettingsStore(s => s.backgroundMusicEnabled);
   const bgMusicVolume = useSettingsStore(s => s.backgroundMusicVolume);
+  const setBackgroundMusic = useSettingsStore(s => s.setBackgroundMusic);
+  const setBackgroundMusicVolume = useSettingsStore(s => s.setBackgroundMusicVolume);
   const { playMantra, playMatchBonusAudio } = useSound(bgMusicEnabled, bgMusicVolume);
 
   const clearPendingAudio = () => {
@@ -102,6 +104,17 @@ export function GameScreen({ mode, levelIndex, onBack, onNextLevel }: GameScreen
     }
   };
 
+  const handleToggleMusic = () => {
+    setBackgroundMusic(!bgMusicEnabled);
+  };
+
+  const handleVolumeChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    const value = Number(e.target.value);
+    if (Number.isFinite(value)) {
+      setBackgroundMusicVolume(value / 100);
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-gradient-to-b from-[#1a1a2e] to-[#16213e] flex flex-col items-center overflow-hidden"
       style={{
@@ -118,6 +131,32 @@ export function GameScreen({ mode, levelIndex, onBack, onNextLevel }: GameScreen
         >
           ← Back
         </button>
+        <div className="flex items-center gap-2 text-xs text-amber-200/80">
+          <button
+            type="button"
+            onClick={handleToggleMusic}
+            className={`px-2 py-1 rounded-lg border text-[11px] ${
+              bgMusicEnabled
+                ? 'bg-amber-500 text-black border-amber-400'
+                : 'bg-black/40 text-amber-200 border-amber-500/40'
+            }`}
+          >
+            {bgMusicEnabled ? 'Music ON' : 'Music OFF'}
+          </button>
+          <div className={`flex items-center gap-1 ${bgMusicEnabled ? '' : 'opacity-50'}`}>
+            <span className="text-[11px]">Vol</span>
+            <input
+              type="range"
+              min={0}
+              max={100}
+              step={1}
+              value={Math.round((bgMusicVolume ?? 0.25) * 100)}
+              onChange={handleVolumeChange}
+              disabled={!bgMusicEnabled}
+              className="w-20 accent-amber-500"
+            />
+          </div>
+        </div>
       </div>
 
       <div className="shrink-0 w-full max-w-md">

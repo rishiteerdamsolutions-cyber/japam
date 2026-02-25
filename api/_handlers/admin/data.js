@@ -70,11 +70,21 @@ export async function POST(request) {
     }
 
     if (type === 'users') {
-      const snap = await db.collection('unlockedUsers').get();
-      const users = snap.docs
+      const [unlockedSnap, blockedSnap] = await Promise.all([
+        db.collection('unlockedUsers').get(),
+        db.collection('blockedUsers').get(),
+      ]);
+      const blockedSet = new Set(blockedSnap.docs.map((d) => d.id));
+      const users = unlockedSnap.docs
         .map((d) => {
           const data = d.data();
-          return { uid: data.uid || d.id, email: data.email || null, unlockedAt: data.unlockedAt || null };
+          const uid = data.uid || d.id;
+          return {
+            uid,
+            email: data.email || null,
+            unlockedAt: data.unlockedAt || null,
+            isBlocked: blockedSet.has(uid),
+          };
         })
         .sort((a, b) => (b.unlockedAt || '').localeCompare(a.unlockedAt || ''));
       return jsonResponse({ users, total: users.length });

@@ -20,22 +20,24 @@ export interface LevelConfig {
 
 export const LEVELS: LevelConfig[] = [];
 export const DAILY_GOAL_JAPAS = 108; // Levels 1-5 combined (3+11+21+33+40)
+export const TOTAL_LEVELS = 1000;
 
 const INCREMENTS = [3, 11, 21, 33, 40]; // Levels 1-5, then cycles for 6+
 
 function createLevels() {
-  for (let id = 1; id <= 50; id++) {
+  for (let id = 1; id <= TOTAL_LEVELS; id++) {
     let japaTarget: number;
     if (id <= 5) {
       japaTarget = INCREMENTS[id - 1]!;
     } else {
-      let val = 108; // Level 6 base (daily goal = 3+11+21+33+40)
+      let val = 108;
       for (let i = 6; i < id; i++) {
         val += INCREMENTS[(i - 6) % 5]!;
       }
       japaTarget = val;
     }
-    const maxGemTypes = id <= 2 ? 4 : id <= 4 ? 5 : id <= 10 ? 6 : id <= 20 ? 7 : 8;
+    const maxGemTypes =
+      id <= 2 ? 4 : id <= 4 ? 5 : id <= 10 ? 6 : id <= 20 ? 7 : id <= 50 ? 8 : id <= 200 ? 8 : 8;
     LEVELS.push({
       id: `level-${id}`,
       episode: Math.ceil(id / 10),
@@ -43,7 +45,7 @@ function createLevels() {
       moves: 80,
       rows: 8,
       cols: 8,
-      maxGemTypes
+      maxGemTypes,
     });
   }
 }

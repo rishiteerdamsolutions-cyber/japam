@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import admin from 'firebase-admin';
-import { getDb, jsonResponse, verifyFirebaseUser } from './_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, isUserBlocked } from './_lib.js';
 
 const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || '';
 
@@ -25,6 +25,7 @@ export async function POST(request) {
     }
     const db = getDb();
     if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
+    if (await isUserBlocked(db, uid)) return jsonResponse({ error: 'Account disabled' }, 403);
     await db.doc(`users/${uid}/data/unlock`).set({ levelsUnlocked: true }, { merge: true });
 
     let email = null;

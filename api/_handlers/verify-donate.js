@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import admin from 'firebase-admin';
-import { getDb, getRazorpay, jsonResponse, verifyFirebaseUser } from './_lib.js';
+import { getDb, getRazorpay, jsonResponse, verifyFirebaseUser, isUserBlocked } from './_lib.js';
 
 const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || '';
 const LIFETIME_DONOR_PAISE = 5000000; // ₹50,000+ = Lifetime Donor
@@ -28,6 +28,7 @@ export async function POST(request) {
 
     const db = getDb();
     if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
+    if (await isUserBlocked(db, uid)) return jsonResponse({ error: 'Account disabled' }, 403);
 
     const unlockedSnap = await db.collection('unlockedUsers').doc(uid).get();
     if (!unlockedSnap.exists) {

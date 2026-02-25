@@ -99,6 +99,17 @@ export async function isUserUnlocked(db, uid) {
   }
 }
 
+/** Check if user is blocked from login/using app. Uses blockedUsers collection. */
+export async function isUserBlocked(db, uid) {
+  if (!uid) return false;
+  try {
+    const snap = await db.collection('blockedUsers').doc(uid).get();
+    return snap.exists;
+  } catch {
+    return false;
+  }
+}
+
 export function getRazorpay() {
   if (razorpay) return razorpay;
   const keyId = process.env.RAZORPAY_KEY_ID || 'rzp_test_SIglcNEf6QAT2M';

@@ -41,6 +41,7 @@ export function AdminLayout() {
         <NavLink to="/admin/pricing">Pricing</NavLink>
         <NavLink to="/admin/temples">Temples</NavLink>
         <NavLink to="/admin/marathons">Marathons</NavLink>
+        <NavLink to="/admin/levels">Levels</NavLink>
         <NavLink to="/admin/users">Paid users</NavLink>
       </nav>
       <Outlet />

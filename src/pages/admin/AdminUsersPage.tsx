@@ -6,7 +6,15 @@ const API_BASE = import.meta.env.VITE_API_URL ?? '';
 
 export function AdminUsersPage() {
   const navigate = useNavigate();
-  const [users, setUsers] = useState<{ uid: string; email: string | null; unlockedAt: string | null; isBlocked?: boolean }[]>([]);
+  const [users, setUsers] = useState<{
+    uid: string;
+    email: string | null;
+    unlockedAt: string | null;
+    tier?: 'pro' | 'premium' | string;
+    donationAmountPaise?: number | null;
+    lifetimeDonor?: boolean;
+    isBlocked?: boolean;
+  }[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [actionUid, setActionUid] = useState<string | null>(null);
@@ -28,7 +36,7 @@ export function AdminUsersPage() {
         }
         return r.json();
       })
-      .then((data: { users?: { uid: string; email: string | null; unlockedAt: string | null; isBlocked?: boolean }[]; error?: string } | null) => {
+      .then((data: { users?: { uid: string; email: string | null; unlockedAt: string | null; tier?: string; donationAmountPaise?: number | null; lifetimeDonor?: boolean; isBlocked?: boolean }[]; error?: string } | null) => {
         if (data == null) return;
         if (data.error) {
           setError(String(data.error));
@@ -122,6 +130,7 @@ export function AdminUsersPage() {
                 <th className="px-3 py-2">Email</th>
                 <th className="px-3 py-2">User ID</th>
                 <th className="px-3 py-2">Paid at</th>
+                <th className="px-3 py-2">Tier</th>
                 <th className="px-3 py-2">Status</th>
               </tr>
             </thead>
@@ -131,6 +140,21 @@ export function AdminUsersPage() {
                   <td className="px-3 py-2">{u.email || '—'}</td>
                   <td className="px-3 py-2 font-mono text-xs">{u.uid.slice(0, 12)}…</td>
                   <td className="px-3 py-2">{u.unlockedAt ? new Date(u.unlockedAt).toLocaleString() : '—'}</td>
+                  <td className="px-3 py-2">
+                    {u.tier === 'premium' ? (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] border border-amber-400/60 bg-amber-500/20 text-amber-200">
+                        Premium
+                        {u.lifetimeDonor ? <span className="text-amber-300/80">(Lifetime)</span> : null}
+                        {typeof u.donationAmountPaise === 'number' && u.donationAmountPaise > 0 ? (
+                          <span className="text-amber-200/70">₹{Math.round(u.donationAmountPaise / 100)}</span>
+                        ) : null}
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] border border-green-500/60 bg-green-500/15 text-green-200">
+                        Pro
+                      </span>
+                    )}
+                  </td>
                   <td className="px-3 py-2">
                     {u.isBlocked ? (
                       <span className="text-red-400 text-xs">Blocked</span>

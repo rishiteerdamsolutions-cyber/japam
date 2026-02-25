@@ -75,18 +75,42 @@ export async function POST(request) {
         db.collection('blockedUsers').get(),
       ]);
       const blockedSet = new Set(blockedSnap.docs.map((d) => d.id));
-      const users = unlockedSnap.docs
-        .map((d) => {
-          const data = d.data();
-          const uid = data.uid || d.id;
+
+      const unlocked = unlockedSnap.docs.map((d) => {
+        const data = d.data();
+        const uid = data.uid || d.id;
+        return { uid, email: data.email || null, unlockedAt: data.unlockedAt || null };
+      });
+
+      // Premium = present in donors collection.
+      let donorByUid = new Map();
+      try {
+        const refs = unlocked.map((u) => db.collection('donors').doc(u.uid));
+        const snaps = refs.length ? await db.getAll(...refs) : [];
+        donorByUid = new Map(snaps.filter((s) => s.exists).map((s) => [s.id, s.data() || {}]));
+      } catch {
+        donorByUid = new Map();
+      }
+
+      const users = unlocked
+        .map((u) => {
+          const donor = donorByUid.get(u.uid) || null;
+          const donationAmountPaise = donor && typeof donor.amount === 'number' ? donor.amount : null;
+          const lifetimeDonor = donor ? donor.lifetimeDonor === true : false;
+          const tier = donor ? 'premium' : 'pro';
           return {
-            uid,
-            email: data.email || null,
-            unlockedAt: data.unlockedAt || null,
-            isBlocked: blockedSet.has(uid),
+            uid: u.uid,
+            email: u.email,
+            unlockedAt: u.unlockedAt,
+            tier,
+            isPremium: tier === 'premium',
+            donationAmountPaise,
+            lifetimeDonor,
+            isBlocked: blockedSet.has(u.uid),
           };
         })
         .sort((a, b) => (b.unlockedAt || '').localeCompare(a.unlockedAt || ''));
+
       return jsonResponse({ users, total: users.length });
     }
 

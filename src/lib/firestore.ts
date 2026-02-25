@@ -1,11 +1,15 @@
 import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
 import { app, auth, isFirebaseConfigured } from './firebase';
+import { getApiBase } from './apiBase';
 import type { LevelProgress } from '../store/progressStore';
 import type { JapaCounts } from '../store/japaStore';
 
 const db = isFirebaseConfigured && app ? getFirestore(app) : null;
 
-const API_BASE = import.meta.env.VITE_API_URL ?? '';
+function apiUrl(path: string): string {
+  const base = getApiBase();
+  return base ? `${base}${path.startsWith('/') ? path : `/${path}`}` : path;
+}
 
 async function getFirebaseIdToken(): Promise<string | null> {
   try {
@@ -31,7 +35,7 @@ export async function loadUserUnlock(_uid: string): Promise<UserUnlockData> {
   const token = await getFirebaseIdToken();
   if (!token) return { levelsUnlocked: false, tier: 'free', isDonor: false };
   try {
-    const url = API_BASE ? `${API_BASE}/api/user/unlock` : '/api/user/unlock';
+    const url = apiUrl('/api/user/unlock');
     const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
     if (res.status === 403) return { levelsUnlocked: false, tier: 'free', isDonor: false, blocked: true };
     if (res.ok) {
@@ -56,7 +60,7 @@ export async function loadPricingConfig(): Promise<{ unlockPricePaise: number; d
   let unlock: number | null = null;
   let display: number | null = null;
   try {
-    const url = API_BASE ? `${API_BASE}/api/price` : '/api/price';
+    const url = apiUrl('/api/price');
     const res = await fetch(url);
     if (res.ok) {
       const data = (await res.json()) as { unlockPricePaise?: number; displayPricePaise?: number };
@@ -141,7 +145,7 @@ export async function loadAdminCheckDebug(uid: string): Promise<{
 export async function loadUserProgress(_uid: string): Promise<{ levelProgress: Record<string, LevelProgress>; currentLevelByMode: Record<string, number> } | null> {
   const token = await getFirebaseIdToken();
   if (!token) return null;
-  const url = API_BASE ? `${API_BASE}/api/user/progress` : '/api/user/progress';
+  const url = apiUrl('/api/user/progress');
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
       const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
@@ -167,9 +171,10 @@ export async function loadUserProgress(_uid: string): Promise<{ levelProgress: R
 export async function saveUserProgress(_uid: string, data: { levelProgress: Record<string, LevelProgress>; currentLevelByMode: Record<string, number> }): Promise<void> {
   const token = await getFirebaseIdToken();
   if (!token) return;
+  const url = apiUrl('/api/user/progress');
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
-      const res = await fetch('/api/user/progress', {
+      const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify(data),
@@ -186,7 +191,7 @@ export async function saveUserProgress(_uid: string, data: { levelProgress: Reco
 export async function loadUserJapa(_uid: string): Promise<JapaCounts | null> {
   const token = await getFirebaseIdToken();
   if (!token) return null;
-  const url = API_BASE ? `${API_BASE}/api/user/japa` : '/api/user/japa';
+  const url = apiUrl('/api/user/japa');
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
       const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
@@ -213,9 +218,10 @@ export async function loadUserJapa(_uid: string): Promise<JapaCounts | null> {
 export async function saveUserJapa(_uid: string, counts: JapaCounts): Promise<void> {
   const token = await getFirebaseIdToken();
   if (!token) return;
+  const url = apiUrl('/api/user/japa');
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
-      const res = await fetch('/api/user/japa', {
+      const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify(counts),

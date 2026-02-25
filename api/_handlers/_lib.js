@@ -16,8 +16,9 @@ const ADMIN_TOKEN_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
 export function createAdminToken() {
   const payload = JSON.stringify({ admin: true, exp: Date.now() + ADMIN_TOKEN_TTL_MS });
-  const sig = crypto.createHmac('sha256', ADMIN_SECRET).update(payload).digest('base64url');
-  return Buffer.from(payload).toString('base64url') + '.' + sig;
+  const raw = Buffer.from(payload).toString('base64url');
+  const sig = crypto.createHmac('sha256', ADMIN_SECRET).update(raw).digest('base64url');
+  return raw + '.' + sig;
 }
 
 export function verifyAdminToken(token) {
@@ -201,8 +202,9 @@ export function verifyPassword(password, stored) {
 /** Create priest JWT with templeId. */
 export function createPriestToken(templeId, templeName) {
   const payload = JSON.stringify({ templeId, templeName, priest: true, exp: Date.now() + 24 * 60 * 60 * 1000 });
-  const sig = crypto.createHmac('sha256', PRIEST_SECRET).update(payload).digest('base64url');
-  return Buffer.from(payload).toString('base64url') + '.' + sig;
+  const raw = Buffer.from(payload).toString('base64url');
+  const sig = crypto.createHmac('sha256', PRIEST_SECRET).update(raw).digest('base64url');
+  return raw + '.' + sig;
 }
 
 /** Verify priest token, return { templeId, templeName } or null. */

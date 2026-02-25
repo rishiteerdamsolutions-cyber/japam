@@ -35,6 +35,7 @@ export function TemplesList({ adminToken, refreshTrigger, onUnauthorized }: Temp
         body: JSON.stringify({ token: adminToken, type: 'temples' }),
       });
       const data = await res.json().catch(() => ({}));
+
       if (res.status === 401) {
         onUnauthorized?.();
         return;

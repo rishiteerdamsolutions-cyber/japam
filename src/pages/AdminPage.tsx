@@ -27,6 +27,7 @@ export function AdminPage() {
         body: JSON.stringify({ adminId: adminId.trim(), password }),
       });
       const data = await res.json().catch(() => ({}));
+
       if (!res.ok) {
         setError(data.error || 'Login failed');
         return;

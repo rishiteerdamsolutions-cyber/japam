@@ -13,6 +13,7 @@ const DEFAULT_DONORS: { displayName: string; label: string }[] = [
 interface Donor {
   displayName: string;
   donatedAt?: string | null;
+  label?: string;
 }
 
 export function DonateThankYouBox() {
@@ -37,7 +38,7 @@ export function DonateThankYouBox() {
     ...DEFAULT_DONORS.map((d) => ({ displayName: d.displayName, label: d.label })),
     ...donors
       .filter((d) => !DEFAULT_DONORS.some((def) => def.displayName === d.displayName))
-      .map((d) => ({ displayName: d.displayName, label: 'Donor' })),
+      .map((d) => ({ displayName: d.displayName, label: d.label ?? 'Donor' })),
   ];
 
   return (

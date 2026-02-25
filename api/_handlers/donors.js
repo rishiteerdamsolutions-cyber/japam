@@ -9,9 +9,12 @@ export async function GET(_request) {
     const snap = await db.collection('donors').orderBy('donatedAt', 'desc').get();
     const donors = snap.docs.map((d) => {
       const data = d.data();
+      const amount = typeof data.amount === 'number' ? data.amount : 0;
+      const label = data.lifetimeDonor === true || amount >= 5000000 ? 'Lifetime Donor' : 'Donor';
       return {
         displayName: data.displayName || 'Anonymous',
         donatedAt: data.donatedAt || null,
+        label,
       };
     });
 

@@ -3,6 +3,8 @@ import { useJapaStore } from '../../store/japaStore';
 import { DEITIES } from '../../data/deities';
 import { DAILY_GOAL_JAPAS } from '../../data/levels';
 import { downloadMantraPdf, type PdfDetails } from '../../utils/pdfExport';
+import { DonateThankYouBox } from '../donation/DonateThankYouBox';
+import { AppHeader } from '../layout/AppHeader';
 
 interface JapaDashboardProps {
   onBack: () => void;
@@ -50,17 +52,16 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#1a1a2e] to-[#16213e] p-4 pb-[env(safe-area-inset-bottom)]">
-      <button onClick={onBack} className="text-amber-400 text-sm mb-4">
-        ← Back
-      </button>
+    <div className="min-h-screen bg-gradient-to-b from-[#1a1a2e] to-[#16213e] p-4 pb-[env(safe-area-inset-bottom)] max-w-lg mx-auto">
+      <AppHeader title="Japa Dashboard" showBack onBack={onBack} />
 
-      <h1 className="text-2xl font-bold text-amber-400 mb-2">Japa Dashboard</h1>
-      <p className="text-amber-200/80 text-sm mb-6">
+      <p className="text-amber-200/80 text-sm mb-4">
         Lifetime mantra count
       </p>
 
-      <div className="text-3xl font-bold text-amber-300 mb-2">
+      <DonateThankYouBox />
+
+      <div className="text-3xl font-bold text-amber-300 mb-2 mt-4">
         {loaded ? total.toLocaleString() : '...'} total japas
       </div>
       <h2 className="text-amber-200/80 text-sm mb-6">

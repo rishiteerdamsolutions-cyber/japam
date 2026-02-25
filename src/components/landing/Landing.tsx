@@ -76,7 +76,7 @@ export function Landing({ onEnterApp }: LandingProps) {
             </motion.button>
           </motion.section>
 
-          <footer className="relative z-10 py-6 px-4 flex flex-col items-center text-white/70 text-sm">
+          <footer className="relative z-10 mt-auto py-6 px-4 flex flex-col items-center justify-center text-white/70 text-sm border-t border-white/10">
             <div className="flex items-center gap-2">
               <span>Built by</span>
               <img src={A_LOGO_SRC} alt="A-Logo" className="h-5 w-auto object-contain opacity-90" />

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useProgressStore, progressKey } from '../../store/progressStore';
 import { useUnlockStore, FIRST_LOCKED_LEVEL_INDEX } from '../../store/unlockStore';
 import { DonateThankYouBox } from '../donation/DonateThankYouBox';
+import { AppHeader } from '../layout/AppHeader';
 import { LEVELS } from '../../data/levels';
 import { EPISODES } from '../../data/episodes';
 import { DEITIES } from '../../data/deities';
@@ -18,16 +19,11 @@ export function WorldMap({ mode: initialMode, onSelectLevel, onBack }: WorldMapP
   const { levelProgress, getCurrentLevelIndex } = useProgressStore();
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
   const currentLevelIndex = getCurrentLevelIndex(mapMode);
+  const levelsTitle = mapMode === 'general' ? 'Levels' : `${mapMode.charAt(0).toUpperCase() + mapMode.slice(1)} Levels`;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#1a1a2e] to-[#16213e] p-4 pb-[env(safe-area-inset-bottom)]">
-      <button onClick={onBack} className="text-amber-400 text-sm mb-4">
-        ← Back
-      </button>
-
-      <h1 className="text-2xl font-bold text-amber-400 mb-2">
-        {mapMode === 'general' ? 'Levels' : `${mapMode.charAt(0).toUpperCase() + mapMode.slice(1)} Levels`}
-      </h1>
+    <div className="min-h-screen bg-gradient-to-b from-[#1a1a2e] to-[#16213e] p-4 pb-[env(safe-area-inset-bottom)] max-w-lg mx-auto">
+      <AppHeader title={levelsTitle} showBack onBack={onBack} />
 
       <div className="flex flex-wrap gap-1 mb-4">
         <button
@@ -48,7 +44,9 @@ export function WorldMap({ mode: initialMode, onSelectLevel, onBack }: WorldMapP
         ))}
       </div>
 
-      <div className="space-y-6">
+      <DonateThankYouBox />
+
+      <div className="space-y-6 mt-4">
         {EPISODES.map(ep => (
           <div key={ep.id}>
             <h2 className="text-amber-300 font-medium mb-2">{ep.name}</h2>
@@ -84,8 +82,6 @@ export function WorldMap({ mode: initialMode, onSelectLevel, onBack }: WorldMapP
           </div>
         ))}
       </div>
-
-      <DonateThankYouBox />
     </div>
   );
 }

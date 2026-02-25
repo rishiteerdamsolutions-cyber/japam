@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { useSettingsStore } from '../store/settingsStore';
 import { useAuthStore } from '../store/authStore';
 import { GoogleSignIn } from './auth/GoogleSignIn';
+import { DonateThankYouBox } from './donation/DonateThankYouBox';
+import { AppHeader } from './layout/AppHeader';
 
 const WHATSAPP_LINK = 'https://wa.me/919505009699';
 const BG_IMAGE = '/images/settingspagebg.png';
@@ -67,16 +69,11 @@ export function Settings({ onBack }: SettingsProps) {
     >
       <div className="absolute inset-0 bg-black/65" aria-hidden />
       <div className="relative z-10 max-w-md mx-auto">
-        <button
-          onClick={onBack}
-          className="text-amber-300 font-medium text-sm mb-6 hover:text-amber-400 transition-colors"
-        >
-          ← Back
-        </button>
+        <AppHeader title="Settings" showBack onBack={onBack} />
 
-        <h1 className="text-2xl font-bold text-amber-400 mb-6 drop-shadow-md">Settings</h1>
+        <DonateThankYouBox />
 
-        <div className="mb-6">
+        <div className="mb-6 mt-6">
           <GoogleSignIn />
         </div>
 

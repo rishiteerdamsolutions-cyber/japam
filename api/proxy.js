@@ -17,6 +17,7 @@ import * as priestMarathonsHandler from './_handlers/priest/marathons.js';
 import * as priestLinkHandler from './_handlers/priest/link.js';
 import * as marathonsDiscoverHandler from './_handlers/marathons/discover.js';
 import * as marathonsJoinHandler from './_handlers/marathons/join.js';
+import * as marathonsMyParticipationsHandler from './_handlers/marathons/my-participations.js';
 import * as userProgressHandler from './_handlers/user/progress.js';
 import * as userJapaHandler from './_handlers/user/japa.js';
 import * as userUnlockHandler from './_handlers/user/unlock.js';
@@ -64,6 +65,7 @@ const HANDLERS = {
   'POST priest/marathons': priestMarathonsHandler,
   'POST priest/link': priestLinkHandler,
   'GET marathons/discover': marathonsDiscoverHandler,
+  'GET marathons/my-participations': marathonsMyParticipationsHandler,
   'POST marathons/join': marathonsJoinHandler,
   'GET user/progress': userProgressHandler,
   'POST user/progress': userProgressHandler,

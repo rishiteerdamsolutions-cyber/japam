@@ -6,7 +6,7 @@ import { useUnlockStore } from '../../store/unlockStore';
 
 const API_BASE = import.meta.env.VITE_API_URL ?? '';
 
-const PRESET_AMOUNTS_PAISE = [1000, 5000, 10000, 50000]; // ₹10, ₹50, ₹100, ₹500
+const PRESET_AMOUNTS_PAISE = [100000, 500000, 2000000, 5000000, 10000000]; // ₹1000, ₹5000, ₹20000, ₹50000, ₹100000
 
 interface DonateModalProps {
   onClose: () => void;

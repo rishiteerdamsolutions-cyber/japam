@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import INDIA_REGIONS from '../data/indiaRegions.json';
 import { DEITIES } from '../data/deities';
 import { useAuthStore } from '../store/authStore';
 import { useUnlockStore } from '../store/unlockStore';
 import { auth } from '../lib/firebase';
+import { DonateThankYouBox } from '../components/donation/DonateThankYouBox';
+import { AppHeader } from '../components/layout/AppHeader';
 
 const STATES = [...INDIA_REGIONS.states, ...INDIA_REGIONS.union_territories];
 
@@ -29,6 +31,16 @@ interface Marathon {
   leaderboard?: { rank: number; userId: string; japasCount: number }[];
 }
 
+interface MyMarathon {
+  marathonId: string;
+  deityId: string;
+  templeId: string;
+  templeName: string;
+  targetJapas: number;
+  startDate: string;
+  japasCount: number;
+}
+
 export function MarathonsPage() {
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
@@ -45,8 +57,30 @@ export function MarathonsPage() {
   const [searched, setSearched] = useState(false);
   const [joining, setJoining] = useState<string | null>(null);
   const [joinError, setJoinError] = useState<string | null>(null);
+  const [joinedMarathonIds, setJoinedMarathonIds] = useState<Set<string>>(new Set());
+  const [myMarathons, setMyMarathons] = useState<MyMarathon[]>([]);
 
   const state = STATES.find((s) => s.name === stateName) || null;
+
+  useEffect(() => {
+    if (!user?.uid || !isPro) {
+      setJoinedMarathonIds(new Set());
+      setMyMarathons([]);
+      return;
+    }
+    const load = async () => {
+      const idToken = await auth?.currentUser?.getIdToken?.().catch(() => null);
+      if (!idToken) return;
+      const url = API_BASE ? `${API_BASE}/api/marathons/my-participations` : '/api/marathons/my-participations';
+      const res = await fetch(url, { headers: { Authorization: `Bearer ${idToken}` } });
+      const data = (await res.json().catch(() => ({}))) as { marathonIds?: string[]; marathons?: MyMarathon[] };
+      if (res.ok && Array.isArray(data.marathonIds)) {
+        setJoinedMarathonIds(new Set(data.marathonIds));
+        setMyMarathons(Array.isArray(data.marathons) ? data.marathons : []);
+      }
+    };
+    load();
+  }, [user?.uid, isPro]);
   const districts = state?.districts ?? [];
 
   const handleSearch = () => {
@@ -96,17 +130,24 @@ export function MarathonsPage() {
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
         body: JSON.stringify({ marathonId }),
       });
-      const data = (await res.json().catch(() => ({}))) as { error?: string };
+      const data = (await res.json().catch(() => ({}))) as { error?: string; alreadyJoined?: boolean };
       if (res.ok) {
-        setMarathonsByTemple((prev) => {
-          const next = { ...prev };
-          for (const tid of Object.keys(next)) {
-            next[tid] = next[tid].map((m) =>
-              m.id === marathonId ? { ...m, joinedCount: (m.joinedCount || 0) + 1 } : m
-            );
-          }
-          return next;
-        });
+        setJoinedMarathonIds((prev) => new Set(prev).add(marathonId));
+        if (!data.alreadyJoined) {
+          setMarathonsByTemple((prev) => {
+            const next = { ...prev };
+            for (const tid of Object.keys(next)) {
+              next[tid] = next[tid].map((m) =>
+                m.id === marathonId ? { ...m, joinedCount: (m.joinedCount || 0) + 1 } : m
+              );
+            }
+            return next;
+          });
+        }
+        const refetchUrl = API_BASE ? `${API_BASE}/api/marathons/my-participations` : '/api/marathons/my-participations';
+        const refetchRes = await fetch(refetchUrl, { headers: { Authorization: `Bearer ${idToken}` } });
+        const refetchData = (await refetchRes.json().catch(() => ({}))) as { marathons?: MyMarathon[] };
+        if (refetchRes.ok && Array.isArray(refetchData.marathons)) setMyMarathons(refetchData.marathons);
       } else if (res.status === 403) {
         setJoinError(data?.error ?? 'Only users who have unlocked the game can join marathons.');
       } else if (res.status === 401) {
@@ -122,16 +163,17 @@ export function MarathonsPage() {
   const deityName = (id: string) => DEITIES.find((d) => d.id === id)?.name ?? id;
 
   return (
-    <div className="min-h-screen bg-[#1a1a2e] p-4 pb-[env(safe-area-inset-bottom)]">
-      <div className="flex items-center justify-between mb-6">
-        <button onClick={() => navigate(-1)} className="text-amber-400 text-sm">
-          ← Back
-        </button>
-        <h1 className="text-xl font-bold text-amber-400">Japa Marathons</h1>
-        <a href="/settings" className="text-amber-200/70 text-xs">
-          Priest
-        </a>
-      </div>
+    <div className="min-h-screen bg-gradient-to-b from-[#1a1a2e] to-[#16213e] p-4 pb-[env(safe-area-inset-bottom)] max-w-lg mx-auto">
+      <AppHeader
+        title="Japa Marathons"
+        showBack
+        onBack={() => navigate(-1)}
+        rightElement={
+          <a href="/settings" className="text-amber-200/70 text-xs hover:text-amber-300">
+            Priest
+          </a>
+        }
+      />
 
       <p className="text-amber-200/80 text-sm mb-4">Discover marathons by location and join to contribute your japas.</p>
 
@@ -139,6 +181,32 @@ export function MarathonsPage() {
         <div className="mb-4 p-3 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-200 text-sm">
           {joinError}
           <button type="button" onClick={() => setJoinError(null)} className="ml-2 underline">Dismiss</button>
+        </div>
+      )}
+
+      <DonateThankYouBox />
+
+      {user && isPro && myMarathons.length > 0 && (
+        <div className="mb-6 p-4 rounded-xl bg-black/30 border border-amber-500/30">
+          <h2 className="text-amber-400 font-semibold mb-3">Your marathons</h2>
+          <p className="text-amber-200/70 text-sm mb-3">Play the japa game for these marathons — your japas count toward the marathon.</p>
+          <div className="space-y-2">
+            {myMarathons.map((my) => (
+              <div key={my.marathonId} className="flex items-center justify-between py-2 border-t border-amber-500/10 first:border-t-0 first:pt-0">
+                <div>
+                  <p className="text-amber-200 font-medium">{my.templeName || 'Marathon'} • {deityName(my.deityId)}</p>
+                  <p className="text-amber-200/60 text-xs">Target {my.targetJapas} japas • Your japas: {my.japasCount}</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => navigate(`/game?mode=${encodeURIComponent(my.deityId)}&level=0`)}
+                  className="px-4 py-2 rounded-lg bg-green-600 text-white text-sm font-medium"
+                >
+                  Play
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
@@ -227,10 +295,10 @@ export function MarathonsPage() {
                             </div>
                             <button
                               onClick={() => handleJoin(m.id)}
-                              disabled={!!joining || !isPro}
+                              disabled={!!joining || !isPro || joinedMarathonIds.has(m.id)}
                               className="px-4 py-2 rounded-lg bg-amber-500 text-white text-sm font-medium disabled:opacity-50"
                             >
-                              {joining === m.id ? '…' : !isPro ? 'Pro required' : 'Join'}
+                              {joining === m.id ? '…' : joinedMarathonIds.has(m.id) ? 'Joined' : !isPro ? 'Pro required' : 'Join'}
                             </button>
                           </div>
                           {m.leaderboard && m.leaderboard.length > 0 && (

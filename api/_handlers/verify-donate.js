@@ -1,8 +1,9 @@
 import crypto from 'crypto';
 import admin from 'firebase-admin';
-import { getDb, jsonResponse, verifyFirebaseUser } from './_lib.js';
+import { getDb, getRazorpay, jsonResponse, verifyFirebaseUser } from './_lib.js';
 
 const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || '';
+const LIFETIME_DONOR_PAISE = 5000000; // ₹50,000+ = Lifetime Donor
 
 /** POST /api/verify-donate - Verify Razorpay donation and add to donors. Requires pro user. */
 export async function POST(request) {
@@ -33,6 +34,15 @@ export async function POST(request) {
       return jsonResponse({ error: 'Pro member required to donate. Unlock the game first.' }, 403);
     }
 
+    let amountPaise = 0;
+    try {
+      const razorpay = getRazorpay();
+      const order = await razorpay.orders.fetch(razorpay_order_id);
+      amountPaise = order?.amount ? Number(order.amount) : 0;
+    } catch (err) {
+      console.error('verify-donate fetch order', err?.message || err);
+    }
+
     let name = displayName || '';
     if (!name) {
       try {
@@ -45,9 +55,9 @@ export async function POST(request) {
 
     const orderId = razorpay_order_id;
     const paymentId = razorpay_payment_id;
-    const amount = 0;
+    const lifetimeDonor = amountPaise >= LIFETIME_DONOR_PAISE;
     await db.collection('donors').doc(uid).set(
-      { uid, displayName: String(name).trim() || 'Anonymous', amount, donatedAt: new Date().toISOString(), orderId, paymentId },
+      { uid, displayName: String(name).trim() || 'Anonymous', amount: amountPaise, lifetimeDonor, donatedAt: new Date().toISOString(), orderId, paymentId },
       { merge: true }
     );
 

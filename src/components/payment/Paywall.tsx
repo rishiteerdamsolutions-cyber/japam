@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { loadPricingConfig } from '../../lib/firestore';
 import { loadRazorpayScript } from '../../lib/razorpay';
+import { getApiBase } from '../../lib/apiBase';
 import { useAuthStore } from '../../store/authStore';
 import { useUnlockStore } from '../../store/unlockStore';
-
-const API_BASE = import.meta.env.VITE_API_URL ?? '';
+import { auth } from '../../lib/firebase';
 
 interface PaywallProps {
   onClose: () => void;
@@ -14,24 +14,24 @@ interface PaywallProps {
 export function Paywall({ onClose, onUnlocked }: PaywallProps) {
   const user = useAuthStore((s) => s.user);
   const loadUnlock = useUnlockStore((s) => s.load);
-  const [pricePaise, setPricePaise] = useState<number | null>(null);
-  const [displayPricePaise, setDisplayPricePaise] = useState<number | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [pricePaise, setPricePaise] = useState<number>(1000);
+  const [displayPricePaise, setDisplayPricePaise] = useState<number>(9900);
+  const [priceLoaded, setPriceLoaded] = useState(false);
   const [paying, setPaying] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
-    (async () => {
-      const config = await loadPricingConfig();
-      if (!cancelled) {
-        const p = config.unlockPricePaise;
-        const d = config.displayPricePaise;
-        setPricePaise(typeof p === 'number' && p >= 100 ? p : 1000);
-        setDisplayPricePaise(typeof d === 'number' && d >= 100 ? d : 9900);
-        setLoading(false);
-      }
-    })();
+    loadPricingConfig().then((config) => {
+      if (cancelled) return;
+      const p = config.unlockPricePaise;
+      const d = config.displayPricePaise;
+      setPricePaise(typeof p === 'number' && p >= 100 ? p : 1000);
+      setDisplayPricePaise(typeof d === 'number' && d >= 100 ? d : 9900);
+      setPriceLoaded(true);
+    }).catch(() => {
+      if (!cancelled) setPriceLoaded(true);
+    });
     return () => { cancelled = true; };
   }, []);
 
@@ -46,15 +46,21 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
   }
 
   const handlePay = async () => {
-    if (!user?.uid || pricePaise == null || paying) return;
+    const currentUser = auth?.currentUser ?? user;
+    if (!currentUser?.uid) {
+      setError('Please sign in first');
+      return;
+    }
+    if (paying) return;
     setError(null);
     setPaying(true);
     try {
-      const createUrl = API_BASE ? `${API_BASE}/api/create-order` : '/api/create-order';
+      const base = getApiBase();
+      const createUrl = base ? `${base}/api/create-order` : '/api/create-order';
       const res = await fetch(createUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: user.uid })
+        body: JSON.stringify({ userId: currentUser.uid })
       });
       if (!res.ok) {
         const msg = await getErrorMessage(res, 'Failed to create order');
@@ -63,7 +69,7 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
       const { orderId, keyId, amount } = (await res.json()) as { orderId: string; keyId?: string; amount?: number };
       await loadRazorpayScript();
       const checkoutKey = keyId || import.meta.env.VITE_RAZORPAY_KEY_ID || '';
-      const checkoutAmount = typeof amount === 'number' && amount >= 100 ? amount : pricePaise;
+      const checkoutAmount = typeof amount === 'number' && amount >= 100 ? amount : (pricePaise || 1000);
       if (!checkoutKey) throw new Error('Payment not configured (missing Razorpay key)');
       const rp = new window.Razorpay({
         key: checkoutKey,
@@ -74,8 +80,10 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
         description: 'Unlock levels 3–50',
         handler: async (data) => {
           try {
-            const verifyUrl = API_BASE ? `${API_BASE}/api/verify-unlock` : '/api/verify-unlock';
-            const idToken = await user.getIdToken();
+            const uid = auth?.currentUser?.uid ?? currentUser.uid;
+            const idToken = await (auth?.currentUser ?? currentUser).getIdToken();
+            const base = getApiBase();
+            const verifyUrl = base ? `${base}/api/verify-unlock` : '/api/verify-unlock';
             const vRes = await fetch(verifyUrl, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
@@ -89,7 +97,7 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
               const msg = await getErrorMessage(vRes, 'Verification failed');
               throw new Error(msg);
             }
-            await loadUnlock(user.uid);
+            await loadUnlock(uid);
             onUnlocked?.();
           } catch (e) {
             setError(e instanceof Error ? e.message : 'Verification failed');
@@ -106,9 +114,9 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
     }
   };
 
-  const priceRupees = pricePaise != null ? (pricePaise / 100).toFixed(0) : '—';
-  const displayRupees = displayPricePaise != null ? (displayPricePaise / 100).toFixed(0) : '99';
-  const showStrikethrough = pricePaise != null && displayPricePaise != null && displayPricePaise > pricePaise;
+  const priceRupees = (pricePaise / 100).toFixed(0);
+  const displayRupees = (displayPricePaise / 100).toFixed(0);
+  const showStrikethrough = displayPricePaise > pricePaise;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
@@ -117,10 +125,8 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
         <p className="text-amber-200/90 text-sm mb-4">
           You’ve completed the first 2 levels. Pay once to unlock levels 3–50.
         </p>
-        {loading ? (
-          <p className="text-amber-200/70 text-sm">Loading…</p>
-        ) : (
-          <>
+        {!priceLoaded && <p className="text-amber-200/70 text-xs mb-2">Loading price…</p>}
+        <>
             <p className="text-2xl font-bold text-white mb-4">
               {showStrikethrough ? (
                 <>
@@ -137,7 +143,7 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
                 type="button"
                 onClick={handlePay}
                 disabled={paying}
-                className="flex-1 py-3 rounded-xl bg-amber-500 text-white font-semibold disabled:opacity-50"
+                className="flex-1 py-3 rounded-xl bg-amber-500 text-white font-semibold disabled:opacity-50 transition-opacity"
               >
                 {paying ? 'Opening…' : 'Pay & unlock'}
               </button>
@@ -149,8 +155,7 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
                 Later
               </button>
             </div>
-          </>
-        )}
+        </>
       </div>
     </div>
   );

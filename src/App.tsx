@@ -18,7 +18,6 @@ function App() {
   const loadJapa = useJapaStore((s) => s.load);
   const loadSettings = useSettingsStore((s) => s.load);
   const loadUnlock = useUnlockStore((s) => s.load);
-  const authInit = useAuthStore((s) => s.init);
   const user = useAuthStore((s) => s.user);
   const authLoading = useAuthStore((s) => s.loading);
   const loadProfile = useProfileStore((s) => s.load);
@@ -35,11 +34,6 @@ function App() {
       loadProfile();
     }
   }, [user?.uid, authLoading, loadProgress, loadJapa, loadUnlock, loadProfile]);
-
-  useEffect(() => {
-    const unsubscribe = authInit();
-    return unsubscribe;
-  }, [authInit]);
 
   return (
     <>

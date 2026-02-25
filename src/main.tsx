@@ -1,27 +1,35 @@
-import { StrictMode } from 'react'
+import { StrictMode, lazy, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './index.css'
+import { AuthProvider } from './components/AuthProvider'
 import App from './App.tsx'
 import { MenuPage } from './pages/MenuPage'
-import { GamePage } from './pages/GamePage'
-import { LevelsPage } from './pages/LevelsPage'
-import { JapaPage } from './pages/JapaPage'
-import { SignInPage } from './pages/SignInPage'
-import { AdminPage } from './pages/AdminPage'
-import { AdminLayout } from './pages/admin/AdminLayout'
-import { AdminPricingPage } from './pages/admin/AdminPricingPage'
-import { AdminTemplesPage } from './pages/admin/AdminTemplesPage'
-import { AdminMarathonsPage } from './pages/admin/AdminMarathonsPage'
-import { AdminUsersPage } from './pages/admin/AdminUsersPage'
-import { AdminLevelsPage } from './pages/admin/AdminLevelsPage'
-import { PriestPage } from './pages/PriestPage'
-import { MarathonsPage } from './pages/MarathonsPage'
-import { SettingsPage } from './pages/SettingsPage'
+
+const GamePage = lazy(() => import('./pages/GamePage').then(m => ({ default: m.GamePage })))
+const LevelsPage = lazy(() => import('./pages/LevelsPage').then(m => ({ default: m.LevelsPage })))
+const JapaPage = lazy(() => import('./pages/JapaPage').then(m => ({ default: m.JapaPage })))
+const SignInPage = lazy(() => import('./pages/SignInPage').then(m => ({ default: m.SignInPage })))
+const AdminPage = lazy(() => import('./pages/AdminPage').then(m => ({ default: m.AdminPage })))
+const AdminLayout = lazy(() => import('./pages/admin/AdminLayout').then(m => ({ default: m.AdminLayout })))
+const AdminPricingPage = lazy(() => import('./pages/admin/AdminPricingPage').then(m => ({ default: m.AdminPricingPage })))
+const AdminTemplesPage = lazy(() => import('./pages/admin/AdminTemplesPage').then(m => ({ default: m.AdminTemplesPage })))
+const AdminMarathonsPage = lazy(() => import('./pages/admin/AdminMarathonsPage').then(m => ({ default: m.AdminMarathonsPage })))
+const AdminUsersPage = lazy(() => import('./pages/admin/AdminUsersPage').then(m => ({ default: m.AdminUsersPage })))
+const AdminLevelsPage = lazy(() => import('./pages/admin/AdminLevelsPage').then(m => ({ default: m.AdminLevelsPage })))
+const PriestPage = lazy(() => import('./pages/PriestPage').then(m => ({ default: m.PriestPage })))
+const MarathonsPage = lazy(() => import('./pages/MarathonsPage').then(m => ({ default: m.MarathonsPage })))
+const SettingsPage = lazy(() => import('./pages/SettingsPage').then(m => ({ default: m.SettingsPage })))
+
+function PageFallback() {
+  return <div className="min-h-screen flex items-center justify-center bg-[#1a1a2e]"><div className="text-amber-400 text-sm">Loading…</div></div>
+}
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
+      <AuthProvider>
+      <Suspense fallback={<PageFallback />}>
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/menu" element={<MenuPage />} />
@@ -43,6 +51,8 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/marathons" element={<MarathonsPage />} />
         <Route path="/settings" element={<SettingsPage />} />
       </Routes>
+      </Suspense>
+      </AuthProvider>
     </BrowserRouter>
   </StrictMode>,
 )

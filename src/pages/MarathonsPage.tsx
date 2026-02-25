@@ -115,12 +115,22 @@ export function MarathonsPage() {
     }
   };
 
-  const renderRankCardBlob = (opts: {
+  const loadLogoImage = (): Promise<HTMLImageElement | null> => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => resolve(img);
+      img.onerror = () => resolve(null);
+      img.src = '/images/japam-logo.png';
+    });
+  };
+
+  const renderRankCardBlob = async (opts: {
     templeName: string;
     deityName: string;
     leaderboard: { rank: number; uid: string; name: string; japasCount: number }[];
     currentUserUid: string;
-  }): Blob | null => {
+  }): Promise<Blob | null> => {
     try {
       const width = 720;
       const height = 1280;
@@ -130,7 +140,7 @@ export function MarathonsPage() {
       const ctx = canvas.getContext('2d');
       if (!ctx) return null;
 
-      const padding = 32;
+      const padding = 24;
       const bgTop = '#1a1a2e';
       const bgBottom = '#0f1b3d';
       const bg = ctx.createLinearGradient(0, 0, 0, height);
@@ -138,6 +148,37 @@ export function MarathonsPage() {
       bg.addColorStop(1, bgBottom);
       ctx.fillStyle = bg;
       ctx.fillRect(0, 0, width, height);
+
+      const logoImg = await loadLogoImage();
+      if (logoImg && logoImg.width > 0) {
+        ctx.save();
+        ctx.globalAlpha = 0.12;
+        const logoSize = 140;
+        const step = 200;
+        for (let yy = -logoSize; yy < height + logoSize; yy += step) {
+          for (let xx = -logoSize; xx < width + logoSize; xx += step) {
+            ctx.drawImage(logoImg, xx, yy, logoSize, logoSize);
+          }
+        }
+        ctx.restore();
+      } else {
+        const drawOmShape = (cx: number, cy: number, size: number) => {
+          ctx.save();
+          ctx.globalAlpha = 0.14;
+          ctx.strokeStyle = 'rgba(251,191,36,0.5)';
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.arc(cx, cy, size, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.ellipse(cx, cy, size * 0.5, size * 0.8, 0, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+        };
+        drawOmShape(width * 0.5, height * 0.35, 90);
+        drawOmShape(width * 0.78, height * 0.6, 55);
+        drawOmShape(width * 0.22, height * 0.72, 50);
+      }
 
       const amber = '#FBBF24';
       const softAmber = '#FDE68A';
@@ -262,22 +303,6 @@ export function MarathonsPage() {
         }
       }
 
-      // Bottom “temple silhouette” wave to anchor the card
-      {
-        ctx.save();
-        ctx.globalAlpha = 0.22;
-        ctx.fillStyle = 'rgba(0,0,0,0.55)';
-        ctx.beginPath();
-        ctx.moveTo(0, height);
-        ctx.lineTo(0, height - 140);
-        ctx.quadraticCurveTo(width * 0.25, height - 210, width * 0.55, height - 160);
-        ctx.quadraticCurveTo(width * 0.8, height - 120, width, height - 190);
-        ctx.lineTo(width, height);
-        ctx.closePath();
-        ctx.fill();
-        ctx.restore();
-      }
-
       const truncate = (text: string, maxWidth: number) => {
         const t = String(text || '');
         if (ctx.measureText(t).width <= maxWidth) return t;
@@ -299,19 +324,19 @@ export function MarathonsPage() {
       ctx.font = '500 18px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
       ctx.fillText(truncate(`${opts.deityName} Japa`, width - padding * 2), padding, padding + 18 + 40 + 28);
 
-      // Leaderboard title
-      const listTopY = padding + 160;
+      // Leaderboard title (tighter so card fills frame)
+      const listTopY = padding + 128;
       ctx.fillStyle = amber;
       ctx.font = '600 20px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
       ctx.fillText('Top participants', padding, listTopY);
 
-      // List container
+      const rowH = 64;
+      const rowGap = 14;
+      const boxPadding = 14;
       const boxX = padding;
-      const boxY = listTopY + 18;
+      const boxY = listTopY + 16;
       const boxW = width - padding * 2;
-      const rowH = 70;
-      const boxPadding = 16;
-      const boxH = boxPadding * 2 + rowH * 10;
+      const boxH = boxPadding * 2 + 10 * rowH + 9 * rowGap;
 
       // Glassy panel for readability
       ctx.fillStyle = 'rgba(0,0,0,0.40)';
@@ -377,28 +402,25 @@ export function MarathonsPage() {
         ctx.fillText(isVacant ? '—' : `${p.japasCount} japas`, textX, y + 50);
       }
 
-      // Footer
-      const footerY = height - padding - 40;
-      const candyPink = '#FAD1E6'; // creamy baby pink
-      const candyPinkDark = '#C02675'; // outline/shadow
+      // Footer moved up so card fills frame (no big empty space at bottom)
+      const footerY = boxY + boxH + 22;
+      const candyPink = '#FAD1E6';
+      const candyPinkDark = '#C02675';
 
       ctx.save();
       ctx.shadowColor = 'rgba(250,209,230,0.45)';
       ctx.shadowBlur = 10;
-
       ctx.fillStyle = candyPink;
       ctx.font = '700 18px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
       ctx.fillText('Match, chant, and climb the leaderboard.', padding, footerY);
-
-      // Big call-to-action
       ctx.shadowBlur = 14;
-      ctx.font = '900 28px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
+      ctx.font = '900 26px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
       const joinText = 'Join at www.japam.digital';
-      ctx.lineWidth = 6;
+      ctx.lineWidth = 5;
       ctx.strokeStyle = candyPinkDark;
-      ctx.strokeText(joinText, padding, footerY + 44);
+      ctx.strokeText(joinText, padding, footerY + 38);
       ctx.fillStyle = candyPink;
-      ctx.fillText(joinText, padding, footerY + 44);
+      ctx.fillText(joinText, padding, footerY + 38);
       ctx.restore();
 
       const dataUrl = canvas.toDataURL('image/png');
@@ -502,7 +524,7 @@ export function MarathonsPage() {
       const rankText = currentEntry ? `My rank ${currentEntry.rank} in this Japa Marathon! ` : '';
       const shareText = `${rankText}Join at www.japam.digital`;
 
-      const blob = renderRankCardBlob({
+      const blob = await renderRankCardBlob({
         templeName: temple.name,
         deityName: deityName(marathon.deityId),
         leaderboard: paddedLeaderboard(marathon.leaderboard),

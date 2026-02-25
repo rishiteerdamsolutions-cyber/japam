@@ -403,18 +403,33 @@ function verifyPriestToken(token) {
   }
 }
 
+function normalize(s) {
+  return (s || '').trim().toLowerCase();
+}
+
 app.get('/api/marathons/discover', async (req, res) => {
   try {
-    const { state, district, cityTownVillage } = req.query;
+    const { state, district, cityTownVillage, area } = req.query;
+    const stateVal = (state || '').trim();
+    const districtVal = (district || '').trim();
+    const cityVal = (cityTownVillage || '').trim();
+    const areaVal = (area || '').trim();
     if (!db) return res.json({ temples: [], marathonsByTemple: {} });
     const templesSnap = await db.collection('temples').get();
     let temples = templesSnap.docs.map((d) => {
       const data = d.data();
       return { id: d.id, name: data.name, state: data.state, district: data.district, cityTownVillage: data.cityTownVillage, area: data.area };
     });
-    if (state) temples = temples.filter((t) => t.state === state);
-    if (district) temples = temples.filter((t) => t.district === district);
-    if (cityTownVillage) temples = temples.filter((t) => t.cityTownVillage === cityTownVillage);
+    if (stateVal) temples = temples.filter((t) => t.state === stateVal);
+    if (districtVal) temples = temples.filter((t) => t.district === districtVal);
+    if (cityVal) {
+      const q = normalize(cityVal);
+      temples = temples.filter((t) => normalize(t.cityTownVillage).includes(q) || q.includes(normalize(t.cityTownVillage)));
+    }
+    if (areaVal) {
+      const q = normalize(areaVal);
+      temples = temples.filter((t) => normalize(t.area).includes(q) || q.includes(normalize(t.area)));
+    }
     const marathonsByTemple = {};
     for (const t of temples) {
       const mSnap = await db.collection('marathons').where('templeId', '==', t.id).get();

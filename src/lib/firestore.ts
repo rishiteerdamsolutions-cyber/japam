@@ -17,20 +17,33 @@ async function getFirebaseIdToken(): Promise<string | null> {
   }
 }
 
-/** Unlock (paid) status. Logged-in: only backend API — same on all devices. No client Firestore fallback. */
-export async function loadUserUnlock(_uid: string): Promise<boolean> {
+export type UserTier = 'free' | 'pro' | 'premium';
+
+export interface UserUnlockData {
+  levelsUnlocked: boolean;
+  tier: UserTier;
+  isDonor: boolean;
+}
+
+/** Unlock (paid) status and tier. Logged-in: only backend API — same on all devices. */
+export async function loadUserUnlock(_uid: string): Promise<UserUnlockData> {
   const token = await getFirebaseIdToken();
-  if (!token) return false;
+  if (!token) return { levelsUnlocked: false, tier: 'free', isDonor: false };
   try {
-    const res = await fetch('/api/user/unlock', { headers: { Authorization: `Bearer ${token}` } });
+    const url = API_BASE ? `${API_BASE}/api/user/unlock` : '/api/user/unlock';
+    const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
     if (res.ok) {
-      const data = (await res.json()) as { levelsUnlocked?: boolean };
-      return Boolean(data?.levelsUnlocked);
+      const data = (await res.json()) as { levelsUnlocked?: boolean; tier?: UserTier; isDonor?: boolean };
+      return {
+        levelsUnlocked: Boolean(data?.levelsUnlocked),
+        tier: (data?.tier as UserTier) || (data?.levelsUnlocked ? 'pro' : 'free'),
+        isDonor: Boolean(data?.isDonor),
+      };
     }
   } catch {
-    // no fallback: treat as not unlocked so paywall can show
+    // no fallback: treat as not unlocked
   }
-  return false;
+  return { levelsUnlocked: false, tier: 'free', isDonor: false };
 }
 
 const DEFAULT_UNLOCK_PRICE_PAISE = 1000; // ₹10

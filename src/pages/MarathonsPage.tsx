@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import INDIA_REGIONS from '../data/indiaRegions.json';
 import { DEITIES } from '../data/deities';
 import { useAuthStore } from '../store/authStore';
+import { useUnlockStore } from '../store/unlockStore';
 import { auth } from '../lib/firebase';
 
 const STATES = [...INDIA_REGIONS.states, ...INDIA_REGIONS.union_territories];
@@ -13,6 +14,9 @@ interface Temple {
   id: string;
   name: string;
   area: string;
+  state?: string;
+  district?: string;
+  cityTownVillage?: string;
 }
 
 interface Marathon {
@@ -28,57 +32,54 @@ interface Marathon {
 export function MarathonsPage() {
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
-  const [step, setStep] = useState<'state' | 'district' | 'city' | 'temples'>('state');
+  const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
+  const isPro = levelsUnlocked === true;
+
   const [stateName, setStateName] = useState('');
   const [districtName, setDistrictName] = useState('');
   const [cityName, setCityName] = useState('');
+  const [areaName, setAreaName] = useState('');
   const [temples, setTemples] = useState<Temple[]>([]);
   const [marathonsByTemple, setMarathonsByTemple] = useState<Record<string, Marathon[]>>({});
   const [loading, setLoading] = useState(false);
+  const [searched, setSearched] = useState(false);
   const [joining, setJoining] = useState<string | null>(null);
   const [joinError, setJoinError] = useState<string | null>(null);
 
   const state = STATES.find((s) => s.name === stateName) || null;
   const districts = state?.districts ?? [];
 
-  useEffect(() => {
-    setDistrictName('');
-    setCityName('');
-    setStep('state');
-  }, [stateName]);
-
-  useEffect(() => {
-    setCityName('');
-    setStep('district');
-  }, [districtName]);
-
-  useEffect(() => {
-    if (!stateName || !districtName || !cityName.trim()) return;
-    let cancelled = false;
+  const handleSearch = () => {
+    if (!stateName.trim()) return;
+    setJoinError(null);
     setLoading(true);
-    const params = new URLSearchParams({ state: stateName, district: districtName, cityTownVillage: cityName.trim() });
+    setSearched(true);
+    const params = new URLSearchParams();
+    params.set('state', stateName.trim());
+    if (districtName.trim()) params.set('district', districtName.trim());
+    if (cityName.trim()) params.set('cityTownVillage', cityName.trim());
+    if (areaName.trim()) params.set('area', areaName.trim());
     const url = API_BASE ? `${API_BASE}/api/marathons/discover?${params}` : `/api/marathons/discover?${params}`;
     fetch(url)
       .then((r) => r.json())
       .then((data) => {
-        if (!cancelled) {
-          setTemples(data.temples || []);
-          setMarathonsByTemple(data.marathonsByTemple || {});
-          setStep('temples');
-        }
+        setTemples(data.temples || []);
+        setMarathonsByTemple(data.marathonsByTemple || {});
       })
       .catch(() => {
-        if (!cancelled) setTemples([]);
+        setTemples([]);
+        setMarathonsByTemple({});
       })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-    return () => { cancelled = true; };
-  }, [stateName, districtName, cityName]);
+      .finally(() => setLoading(false));
+  };
 
   const handleJoin = async (marathonId: string) => {
     if (!user?.uid) {
       navigate('/');
+      return;
+    }
+    if (!isPro) {
+      setJoinError('Pro member required to join marathons. Unlock the game first.');
       return;
     }
     setJoinError(null);
@@ -141,12 +142,12 @@ export function MarathonsPage() {
         </div>
       )}
 
-      {step === 'state' && (
+      <div className="space-y-3 mb-6">
         <div>
-          <label className="text-amber-200/80 text-sm block mb-2">State</label>
+          <label className="text-amber-200/80 text-sm block mb-1">State (required)</label>
           <select
             value={stateName}
-            onChange={(e) => setStateName(e.target.value)}
+            onChange={(e) => { setStateName(e.target.value); setDistrictName(''); }}
             className="w-full max-w-xs px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30"
           >
             <option value="">Select State</option>
@@ -155,40 +156,54 @@ export function MarathonsPage() {
             ))}
           </select>
         </div>
-      )}
-
-      {step === 'district' && state && (
+        {state && (
+          <div>
+            <label className="text-amber-200/80 text-sm block mb-1">District (optional)</label>
+            <select
+              value={districtName}
+              onChange={(e) => setDistrictName(e.target.value)}
+              className="w-full max-w-xs px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30"
+            >
+              <option value="">Any</option>
+              {districts.map((d) => (
+                <option key={d} value={d}>{d}</option>
+              ))}
+            </select>
+          </div>
+        )}
         <div>
-          <label className="text-amber-200/80 text-sm block mb-2">District</label>
-          <select
-            value={districtName}
-            onChange={(e) => setDistrictName(e.target.value)}
-            className="w-full max-w-xs px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30"
-          >
-            <option value="">Select District</option>
-            {districts.map((d) => (
-              <option key={d} value={d}>{d}</option>
-            ))}
-          </select>
-        </div>
-      )}
-
-      {step === 'city' && districtName && (
-        <div>
-          <label className="text-amber-200/80 text-sm block mb-2">City / Town / Village</label>
+          <label className="text-amber-200/80 text-sm block mb-1">City / Town / Village (optional)</label>
           <input
             type="text"
             value={cityName}
             onChange={(e) => setCityName(e.target.value)}
-            placeholder="City / Town / Village"
+            placeholder="e.g. Hyderabad"
             className="w-full max-w-xs px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30"
           />
         </div>
-      )}
+        <div>
+          <label className="text-amber-200/80 text-sm block mb-1">Area (optional)</label>
+          <input
+            type="text"
+            value={areaName}
+            onChange={(e) => setAreaName(e.target.value)}
+            placeholder="e.g. Secunderabad"
+            className="w-full max-w-xs px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30"
+          />
+        </div>
+        <button
+          type="button"
+          onClick={handleSearch}
+          disabled={!stateName.trim() || loading}
+          className="px-6 py-2 rounded-lg bg-amber-500 text-white font-medium disabled:opacity-50"
+        >
+          {loading ? 'Searching…' : 'Search'}
+        </button>
+      </div>
 
-      {loading && <p className="text-amber-200/70 text-sm mt-4">Loading…</p>}
+      {loading && <p className="text-amber-200/70 text-sm">Loading…</p>}
 
-      {step === 'temples' && !loading && (
+      {searched && !loading && (
         <div className="space-y-6">
           {temples.length === 0 ? (
             <p className="text-amber-200/60 text-sm">No temples in this location yet.</p>
@@ -212,10 +227,10 @@ export function MarathonsPage() {
                             </div>
                             <button
                               onClick={() => handleJoin(m.id)}
-                              disabled={!!joining}
+                              disabled={!!joining || !isPro}
                               className="px-4 py-2 rounded-lg bg-amber-500 text-white text-sm font-medium disabled:opacity-50"
                             >
-                              {joining === m.id ? '…' : 'Join'}
+                              {joining === m.id ? '…' : !isPro ? 'Pro required' : 'Join'}
                             </button>
                           </div>
                           {m.leaderboard && m.leaderboard.length > 0 && (

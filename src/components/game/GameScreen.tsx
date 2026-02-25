@@ -47,11 +47,18 @@ export function GameScreen({ mode, levelIndex, onBack, onNextLevel }: GameScreen
     prevGenerationRef.current = matchGeneration;
 
     const swapped = lastSwappedTypes;
+    const intendedDeity = swapped?.[0] ?? null;
+    const uniqueDeities = new Set(lastMatches.map(m => m.deity));
+    const isMultiDeity = uniqueDeities.size > 1;
+
     let filtered: typeof lastMatches;
     if (mode === 'general') {
       filtered = lastMatches.filter(m =>
         m.combo === 1 && (!swapped || swapped.includes(m.deity))
       );
+      if (isMultiDeity && intendedDeity && filtered.some(m => m.deity === intendedDeity)) {
+        filtered = filtered.filter(m => m.deity === intendedDeity);
+      }
     } else {
       const userSwappedTarget = swapped ? swapped.includes(mode as DeityId) : false;
       filtered = userSwappedTarget

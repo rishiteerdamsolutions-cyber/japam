@@ -28,6 +28,7 @@ interface GameState {
   selectedCell: { row: number; col: number } | null;
   lastMatches: { deity: DeityId; count: number; combo: number }[];
   lastSwappedTypes: [DeityId, DeityId] | null;
+  intendedDeity: DeityId | null;
   matchGeneration: number;
   firstMatchMade: boolean;
   maxGemTypes: number;
@@ -66,6 +67,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   selectedCell: null,
   lastMatches: [],
   lastSwappedTypes: null,
+  intendedDeity: null,
   matchGeneration: 0,
   firstMatchMade: false,
   maxGemTypes: 8,
@@ -98,6 +100,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       selectedCell: null,
       lastMatches: [],
       lastSwappedTypes: null,
+      intendedDeity: null,
       matchGeneration: 0,
       firstMatchMade: false,
       maxGemTypes,
@@ -147,7 +150,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       board: nextBoard,
       moves: moves - 1,
       selectedCell: null,
-      lastSwappedTypes: gemA && gemB ? [gemA, gemB] : null
+      lastSwappedTypes: gemA && gemB ? [gemA, gemB] : null,
+      intendedDeity: gemA || null
     });
 
     get().processMatches([]);
@@ -185,7 +189,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   },
 
   commitMatch: (accumulated) => {
-    const { pendingMatchBatch, matchAnimationTimeoutId } = get();
+    const { pendingMatchBatch, matchAnimationTimeoutId, intendedDeity } = get();
     if (matchAnimationTimeoutId != null) {
       clearTimeout(matchAnimationTimeoutId);
       set({ matchAnimationTimeoutId: null });
@@ -204,18 +208,26 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     for (const m of pendingMatchBatch) {
       deityMatches.set(m.deity, (deityMatches.get(m.deity) ?? 0) + 1);
     }
-    for (const [deity, count] of deityMatches) {
+    const isFirstBatch = accumulated.length === 0;
+    const isMultiMatch = pendingMatchBatch.length > 1 || deityMatches.size > 1;
+    const useIntendedOnly = isFirstBatch && isMultiMatch && intendedDeity && deityMatches.has(intendedDeity);
+
+    for (const [deity] of deityMatches) {
       const shouldCountJapa = gameMode === 'general' || gameMode === deity;
-      if (shouldCountJapa) {
-        japasByDeity[deity] = (japasByDeity[deity] ?? 0) + count;
-        japaStore.addJapa(deity, count);
-      }
+      if (!shouldCountJapa) continue;
+      if (useIntendedOnly && deity !== intendedDeity) continue;
+      const japaCount = useIntendedOnly ? 1 : 1;
+      japasByDeity[deity] = (japasByDeity[deity] ?? 0) + japaCount;
+      japaStore.addJapa(deity, japaCount);
     }
+    const japaDelta = useIntendedOnly
+      ? ((gameMode === 'general' || gameMode === intendedDeity) ? 1 : 0)
+      : Array.from(deityMatches.entries()).reduce(
+          (a, [deity, count]) => a + (gameMode === 'general' || gameMode === deity ? count : 0),
+          0
+        );
     const totalScore = get().score + calculateScore(pendingMatchBatch, comboLevel);
-    const japasThisLevel = get().japasThisLevel + Array.from(deityMatches.entries()).reduce(
-      (a, [deity, count]) => a + (gameMode === 'general' || gameMode === deity ? count : 0),
-      0
-    );
+    const japasThisLevel = get().japasThisLevel + japaDelta;
     const positions = getAllMatchPositions(pendingMatchBatch);
     board = removeMatches(board, positions);
     const { board: afterGravity } = applyGravity(board);

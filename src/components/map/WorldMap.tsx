@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useProgressStore, progressKey } from '../../store/progressStore';
 import { useUnlockStore, FIRST_LOCKED_LEVEL_INDEX } from '../../store/unlockStore';
+import { DonateThankYouBox } from '../donation/DonateThankYouBox';
 import { LEVELS } from '../../data/levels';
 import { EPISODES } from '../../data/episodes';
 import { DEITIES } from '../../data/deities';
@@ -83,6 +84,8 @@ export function WorldMap({ mode: initialMode, onSelectLevel, onBack }: WorldMapP
           </div>
         ))}
       </div>
+
+      <DonateThankYouBox />
     </div>
   );
 }

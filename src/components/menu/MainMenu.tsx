@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { DEITIES } from '../../data/deities';
 import { GoogleSignIn } from '../auth/GoogleSignIn';
 import { JapamLogo } from '../ui/JapamLogo';
+import { DonateModal } from '../donation/DonateModal';
 import { useAuthStore } from '../../store/authStore';
+import { useUnlockStore } from '../../store/unlockStore';
 import type { GameMode } from '../../store/gameStore';
 
 const BG_IMAGE = '/images/game%20menupagebg.png';
@@ -18,7 +21,10 @@ interface MainMenuProps {
 export function MainMenu({ onSelect, onOpenMap, onOpenJapaDashboard, onOpenSettings }: MainMenuProps) {
   const navigate = useNavigate();
   const { user, loading, signOut } = useAuthStore();
+  const tier = useUnlockStore((s) => s.tier);
+  const [showDonate, setShowDonate] = useState(false);
   const displayName = user?.displayName ?? user?.email ?? '';
+  const badgeLabel = tier === 'premium' ? 'Premium' : tier === 'pro' ? 'Pro' : null;
 
   return (
     <div
@@ -27,20 +33,37 @@ export function MainMenu({ onSelect, onOpenMap, onOpenJapaDashboard, onOpenSetti
     >
       <div className="absolute inset-0 bg-black/60" aria-hidden />
       <div className="relative z-10 w-full max-w-sm flex flex-col items-center">
-        {/* Top right: user photo, name, sign out */}
+        {/* Top right: user photo, name, badge, donate, sign out */}
         <div className="w-full flex justify-end items-center gap-2 mt-2 mb-1 min-h-[40px]">
           {!loading && user && (
-            <div className="flex items-center gap-2">
-              {user.photoURL && (
-                <img
-                  src={user.photoURL}
-                  alt=""
-                  className="w-9 h-9 rounded-full border-2 border-amber-500/40"
-                />
-              )}
-              <span className="text-amber-200/90 text-sm truncate max-w-[120px]" title={displayName}>
-                {displayName}
-              </span>
+            <div className="flex items-center gap-2 flex-wrap justify-end">
+              <div className="flex items-center gap-1.5">
+                {user.photoURL && (
+                  <div className="relative">
+                    <img
+                      src={user.photoURL}
+                      alt=""
+                      className={`w-9 h-9 rounded-full border-2 ${badgeLabel ? 'border-amber-400 ring-2 ring-amber-400/50' : 'border-amber-500/40'}`}
+                    />
+                    {badgeLabel && (
+                      <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-green-500 flex items-center justify-center text-white text-[10px] font-bold" title={badgeLabel}>
+                        ✓
+                      </span>
+                    )}
+                  </div>
+                )}
+                <span className="text-amber-200/90 text-sm truncate max-w-[100px]" title={displayName}>
+                  {displayName}
+                  {badgeLabel && <span className="ml-1 text-xs text-amber-400">({badgeLabel})</span>}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowDonate(true)}
+                className="text-amber-400/90 text-xs font-medium hover:text-amber-400 whitespace-nowrap"
+              >
+                Donate
+              </button>
               <button
                 type="button"
                 onClick={() => signOut()}
@@ -51,6 +74,13 @@ export function MainMenu({ onSelect, onOpenMap, onOpenJapaDashboard, onOpenSetti
             </div>
           )}
         </div>
+
+        {showDonate && (
+          <DonateModal
+            onClose={() => setShowDonate(false)}
+            onDonated={() => { setShowDonate(false); }}
+          />
+        )}
 
         <JapamLogo size={100} className="mt-4 drop-shadow-lg" />
         <h1 className="text-4xl font-bold text-amber-400 mt-2 mb-1 drop-shadow-lg" style={{ fontFamily: 'serif' }}>

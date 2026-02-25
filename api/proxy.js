@@ -20,6 +20,9 @@ import * as marathonsJoinHandler from './_handlers/marathons/join.js';
 import * as userProgressHandler from './_handlers/user/progress.js';
 import * as userJapaHandler from './_handlers/user/japa.js';
 import * as userUnlockHandler from './_handlers/user/unlock.js';
+import * as donateOrderHandler from './_handlers/donate-order.js';
+import * as verifyDonateHandler from './_handlers/verify-donate.js';
+import * as donorsHandler from './_handlers/donors.js';
 
 function getPathSegments(request) {
   const url = new URL(request.url);
@@ -67,6 +70,9 @@ const HANDLERS = {
   'GET user/japa': userJapaHandler,
   'POST user/japa': userJapaHandler,
   'GET user/unlock': userUnlockHandler,
+  'POST donate-order': donateOrderHandler,
+  'POST verify-donate': verifyDonateHandler,
+  'GET donors': donorsHandler,
 };
 
 async function route(request, method, pathSegments) {

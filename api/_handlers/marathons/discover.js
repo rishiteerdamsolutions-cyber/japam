@@ -1,14 +1,20 @@
 import { getDb, jsonResponse } from '../_lib.js';
 
-/** GET /api/marathons/discover?state=&district=&cityTownVillage=
+function normalize(s) {
+  return (s || '').trim().toLowerCase();
+}
+
+/** GET /api/marathons/discover?state=&district=&cityTownVillage=&area=
  * Returns temples and their marathons for the given location. No auth required.
+ * State required; district, cityTownVillage, area optional. Case-insensitive for city/area.
  */
 export async function GET(request) {
   try {
     const url = new URL(request.url);
-    const state = url.searchParams.get('state') || '';
-    const district = url.searchParams.get('district') || '';
-    const cityTownVillage = url.searchParams.get('cityTownVillage') || '';
+    const state = (url.searchParams.get('state') || '').trim();
+    const district = (url.searchParams.get('district') || '').trim();
+    const cityTownVillage = (url.searchParams.get('cityTownVillage') || '').trim();
+    const area = (url.searchParams.get('area') || '').trim();
 
     const db = getDb();
     if (!db) return jsonResponse({ temples: [], marathonsByTemple: {} }, 200);
@@ -27,7 +33,14 @@ export async function GET(request) {
     });
     if (state) temples = temples.filter((t) => t.state === state);
     if (district) temples = temples.filter((t) => t.district === district);
-    if (cityTownVillage) temples = temples.filter((t) => t.cityTownVillage === cityTownVillage);
+    if (cityTownVillage) {
+      const q = normalize(cityTownVillage);
+      temples = temples.filter((t) => normalize(t.cityTownVillage).includes(q) || q.includes(normalize(t.cityTownVillage)));
+    }
+    if (area) {
+      const q = normalize(area);
+      temples = temples.filter((t) => normalize(t.area).includes(q) || q.includes(normalize(t.area)));
+    }
 
     const templeIds = temples.map((t) => t.id);
     const marathonsByTemple = {};

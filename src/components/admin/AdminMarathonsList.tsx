@@ -33,10 +33,11 @@ export function AdminMarathonsList({ adminToken, onUnauthorized }: AdminMarathon
     if (!adminToken) return;
     setLoading(true);
     setError(null);
-    const base = API_BASE ? `${API_BASE}/api/admin/marathons` : '/api/admin/marathons';
-    const url = `${base}${base.includes('?') ? '&' : '?'}token=${encodeURIComponent(adminToken)}`;
+    const url = API_BASE ? `${API_BASE}/api/admin/marathons` : '/api/admin/marathons';
     fetch(url, {
-      headers: { Authorization: `Bearer ${adminToken}`, 'X-Admin-Token': adminToken },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${adminToken}`, 'X-Admin-Token': adminToken },
+      body: JSON.stringify({ token: adminToken }),
     })
       .then((r) => {
         if (r.status === 401) {

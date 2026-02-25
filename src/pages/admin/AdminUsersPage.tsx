@@ -16,10 +16,11 @@ export function AdminUsersPage() {
       navigate('/admin', { replace: true });
       return;
     }
-    const base = API_BASE ? `${API_BASE}/api/admin/unlocked-users` : '/api/admin/unlocked-users';
-    const url = `${base}${base.includes('?') ? '&' : '?'}token=${encodeURIComponent(token)}`;
+    const url = API_BASE ? `${API_BASE}/api/admin/unlocked-users` : '/api/admin/unlocked-users';
     fetch(url, {
-      headers: { Authorization: `Bearer ${token}`, 'X-Admin-Token': token },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}`, 'X-Admin-Token': token },
+      body: JSON.stringify({ token }),
     })
       .then((r) => {
         if (r.status === 401) {

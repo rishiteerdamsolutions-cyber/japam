@@ -28,7 +28,7 @@ export function AdminPage() {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setError(data.error || (res.status === 404 ? 'Login API not found. Redeploy the project on Vercel so /api routes are live.' : 'Login failed'));
+        setError(data.error || 'Login failed');
         return;
       }
       if (data.token) {
@@ -39,7 +39,7 @@ export function AdminPage() {
         setError('Login failed');
       }
     } catch {
-      setError('Network error. On Vercel this usually works without any extra setup.');
+      setError('Network error.');
     } finally {
       setLoading(false);
     }
@@ -80,9 +80,6 @@ export function AdminPage() {
           {loading ? 'Logging in…' : 'Log in'}
         </button>
       </form>
-      <p className="text-amber-200/50 text-xs mt-4 text-center max-w-xs">
-        On Vercel, leave VITE_API_URL empty. Use the Admin ID and password you set in Vercel env.
-      </p>
       <button
         type="button"
         onClick={() => navigate('/', { replace: true })}

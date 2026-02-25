@@ -7,21 +7,38 @@ export async function GET(request) {
     if (!verifyAdminToken(token)) return jsonResponse({ error: 'Invalid or expired session' }, 401);
     const db = getDb();
     if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
-
     const snap = await db.collection('unlockedUsers').get();
     const users = snap.docs
       .map((d) => {
         const data = d.data();
-        return {
-          uid: data.uid || d.id,
-          email: data.email || null,
-          unlockedAt: data.unlockedAt || null,
-        };
+        return { uid: data.uid || d.id, email: data.email || null, unlockedAt: data.unlockedAt || null };
       })
       .sort((a, b) => (b.unlockedAt || '').localeCompare(a.unlockedAt || ''));
     return jsonResponse({ users, total: users.length });
   } catch (e) {
-    console.error('admin unlocked-users', e);
+    console.error('admin unlocked-users GET', e);
+    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+  }
+}
+
+/** POST /api/admin/unlocked-users - Same as GET but token in body (avoids rewrite stripping headers/query). */
+export async function POST(request) {
+  try {
+    const body = await request.json().catch(() => ({}));
+    const token = body?.token || getAdminTokenFromRequest(request);
+    if (!verifyAdminToken(token)) return jsonResponse({ error: 'Invalid or expired session' }, 401);
+    const db = getDb();
+    if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
+    const snap = await db.collection('unlockedUsers').get();
+    const users = snap.docs
+      .map((d) => {
+        const data = d.data();
+        return { uid: data.uid || d.id, email: data.email || null, unlockedAt: data.unlockedAt || null };
+      })
+      .sort((a, b) => (b.unlockedAt || '').localeCompare(a.unlockedAt || ''));
+    return jsonResponse({ users, total: users.length });
+  } catch (e) {
+    console.error('admin unlocked-users POST', e);
     return jsonResponse({ error: e?.message || 'Failed' }, 500);
   }
 }

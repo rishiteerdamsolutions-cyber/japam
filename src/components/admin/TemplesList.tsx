@@ -28,10 +28,11 @@ export function TemplesList({ adminToken, refreshTrigger, onUnauthorized }: Temp
     setLoading(true);
     setError(null);
     try {
-      const base = API_BASE ? `${API_BASE}/api/admin/list-temples` : '/api/admin/list-temples';
-      const url = `${base}${base.includes('?') ? '&' : '?'}token=${encodeURIComponent(adminToken)}`;
+      const url = API_BASE ? `${API_BASE}/api/admin/list-temples` : '/api/admin/list-temples';
       const res = await fetch(url, {
-        headers: { Authorization: `Bearer ${adminToken}`, 'X-Admin-Token': adminToken },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${adminToken}`, 'X-Admin-Token': adminToken },
+        body: JSON.stringify({ token: adminToken }),
       });
       const data = await res.json().catch(() => ({}));
       if (res.status === 401) {

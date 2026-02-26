@@ -121,7 +121,8 @@ export function MarathonsPage() {
       img.crossOrigin = 'anonymous';
       img.onload = () => resolve(img);
       img.onerror = () => resolve(null);
-      img.src = '/images/leaderboard-bg.png';
+      // Cache-bust so replacing the file (same name) takes effect immediately.
+      img.src = `/images/leaderboard-bg.png?v=${Date.now()}`;
     });
   };
 
@@ -158,6 +159,9 @@ export function MarathonsPage() {
       const saffronDark = '#7C2D12';
       const saffronMid = '#92400E';
       const berryDark = '#831843';
+      const creamWhite = '#FFF7ED';
+      const creamPink = '#FDE2F3';
+      const creamLav = '#E9D5FF';
 
       const truncate = (text: string, maxWidth: number) => {
         const t = String(text || '');
@@ -175,6 +179,73 @@ export function MarathonsPage() {
           if (ctx.measureText(text).width <= maxWidth) return px;
           px -= 2;
         }
+        return px;
+      };
+
+      const drawTrackedCentered = (text: string, centerX: number, y: number, trackingPx: number) => {
+        const chars = Array.from(String(text || ''));
+        if (chars.length === 0) return;
+        let total = 0;
+        for (const ch of chars) total += ctx.measureText(ch).width + trackingPx;
+        total -= trackingPx;
+        let x = centerX - total / 2;
+        for (const ch of chars) {
+          ctx.fillText(ch, x, y);
+          x += ctx.measureText(ch).width + trackingPx;
+        }
+      };
+
+      const drawCreamText = (text: string, centerX: number, y: number, weight: number, maxPx: number, maxWidth: number) => {
+        const t = String(text || '');
+        const px = fitFontPx(weight, maxPx, t, maxWidth);
+        const fontFamily = 'ui-rounded, "Arial Rounded MT Bold", system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
+
+        ctx.save();
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.font = `${weight} ${px}px ${fontFamily}`;
+
+        // Drop shadow (subtle, makes it pop)
+        ctx.shadowColor = 'rgba(0,0,0,0.28)';
+        ctx.shadowBlur = 10;
+        ctx.shadowOffsetY = 5;
+
+        // Base dark outline
+        ctx.lineJoin = 'round';
+        ctx.miterLimit = 2;
+        ctx.lineWidth = Math.max(8, Math.floor(px * 0.16));
+        ctx.strokeStyle = berryDark;
+        ctx.strokeText(t, centerX, y);
+
+        // Cream outline (tube edge)
+        ctx.shadowBlur = 0;
+        ctx.shadowOffsetY = 0;
+        ctx.lineWidth = Math.max(6, Math.floor(px * 0.12));
+        ctx.strokeStyle = 'rgba(255,255,255,0.92)';
+        ctx.strokeText(t, centerX, y);
+
+        // Cream fill gradient (toothpaste)
+        const g = ctx.createLinearGradient(centerX - maxWidth / 2, y, centerX + maxWidth / 2, y + px);
+        g.addColorStop(0, creamWhite);
+        g.addColorStop(0.28, creamPink);
+        g.addColorStop(0.62, creamLav);
+        g.addColorStop(1, creamWhite);
+        ctx.fillStyle = g;
+        ctx.fillText(t, centerX, y);
+
+        // Gloss highlight on top half
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(0, y, width, px * 0.55);
+        ctx.clip();
+        const hi = ctx.createLinearGradient(0, y, 0, y + px * 0.55);
+        hi.addColorStop(0, 'rgba(255,255,255,0.75)');
+        hi.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.fillStyle = hi;
+        ctx.fillText(t, centerX, y);
+        ctx.restore();
+
+        ctx.restore();
         return px;
       };
 
@@ -209,12 +280,16 @@ export function MarathonsPage() {
         const y1 = y0 + titlePx + 8;
         const y2 = y1 + templePx + 10;
 
+        // Title: spaced letters for a premium feel
         ctx.fillStyle = saffronMid;
         ctx.font = `950 ${titlePx}px system-ui, -apple-system, BlinkMacSystemFont, sans-serif`;
-        ctx.fillText(title, centerX, y0);
+        drawTrackedCentered(title, centerX, y0, 1.2);
 
         ctx.fillStyle = saffronDark;
         ctx.font = `950 ${templePx}px system-ui, -apple-system, BlinkMacSystemFont, sans-serif`;
+        ctx.lineWidth = 6;
+        ctx.strokeStyle = 'rgba(255,255,255,0.62)';
+        ctx.strokeText(temple, centerX, y1);
         ctx.fillText(temple, centerX, y1);
 
         ctx.fillStyle = saffronMid;
@@ -348,27 +423,21 @@ export function MarathonsPage() {
       ctx.textBaseline = 'top';
 
       const maxFooterW = width - padding * 2;
-      const line1Px = fitFontPx(900, 72, footerLine1, maxFooterW);
-      const line2Px = fitFontPx(950, 104, joinText, maxFooterW);
+      // Keep footer huge but also guarantee it fits vertically
+      let line1Px = fitFontPx(900, 70, footerLine1, maxFooterW);
+      let line2Px = fitFontPx(950, 96, joinText, maxFooterW);
+      const gap = 16;
+      const availableH = height - padding - footerY;
+      if (line1Px + gap + line2Px > availableH) {
+        const scale = availableH / (line1Px + gap + line2Px);
+        line1Px = Math.max(28, Math.floor(line1Px * scale));
+        line2Px = Math.max(34, Math.floor(line2Px * scale));
+      }
 
-      ctx.lineWidth = 12;
-      ctx.strokeStyle = 'rgba(255,255,255,0.82)';
-      ctx.fillStyle = berryDark;
-
-      ctx.font = `900 ${line1Px}px system-ui, -apple-system, BlinkMacSystemFont, sans-serif`;
-      ctx.strokeText(footerLine1, width / 2, footerY);
-      ctx.fillText(footerLine1, width / 2, footerY);
-
-      const y2 = footerY + line1Px + 14;
-      // Make the website line more attractive: warm gradient fill
-      const joinGrad = ctx.createLinearGradient(padding, 0, width - padding, 0);
-      joinGrad.addColorStop(0, saffronDark);
-      joinGrad.addColorStop(0.5, '#6D28D9');
-      joinGrad.addColorStop(1, berryDark);
-      ctx.font = `950 ${line2Px}px system-ui, -apple-system, BlinkMacSystemFont, sans-serif`;
-      ctx.strokeText(joinText, width / 2, y2);
-      ctx.fillStyle = joinGrad;
-      ctx.fillText(joinText, width / 2, y2);
+      // Toothpaste / cream tube effect (different font, glossy)
+      const used1 = drawCreamText(footerLine1, width / 2, footerY, 950, line1Px, maxFooterW);
+      const y2 = footerY + used1 + gap;
+      drawCreamText(joinText, width / 2, y2, 950, line2Px, maxFooterW);
 
       ctx.restore();
 

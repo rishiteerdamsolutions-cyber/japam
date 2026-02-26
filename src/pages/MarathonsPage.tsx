@@ -155,13 +155,13 @@ export function MarathonsPage() {
       }
 
       const amber = '#FBBF24';
-      // Darker shades of the same warm palette (avoid pure black)
       const saffronDark = '#7C2D12';
       const saffronMid = '#92400E';
-      const berryDark = '#831843';
       const creamWhite = '#FFF7ED';
       const creamPink = '#FDE2F3';
       const creamLav = '#E9D5FF';
+
+      const fontFamily = 'ui-rounded, "Arial Rounded MT Bold", system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
 
       const truncate = (text: string, maxWidth: number) => {
         const t = String(text || '');
@@ -175,7 +175,7 @@ export function MarathonsPage() {
       const fitFontPx = (weight: number, maxPx: number, text: string, maxWidth: number) => {
         let px = maxPx;
         while (px > 14) {
-          ctx.font = `${weight} ${px}px system-ui, -apple-system, BlinkMacSystemFont, sans-serif`;
+          ctx.font = `${weight} ${px}px ${fontFamily}`;
           if (ctx.measureText(text).width <= maxWidth) return px;
           px -= 2;
         }
@@ -198,7 +198,6 @@ export function MarathonsPage() {
       const drawCreamText = (text: string, centerX: number, y: number, weight: number, maxPx: number, maxWidth: number) => {
         const t = String(text || '');
         const px = fitFontPx(weight, maxPx, t, maxWidth);
-        const fontFamily = 'ui-rounded, "Arial Rounded MT Bold", system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
 
         ctx.save();
         ctx.textAlign = 'center';
@@ -210,11 +209,11 @@ export function MarathonsPage() {
         ctx.shadowBlur = 10;
         ctx.shadowOffsetY = 5;
 
-        // Base dark outline
+        // Black outline
         ctx.lineJoin = 'round';
         ctx.miterLimit = 2;
         ctx.lineWidth = Math.max(8, Math.floor(px * 0.16));
-        ctx.strokeStyle = berryDark;
+        ctx.strokeStyle = '#000000';
         ctx.strokeText(t, centerX, y);
 
         // Cream outline (tube edge)
@@ -280,20 +279,19 @@ export function MarathonsPage() {
         const y1 = y0 + titlePx + 8;
         const y2 = y1 + templePx + 10;
 
-        // Title: spaced letters for a premium feel
         ctx.fillStyle = saffronMid;
-        ctx.font = `950 ${titlePx}px system-ui, -apple-system, BlinkMacSystemFont, sans-serif`;
+        ctx.font = `950 ${titlePx}px ${fontFamily}`;
         drawTrackedCentered(title, centerX, y0, 1.2);
 
         ctx.fillStyle = saffronDark;
-        ctx.font = `950 ${templePx}px system-ui, -apple-system, BlinkMacSystemFont, sans-serif`;
+        ctx.font = `950 ${templePx}px ${fontFamily}`;
         ctx.lineWidth = 6;
         ctx.strokeStyle = 'rgba(255,255,255,0.62)';
         ctx.strokeText(temple, centerX, y1);
         ctx.fillText(temple, centerX, y1);
 
         ctx.fillStyle = saffronMid;
-        ctx.font = `900 ${deityPx}px system-ui, -apple-system, BlinkMacSystemFont, sans-serif`;
+        ctx.font = `900 ${deityPx}px ${fontFamily}`;
         ctx.fillText(deity, centerX, y2);
 
         ctx.restore();
@@ -307,7 +305,7 @@ export function MarathonsPage() {
       ctx.save();
       ctx.textAlign = 'center';
       ctx.fillStyle = saffronDark;
-      ctx.font = '950 30px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
+      ctx.font = `950 30px ${fontFamily}`;
       ctx.fillText('Top participants', width / 2, listTopY);
       ctx.restore();
 
@@ -320,8 +318,8 @@ export function MarathonsPage() {
       const boxW = width - padding * 2;
       const boxH = boxPadding * 2 + 5 * rowH + 4 * rowGap;
 
-      // Dark panel for readability (white text pops)
-      ctx.fillStyle = 'rgba(0,0,0,0.82)';
+      // Dark pink panel (white text pops)
+      ctx.fillStyle = 'rgba(131,24,67,0.92)';
       ctx.beginPath();
       const r = 16;
       ctx.moveTo(boxX + r, boxY);
@@ -366,7 +364,7 @@ export function MarathonsPage() {
           ctx.fill();
 
           ctx.fillStyle = isCurrent ? '#1F2937' : '#FFFFFF';
-          ctx.font = '950 18px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
+          ctx.font = `950 18px ${fontFamily}`;
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
           ctx.fillText(String(p.rank), cx, cy);
@@ -381,24 +379,20 @@ export function MarathonsPage() {
           ctx.fillStyle = isVacant ? 'rgba(255,255,255,0.78)' : '#FFFFFF';
           const baseName = isVacant ? 'Vacant' : String(p.name || '');
           const namePx = fitFontPx(950, 28, baseName, nameMaxW);
-          ctx.font = `950 ${namePx}px system-ui, -apple-system, BlinkMacSystemFont, sans-serif`;
+          ctx.font = `950 ${namePx}px ${fontFamily}`;
           const name = isVacant ? 'Vacant' : truncate(baseName, nameMaxW);
-          const nameY = y + 40;
+          const nameY = y + 36;
           ctx.fillText(name, textX, nameY);
 
           if (isCurrent) {
             ctx.fillStyle = '#FCD34D';
-            ctx.font = `900 ${Math.max(14, Math.floor(namePx * 0.68))}px system-ui, -apple-system, BlinkMacSystemFont, sans-serif`;
-            const youX = textX + ctx.measureText(name).width + 10;
-            const youMaxX = colX + colW - rightPad;
-            if (youX + ctx.measureText('(You)').width <= youMaxX) {
-              ctx.fillText('(You)', youX, nameY);
-            }
+            ctx.font = `800 14px ${fontFamily}`;
+            ctx.fillText('(You)', textX, y + 58);
           }
 
           ctx.fillStyle = 'rgba(255,255,255,0.92)';
-          ctx.font = '800 18px system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
-          ctx.fillText(isVacant ? '—' : `${p.japasCount} japas`, textX, y + 72);
+          ctx.font = `800 18px ${fontFamily}`;
+          ctx.fillText(isVacant ? '—' : `${p.japasCount} japas`, textX, y + 78);
         }
       }
 

@@ -250,7 +250,7 @@ export function MarathonsPage() {
         headerBottomY = y2 + used3;
       }
 
-      // Leaderboard title: baby pink 3D
+      // Leaderboard title: baby pink 3D (extra gap so it doesn't underlap the arena)
       const listTopY = Math.max(padding + 190, headerBottomY + 24);
       draw3DBabyPinkText('Top participants', width / 2, listTopY, 950, 32, width - padding * 2);
 
@@ -258,7 +258,7 @@ export function MarathonsPage() {
       const rowGap = 18;
       const boxPadding = 18;
       const boxX = padding;
-      const boxY = listTopY + 24;
+      const boxY = listTopY + 46;
       const boxW = width - padding * 2;
       const boxH = boxPadding * 2 + 5 * rowH + 4 * rowGap;
 

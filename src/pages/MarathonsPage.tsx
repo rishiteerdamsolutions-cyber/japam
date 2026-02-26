@@ -154,13 +154,6 @@ export function MarathonsPage() {
         ctx.fillRect(0, 0, width, height);
       }
 
-      const amber = '#FBBF24';
-      const saffronDark = '#7C2D12';
-      const saffronMid = '#92400E';
-      const creamWhite = '#FFF7ED';
-      const creamPink = '#FDE2F3';
-      const creamLav = '#E9D5FF';
-
       const fontFamily = 'ui-rounded, "Arial Rounded MT Bold", system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
 
       const truncate = (text: string, maxWidth: number) => {
@@ -182,68 +175,47 @@ export function MarathonsPage() {
         return px;
       };
 
-      const drawTrackedCentered = (text: string, centerX: number, y: number, trackingPx: number) => {
-        const chars = Array.from(String(text || ''));
-        if (chars.length === 0) return;
-        let total = 0;
-        for (const ch of chars) total += ctx.measureText(ch).width + trackingPx;
-        total -= trackingPx;
-        let x = centerX - total / 2;
-        for (const ch of chars) {
-          ctx.fillText(ch, x, y);
-          x += ctx.measureText(ch).width + trackingPx;
-        }
-      };
+      const babyPink = '#FAD1E6';
+      const babyPinkDark = '#C02675';
 
-      const drawCreamText = (text: string, centerX: number, y: number, weight: number, maxPx: number, maxWidth: number) => {
-        const t = String(text || '');
-        const px = fitFontPx(weight, maxPx, t, maxWidth);
-
-        ctx.save();
-        ctx.textAlign = 'center';
+      const draw3D = (t: string, px: number, x: number, y: number, align: 'center' | 'left') => {
+        ctx.textAlign = align;
         ctx.textBaseline = 'top';
-        ctx.font = `${weight} ${px}px ${fontFamily}`;
-
-        // Drop shadow (subtle, makes it pop)
-        ctx.shadowColor = 'rgba(0,0,0,0.28)';
-        ctx.shadowBlur = 10;
-        ctx.shadowOffsetY = 5;
-
-        // Black outline
+        ctx.font = `950 ${px}px ${fontFamily}`;
+        const depth = Math.max(3, Math.floor(px * 0.12));
+        for (let i = depth; i >= 1; i--) {
+          ctx.fillStyle = `rgba(131,24,67,${0.15 + (1 - i / depth) * 0.35})`;
+          ctx.fillText(t, x + i, y + i);
+        }
         ctx.lineJoin = 'round';
         ctx.miterLimit = 2;
-        ctx.lineWidth = Math.max(8, Math.floor(px * 0.16));
-        ctx.strokeStyle = '#000000';
-        ctx.strokeText(t, centerX, y);
-
-        // Cream outline (tube edge)
-        ctx.shadowBlur = 0;
-        ctx.shadowOffsetY = 0;
-        ctx.lineWidth = Math.max(6, Math.floor(px * 0.12));
-        ctx.strokeStyle = 'rgba(255,255,255,0.92)';
-        ctx.strokeText(t, centerX, y);
-
-        // Cream fill gradient (toothpaste)
-        const g = ctx.createLinearGradient(centerX - maxWidth / 2, y, centerX + maxWidth / 2, y + px);
-        g.addColorStop(0, creamWhite);
-        g.addColorStop(0.28, creamPink);
-        g.addColorStop(0.62, creamLav);
-        g.addColorStop(1, creamWhite);
-        ctx.fillStyle = g;
-        ctx.fillText(t, centerX, y);
-
-        // Gloss highlight on top half
+        ctx.lineWidth = Math.max(3, Math.floor(px * 0.1));
+        ctx.strokeStyle = babyPinkDark;
+        ctx.strokeText(t, x, y);
+        ctx.fillStyle = babyPink;
+        ctx.fillText(t, x, y);
         ctx.save();
-        ctx.beginPath();
-        ctx.rect(0, y, width, px * 0.55);
-        ctx.clip();
-        const hi = ctx.createLinearGradient(0, y, 0, y + px * 0.55);
-        hi.addColorStop(0, 'rgba(255,255,255,0.75)');
-        hi.addColorStop(1, 'rgba(255,255,255,0)');
-        ctx.fillStyle = hi;
-        ctx.fillText(t, centerX, y);
+        ctx.globalCompositeOperation = 'overlay';
+        ctx.globalAlpha = 0.35;
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillText(t, x, y - 1);
         ctx.restore();
+      };
 
+      const draw3DBabyPinkText = (text: string, centerX: number, y: number, weight: number, maxPx: number, maxWidth: number) => {
+        const t = String(text || '');
+        const px = fitFontPx(weight, maxPx, t, maxWidth);
+        ctx.save();
+        draw3D(t, px, centerX, y, 'center');
+        ctx.restore();
+        return px;
+      };
+
+      const draw3DBabyPinkTextLeft = (text: string, x: number, y: number, maxPx: number, maxWidth: number) => {
+        const t = truncate(String(text || ''), maxWidth);
+        const px = fitFontPx(950, maxPx, t, maxWidth);
+        ctx.save();
+        draw3D(t, px, x, y, 'left');
         ctx.restore();
         return px;
       };
@@ -259,7 +231,7 @@ export function MarathonsPage() {
         ctx.fillRect(0, 0, width, topH);
       }
 
-      // Header (centered, dark, larger)
+      // Header: baby pink 3D (JAPA MARATHON, temple, deity)
       let headerBottomY = padding + 10;
       {
         const centerX = width / 2;
@@ -267,54 +239,26 @@ export function MarathonsPage() {
         const title = 'JAPA MARATHON';
         const temple = truncate(opts.templeName || 'Temple', maxW);
         const deity = truncate(`${opts.deityName} Japa`, maxW);
-        ctx.save();
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'top';
-
-        const titlePx = fitFontPx(950, 30, title, maxW);
-        const templePx = fitFontPx(950, 54, temple, maxW);
-        const deityPx = fitFontPx(900, 32, deity, maxW);
 
         const y0 = padding + 10;
-        const y1 = y0 + titlePx + 8;
-        const y2 = y1 + templePx + 10;
+        const used1 = draw3DBabyPinkText(title, centerX, y0, 950, 32, maxW);
+        const y1 = y0 + used1 + 10;
+        const used2 = draw3DBabyPinkText(temple, centerX, y1, 950, 56, maxW);
+        const y2 = y1 + used2 + 10;
+        const used3 = draw3DBabyPinkText(deity, centerX, y2, 900, 34, maxW);
 
-        ctx.fillStyle = saffronMid;
-        ctx.font = `950 ${titlePx}px ${fontFamily}`;
-        drawTrackedCentered(title, centerX, y0, 1.2);
-
-        ctx.fillStyle = saffronDark;
-        ctx.font = `950 ${templePx}px ${fontFamily}`;
-        ctx.lineWidth = 6;
-        ctx.strokeStyle = 'rgba(255,255,255,0.62)';
-        ctx.strokeText(temple, centerX, y1);
-        ctx.fillText(temple, centerX, y1);
-
-        ctx.fillStyle = saffronMid;
-        ctx.font = `900 ${deityPx}px ${fontFamily}`;
-        ctx.fillText(deity, centerX, y2);
-
-        ctx.restore();
-
-        // Leaderboard title starts after header content (no overlap)
-        headerBottomY = y2 + deityPx;
+        headerBottomY = y2 + used3;
       }
 
-      // Leaderboard title (tighter so card fills frame)
+      // Leaderboard title: baby pink 3D
       const listTopY = Math.max(padding + 190, headerBottomY + 24);
-      ctx.save();
-      ctx.textAlign = 'center';
-      ctx.fillStyle = saffronDark;
-      ctx.font = `950 30px ${fontFamily}`;
-      ctx.fillText('Top participants', width / 2, listTopY);
-      ctx.restore();
+      draw3DBabyPinkText('Top participants', width / 2, listTopY, 950, 32, width - padding * 2);
 
-      // Two-column arena: 5 + 5 entries (bigger text, uses space better)
       const rowH = 96;
       const rowGap = 18;
       const boxPadding = 18;
       const boxX = padding;
-      const boxY = listTopY + 16;
+      const boxY = listTopY + 24;
       const boxW = width - padding * 2;
       const boxH = boxPadding * 2 + 5 * rowH + 4 * rowGap;
 
@@ -350,58 +294,49 @@ export function MarathonsPage() {
           const y = boxY + boxPadding + row * (rowH + rowGap);
 
           if (isCurrent) {
-            ctx.fillStyle = 'rgba(251,191,36,0.18)';
+            ctx.fillStyle = 'rgba(251,191,36,0.2)';
             ctx.fillRect(colX + 10, y + 8, colW - 20, rowH - 16);
           }
 
-          // rank circle
-          const cx = colX + 30;
+          // Rank number circle (light bg so baby pink 3D shows)
+          const cx = colX + 32;
           const cy = y + rowH / 2;
           ctx.beginPath();
-          ctx.arc(cx, cy, 18, 0, Math.PI * 2);
+          ctx.arc(cx, cy, 20, 0, Math.PI * 2);
           ctx.closePath();
-          ctx.fillStyle = isCurrent ? amber : 'rgba(55,65,81,0.95)';
+          ctx.fillStyle = isCurrent ? 'rgba(251,191,36,0.4)' : 'rgba(255,255,255,0.2)';
           ctx.fill();
+          ctx.strokeStyle = babyPinkDark;
+          ctx.lineWidth = 2;
+          ctx.stroke();
 
-          ctx.fillStyle = isCurrent ? '#1F2937' : '#FFFFFF';
-          ctx.font = `950 18px ${fontFamily}`;
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText(String(p.rank), cx, cy);
-          ctx.textAlign = 'left';
-          ctx.textBaseline = 'alphabetic';
+          // Rank number: baby pink 3D
+          ctx.save();
+          draw3D(String(p.rank), 20, cx, cy - 12, 'center');
+          ctx.restore();
 
-          // name + japas
-          const textX = colX + 62;
-          const rightPad = 16;
+          // Name: baby pink 3D
+          const textX = colX + 66;
+          const rightPad = 12;
           const nameMaxW = colW - (textX - colX) - rightPad;
-
-          ctx.fillStyle = isVacant ? 'rgba(255,255,255,0.78)' : '#FFFFFF';
-          const baseName = isVacant ? 'Vacant' : String(p.name || '');
-          const namePx = fitFontPx(950, 28, baseName, nameMaxW);
-          ctx.font = `950 ${namePx}px ${fontFamily}`;
-          const name = isVacant ? 'Vacant' : truncate(baseName, nameMaxW);
-          const nameY = y + 36;
-          ctx.fillText(name, textX, nameY);
+          const nameY = y + 32;
+          draw3DBabyPinkTextLeft(isVacant ? 'Vacant' : String(p.name || ''), textX, nameY, 26, nameMaxW);
 
           if (isCurrent) {
-            ctx.fillStyle = '#FCD34D';
-            ctx.font = `800 14px ${fontFamily}`;
-            ctx.fillText('(You)', textX, y + 58);
+            draw3DBabyPinkTextLeft('(You)', textX, y + 56, 14, nameMaxW);
           }
 
-          ctx.fillStyle = 'rgba(255,255,255,0.92)';
-          ctx.font = `800 18px ${fontFamily}`;
-          ctx.fillText(isVacant ? '—' : `${p.japasCount} japas`, textX, y + 78);
+          draw3DBabyPinkTextLeft(isVacant ? '—' : `${p.japasCount} japas`, textX, y + 76, 18, nameMaxW);
         }
       }
 
-      // Footer moved up so card fills frame (no big empty space at bottom)
+      // Footer: baby pink 3D text, bubbly font
       const footerY = boxY + boxH + 28;
       const footerLine1 = 'Match, chant, and climb the leaderboard.';
-      const joinText = 'Join at www.japam.digital';
+      const joinAtText = 'Join at';
+      const urlText = 'www.japam.digital';
 
-      // Bottom overlay for readable, big dark footer text
+      // Bottom overlay for readable footer
       {
         const startY = Math.max(0, footerY - 24);
         const g = ctx.createLinearGradient(0, startY, 0, height);
@@ -417,21 +352,26 @@ export function MarathonsPage() {
       ctx.textBaseline = 'top';
 
       const maxFooterW = width - padding * 2;
-      // Keep footer huge but also guarantee it fits vertically
+      const gap = 14;
       let line1Px = fitFontPx(900, 70, footerLine1, maxFooterW);
-      let line2Px = fitFontPx(950, 96, joinText, maxFooterW);
-      const gap = 16;
+      let joinAtPx = fitFontPx(950, 40, joinAtText, maxFooterW);
+      const urlTargetPx = joinAtPx * 3;
+      let urlPx = fitFontPx(950, urlTargetPx, urlText, maxFooterW);
+
       const availableH = height - padding - footerY;
-      if (line1Px + gap + line2Px > availableH) {
-        const scale = availableH / (line1Px + gap + line2Px);
-        line1Px = Math.max(28, Math.floor(line1Px * scale));
-        line2Px = Math.max(34, Math.floor(line2Px * scale));
+      const totalH = line1Px + gap + joinAtPx + gap + urlPx;
+      if (totalH > availableH) {
+        const scale = availableH / totalH;
+        line1Px = Math.max(24, Math.floor(line1Px * scale));
+        joinAtPx = Math.max(28, Math.floor(joinAtPx * scale));
+        urlPx = Math.max(36, Math.floor(urlPx * scale));
       }
 
-      // Toothpaste / cream tube effect (different font, glossy)
-      const used1 = drawCreamText(footerLine1, width / 2, footerY, 950, line1Px, maxFooterW);
+      const used1 = draw3DBabyPinkText(footerLine1, width / 2, footerY, 950, line1Px, maxFooterW);
       const y2 = footerY + used1 + gap;
-      drawCreamText(joinText, width / 2, y2, 950, line2Px, maxFooterW);
+      const used2 = draw3DBabyPinkText(joinAtText, width / 2, y2, 950, joinAtPx, maxFooterW);
+      const y3 = y2 + used2 + gap;
+      draw3DBabyPinkText(urlText, width / 2, y3, 950, urlPx, maxFooterW);
 
       ctx.restore();
 

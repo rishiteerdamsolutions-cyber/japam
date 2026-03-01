@@ -1,6 +1,7 @@
 import { StrictMode, lazy, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { SpeedInsights } from '@vercel/speed-insights/react'
 import './index.css'
 import { AuthProvider } from './components/AuthProvider'
 import { BlockedOverlay } from './components/BlockedOverlay'
@@ -60,5 +61,6 @@ createRoot(document.getElementById('root')!).render(
       <WhatsAppFab />
       </AuthProvider>
     </BrowserRouter>
+    <SpeedInsights />
   </StrictMode>,
 )

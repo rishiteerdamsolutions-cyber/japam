@@ -50,6 +50,18 @@ Until these files are added, the app uses a placeholder tone. Update `src/data/d
 
 Without Firebase config, the app runs normally but the Google Sign-In button is hidden.
 
+### Fixing 403 on Google Sign-In (production)
+
+If you see `403` when signing in with Google on your deployed site, add your production domain to Firebase:
+
+1. Open [Firebase Console](https://console.firebase.google.com/) → your project → **Authentication** → **Settings** → **Authorized domains**
+2. Add your domain **without** `https://`:
+   - Vercel: `japam-xxx.vercel.app` (or your custom domain, e.g. `www.japam.digital`)
+   - Preview deploys: add each preview URL you use (e.g. `japam-git-main-xxx.vercel.app`)
+3. If you use a custom domain in Google Cloud OAuth:
+   - Go to [Google Cloud Console](https://console.cloud.google.com/) → APIs & Services → Credentials → your OAuth 2.0 Client ID
+   - Add your domain to **Authorized JavaScript origins** and **Authorized redirect URIs**
+
 ## Scalability (10k users, 100 priests)
 
 The app is built to handle many concurrent users and priests without breaking:

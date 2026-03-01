@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "dev:community": "npm run dev --prefix community",
+    "build:community": "npm run build --prefix community"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.2.0",
@@ -35,6 +37,7 @@
     "globals": "^16.5.0",
     "howler": "^2.2.4",
     "idb-keyval": "^6.2.2",
+    "playwright": "^1.58.2",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.2.0",
     "typescript": "~5.9.3",

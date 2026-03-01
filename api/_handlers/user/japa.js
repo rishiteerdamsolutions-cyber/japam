@@ -1,4 +1,5 @@
 import { getDb, jsonResponse, verifyFirebaseUser, isUserBlocked } from '../_lib.js';
+import admin from 'firebase-admin';
 
 /** GET /api/user/japa - Load japa counts for current user (Firebase ID token required) */
 export async function GET(request) {
@@ -33,6 +34,20 @@ export async function POST(request) {
     const prevSnap = await db.doc(`users/${uid}/data/japa`).get();
     const prev = (prevSnap.exists && prevSnap.data()) || {};
     await db.doc(`users/${uid}/data/japa`).set(counts, { merge: true });
+
+    // Keep a public summary doc updated for global leaderboards/active users UI.
+    try {
+      const totalFromBody = typeof counts.total === 'number' ? counts.total : null;
+      const computedTotal = DEITY_IDS.reduce((a, deity) => a + (typeof counts[deity] === 'number' ? counts[deity] : 0), 0);
+      await db.doc(`publicUsers/${uid}`).set(
+        {
+          uid,
+          totalJapas: Math.max(0, Math.round(totalFromBody ?? computedTotal)),
+          updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+        },
+        { merge: true },
+      );
+    } catch {}
 
     const deltas = {};
     for (const deity of DEITY_IDS) {

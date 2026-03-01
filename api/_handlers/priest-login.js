@@ -8,7 +8,12 @@ export async function POST(request) {
       return jsonResponse({ error: 'Username and password required' }, 400);
     }
     const db = getDb();
-    if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
+    if (!db) {
+      return jsonResponse(
+        { error: 'Database not configured. Add FIREBASE_SERVICE_ACCOUNT_JSON to .env (Firebase service account key as JSON string).' },
+        503
+      );
+    }
 
     const templesRef = db.collection('temples');
     const snap = await templesRef.where('priestUsername', '==', username.trim()).limit(1).get();

@@ -16,10 +16,50 @@ export async function GET(request) {
     if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
 
     const snap = await db.collection('marathons').where('templeId', '==', priest.templeId).get();
-    const marathons = snap.docs
-      .map((d) => {
+    const marathons = [];
+    for (const d of snap.docs) {
       const data = d.data();
-      return {
+      let topParticipants = [];
+      try {
+        const partsSnap = await db.collection('marathonParticipations').where('marathonId', '==', d.id).get();
+        const parts = partsSnap.docs.map((p) => {
+          const pData = p.data() || {};
+          const uid = pData.userId || '';
+          const displayName =
+            (typeof pData.displayName === 'string' && pData.displayName.trim())
+              ? pData.displayName.trim()
+              : (uid ? uid.slice(0, 12) : '—');
+          return { uid, name: displayName, japasCount: pData.japasCount ?? 0 };
+        });
+        parts.sort((a, b) => (b.japasCount || 0) - (a.japasCount || 0));
+        const top = parts.slice(0, 10);
+
+        // Attach lastActiveAt for top participants.
+        const refs = top.filter((p) => p.uid).map((p) => db.doc(`users/${p.uid}/data/activity`));
+        const snaps = refs.length ? await db.getAll(...refs) : [];
+        const lastActiveByUid = new Map(
+          snaps
+            .filter((s) => s.exists)
+            .map((s) => {
+              const path = s.ref?.path || '';
+              const uidFromPath = path.split('/')[1] || '';
+              const ts = (s.data() || {}).lastActiveAt;
+              const iso =
+                ts && typeof ts.toDate === 'function'
+                  ? ts.toDate().toISOString()
+                  : typeof ts === 'string'
+                    ? ts
+                    : null;
+              return [uidFromPath, iso];
+            }),
+        );
+
+        topParticipants = top.map((p) => ({ ...p, lastActiveAt: lastActiveByUid.get(p.uid) || null }));
+      } catch {
+        topParticipants = [];
+      }
+
+      marathons.push({
         id: d.id,
         templeId: data.templeId,
         deityId: data.deityId,
@@ -28,9 +68,10 @@ export async function GET(request) {
         joinedCount: data.joinedCount ?? 0,
         japasToday: data.japasToday ?? 0,
         totalJapas: data.totalJapas ?? 0,
-      };
-    })
-      .sort((a, b) => (b.startDate || '').localeCompare(a.startDate || ''));
+        topParticipants,
+      });
+    }
+    marathons.sort((a, b) => (b.startDate || '').localeCompare(a.startDate || ''));
     return jsonResponse({ marathons });
   } catch (e) {
     console.error('priest marathons', e);

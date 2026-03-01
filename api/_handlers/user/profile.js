@@ -1,4 +1,5 @@
 import { getDb, jsonResponse, verifyFirebaseUser, isUserBlocked } from '../_lib.js';
+import admin from 'firebase-admin';
 
 /** GET /api/user/profile - Get current user's profile (displayName). Firebase ID token required. */
 export async function GET(request) {
@@ -10,10 +11,25 @@ export async function GET(request) {
     if (await isUserBlocked(db, uid)) return jsonResponse({ error: 'Account disabled' }, 403);
 
     const snap = await db.doc(`users/${uid}/data/profile`).get();
-    if (!snap.exists) return jsonResponse({ displayName: null }, 200);
-    const data = snap.data() || {};
+    const data = snap.exists ? (snap.data() || {}) : {};
     const displayName = typeof data.displayName === 'string' ? data.displayName : null;
-    return jsonResponse({ displayName }, 200);
+
+    // Include lifetime appreciations from public summary doc (best-effort).
+    let appreciations = { heart: 0, like: 0, clap: 0 };
+    try {
+      const pub = await db.doc(`publicUsers/${uid}`).get();
+      if (pub.exists) {
+        const p = pub.data() || {};
+        const a = p.appreciations && typeof p.appreciations === 'object' ? p.appreciations : {};
+        appreciations = {
+          heart: typeof a.heart === 'number' ? a.heart : 0,
+          like: typeof a.like === 'number' ? a.like : 0,
+          clap: typeof a.clap === 'number' ? a.clap : 0,
+        };
+      }
+    } catch {}
+
+    return jsonResponse({ displayName, appreciations }, 200);
   } catch (e) {
     console.error('user profile GET', e);
     return jsonResponse({ error: e?.message || 'Failed' }, 500);
@@ -42,6 +58,16 @@ export async function POST(request) {
       {
         displayName,
         updatedAt: new Date().toISOString(),
+      },
+      { merge: true },
+    );
+
+    // Public summary (for in-game active users strip)
+    await db.doc(`publicUsers/${uid}`).set(
+      {
+        uid,
+        name: displayName,
+        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
       },
       { merge: true },
     );

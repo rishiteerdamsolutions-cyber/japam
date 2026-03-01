@@ -5,6 +5,7 @@ import './index.css'
 import { AuthProvider } from './components/AuthProvider'
 import { BlockedOverlay } from './components/BlockedOverlay'
 import { PWAUpdatePrompt } from './components/PWAUpdatePrompt'
+import { WhatsAppFab } from './components/ui/WhatsAppFab'
 import App from './App.tsx'
 import { MenuPage } from './pages/MenuPage'
 
@@ -56,6 +57,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/settings" element={<SettingsPage />} />
       </Routes>
       </Suspense>
+      <WhatsAppFab />
       </AuthProvider>
     </BrowserRouter>
   </StrictMode>,

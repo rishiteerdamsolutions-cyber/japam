@@ -2,12 +2,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 interface GameOverlayProps {
   status: 'won' | 'lost';
+  isMarathon?: boolean;
   onRetry: () => void;
   onMenu: () => void;
   onNext?: () => void;
 }
 
-export function GameOverlay({ status, onRetry, onMenu, onNext }: GameOverlayProps) {
+export function GameOverlay({ status, isMarathon, onRetry, onMenu, onNext }: GameOverlayProps) {
   return (
     <AnimatePresence>
       <motion.div
@@ -22,10 +23,10 @@ export function GameOverlay({ status, onRetry, onMenu, onNext }: GameOverlayProp
           className="bg-[#1a1a2e] rounded-2xl p-6 max-w-sm w-full text-center"
         >
           <h2 className="text-2xl font-bold text-amber-400 mb-2">
-            {status === 'won' ? 'Jai!' : 'Try Again'}
+            {status === 'won' ? (isMarathon ? 'Marathon complete!' : 'Jai!') : 'Try Again'}
           </h2>
           <p className="text-amber-200/80 mb-6">
-            {status === 'won' ? 'You completed the japas!' : 'Out of moves. Chant more next time!'}
+            {status === 'won' ? (isMarathon ? 'You reached the marathon target!' : 'You completed the japas!') : 'Out of moves. Chant more next time!'}
           </p>
           <div className="flex flex-col gap-2">
             {status === 'won' && onNext && (

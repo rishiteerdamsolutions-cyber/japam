@@ -597,7 +597,9 @@ export function MarathonsPage() {
                   <div className="flex flex-col items-end gap-1">
                     <button
                       type="button"
-                      onClick={() => navigate(`/game?mode=${encodeURIComponent(my.deityId)}&level=0`)}
+                      onClick={() => {
+                        navigate(`/game?mode=${encodeURIComponent(my.deityId)}&marathon=${encodeURIComponent(my.marathonId)}&target=${my.targetJapas}`);
+                      }}
                       className="px-4 py-2 rounded-lg bg-green-600 text-white text-sm font-medium"
                     >
                       Play

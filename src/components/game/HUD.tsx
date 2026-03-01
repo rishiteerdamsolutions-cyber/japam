@@ -2,11 +2,11 @@ import { useGameStore } from '../../store/gameStore';
 import { LEVELS } from '../../data/levels';
 
 export function HUD() {
-  const { moves, japasThisLevel, japasByDeity, mode, levelIndex } = useGameStore();
+  const { moves, japasThisLevel, japasByDeity, mode, levelIndex, marathonTargetJapas, overrideJapaTarget } = useGameStore();
   const level = LEVELS[levelIndex];
   const deityTarget = mode !== 'general' ? mode : undefined;
   const japasNeeded = deityTarget ? (japasByDeity[deityTarget] ?? 0) : japasThisLevel;
-  const japaTarget = level?.japaTarget ?? 15;
+  const japaTarget = overrideJapaTarget ?? marathonTargetJapas ?? level?.japaTarget ?? 15;
 
   return (
     <div className="flex justify-between items-center w-full px-2 py-1">

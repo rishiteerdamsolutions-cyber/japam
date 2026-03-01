@@ -15,6 +15,23 @@ import { stopAllMantras } from '../hooks/useSound';
 export type { GameMode };
 export type GameStatus = 'playing' | 'won' | 'lost';
 
+const PAUSED_KEY_PREFIX = 'japam-paused-';
+
+export interface PausedGameState {
+  key: string;
+  board: (string | null)[][];
+  score: number;
+  moves: number;
+  japasThisLevel: number;
+  japasByDeity: Record<string, number>;
+  mode: GameMode;
+  levelIndex: number;
+  marathonId?: string;
+  marathonTargetJapas?: number;
+  maxGemTypes: number;
+  savedAt: number;
+}
+
 interface GameState {
   board: Board;
   score: number;
@@ -25,6 +42,10 @@ interface GameState {
   status: GameStatus;
   mode: GameMode;
   levelIndex: number;
+  marathonId: string | null;
+  marathonTargetJapas: number | null;
+  overrideJapaTarget: number | null;
+  isGuest: boolean;
   selectedCell: { row: number; col: number } | null;
   lastMatches: { deity: DeityId; count: number; combo: number }[];
   lastSwappedTypes: [DeityId, DeityId] | null;
@@ -41,7 +62,10 @@ interface GameState {
 const getLevel = (index: number) => LEVELS[index] ?? LEVELS[0];
 
 interface GameActions {
-  initGame: (mode: GameMode, levelIndex?: number) => void;
+  initGame: (mode: GameMode, levelIndex?: number, options?: { marathonId?: string; marathonTargetJapas?: number; overrideJapaTarget?: number; isGuest?: boolean }) => void;
+  restoreGame: (state: PausedGameState) => void;
+  savePausedState: () => PausedGameState | null;
+  getPausedKey: () => string;
   selectCell: (row: number, col: number) => void;
   swap: (toRow: number, toCol: number, fromRow?: number, fromCol?: number) => boolean;
   processMatches: (accumulated?: { deity: DeityId; count: number; combo: number }[]) => void;
@@ -64,6 +88,10 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   status: 'playing',
   mode: 'general',
   levelIndex: 0,
+  marathonId: null,
+  marathonTargetJapas: null,
+  overrideJapaTarget: null,
+  isGuest: false,
   selectedCell: null,
   lastMatches: [],
   lastSwappedTypes: null,
@@ -76,13 +104,18 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   matchAnimationTimeoutId: null,
   matchBonusAudio: 'none',
 
-  initGame: (mode, levelIndex = 0) => {
+  initGame: (mode, levelIndex = 0, options) => {
     stopAllMantras();
     const { matchAnimationTimeoutId } = get();
     if (matchAnimationTimeoutId != null) clearTimeout(matchAnimationTimeoutId);
     const level = getLevel(levelIndex);
     const maxGemTypes = level.maxGemTypes ?? 8;
     const deityMode = mode !== 'general' ? (mode as DeityId) : undefined;
+    const marathonId = options?.marathonId ?? null;
+    const marathonTargetJapas = options?.marathonTargetJapas ?? null;
+    const overrideJapaTarget = options?.overrideJapaTarget ?? null;
+    const isGuest = options?.isGuest === true;
+    const moves = marathonTargetJapas != null ? 999999 : level.moves;
     let board = createBoard(level.rows, level.cols, maxGemTypes, deityMode);
     while (!hasValidMoves(board)) {
       board = createBoard(level.rows, level.cols, maxGemTypes, deityMode);
@@ -90,13 +123,17 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     set({
       board,
       score: 0,
-      moves: level.moves,
+      moves,
       japasThisLevel: 0,
       japasByDeity: emptyJapas(),
       comboLevel: 0,
       status: 'playing',
       mode,
       levelIndex,
+      marathonId,
+      marathonTargetJapas,
+      overrideJapaTarget,
+      isGuest,
       selectedCell: null,
       lastMatches: [],
       lastSwappedTypes: null,
@@ -107,7 +144,68 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       matchHighlightPositions: null,
       pendingMatchBatch: null,
       matchAnimationTimeoutId: null,
-      matchBonusAudio: 'none' /* clear so new game doesn't use previous move's bonus */
+      matchBonusAudio: 'none'
+    });
+  },
+
+  getPausedKey: () => {
+    const { mode, levelIndex, marathonId } = get();
+    if (marathonId) return `${PAUSED_KEY_PREFIX}marathon-${marathonId}`;
+    return `${PAUSED_KEY_PREFIX}${mode}-${levelIndex}`;
+  },
+
+
+  savePausedState: (): PausedGameState | null => {
+    const state = get();
+    if (state.isGuest) return null;
+    if (state.status !== 'playing' || state.board.length === 0) return null;
+    const key = get().getPausedKey();
+    const payload: PausedGameState = {
+      key,
+      board: state.board.map(row => row.map(c => (c as string) ?? null)),
+      score: state.score,
+      moves: state.moves,
+      japasThisLevel: state.japasThisLevel,
+      japasByDeity: { ...state.japasByDeity },
+      mode: state.mode,
+      levelIndex: state.levelIndex,
+      marathonId: state.marathonId ?? undefined,
+      marathonTargetJapas: state.marathonTargetJapas ?? undefined,
+      maxGemTypes: state.maxGemTypes,
+      savedAt: Date.now()
+    };
+    return payload;
+  },
+
+
+  restoreGame: (saved: PausedGameState) => {
+    stopAllMantras();
+    const board = saved.board.map(row =>
+      row.map(c => (c as DeityId) ?? null)
+    ) as Board;
+    set({
+      board,
+      score: saved.score,
+      moves: saved.moves,
+      japasThisLevel: saved.japasThisLevel,
+      japasByDeity: { ...emptyJapas(), ...saved.japasByDeity } as Record<DeityId, number>,
+      comboLevel: 0,
+      status: 'playing',
+      mode: saved.mode as GameMode,
+      levelIndex: saved.levelIndex,
+      marathonId: saved.marathonId ?? null,
+      marathonTargetJapas: saved.marathonTargetJapas ?? null,
+      selectedCell: null,
+      lastMatches: [],
+      lastSwappedTypes: null,
+      intendedDeity: null,
+      matchGeneration: 0,
+      firstMatchMade: true,
+      maxGemTypes: saved.maxGemTypes,
+      matchHighlightPositions: null,
+      pendingMatchBatch: null,
+      matchAnimationTimeoutId: null,
+      matchBonusAudio: 'none'
     });
   },
 
@@ -194,7 +292,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   },
 
   commitMatch: (accumulated) => {
-    const { pendingMatchBatch, matchAnimationTimeoutId, intendedDeity } = get();
+    const { pendingMatchBatch, matchAnimationTimeoutId, intendedDeity, isGuest } = get();
     if (matchAnimationTimeoutId != null) {
       clearTimeout(matchAnimationTimeoutId);
       set({ matchAnimationTimeoutId: null });
@@ -223,7 +321,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       if (useIntendedOnly && deity !== intendedDeity) continue;
       const japaCount = useIntendedOnly ? 1 : 1;
       japasByDeity[deity] = (japasByDeity[deity] ?? 0) + japaCount;
-      japaStore.addJapa(deity, japaCount);
+      if (!isGuest) japaStore.addJapa(deity, japaCount);
     }
     const japaDelta = useIntendedOnly
       ? ((gameMode === 'general' || gameMode === intendedDeity) ? 1 : 0)
@@ -251,49 +349,61 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   },
 
   finalizeMatchChain: (accumulated) => {
-    const level = getLevel(get().levelIndex);
-    const deityTarget = get().mode !== 'general' ? (get().mode as DeityId) : undefined;
-    const japasByDeity = get().japasByDeity;
-    const japasNeeded = deityTarget ? (japasByDeity[deityTarget] ?? 0) : get().japasThisLevel;
-    const japaTarget = level.japaTarget;
-    const moves = get().moves;
+    const state = get();
+    const level = getLevel(state.levelIndex);
+    const deityTarget = state.mode !== 'general' ? (state.mode as DeityId) : undefined;
+    const japasByDeity = state.japasByDeity;
+    const japasNeeded = deityTarget ? (japasByDeity[deityTarget] ?? 0) : state.japasThisLevel;
+    const japaTarget = state.overrideJapaTarget ?? state.marathonTargetJapas ?? level.japaTarget;
+    const moves = state.moves;
+    const isMarathon = state.marathonTargetJapas != null;
 
     let status: GameStatus = 'playing';
+    let finalBoard = state.board;
+
     if (japasNeeded >= japaTarget) {
       status = 'won';
-      const totalScore = get().score;
-      const stars = getStars(japasNeeded, japaTarget, moves);
-      const mode = get().mode;
-      useProgressStore.getState().saveLevel(mode, level.id, {
-        stars,
-        japasCompleted: japasNeeded,
-        bestScore: totalScore,
-        completed: true
-      });
-      useProgressStore.getState().setCurrentLevel(mode, Math.min(get().levelIndex + 1, LEVELS.length - 1));
+      if (!isMarathon && !state.isGuest) {
+        const totalScore = state.score;
+        const stars = getStars(japasNeeded, japaTarget, moves);
+        useProgressStore.getState().saveLevel(state.mode, level.id, {
+          stars,
+          japasCompleted: japasNeeded,
+          bestScore: totalScore,
+          completed: true
+        });
+        useProgressStore.getState().setCurrentLevel(state.mode, Math.min(state.levelIndex + 1, LEVELS.length - 1));
+      }
     } else if (moves <= 0) {
       status = 'lost';
     }
 
-    let finalBoard = get().board;
     if (status === 'playing' && !hasValidMoves(finalBoard)) {
-      const maxGemTypes = get().maxGemTypes;
-      const deityMode = get().mode !== 'general' ? (get().mode as DeityId) : undefined;
-      finalBoard = createBoard(level.rows, level.cols, maxGemTypes, deityMode);
+      const deityMode = state.mode !== 'general' ? (state.mode as DeityId) : undefined;
+      finalBoard = createBoard(level.rows, level.cols, state.maxGemTypes, deityMode);
       while (!hasValidMoves(finalBoard)) {
-        finalBoard = createBoard(level.rows, level.cols, maxGemTypes, deityMode);
+        finalBoard = createBoard(level.rows, level.cols, state.maxGemTypes, deityMode);
       }
     }
 
     set({
       board: finalBoard,
+      moves,
       comboLevel: 0,
       status,
       lastMatches: accumulated,
-      matchGeneration: accumulated.length > 0 ? get().matchGeneration + 1 : get().matchGeneration
-      /* matchBonusAudio left as-is so the audio effect can read it; cleared on next move or initGame */
+      matchGeneration: accumulated.length > 0 ? state.matchGeneration + 1 : state.matchGeneration
     });
   },
 
-  reset: () => get().initGame(get().mode, get().levelIndex)
+  reset: () => {
+    const { mode, levelIndex, marathonId, marathonTargetJapas, overrideJapaTarget, isGuest } = get();
+    get().initGame(
+      mode,
+      levelIndex,
+      marathonId
+        ? { marathonId, marathonTargetJapas: marathonTargetJapas ?? undefined, overrideJapaTarget: overrideJapaTarget ?? undefined, isGuest }
+        : { overrideJapaTarget: overrideJapaTarget ?? undefined, isGuest },
+    );
+  }
 }));

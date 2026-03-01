@@ -3,11 +3,15 @@ import { Link } from 'react-router-dom';
 import { useSettingsStore } from '../store/settingsStore';
 import { useAuthStore } from '../store/authStore';
 import { useProfileStore } from '../store/profileStore';
+import { useUnlockStore } from '../store/unlockStore';
 import { GoogleSignIn } from './auth/GoogleSignIn';
 import { DonateThankYouBox } from './donation/DonateThankYouBox';
 import { AppHeader } from './layout/AppHeader';
+import { loadMyAppreciations, type MyAppreciations } from '../lib/firestore';
+import { useReminderStore } from '../store/reminderStore';
 
 const WHATSAPP_LINK = 'https://wa.me/919505009699';
+const APAVARGA_URL = import.meta.env.VITE_APAVARGA_URL || 'http://localhost:5174';
 const BG_IMAGE = '/images/settingspagebg.png';
 const API_BASE = import.meta.env.VITE_API_URL ?? '';
 const PRIEST_TOKEN_KEY = 'japam_priest_token';
@@ -19,22 +23,55 @@ interface SettingsProps {
 
 export function Settings({ onBack }: SettingsProps) {
   const user = useAuthStore((s) => s.user);
+  const tier = useUnlockStore((s) => s.tier);
+  const isProOrPremium = tier === 'pro' || tier === 'premium';
   const { backgroundMusicEnabled, backgroundMusicVolume, load, setBackgroundMusic, setBackgroundMusicVolume } = useSettingsStore();
   const { displayName, setDisplayName } = useProfileStore();
   const [localName, setLocalName] = useState(displayName ?? '');
   const [savingName, setSavingName] = useState(false);
+  const [appreciations, setAppreciations] = useState<MyAppreciations | null>(null);
+  const [loadingAppreciations, setLoadingAppreciations] = useState(false);
   const [priestUsername, setPriestUsername] = useState('');
   const [priestPassword, setPriestPassword] = useState('');
   const [priestLinking, setPriestLinking] = useState(false);
   const [priestMessage, setPriestMessage] = useState<string | null>(null);
+  const reminder = useReminderStore((s) => s.reminder);
+  const reminderLoaded = useReminderStore((s) => s.loaded);
+  const loadReminder = useReminderStore((s) => s.load);
+  const setReminder = useReminderStore((s) => s.setReminder);
+  const [savingReminder, setSavingReminder] = useState(false);
 
   useEffect(() => {
     load();
   }, [load]);
 
   useEffect(() => {
+    if (user?.uid) loadReminder(user.uid).catch(() => {});
+    else loadReminder(undefined).catch(() => {});
+  }, [user?.uid, loadReminder]);
+
+  useEffect(() => {
     setLocalName(displayName ?? '');
   }, [displayName]);
+
+  useEffect(() => {
+    if (!user?.uid) {
+      setAppreciations(null);
+      return;
+    }
+    let cancelled = false;
+    setLoadingAppreciations(true);
+    loadMyAppreciations(user.uid)
+      .then((a) => {
+        if (!cancelled) setAppreciations(a);
+      })
+      .finally(() => {
+        if (!cancelled) setLoadingAppreciations(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.uid]);
 
   const handleNameSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -120,7 +157,104 @@ export function Settings({ onBack }: SettingsProps) {
                   {savingName ? 'Saving…' : 'Save'}
                 </button>
               </form>
+
+              <div className="pt-2 border-t border-amber-500/10">
+                <h3 className="text-amber-200/80 text-xs font-medium mb-2">Lifetime appreciations received</h3>
+                {loadingAppreciations && !appreciations ? (
+                  <p className="text-amber-200/50 text-xs">Loading…</p>
+                ) : (
+                  <div className="grid grid-cols-3 gap-2">
+                    <div className="rounded-xl bg-black/30 border border-amber-500/10 p-3 text-center">
+                      <div className="text-lg">❤️</div>
+                      <div className="text-amber-200 font-semibold">{appreciations?.heart ?? 0}</div>
+                    </div>
+                    <div className="rounded-xl bg-black/30 border border-amber-500/10 p-3 text-center">
+                      <div className="text-lg">👍</div>
+                      <div className="text-amber-200 font-semibold">{appreciations?.like ?? 0}</div>
+                    </div>
+                    <div className="rounded-xl bg-black/30 border border-amber-500/10 p-3 text-center">
+                      <div className="text-lg">👏</div>
+                      <div className="text-amber-200 font-semibold">{appreciations?.clap ?? 0}</div>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
+          )}
+
+          {user && (
+            <div className="rounded-2xl bg-black/40 border border-amber-500/20 p-4 space-y-3 backdrop-blur-sm">
+              <h2 className="text-amber-200 font-semibold text-sm">Daily reminder</h2>
+              <p className="text-amber-200/70 text-xs">
+                Set a daily time to get a browser notification reminder (with an alarm beep).
+              </p>
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-amber-100 text-sm">Enable reminder</span>
+                <button
+                  type="button"
+                  disabled={!reminderLoaded || savingReminder}
+                  onClick={async () => {
+                    if (!reminderLoaded) return;
+                    const nextEnabled = !reminder.enabled;
+                    if (nextEnabled && typeof Notification !== 'undefined') {
+                      try {
+                        await Notification.requestPermission();
+                      } catch {}
+                    }
+                    setSavingReminder(true);
+                    try {
+                      await setReminder({ enabled: nextEnabled, time: nextEnabled ? (reminder.time || '07:00') : null });
+                    } finally {
+                      setSavingReminder(false);
+                    }
+                  }}
+                  className={`px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${
+                    reminder.enabled ? 'bg-amber-500 text-white' : 'bg-white/10 text-amber-200'
+                  } disabled:opacity-50`}
+                >
+                  {reminder.enabled ? 'ON' : 'OFF'}
+                </button>
+              </div>
+
+              <div className={`flex items-center justify-between gap-3 ${reminder.enabled ? '' : 'opacity-50'}`}>
+                <label className="text-amber-100 text-sm" htmlFor="dailyReminderTime">Time</label>
+                <input
+                  id="dailyReminderTime"
+                  type="time"
+                  disabled={!reminder.enabled || savingReminder}
+                  value={reminder.time || '07:00'}
+                  onChange={async (e) => {
+                    const time = e.target.value;
+                    if (!/^\d{2}:\d{2}$/.test(time)) return;
+                    setSavingReminder(true);
+                    try {
+                      await setReminder({ enabled: true, time });
+                    } finally {
+                      setSavingReminder(false);
+                    }
+                  }}
+                  className="px-3 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30 text-sm"
+                />
+              </div>
+              <p className="text-amber-200/50 text-[11px]">
+                Note: browser notifications require permission, and sound may be limited by your device/browser settings.
+              </p>
+            </div>
+          )}
+
+          {user && isProOrPremium && (
+            <a
+              href={APAVARGA_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block rounded-2xl bg-black/40 border border-amber-500/30 p-4 backdrop-blur-sm hover:border-amber-500/50 transition-colors"
+            >
+              <h2 className="text-amber-200 font-semibold text-sm">Join Apavarga</h2>
+              <p className="text-amber-200/70 text-xs mt-1">
+                Talk to Pandits directly & social network. Exclusive for pro members.
+              </p>
+              <span className="inline-block mt-2 text-amber-400 text-xs font-medium">Open Apavarga →</span>
+            </a>
           )}
 
           <div className="rounded-2xl bg-black/40 border border-amber-500/20 p-4 space-y-3 backdrop-blur-sm">

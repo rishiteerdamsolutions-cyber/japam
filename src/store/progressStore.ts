@@ -78,7 +78,9 @@ export const useProgressStore = create<ProgressState>((setState, getState) => ({
 
   setCurrentLevel: async (mode, index) => {
     const state = getState();
-    const next = { ...state.currentLevelByMode, [mode]: index };
+    const prev = state.currentLevelByMode[mode] ?? 0;
+    const nextIndex = Math.max(prev, index);
+    const next = { ...state.currentLevelByMode, [mode]: nextIndex };
     setState({ currentLevelByMode: next });
     try {
       const uid = useAuthStore.getState().user?.uid;

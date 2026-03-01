@@ -8,9 +8,10 @@ const BG_IMAGE = '/images/landingpagebg.png';
 
 interface LandingProps {
   onEnterApp: () => void;
+  onGuestPlay: () => void;
 }
 
-export function Landing({ onEnterApp }: LandingProps) {
+export function Landing({ onEnterApp, onGuestPlay }: LandingProps) {
   const [showVideo, setShowVideo] = useState(true);
 
   return (
@@ -73,6 +74,16 @@ export function Landing({ onEnterApp }: LandingProps) {
               className="w-full max-w-xs py-5 rounded-2xl bg-amber-500 text-white font-bold text-xl shadow-[0_0_30px_rgba(245,158,11,0.4)] hover:shadow-[0_0_40px_rgba(245,158,11,0.5)] hover:bg-amber-400 transition-all duration-200"
             >
               Play
+            </motion.button>
+
+            <motion.button
+              type="button"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={onGuestPlay}
+              className="w-full max-w-xs mt-3 py-4 rounded-2xl bg-white/10 text-white font-semibold text-base border border-white/15 hover:bg-white/15 transition-colors"
+            >
+              Play as Guest
             </motion.button>
           </motion.section>
 

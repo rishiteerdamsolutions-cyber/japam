@@ -1,0 +1,76 @@
+@import 'tailwindcss';
+
+/* NeoPOP design tokens (CRED-style, tactile 3D) */
+:root {
+  /* Palette - Neon Spiritual */
+  --bg: #000000;
+  --bg-elevated: #111111;
+  --bg-card: #151515;
+  --primary: #FFD700;
+  --primary-dark: #B8860B;
+  --text: #FFFFFF;
+  --text-muted: rgba(255, 255, 255, 0.7);
+  --text-dim: rgba(255, 255, 255, 0.5);
+  --border: rgba(255, 255, 255, 0.12);
+  --glow-gold: 0 0 12px rgba(255, 215, 0, 0.4);
+  --glow-subtle: 0 0 8px rgba(255, 255, 255, 0.15);
+
+  /* 8px grid */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 40px;
+
+  /* Typography */
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+  --font-body: 'IBM Plex Mono', system-ui, sans-serif;
+
+  /* 3D extrusion */
+  --extrude: 4px;
+  --shadow-hard: 6px 6px 0 rgba(0, 0, 0, 0.4);
+  --shadow-hard-sm: 4px 4px 0 rgba(0, 0, 0, 0.4);
+
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text);
+  background-color: var(--bg);
+  color-scheme: dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+body {
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+#root {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* Utility classes for NeoPOP */
+.font-heading {
+  font-family: var(--font-heading);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}

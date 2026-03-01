@@ -214,6 +214,41 @@ export async function loadUserJapa(_uid: string): Promise<JapaCounts | null> {
   return null;
 }
 
+/** Load paused game. Logged-in: backend API only. */
+export async function loadUserPausedGame(_uid: string): Promise<Record<string, unknown> | null> {
+  const token = await getFirebaseIdToken();
+  if (!token) return null;
+  const url = apiUrl('/api/user/paused-game');
+  try {
+    const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+    if (res.status === 403) return null;
+    if (res.ok) {
+      const data = (await res.json()) as { pausedGame?: Record<string, unknown> | null };
+      return data?.pausedGame && typeof data.pausedGame === 'object' ? data.pausedGame : null;
+    }
+  } catch {
+    // ignore
+  }
+  return null;
+}
+
+/** Save paused game. Logged-in: backend API only. Pass null to clear. */
+export async function saveUserPausedGame(_uid: string, pausedGame: Record<string, unknown> | null): Promise<void> {
+  const token = await getFirebaseIdToken();
+  if (!token) return;
+  const url = apiUrl('/api/user/paused-game');
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ pausedGame }),
+    });
+    if (res.ok) return;
+  } catch {
+    // ignore
+  }
+}
+
 /** Save japa. Logged-in: backend API only. */
 export async function saveUserJapa(_uid: string, counts: JapaCounts): Promise<void> {
   const token = await getFirebaseIdToken();
@@ -231,5 +266,114 @@ export async function saveUserJapa(_uid: string, counts: JapaCounts): Promise<vo
       if (attempt === 1) return;
       await new Promise((r) => setTimeout(r, 500));
     }
+  }
+}
+
+/** Touch lastActiveAt. Logged-in: backend API only. */
+export async function touchUserLastActive(_uid: string): Promise<void> {
+  const token = await getFirebaseIdToken();
+  if (!token) return;
+  const url = apiUrl('/api/user/last-active');
+  try {
+    await fetch(url, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  } catch {
+    // ignore
+  }
+}
+
+export type PublicActiveUser = {
+  uid: string;
+  name: string | null;
+  totalJapas: number;
+  appreciations: { heart: number; like: number; clap: number };
+  lastActiveAt: string | null;
+};
+
+/** Public: active users in last 24 hours (no auth required). */
+export async function loadPublicActiveUsers(): Promise<PublicActiveUser[]> {
+  const url = apiUrl('/api/public/active-users');
+  try {
+    const res = await fetch(url);
+    const data = (await res.json().catch(() => ({}))) as { users?: PublicActiveUser[] };
+    return Array.isArray(data.users) ? data.users : [];
+  } catch {
+    return [];
+  }
+}
+
+/** Send appreciation. Logged-in only. */
+export async function sendUserReaction(_uid: string, targetUid: string, type: 'heart' | 'like' | 'clap'): Promise<boolean> {
+  const token = await getFirebaseIdToken();
+  if (!token) return false;
+  const url = apiUrl('/api/user/react');
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ targetUid, type }),
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
+export type MyAppreciations = { heart: number; like: number; clap: number };
+
+/** Load current user's lifetime appreciations (received). Logged-in only. */
+export async function loadMyAppreciations(_uid: string): Promise<MyAppreciations | null> {
+  const token = await getFirebaseIdToken();
+  if (!token) return null;
+  const url = apiUrl('/api/user/profile');
+  try {
+    const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+    if (!res.ok) return null;
+    const data = (await res.json().catch(() => ({}))) as { appreciations?: MyAppreciations };
+    const a = data?.appreciations;
+    if (!a || typeof a !== 'object') return { heart: 0, like: 0, clap: 0 };
+    return {
+      heart: typeof a.heart === 'number' ? a.heart : 0,
+      like: typeof a.like === 'number' ? a.like : 0,
+      clap: typeof a.clap === 'number' ? a.clap : 0,
+    };
+  } catch {
+    return null;
+  }
+}
+
+export type DailyReminder = { enabled: boolean; time: string | null };
+
+export async function loadUserReminder(_uid: string): Promise<DailyReminder | null> {
+  const token = await getFirebaseIdToken();
+  if (!token) return null;
+  const url = apiUrl('/api/user/reminder');
+  try {
+    const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+    if (!res.ok) return null;
+    const data = (await res.json().catch(() => ({}))) as { reminder?: DailyReminder | null };
+    const r = data?.reminder;
+    if (!r || typeof r !== 'object') return null;
+    return { enabled: r.enabled === true, time: typeof r.time === 'string' ? r.time : null };
+  } catch {
+    return null;
+  }
+}
+
+export async function saveUserReminder(_uid: string, reminder: DailyReminder): Promise<boolean> {
+  const token = await getFirebaseIdToken();
+  if (!token) return false;
+  const url = apiUrl('/api/user/reminder');
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ enabled: reminder.enabled, time: reminder.time }),
+    });
+    return res.ok;
+  } catch {
+    return false;
   }
 }

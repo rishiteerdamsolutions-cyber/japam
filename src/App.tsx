@@ -16,7 +16,12 @@ function App() {
   return (
     <>
       {screen === 'splash' && <Splash onComplete={() => setScreen('landing')} />}
-      {screen === 'landing' && <Landing onEnterApp={() => navigate('/menu')} />}
+      {screen === 'landing' && (
+        <Landing
+          onEnterApp={() => navigate('/menu')}
+          onGuestPlay={() => navigate('/game?guest=1')}
+        />
+      )}
       <InstallPrompt />
     </>
   );

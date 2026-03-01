@@ -88,6 +88,30 @@ export async function POST(request) {
         return { uid, email: data.email || null, unlockedAt: data.unlockedAt || null };
       });
 
+      // Load lastActiveAt for these users (best-effort).
+      let activityByUid = new Map();
+      try {
+        const refs = unlocked.map((u) => db.doc(`users/${u.uid}/data/activity`));
+        const snaps = refs.length ? await db.getAll(...refs) : [];
+        activityByUid = new Map(
+          snaps
+            .filter((s) => s.exists)
+            .map((s) => {
+              const data = s.data() || {};
+              const ts = data.lastActiveAt;
+              const iso =
+                ts && typeof ts.toDate === 'function'
+                  ? ts.toDate().toISOString()
+                  : typeof ts === 'string'
+                    ? ts
+                    : null;
+              return [s.ref?.path?.split('/')[1] || s.id, iso];
+            }),
+        );
+      } catch {
+        activityByUid = new Map();
+      }
+
       // Premium = present in donors collection.
       let donorByUid = new Map();
       try {
@@ -113,6 +137,7 @@ export async function POST(request) {
             donationAmountPaise,
             lifetimeDonor,
             isBlocked: blockedSet.has(u.uid),
+            lastActiveAt: activityByUid.get(u.uid) || null,
           };
         })
         .sort((a, b) => (b.unlockedAt || '').localeCompare(a.unlockedAt || ''));

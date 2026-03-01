@@ -1,20 +1,30 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 import { Board } from './Board';
 import { HUD } from './HUD';
 import { GameOverlay } from './GameOverlay';
+import { ActiveUsersStrip } from './ActiveUsersStrip';
 import { useGameStore } from '../../store/gameStore';
+import { useAuthStore } from '../../store/authStore';
+import { saveUserPausedGame } from '../../lib/firestore';
 import { useSound, stopAllMantras, stopMatchBonusAudio } from '../../hooks/useSound';
 import { useSettingsStore } from '../../store/settingsStore';
 import type { DeityId } from '../../data/deities';
+import { GoogleSignIn } from '../auth/GoogleSignIn';
 
 interface GameScreenProps {
   mode: 'general' | string;
   levelIndex: number;
+  isMarathon?: boolean;
+  marathonId?: string | null;
+  marathonTargetJapas?: number | null;
+  isGuest?: boolean;
+  justRestored?: boolean;
+  onJustRestoredCleared?: () => void;
   onBack: () => void;
   onNextLevel?: (mode: 'general' | string, levelIndex: number) => void;
 }
 
-export function GameScreen({ mode, levelIndex, onBack, onNextLevel }: GameScreenProps) {
+export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonTargetJapas, isGuest, justRestored, onJustRestoredCleared, onBack, onNextLevel }: GameScreenProps) {
   const initGame = useGameStore(s => s.initGame);
   const status = useGameStore(s => s.status);
   const reset = useGameStore(s => s.reset);
@@ -38,11 +48,73 @@ export function GameScreen({ mode, levelIndex, onBack, onNextLevel }: GameScreen
     stopMatchBonusAudio();
   };
 
+  const savePausedState = useGameStore(s => s.savePausedState);
+  const prevRestoredRef = useRef(false);
+
   useEffect(() => {
     clearPendingAudio();
-    initGame(mode as 'general', levelIndex);
+    if (justRestored || prevRestoredRef.current) {
+      prevRestoredRef.current = !!justRestored;
+      if (justRestored && onJustRestoredCleared) {
+        const id = setTimeout(onJustRestoredCleared, 0);
+        return () => clearTimeout(id);
+      }
+      return;
+    }
+    prevRestoredRef.current = false;
+    if (isMarathon && marathonTargetJapas != null && marathonId) {
+      initGame(mode as 'general', 0, { marathonId, marathonTargetJapas });
+    } else if (isGuest) {
+      initGame('general', 0, { overrideJapaTarget: 11, isGuest: true });
+    } else {
+      initGame(mode as 'general', levelIndex);
+    }
     prevGenerationRef.current = 0;
-  }, [mode, levelIndex, initGame]);
+  }, [mode, levelIndex, isMarathon, marathonTargetJapas, marathonId, isGuest, justRestored, onJustRestoredCleared, initGame]);
+
+  const user = useAuthStore(s => s.user);
+  const getPausedKey = useGameStore(s => s.getPausedKey);
+  const [showBreakReminder, setShowBreakReminder] = useState(false);
+
+  const breakTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const scheduleBreakReminder = useCallback(() => {
+    if (breakTimerRef.current) clearTimeout(breakTimerRef.current);
+    breakTimerRef.current = setTimeout(() => setShowBreakReminder(true), 20 * 60 * 1000);
+  }, []);
+
+  useEffect(() => {
+    if (status !== 'playing') return;
+    scheduleBreakReminder();
+    return () => {
+      if (breakTimerRef.current) clearTimeout(breakTimerRef.current);
+    };
+  }, [status, scheduleBreakReminder]);
+
+  useEffect(() => {
+    if (status === 'won') {
+      if (user?.uid) {
+        saveUserPausedGame(user.uid, null);
+      } else {
+        try {
+          localStorage.removeItem(getPausedKey());
+        } catch {}
+      }
+    }
+  }, [status, user?.uid, getPausedKey]);
+
+  const handlePause = useCallback(async () => {
+    const payload = savePausedState();
+    if (payload) {
+      if (user?.uid) {
+        await saveUserPausedGame(user.uid, payload as unknown as Record<string, unknown>);
+      } else {
+        try {
+          localStorage.setItem(payload.key, JSON.stringify(payload));
+        } catch {}
+      }
+      onBack();
+    }
+  }, [savePausedState, user?.uid, onBack]);
 
   useEffect(() => {
     if (lastMatches.length === 0 || matchGeneration === prevGenerationRef.current) return;
@@ -125,12 +197,30 @@ export function GameScreen({ mode, levelIndex, onBack, onNextLevel }: GameScreen
       }}
     >
       <div className="w-full max-w-md flex items-center justify-between shrink-0 mb-1">
-        <button
-          onClick={onBack}
-          className="text-amber-400 text-sm py-1 px-2"
-        >
-          ← Back
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={onBack}
+            className="text-amber-400 text-sm py-1 px-2"
+          >
+            ← Back
+          </button>
+          {status === 'playing' && !isGuest && (
+            <button
+              onClick={handlePause}
+              className="text-amber-400 text-sm py-1 px-2 border border-amber-500/50 rounded"
+            >
+              Pause
+            </button>
+          )}
+          {status === 'playing' && isGuest && (
+            <button
+              onClick={onBack}
+              className="text-amber-400 text-sm py-1 px-2 border border-amber-500/50 rounded"
+            >
+              Exit
+            </button>
+          )}
+        </div>
         <div className="flex items-center gap-2 text-xs text-amber-200/80">
           <button
             type="button"
@@ -161,6 +251,7 @@ export function GameScreen({ mode, levelIndex, onBack, onNextLevel }: GameScreen
 
       <div className="shrink-0 w-full max-w-md">
         <HUD />
+        <ActiveUsersStrip />
       </div>
 
       <div className="flex-1 w-full max-w-md min-h-0 flex items-center justify-center">
@@ -168,12 +259,39 @@ export function GameScreen({ mode, levelIndex, onBack, onNextLevel }: GameScreen
       </div>
 
       {status === 'won' && (
-        <GameOverlay
-          status="won"
-          onRetry={reset}
-          onMenu={onBack}
-          onNext={handleNext}
-        />
+        isGuest ? (
+          <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center z-20 p-4">
+            <div className="bg-[#1a1a2e] rounded-2xl p-6 max-w-sm w-full text-center">
+              <h2 className="text-2xl font-bold text-amber-400 mb-3">Jai!</h2>
+              <p className="text-amber-200/90 mb-6">
+                Play your favourite God&apos;s Japam? Login with Gmail
+              </p>
+              <div className="mb-4">
+                <GoogleSignIn />
+              </div>
+              <button
+                onClick={reset}
+                className="w-full py-3 rounded-xl bg-amber-500/80 text-white font-semibold"
+              >
+                Play again as guest
+              </button>
+              <button
+                onClick={onBack}
+                className="mt-2 w-full py-3 rounded-xl border border-amber-500/50 text-amber-400"
+              >
+                Menu
+              </button>
+            </div>
+          </div>
+        ) : (
+          <GameOverlay
+            status="won"
+            isMarathon={isMarathon}
+            onRetry={reset}
+            onMenu={onBack}
+            onNext={isMarathon ? undefined : handleNext}
+          />
+        )
       )}
       {status === 'lost' && (
         <GameOverlay
@@ -181,6 +299,26 @@ export function GameScreen({ mode, levelIndex, onBack, onNextLevel }: GameScreen
           onRetry={reset}
           onMenu={onBack}
         />
+      )}
+      {showBreakReminder && status === 'playing' && (
+        <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center z-20 p-4">
+          <div className="bg-[#1a1a2e] rounded-2xl p-6 max-w-sm w-full text-center">
+            <p className="text-amber-200/90 mb-8">
+              {isMarathon
+                ? 'You have been playing the game for 20 minutes, please take a break.'
+                : 'You have been playing the game for 20 minutes, please take a break after this current level.'}
+            </p>
+            <button
+              onClick={() => {
+                setShowBreakReminder(false);
+                scheduleBreakReminder();
+              }}
+              className="w-full py-3 rounded-xl bg-amber-500 text-white font-semibold"
+            >
+              OK
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );

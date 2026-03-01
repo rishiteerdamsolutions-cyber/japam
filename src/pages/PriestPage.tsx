@@ -14,6 +14,7 @@ interface Marathon {
   joinedCount: number;
   japasToday: number;
   totalJapas: number;
+  topParticipants?: { uid: string; name: string; japasCount: number; lastActiveAt?: string | null }[];
 }
 
 export function PriestPage() {
@@ -160,6 +161,16 @@ export function PriestPage() {
               <p className="text-amber-200/80 text-sm mt-2">
                 Joined: {m.joinedCount} • Today: {m.japasToday} • Total: {m.totalJapas}
               </p>
+              {m.topParticipants && m.topParticipants.length > 0 && (
+                <div className="mt-3 pl-3 border-l-2 border-amber-500/20">
+                  <p className="text-amber-200/70 text-xs font-medium mb-1">Top participants (with last active)</p>
+                  {m.topParticipants.map((p, idx) => (
+                    <p key={`${p.uid}-${idx}`} className="text-amber-200/60 text-xs">
+                      {idx + 1}. {p.name} — {p.japasCount} japas {p.lastActiveAt ? `• last active ${new Date(p.lastActiveAt).toLocaleString()}` : ''}
+                    </p>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </div>

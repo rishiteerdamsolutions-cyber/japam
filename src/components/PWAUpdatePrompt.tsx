@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
 import { registerSW } from 'virtual:pwa-register';
 
-/**
- * Registers the PWA service worker and shows an "Update available" bar
- * when a new version is deployed. User can tap Refresh to load it.
- */
 export function PWAUpdatePrompt() {
   const [needRefresh, setNeedRefresh] = useState(false);
+  const [updating, setUpdating] = useState(false);
+  const [updated, setUpdated] = useState(false);
   const [offlineReady, setOfflineReady] = useState(false);
   const [updateSW, setUpdateSW] = useState<(() => void) | null>(null);
 
@@ -22,8 +20,17 @@ export function PWAUpdatePrompt() {
     setUpdateSW(() => update);
   }, []);
 
-  const handleRefresh = () => {
-    updateSW?.();
+  const handleUpdate = () => {
+    setUpdating(true);
+    setUpdated(false);
+    // Give the SW a moment to activate, then show "Updated!" briefly before reload
+    setTimeout(() => {
+      setUpdating(false);
+      setUpdated(true);
+      setTimeout(() => {
+        updateSW?.();
+      }, 800);
+    }, 600);
   };
 
   const closeOffline = () => setOfflineReady(false);
@@ -38,19 +45,27 @@ export function PWAUpdatePrompt() {
         >
           <span className="text-sm font-medium">Update available</span>
           <div className="flex gap-2">
+            {!updated && (
+              <button
+                type="button"
+                onClick={closeRefresh}
+                className="px-3 py-1.5 rounded-lg bg-white/20 text-sm font-medium"
+                disabled={updating}
+              >
+                Later
+              </button>
+            )}
             <button
               type="button"
-              onClick={closeRefresh}
-              className="px-3 py-1.5 rounded-lg bg-white/20 text-sm font-medium"
+              onClick={handleUpdate}
+              disabled={updating || updated}
+              className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-colors ${
+                updated
+                  ? 'bg-green-400 text-green-900'
+                  : 'bg-white text-amber-800'
+              }`}
             >
-              Later
-            </button>
-            <button
-              type="button"
-              onClick={handleRefresh}
-              className="px-4 py-1.5 rounded-lg bg-white text-amber-800 text-sm font-semibold"
-            >
-              Refresh
+              {updated ? 'Updated!' : updating ? 'Updating…' : 'Update Now'}
             </button>
           </div>
         </div>

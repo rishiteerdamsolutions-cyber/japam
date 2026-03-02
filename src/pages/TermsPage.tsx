@@ -147,7 +147,7 @@ export function TermsPage() {
           <section>
             <h2 className="text-lg font-semibold text-amber-300 mb-3">13. Governing Law</h2>
             <p className="text-sm">
-              These Terms are governed by the laws of India. Any disputes arising from these Terms or your use of the Service shall be subject to the exclusive jurisdiction of the courts in Hyderabad, Telangana, India.
+              These Terms are governed by the laws of India. Any disputes arising from these Terms or your use of the Service shall be subject to the exclusive jurisdiction of the courts in Karimnagar, Telangana, India.
             </p>
           </section>
 

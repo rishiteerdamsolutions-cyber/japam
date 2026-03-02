@@ -35,12 +35,14 @@ export function GamePage() {
   const [resumePending, setResumePending] = useState<PausedGameState | null>(null);
   const [resumeKey, setResumeKey] = useState<string | null>(null);
   const [justRestored, setJustRestored] = useState(false);
+  const [pauseCheckDone, setPauseCheckDone] = useState(false);
 
   const initGame = useGameStore((s) => s.initGame);
   const restoreGame = useGameStore((s) => s.restoreGame);
   const loadUnlock = useUnlockStore((s) => s.load);
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
   const user = useAuthStore((s) => s.user);
+  const authLoading = useAuthStore((s) => s.loading);
 
   const isMarathon = !!marathonId && marathonTargetJapas != null;
   const isLocked = !isGuest && !isMarathon && levelIndex >= FIRST_LOCKED_LEVEL_INDEX && levelsUnlocked !== true;
@@ -56,14 +58,23 @@ export function GamePage() {
     if (isGuest) {
       setResumePending(null);
       setResumeKey(null);
+      setPauseCheckDone(true);
       if (isLocked) setPaywallPending({ mode, levelIndex });
       return;
     }
+    // Wait for Firebase auth to settle so we can fetch ID token.
+    if (user?.uid && authLoading) return;
 
     let cancelled = false;
     const load = async () => {
       if (user?.uid) {
-        const data = await loadUserPausedGame(user.uid);
+        // token can be briefly unavailable right after reload; retry a couple times
+        let data: Record<string, unknown> | null = null;
+        for (let attempt = 0; attempt < 3; attempt++) {
+          data = await loadUserPausedGame(user.uid);
+          if (data) break;
+          await new Promise((r) => setTimeout(r, 250));
+        }
         if (cancelled) return;
         // For logged-in users: show resume if we have ANY valid recent paused game (don't require URL match).
         // User may have come back via Menu which uses getCurrentLevelIndex = last completed, not the level they paused on.
@@ -72,6 +83,7 @@ export function GamePage() {
           if (saved.savedAt && Date.now() - saved.savedAt < 7 * 24 * 60 * 60 * 1000) {
             setResumePending(saved);
             setResumeKey(saved.key);
+            setPauseCheckDone(true);
             return;
           }
         }
@@ -83,6 +95,7 @@ export function GamePage() {
             if (parsed?.savedAt && Date.now() - parsed.savedAt < 7 * 24 * 60 * 60 * 1000) {
               setResumePending(parsed);
               setResumeKey(expectedKey);
+              setPauseCheckDone(true);
               return;
             }
           }
@@ -90,6 +103,7 @@ export function GamePage() {
       }
       setResumePending(null);
       setResumeKey(null);
+      setPauseCheckDone(true);
 
       if (isLocked) {
         setPaywallPending({ mode, levelIndex });
@@ -98,7 +112,7 @@ export function GamePage() {
     };
     load();
     return () => { cancelled = true; };
-  }, [mode, levelIndex, isMarathon, marathonId, expectedKey, isLocked, paywallPending, user?.uid]);
+  }, [mode, levelIndex, isMarathon, marathonId, expectedKey, isLocked, paywallPending, user?.uid, authLoading]);
 
   const handleResume = () => {
     if (resumePending) {
@@ -173,6 +187,15 @@ export function GamePage() {
           });
         }}
       />
+    );
+  }
+
+  // Avoid starting a fresh game before we've checked for a paused game (prevents japa count from resetting on reload).
+  if (!pauseCheckDone && !isGuest) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#1a1a2e]">
+        <div className="text-amber-400 text-sm">Loading…</div>
+      </div>
     );
   }
 

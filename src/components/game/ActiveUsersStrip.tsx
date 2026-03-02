@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { loadPublicActiveUsers, sendUserReaction, type PublicActiveUser } from '../../lib/firestore';
 import { useAuthStore } from '../../store/authStore';
 
 const POLL_MS = 30_000;
 const ACTIVE_NOW_MS = 90_000;
 const NOW_TAG_MS = 5 * 60_000;
+const SCROLL_SPEED_PX_PER_SEC = 40;
 
 type ReactionType = 'heart' | 'like' | 'clap';
 
@@ -27,13 +28,45 @@ export function ActiveUsersStrip() {
   const [users, setUsers] = useState<PublicActiveUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState<{ targetUid: string; type: ReactionType } | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const animRef = useRef<number | null>(null);
+  const pausedRef = useRef(false);
 
   const now = Date.now();
 
   const visible = useMemo(() => {
-    const list = users.slice(0, 40);
-    return list;
+    return users.slice(0, 40);
   }, [users]);
+
+  // Auto-scroll the strip continuously
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el || visible.length === 0) return;
+
+    let lastTime: number | null = null;
+
+    const step = (ts: number) => {
+      if (!pausedRef.current) {
+        if (lastTime != null) {
+          const delta = ts - lastTime;
+          el.scrollLeft += (SCROLL_SPEED_PX_PER_SEC * delta) / 1000;
+          // Loop back to start when we've scrolled past all content
+          if (el.scrollLeft >= el.scrollWidth - el.clientWidth - 1) {
+            el.scrollLeft = 0;
+          }
+        }
+        lastTime = ts;
+      } else {
+        lastTime = null;
+      }
+      animRef.current = requestAnimationFrame(step);
+    };
+
+    animRef.current = requestAnimationFrame(step);
+    return () => {
+      if (animRef.current != null) cancelAnimationFrame(animRef.current);
+    };
+  }, [visible.length]);
 
   useEffect(() => {
     let cancelled = false;
@@ -114,7 +147,15 @@ export function ActiveUsersStrip() {
           </div>
         )}
       </div>
-      <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1">
+      <div
+        ref={scrollRef}
+        className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1 scroll-smooth"
+        style={{ scrollbarWidth: 'none' }}
+        onMouseEnter={() => { pausedRef.current = true; }}
+        onMouseLeave={() => { pausedRef.current = false; }}
+        onTouchStart={() => { pausedRef.current = true; }}
+        onTouchEnd={() => { pausedRef.current = false; }}
+      >
         {visible.map((u) => {
           const t = safeTimeMs(u.lastActiveAt);
           const isActiveNow = t != null ? now - t <= ACTIVE_NOW_MS : false;

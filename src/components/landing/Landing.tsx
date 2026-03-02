@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { OpeningVideoModal } from './OpeningVideoModal';
 import { JapamLogo } from '../ui/JapamLogo';
+import { useAuthStore } from '../../store/authStore';
 
 const A_LOGO_SRC = '/images/A-logo.png';
 const BG_IMAGE = '/images/landingpagebg.png';
@@ -12,6 +13,7 @@ interface LandingProps {
 }
 
 export function Landing({ onEnterApp, onGuestPlay }: LandingProps) {
+  const user = useAuthStore((s) => s.user);
   const [showVideo, setShowVideo] = useState(true);
 
   return (
@@ -76,15 +78,17 @@ export function Landing({ onEnterApp, onGuestPlay }: LandingProps) {
               Play
             </motion.button>
 
-            <motion.button
-              type="button"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={onGuestPlay}
-              className="w-full max-w-xs mt-3 py-4 rounded-2xl bg-white/10 text-white font-semibold text-base border border-white/15 hover:bg-white/15 transition-colors"
-            >
-              Play as Guest
-            </motion.button>
+            {!user && (
+              <motion.button
+                type="button"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={onGuestPlay}
+                className="w-full max-w-xs mt-3 py-4 rounded-2xl bg-white/10 text-white font-semibold text-base border border-white/15 hover:bg-white/15 transition-colors"
+              >
+                Play as Guest
+              </motion.button>
+            )}
           </motion.section>
 
           <footer className="relative z-10 mt-auto py-6 px-4 flex flex-col items-center justify-center text-white/70 text-sm border-t border-white/10">

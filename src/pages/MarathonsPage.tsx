@@ -550,7 +550,7 @@ export function MarathonsPage() {
       <AppHeader
         title="Japa Marathons"
         showBack
-        onBack={() => navigate(-1)}
+        onBack={() => navigate('/menu')}
         rightElement={
           <a href="/settings" className="text-amber-200/70 text-xs hover:text-amber-300">
             Priest

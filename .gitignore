@@ -28,3 +28,4 @@ dist-ssr
 
 # Local secrets (never commit)
 .github-token
+.vercel

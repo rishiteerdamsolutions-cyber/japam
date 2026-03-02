@@ -17,11 +17,26 @@ function nextOccurrenceMs(hhmm: string): number | null {
   return next.getTime();
 }
 
-function showNotification(title: string, body: string) {
+async function showNotification(title: string, body: string) {
   try {
     if (typeof Notification === 'undefined') return;
     if (Notification.permission !== 'granted') return;
-    new Notification(title, { body });
+
+    // Prefer SW notification — works even when tab is in background
+    if ('serviceWorker' in navigator) {
+      const reg = await navigator.serviceWorker.ready.catch(() => null);
+      if (reg) {
+        await reg.showNotification(title, {
+          body,
+          icon: '/vite.svg',
+          badge: '/vite.svg',
+          tag: 'japam-daily-reminder',
+        });
+        return;
+      }
+    }
+    // Fallback: plain Notification API
+    new Notification(title, { body, icon: '/vite.svg' });
   } catch {
     // ignore
   }
@@ -29,15 +44,14 @@ function showNotification(title: string, body: string) {
 
 function playAlarmBeep() {
   try {
-    // WebAudio best-effort (some browsers block without prior user gesture)
     const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
     if (!AudioCtx) return;
     const ctx = new AudioCtx();
     const now = ctx.currentTime;
     const gain = ctx.createGain();
     gain.gain.setValueAtTime(0.0001, now);
-    gain.gain.exponentialRampToValueAtTime(0.2, now + 0.01);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.0);
+    gain.gain.exponentialRampToValueAtTime(0.25, now + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.2);
     gain.connect(ctx.destination);
 
     const osc = ctx.createOscillator();
@@ -45,12 +59,9 @@ function playAlarmBeep() {
     osc.frequency.setValueAtTime(880, now);
     osc.connect(gain);
     osc.start(now);
-    osc.stop(now + 1.05);
+    osc.stop(now + 1.25);
 
-    // Close context after the beep
-    osc.onended = () => {
-      ctx.close().catch(() => {});
-    };
+    osc.onended = () => { ctx.close().catch(() => {}); };
   } catch {
     // ignore
   }
@@ -64,7 +75,10 @@ export function useDailyReminder() {
   const load = useReminderStore((s) => s.load);
 
   const uid = user?.uid ?? null;
-  const key = useMemo(() => `${uid ?? 'no-user'}|${reminder.enabled ? '1' : '0'}|${reminder.time ?? ''}`, [uid, reminder.enabled, reminder.time]);
+  const key = useMemo(
+    () => `${uid ?? 'no-user'}|${reminder.enabled ? '1' : '0'}|${reminder.time ?? ''}`,
+    [uid, reminder.enabled, reminder.time],
+  );
 
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -74,7 +88,6 @@ export function useDailyReminder() {
   }, [uid, loading, load]);
 
   useEffect(() => {
-    if (!uid) return;
     if (!loaded) return;
     let cancelled = false;
 
@@ -91,7 +104,7 @@ export function useDailyReminder() {
       const delay = Math.max(500, nextMs - Date.now());
       timeoutRef.current = setTimeout(() => {
         if (cancelled) return;
-        showNotification('Japam reminder', 'Time to chant your favourite God’s name.');
+        showNotification('Japam reminder \uD83D\uDE4F', "Time to chant your favourite God's name.").catch(() => {});
         playAlarmBeep();
         schedule();
       }, delay);
@@ -104,6 +117,5 @@ export function useDailyReminder() {
       clear();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key, uid, loaded]);
+  }, [key, loaded]);
 }
-

@@ -11,8 +11,6 @@ import { useSettingsStore } from '../../store/settingsStore';
 import type { DeityId } from '../../data/deities';
 import { GoogleSignIn } from '../auth/GoogleSignIn';
 
-const LAST_PAUSED_KEY = 'japam-last-paused-key';
-
 interface GameScreenProps {
   mode: 'general' | string;
   levelIndex: number;
@@ -77,6 +75,8 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
   const user = useAuthStore(s => s.user);
   const getPausedKey = useGameStore(s => s.getPausedKey);
   const [showBreakReminder, setShowBreakReminder] = useState(false);
+  const [pauseSaving, setPauseSaving] = useState(false);
+  const [pauseError, setPauseError] = useState<string | null>(null);
 
   const breakTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const scheduleBreakReminder = useCallback(() => {
@@ -95,13 +95,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
   useEffect(() => {
     if (status === 'won') {
       if (user?.uid) {
-        saveUserPausedGame(user.uid, null);
-        // also clear local fallback copy
-        try {
-          const k = localStorage.getItem(LAST_PAUSED_KEY);
-          if (k) localStorage.removeItem(k);
-          localStorage.removeItem(LAST_PAUSED_KEY);
-        } catch {}
+        saveUserPausedGame(user.uid, null, user);
       } else {
         try {
           localStorage.removeItem(getPausedKey());
@@ -113,19 +107,23 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
   const handlePause = useCallback(async () => {
     const payload = savePausedState();
     if (payload) {
-      // Always keep a local fallback copy (helps when token/API is temporarily unavailable after reopening the app)
-      try {
-        localStorage.setItem(payload.key, JSON.stringify(payload));
-        localStorage.setItem(LAST_PAUSED_KEY, payload.key);
-      } catch {}
       if (user?.uid) {
-        await saveUserPausedGame(user.uid, payload as unknown as Record<string, unknown>);
+        setPauseError(null);
+        setPauseSaving(true);
+        const ok = await saveUserPausedGame(user.uid, payload as unknown as Record<string, unknown>, user);
+        setPauseSaving(false);
+        if (!ok) {
+          setPauseError('Could not save pause. Check internet and try again.');
+          return;
+        }
       } else {
-        // already stored above
+        try {
+          localStorage.setItem(payload.key, JSON.stringify(payload));
+        } catch {}
       }
       onBack();
     }
-  }, [savePausedState, user?.uid, onBack]);
+  }, [savePausedState, user?.uid, user, onBack]);
 
   useEffect(() => {
     if (lastMatches.length === 0 || matchGeneration === prevGenerationRef.current) return;
@@ -218,9 +216,10 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
           {status === 'playing' && !isGuest && (
             <button
               onClick={handlePause}
-              className="text-amber-400 text-sm py-1 px-2 border border-amber-500/50 rounded"
+              disabled={pauseSaving}
+              className="text-amber-400 text-sm py-1 px-2 border border-amber-500/50 rounded disabled:opacity-50"
             >
-              Pause
+              {pauseSaving ? 'Saving…' : 'Pause'}
             </button>
           )}
           {status === 'playing' && isGuest && (
@@ -259,6 +258,13 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
           </div>
         </div>
       </div>
+      {pauseError && (
+        <div className="w-full max-w-md mb-2 px-2">
+          <div className="rounded-lg bg-red-500/20 border border-red-500/40 text-red-200 text-xs px-3 py-2">
+            {pauseError}
+          </div>
+        </div>
+      )}
 
       <div className="shrink-0 w-full max-w-md">
         <HUD />

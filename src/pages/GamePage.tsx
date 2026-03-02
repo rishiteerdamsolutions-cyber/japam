@@ -69,12 +69,7 @@ export function GamePage() {
     const load = async () => {
       if (user?.uid) {
         // token can be briefly unavailable right after reload; retry a couple times
-        let data: Record<string, unknown> | null = null;
-        for (let attempt = 0; attempt < 3; attempt++) {
-          data = await loadUserPausedGame(user.uid);
-          if (data) break;
-          await new Promise((r) => setTimeout(r, 250));
-        }
+        const data = await loadUserPausedGame(user.uid, user);
         if (cancelled) return;
         // For logged-in users: show resume if we have ANY valid recent paused game (don't require URL match).
         // User may have come back via Menu which uses getCurrentLevelIndex = last completed, not the level they paused on.
@@ -88,22 +83,6 @@ export function GamePage() {
           }
         }
 
-        // Fallback: local copy (in case API/token fails or user is offline)
-        try {
-          const lastKey = localStorage.getItem('japam-last-paused-key');
-          if (lastKey) {
-            const raw = localStorage.getItem(lastKey);
-            if (raw) {
-              const parsed = JSON.parse(raw) as PausedGameState;
-              if (parsed?.savedAt && Date.now() - parsed.savedAt < 7 * 24 * 60 * 60 * 1000) {
-                setResumePending(parsed);
-                setResumeKey(lastKey);
-                setPauseCheckDone(true);
-                return;
-              }
-            }
-          }
-        } catch {}
       } else {
         try {
           const raw = localStorage.getItem(expectedKey);
@@ -143,7 +122,7 @@ export function GamePage() {
   const handleStartFresh = async () => {
     if (resumeKey) {
       if (user?.uid) {
-        await saveUserPausedGame(user.uid, null);
+        await saveUserPausedGame(user.uid, null, user);
       } else {
         try {
           localStorage.removeItem(resumeKey);

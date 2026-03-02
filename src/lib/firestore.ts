@@ -1,4 +1,5 @@
 import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
+import type { User } from 'firebase/auth';
 import { app, auth, isFirebaseConfigured } from './firebase';
 import { getApiBase } from './apiBase';
 import type { LevelProgress } from '../store/progressStore';
@@ -19,6 +20,22 @@ async function getFirebaseIdToken(): Promise<string | null> {
   } catch {
     return null;
   }
+}
+
+async function getIdTokenWithRetry(user: User | null | undefined, attempts = 5, delayMs = 200): Promise<string | null> {
+  for (let i = 0; i < attempts; i++) {
+    try {
+      const u = user ?? auth?.currentUser ?? null;
+      if (u) {
+        const token = await u.getIdToken();
+        if (token) return token;
+      }
+    } catch {
+      // ignore and retry
+    }
+    await new Promise((r) => setTimeout(r, delayMs));
+  }
+  return null;
 }
 
 export type UserTier = 'free' | 'pro' | 'premium';
@@ -215,8 +232,8 @@ export async function loadUserJapa(_uid: string): Promise<JapaCounts | null> {
 }
 
 /** Load paused game. Logged-in: backend API only. */
-export async function loadUserPausedGame(_uid: string): Promise<Record<string, unknown> | null> {
-  const token = await getFirebaseIdToken();
+export async function loadUserPausedGame(_uid: string, user?: User | null): Promise<Record<string, unknown> | null> {
+  const token = await getIdTokenWithRetry(user);
   if (!token) return null;
   const url = apiUrl('/api/user/paused-game');
   try {
@@ -233,20 +250,24 @@ export async function loadUserPausedGame(_uid: string): Promise<Record<string, u
 }
 
 /** Save paused game. Logged-in: backend API only. Pass null to clear. */
-export async function saveUserPausedGame(_uid: string, pausedGame: Record<string, unknown> | null): Promise<void> {
-  const token = await getFirebaseIdToken();
-  if (!token) return;
+export async function saveUserPausedGame(_uid: string, pausedGame: Record<string, unknown> | null, user?: User | null): Promise<boolean> {
+  const token = await getIdTokenWithRetry(user);
+  if (!token) return false;
   const url = apiUrl('/api/user/paused-game');
-  try {
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ pausedGame }),
-    });
-    if (res.ok) return;
-  } catch {
-    // ignore
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ pausedGame }),
+      });
+      if (res.ok) return true;
+    } catch {
+      // ignore
+    }
+    await new Promise((r) => setTimeout(r, 250));
   }
+  return false;
 }
 
 /** Save japa. Logged-in: backend API only. */

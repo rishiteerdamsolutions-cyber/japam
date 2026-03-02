@@ -68,9 +68,9 @@ export async function POST(request) {
         const deityId = marathonSnap.data()?.deityId;
         if (!deityId || !deltas[deityId]) continue;
         const add = deltas[deityId];
-        const partRef = db.doc(`marathonParticipations/${marathonId}_${uid}`);
-        const partCur = (await partRef.get()).data()?.japasCount ?? 0;
-        await partRef.set({ japasCount: partCur + add }, { merge: true });
+        // Use the actual doc ref from the query result — avoids mismatch if doc ID differs from expected pattern.
+        const partCur = partData.japasCount ?? 0;
+        await partDoc.ref.set({ japasCount: partCur + add }, { merge: true });
         const marathonRef = db.doc(`marathons/${marathonId}`);
         const mData = (await marathonRef.get()).data() || {};
         const totalJapas = (mData.totalJapas ?? 0) + add;

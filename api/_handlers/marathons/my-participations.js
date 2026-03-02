@@ -54,6 +54,10 @@ export async function GET(request) {
         leaderboard = [];
       }
 
+      // Use japasCount from the participation doc directly (same doc the leaderboard reads from).
+      const myEntry = leaderboard.find((p) => p.uid === uid);
+      const japasCount = myEntry ? myEntry.japasCount : (data.japasCount ?? 0);
+
       marathons.push({
         marathonId,
         deityId: mData.deityId,
@@ -61,7 +65,7 @@ export async function GET(request) {
         templeName,
         targetJapas: mData.targetJapas ?? 0,
         startDate: mData.startDate,
-        japasCount: data.japasCount ?? 0,
+        japasCount,
         leaderboard,
       });
     }

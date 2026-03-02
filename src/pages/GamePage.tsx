@@ -80,7 +80,7 @@ export function GamePage() {
           const modeMatches = isMarathon
             ? savedMarathon === marathonId
             : savedMode === mode;
-          if (modeMatches && saved.savedAt && Date.now() - saved.savedAt < 7 * 24 * 60 * 60 * 1000) {
+          if (modeMatches) {
             setResumePending(saved);
             setResumeKey(saved.key);
             setPauseCheckDone(true);
@@ -93,7 +93,7 @@ export function GamePage() {
           const raw = localStorage.getItem(expectedKey);
           if (raw) {
             const parsed = JSON.parse(raw) as PausedGameState;
-            if (parsed?.savedAt && Date.now() - parsed.savedAt < 7 * 24 * 60 * 60 * 1000) {
+            if (parsed?.savedAt) {
               setResumePending(parsed);
               setResumeKey(expectedKey);
               setPauseCheckDone(true);

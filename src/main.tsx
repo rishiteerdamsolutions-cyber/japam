@@ -25,6 +25,8 @@ const PriestPage = lazy(() => import('./pages/PriestPage').then(m => ({ default:
 const MarathonsPage = lazy(() => import('./pages/MarathonsPage').then(m => ({ default: m.MarathonsPage })))
 const SettingsPage = lazy(() => import('./pages/SettingsPage').then(m => ({ default: m.SettingsPage })))
 const ApavargaPage = lazy(() => import('./pages/ApavargaPage').then(m => ({ default: m.ApavargaPage })))
+const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage').then(m => ({ default: m.PrivacyPolicyPage })))
+const TermsPage = lazy(() => import('./pages/TermsPage').then(m => ({ default: m.TermsPage })))
 
 function PageFallback() {
   return <div className="min-h-screen flex items-center justify-center bg-[#1a1a2e]"><div className="text-amber-400 text-sm">Loading…</div></div>
@@ -58,6 +60,8 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/marathons" element={<MarathonsPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/apavarga" element={<ApavargaPage />} />
+        <Route path="/privacy" element={<PrivacyPolicyPage />} />
+        <Route path="/terms" element={<TermsPage />} />
       </Routes>
       </Suspense>
       <WhatsAppFab />

@@ -91,11 +91,27 @@ export function Landing({ onEnterApp, onGuestPlay }: LandingProps) {
             )}
           </motion.section>
 
-          <footer className="relative z-10 mt-auto py-6 px-4 flex flex-col items-center justify-center text-white/70 text-sm border-t border-white/10">
+          <footer className="relative z-10 mt-auto py-6 px-4 flex flex-col items-center justify-center text-white/70 text-sm border-t border-white/10 gap-3">
             <div className="flex items-center gap-2">
               <span>Built by</span>
-              <img src={A_LOGO_SRC} alt="A-Logo" className="h-5 w-auto object-contain opacity-90" />
+              <a
+                href="https://aideveloperindia.store"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 hover:opacity-100 transition-opacity"
+                aria-label="AI Developer India"
+              >
+                <img src={A_LOGO_SRC} alt="AI Developer India" className="h-6 w-auto object-contain opacity-90 hover:opacity-100" />
+              </a>
               <span>AI Developer India</span>
+            </div>
+            <p className="text-white/40 text-xs text-center">
+              © {new Date().getFullYear()} Japam. All rights reserved.
+            </p>
+            <div className="flex items-center gap-4 text-xs text-white/50">
+              <a href="/privacy" className="hover:text-white/80 transition-colors underline underline-offset-2">Privacy Policy</a>
+              <span className="text-white/20">|</span>
+              <a href="/terms" className="hover:text-white/80 transition-colors underline underline-offset-2">Terms &amp; Conditions</a>
             </div>
           </footer>
         </div>

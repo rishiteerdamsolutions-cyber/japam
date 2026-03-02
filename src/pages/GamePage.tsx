@@ -71,11 +71,16 @@ export function GamePage() {
         // token can be briefly unavailable right after reload; retry a couple times
         const data = await loadUserPausedGame(user.uid, user);
         if (cancelled) return;
-        // For logged-in users: show resume if we have ANY valid recent paused game (don't require URL match).
-        // User may have come back via Menu which uses getCurrentLevelIndex = last completed, not the level they paused on.
+        // Only show resume if the saved game's mode matches the game the user is opening.
+        // e.g. paused a General game → only show resume when opening General game.
         if (data && typeof data === 'object' && data.key && typeof data.moves === 'number') {
           const saved = data as unknown as PausedGameState;
-          if (saved.savedAt && Date.now() - saved.savedAt < 7 * 24 * 60 * 60 * 1000) {
+          const savedMode = saved.mode ?? null;
+          const savedMarathon = saved.marathonId ?? null;
+          const modeMatches = isMarathon
+            ? savedMarathon === marathonId
+            : savedMode === mode;
+          if (modeMatches && saved.savedAt && Date.now() - saved.savedAt < 7 * 24 * 60 * 60 * 1000) {
             setResumePending(saved);
             setResumeKey(saved.key);
             setPauseCheckDone(true);

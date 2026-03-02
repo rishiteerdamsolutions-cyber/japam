@@ -87,6 +87,23 @@ export function GamePage() {
             return;
           }
         }
+
+        // Fallback: local copy (in case API/token fails or user is offline)
+        try {
+          const lastKey = localStorage.getItem('japam-last-paused-key');
+          if (lastKey) {
+            const raw = localStorage.getItem(lastKey);
+            if (raw) {
+              const parsed = JSON.parse(raw) as PausedGameState;
+              if (parsed?.savedAt && Date.now() - parsed.savedAt < 7 * 24 * 60 * 60 * 1000) {
+                setResumePending(parsed);
+                setResumeKey(lastKey);
+                setPauseCheckDone(true);
+                return;
+              }
+            }
+          }
+        } catch {}
       } else {
         try {
           const raw = localStorage.getItem(expectedKey);

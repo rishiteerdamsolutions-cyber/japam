@@ -11,6 +11,8 @@ import { useSettingsStore } from '../../store/settingsStore';
 import type { DeityId } from '../../data/deities';
 import { GoogleSignIn } from '../auth/GoogleSignIn';
 
+const LAST_PAUSED_KEY = 'japam-last-paused-key';
+
 interface GameScreenProps {
   mode: 'general' | string;
   levelIndex: number;
@@ -94,6 +96,12 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
     if (status === 'won') {
       if (user?.uid) {
         saveUserPausedGame(user.uid, null);
+        // also clear local fallback copy
+        try {
+          const k = localStorage.getItem(LAST_PAUSED_KEY);
+          if (k) localStorage.removeItem(k);
+          localStorage.removeItem(LAST_PAUSED_KEY);
+        } catch {}
       } else {
         try {
           localStorage.removeItem(getPausedKey());
@@ -105,12 +113,15 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
   const handlePause = useCallback(async () => {
     const payload = savePausedState();
     if (payload) {
+      // Always keep a local fallback copy (helps when token/API is temporarily unavailable after reopening the app)
+      try {
+        localStorage.setItem(payload.key, JSON.stringify(payload));
+        localStorage.setItem(LAST_PAUSED_KEY, payload.key);
+      } catch {}
       if (user?.uid) {
         await saveUserPausedGame(user.uid, payload as unknown as Record<string, unknown>);
       } else {
-        try {
-          localStorage.setItem(payload.key, JSON.stringify(payload));
-        } catch {}
+        // already stored above
       }
       onBack();
     }

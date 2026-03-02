@@ -73,7 +73,7 @@ export function GamePage() {
         if (cancelled) return;
         // For logged-in users: show resume if we have ANY valid recent paused game (don't require URL match).
         // User may have come back via Menu which uses getCurrentLevelIndex = last completed, not the level they paused on.
-        if (data && typeof data === 'object' && data.key && Array.isArray(data.board)) {
+        if (data && typeof data === 'object' && data.key && typeof data.moves === 'number') {
           const saved = data as unknown as PausedGameState;
           if (saved.savedAt && Date.now() - saved.savedAt < 7 * 24 * 60 * 60 * 1000) {
             setResumePending(saved);

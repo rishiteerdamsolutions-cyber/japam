@@ -19,8 +19,6 @@ const PAUSED_KEY_PREFIX = 'japam-paused-';
 
 export interface PausedGameState {
   key: string;
-  board: (string | null)[][];
-  score: number;
   moves: number;
   japasThisLevel: number;
   japasByDeity: Record<string, number>;
@@ -28,8 +26,8 @@ export interface PausedGameState {
   levelIndex: number;
   marathonId?: string;
   marathonTargetJapas?: number;
-  maxGemTypes: number;
   savedAt: number;
+  version?: number;
 }
 
 interface GameState {
@@ -162,8 +160,6 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const key = get().getPausedKey();
     const payload: PausedGameState = {
       key,
-      board: state.board.map(row => row.map(c => (c as string) ?? null)),
-      score: state.score,
       moves: state.moves,
       japasThisLevel: state.japasThisLevel,
       japasByDeity: { ...state.japasByDeity },
@@ -171,8 +167,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       levelIndex: state.levelIndex,
       marathonId: state.marathonId ?? undefined,
       marathonTargetJapas: state.marathonTargetJapas ?? undefined,
-      maxGemTypes: state.maxGemTypes,
-      savedAt: Date.now()
+      savedAt: Date.now(),
+      version: 2
     };
     return payload;
   },
@@ -180,12 +176,14 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
 
   restoreGame: (saved: PausedGameState) => {
     stopAllMantras();
-    const board = saved.board.map(row =>
-      row.map(c => (c as DeityId) ?? null)
-    ) as Board;
+    // For resume we only restore progress (moves + japa counts). We start with a fresh board.
+    const level = getLevel(saved.levelIndex);
+    const maxGemTypes = level.maxGemTypes ?? 8;
+    const deityMode = saved.mode !== 'general' ? (saved.mode as DeityId) : undefined;
+    let board = createBoard(level.rows, level.cols, maxGemTypes, deityMode);
+    while (!hasValidMoves(board)) board = createBoard(level.rows, level.cols, maxGemTypes, deityMode);
     set({
       board,
-      score: saved.score,
       moves: saved.moves,
       japasThisLevel: saved.japasThisLevel,
       japasByDeity: { ...emptyJapas(), ...saved.japasByDeity } as Record<DeityId, number>,
@@ -201,7 +199,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       intendedDeity: null,
       matchGeneration: 0,
       firstMatchMade: true,
-      maxGemTypes: saved.maxGemTypes,
+      maxGemTypes,
       matchHighlightPositions: null,
       pendingMatchBatch: null,
       matchAnimationTimeoutId: null,

@@ -65,11 +65,13 @@ export function GamePage() {
       if (user?.uid) {
         const data = await loadUserPausedGame(user.uid);
         if (cancelled) return;
-        if (data && typeof data === 'object' && data.key === expectedKey && Array.isArray(data.board)) {
+        // For logged-in users: show resume if we have ANY valid recent paused game (don't require URL match).
+        // User may have come back via Menu which uses getCurrentLevelIndex = last completed, not the level they paused on.
+        if (data && typeof data === 'object' && data.key && Array.isArray(data.board)) {
           const saved = data as unknown as PausedGameState;
           if (saved.savedAt && Date.now() - saved.savedAt < 7 * 24 * 60 * 60 * 1000) {
             setResumePending(saved);
-            setResumeKey(expectedKey);
+            setResumeKey(saved.key);
             return;
           }
         }

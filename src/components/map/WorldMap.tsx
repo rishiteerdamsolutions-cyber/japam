@@ -4,6 +4,7 @@ import { useUnlockStore, FIRST_LOCKED_LEVEL_INDEX } from '../../store/unlockStor
 import { useLevelsConfigStore } from '../../store/levelsConfigStore';
 import { DonateThankYouBox } from '../donation/DonateThankYouBox';
 import { AppHeader } from '../layout/AppHeader';
+import { AppFooter } from '../layout/AppFooter';
 import { LEVELS } from '../../data/levels';
 import { EPISODES } from '../../data/episodes';
 import { DEITIES } from '../../data/deities';
@@ -94,6 +95,7 @@ export function WorldMap({ mode: initialMode, onSelectLevel, onBack }: WorldMapP
           </div>
         ))}
       </div>
+      <AppFooter />
     </div>
   );
 }

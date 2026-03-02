@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-
-const A_LOGO_SRC = '/images/A-logo.png';
+import { AppFooter } from '../components/layout/AppFooter';
 
 export function TermsPage() {
   const navigate = useNavigate();
@@ -168,22 +167,7 @@ export function TermsPage() {
           </section>
         </div>
 
-        {/* Footer */}
-        <div className="mt-12 pt-6 border-t border-white/10 flex flex-col items-center gap-3 text-white/40 text-xs">
-          <div className="flex items-center gap-2">
-            <span>Built by</span>
-            <a href="https://aideveloperindia.store" target="_blank" rel="noopener noreferrer">
-              <img src={A_LOGO_SRC} alt="AI Developer India" className="h-5 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" />
-            </a>
-            <span>AI Developer India</span>
-          </div>
-          <p>© {new Date().getFullYear()} Japam. All rights reserved.</p>
-          <div className="flex gap-4">
-            <a href="/privacy" className="underline hover:text-white/70">Privacy Policy</a>
-            <span>|</span>
-            <a href="/terms" className="underline hover:text-white/70">Terms &amp; Conditions</a>
-          </div>
-        </div>
+        <AppFooter />
       </div>
     </div>
   );

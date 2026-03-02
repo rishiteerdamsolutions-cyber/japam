@@ -75,7 +75,9 @@ export default defineConfig({
         scope: '/',
         start_url: '/',
         icons: [
-          { src: '/vite.svg', sizes: 'any', type: 'image/svg+xml' }
+          { src: '/images/favicon.png', sizes: '192x192', type: 'image/png' },
+          { src: '/images/favicon.png', sizes: '512x512', type: 'image/png' },
+          { src: '/images/favicon.png', sizes: 'any', type: 'image/png', purpose: 'maskable any' }
         ]
       },
       workbox: {

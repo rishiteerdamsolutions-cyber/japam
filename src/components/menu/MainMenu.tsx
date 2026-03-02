@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { AppFooter } from '../layout/AppFooter';
 import { DEITIES } from '../../data/deities';
 import { GoogleSignIn } from '../auth/GoogleSignIn';
 import { JapamLogo } from '../ui/JapamLogo';
@@ -189,6 +190,7 @@ export function MainMenu({ onSelect, onOpenMap, onOpenJapaDashboard, onOpenSetti
             Settings
           </button>
         </div>
+        <AppFooter />
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { AppHeader } from '../components/layout/AppHeader';
+import { AppFooter } from '../components/layout/AppFooter';
 
 const features = [
   {
@@ -122,6 +123,7 @@ export function ApavargaPage() {
           </p>
         </motion.div>
       </div>
+      <AppFooter />
     </div>
   );
 }

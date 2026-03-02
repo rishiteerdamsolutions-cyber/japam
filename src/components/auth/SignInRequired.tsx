@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { GoogleSignIn } from './GoogleSignIn';
 import { isFirebaseConfigured } from '../../lib/firebase';
+import { AppFooter } from '../layout/AppFooter';
 
 interface SignInRequiredProps {
   onBack: () => void;
@@ -21,6 +22,7 @@ export function SignInRequired({ onBack, message = 'Sign in with Google to play'
       </button>
       <p className="text-amber-200 text-center mb-6">{message}</p>
       <GoogleSignIn />
+      <AppFooter />
     </div>
   );
 }

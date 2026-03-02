@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AppFooter } from '../components/layout/AppFooter';
 import INDIA_REGIONS from '../data/indiaRegions.json';
 import { DEITIES } from '../data/deities';
 import { useAuthStore } from '../store/authStore';
@@ -796,6 +797,7 @@ export function MarathonsPage() {
           )}
         </div>
       )}
+      <AppFooter />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { AppFooter } from './layout/AppFooter';
 import { useSettingsStore } from '../store/settingsStore';
 import { useAuthStore } from '../store/authStore';
 import { useProfileStore } from '../store/profileStore';
@@ -478,6 +479,7 @@ export function Settings({ onBack }: SettingsProps) {
           Mantra audio plays on every match (always on)
         </p>
       </div>
+      <AppFooter />
     </div>
   );
 }

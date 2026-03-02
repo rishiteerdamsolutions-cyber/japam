@@ -15,11 +15,22 @@ export async function POST(request) {
       { merge: true },
     );
 
-    // Public summary (for in-game active users strip)
-    await db.doc(`publicUsers/${uid}`).set(
-      { uid, lastActiveAt: admin.firestore.FieldValue.serverTimestamp() },
-      { merge: true },
-    );
+    // Public summary (for in-game active users strip) — also sync display name
+    let displayName = null;
+    try {
+      const profileSnap = await db.doc(`users/${uid}/data/profile`).get();
+      if (profileSnap.exists) {
+        const pd = profileSnap.data() || {};
+        if (typeof pd.displayName === 'string' && pd.displayName.trim()) {
+          displayName = pd.displayName.trim();
+        }
+      }
+    } catch {}
+
+    const publicUpdate = { uid, lastActiveAt: admin.firestore.FieldValue.serverTimestamp() };
+    if (displayName) publicUpdate.name = displayName;
+
+    await db.doc(`publicUsers/${uid}`).set(publicUpdate, { merge: true });
     return jsonResponse({ ok: true }, 200);
   } catch (e) {
     console.error('user last-active POST', e);

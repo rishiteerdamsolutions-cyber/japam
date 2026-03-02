@@ -43,13 +43,13 @@ export function PWAUpdatePrompt() {
           className="fixed bottom-0 left-0 right-0 z-[9999] flex items-center justify-between gap-3 px-4 py-3 bg-amber-600 text-white shadow-lg"
           style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
         >
-          <span className="text-sm font-medium">Update available</span>
-          <div className="flex gap-2">
+          <span className="text-sm font-medium shrink-0">Update available</span>
+          <div className="flex gap-2 shrink-0">
             {!updated && (
               <button
                 type="button"
                 onClick={closeRefresh}
-                className="px-3 py-1.5 rounded-lg bg-white/20 text-sm font-medium"
+                className="px-3 py-1.5 rounded-lg bg-white/20 text-sm font-medium whitespace-nowrap"
                 disabled={updating}
               >
                 Later
@@ -59,10 +59,10 @@ export function PWAUpdatePrompt() {
               type="button"
               onClick={handleUpdate}
               disabled={updating || updated}
-              className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-colors ${
+              className={`min-w-[7rem] px-4 py-1.5 rounded-lg text-sm font-bold transition-colors whitespace-nowrap ${
                 updated
                   ? 'bg-green-400 text-green-900'
-                  : 'bg-white text-amber-800'
+                  : 'bg-white text-amber-900'
               }`}
             >
               {updated ? 'Updated!' : updating ? 'Updating…' : 'Update Now'}

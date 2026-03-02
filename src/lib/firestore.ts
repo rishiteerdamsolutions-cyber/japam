@@ -231,11 +231,12 @@ export async function loadUserJapa(_uid: string): Promise<JapaCounts | null> {
   return null;
 }
 
-/** Load paused game. Logged-in: backend API only. */
-export async function loadUserPausedGame(_uid: string, user?: User | null): Promise<Record<string, unknown> | null> {
+/** Load paused game for a specific game key. Logged-in: backend API only. */
+export async function loadUserPausedGame(_uid: string, user?: User | null, key?: string | null): Promise<Record<string, unknown> | null> {
   const token = await getIdTokenWithRetry(user);
   if (!token) return null;
-  const url = apiUrl('/api/user/paused-game');
+  if (!key) return null;
+  const url = apiUrl(`/api/user/paused-game?key=${encodeURIComponent(key)}`);
   try {
     const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
     if (res.status === 403) return null;
@@ -249,17 +250,18 @@ export async function loadUserPausedGame(_uid: string, user?: User | null): Prom
   return null;
 }
 
-/** Save paused game. Logged-in: backend API only. Pass null to clear. */
-export async function saveUserPausedGame(_uid: string, pausedGame: Record<string, unknown> | null, user?: User | null): Promise<boolean> {
+/** Save paused game. Logged-in: backend API only. Pass null to clear. When clearing, pass key so only that game is cleared. */
+export async function saveUserPausedGame(_uid: string, pausedGame: Record<string, unknown> | null, user?: User | null, key?: string | null): Promise<boolean> {
   const token = await getIdTokenWithRetry(user);
   if (!token) return false;
   const url = apiUrl('/api/user/paused-game');
+  const body = pausedGame == null ? { pausedGame: null, key: key || undefined } : { pausedGame };
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
       const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ pausedGame }),
+        body: JSON.stringify(body),
       });
       if (res.ok) return true;
     } catch {

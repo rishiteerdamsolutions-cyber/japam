@@ -94,11 +94,12 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
 
   useEffect(() => {
     if (status === 'won') {
+      const key = getPausedKey();
       if (user?.uid) {
-        saveUserPausedGame(user.uid, null, user);
+        saveUserPausedGame(user.uid, null, user, key);
       } else {
         try {
-          localStorage.removeItem(getPausedKey());
+          localStorage.removeItem(key);
         } catch {}
       }
     }

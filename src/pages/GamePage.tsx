@@ -69,7 +69,7 @@ export function GamePage() {
     const load = async () => {
       if (user?.uid) {
         // token can be briefly unavailable right after reload; retry a couple times
-        const data = await loadUserPausedGame(user.uid, user);
+        const data = await loadUserPausedGame(user.uid, user, expectedKey);
         if (cancelled) return;
         // Only show resume if the saved game's mode matches the game the user is opening.
         // e.g. paused a General game → only show resume when opening General game.
@@ -127,7 +127,7 @@ export function GamePage() {
   const handleStartFresh = async () => {
     if (resumeKey) {
       if (user?.uid) {
-        await saveUserPausedGame(user.uid, null, user);
+        await saveUserPausedGame(user.uid, null, user, resumeKey);
       } else {
         try {
           localStorage.removeItem(resumeKey);

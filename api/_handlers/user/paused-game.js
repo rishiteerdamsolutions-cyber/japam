@@ -1,4 +1,6 @@
-/** GET /api/user/paused-game - Load paused game for current user (Firebase ID token required) */
+/** GET /api/user/paused-game - Load paused game for current user (Firebase ID token required).
+ *  Query param: key (e.g. japam-paused-general-0, japam-paused-shiva-0, japam-paused-marathon-xyz)
+ *  Returns the paused game for that specific key only. Supports multiple paused games per user. */
 import { getDb, jsonResponse, verifyFirebaseUser, isUserBlocked } from '../_lib.js';
 
 export async function GET(request) {
@@ -8,19 +10,38 @@ export async function GET(request) {
   if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
   if (await isUserBlocked(db, uid)) return jsonResponse({ error: 'Account disabled' }, 403);
   try {
+    const url = new URL(request.url);
+    const key = (url.searchParams.get('key') || '').trim();
+    if (!key) return jsonResponse({ pausedGame: null }, 200);
+
     const snap = await db.doc(`users/${uid}/data/pausedGame`).get();
     if (!snap.exists) return jsonResponse({ pausedGame: null }, 200);
     const data = snap.data() || {};
-    const pausedGame = data.pausedGame;
-    if (!pausedGame || typeof pausedGame !== 'object') return jsonResponse({ pausedGame: null }, 200);
-    return jsonResponse({ pausedGame }, 200);
+
+    // New format: pausedGames map keyed by game key
+    const pausedGames = data.pausedGames;
+    if (pausedGames && typeof pausedGames === 'object' && pausedGames[key]) {
+      const game = pausedGames[key];
+      if (game && typeof game === 'object' && game.key) {
+        return jsonResponse({ pausedGame: game }, 200);
+      }
+    }
+
+    // Legacy: single pausedGame (migrate on read if key matches)
+    const legacy = data.pausedGame;
+    if (legacy && typeof legacy === 'object' && legacy.key === key) {
+      return jsonResponse({ pausedGame: legacy }, 200);
+    }
+    return jsonResponse({ pausedGame: null }, 200);
   } catch (e) {
     console.error('user paused-game GET', e);
     return jsonResponse({ error: e?.message || 'Failed' }, 500);
   }
 }
 
-/** POST /api/user/paused-game - Save paused game for current user (Firebase ID token required) */
+/** POST /api/user/paused-game - Save or clear paused game for current user.
+ *  Supports multiple paused games: each game (general-0, shiva-0, marathon-xyz) is stored separately.
+ *  Body: { pausedGame: {...} } to save, or { pausedGame: null, key: "japam-paused-general-0" } to clear that game. */
 export async function POST(request) {
   const uid = await verifyFirebaseUser(request);
   if (!uid) return jsonResponse({ error: 'Unauthorized' }, 401);
@@ -30,12 +51,24 @@ export async function POST(request) {
   try {
     const body = await request.json().catch(() => ({}));
     const raw = body?.pausedGame;
-    if (raw === null) {
-      await db.doc(`users/${uid}/data/pausedGame`).set({ pausedGame: null }, { merge: true });
+    const keyToClear = typeof body?.key === 'string' ? body.key.trim() : null;
+
+    if (raw === null || raw == null) {
+      // Clear a specific game slot (key required to support multiple games)
+      const key = keyToClear;
+      if (!key) {
+        await db.doc(`users/${uid}/data/pausedGame`).set({ pausedGame: null }, { merge: true });
+        return jsonResponse({ ok: true }, 200);
+      }
+      const snap = await db.doc(`users/${uid}/data/pausedGame`).get();
+      const data = snap.exists ? snap.data() || {} : {};
+      const pausedGames = { ...(data.pausedGames && typeof data.pausedGames === 'object' ? data.pausedGames : {}) };
+      delete pausedGames[key];
+      await db.doc(`users/${uid}/data/pausedGame`).set({ pausedGames, pausedGame: null }, { merge: true });
       return jsonResponse({ ok: true }, 200);
     }
+
     if (!raw || typeof raw !== 'object') {
-      await db.doc(`users/${uid}/data/pausedGame`).set({ pausedGame: null }, { merge: true });
       return jsonResponse({ ok: true }, 200);
     }
 
@@ -63,7 +96,12 @@ export async function POST(request) {
     }
     safe.japasByDeity = cleaned;
 
-    await db.doc(`users/${uid}/data/pausedGame`).set({ pausedGame: safe }, { merge: true });
+    // Merge into pausedGames map (keeps other games intact)
+    const snap = await db.doc(`users/${uid}/data/pausedGame`).get();
+    const data = snap.exists ? snap.data() || {} : {};
+    const pausedGames = { ...(data.pausedGames && typeof data.pausedGames === 'object' ? data.pausedGames : {}) };
+    pausedGames[safe.key] = safe;
+    await db.doc(`users/${uid}/data/pausedGame`).set({ pausedGames, pausedGame: null }, { merge: true });
     return jsonResponse({ ok: true }, 200);
   } catch (e) {
     console.error('user paused-game POST', e);

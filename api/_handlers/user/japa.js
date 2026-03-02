@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser, isUserBlocked } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser } from '../_lib.js';
 import admin from 'firebase-admin';
 
 /** GET /api/user/japa - Load japa counts for current user (Firebase ID token required) */
@@ -7,7 +7,6 @@ export async function GET(request) {
   if (!uid) return jsonResponse({ error: 'Unauthorized' }, 401);
   const db = getDb();
   if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
-  if (await isUserBlocked(db, uid)) return jsonResponse({ error: 'Account disabled' }, 403);
   try {
     const snap = await db.doc(`users/${uid}/data/japa`).get();
     if (!snap.exists) return jsonResponse({ counts: null }, 200);
@@ -27,7 +26,6 @@ export async function POST(request) {
   if (!uid) return jsonResponse({ error: 'Unauthorized' }, 401);
   const db = getDb();
   if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
-  if (await isUserBlocked(db, uid)) return jsonResponse({ error: 'Account disabled' }, 403);
   try {
     const body = await request.json().catch(() => ({}));
     const counts = body && typeof body === 'object' ? body : {};
@@ -56,6 +54,19 @@ export async function POST(request) {
       const d = cur - prevVal;
       if (d > 0) deltas[deity] = d;
     }
+
+    // Skip marathon logic for users who have never joined (saves query for non-marathon users)
+    let hasJoinedMarathon = null;
+    try {
+      const profileSnap = await db.doc(`users/${uid}/data/profile`).get();
+      if (profileSnap.exists) {
+        const pd = profileSnap.data() || {};
+        if (pd.hasJoinedMarathon === true) hasJoinedMarathon = true;
+        else if (pd.hasJoinedMarathon === false) hasJoinedMarathon = false;
+      }
+    } catch {}
+    if (hasJoinedMarathon === false) return jsonResponse({ ok: true }, 200);
+
     if (Object.keys(deltas).length > 0) {
       const partsSnap = await db.collection('marathonParticipations').where('userId', '==', uid).get();
       const today = new Date().toISOString().slice(0, 10);
@@ -77,6 +88,12 @@ export async function POST(request) {
         const japasTodayDate = mData.japasTodayDate;
         const japasToday = (japasTodayDate === today ? (mData.japasToday ?? 0) : 0) + add;
         await marathonRef.update({ japasToday, japasTodayDate: today, totalJapas });
+      }
+      // Cache hasJoinedMarathon: false so we skip the query on next japa save
+      if (partsSnap.empty && hasJoinedMarathon !== true) {
+        try {
+          await db.doc(`users/${uid}/data/profile`).set({ hasJoinedMarathon: false }, { merge: true });
+        } catch {}
       }
     }
     return jsonResponse({ ok: true }, 200);

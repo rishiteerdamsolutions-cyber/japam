@@ -6,7 +6,6 @@ import { useJapaStore } from '../store/japaStore';
 import { useUnlockStore } from '../store/unlockStore';
 import { useSettingsStore } from '../store/settingsStore';
 import { useProfileStore } from '../store/profileStore';
-import { useLastActiveHeartbeat } from '../hooks/useLastActiveHeartbeat';
 import { useDailyReminder } from '../hooks/useDailyReminder';
 
 /**
@@ -25,7 +24,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const loadUnlock = useUnlockStore((s) => s.load);
   const loadSettings = useSettingsStore((s) => s.load);
   const loadProfile = useProfileStore((s) => s.load);
-  useLastActiveHeartbeat();
   useDailyReminder();
 
   useEffect(() => {

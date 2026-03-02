@@ -31,7 +31,7 @@ async function fetchMarathons(token) {
       targetJapas: data.targetJapas,
       startDate: data.startDate,
       joinedCount: data.joinedCount ?? 0,
-      topParticipants: participants.slice(0, 10),
+      topParticipants: participants.slice(0, 5),
     });
   }
   marathons.sort((a, b) => (b.startDate || '').localeCompare(a.startDate || ''));

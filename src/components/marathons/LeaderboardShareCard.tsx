@@ -22,7 +22,7 @@ export const LeaderboardShareCard: FC<LeaderboardShareCardProps> = ({
   leaderboard,
   currentUserUid,
 }) => {
-  const top = leaderboard.slice(0, 10);
+  const top = leaderboard.slice(0, 5);
 
   return (
     <div

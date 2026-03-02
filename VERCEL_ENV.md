@@ -24,7 +24,8 @@ Set these in **Vercel → Project → Settings → Environment Variables**:
 | `FIREBASE_SERVICE_ACCOUNT_JSON` | Full JSON string of Firebase service account key (one line) |
 | `RAZORPAY_KEY_ID` | Same as `VITE_RAZORPAY_KEY_ID` |
 | `RAZORPAY_KEY_SECRET` | Razorpay key secret |
+| `CRON_SECRET` or `ADMIN_SECRET` | Required for cron jobs (`refresh-active-users` at 3 AM IST). Vercel injects `CRON_SECRET` for scheduled crons on Pro; otherwise set it manually. |
 
-**Total: 11 variables** (no `ADMIN_ID`, `ADMIN_PASSWORD`, or `ADMIN_SECRET`).
+**Total: 11–12 variables** (no `ADMIN_ID` or `ADMIN_PASSWORD`).
 
 To change the unlock price: edit `api/_lib.js`, update `UNLOCK_PRICE_PAISE` (e.g. `9900` = ₹99), then push and redeploy.

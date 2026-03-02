@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser, isUserUnlocked, isUserBlocked } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, isUserUnlocked } from '../_lib.js';
 
 /** POST /api/apavarga/join - Register pro/premium user as Apavarga member */
 export async function POST(request) {
@@ -8,7 +8,6 @@ export async function POST(request) {
   const db = getDb();
   if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
 
-  if (await isUserBlocked(db, uid)) return jsonResponse({ error: 'Account disabled' }, 403);
   if (!(await isUserUnlocked(db, uid))) return jsonResponse({ error: 'Pro membership required' }, 403);
 
   try {

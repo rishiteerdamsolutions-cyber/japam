@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser, isUserUnlocked, isUserBlocked } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, isUserUnlocked } from '../_lib.js';
 
 /** POST /api/marathons/join - User joins a marathon. Requires Firebase auth; only paid (unlocked) users can join. Body: { marathonId } */
 export async function POST(request) {
@@ -12,8 +12,6 @@ export async function POST(request) {
 
     const db = getDb();
     if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
-    if (await isUserBlocked(db, uid)) return jsonResponse({ error: 'Account disabled' }, 403);
-
     const unlocked = await isUserUnlocked(db, uid);
     if (!unlocked) {
       return jsonResponse(
@@ -46,6 +44,9 @@ export async function POST(request) {
       joinedAt: new Date().toISOString(),
       japasCount: 0,
     });
+
+    // Mark user as marathon joiner so japa POST can skip participation query for non-joiners
+    await db.doc(`users/${uid}/data/profile`).set({ hasJoinedMarathon: true }, { merge: true });
 
     const marathonRef = db.doc(`marathons/${marathonId}`);
     const marathonSnap = await marathonRef.get();

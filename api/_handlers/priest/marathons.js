@@ -32,7 +32,7 @@ export async function GET(request) {
           return { uid, name: displayName, japasCount: pData.japasCount ?? 0 };
         });
         parts.sort((a, b) => (b.japasCount || 0) - (a.japasCount || 0));
-        const top = parts.slice(0, 10);
+        const top = parts.slice(0, 5);
 
         // Attach lastActiveAt for top participants.
         const refs = top.filter((p) => p.uid).map((p) => db.doc(`users/${p.uid}/data/activity`));

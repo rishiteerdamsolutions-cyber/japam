@@ -43,7 +43,6 @@ import * as userJapaHandler from './_handlers/user/japa.js';
 import * as userUnlockHandler from './_handlers/user/unlock.js';
 import * as userProfileHandler from './_handlers/user/profile.js';
 import * as userPausedGameHandler from './_handlers/user/paused-game.js';
-import * as userLastActiveHandler from './_handlers/user/last-active.js';
 import * as userReactHandler from './_handlers/user/react.js';
 import * as publicActiveUsersHandler from './_handlers/public/active-users.js';
 import * as userReminderHandler from './_handlers/user/reminder.js';
@@ -69,6 +68,7 @@ import * as apavargaPriestSettingsHandler from './_handlers/apavarga/priest-sett
 import * as apavargaGroupsHandler from './_handlers/apavarga/groups.js';
 import * as apavargaGroupsManageHandler from './_handlers/apavarga/groups-manage.js';
 import * as apavargaCleanupHandler from './_handlers/apavarga/cleanup.js';
+import * as cronRefreshActiveUsersHandler from './_handlers/cron/refresh-active-users.js';
 
 function getPathSegments(request) {
   const url = new URL(request.url);
@@ -128,7 +128,6 @@ const HANDLERS = {
   'POST user/profile': userProfileHandler,
   'GET user/paused-game': userPausedGameHandler,
   'POST user/paused-game': userPausedGameHandler,
-  'POST user/last-active': userLastActiveHandler,
   'POST user/react': userReactHandler,
   'GET public/active-users': publicActiveUsersHandler,
   'GET user/reminder': userReminderHandler,
@@ -154,6 +153,7 @@ const HANDLERS = {
   'POST apavarga/groups': apavargaGroupsHandler,
   'POST apavarga/groups/manage': apavargaGroupsManageHandler,
   'POST apavarga/cleanup': apavargaCleanupHandler,
+  'GET cron/refresh-active-users': cronRefreshActiveUsersHandler,
 };
 
 async function route(request, method, pathSegments) {

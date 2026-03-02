@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser, verifyPriestToken, isUserUnlocked, isUserBlocked } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, verifyPriestToken, isUserUnlocked } from '../_lib.js';
 
 function getBearerToken(request) {
   const auth = request?.headers?.get?.('authorization') || request?.headers?.get?.('Authorization');
@@ -26,7 +26,6 @@ export async function GET(request) {
   }
 
   if (!firebaseUid) return jsonResponse({ error: 'Unauthorized' }, 401);
-  if (await isUserBlocked(db, firebaseUid)) return jsonResponse({ error: 'Account disabled' }, 403);
   if (!(await isUserUnlocked(db, firebaseUid))) return jsonResponse({ error: 'Pro membership required' }, 403);
 
   const snap = await db.collection('apavargaAppointments')

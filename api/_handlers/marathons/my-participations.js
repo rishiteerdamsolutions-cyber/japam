@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser, isUserBlocked } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser } from '../_lib.js';
 
 /** GET /api/marathons/my-participations - List marathons the current user has joined. Requires Firebase auth. */
 export async function GET(request) {
@@ -8,7 +8,6 @@ export async function GET(request) {
 
     const db = getDb();
     if (!db) return jsonResponse({ marathonIds: [], marathons: [] }, 200);
-    if (await isUserBlocked(db, uid)) return jsonResponse({ error: 'Account disabled' }, 403);
 
     const partsSnap = await db.collection('marathonParticipations').where('userId', '==', uid).get();
     const marathonIds = partsSnap.docs.map((d) => d.data().marathonId).filter(Boolean);
@@ -44,7 +43,7 @@ export async function GET(request) {
           };
         });
         participants.sort((a, b) => (b.japasCount || 0) - (a.japasCount || 0));
-        leaderboard = participants.slice(0, 10).map((p, i) => ({
+        leaderboard = participants.slice(0, 5).map((p, i) => ({
           rank: i + 1,
           uid: p.userId,
           name: p.displayName || (p.userId ? String(p.userId).slice(0, 8) : '—'),

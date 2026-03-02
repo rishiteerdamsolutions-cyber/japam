@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser, isUserUnlocked, isUserBlocked } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, isUserUnlocked } from '../_lib.js';
 
 /** POST /api/apavarga/appointments/arrival-confirm - Seeker confirms "I'm coming" */
 export async function POST(request) {
@@ -7,7 +7,6 @@ export async function POST(request) {
 
   const firebaseUid = await verifyFirebaseUser(request);
   if (!firebaseUid) return jsonResponse({ error: 'Unauthorized' }, 401);
-  if (await isUserBlocked(db, firebaseUid)) return jsonResponse({ error: 'Account disabled' }, 403);
   if (!(await isUserUnlocked(db, firebaseUid))) return jsonResponse({ error: 'Pro membership required' }, 403);
 
   const body = await request.json().catch(() => ({}));

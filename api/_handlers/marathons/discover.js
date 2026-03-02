@@ -19,7 +19,11 @@ export async function GET(request) {
     const db = getDb();
     if (!db) return jsonResponse({ temples: [], marathonsByTemple: {} }, 200);
 
-    const templesSnap = await db.collection('temples').get();
+    // Filter at DB level for state and district
+    let query = db.collection('temples');
+    if (state) query = query.where('state', '==', state);
+    if (district) query = query.where('district', '==', district);
+    const templesSnap = await query.get();
     let temples = templesSnap.docs.map((d) => {
       const data = d.data();
       return {
@@ -31,8 +35,6 @@ export async function GET(request) {
         area: data.area,
       };
     });
-    if (state) temples = temples.filter((t) => t.state === state);
-    if (district) temples = temples.filter((t) => t.district === district);
     if (cityTownVillage) {
       const q = normalize(cityTownVillage);
       temples = temples.filter((t) => normalize(t.cityTownVillage).includes(q) || q.includes(normalize(t.cityTownVillage)));
@@ -65,7 +67,7 @@ export async function GET(request) {
           targetJapas: data.targetJapas,
           startDate: data.startDate,
           joinedCount: data.joinedCount ?? 0,
-          leaderboard: participants.slice(0, 10).map((p, i) => ({
+          leaderboard: participants.slice(0, 5).map((p, i) => ({
             rank: i + 1,
             uid: p.userId,
             name: p.displayName || (p.userId ? String(p.userId).slice(0, 8) : '—'),
@@ -78,6 +80,10 @@ export async function GET(request) {
     return jsonResponse({ temples, marathonsByTemple });
   } catch (e) {
     console.error('marathons discover', e);
-    return jsonResponse({ error: e.message || 'Failed' }, 500);
+    const msg = e.message || 'Failed';
+    const isIndexError = /index|Composite index/i.test(msg);
+    return jsonResponse({
+      error: isIndexError ? 'Firestore index required. Run: firebase deploy --only firestore:indexes' : msg,
+    }, 500);
   }
 }

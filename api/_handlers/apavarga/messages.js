@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser, verifyPriestToken, isUserUnlocked, isUserBlocked } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, verifyPriestToken, isUserUnlocked } from '../_lib.js';
 
 function getBearerToken(request) {
   const auth = request?.headers?.get?.('authorization') || request?.headers?.get?.('Authorization');
@@ -28,7 +28,6 @@ export async function GET(request) {
   const priest = priestToken ? verifyPriestToken(priestToken) : null;
 
   if (!firebaseUid && !priest) return jsonResponse({ error: 'Unauthorized' }, 401);
-  if (firebaseUid && (await isUserBlocked(db, firebaseUid))) return jsonResponse({ error: 'Account disabled' }, 403);
   if (firebaseUid && !(await isUserUnlocked(db, firebaseUid))) return jsonResponse({ error: 'Pro membership required' }, 403);
 
   if (!(await canAccessChat(db, chatId, firebaseUid, priest))) return jsonResponse({ error: 'Forbidden' }, 403);
@@ -58,7 +57,6 @@ export async function POST(request) {
   const priest = priestToken ? verifyPriestToken(priestToken) : null;
 
   if (!firebaseUid && !priest) return jsonResponse({ error: 'Unauthorized' }, 401);
-  if (firebaseUid && (await isUserBlocked(db, firebaseUid))) return jsonResponse({ error: 'Account disabled' }, 403);
   if (firebaseUid && !(await isUserUnlocked(db, firebaseUid))) return jsonResponse({ error: 'Pro membership required' }, 403);
 
   const chatRef = db.collection('apavargaChats').doc(chatId);

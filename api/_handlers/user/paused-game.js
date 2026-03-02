@@ -1,14 +1,13 @@
 /** GET /api/user/paused-game - Load paused game for current user (Firebase ID token required).
  *  Query param: key (e.g. japam-paused-general-0, japam-paused-shiva-0, japam-paused-marathon-xyz)
  *  Returns the paused game for that specific key only. Supports multiple paused games per user. */
-import { getDb, jsonResponse, verifyFirebaseUser, isUserBlocked } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser } from '../_lib.js';
 
 export async function GET(request) {
   const uid = await verifyFirebaseUser(request);
   if (!uid) return jsonResponse({ error: 'Unauthorized' }, 401);
   const db = getDb();
   if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
-  if (await isUserBlocked(db, uid)) return jsonResponse({ error: 'Account disabled' }, 403);
   try {
     const url = new URL(request.url);
     const key = (url.searchParams.get('key') || '').trim();
@@ -47,7 +46,6 @@ export async function POST(request) {
   if (!uid) return jsonResponse({ error: 'Unauthorized' }, 401);
   const db = getDb();
   if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
-  if (await isUserBlocked(db, uid)) return jsonResponse({ error: 'Account disabled' }, 403);
   try {
     const body = await request.json().catch(() => ({}));
     const raw = body?.pausedGame;

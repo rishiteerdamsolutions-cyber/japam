@@ -72,15 +72,15 @@ function getBearerToken(request) {
   return null;
 }
 
-/** Verify Firebase user ID token, return uid or null. */
+/** Verify Firebase user ID token, return uid or null. Blocked users (custom claim) return null. */
 export async function verifyFirebaseUser(request) {
   try {
-    // Ensure admin app initialized (for admin.auth()).
     const database = getDb();
     if (!database) return null;
     const token = getBearerToken(request);
     if (!token) return null;
     const decoded = await admin.auth().verifyIdToken(token);
+    if (decoded?.blocked === true) return null;
     return decoded?.uid || null;
   } catch (e) {
     console.error('verifyFirebaseUser failed:', e?.message || e);
@@ -93,17 +93,6 @@ export async function isUserUnlocked(db, uid) {
   if (!uid) return false;
   try {
     const snap = await db.collection('unlockedUsers').doc(uid).get();
-    return snap.exists;
-  } catch {
-    return false;
-  }
-}
-
-/** Check if user is blocked from login/using app. Uses blockedUsers collection. */
-export async function isUserBlocked(db, uid) {
-  if (!uid) return false;
-  try {
-    const snap = await db.collection('blockedUsers').doc(uid).get();
     return snap.exists;
   } catch {
     return false;

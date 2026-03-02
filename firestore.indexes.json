@@ -1,6 +1,14 @@
 {
   "indexes": [
     {
+      "collectionGroup": "temples",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "state", "order": "ASCENDING" },
+        { "fieldPath": "district", "order": "ASCENDING" }
+      ]
+    },
+    {
       "collectionGroup": "apavargaChats",
       "queryScope": "COLLECTION",
       "fields": [

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { loadPublicActiveUsers, sendUserReaction, type PublicActiveUser } from '../../lib/firestore';
 import { useAuthStore } from '../../store/authStore';
 
-const POLL_MS = 30_000;
 const ACTIVE_NOW_MS = 90_000;
 const NOW_TAG_MS = 5 * 60_000;
 
@@ -34,18 +33,13 @@ export function ActiveUsersStrip() {
 
   useEffect(() => {
     let cancelled = false;
-    const load = async () => {
-      const list = await loadPublicActiveUsers();
-      if (cancelled) return;
-      setUsers(list);
-      setLoading(false);
-    };
-    load();
-    const id = window.setInterval(load, POLL_MS);
-    return () => {
-      cancelled = true;
-      window.clearInterval(id);
-    };
+    loadPublicActiveUsers().then((list) => {
+      if (!cancelled) {
+        setUsers(list);
+        setLoading(false);
+      }
+    });
+    return () => { cancelled = true; };
   }, []);
 
   const send = async (targetUid: string, type: ReactionType) => {
@@ -94,7 +88,7 @@ export function ActiveUsersStrip() {
   return (
     <div className="w-full mt-2">
       <div className="flex items-center justify-between mb-1 px-0.5">
-        <div className="text-[11px] text-amber-200/70">Active in last 24h</div>
+        <div className="text-[11px] text-amber-200/70">Active recently</div>
         {!uid && (
           <div className="text-[10px] text-amber-200/45">Sign in to send ❤️ 👍 👏</div>
         )}

@@ -1,6 +1,7 @@
+import admin from 'firebase-admin';
 import { getDb, jsonResponse, verifyAdminToken, getAdminTokenFromRequest } from '../_lib.js';
 
-/** POST /api/admin/unblock-user - Unblock a user. Body: { token, uid } */
+/** POST /api/admin/unblock-user - Unblock a user (remove custom claim). Body: { token, uid } */
 export async function POST(request) {
   const body = await request.json().catch(() => ({}));
   const token = (body?.token && typeof body.token === 'string') ? body.token : getAdminTokenFromRequest(request);
@@ -13,6 +14,7 @@ export async function POST(request) {
   if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
 
   try {
+    await admin.auth().setCustomUserClaims(uid, { blocked: false });
     await db.collection('blockedUsers').doc(uid).delete();
     return jsonResponse({ ok: true, message: 'User unblocked' }, 200);
   } catch (e) {

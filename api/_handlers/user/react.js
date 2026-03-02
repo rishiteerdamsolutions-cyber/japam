@@ -1,5 +1,5 @@
 import admin from 'firebase-admin';
-import { getDb, jsonResponse, verifyFirebaseUser, isUserBlocked } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser } from '../_lib.js';
 
 const TYPES = new Set(['heart', 'like', 'clap']);
 
@@ -10,8 +10,6 @@ export async function POST(request) {
     if (!uid) return jsonResponse({ error: 'Unauthorized' }, 401);
     const db = getDb();
     if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
-    if (await isUserBlocked(db, uid)) return jsonResponse({ error: 'Account disabled' }, 403);
-
     const body = await request.json().catch(() => ({}));
     const targetUid = typeof body.targetUid === 'string' ? body.targetUid.trim() : '';
     const type = typeof body.type === 'string' ? body.type.trim() : '';

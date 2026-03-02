@@ -50,6 +50,16 @@ Until these files are added, the app uses a placeholder tone. Update `src/data/d
 
 Without Firebase config, the app runs normally but the Google Sign-In button is hidden.
 
+### Firestore indexes
+
+Some features (marathon discover, apavarga chats, etc.) need composite indexes. Deploy them once:
+
+```bash
+firebase deploy --only firestore:indexes
+```
+
+This uses `firestore.indexes.json`. If the discover marathons page fails with an index error, run this and wait for indexes to build.
+
 ### Fixing 403 on Google Sign-In (production)
 
 If you see `403` when signing in with Google on your deployed site, add your production domain to Firebase:

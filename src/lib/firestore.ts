@@ -292,21 +292,6 @@ export async function saveUserJapa(_uid: string, counts: JapaCounts): Promise<vo
   }
 }
 
-/** Touch lastActiveAt. Logged-in: backend API only. */
-export async function touchUserLastActive(_uid: string): Promise<void> {
-  const token = await getFirebaseIdToken();
-  if (!token) return;
-  const url = apiUrl('/api/user/last-active');
-  try {
-    await fetch(url, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${token}` },
-    });
-  } catch {
-    // ignore
-  }
-}
-
 export type PublicActiveUser = {
   uid: string;
   name: string | null;

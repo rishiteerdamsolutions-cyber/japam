@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser, isUserBlocked } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser } from '../_lib.js';
 
 /** GET /api/user/reminder - Load daily reminder for current user. */
 export async function GET(request) {
@@ -7,8 +7,6 @@ export async function GET(request) {
     if (!uid) return jsonResponse({ error: 'Unauthorized' }, 401);
     const db = getDb();
     if (!db) return jsonResponse({ reminder: null }, 200);
-    if (await isUserBlocked(db, uid)) return jsonResponse({ error: 'Account disabled' }, 403);
-
     const snap = await db.doc(`users/${uid}/data/reminder`).get();
     if (!snap.exists) return jsonResponse({ reminder: null }, 200);
     const data = snap.data() || {};
@@ -28,8 +26,6 @@ export async function POST(request) {
     if (!uid) return jsonResponse({ error: 'Unauthorized' }, 401);
     const db = getDb();
     if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
-    if (await isUserBlocked(db, uid)) return jsonResponse({ error: 'Account disabled' }, 403);
-
     const body = await request.json().catch(() => ({}));
     const enabled = body?.enabled === true;
     const time = typeof body?.time === 'string' ? body.time.trim() : '';

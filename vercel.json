@@ -7,6 +7,7 @@
     {"source": "/((?!api/).*)", "destination": "/index.html"}
   ],
   "crons": [
-    {"path": "/api/apavarga/cleanup", "schedule": "0 0 * * *"}
+    {"path": "/api/apavarga/cleanup", "schedule": "0 0 * * *"},
+    {"path": "/api/cron/refresh-active-users", "schedule": "30 21 * * *"}
   ]
 }

@@ -91,9 +91,9 @@ export function MarathonsPage() {
   const districts = state?.districts ?? [];
 
   const paddedLeaderboard = (lb?: { rank: number; uid: string; name: string; japasCount: number }[]) => {
-    const list = Array.isArray(lb) ? lb.slice(0, 10) : [];
+    const list = Array.isArray(lb) ? lb.slice(0, 5) : [];
     const out = [...list];
-    for (let i = out.length; i < 10; i++) {
+    for (let i = out.length; i < 5; i++) {
       out.push({ rank: i + 1, uid: '', name: 'Vacant', japasCount: 0 });
     }
     return out;
@@ -278,7 +278,7 @@ export function MarathonsPage() {
       ctx.lineWidth = 3;
       ctx.stroke();
 
-      const entries = opts.leaderboard.slice(0, 10);
+      const entries = opts.leaderboard.slice(0, 5);
       const curUid = opts.currentUserUid;
 
       const colGap = 18;

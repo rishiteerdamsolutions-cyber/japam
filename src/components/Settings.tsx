@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSettingsStore } from '../store/settingsStore';
 import { useAuthStore } from '../store/authStore';
 import { useProfileStore } from '../store/profileStore';
@@ -16,7 +16,6 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 const WHATSAPP_LINK = 'https://wa.me/919505009699';
-const APAVARGA_URL = import.meta.env.VITE_APAVARGA_URL || 'http://localhost:5174';
 const BG_IMAGE = '/images/settingspagebg.png';
 const API_BASE = import.meta.env.VITE_API_URL ?? '';
 const PRIEST_TOKEN_KEY = 'japam_priest_token';
@@ -27,9 +26,9 @@ interface SettingsProps {
 }
 
 export function Settings({ onBack }: SettingsProps) {
+  const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
-  const tier = useUnlockStore((s) => s.tier);
-  const isProOrPremium = tier === 'pro' || tier === 'premium';
+  useUnlockStore((s) => s.tier);
   const { backgroundMusicEnabled, backgroundMusicVolume, load, setBackgroundMusic, setBackgroundMusicVolume } = useSettingsStore();
   const { displayName, setDisplayName } = useProfileStore();
   const [localName, setLocalName] = useState(displayName ?? '');
@@ -367,20 +366,26 @@ export function Settings({ onBack }: SettingsProps) {
             </div>
           )}
 
-          {user && isProOrPremium && (
-            <a
-              href={APAVARGA_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block rounded-2xl bg-black/40 border border-amber-500/30 p-4 backdrop-blur-sm hover:border-amber-500/50 transition-colors"
-            >
-              <h2 className="text-amber-200 font-semibold text-sm">Join Apavarga</h2>
-              <p className="text-amber-200/70 text-xs mt-1">
-                Talk to Pandits directly & social network. Exclusive for pro members.
-              </p>
-              <span className="inline-block mt-2 text-amber-400 text-xs font-medium">Open Apavarga →</span>
-            </a>
-          )}
+          <button
+            type="button"
+            onClick={() => navigate('/apavarga')}
+            className="w-full text-left rounded-2xl bg-gradient-to-r from-[#1a1a2e] to-[#16213e] border border-amber-500/40 p-4 backdrop-blur-sm hover:border-amber-500/70 transition-colors"
+          >
+            <div className="flex items-center gap-3 mb-2">
+              <span className="text-2xl">🕉️</span>
+              <div>
+                <h2 className="text-amber-300 font-bold text-sm">Apavarga</h2>
+                <span className="inline-flex items-center gap-1 text-[10px] text-amber-400 font-medium">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                  Coming Soon
+                </span>
+              </div>
+            </div>
+            <p className="text-amber-200/70 text-xs leading-relaxed">
+              The spiritual social network for seekers — connect with priests, share mantras, and find your community.
+            </p>
+            <span className="inline-block mt-2 text-amber-400 text-xs font-medium">Learn more →</span>
+          </button>
 
           <div className="rounded-2xl bg-black/40 border border-amber-500/20 p-4 space-y-3 backdrop-blur-sm">
             <div className="flex justify-between items-center">

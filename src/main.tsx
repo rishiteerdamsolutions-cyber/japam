@@ -24,6 +24,7 @@ const AdminLevelsPage = lazy(() => import('./pages/admin/AdminLevelsPage').then(
 const PriestPage = lazy(() => import('./pages/PriestPage').then(m => ({ default: m.PriestPage })))
 const MarathonsPage = lazy(() => import('./pages/MarathonsPage').then(m => ({ default: m.MarathonsPage })))
 const SettingsPage = lazy(() => import('./pages/SettingsPage').then(m => ({ default: m.SettingsPage })))
+const ApavargaPage = lazy(() => import('./pages/ApavargaPage').then(m => ({ default: m.ApavargaPage })))
 
 function PageFallback() {
   return <div className="min-h-screen flex items-center justify-center bg-[#1a1a2e]"><div className="text-amber-400 text-sm">Loading…</div></div>
@@ -56,6 +57,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/priest" element={<PriestPage />} />
         <Route path="/marathons" element={<MarathonsPage />} />
         <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/apavarga" element={<ApavargaPage />} />
       </Routes>
       </Suspense>
       <WhatsAppFab />

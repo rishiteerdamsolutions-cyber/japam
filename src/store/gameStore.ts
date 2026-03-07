@@ -67,7 +67,7 @@ interface GameActions {
   selectCell: (row: number, col: number) => void;
   swap: (toRow: number, toCol: number, fromRow?: number, fromCol?: number) => boolean;
   processMatches: (accumulated?: { deity: DeityId; count: number; combo: number }[]) => void;
-  commitMatch: (accumulated: { deity: DeityId; count: number; combo: number }[]) => void;
+  commitMatch: (accumulated: { deity: DeityId; count: number; combo: number }[], isUserDirectMatch?: boolean) => void;
   finalizeMatchChain: (accumulated: { deity: DeityId; count: number; combo: number }[]) => void;
   reset: () => void;
 }
@@ -285,11 +285,12 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       pendingMatchBatch: matches,
       matchBonusAudio
     });
-    const id = setTimeout(() => get().commitMatch(nextAccumulated), 500);
+    const isUserDirectMatch = accumulated.length === 0;
+    const id = setTimeout(() => get().commitMatch(nextAccumulated, isUserDirectMatch), 500);
     set({ matchAnimationTimeoutId: id });
   },
 
-  commitMatch: (accumulated) => {
+  commitMatch: (accumulated, isUserDirectMatch = false) => {
     const { pendingMatchBatch, matchAnimationTimeoutId, intendedDeity, isGuest } = get();
     if (matchAnimationTimeoutId != null) {
       clearTimeout(matchAnimationTimeoutId);
@@ -309,24 +310,23 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     for (const m of pendingMatchBatch) {
       deityMatches.set(m.deity, (deityMatches.get(m.deity) ?? 0) + 1);
     }
-    const isFirstBatch = accumulated.length === 0;
+    // Only count japa for user's direct manual match (1 japa per match), NOT cascading matches
     const isMultiMatch = pendingMatchBatch.length > 1 || deityMatches.size > 1;
-    const useIntendedOnly = isFirstBatch && isMultiMatch && intendedDeity && deityMatches.has(intendedDeity);
+    const useIntendedOnly = isUserDirectMatch && isMultiMatch && intendedDeity && deityMatches.has(intendedDeity);
 
-    for (const [deity] of deityMatches) {
-      const shouldCountJapa = gameMode === 'general' || gameMode === deity;
-      if (!shouldCountJapa) continue;
-      if (useIntendedOnly && deity !== intendedDeity) continue;
-      const japaCount = useIntendedOnly ? 1 : 1;
-      japasByDeity[deity] = (japasByDeity[deity] ?? 0) + japaCount;
-      if (!isGuest) japaStore.addJapa(deity, japaCount);
+    let japaDelta = 0;
+    if (isUserDirectMatch) {
+      for (const [deity] of deityMatches) {
+        const shouldCountJapa = gameMode === 'general' || gameMode === deity;
+        if (!shouldCountJapa) continue;
+        if (useIntendedOnly && deity !== intendedDeity) continue;
+        const japaCount = 1; // 1 japa per manual match (e.g. 3 candies matched = 1 japa)
+        japasByDeity[deity] = (japasByDeity[deity] ?? 0) + japaCount;
+        if (!isGuest) japaStore.addJapa(deity, japaCount);
+        japaDelta += shouldCountJapa ? japaCount : 0;
+      }
+      if (useIntendedOnly && japaDelta > 1) japaDelta = 1; // multi-match: cap at 1 (intended deity only)
     }
-    const japaDelta = useIntendedOnly
-      ? ((gameMode === 'general' || gameMode === intendedDeity) ? 1 : 0)
-      : Array.from(deityMatches.entries()).reduce(
-          (a, [deity, count]) => a + (gameMode === 'general' || gameMode === deity ? count : 0),
-          0
-        );
     const totalScore = get().score + calculateScore(pendingMatchBatch, comboLevel);
     const japasThisLevel = get().japasThisLevel + japaDelta;
     const positions = getAllMatchPositions(pendingMatchBatch);

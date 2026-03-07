@@ -70,12 +70,12 @@ export async function POST(request) {
     }
 
     const paymentSessionId = data?.payment_session_id;
-    const cfOrderId = data?.cf_order_id || data?.order_id || orderId;
     if (!paymentSessionId) {
       return jsonResponse({ error: 'Invalid Cashfree response' }, 500);
     }
 
-    return jsonResponse({ orderId: cfOrderId, paymentSessionId, amount });
+    // Use our order_id - Cashfree GET order API expects merchant order_id, not cf_order_id
+    return jsonResponse({ orderId, paymentSessionId, amount });
   } catch (e) {
     console.error('donate-order', e);
     return jsonResponse({ error: e?.message || 'Failed to create order' }, 500);

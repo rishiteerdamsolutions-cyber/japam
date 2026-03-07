@@ -85,14 +85,14 @@ export async function POST(request) {
     }
 
     const paymentSessionId = data?.payment_session_id;
-    const cfOrderId = data?.cf_order_id || data?.order_id || orderId;
     if (!paymentSessionId) {
       console.error('create-order: no payment_session_id in response', data);
       return jsonResponse({ error: 'Invalid Cashfree response' }, 500);
     }
 
+    // Use our order_id (merchant reference) - Cashfree GET order API expects this, not cf_order_id
     return jsonResponse({
-      orderId: cfOrderId,
+      orderId,
       paymentSessionId,
       amount: amountPaise,
     });

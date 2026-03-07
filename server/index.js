@@ -154,9 +154,8 @@ app.post('/api/create-order', async (req, res) => {
     const data = await cfRes.json();
     if (!cfRes.ok) return res.status(cfRes.status >= 500 ? 500 : 400).json({ error: data?.message || 'Cashfree error' });
     const paymentSessionId = data?.payment_session_id;
-    const cfOrderId = data?.cf_order_id || data?.order_id || orderId;
     if (!paymentSessionId) return res.status(500).json({ error: 'Invalid Cashfree response' });
-    res.json({ orderId: cfOrderId, paymentSessionId, amount: amountPaise });
+    res.json({ orderId, paymentSessionId, amount: amountPaise });
   } catch (e) {
     console.error('create-order', e);
     res.status(500).json({ error: e.message || 'Failed to create order' });
@@ -564,9 +563,8 @@ app.post('/api/donate-order', async (req, res) => {
     const data = await cfRes.json();
     if (!cfRes.ok) return res.status(cfRes.status >= 500 ? 500 : 400).json({ error: data?.message || 'Cashfree error' });
     const paymentSessionId = data?.payment_session_id;
-    const cfOrderId = data?.cf_order_id || data?.order_id || orderId;
     if (!paymentSessionId) return res.status(500).json({ error: 'Invalid Cashfree response' });
-    res.json({ orderId: cfOrderId, paymentSessionId, amount });
+    res.json({ orderId, paymentSessionId, amount });
   } catch (e) {
     console.error('donate-order', e);
     res.status(500).json({ error: e.message || 'Failed to create order' });

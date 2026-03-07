@@ -1,7 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import Razorpay from 'razorpay';
 import crypto from 'crypto';
 import admin from 'firebase-admin';
 
@@ -9,8 +8,9 @@ const app = express();
 app.use(cors({ origin: true }));
 app.use(express.json());
 
-const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || 'rzp_test_SIglcNEf6QAT2M';
-const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || 'iDY2XaMKT5k22g39pOU27X1t';
+const CASHFREE_APP_ID = process.env.CASHFREE_APP_ID || process.env.CASHFREE_CLIENT_ID;
+const CASHFREE_SECRET = process.env.CASHFREE_SECRET || process.env.CASHFREE_CLIENT_SECRET;
+const CASHFREE_BASE = process.env.CASHFREE_ENV === 'sandbox' ? 'https://sandbox.cashfree.com/pg' : 'https://api.cashfree.com/pg';
 
 let db = null;
 if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
@@ -22,8 +22,6 @@ if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
     console.error('Firebase init failed:', e.message);
   }
 }
-
-const razorpay = new Razorpay({ key_id: RAZORPAY_KEY_ID, key_secret: RAZORPAY_KEY_SECRET });
 
 const ADMIN_ID = process.env.ADMIN_ID || '';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
@@ -130,17 +128,38 @@ app.get('/api/price', async (req, res) => {
 app.post('/api/create-order', async (req, res) => {
   try {
     const { userId } = req.body || {};
-    if (!userId) return res.status(400).send('userId required');
-    const amount = await getUnlockPricePaise();
-    const order = await razorpay.orders.create({
-      amount,
-      currency: 'INR',
-      receipt: `japam-unlock-${userId}-${Date.now()}`
+    if (!userId) return res.status(400).json({ error: 'userId required' });
+    if (!CASHFREE_APP_ID || !CASHFREE_SECRET) return res.status(503).json({ error: 'Payment not configured' });
+    const amountPaise = await getUnlockPricePaise();
+    const orderId = `japam-${String(userId).slice(-12)}-${Date.now().toString(36).slice(-6)}`.replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 45);
+    const orderAmount = (amountPaise / 100).toFixed(2);
+    const origin = req.headers.origin || req.headers.referer || 'https://japam.digital';
+    const baseUrl = (origin || '').replace(/\/$/, '') || 'https://japam.digital';
+    const returnUrl = `${baseUrl}/?payment_return=1&order_id={order_id}`;
+    let customerEmail = 'user@japam.digital', customerName = 'User';
+    try {
+      const u = await admin.auth().getUser(userId);
+      customerEmail = u.email || customerEmail;
+      customerName = (u.displayName || u.email || 'User').slice(0, 100);
+    } catch {}
+    const cfRes = await fetch(`${CASHFREE_BASE}/orders`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'x-api-version': '2023-08-01', 'X-Client-Id': CASHFREE_APP_ID, 'X-Client-Secret': CASHFREE_SECRET },
+      body: JSON.stringify({
+        order_id: orderId, order_amount: parseFloat(orderAmount), order_currency: 'INR',
+        customer_details: { customer_id: userId.slice(-20), customer_email: customerEmail, customer_name: customerName, customer_phone: '9999999999' },
+        order_meta: { return_url: returnUrl }, order_note: 'Japam Pro Unlock',
+      }),
     });
-    res.json({ orderId: order.id, amount, keyId: RAZORPAY_KEY_ID });
+    const data = await cfRes.json();
+    if (!cfRes.ok) return res.status(cfRes.status >= 500 ? 500 : 400).json({ error: data?.message || 'Cashfree error' });
+    const paymentSessionId = data?.payment_session_id;
+    const cfOrderId = data?.cf_order_id || data?.order_id || orderId;
+    if (!paymentSessionId) return res.status(500).json({ error: 'Invalid Cashfree response' });
+    res.json({ orderId: cfOrderId, paymentSessionId, amount: amountPaise });
   } catch (e) {
     console.error('create-order', e);
-    res.status(500).send(e.message || 'Failed to create order');
+    res.status(500).json({ error: e.message || 'Failed to create order' });
   }
 });
 
@@ -478,21 +497,108 @@ app.post('/api/marathons/join', async (req, res) => {
   }
 });
 
+async function verifyFirebaseUser(req) {
+  try {
+    const auth = req.headers.authorization || req.headers.Authorization;
+    const token = auth && String(auth).startsWith('Bearer ') ? auth.slice(7) : null;
+    if (!token || !db) return null;
+    const decoded = await admin.auth().verifyIdToken(token);
+    if (decoded?.blocked === true) return null;
+    return decoded?.uid || null;
+  } catch { return null; }
+}
+
 app.post('/api/verify-unlock', async (req, res) => {
   try {
-    const { userId, razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body || {};
-    if (!userId || !razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
-      return res.status(400).send('Missing fields');
-    }
-    const body = `${razorpay_order_id}|${razorpay_payment_id}`;
-    const expected = crypto.createHmac('sha256', RAZORPAY_KEY_SECRET).update(body).digest('hex');
-    if (expected !== razorpay_signature) return res.status(400).send('Invalid signature');
-    if (!db) return res.status(503).send('Database not configured');
-    await db.doc(`users/${userId}/data/unlock`).set({ levelsUnlocked: true });
+    const uid = await verifyFirebaseUser(req);
+    if (!uid) return res.status(401).json({ error: 'Unauthorized' });
+    const { order_id } = req.body || {};
+    if (!order_id) return res.status(400).json({ error: 'order_id required' });
+    if (!CASHFREE_APP_ID || !CASHFREE_SECRET) return res.status(503).json({ error: 'Payment not configured' });
+    const cfRes = await fetch(`${CASHFREE_BASE}/orders/${encodeURIComponent(order_id)}`, {
+      method: 'GET',
+      headers: { 'Accept': 'application/json', 'x-api-version': '2023-08-01', 'X-Client-Id': CASHFREE_APP_ID, 'X-Client-Secret': CASHFREE_SECRET },
+    });
+    const data = await cfRes.json();
+    if (!cfRes.ok || data?.order_status !== 'PAID') return res.status(400).json({ error: 'Payment not completed' });
+    if (!db) return res.status(503).json({ error: 'Database not configured' });
+    await db.doc(`users/${uid}/data/unlock`).set({ levelsUnlocked: true });
+    let email = null;
+    try { email = (await admin.auth().getUser(uid)).email || null; } catch {}
+    await db.collection('unlockedUsers').doc(uid).set({ uid, email, unlockedAt: new Date().toISOString() }, { merge: true });
     res.json({ ok: true });
   } catch (e) {
     console.error('verify-unlock', e);
-    res.status(500).send(e.message || 'Verification failed');
+    res.status(500).json({ error: e.message || 'Verification failed' });
+  }
+});
+
+app.post('/api/donate-order', async (req, res) => {
+  try {
+    const { userId, amountPaise } = req.body || {};
+    if (!userId) return res.status(400).json({ error: 'userId required' });
+    const amount = Math.round(Number(amountPaise));
+    if (!Number.isFinite(amount) || amount < 100) return res.status(400).json({ error: 'Minimum donation is ₹1 (100 paise)' });
+    if (amount > 10000000) return res.status(400).json({ error: 'Amount too large' });
+    if (!CASHFREE_APP_ID || !CASHFREE_SECRET) return res.status(503).json({ error: 'Payment not configured' });
+    const orderId = `japam-donate-${String(userId).slice(-12)}-${Date.now().toString(36).slice(-6)}`.replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 45);
+    const orderAmount = (amount / 100).toFixed(2);
+    const origin = req.headers.origin || req.headers.referer || 'https://japam.digital';
+    const baseUrl = (origin || '').replace(/\/$/, '') || 'https://japam.digital';
+    const returnUrl = `${baseUrl}/?donate_return=1&order_id={order_id}`;
+    let customerEmail = 'user@japam.digital', customerName = 'Donor';
+    try {
+      const u = await admin.auth().getUser(userId);
+      customerEmail = u.email || customerEmail;
+      customerName = (u.displayName || u.email || 'Donor').slice(0, 100);
+    } catch {}
+    const cfRes = await fetch(`${CASHFREE_BASE}/orders`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'x-api-version': '2023-08-01', 'X-Client-Id': CASHFREE_APP_ID, 'X-Client-Secret': CASHFREE_SECRET },
+      body: JSON.stringify({
+        order_id: orderId, order_amount: parseFloat(orderAmount), order_currency: 'INR',
+        customer_details: { customer_id: userId.slice(-20), customer_email: customerEmail, customer_name: customerName, customer_phone: '9999999999' },
+        order_meta: { return_url: returnUrl }, order_note: 'Japam Donation',
+      }),
+    });
+    const data = await cfRes.json();
+    if (!cfRes.ok) return res.status(cfRes.status >= 500 ? 500 : 400).json({ error: data?.message || 'Cashfree error' });
+    const paymentSessionId = data?.payment_session_id;
+    const cfOrderId = data?.cf_order_id || data?.order_id || orderId;
+    if (!paymentSessionId) return res.status(500).json({ error: 'Invalid Cashfree response' });
+    res.json({ orderId: cfOrderId, paymentSessionId, amount });
+  } catch (e) {
+    console.error('donate-order', e);
+    res.status(500).json({ error: e.message || 'Failed to create order' });
+  }
+});
+
+app.post('/api/verify-donate', async (req, res) => {
+  try {
+    const uid = await verifyFirebaseUser(req);
+    if (!uid) return res.status(401).json({ error: 'Unauthorized' });
+    const { order_id, displayName } = req.body || {};
+    if (!order_id) return res.status(400).json({ error: 'order_id required' });
+    if (!CASHFREE_APP_ID || !CASHFREE_SECRET) return res.status(503).json({ error: 'Payment not configured' });
+    const cfRes = await fetch(`${CASHFREE_BASE}/orders/${encodeURIComponent(order_id)}`, {
+      method: 'GET',
+      headers: { 'Accept': 'application/json', 'x-api-version': '2023-08-01', 'X-Client-Id': CASHFREE_APP_ID, 'X-Client-Secret': CASHFREE_SECRET },
+    });
+    const data = await cfRes.json();
+    if (!cfRes.ok || data?.order_status !== 'PAID') return res.status(400).json({ error: 'Payment not completed' });
+    if (!db) return res.status(503).json({ error: 'Database not configured' });
+    const unlockedSnap = await db.collection('unlockedUsers').doc(uid).get();
+    if (!unlockedSnap.exists) return res.status(403).json({ error: 'Pro member required to donate' });
+    const orderAmount = data?.order_amount;
+    const amountPaise = typeof orderAmount === 'number' ? Math.round(orderAmount * 100) : 0;
+    let name = displayName || '';
+    if (!name) try { const u = await admin.auth().getUser(uid); name = u.displayName || u.email || uid.slice(0, 12); } catch { name = uid.slice(0, 12); }
+    const lifetimeDonor = amountPaise >= 5000000;
+    await db.collection('donors').doc(uid).set({ uid, displayName: String(name).trim() || 'Anonymous', amount: amountPaise, lifetimeDonor, donatedAt: new Date().toISOString(), orderId: order_id, paymentId: order_id }, { merge: true });
+    res.json({ ok: true });
+  } catch (e) {
+    console.error('verify-donate', e);
+    res.status(500).json({ error: e.message || 'Verification failed' });
   }
 });
 

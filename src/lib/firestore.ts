@@ -69,7 +69,7 @@ export async function loadUserUnlock(_uid: string): Promise<UserUnlockData> {
   return { levelsUnlocked: false, tier: 'free', isDonor: false };
 }
 
-const DEFAULT_UNLOCK_PRICE_PAISE = 1000; // ₹10
+const DEFAULT_UNLOCK_PRICE_PAISE = 10800; // ₹108 (auspicious)
 const DEFAULT_DISPLAY_PRICE_PAISE = 9900; // ₹99 strikethrough
 
 /** Unlock + display price in paise. Tries /api/price first, then Firestore. */

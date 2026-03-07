@@ -1,14 +1,12 @@
 /**
  * Shared helpers for API handlers (used by api/proxy.js router).
  */
-export const UNLOCK_PRICE_PAISE = 1000; // ₹10 default (Razorpay uses paise); admin can override via /admin in rupees
+export const UNLOCK_PRICE_PAISE = 10800; // ₹108 default (auspicious); admin can override via /admin in rupees
 
 import crypto from 'crypto';
 import admin from 'firebase-admin';
-import Razorpay from 'razorpay';
 
 let db = null;
-let razorpay = null;
 
 const ADMIN_SECRET = process.env.ADMIN_SECRET || process.env.JWT_SECRET || 'change-me-in-production';
 
@@ -99,17 +97,9 @@ export async function isUserUnlocked(db, uid) {
   }
 }
 
-export function getRazorpay() {
-  if (razorpay) return razorpay;
-  const keyId = process.env.RAZORPAY_KEY_ID || 'rzp_test_SIglcNEf6QAT2M';
-  const keySecret = process.env.RAZORPAY_KEY_SECRET || 'iDY2XaMKT5k22g39pOU27X1t';
-  razorpay = new Razorpay({ key_id: keyId, key_secret: keySecret });
-  return razorpay;
-}
-
 const DEFAULT_DISPLAY_PRICE_PAISE = 9900; // ₹99 strikethrough
 
-/** Current price: Firestore config/pricing if set by admin, else UNLOCK_PRICE_PAISE. Never returns < 100 (Razorpay minimum). */
+/** Current price: Firestore config/pricing if set by admin, else UNLOCK_PRICE_PAISE. Never returns < 100. */
 export async function getUnlockPricePaise() {
   const { unlockPricePaise } = await getPricing();
   return unlockPricePaise;

@@ -14,7 +14,6 @@ Set these in **Vercel → Project → Settings → Environment Variables**:
 | `VITE_FIREBASE_STORAGE_BUCKET` | `your-project.appspot.com` |
 | `VITE_FIREBASE_MESSAGING_SENDER_ID` | From Firebase |
 | `VITE_FIREBASE_APP_ID` | From Firebase |
-| `VITE_RAZORPAY_KEY_ID` | Razorpay key ID (e.g. `rzp_test_...`) |
 | `VITE_API_URL` | Leave **empty** (API is same origin) |
 
 ## API / server-only (for create-order & verify-unlock)
@@ -22,8 +21,8 @@ Set these in **Vercel → Project → Settings → Environment Variables**:
 | Name | Value |
 |------|--------|
 | `FIREBASE_SERVICE_ACCOUNT_JSON` | Full JSON string of Firebase service account key (one line) |
-| `RAZORPAY_KEY_ID` | Same as `VITE_RAZORPAY_KEY_ID` |
-| `RAZORPAY_KEY_SECRET` | Razorpay key secret |
+| `CASHFREE_APP_ID` | Cashfree App ID (from [Cashfree Dashboard](https://merchant.cashfree.com/merchants/pg/developers/api-keys)) |
+| `CASHFREE_SECRET` | Cashfree Secret Key |
 | `CRON_SECRET` or `ADMIN_SECRET` | Required for cron jobs (`refresh-active-users` at 3 AM IST). Vercel injects `CRON_SECRET` for scheduled crons on Pro; otherwise set it manually. |
 
 **Total: 11–12 variables** (no `ADMIN_ID` or `ADMIN_PASSWORD`).

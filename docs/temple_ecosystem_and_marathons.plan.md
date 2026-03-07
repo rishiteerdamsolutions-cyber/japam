@@ -9,7 +9,7 @@ isProject: false
 
 ## Current state
 
-- App: React, Firebase Auth (Google) for **users only**, Firestore, Razorpay one-time unlock.
+- App: React, Firebase Auth (Google) for **users only**, Firestore, Cashfree one-time unlock.
 - Paywall after level 2; price from admin in `config/pricing` ([api/_lib.js](api/_lib.js), [AdminPanel](src/components/admin/AdminPanel.tsx)).
 - No temples, priests, or marathons yet.
 
@@ -73,8 +73,8 @@ isProject: false
 
 ## 6. Pricing
 
-- **Now:** Admin sets actual (e.g. Rs.10) and display (e.g. Rs.299). Paywall shows ~~₹299~~ ₹10; Razorpay charges actual. Two fields in config + strikethrough in UI.
-- **Later:** Rs.299/month subscription; admin sets fee; Razorpay subscription + "is active?" check.
+- **Now:** Admin sets actual (e.g. Rs.10) and display (e.g. Rs.299). Paywall shows ~~₹299~~ ₹10; Cashfree charges actual. Two fields in config + strikethrough in UI.
+- **Later:** Rs.299/month subscription; admin sets fee; Cashfree subscription + "is active?" check.
 
 ---
 

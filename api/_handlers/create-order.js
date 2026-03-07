@@ -1,6 +1,9 @@
-import { getRazorpay, getUnlockPricePaise, jsonResponse, UNLOCK_PRICE_PAISE } from './_lib.js';
+import { getDb, getUnlockPricePaise, jsonResponse, UNLOCK_PRICE_PAISE } from './_lib.js';
+import admin from 'firebase-admin';
 
-const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || 'rzp_test_SIglcNEf6QAT2M';
+const CASHFREE_APP_ID = process.env.CASHFREE_APP_ID || process.env.CASHFREE_CLIENT_ID;
+const CASHFREE_SECRET = process.env.CASHFREE_SECRET || process.env.CASHFREE_CLIENT_SECRET;
+const CASHFREE_BASE = process.env.CASHFREE_ENV === 'sandbox' ? 'https://sandbox.cashfree.com/pg' : 'https://api.cashfree.com/pg';
 
 function getErrorMessage(e) {
   if (!e) return 'Failed to create order';
@@ -17,30 +20,82 @@ export async function POST(request) {
     const { userId } = body;
     if (!userId) return jsonResponse({ error: 'userId required' }, 400);
 
-    let amount;
+    if (!CASHFREE_APP_ID || !CASHFREE_SECRET) {
+      console.error('create-order: CASHFREE_APP_ID or CASHFREE_SECRET not set');
+      return jsonResponse({ error: 'Payment not configured (missing Cashfree keys)' }, 503);
+    }
+
+    let amountPaise;
     try {
-      amount = await getUnlockPricePaise();
+      amountPaise = await getUnlockPricePaise();
     } catch (err) {
       console.error('create-order getUnlockPricePaise', err);
-      amount = UNLOCK_PRICE_PAISE;
+      amountPaise = UNLOCK_PRICE_PAISE;
     }
-    amount = Math.round(Number(amount));
-    if (!Number.isFinite(amount) || amount < 100) amount = UNLOCK_PRICE_PAISE;
+    amountPaise = Math.round(Number(amountPaise));
+    if (!Number.isFinite(amountPaise) || amountPaise < 100) amountPaise = UNLOCK_PRICE_PAISE;
 
-    const keySecret = process.env.RAZORPAY_KEY_SECRET;
-    if (!keySecret) {
-      console.error('create-order: RAZORPAY_KEY_SECRET not set');
-      return jsonResponse({ error: 'Payment not configured (missing RAZORPAY_KEY_SECRET)' }, 503);
-    }
+    getDb();
+    const orderId = `japam-${String(userId).slice(-12)}-${Date.now().toString(36).slice(-6)}`.replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 45);
+    const orderAmount = (amountPaise / 100).toFixed(2);
 
-    const razorpay = getRazorpay();
-    const receipt = `japam-${String(userId).slice(-14)}-${Date.now().toString(36).slice(-6)}`.slice(0, 40);
-    const order = await razorpay.orders.create({
-      amount,
-      currency: 'INR',
-      receipt,
+    let customerEmail = 'user@japam.digital';
+    let customerName = 'User';
+    try {
+      const userRecord = await admin.auth().getUser(userId);
+      customerEmail = userRecord.email || customerEmail;
+      customerName = (userRecord.displayName || userRecord.email || 'User').slice(0, 100);
+    } catch {}
+
+    const origin = request.headers.get('origin') || request.headers.get('referer') || 'https://japam.digital';
+    const baseUrl = origin.replace(/\/$/, '');
+    const returnUrl = `${baseUrl}/?payment_return=1&order_id={order_id}`;
+
+    const res = await fetch(`${CASHFREE_BASE}/orders`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'x-api-version': '2023-08-01',
+        'X-Client-Id': CASHFREE_APP_ID,
+        'X-Client-Secret': CASHFREE_SECRET,
+      },
+      body: JSON.stringify({
+        order_id: orderId,
+        order_amount: parseFloat(orderAmount),
+        order_currency: 'INR',
+        customer_details: {
+          customer_id: userId.slice(-20),
+          customer_email: customerEmail,
+          customer_name: customerName,
+          customer_phone: '9999999999',
+        },
+        order_meta: {
+          return_url: returnUrl,
+        },
+        order_note: 'Japam Pro Unlock',
+      }),
     });
-    return jsonResponse({ orderId: order.id, amount, keyId: RAZORPAY_KEY_ID });
+
+    const data = await res.json();
+    if (!res.ok) {
+      const msg = data?.message || data?.error?.message || `Cashfree error: ${res.status}`;
+      console.error('create-order Cashfree', res.status, data);
+      return jsonResponse({ error: msg }, res.status >= 500 ? 500 : 400);
+    }
+
+    const paymentSessionId = data?.payment_session_id;
+    const cfOrderId = data?.cf_order_id || data?.order_id || orderId;
+    if (!paymentSessionId) {
+      console.error('create-order: no payment_session_id in response', data);
+      return jsonResponse({ error: 'Invalid Cashfree response' }, 500);
+    }
+
+    return jsonResponse({
+      orderId: cfOrderId,
+      paymentSessionId,
+      amount: amountPaise,
+    });
   } catch (e) {
     const msg = getErrorMessage(e);
     console.error('create-order', e);

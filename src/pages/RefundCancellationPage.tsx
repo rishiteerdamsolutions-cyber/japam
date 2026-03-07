@@ -46,7 +46,7 @@ export function RefundCancellationPage() {
           <section>
             <h2 className="text-lg font-semibold text-amber-300 mb-3">4. Disputes</h2>
             <p className="text-sm">
-              Payment disputes should be raised first with us. If unresolved, you may contact your payment provider (e.g., Razorpay, your bank) according to their dispute procedures.
+              Payment disputes should be raised first with us. If unresolved, you may contact your payment provider (e.g., Cashfree, your bank) according to their dispute procedures.
             </p>
           </section>
 

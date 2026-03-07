@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useAuthStore } from '../store/authStore';
-import { loadRazorpayScript } from '../lib/razorpay';
+import { loadCashfree } from '../lib/cashfree';
 import { useProgressStore } from '../store/progressStore';
 import { useJapaStore } from '../store/japaStore';
 import { useUnlockStore } from '../store/unlockStore';
@@ -12,7 +12,7 @@ import { useDailyReminder } from '../hooks/useDailyReminder';
  * Keeps Firebase auth state in sync on every route.
  * Must be mounted once at the root so sign-in state updates immediately
  * without refresh (e.g. on /menu, /game, /levels).
- * Also preloads Razorpay so Pay & Unlock opens instantly in PWA.
+ * Also preloads Cashfree so Offer Dakshina opens instantly in PWA.
  */
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const init = useAuthStore((s) => s.init);
@@ -31,7 +31,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return unsubscribe;
   }, [init]);
   useEffect(() => {
-    loadRazorpayScript().catch(() => {});
+    loadCashfree('production').catch(() => {});
   }, []);
 
   // Global app bootstrap: ensure stores load on *every* route refresh.

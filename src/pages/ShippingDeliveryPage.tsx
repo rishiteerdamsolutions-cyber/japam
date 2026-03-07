@@ -44,7 +44,7 @@ export function ShippingDeliveryPage() {
           <section>
             <h2 className="text-lg font-semibold text-amber-300 mb-3">4. No Physical Address Required</h2>
             <p className="text-sm">
-              Since we deliver only digital services, no shipping address is required for purchases. Billing or contact details may be collected by our payment provider (Razorpay) for transaction purposes only.
+              Since we deliver only digital services, no shipping address is required for purchases. Billing or contact details may be collected by our payment provider (Cashfree) for transaction purposes only.
             </p>
           </section>
 

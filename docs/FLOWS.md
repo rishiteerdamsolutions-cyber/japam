@@ -59,9 +59,9 @@ Users **must sign in with Google** to play. All progress and japa data is stored
 
 1. User hits a **locked level** (level 3+, index ≥ 2) without having unlocked → **Paywall** appears (e.g. “Unlock levels 3–50”).
 2. **Prices**: From GET `/api/price` or Firestore `config/pricing` (actual + display, e.g. ~~₹99~~ ₹10).
-3. User taps **Pay** → POST `/api/create-order` with `userId` → backend returns Razorpay `orderId`, `keyId`, `amount`.
-4. **Razorpay checkout** opens; user pays.
-5. On success: frontend calls POST `/api/verify-unlock` with Firebase ID token + `razorpay_order_id`, `razorpay_payment_id`, `razorpay_signature`. Backend verifies with Razorpay, then writes:
+3. User taps **Pay** → POST `/api/create-order` with `userId` → backend returns Cashfree `orderId`, `paymentSessionId`.
+4. **Cashfree checkout** opens; user pays.
+5. On success: frontend calls POST `/api/verify-unlock` with Firebase ID token + `order_id`. Backend verifies with Cashfree, then writes:
    - `users/{uid}/data/unlock` = `{ levelsUnlocked: true }`
    - `unlockedUsers/{uid}` (for admin list + marathon join check).
 6. Frontend calls **loadUnlock(uid)** (GET `/api/user/unlock`), then **onUnlocked** → Paywall closes and user can play the level.
@@ -114,7 +114,7 @@ Users **must sign in with Google** to play. All progress and japa data is stored
 | Priest     | Priest     | Settings link or /priest login | Marathons: backend (token) |
 | General game | Player   | Menu → General Game | Progress + japa: backend         |
 | Deity game | Player     | Menu → Deity       | Same as general, deity filter   |
-| Payment    | Player     | Paywall on locked level | Razorpay → verify-unlock → unlock + unlockedUsers |
+| Payment    | Player     | Paywall on locked level | Cashfree → verify-unlock → unlock + unlockedUsers |
 | Levels     | Player     | Menu / Map         | progressStore ↔ GET/POST /api/user/progress |
 | Japa count | Player     | Menu → Japa Count  | japaStore ↔ GET/POST /api/user/japa |
 | Marathon   | Player / Priest | /marathons, Join / Create | discover, join (paid only), priest marathons API |

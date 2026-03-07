@@ -29,3 +29,5 @@ dist-ssr
 # Local secrets (never commit)
 .github-token
 .vercel
+api/APIKey.csv
+api/**/APIKey*.csv

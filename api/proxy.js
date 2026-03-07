@@ -5,7 +5,7 @@
 
 function getCorsHeaders(request) {
   const origin = request.headers.get('origin') || '';
-  const allowed = (process.env.CORS_ORIGINS || 'http://localhost:5173,http://localhost:5174').split(',').map((o) => o.trim());
+  const allowed = (process.env.CORS_ORIGINS || 'http://localhost:5173,http://localhost:5174,https://japam.digital,https://www.japam.digital').split(',').map((o) => o.trim());
   const allowOrigin = allowed.includes(origin) || origin.endsWith('.vercel.app') ? origin : allowed[0] || '*';
   return {
     'Access-Control-Allow-Origin': allowOrigin,

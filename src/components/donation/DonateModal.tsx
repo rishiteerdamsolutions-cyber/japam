@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { loadRazorpayScript } from '../../lib/razorpay';
+import { openCashfreeCheckout } from '../../lib/cashfree';
 import { auth } from '../../lib/firebase';
 import { useAuthStore } from '../../store/authStore';
 import { useUnlockStore } from '../../store/unlockStore';
@@ -54,48 +54,30 @@ export function DonateModal({ onClose, onDonated }: DonateModalProps) {
         const msg = await getErrorMessage(res, 'Failed to create order');
         throw new Error(msg);
       }
-      const { orderId, keyId, amount } = (await res.json()) as { orderId: string; keyId?: string; amount?: number };
-      await loadRazorpayScript();
-      const checkoutKey = keyId || import.meta.env.VITE_RAZORPAY_KEY_ID || '';
-      const checkoutAmount = typeof amount === 'number' && amount >= 100 ? amount : amt;
-      if (!checkoutKey) throw new Error('Payment not configured');
-      const rp = new window.Razorpay({
-        key: checkoutKey,
-        amount: checkoutAmount,
-        currency: 'INR',
-        order_id: orderId,
-        name: 'Japam',
-        description: 'Fund Japam startup - Charity for Sanathana Dharma',
-        handler: async (data) => {
-          try {
-            const verifyUrl = API_BASE ? `${API_BASE}/api/verify-donate` : '/api/verify-donate';
-            const idToken = await auth?.currentUser?.getIdToken?.().catch(() => null);
-            if (!idToken) throw new Error('Please sign in again');
-            const vRes = await fetch(verifyUrl, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
-              body: JSON.stringify({
-                razorpay_order_id: data.razorpay_order_id,
-                razorpay_payment_id: data.razorpay_payment_id,
-                razorpay_signature: data.razorpay_signature,
-                displayName: user.displayName || user.email || '',
-              })
-            });
-            if (!vRes.ok) {
-              const msg = await getErrorMessage(vRes, 'Verification failed');
-              throw new Error(msg);
-            }
-            await loadUnlock(user.uid);
-            onDonated?.();
-            onClose();
-          } catch (e) {
-            setError(e instanceof Error ? e.message : 'Verification failed');
-          } finally {
-            setPaying(false);
-          }
+      const { orderId, paymentSessionId } = (await res.json()) as { orderId?: string; paymentSessionId?: string };
+      if (!paymentSessionId || !orderId) throw new Error('Invalid create-order response');
+
+      const result = await openCashfreeCheckout(paymentSessionId, { redirectTarget: '_modal' });
+      const r = result as { error?: unknown; paymentDetails?: unknown };
+      if (r?.paymentDetails) {
+        const verifyUrl = API_BASE ? `${API_BASE}/api/verify-donate` : '/api/verify-donate';
+        const idToken = await auth?.currentUser?.getIdToken?.().catch(() => null);
+        if (!idToken) throw new Error('Please sign in again');
+        const vRes = await fetch(verifyUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
+          body: JSON.stringify({ order_id: orderId, displayName: user.displayName || user.email || '' }),
+        });
+        if (!vRes.ok) {
+          const msg = await getErrorMessage(vRes, 'Verification failed');
+          throw new Error(msg);
         }
-      });
-      rp.open();
+        await loadUnlock(user.uid);
+        onDonated?.();
+        onClose();
+      } else if (r?.error) {
+        setError('Payment was cancelled or failed');
+      }
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Donation failed');
     } finally {

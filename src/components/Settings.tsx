@@ -462,7 +462,7 @@ export function Settings({ onBack }: SettingsProps) {
               Contact on WhatsApp
             </a>
             <a
-              href="https://wa.me/919505009699?text=Hi%2C%20I%20would%20like%20to%20suggest%20adding%20a%20new%20deity%2Fgod%2Fjapa%20to%20Japam%20game%3A%20"
+              href="https://wa.me/919505009699?text=Hi%2C%20I%20would%20like%20to%20suggest%20adding%20a%20new%20deity%2Fgod%2Fjapa%20to%20Japam%20app%3A%20"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#128C7E] text-white font-semibold hover:bg-[#0f7a6d] transition-colors"

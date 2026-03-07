@@ -153,9 +153,9 @@ export function GamePage() {
     return (
       <div className="fixed inset-0 bg-black/80 flex flex-col items-center justify-center z-30 p-4">
         <div className="bg-[#1a1a2e] rounded-2xl p-6 max-w-sm w-full text-center">
-          <h2 className="text-xl font-bold text-amber-400 mb-2">Resume game?</h2>
+          <h2 className="text-xl font-bold text-amber-400 mb-2">Resume Japa?</h2>
           <p className="text-amber-200/80 mb-6 text-sm">
-            You have a saved game. Continue where you left off?
+            You have a saved session. Continue where you left off?
           </p>
           <div className="flex flex-col gap-2">
             <button

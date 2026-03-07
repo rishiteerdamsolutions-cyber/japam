@@ -25,7 +25,7 @@ export function PrivacyPolicyPage() {
           <section>
             <h2 className="text-lg font-semibold text-amber-300 mb-3">1. Introduction</h2>
             <p>
-              Welcome to <strong className="text-white">Japam</strong> ("we", "our", or "us"), a spiritual japa chanting game developed and operated by <strong className="text-white">AI Developer India</strong> (Aditya Nandagiri). We are committed to protecting your personal information and your right to privacy.
+              Welcome to <strong className="text-white">Japam</strong> ("we", "our", or "us"), a digital mantra practice platform developed and operated by <strong className="text-white">AI Developer India</strong> (Aditya Nandagiri). We are committed to protecting your personal information and your right to privacy.
             </p>
             <p className="mt-2">
               This Privacy Policy describes how we collect, use, and share information when you use our website and application at <strong className="text-white">japam.digital</strong> (the "Service").
@@ -43,7 +43,7 @@ export function PrivacyPolicyPage() {
             <h3 className="font-medium text-amber-200 mb-2 mt-4">2.2 Information Collected Automatically</h3>
             <ul className="list-disc pl-5 space-y-1 text-sm">
               <li><strong>Japa Counts:</strong> Your japa (chanting) progress per deity, stored to track your spiritual journey.</li>
-              <li><strong>Game Progress:</strong> Paused game states (moves count, japa count) to allow resume functionality.</li>
+              <li><strong>Practice Progress:</strong> Paused session states (moves count, japa count) to allow resume functionality.</li>
               <li><strong>Last Active Timestamp:</strong> The time you last used the app, used to show active users in real time.</li>
               <li><strong>Marathon Participation:</strong> Which community japa marathons you have joined and your contribution count.</li>
               <li><strong>Payment Status:</strong> Whether you have unlocked the Pro version (we do not store card details — payments are processed by third-party providers).</li>
@@ -54,7 +54,7 @@ export function PrivacyPolicyPage() {
           <section>
             <h2 className="text-lg font-semibold text-amber-300 mb-3">3. How We Use Your Information</h2>
             <ul className="list-disc pl-5 space-y-1 text-sm">
-              <li>To provide and maintain the Service, including saving your game progress and japa counts.</li>
+              <li>To provide and maintain the Service, including saving your practice progress and japa counts.</li>
               <li>To display your name and japa count on community leaderboards (marathons) — only if you have joined a marathon.</li>
               <li>To show your name in the real-time active users strip visible to other players.</li>
               <li>To send daily reminder notifications at the time you set (only if you grant notification permission).</li>
@@ -110,7 +110,7 @@ export function PrivacyPolicyPage() {
           <section>
             <h2 className="text-lg font-semibold text-amber-300 mb-3">9. Cookies & Local Storage</h2>
             <p className="text-sm">
-              We use browser local storage to store app settings (sound preferences, reminder times) and temporary game state. We do not use advertising cookies or third-party tracking cookies.
+              We use browser local storage to store app settings (sound preferences, reminder times) and temporary session state. We do not use advertising cookies or third-party tracking cookies.
             </p>
           </section>
 

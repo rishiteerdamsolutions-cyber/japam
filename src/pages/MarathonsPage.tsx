@@ -413,7 +413,7 @@ export function MarathonsPage() {
       return;
     }
     if (!isPro) {
-      setJoinError('Pro member required to join marathons. Unlock the game first.');
+      setJoinError('Pro member required to join marathons. Unlock full access first.');
       return;
     }
     setJoinError(null);
@@ -449,7 +449,7 @@ export function MarathonsPage() {
         const refetchData = (await refetchRes.json().catch(() => ({}))) as { marathons?: MyMarathon[] };
         if (refetchRes.ok && Array.isArray(refetchData.marathons)) setMyMarathons(refetchData.marathons);
       } else if (res.status === 403) {
-        setJoinError(data?.error ?? 'Only users who have unlocked the game can join marathons.');
+        setJoinError(data?.error ?? 'Only users who have full access can join marathons.');
       } else if (res.status === 401) {
         setJoinError('Please sign in to join a marathon.');
       } else {
@@ -586,7 +586,7 @@ export function MarathonsPage() {
       {user && isPro && myMarathons.length > 0 && (
         <div className="mb-6 p-4 rounded-xl bg-black/30 border border-amber-500/30">
           <h2 className="text-amber-400 font-semibold mb-3">Your marathons</h2>
-          <p className="text-amber-200/70 text-sm mb-3">Play the japa game for these marathons — your japas count toward the marathon.</p>
+          <p className="text-amber-200/70 text-sm mb-3">Do your japa for these marathons — your japas count toward the marathon.</p>
           <div className="space-y-2">
             {myMarathons.map((my) => (
               <div key={my.marathonId} className="py-2 border-t border-amber-500/10 first:border-t-0 first:pt-0">
@@ -603,7 +603,7 @@ export function MarathonsPage() {
                       }}
                       className="px-4 py-2 rounded-lg bg-green-600 text-white text-sm font-medium"
                     >
-                      Play
+                      Japa
                     </button>
                     {!!my.leaderboard && my.leaderboard.length > 0 && (
                       <button

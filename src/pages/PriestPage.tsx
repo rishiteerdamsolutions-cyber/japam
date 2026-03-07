@@ -127,7 +127,7 @@ export function PriestPage() {
           Go to Settings
         </Link>
         <Link to="/" className="text-amber-200/70 text-sm mt-4 underline">
-          ← Back to game
+          ← Back to Japam
         </Link>
       </div>
     );

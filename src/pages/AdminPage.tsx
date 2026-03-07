@@ -86,7 +86,7 @@ export function AdminPage() {
         onClick={() => navigate('/', { replace: true })}
         className="text-amber-400 text-sm mt-6 underline"
       >
-        ← Back to game
+        ← Back to Japam
       </button>
     </div>
   );

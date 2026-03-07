@@ -133,10 +133,10 @@ export function MainMenu({ onSelect, onOpenMap, onOpenJapaDashboard, onOpenSetti
           className="w-full py-4 rounded-2xl bg-amber-500/95 text-white font-bold text-lg shadow-lg shadow-amber-500/30 mb-4"
           onClick={() => onSelect('general')}
         >
-          General Game
+          General Japa
         </motion.button>
 
-        <p className="text-amber-200/80 text-xs uppercase tracking-wider mb-2">Deity games</p>
+        <p className="text-amber-200/80 text-xs uppercase tracking-wider mb-2">Ista Devata Japa</p>
         <div className="grid grid-cols-2 gap-3 w-full mb-6">
           {DEITIES.map((deity, i) => (
             <motion.button

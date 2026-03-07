@@ -75,7 +75,7 @@ export function Landing({ onEnterApp, onGuestPlay }: LandingProps) {
               onClick={onEnterApp}
               className="w-full max-w-xs py-5 rounded-2xl bg-amber-500 text-white font-bold text-xl shadow-[0_0_30px_rgba(245,158,11,0.4)] hover:shadow-[0_0_40px_rgba(245,158,11,0.5)] hover:bg-amber-400 transition-all duration-200"
             >
-              Play
+              Begin Japa
             </motion.button>
 
             {!user && (
@@ -86,7 +86,7 @@ export function Landing({ onEnterApp, onGuestPlay }: LandingProps) {
                 onClick={onGuestPlay}
                 className="w-full max-w-xs mt-3 py-4 rounded-2xl bg-white/10 text-white font-semibold text-base border border-white/15 hover:bg-white/15 transition-colors"
               >
-                Play as Guest
+                Try as Guest
               </motion.button>
             )}
           </motion.section>
@@ -108,10 +108,16 @@ export function Landing({ onEnterApp, onGuestPlay }: LandingProps) {
             <p className="text-white/40 text-xs text-center">
               © {new Date().getFullYear()} Japam. All rights reserved.
             </p>
-            <div className="flex items-center gap-4 text-xs text-white/50">
+            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-white/50">
+              <a href="/contact" className="hover:text-white/80 transition-colors underline underline-offset-2">Contact</a>
+              <span className="text-white/20">|</span>
               <a href="/privacy" className="hover:text-white/80 transition-colors underline underline-offset-2">Privacy Policy</a>
               <span className="text-white/20">|</span>
               <a href="/terms" className="hover:text-white/80 transition-colors underline underline-offset-2">Terms &amp; Conditions</a>
+              <span className="text-white/20">|</span>
+              <a href="/refund-cancellation" className="hover:text-white/80 transition-colors underline underline-offset-2">Refund &amp; Cancellation</a>
+              <span className="text-white/20">|</span>
+              <a href="/shipping-delivery" className="hover:text-white/80 transition-colors underline underline-offset-2">Shipping &amp; Delivery</a>
             </div>
           </footer>
         </div>

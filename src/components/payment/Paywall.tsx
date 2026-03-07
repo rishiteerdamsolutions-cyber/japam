@@ -123,7 +123,7 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
       <div className="bg-[#1a1a2e] rounded-2xl border border-amber-500/30 p-6 max-w-sm w-full shadow-xl">
         <h2 className="text-xl font-bold text-amber-400 mb-2">Unlock all levels</h2>
         <p className="text-amber-200/90 text-sm mb-4">
-          You’ve completed the first 2 levels. Pay once to unlock levels 3–50.
+          You’ve completed the first 2 levels. Offer Dakshina once to unlock levels 3–50.
         </p>
         {!priceLoaded && <p className="text-amber-200/70 text-xs mb-2">Loading price…</p>}
         <>
@@ -145,7 +145,7 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
                 disabled={paying}
                 className="flex-1 py-3 rounded-xl bg-amber-500 text-white font-semibold disabled:opacity-50 transition-opacity"
               >
-                {paying ? 'Opening…' : 'Pay & unlock'}
+                {paying ? 'Opening…' : `Offer Dakshina ₹${priceRupees} & unlock`}
               </button>
               <button
                 type="button"

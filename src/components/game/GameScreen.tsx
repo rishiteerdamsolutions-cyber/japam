@@ -282,7 +282,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
             <div className="bg-[#1a1a2e] rounded-2xl p-6 max-w-sm w-full text-center">
               <h2 className="text-2xl font-bold text-amber-400 mb-3">Jai!</h2>
               <p className="text-amber-200/90 mb-6">
-                Play your favourite God&apos;s Japam? Login with Gmail
+                Do your ista devata japa? Sign in with Google
               </p>
               <div className="mb-4">
                 <GoogleSignIn />
@@ -291,7 +291,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
                 onClick={reset}
                 className="w-full py-3 rounded-xl bg-amber-500/80 text-white font-semibold"
               >
-                Play again as guest
+                Continue as guest
               </button>
               <button
                 onClick={onBack}
@@ -323,8 +323,8 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
           <div className="bg-[#1a1a2e] rounded-2xl p-6 max-w-sm w-full text-center">
             <p className="text-amber-200/90 mb-8">
               {isMarathon
-                ? 'You have been playing the game for 20 minutes, please take a break.'
-                : 'You have been playing the game for 20 minutes, please take a break after this current level.'}
+                ? 'You have been doing japa for 20 minutes, please take a break.'
+                : 'You have been doing japa for 20 minutes, please take a break after this current level.'}
             </p>
             <button
               onClick={() => {

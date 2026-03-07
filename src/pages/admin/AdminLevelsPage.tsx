@@ -79,7 +79,7 @@ export function AdminLevelsPage() {
     <div className="space-y-4">
       <h2 className="text-xl font-bold text-amber-400">Reveal levels</h2>
       <p className="text-amber-200/80 text-sm">
-        Total levels in the game: {MAX_LEVELS}. By default 50 are revealed. Set how many levels (1–{MAX_LEVELS}) users can access. Once you reveal more, all paid users can play up to that level.
+        Total levels in the game: {MAX_LEVELS}. By default 50 are revealed. Set how many levels (1–{MAX_LEVELS}) users can access. Once you reveal more, all paid users can do japa up to that level.
       </p>
       <div className="flex flex-wrap items-center gap-3">
         <label className="text-amber-200/90 text-sm">

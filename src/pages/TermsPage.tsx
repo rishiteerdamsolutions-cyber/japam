@@ -35,10 +35,10 @@ export function TermsPage() {
           <section>
             <h2 className="text-lg font-semibold text-amber-300 mb-3">2. Description of Service</h2>
             <p className="text-sm">
-              Japam is a spiritual japa (mantra chanting) game where users match gems on a puzzle board to complete japas for Hindu deities including Rama, Shiva, Ganesh, Surya, Shakthi, Krishna, Shanmukha, and Venkateswara. The Service includes:
+              Japam is a spiritual mantra practice platform where users match gems on a puzzle board to complete japas for Hindu deities including Rama, Shiva, Ganesh, Surya, Shakthi, Krishna, Shanmukha, and Venkateswara. The Service includes:
             </p>
             <ul className="list-disc pl-5 space-y-1 text-sm mt-2">
-              <li>A gem-matching puzzle game tied to japa chanting</li>
+              <li>An interactive mantra practice tied to japa chanting</li>
               <li>Personal japa count tracking across deities</li>
               <li>Community Japa Marathons tied to real temples</li>
               <li>Leaderboards for marathon participants</li>
@@ -75,7 +75,7 @@ export function TermsPage() {
             <ul className="list-disc pl-5 space-y-1 text-sm">
               <li>Japa Marathons are community events tied to real temples. Joining a marathon is voluntary.</li>
               <li>Your display name and japa count will be visible to other marathon participants on the leaderboard.</li>
-              <li>Marathon japa counts are calculated from japas completed within the game. Manual entry is not supported.</li>
+              <li>Marathon japa counts are calculated from japas completed within the app. Manual entry is not supported.</li>
               <li>We reserve the right to remove participants who abuse the system or use unfair means to inflate counts.</li>
               <li>Temples listed in the app are real places of worship. We are not officially affiliated with any temple unless explicitly stated.</li>
             </ul>
@@ -98,7 +98,7 @@ export function TermsPage() {
           <section>
             <h2 className="text-lg font-semibold text-amber-300 mb-3">7. Intellectual Property</h2>
             <ul className="list-disc pl-5 space-y-1 text-sm">
-              <li>All content, design, graphics, logos (including the A-logo), game mechanics, and code are the intellectual property of <strong className="text-white">AI Developer India (Aditya Nandagiri)</strong>.</li>
+              <li>All content, design, graphics, logos (including the A-logo), practice mechanics, and code are the intellectual property of <strong className="text-white">AI Developer India (Aditya Nandagiri)</strong>.</li>
               <li>The Japam name, logo, and branding are protected. You may not use them without written permission.</li>
               <li>Deity names and mantras are part of the public domain of Hindu tradition and are used with reverence.</li>
               <li>You may not copy, reproduce, distribute, or create derivative works from our content without prior written consent.</li>
@@ -108,7 +108,7 @@ export function TermsPage() {
           <section>
             <h2 className="text-lg font-semibold text-amber-300 mb-3">8. Spiritual Content Disclaimer</h2>
             <p className="text-sm">
-              Japam is a gamified tool designed to encourage regular japa practice. It is not a replacement for formal religious instruction, guidance from a qualified guru, or traditional spiritual practice. The japa counts recorded in the app are for personal motivation and community engagement only — they do not constitute any religious certification or spiritual authority.
+              Japam is a digital tool designed to encourage regular japa practice. It is not a replacement for formal religious instruction, guidance from a qualified guru, or traditional spiritual practice. The japa counts recorded in the app are for personal motivation and community engagement only — they do not constitute any religious certification or spiritual authority.
             </p>
           </section>
 

@@ -11,7 +11,7 @@ interface OpeningVideoModalProps {
   videoSrcs?: string[];
 }
 
-const TITLE = 'JAPAM GAME';
+const TITLE = 'JAPAM - DIGITAL MANTRA PRACTICE';
 const TYPE_DELAY_MS = 120;
 const BG_IMAGE = '/images/videomodalbg.png';
 

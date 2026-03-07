@@ -27,6 +27,9 @@ const SettingsPage = lazy(() => import('./pages/SettingsPage').then(m => ({ defa
 const ApavargaPage = lazy(() => import('./pages/ApavargaPage').then(m => ({ default: m.ApavargaPage })))
 const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage').then(m => ({ default: m.PrivacyPolicyPage })))
 const TermsPage = lazy(() => import('./pages/TermsPage').then(m => ({ default: m.TermsPage })))
+const RefundCancellationPage = lazy(() => import('./pages/RefundCancellationPage').then(m => ({ default: m.RefundCancellationPage })))
+const ShippingDeliveryPage = lazy(() => import('./pages/ShippingDeliveryPage').then(m => ({ default: m.ShippingDeliveryPage })))
+const ContactPage = lazy(() => import('./pages/ContactPage').then(m => ({ default: m.ContactPage })))
 
 function PageFallback() {
   return <div className="min-h-screen flex items-center justify-center bg-[#1a1a2e]"><div className="text-amber-400 text-sm">Loading…</div></div>
@@ -62,6 +65,9 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/apavarga" element={<ApavargaPage />} />
         <Route path="/privacy" element={<PrivacyPolicyPage />} />
         <Route path="/terms" element={<TermsPage />} />
+        <Route path="/refund-cancellation" element={<RefundCancellationPage />} />
+        <Route path="/shipping-delivery" element={<ShippingDeliveryPage />} />
+        <Route path="/contact" element={<ContactPage />} />
       </Routes>
       </Suspense>
       <WhatsAppFab />

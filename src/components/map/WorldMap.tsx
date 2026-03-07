@@ -79,7 +79,7 @@ export function WorldMap({ mode: initialMode, onSelectLevel, onBack }: WorldMapP
                       font-medium text-sm
                       ${canPlay ? 'bg-amber-500/30 text-amber-200' : isPaywalled ? 'bg-amber-500/20 text-amber-300' : 'bg-black/20 text-gray-500'}
                     `}
-                    title={isPaywalled ? 'Pay to unlock' : undefined}
+                    title={isPaywalled ? 'Offer Dakshina to unlock' : undefined}
                   >
                     <span>{idx + 1}</span>
                     {isPaywalled && <span className="text-xs">🔒</span>}

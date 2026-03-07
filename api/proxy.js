@@ -3,6 +3,8 @@
  * All /api/* requests are rewritten to /api/proxy?path=... ; routes via static imports so handlers are bundled.
  */
 
+import { checkRateLimit } from './_handlers/rateLimit.js';
+
 function getCorsHeaders(request) {
   const origin = request.headers.get('origin') || '';
   const allowed = (process.env.CORS_ORIGINS || 'http://localhost:5173,http://localhost:5174,https://japam.digital,https://www.japam.digital').split(',').map((o) => o.trim());
@@ -15,10 +17,17 @@ function getCorsHeaders(request) {
   };
 }
 
+const SECURITY_HEADERS = {
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'DENY',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+};
+
 function withCors(response, request) {
   const cors = getCorsHeaders(request);
   const newHeaders = new Headers(response.headers);
   Object.entries(cors).forEach(([k, v]) => newHeaders.set(k, v));
+  Object.entries(SECURITY_HEADERS).forEach(([k, v]) => newHeaders.set(k, v));
   return new Response(response.body, { status: response.status, statusText: response.statusText, headers: newHeaders });
 }
 
@@ -69,6 +78,7 @@ import * as apavargaGroupsHandler from './_handlers/apavarga/groups.js';
 import * as apavargaGroupsManageHandler from './_handlers/apavarga/groups-manage.js';
 import * as apavargaCleanupHandler from './_handlers/apavarga/cleanup.js';
 import * as cronRefreshActiveUsersHandler from './_handlers/cron/refresh-active-users.js';
+import * as healthHandler from './_handlers/health.js';
 
 function getPathSegments(request) {
   const url = new URL(request.url);
@@ -154,6 +164,7 @@ const HANDLERS = {
   'POST apavarga/groups/manage': apavargaGroupsManageHandler,
   'POST apavarga/cleanup': apavargaCleanupHandler,
   'GET cron/refresh-active-users': cronRefreshActiveUsersHandler,
+  'GET health': healthHandler,
 };
 
 async function route(request, method, pathSegments) {
@@ -183,11 +194,32 @@ export async function OPTIONS() {
   });
 }
 
+function applyRateLimit(request, pathKey) {
+  if (pathKey === 'health') return null;
+  const cronSecret = process.env.CRON_SECRET || process.env.ADMIN_SECRET;
+  const auth = request?.headers?.get?.('authorization') || request?.headers?.get?.('x-cron-secret');
+  const hasCronAuth = cronSecret && (auth === `Bearer ${cronSecret}` || auth === cronSecret);
+  const isCronRoute = pathKey.startsWith('cron/') || pathKey === 'apavarga/cleanup';
+  if (isCronRoute && hasCronAuth) return null;
+  const result = checkRateLimit(request);
+  if (!result.allowed) {
+    const res = new Response(JSON.stringify({ error: 'Too many requests. Please try again later.' }), {
+      status: 429,
+      headers: { 'Content-Type': 'application/json', 'Retry-After': String(result.retryAfter || 60) },
+    });
+    return res;
+  }
+  return null;
+}
+
 export async function GET(request) {
   const pathSegments = getPathSegments(request);
   if (!Array.isArray(pathSegments) || pathSegments.length === 0) {
     return withCors(jsonResponse({ error: 'Not found' }, 404), request);
   }
+  const pathKey = pathSegments.join('/');
+  const rateLimitRes = applyRateLimit(request, pathKey);
+  if (rateLimitRes) return withCors(rateLimitRes, request);
   const res = await route(request, 'GET', pathSegments);
   return withCors(res, request);
 }
@@ -197,6 +229,9 @@ export async function POST(request) {
   if (!Array.isArray(pathSegments) || pathSegments.length === 0) {
     return withCors(jsonResponse({ error: 'Not found' }, 404), request);
   }
+  const pathKey = pathSegments.join('/');
+  const rateLimitRes = applyRateLimit(request, pathKey);
+  if (rateLimitRes) return withCors(rateLimitRes, request);
   const res = await route(request, 'POST', pathSegments);
   return withCors(res, request);
 }

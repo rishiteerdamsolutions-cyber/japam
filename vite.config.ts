@@ -7,6 +7,9 @@ import * as apiProxy from './api/proxy.js'
 
 // https://vite.dev/config/
 export default defineConfig({
+  build: {
+    chunkSizeWarningLimit: 1000, // Increase from default 500KB to suppress chunk size warnings
+  },
   server: {
     port: 5173,
   },

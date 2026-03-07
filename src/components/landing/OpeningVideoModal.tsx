@@ -11,7 +11,9 @@ interface OpeningVideoModalProps {
   videoSrcs?: string[];
 }
 
-const TITLE = 'JAPAM - DIGITAL MANTRA PRACTICE';
+const TITLE_LINE1 = 'JAPAM';
+const TITLE_LINE2 = 'DIGITAL MANTRA PRACTICE';
+const TITLE_FULL = `${TITLE_LINE1} - ${TITLE_LINE2}`;
 const TYPE_DELAY_MS = 120;
 const BG_IMAGE = '/images/videomodalbg.png';
 
@@ -24,7 +26,7 @@ export function OpeningVideoModal({ onClose, videoSrc, videoSrcs }: OpeningVideo
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    if (typedLength >= TITLE.length) return;
+    if (typedLength >= TITLE_FULL.length) return;
     const id = setTimeout(() => setTypedLength((n) => n + 1), TYPE_DELAY_MS);
     return () => clearTimeout(id);
   }, [typedLength]);
@@ -49,23 +51,42 @@ export function OpeningVideoModal({ onClose, videoSrc, videoSrcs }: OpeningVideo
       style={{ backgroundImage: `url(${BG_IMAGE})` }}
     >
       <div className="absolute inset-0 bg-black/70 backdrop-blur-[2px]" aria-hidden />
-      <div className="relative z-10 flex flex-col items-center justify-center w-full">
+      <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-full min-w-0 px-4 sm:px-6">
         <motion.h1
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-neon animate-neon-pulse text-3xl sm:text-4xl md:text-5xl font-bold tracking-widest mb-6 text-center drop-shadow-lg"
-          style={{ fontFamily: 'system-ui, sans-serif' }}
+          className="text-neon animate-neon-pulse font-bold mb-6 text-center drop-shadow-lg w-full overflow-visible flex flex-col items-center gap-0.5 sm:gap-1"
+          style={{
+            fontFamily: 'system-ui, sans-serif',
+            fontSize: 'clamp(0.8rem, 4.5vw, 2.5rem)',
+            letterSpacing: 'clamp(0.02em, 0.8vw, 0.12em)',
+            lineHeight: 1.3,
+          }}
         >
-          {TITLE.split('').map((char, i) => (
-            <motion.span
-              key={i}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: i < typedLength ? 1 : 0 }}
-              transition={{ duration: 0.15 }}
-            >
-              {char === ' ' ? '\u00A0' : char}
-            </motion.span>
-          ))}
+          <span className="block">
+            {TITLE_LINE1.split('').map((char, i) => (
+              <motion.span
+                key={`l1-${i}`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: i < typedLength ? 1 : 0 }}
+                transition={{ duration: 0.15 }}
+              >
+                {char}
+              </motion.span>
+            ))}
+          </span>
+          <span className="block">
+            {TITLE_LINE2.split('').map((char, i) => (
+              <motion.span
+                key={`l2-${i}`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: typedLength > TITLE_LINE1.length + 3 + i ? 1 : 0 }}
+                transition={{ duration: 0.15 }}
+              >
+                {char === ' ' ? '\u00A0' : char}
+              </motion.span>
+            ))}
+          </span>
         </motion.h1>
 
         <motion.div

@@ -7,9 +7,9 @@ export async function GET(request) {
   try {
     const secret = process.env.CRON_SECRET || process.env.ADMIN_SECRET;
     const auth = request?.headers?.get?.('authorization') || request?.headers?.get?.('x-cron-secret');
-    const authMatch = auth === `Bearer ${secret}` || auth === secret;
-    if (secret && !authMatch) {
-      return jsonResponse({ error: 'Unauthorized' }, 401);
+    const authMatch = secret && (auth === `Bearer ${secret}` || auth === secret);
+    if (!authMatch) {
+      return jsonResponse({ error: 'Unauthorized (CRON_SECRET or ADMIN_SECRET required)' }, 401);
     }
 
     const db = getDb();

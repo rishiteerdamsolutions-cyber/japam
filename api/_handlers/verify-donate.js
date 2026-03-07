@@ -1,5 +1,5 @@
 import admin from 'firebase-admin';
-import { getDb, jsonResponse, verifyFirebaseUser } from './_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, logAudit } from './_lib.js';
 
 const CASHFREE_APP_ID = process.env.CASHFREE_APP_ID || process.env.CASHFREE_CLIENT_ID;
 const CASHFREE_SECRET = process.env.CASHFREE_SECRET || process.env.CASHFREE_CLIENT_SECRET;
@@ -67,6 +67,7 @@ export async function POST(request) {
       { merge: true }
     );
 
+    await logAudit('donation_verified', { uid, orderId: order_id, amountPaise });
     return jsonResponse({ ok: true });
   } catch (e) {
     console.error('verify-donate', e);

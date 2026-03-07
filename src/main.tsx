@@ -2,10 +2,15 @@ import { StrictMode, lazy, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './index.css'
+import { initSentry } from './lib/sentry'
+import { ErrorBoundary } from './components/ErrorBoundary'
+
+initSentry()
 import { AuthProvider } from './components/AuthProvider'
 import { PaymentReturnHandler } from './components/PaymentReturnHandler'
 import { BlockedOverlay } from './components/BlockedOverlay'
 import { PWAUpdatePrompt } from './components/PWAUpdatePrompt'
+import { OfflineBanner } from './components/OfflineBanner'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 import { WhatsAppFab } from './components/ui/WhatsAppFab'
 import App from './App.tsx'
@@ -31,18 +36,26 @@ const TermsPage = lazy(() => import('./pages/TermsPage').then(m => ({ default: m
 const RefundCancellationPage = lazy(() => import('./pages/RefundCancellationPage').then(m => ({ default: m.RefundCancellationPage })))
 const ShippingDeliveryPage = lazy(() => import('./pages/ShippingDeliveryPage').then(m => ({ default: m.ShippingDeliveryPage })))
 const ContactPage = lazy(() => import('./pages/ContactPage').then(m => ({ default: m.ContactPage })))
+const ApiDocsPage = lazy(() => import('./pages/ApiDocsPage').then(m => ({ default: m.ApiDocsPage })))
 
 function PageFallback() {
-  return <div className="min-h-screen flex items-center justify-center bg-[#1a1a2e]"><div className="text-amber-400 text-sm">Loading…</div></div>
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#1a1a2e] gap-3">
+      <div className="w-10 h-10 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" aria-hidden />
+      <p className="text-amber-400 text-sm">Loading…</p>
+    </div>
+  )
 }
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
+    <ErrorBoundary>
     <BrowserRouter>
       <AuthProvider>
       <PaymentReturnHandler />
       <BlockedOverlay />
       <PWAUpdatePrompt />
+      <OfflineBanner />
       <Suspense fallback={<PageFallback />}>
       <Routes>
         <Route path="/" element={<App />} />
@@ -70,11 +83,13 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/refund-cancellation" element={<RefundCancellationPage />} />
         <Route path="/shipping-delivery" element={<ShippingDeliveryPage />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/api-docs" element={<ApiDocsPage />} />
       </Routes>
       </Suspense>
       <WhatsAppFab />
       <SpeedInsights />
       </AuthProvider>
     </BrowserRouter>
+    </ErrorBoundary>
   </StrictMode>,
 )

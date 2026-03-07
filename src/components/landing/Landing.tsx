@@ -70,6 +70,7 @@ export function Landing({ onEnterApp, onGuestPlay }: LandingProps) {
 
             <motion.button
               type="button"
+              aria-label="Begin Japa and enter the app"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.98 }}
               onClick={onEnterApp}
@@ -81,6 +82,7 @@ export function Landing({ onEnterApp, onGuestPlay }: LandingProps) {
             {!user && (
               <motion.button
                 type="button"
+                aria-label="Try the app as guest without signing in"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={onGuestPlay}
@@ -118,6 +120,8 @@ export function Landing({ onEnterApp, onGuestPlay }: LandingProps) {
               <a href="/refund-cancellation" className="hover:text-white/80 transition-colors underline underline-offset-2">Refund &amp; Cancellation</a>
               <span className="text-white/20">|</span>
               <a href="/shipping-delivery" className="hover:text-white/80 transition-colors underline underline-offset-2">Shipping &amp; Delivery</a>
+              <span className="text-white/20">|</span>
+              <a href="/api-docs" className="hover:text-white/80 transition-colors underline underline-offset-2">API Docs</a>
             </div>
           </footer>
         </div>

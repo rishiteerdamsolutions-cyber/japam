@@ -8,43 +8,47 @@ import admin from 'firebase-admin';
 
 let db = null;
 
-const ADMIN_SECRET = process.env.ADMIN_SECRET || process.env.JWT_SECRET || 'change-me-in-production';
+const WEAK_SECRET = 'change-me-in-production';
+
+function getAdminSecret() {
+  const s = process.env.ADMIN_SECRET || process.env.JWT_SECRET || '';
+  return s && s !== WEAK_SECRET ? s : null;
+}
 
 const ADMIN_TOKEN_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
 export function createAdminToken() {
+  const secret = getAdminSecret();
+  if (!secret) throw new Error('ADMIN_SECRET not configured (set in Vercel env vars)');
   const payload = JSON.stringify({ admin: true, exp: Date.now() + ADMIN_TOKEN_TTL_MS });
   const raw = Buffer.from(payload).toString('base64url');
-  const sig = crypto.createHmac('sha256', ADMIN_SECRET).update(raw).digest('base64url');
+  const sig = crypto.createHmac('sha256', secret).update(raw).digest('base64url');
   return raw + '.' + sig;
 }
 
 export function verifyAdminToken(token) {
+  const secret = getAdminSecret();
+  if (!secret) return false;
   if (!token || typeof token !== 'string') return false;
   const [raw, sig] = token.split('.');
   if (!raw || !sig) return false;
   try {
     const payload = JSON.parse(Buffer.from(raw, 'base64url').toString());
     if (payload.exp < Date.now()) return false;
-    const expected = crypto.createHmac('sha256', ADMIN_SECRET).update(raw).digest('base64url');
+    const expected = crypto.createHmac('sha256', secret).update(raw).digest('base64url');
     return sig === expected;
   } catch {
     return false;
   }
 }
 
-/** Get admin token from request (header, X-Admin-Token, or query). Use for admin API handlers. */
+/** Get admin token from request (Authorization header or X-Admin-Token only). Never from query params (URLs get logged). */
 export function getAdminTokenFromRequest(request) {
   const auth = request?.headers?.get?.('authorization') || request?.headers?.get?.('Authorization');
   if (auth && typeof auth === 'string' && auth.startsWith('Bearer ')) return auth.slice(7);
   const xToken = request?.headers?.get?.('x-admin-token') || request?.headers?.get?.('X-Admin-Token');
   if (xToken && typeof xToken === 'string') return xToken;
-  try {
-    const url = new URL(request.url);
-    return url.searchParams.get('token') || null;
-  } catch {
-    return null;
-  }
+  return null;
 }
 
 export function getDb() {
@@ -123,7 +127,10 @@ export async function getPricing() {
   return { unlockPricePaise: UNLOCK_PRICE_PAISE, displayPricePaise: DEFAULT_DISPLAY_PRICE_PAISE };
 }
 
-const PRIEST_SECRET = process.env.PRIEST_SECRET || process.env.ADMIN_SECRET || process.env.JWT_SECRET || 'change-me-in-production';
+function getPriestSecret() {
+  const s = process.env.PRIEST_SECRET || getAdminSecret();
+  return s || null;
+}
 
 /** Generate priest username from temple name: pujari@slug */
 export function generatePriestUsername(templeName) {
@@ -191,21 +198,25 @@ export function verifyPassword(password, stored) {
 
 /** Create priest JWT with templeId. */
 export function createPriestToken(templeId, templeName) {
+  const secret = getPriestSecret();
+  if (!secret) throw new Error('PRIEST_SECRET or ADMIN_SECRET not configured');
   const payload = JSON.stringify({ templeId, templeName, priest: true, exp: Date.now() + 24 * 60 * 60 * 1000 });
   const raw = Buffer.from(payload).toString('base64url');
-  const sig = crypto.createHmac('sha256', PRIEST_SECRET).update(raw).digest('base64url');
+  const sig = crypto.createHmac('sha256', secret).update(raw).digest('base64url');
   return raw + '.' + sig;
 }
 
 /** Verify priest token, return { templeId, templeName } or null. */
 export function verifyPriestToken(token) {
+  const secret = getPriestSecret();
+  if (!secret) return null;
   if (!token || typeof token !== 'string') return null;
   const [raw, sig] = token.split('.');
   if (!raw || !sig) return null;
   try {
     const payload = JSON.parse(Buffer.from(raw, 'base64url').toString());
     if (payload.exp < Date.now() || !payload.templeId) return null;
-    const expected = crypto.createHmac('sha256', PRIEST_SECRET).update(raw).digest('base64url');
+    const expected = crypto.createHmac('sha256', secret).update(raw).digest('base64url');
     if (sig !== expected) return null;
     return { templeId: payload.templeId, templeName: payload.templeName || '' };
   } catch {
@@ -213,9 +224,34 @@ export function verifyPriestToken(token) {
   }
 }
 
+/** Validate Firestore document ID from user input - reject path chars and invalid length. */
+export function isValidFirestoreDocId(id) {
+  if (!id || typeof id !== 'string') return false;
+  const s = id.trim();
+  return s.length > 0 && s.length <= 1500 && !/[./\\]/.test(s);
+}
+
 export function jsonResponse(data, status = 200) {
   return new Response(JSON.stringify(data), {
     status,
     headers: { 'Content-Type': 'application/json' },
   });
+}
+
+/** Audit log for sensitive actions. Logs to console; optionally to Firestore auditLogs collection. */
+export async function logAudit(action, details = {}) {
+  const entry = {
+    action,
+    ...details,
+    timestamp: new Date().toISOString(),
+  };
+  console.info('[Audit]', JSON.stringify(entry));
+  const db = getDb();
+  if (db && process.env.AUDIT_TO_FIRESTORE === 'true') {
+    try {
+      await db.collection('auditLogs').add(entry);
+    } catch (e) {
+      console.error('audit Firestore write failed', e?.message);
+    }
+  }
 }

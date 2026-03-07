@@ -1,4 +1,4 @@
-import { getDb, verifyPassword, createPriestToken, jsonResponse } from './_lib.js';
+import { getDb, verifyPassword, createPriestToken, jsonResponse, logAudit } from './_lib.js';
 
 export async function POST(request) {
   try {
@@ -29,10 +29,14 @@ export async function POST(request) {
       return jsonResponse({ error: 'Invalid username or password' }, 401);
     }
 
+    await logAudit('priest_login', { templeId, templeName, priestUsername: username.trim() });
     const token = createPriestToken(templeId, templeName);
     return jsonResponse({ token, templeId, templeName });
   } catch (e) {
     console.error('priest-login', e);
+    if (e?.message?.includes('not configured')) {
+      return jsonResponse({ error: 'Priest login not configured (set ADMIN_SECRET or PRIEST_SECRET)' }, 503);
+    }
     return jsonResponse({ error: e.message || 'Login failed' }, 500);
   }
 }

@@ -1,4 +1,4 @@
-import { createAdminToken, jsonResponse } from './_lib.js';
+import { createAdminToken, jsonResponse, logAudit } from './_lib.js';
 
 const ADMIN_ID = process.env.ADMIN_ID || '';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
@@ -13,10 +13,14 @@ export async function POST(request) {
     if (String(adminId || '').trim() !== ADMIN_ID || password !== ADMIN_PASSWORD) {
       return jsonResponse({ error: 'Wrong Admin ID or password' }, 401);
     }
+    await logAudit('admin_login', { adminId: String(adminId || '').trim() });
     const token = createAdminToken();
     return jsonResponse({ token });
   } catch (e) {
     console.error('admin-login', e);
+    if (e?.message?.includes('ADMIN_SECRET')) {
+      return jsonResponse({ error: 'Admin not configured (set ADMIN_SECRET in env)' }, 503);
+    }
     return jsonResponse({ error: 'Login failed' }, 500);
   }
 }

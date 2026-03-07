@@ -1,5 +1,5 @@
 import admin from 'firebase-admin';
-import { getDb, jsonResponse, verifyAdminToken, getAdminTokenFromRequest } from '../_lib.js';
+import { getDb, jsonResponse, verifyAdminToken, getAdminTokenFromRequest, logAudit } from '../_lib.js';
 
 /** POST /api/admin/block-user - Block a user via custom claims (no Firestore read per request). Body: { token, uid } */
 export async function POST(request) {
@@ -16,6 +16,7 @@ export async function POST(request) {
   try {
     await admin.auth().setCustomUserClaims(uid, { blocked: true });
     await db.collection('blockedUsers').doc(uid).set({ blockedAt: new Date().toISOString() }, { merge: true });
+    await logAudit('admin_block_user', { uid });
     return jsonResponse({ ok: true, message: 'User blocked' }, 200);
   } catch (e) {
     console.error('admin block-user', e);

@@ -39,6 +39,8 @@ export function GoogleSignIn() {
   return (
     <div className="flex flex-col items-center gap-2">
       <motion.button
+        type="button"
+        aria-label="Sign in with Google"
         whileTap={{ scale: 0.98 }}
         onClick={() => signInWithGoogle()}
         className="flex items-center justify-center gap-2 w-full max-w-[280px] py-3 px-4 rounded-xl bg-white text-gray-800 font-medium text-sm shadow-md hover:bg-gray-50"

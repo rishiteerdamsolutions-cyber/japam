@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyAdminToken, getAdminTokenFromRequest } from '../_lib.js';
+import { getDb, jsonResponse, verifyAdminToken, getAdminTokenFromRequest, logAudit } from '../_lib.js';
 
 /** POST /api/admin/delete-marathon - Delete a marathon and its participations. Body: { token, marathonId } */
 export async function POST(request) {
@@ -18,6 +18,7 @@ export async function POST(request) {
     for (const p of partsSnap.docs) batch.delete(p.ref);
     batch.delete(db.doc(`marathons/${marathonId}`));
     await batch.commit();
+    await logAudit('admin_delete_marathon', { marathonId });
     return jsonResponse({ ok: true, message: 'Marathon deleted' }, 200);
   } catch (e) {
     console.error('admin delete-marathon', e);

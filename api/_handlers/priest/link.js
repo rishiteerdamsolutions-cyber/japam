@@ -30,6 +30,9 @@ export async function POST(request) {
     return jsonResponse({ ok: true, token, templeId, templeName });
   } catch (e) {
     console.error('priest link', e);
+    if (e?.message?.includes('not configured')) {
+      return jsonResponse({ error: 'Priest link not configured (set ADMIN_SECRET or PRIEST_SECRET)' }, 503);
+    }
     return jsonResponse({ error: e.message || 'Failed' }, 500);
   }
 }

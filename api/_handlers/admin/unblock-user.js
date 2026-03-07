@@ -1,5 +1,5 @@
 import admin from 'firebase-admin';
-import { getDb, jsonResponse, verifyAdminToken, getAdminTokenFromRequest } from '../_lib.js';
+import { getDb, jsonResponse, verifyAdminToken, getAdminTokenFromRequest, logAudit } from '../_lib.js';
 
 /** POST /api/admin/unblock-user - Unblock a user (remove custom claim). Body: { token, uid } */
 export async function POST(request) {
@@ -16,6 +16,7 @@ export async function POST(request) {
   try {
     await admin.auth().setCustomUserClaims(uid, { blocked: false });
     await db.collection('blockedUsers').doc(uid).delete();
+    await logAudit('admin_unblock_user', { uid });
     return jsonResponse({ ok: true, message: 'User unblocked' }, 200);
   } catch (e) {
     console.error('admin unblock-user', e);

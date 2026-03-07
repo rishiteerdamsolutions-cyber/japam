@@ -1,0 +1,58 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Japam API",
+    "description": "API for Japam - Mantra Match. Base URL: /api",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health check",
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/price": {
+      "get": {
+        "summary": "Get unlock price"
+      }
+    },
+    "/create-order": {
+      "post": {
+        "summary": "Create Cashfree payment order",
+        "requestBody": { "content": { "application/json": { "schema": { "type": "object", "properties": { "userId": { "type": "string" } } } } }
+      }
+    },
+    "/verify-unlock": {
+      "post": {
+        "summary": "Verify payment and unlock (requires Bearer)",
+        "security": [{ "bearerAuth": [] }]
+      }
+    },
+    "/admin-login": {
+      "post": {
+        "summary": "Admin login"
+      }
+    },
+    "/priest-login": {
+      "post": {
+        "summary": "Priest login"
+      }
+    },
+    "/user/progress": {
+      "get": { "summary": "Get user progress" },
+      "post": { "summary": "Save user progress" }
+    },
+    "/marathons/discover": {
+      "get": { "summary": "Discover marathons" }
+    },
+    "/marathons/join": {
+      "post": { "summary": "Join a marathon" }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": { "type": "http", "scheme": "bearer", "bearerFormat": "JWT" }
+    }
+  }
+}

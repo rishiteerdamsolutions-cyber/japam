@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser, isUserUnlocked } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, isUserUnlocked, isValidFirestoreDocId } from '../_lib.js';
 
 /** POST /api/marathons/join - User joins a marathon. Requires Firebase auth; only paid (unlocked) users can join. Body: { marathonId } */
 export async function POST(request) {
@@ -7,8 +7,8 @@ export async function POST(request) {
     if (!uid) return jsonResponse({ error: 'Sign in to join a marathon' }, 401);
 
     const body = await request.json().catch(() => ({}));
-    const marathonId = body.marathonId;
-    if (!marathonId) return jsonResponse({ error: 'marathonId required' }, 400);
+    const marathonId = typeof body.marathonId === 'string' ? body.marathonId.trim() : '';
+    if (!marathonId || !isValidFirestoreDocId(marathonId)) return jsonResponse({ error: 'marathonId required' }, 400);
 
     const db = getDb();
     if (!db) return jsonResponse({ error: 'Database not configured' }, 503);

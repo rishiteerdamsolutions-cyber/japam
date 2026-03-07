@@ -29,6 +29,8 @@ export function AppFooter() {
         <a href="/refund-cancellation" className="hover:text-white/70 transition-colors underline underline-offset-2">Refund &amp; Cancellation</a>
         <span className="text-white/20">|</span>
         <a href="/shipping-delivery" className="hover:text-white/70 transition-colors underline underline-offset-2">Shipping &amp; Delivery</a>
+        <span className="text-white/20">|</span>
+        <a href="/api-docs" className="hover:text-white/70 transition-colors underline underline-offset-2">API Docs</a>
       </div>
     </footer>
   );

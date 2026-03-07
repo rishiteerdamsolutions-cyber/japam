@@ -105,9 +105,9 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
   const showStrikethrough = displayPricePaise > pricePaise;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4" role="dialog" aria-modal="true" aria-labelledby="paywall-title">
       <div className="bg-[#1a1a2e] rounded-2xl border border-amber-500/30 p-6 max-w-sm w-full shadow-xl">
-        <h2 className="text-xl font-bold text-amber-400 mb-2">Unlock all levels</h2>
+        <h2 id="paywall-title" className="text-xl font-bold text-amber-400 mb-2">Unlock all levels</h2>
         <p className="text-amber-200/90 text-sm mb-4">
           You've completed the first 2 levels. Offer Dakshina once to unlock levels 3–50.
         </p>
@@ -127,6 +127,7 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
           <div className="flex gap-2">
             <button
               type="button"
+              aria-label={paying ? 'Opening payment' : `Pay ₹${priceRupees} to unlock all levels`}
               onClick={handlePay}
               disabled={paying}
               className="flex-1 py-3 rounded-xl bg-amber-500 text-white font-semibold disabled:opacity-50 transition-opacity"
@@ -135,6 +136,7 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
             </button>
             <button
               type="button"
+              aria-label="Close and continue later"
               onClick={onClose}
               className="px-4 py-3 rounded-xl bg-white/10 text-amber-200 font-medium"
             >

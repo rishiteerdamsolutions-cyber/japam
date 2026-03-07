@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser, verifyPriestToken, isUserUnlocked } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, verifyPriestToken, isUserUnlocked, isValidFirestoreDocId } from '../_lib.js';
 
 function getBearerToken(request) {
   const auth = request?.headers?.get?.('authorization') || request?.headers?.get?.('Authorization');
@@ -21,7 +21,7 @@ export async function GET(request) {
 
   const url = new URL(request.url);
   const chatId = url.searchParams.get('chatId');
-  if (!chatId) return jsonResponse({ error: 'chatId required' }, 400);
+  if (!chatId || !isValidFirestoreDocId(chatId)) return jsonResponse({ error: 'chatId required or invalid' }, 400);
 
   const firebaseUid = await verifyFirebaseUser(request);
   const priestToken = getBearerToken(request);
@@ -50,7 +50,7 @@ export async function POST(request) {
 
   const body = await request.json().catch(() => ({}));
   const { chatId, text, isAutoReply } = body;
-  if (!chatId || typeof text !== 'string') return jsonResponse({ error: 'chatId and text required' }, 400);
+  if (!chatId || !isValidFirestoreDocId(chatId) || typeof text !== 'string') return jsonResponse({ error: 'chatId and text required' }, 400);
 
   const firebaseUid = await verifyFirebaseUser(request);
   const priestToken = getBearerToken(request);

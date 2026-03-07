@@ -349,7 +349,7 @@ app.get('/api/admin/marathons', async (req, res) => {
 
 app.get('/api/admin/list-temples', async (req, res) => {
   try {
-    const token = req.headers.authorization?.startsWith('Bearer ') ? req.headers.authorization.slice(7) : req.query.token || null;
+    const token = req.headers.authorization?.startsWith('Bearer ') ? req.headers.authorization.slice(7) : null;
     if (!verifyAdminToken(token)) return res.status(401).json({ error: 'Invalid or expired session' });
     if (!db) return res.status(503).json({ error: 'Database not configured' });
     const snap = await db.collection('temples').orderBy('createdAt', 'desc').get();

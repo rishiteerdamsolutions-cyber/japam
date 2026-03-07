@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser, verifyPriestToken, isUserUnlocked } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, verifyPriestToken, isUserUnlocked, isValidFirestoreDocId } from '../_lib.js';
 
 function getBearerToken(request) {
   const auth = request?.headers?.get?.('authorization') || request?.headers?.get?.('Authorization');
@@ -17,7 +17,7 @@ export async function POST(request) {
 
   const body = await request.json().catch(() => ({}));
   const { templeId, requestedAt } = body;
-  if (!templeId || !requestedAt) return jsonResponse({ error: 'templeId and requestedAt required' }, 400);
+  if (!templeId || !isValidFirestoreDocId(templeId) || !requestedAt) return jsonResponse({ error: 'templeId and requestedAt required' }, 400);
 
   const templeSnap = await db.collection('temples').doc(templeId).get();
   if (!templeSnap.exists) return jsonResponse({ error: 'Temple not found' }, 404);

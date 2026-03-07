@@ -43,6 +43,7 @@ export function MainMenu({ onSelect, onOpenMap, onOpenJapaDashboard, onOpenSetti
         <div className="w-full flex justify-between items-center gap-2 mt-2 mb-1 min-h-[40px]">
           <button
             type="button"
+            aria-label="Back to home"
             onClick={() => navigate('/')}
             className="text-amber-400/90 text-sm font-medium hover:text-amber-400 shrink-0"
           >
@@ -128,6 +129,8 @@ export function MainMenu({ onSelect, onOpenMap, onOpenJapaDashboard, onOpenSetti
         )}
 
         <motion.button
+          type="button"
+          aria-label="Play General Japa mode"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           className="w-full py-4 rounded-2xl bg-amber-500/95 text-white font-bold text-lg shadow-lg shadow-amber-500/30 mb-4"

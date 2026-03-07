@@ -1,4 +1,4 @@
-import { getDb, verifyAdminToken, jsonResponse } from '../_lib.js';
+import { getDb, verifyAdminToken, jsonResponse, logAudit } from '../_lib.js';
 
 function getAdminToken(request, body) {
   const auth = request.headers.get('authorization');
@@ -22,6 +22,7 @@ export async function POST(request) {
     const db = getDb();
     if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
     await db.doc('config/pricing').set({ unlockPricePaise, displayPricePaise: safeDisplay }, { merge: true });
+    await logAudit('admin_set_price', { unlockPricePaise, displayPricePaise: safeDisplay });
     return jsonResponse({ ok: true });
   } catch (e) {
     console.error('admin set-price', e);

@@ -2,6 +2,7 @@ import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
 import type { User } from 'firebase/auth';
 import { app, auth, isFirebaseConfigured } from './firebase';
 import { getApiBase } from './apiBase';
+import { fetchWithRetry } from './fetchWithRetry';
 import type { LevelProgress } from '../store/progressStore';
 import type { JapaCounts } from '../store/japaStore';
 
@@ -53,7 +54,7 @@ export async function loadUserUnlock(_uid: string): Promise<UserUnlockData> {
   if (!token) return { levelsUnlocked: false, tier: 'free', isDonor: false };
   try {
     const url = apiUrl('/api/user/unlock');
-    const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+    const res = await fetchWithRetry(url, { headers: { Authorization: `Bearer ${token}` } });
     if (res.status === 403) return { levelsUnlocked: false, tier: 'free', isDonor: false, blocked: true };
     if (res.ok) {
       const data = (await res.json()) as { levelsUnlocked?: boolean; tier?: UserTier; isDonor?: boolean };
@@ -78,7 +79,7 @@ export async function loadPricingConfig(): Promise<{ unlockPricePaise: number; d
   let display: number | null = null;
   try {
     const url = apiUrl('/api/price');
-    const res = await fetch(url);
+    const res = await fetchWithRetry(url);
     if (res.ok) {
       const data = (await res.json()) as { unlockPricePaise?: number; displayPricePaise?: number };
       const u = data?.unlockPricePaise;

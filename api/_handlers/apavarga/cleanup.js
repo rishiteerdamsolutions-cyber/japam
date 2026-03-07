@@ -7,8 +7,9 @@ export async function POST(request) {
 
   const auth = request?.headers?.get?.('authorization') || request?.headers?.get?.('x-cron-secret');
   const secret = process.env.CRON_SECRET || process.env.ADMIN_SECRET;
-  if (secret && auth !== `Bearer ${secret}` && auth !== secret) {
-    return jsonResponse({ error: 'Unauthorized' }, 401);
+  const authMatch = secret && (auth === `Bearer ${secret}` || auth === secret);
+  if (!authMatch) {
+    return jsonResponse({ error: 'Unauthorized (CRON_SECRET or ADMIN_SECRET required)' }, 401);
   }
 
   const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();

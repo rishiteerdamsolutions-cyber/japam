@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyAdminToken, getAdminTokenFromRequest } from '../_lib.js';
+import { getDb, jsonResponse, verifyAdminToken, getAdminTokenFromRequest, logAudit } from '../_lib.js';
 
 /** POST /api/admin/delete-temple - Delete a temple and its marathons + participations. Body: { token, templeId } */
 export async function POST(request) {
@@ -23,6 +23,7 @@ export async function POST(request) {
       await batch.commit();
     }
     await db.doc(`temples/${templeId}`).delete();
+    await logAudit('admin_delete_temple', { templeId });
     return jsonResponse({ ok: true, message: 'Temple deleted' }, 200);
   } catch (e) {
     console.error('admin delete-temple', e);

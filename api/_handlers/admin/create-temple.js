@@ -1,4 +1,4 @@
-import { getDb, verifyAdminToken, jsonResponse, hashPassword, generatePriestUsername, generatePriestPassword } from '../_lib.js';
+import { getDb, verifyAdminToken, jsonResponse, hashPassword, generatePriestUsername, generatePriestPassword, logAudit } from '../_lib.js';
 
 function getAdminToken(request, body) {
   const auth = request.headers.get('authorization');
@@ -44,6 +44,7 @@ export async function POST(request) {
       createdAt: new Date().toISOString(),
     };
     const docRef = await templesRef.add(temple);
+    await logAudit('admin_create_temple', { templeId: docRef.id, name, priestUsername });
     return jsonResponse({ ok: true, templeId: docRef.id, priestUsername, priestPassword });
   } catch (e) {
     console.error('admin create-temple', e);

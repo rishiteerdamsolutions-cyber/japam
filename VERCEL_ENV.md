@@ -16,6 +16,7 @@ Set these in **Vercel → Project → Settings → Environment Variables**:
 | `VITE_FIREBASE_APP_ID` | From Firebase |
 | `VITE_API_URL` | Leave **empty** (API is same origin) |
 
+
 ## API / server-only (for create-order & verify-unlock)
 
 | Name | Value |

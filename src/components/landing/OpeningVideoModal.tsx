@@ -16,21 +16,30 @@ const BG_IMAGE = '/images/videomodalbg.png';
 
 const DEFAULT_SOURCES = [OPENING_VIDEO_1, OPENING_VIDEO_2];
 
+/** Split by grapheme clusters so Indic scripts (Telugu, Devanagari, etc.) render correctly. split('') breaks combining chars → dotted circles. */
+function graphemeSplit(str: string): string[] {
+  if (typeof Intl?.Segmenter !== 'function') return [...str];
+  return [...new Intl.Segmenter('und', { granularity: 'grapheme' }).segment(str)].map((s) => s.segment);
+}
+
 export function OpeningVideoModal({ onClose, videoSrc, videoSrcs }: OpeningVideoModalProps) {
   const { t } = useTranslation();
   const TITLE_LINE1 = t('videoModal.title1');
   const TITLE_LINE2 = t('videoModal.title2');
-  const TITLE_FULL = `${TITLE_LINE1} - ${TITLE_LINE2}`;
+  const graphemes1 = graphemeSplit(TITLE_LINE1);
+  const graphemes2 = graphemeSplit(TITLE_LINE2);
+  const sep = graphemeSplit(' - ');
+  const totalGraphemes = graphemes1.length + sep.length + graphemes2.length;
   const [typedLength, setTypedLength] = useState(0);
   const sources = videoSrcs?.length ? videoSrcs : videoSrc ? [videoSrc] : DEFAULT_SOURCES;
   const [currentIndex, setCurrentIndex] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    if (typedLength >= TITLE_FULL.length) return;
+    if (typedLength >= totalGraphemes) return;
     const id = setTimeout(() => setTypedLength((n) => n + 1), TYPE_DELAY_MS);
     return () => clearTimeout(id);
-  }, [typedLength, TITLE_FULL.length]);
+  }, [typedLength, totalGraphemes]);
 
   const handleEnded = useCallback(() => {
     const next = currentIndex + 1;
@@ -65,26 +74,26 @@ export function OpeningVideoModal({ onClose, videoSrc, videoSrcs }: OpeningVideo
           }}
         >
           <span className="block">
-            {TITLE_LINE1.split('').map((char, i) => (
+            {graphemes1.map((g, i) => (
               <motion.span
                 key={`l1-${i}`}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: i < typedLength ? 1 : 0 }}
                 transition={{ duration: 0.15 }}
               >
-                {char}
+                {g === ' ' ? '\u00A0' : g}
               </motion.span>
             ))}
           </span>
           <span className="block">
-            {TITLE_LINE2.split('').map((char, i) => (
+            {graphemes2.map((g, i) => (
               <motion.span
                 key={`l2-${i}`}
                 initial={{ opacity: 0 }}
-                animate={{ opacity: typedLength > TITLE_LINE1.length + 3 + i ? 1 : 0 }}
+                animate={{ opacity: typedLength > graphemes1.length + sep.length + i ? 1 : 0 }}
                 transition={{ duration: 0.15 }}
               >
-                {char === ' ' ? '\u00A0' : char}
+                {g === ' ' ? '\u00A0' : g}
               </motion.span>
             ))}
           </span>

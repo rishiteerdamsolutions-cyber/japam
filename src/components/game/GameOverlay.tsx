@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 interface GameOverlayProps {
   status: 'won' | 'lost';
@@ -9,6 +10,7 @@ interface GameOverlayProps {
 }
 
 export function GameOverlay({ status, isMarathon, onRetry, onMenu, onNext }: GameOverlayProps) {
+  const { t } = useTranslation();
   return (
     <AnimatePresence>
       <motion.div
@@ -23,10 +25,10 @@ export function GameOverlay({ status, isMarathon, onRetry, onMenu, onNext }: Gam
           className="bg-[#1a1a2e] rounded-2xl p-6 max-w-sm w-full text-center"
         >
           <h2 className="text-2xl font-bold text-amber-400 mb-2">
-            {status === 'won' ? (isMarathon ? 'Marathon complete!' : 'Jai!') : 'Try Again'}
+            {status === 'won' ? (isMarathon ? t('game.marathonComplete') : t('game.jai')) : t('game.tryAgain')}
           </h2>
           <p className="text-amber-200/80 mb-6">
-            {status === 'won' ? (isMarathon ? 'You reached the marathon target!' : 'You completed the japas!') : 'Out of moves. Chant more next time!'}
+            {status === 'won' ? (isMarathon ? t('game.marathonTargetReached') : t('game.youCompletedJapas')) : t('game.outOfMoves')}
           </p>
           <div className="flex flex-col gap-2">
             {status === 'won' && onNext && (
@@ -34,20 +36,20 @@ export function GameOverlay({ status, isMarathon, onRetry, onMenu, onNext }: Gam
                 onClick={onNext}
                 className="w-full py-3 rounded-xl bg-amber-500 text-white font-semibold"
               >
-                Next Level
+                {t('game.nextLevel')}
               </button>
             )}
             <button
               onClick={onRetry}
               className="w-full py-3 rounded-xl bg-amber-500/80 text-white font-semibold"
             >
-              Retry
+              {t('game.retry')}
             </button>
             <button
               onClick={onMenu}
               className="w-full py-3 rounded-xl border border-amber-500/50 text-amber-400"
             >
-              Menu
+              {t('game.menu')}
             </button>
           </div>
         </motion.div>

@@ -2,6 +2,7 @@ import { StrictMode, lazy, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './index.css'
+import './i18n'
 import { initSentry } from './lib/sentry'
 import { ErrorBoundary } from './components/ErrorBoundary'
 

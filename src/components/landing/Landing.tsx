@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { OpeningVideoModal } from './OpeningVideoModal';
 import { JapamLogo } from '../ui/JapamLogo';
+import { LanguageDropdown } from '../ui/LanguageDropdown';
 import { useAuthStore } from '../../store/authStore';
 
 const A_LOGO_SRC = '/images/A-logo.png';
@@ -13,6 +15,7 @@ interface LandingProps {
 }
 
 export function Landing({ onEnterApp, onGuestPlay }: LandingProps) {
+  const { t } = useTranslation();
   const user = useAuthStore((s) => s.user);
   const [showVideo, setShowVideo] = useState(true);
 
@@ -30,7 +33,10 @@ export function Landing({ onEnterApp, onGuestPlay }: LandingProps) {
       >
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/55 to-black/75" aria-hidden />
         <div className="relative z-10 flex flex-col min-h-screen">
-          <header className="pt-16 sm:pt-24 pb-6 px-4 text-center">
+          <header className="relative pt-16 sm:pt-24 pb-6 px-4 text-center">
+            <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-20">
+              <LanguageDropdown />
+            </div>
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -46,7 +52,7 @@ export function Landing({ onEnterApp, onGuestPlay }: LandingProps) {
               className="text-5xl sm:text-6xl font-bold text-white mb-2 tracking-tight drop-shadow-[0_0_20px_rgba(251,191,36,0.5)]"
               style={{ fontFamily: 'serif' }}
             >
-              Japam
+              {t('landing.title')}
             </motion.h1>
             <motion.p
               initial={{ opacity: 0 }}
@@ -54,7 +60,7 @@ export function Landing({ onEnterApp, onGuestPlay }: LandingProps) {
               transition={{ delay: 0.25, duration: 0.4 }}
               className="text-amber-200 text-xl font-medium"
             >
-              Match & Chant
+              {t('landing.tagline')}
             </motion.p>
           </header>
 
@@ -65,37 +71,37 @@ export function Landing({ onEnterApp, onGuestPlay }: LandingProps) {
             className="flex-1 px-4 max-w-md mx-auto w-full flex flex-col items-center"
           >
             <p className="text-center text-white/95 text-base leading-relaxed mb-8 drop-shadow-md">
-              Match divine candies. Hear mantras. Build your japa.
+              {t('landing.description')}
             </p>
 
             <motion.button
               type="button"
-              aria-label="Begin Japa and enter the app"
+              aria-label={t('landing.beginJapa')}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.98 }}
               onClick={onEnterApp}
               className="w-full max-w-xs py-5 rounded-2xl bg-amber-500 text-white font-bold text-xl shadow-[0_0_30px_rgba(245,158,11,0.4)] hover:shadow-[0_0_40px_rgba(245,158,11,0.5)] hover:bg-amber-400 transition-all duration-200"
             >
-              Begin Japa
+              {t('landing.beginJapa')}
             </motion.button>
 
             {!user && (
               <motion.button
                 type="button"
-                aria-label="Try the app as guest without signing in"
+                aria-label={t('landing.tryAsGuest')}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={onGuestPlay}
                 className="w-full max-w-xs mt-3 py-4 rounded-2xl bg-white/10 text-white font-semibold text-base border border-white/15 hover:bg-white/15 transition-colors"
               >
-                Try as Guest
+                {t('landing.tryAsGuest')}
               </motion.button>
             )}
           </motion.section>
 
           <footer className="relative z-10 mt-auto py-6 px-4 flex flex-col items-center justify-center text-white/70 text-sm border-t border-white/10 gap-3">
             <div className="flex items-center gap-2">
-              <span>Built by</span>
+              <span>{t('landing.builtBy')}</span>
               <a
                 href="https://aideveloperindia.store"
                 target="_blank"
@@ -108,20 +114,20 @@ export function Landing({ onEnterApp, onGuestPlay }: LandingProps) {
               <span>AI Developer India</span>
             </div>
             <p className="text-white/40 text-xs text-center">
-              © {new Date().getFullYear()} Japam. All rights reserved.
+              © {new Date().getFullYear()} Japam. {t('landing.copyright')}
             </p>
             <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-white/50">
-              <a href="/contact" className="hover:text-white/80 transition-colors underline underline-offset-2">Contact</a>
+              <a href="/contact" className="hover:text-white/80 transition-colors underline underline-offset-2">{t('landing.contact')}</a>
               <span className="text-white/20">|</span>
-              <a href="/privacy" className="hover:text-white/80 transition-colors underline underline-offset-2">Privacy Policy</a>
+              <a href="/privacy" className="hover:text-white/80 transition-colors underline underline-offset-2">{t('landing.privacy')}</a>
               <span className="text-white/20">|</span>
-              <a href="/terms" className="hover:text-white/80 transition-colors underline underline-offset-2">Terms &amp; Conditions</a>
+              <a href="/terms" className="hover:text-white/80 transition-colors underline underline-offset-2">{t('landing.terms')}</a>
               <span className="text-white/20">|</span>
-              <a href="/refund-cancellation" className="hover:text-white/80 transition-colors underline underline-offset-2">Refund &amp; Cancellation</a>
+              <a href="/refund-cancellation" className="hover:text-white/80 transition-colors underline underline-offset-2">{t('landing.refund')}</a>
               <span className="text-white/20">|</span>
-              <a href="/shipping-delivery" className="hover:text-white/80 transition-colors underline underline-offset-2">Shipping &amp; Delivery</a>
+              <a href="/shipping-delivery" className="hover:text-white/80 transition-colors underline underline-offset-2">{t('landing.shipping')}</a>
               <span className="text-white/20">|</span>
-              <a href="/api-docs" className="hover:text-white/80 transition-colors underline underline-offset-2">API Docs</a>
+              <a href="/api-docs" className="hover:text-white/80 transition-colors underline underline-offset-2">{t('landing.apiDocs')}</a>
             </div>
           </footer>
         </div>

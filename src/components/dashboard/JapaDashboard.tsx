@@ -1,10 +1,14 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useJapaStore } from '../../store/japaStore';
 import { DEITIES } from '../../data/deities';
 import { DAILY_GOAL_JAPAS } from '../../data/levels';
 import { downloadMantraPdf, type PdfDetails } from '../../utils/pdfExport';
 import { DonateThankYouBox } from '../donation/DonateThankYouBox';
 import { AppHeader } from '../layout/AppHeader';
+
+const REMOVE_BG_URL = 'https://www.remove.bg';
+/** Single sample image used across all deities and site-wide */
+const HANDWRITING_SAMPLE_SRC = '/SAMPLE%20NAMA%20IMAGE.png';
 
 interface JapaDashboardProps {
   onBack: () => void;
@@ -20,6 +24,10 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
   const [name, setName] = useState('');
   const [gotram, setGotram] = useState('');
   const [mobileNumber, setMobileNumber] = useState('');
+  const [handwritingDataUrl, setHandwritingDataUrl] = useState<string | null>(null);
+  const [downloadLoading, setDownloadLoading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const total = counts.total;
   const maxDeity = Math.max(...DEITIES.map(d => counts[d.id]), 1);
@@ -29,26 +37,54 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
     setName('');
     setGotram('');
     setMobileNumber('');
+    setHandwritingDataUrl(null);
+    setUploadError(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   const closeDownloadModal = () => {
     setDownloadModal(null);
+    setHandwritingDataUrl(null);
   };
 
-  const handleDownloadSubmit = () => {
-    if (!downloadModal) return;
-    const details: PdfDetails = {
-      name: name.trim(),
-      gotram: gotram.trim(),
-      mobileNumber: mobileNumber.trim()
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUploadError(null);
+    setHandwritingDataUrl(null);
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      setUploadError('Please upload an image file (PNG, JPG, etc.)');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result;
+      if (typeof result === 'string') setHandwritingDataUrl(result);
     };
-    downloadMantraPdf(
-      downloadModal.mantra,
-      downloadModal.count,
-      downloadModal.deityName,
-      details
-    );
-    closeDownloadModal();
+    reader.onerror = () => setUploadError('Could not read file');
+    reader.readAsDataURL(file);
+  };
+
+  const handleDownloadSubmit = async () => {
+    if (!downloadModal) return;
+    setDownloadLoading(true);
+    try {
+      const details: PdfDetails = {
+        name: name.trim(),
+        gotram: gotram.trim(),
+        mobileNumber: mobileNumber.trim()
+      };
+      await downloadMantraPdf(
+        downloadModal.mantra,
+        downloadModal.count,
+        downloadModal.deityName,
+        details,
+        handwritingDataUrl
+      );
+      closeDownloadModal();
+    } finally {
+      setDownloadLoading(false);
+    }
   };
 
   return (
@@ -99,12 +135,43 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
       </div>
 
       {downloadModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
-          <div className="bg-[#1a1a2e] rounded-2xl border border-amber-500/30 p-6 max-w-sm w-full shadow-xl">
-            <h2 className="text-xl font-bold text-amber-400 mb-4">Details for PDF</h2>
-            <p className="text-amber-200/80 text-sm mb-4">
-              These will appear in the PDF along with &quot;JAPAM&quot; and your japas.
-            </p>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 overflow-y-auto">
+          <div className="bg-[#1a1a2e] rounded-2xl border border-amber-500/30 p-6 max-w-sm w-full shadow-xl my-4">
+            <h2 className="text-xl font-bold text-amber-400 mb-4">Download PDF</h2>
+
+            <div className="mb-4 p-3 rounded-lg bg-black/30 border border-amber-500/20">
+              <p className="text-amber-200/90 text-xs mb-2 font-medium">Use your own handwriting (optional)</p>
+              <p className="text-amber-200/70 text-[11px] mb-2 leading-relaxed">
+                Write your nama phrase on paper, take a photo. Go to{' '}
+                <a href={REMOVE_BG_URL} target="_blank" rel="noopener noreferrer" className="text-amber-400 underline">
+                  remove.bg
+                </a>
+                {' '}to remove the background, then upload the image here. It will appear in the PDF at the same size as the default text. We don&apos;t save your image—you may save it on your device for future downloads.
+              </p>
+              <p className="text-amber-200/80 text-[11px] mb-2">Example of what to upload:</p>
+              <div className="mb-2 flex justify-center">
+                <img
+                  src={HANDWRITING_SAMPLE_SRC}
+                  alt="Sample handwriting"
+                  className="max-h-14 object-contain border border-amber-500/20 rounded bg-white/5"
+                />
+              </div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="block w-full text-amber-200/80 text-xs file:mr-2 file:py-1.5 file:px-3 file:rounded file:border-0 file:bg-amber-500/80 file:text-white file:text-xs"
+              />
+              {handwritingDataUrl && (
+                <p className="text-emerald-400 text-xs mt-2">Image ready</p>
+              )}
+              {uploadError && (
+                <p className="text-red-400 text-xs mt-2">{uploadError}</p>
+              )}
+            </div>
+
+            <p className="text-amber-200/80 text-sm mb-3">Details for PDF (optional)</p>
             <div className="space-y-3 mb-6">
               <div>
                 <label className="block text-amber-200/80 text-xs mb-1">Name</label>
@@ -141,14 +208,16 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
               <button
                 type="button"
                 onClick={handleDownloadSubmit}
-                className="flex-1 py-2 rounded-xl bg-amber-500 text-white font-semibold"
+                disabled={downloadLoading}
+                className="flex-1 py-2 rounded-xl bg-amber-500 text-white font-semibold disabled:opacity-60"
               >
-                Download PDF
+                {downloadLoading ? 'Generating…' : 'Download PDF'}
               </button>
               <button
                 type="button"
                 onClick={closeDownloadModal}
-                className="px-4 py-2 rounded-xl border border-amber-500/50 text-amber-400"
+                disabled={downloadLoading}
+                className="px-4 py-2 rounded-xl border border-amber-500/50 text-amber-400 disabled:opacity-60"
               >
                 Cancel
               </button>

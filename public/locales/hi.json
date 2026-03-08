@@ -1,0 +1,76 @@
+{
+  "landing": {
+    "title": "जपम",
+    "tagline": "मिलान करें, जप करें",
+    "description": "दिव्य मिठाइयाँ मिलाएँ। मंत्र सुनें। अपना जप बनाएँ।",
+    "beginJapa": "जप शुरू करें",
+    "tryAsGuest": "अतिथि के रूप में आज़माएँ",
+    "builtBy": "द्वारा निर्मित",
+    "copyright": "सर्वाधिकार सुरक्षित।",
+    "contact": "संपर्क",
+    "privacy": "गोपनीयता नीति",
+    "terms": "नियम और शर्तें",
+    "refund": "रिफंड और रद्दीकरण",
+    "shipping": "शिपिंग और डिलीवरी",
+    "apiDocs": "API दस्तावेज़"
+  },
+  "videoModal": {
+    "title1": "जपम",
+    "title2": "डिजिटल मंत्र साधना",
+    "skip": "छोड़ें"
+  },
+  "menu": {
+    "back": "← वापस",
+    "signIn": "साइन इन",
+    "signOut": "साइन आउट",
+    "donate": "दान करें",
+    "title": "जपम",
+    "tagline": "मिलान करें, जप करें",
+    "generalJapa": "सामान्य जप",
+    "istaDevata": "इष्ट देवता जप",
+    "japaMarathons": "जप मैराथन",
+    "japaCount": "जप गिनती",
+    "levels": "स्तर",
+    "settings": "सेटिंग्स",
+    "signedIn": "साइन इन हो चुका है",
+    "premium": "प्रीमियम",
+    "pro": "प्रो"
+  },
+  "game": {
+    "jai": "जय!",
+    "tryAgain": "पुनः प्रयास करें",
+    "marathonComplete": "मैराथन पूर्ण!",
+    "youCompletedJapas": "आपने जप पूरे कर लिए!",
+    "marathonTargetReached": "आप मैराथन लक्ष्य तक पहुँच गए!",
+    "outOfMoves": "चालें खत्म। अगली बार और जप करें!",
+    "nextLevel": "अगला स्तर",
+    "retry": "पुनः प्रयास करें",
+    "menu": "मेन्यू",
+    "japas": "जप",
+    "moves": "चालें",
+    "back": "← वापस",
+    "pause": "रोकें",
+    "exit": "बाहर निकलें"
+  },
+  "common": {
+    "loading": "लोड हो रहा है…",
+    "save": "सेव करें",
+    "saving": "सेव हो रहा है…",
+    "cancel": "रद्द करें",
+    "ok": "ठीक है",
+    "later": "बाद में"
+  },
+  "language": {
+    "disclaimer": "अनुवाद में गलतियाँ हो सकती हैं। हम सुधार करेंगे।"
+  },
+  "deities": {
+    "rama": "राम",
+    "shiva": "शिव",
+    "ganesh": "गणेश",
+    "surya": "सूर्य",
+    "shakthi": "शक्ति",
+    "krishna": "कृष्ण",
+    "shanmukha": "षण्मुख",
+    "venkateswara": "वेंकटेश्वर"
+  }
+}

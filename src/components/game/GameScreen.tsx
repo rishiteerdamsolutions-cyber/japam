@@ -1,4 +1,5 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Board } from './Board';
 import { HUD } from './HUD';
 import { GameOverlay } from './GameOverlay';
@@ -25,6 +26,7 @@ interface GameScreenProps {
 }
 
 export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonTargetJapas, isGuest, justRestored, onJustRestoredCleared, onBack, onNextLevel }: GameScreenProps) {
+  const { t } = useTranslation();
   const initGame = useGameStore(s => s.initGame);
   const status = useGameStore(s => s.status);
   const reset = useGameStore(s => s.reset);
@@ -212,7 +214,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
             onClick={onBack}
             className="text-amber-400 text-sm py-1 px-2"
           >
-            ← Back
+            {t('game.back')}
           </button>
           {status === 'playing' && !isGuest && (
             <button
@@ -220,7 +222,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
               disabled={pauseSaving}
               className="text-amber-400 text-sm py-1 px-2 border border-amber-500/50 rounded disabled:opacity-50"
             >
-              {pauseSaving ? 'Saving…' : 'Pause'}
+              {pauseSaving ? t('common.saving') : t('game.pause')}
             </button>
           )}
           {status === 'playing' && isGuest && (
@@ -228,7 +230,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
               onClick={onBack}
               className="text-amber-400 text-sm py-1 px-2 border border-amber-500/50 rounded"
             >
-              Exit
+              {t('game.exit')}
             </button>
           )}
         </div>

@@ -1,7 +1,9 @@
+import { useTranslation } from 'react-i18next';
 import { useGameStore } from '../../store/gameStore';
 import { LEVELS } from '../../data/levels';
 
 export function HUD() {
+  const { t } = useTranslation();
   const { moves, japasThisLevel, japasByDeity, mode, levelIndex, marathonTargetJapas, overrideJapaTarget } = useGameStore();
   const level = LEVELS[levelIndex];
   const deityTarget = mode !== 'general' ? mode : undefined;
@@ -11,10 +13,10 @@ export function HUD() {
   return (
     <div className="flex justify-between items-center w-full px-2 py-1">
       <div className="text-amber-200 text-sm">
-        <div>Japas: {japasNeeded} / {japaTarget}</div>
+        <div>{t('game.japas')}: {japasNeeded} / {japaTarget}</div>
       </div>
       <div className="text-amber-200 text-sm font-medium">
-        Moves: {moves}
+        {t('game.moves')}: {moves}
       </div>
     </div>
   );

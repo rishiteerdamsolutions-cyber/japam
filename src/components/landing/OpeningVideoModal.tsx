@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 
 const OPENING_VIDEO_1 = '/openingvideo1.mp4';
@@ -10,16 +11,16 @@ interface OpeningVideoModalProps {
   videoSrc?: string;
   videoSrcs?: string[];
 }
-
-const TITLE_LINE1 = 'JAPAM';
-const TITLE_LINE2 = 'DIGITAL MANTRA PRACTICE';
-const TITLE_FULL = `${TITLE_LINE1} - ${TITLE_LINE2}`;
 const TYPE_DELAY_MS = 120;
 const BG_IMAGE = '/images/videomodalbg.png';
 
 const DEFAULT_SOURCES = [OPENING_VIDEO_1, OPENING_VIDEO_2];
 
 export function OpeningVideoModal({ onClose, videoSrc, videoSrcs }: OpeningVideoModalProps) {
+  const { t } = useTranslation();
+  const TITLE_LINE1 = t('videoModal.title1');
+  const TITLE_LINE2 = t('videoModal.title2');
+  const TITLE_FULL = `${TITLE_LINE1} - ${TITLE_LINE2}`;
   const [typedLength, setTypedLength] = useState(0);
   const sources = videoSrcs?.length ? videoSrcs : videoSrc ? [videoSrc] : DEFAULT_SOURCES;
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -29,7 +30,7 @@ export function OpeningVideoModal({ onClose, videoSrc, videoSrcs }: OpeningVideo
     if (typedLength >= TITLE_FULL.length) return;
     const id = setTimeout(() => setTypedLength((n) => n + 1), TYPE_DELAY_MS);
     return () => clearTimeout(id);
-  }, [typedLength]);
+  }, [typedLength, TITLE_FULL.length]);
 
   const handleEnded = useCallback(() => {
     const next = currentIndex + 1;
@@ -110,7 +111,7 @@ export function OpeningVideoModal({ onClose, videoSrc, videoSrcs }: OpeningVideo
             onClick={onClose}
             className="absolute top-3 right-3 px-4 py-2 rounded-xl bg-black/70 text-amber-200 text-sm font-semibold hover:bg-amber-500/30 hover:text-white transition-all"
           >
-            Skip
+            {t('videoModal.skip')}
           </button>
         </motion.div>
       </div>

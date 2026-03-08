@@ -2,17 +2,6 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "framework": "vite",
-  "headers": [
-    {
-      "source": "/((?!api/).*)",
-      "headers": [
-        {
-          "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.googleapis.com https://apis.google.com https://*.gstatic.com https://*.cashfree.com https://*.sentry.io https://*.ingest.sentry.io https://*.ingest.us.sentry.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://*.googleapis.com https://*.google.com https://apis.google.com https://*.firebaseio.com https://*.firebase.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://*.cashfree.com https://*.ingest.sentry.io https://*.ingest.us.sentry.io wss://*.firebaseio.com https://*.sentry.io https://*.us.sentry.io; frame-src 'self' https://*.cashfree.com https://*.google.com https://accounts.google.com; worker-src 'self' blob:;"
-        }
-      ]
-    }
-  ],
   "rewrites": [
     {"source": "/api/:path*", "destination": "/api/proxy?path=:path*"},
     {"source": "/((?!api/).*)", "destination": "/index.html"}

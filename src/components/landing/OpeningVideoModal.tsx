@@ -58,7 +58,7 @@ export function OpeningVideoModal({ onClose, videoSrc, videoSrcs }: OpeningVideo
           animate={{ opacity: 1 }}
           className="text-neon animate-neon-pulse font-bold mb-6 text-center drop-shadow-lg w-full overflow-visible flex flex-col items-center gap-0.5 sm:gap-1"
           style={{
-            fontFamily: 'system-ui, sans-serif',
+            fontFamily: "inherit",
             fontSize: 'clamp(0.8rem, 4.5vw, 2.5rem)',
             letterSpacing: 'clamp(0.02em, 0.8vw, 0.12em)',
             lineHeight: 1.3,

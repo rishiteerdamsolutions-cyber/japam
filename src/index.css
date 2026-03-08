@@ -1,6 +1,14 @@
 @import 'tailwindcss';
 @import './styles/animations.css';
 
+/* Self-hosted Indic fonts - bundled with app so Telugu/Devanagari render correctly on desktop (avoids dotted circles when Google Fonts blocked/slow) */
+@import '@fontsource/noto-sans-telugu/400.css';
+@import '@fontsource/noto-sans-telugu/600.css';
+@import '@fontsource/noto-sans-telugu/700.css';
+@import '@fontsource/noto-sans-devanagari/400.css';
+@import '@fontsource/noto-sans-devanagari/600.css';
+@import '@fontsource/noto-sans-devanagari/700.css';
+
 :root {
   font-family: 'Noto Sans Devanagari', 'Noto Sans Telugu', 'Noto Sans Tamil', 'Noto Sans Bengali', 'Noto Sans Kannada', 'Noto Sans Malayalam', 'Noto Sans Gujarati', 'Noto Sans Oriya', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   line-height: 1.5;

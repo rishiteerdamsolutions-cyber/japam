@@ -38,6 +38,7 @@ import * as adminLoginHandler from './_handlers/admin-login.js';
 import * as priestLoginHandler from './_handlers/priest-login.js';
 import * as adminSetPriceHandler from './_handlers/admin/set-price.js';
 import * as adminCreateTempleHandler from './_handlers/admin/create-temple.js';
+import * as adminCreateMarathonHandler from './_handlers/admin/create-marathon.js';
 import * as adminListTemplesHandler from './_handlers/admin/list-temples.js';
 import * as adminMarathonsHandler from './_handlers/admin/marathons.js';
 import * as adminUnlockedUsersHandler from './_handlers/admin/unlocked-users.js';
@@ -109,6 +110,7 @@ const HANDLERS = {
   'POST priest-login': priestLoginHandler,
   'POST admin/set-price': adminSetPriceHandler,
   'POST admin/create-temple': adminCreateTempleHandler,
+  'POST admin/create-marathon': adminCreateMarathonHandler,
   'GET admin/list-temples': adminListTemplesHandler,
   'POST admin/list-temples': adminListTemplesHandler,
   'GET admin/marathons': adminMarathonsHandler,

@@ -44,8 +44,18 @@ export async function POST(request) {
       const marathons = [];
       for (const d of marathonsSnap.docs) {
         const data = d.data();
-        const templeSnap = await db.doc(`temples/${data.templeId}`).get();
-        const temple = templeSnap.exists ? templeSnap.data() : null;
+        const isCommunity = data.isCommunity === true && data.communityName;
+        let templeName = '—';
+        let priestUsername = '—';
+        if (isCommunity) {
+          templeName = data.communityName || 'Community';
+          priestUsername = '(Admin)';
+        } else {
+          const templeSnap = data.templeId ? await db.doc(`temples/${data.templeId}`).get() : null;
+          const temple = templeSnap?.exists ? templeSnap.data() : null;
+          templeName = temple?.name || '—';
+          priestUsername = temple?.priestUsername || '—';
+        }
         const participationsSnap = await db.collection('marathonParticipations').where('marathonId', '==', d.id).get();
         const participants = participationsSnap.docs.map((p) => {
           const pData = p.data();
@@ -60,9 +70,10 @@ export async function POST(request) {
         participants.sort((a, b) => (b.japasCount || 0) - (a.japasCount || 0));
         marathons.push({
           id: d.id,
-          templeId: data.templeId,
-          templeName: temple?.name || '—',
-          priestUsername: temple?.priestUsername || '—',
+          templeId: data.templeId || null,
+          isCommunity: !!isCommunity,
+          templeName,
+          priestUsername,
           deityId: data.deityId,
           deityName: DEITY_NAMES[data.deityId] || data.deityId,
           targetJapas: data.targetJapas,

@@ -25,7 +25,9 @@ export async function GET(request) {
       if (!marathonSnap.exists) continue;
       const mData = marathonSnap.data();
       let templeName = '';
-      if (mData.templeId) {
+      if (mData.isCommunity && mData.communityName) {
+        templeName = mData.communityName;
+      } else if (mData.templeId) {
         const templeSnap = await db.doc(`temples/${mData.templeId}`).get();
         if (templeSnap.exists) templeName = templeSnap.data().name || '';
       }

@@ -1,6 +1,14 @@
 {
   "indexes": [
     {
+      "collectionGroup": "marathons",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "isCommunity", "order": "ASCENDING" },
+        { "fieldPath": "state", "order": "ASCENDING" }
+      ]
+    },
+    {
       "collectionGroup": "temples",
       "queryScope": "COLLECTION",
       "fields": [

@@ -4,6 +4,7 @@ import { loadPricingConfig, savePricingConfig, loadIsAdmin } from '../../lib/fir
 import { AddTempleForm } from './AddTempleForm';
 import { TemplesList } from './TemplesList';
 import { AdminMarathonsList } from './AdminMarathonsList';
+import { AdminCreateMarathonForm } from './AdminCreateMarathonForm';
 
 const API_BASE = import.meta.env.VITE_API_URL ?? '';
 
@@ -30,6 +31,7 @@ export function AdminPanel({ onBack, passwordAuth, adminToken, onLogout }: Admin
   const [paidUsers, setPaidUsers] = useState<{ uid: string; email: string | null; unlockedAt: string | null }[]>([]);
   const [paidUsersLoading, setPaidUsersLoading] = useState(false);
   const [paidUsersTotal, setPaidUsersTotal] = useState<number | null>(null);
+  const [marathonsRefresh, setMarathonsRefresh] = useState(0);
 
   useEffect(() => {
     if (passwordAuth) {
@@ -231,7 +233,10 @@ export function AdminPanel({ onBack, passwordAuth, adminToken, onLogout }: Admin
       {tab === 'marathons' && passwordAuth && adminToken && (
         <>
           <h1 className="text-2xl font-bold text-amber-400 mb-4">Active Marathons</h1>
-          <AdminMarathonsList adminToken={adminToken} onUnauthorized={onLogout} />
+          <AdminCreateMarathonForm adminToken={adminToken} onSuccess={() => setMarathonsRefresh((k) => k + 1)} onUnauthorized={onLogout} />
+          <div className="mt-6">
+            <AdminMarathonsList adminToken={adminToken} onUnauthorized={onLogout} refreshTrigger={marathonsRefresh} />
+          </div>
         </>
       )}
       {tab === 'users' && passwordAuth && adminToken && (

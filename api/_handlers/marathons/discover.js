@@ -4,9 +4,29 @@ function normalize(s) {
   return (s || '').trim().toLowerCase();
 }
 
+async function loadMarathonLeaderboard(db, marathonId) {
+  const partsSnap = await db.collection('marathonParticipations').where('marathonId', '==', marathonId).get();
+  const participants = partsSnap.docs.map((p) => {
+    const pdata = p.data();
+    return {
+      userId: pdata.userId,
+      displayName: typeof pdata.displayName === 'string' ? pdata.displayName : null,
+      japasCount: pdata.japasCount ?? 0,
+    };
+  });
+  participants.sort((a, b) => (b.japasCount || 0) - (a.japasCount || 0));
+  return participants.slice(0, 5).map((p, i) => ({
+    rank: i + 1,
+    uid: p.userId,
+    name: p.displayName || (p.userId ? String(p.userId).slice(0, 8) : '—'),
+    japasCount: p.japasCount,
+  }));
+}
+
 /** GET /api/marathons/discover?state=&district=&cityTownVillage=&area=
  * Returns temples and their marathons for the given location. No auth required.
  * State required; district, cityTownVillage, area optional. Case-insensitive for city/area.
+ * Also includes community marathons (admin-created) with same location fields.
  */
 export async function GET(request) {
   try {
@@ -50,16 +70,7 @@ export async function GET(request) {
       const mSnap = await db.collection('marathons').where('templeId', '==', templeId).get();
       marathonsByTemple[templeId] = await Promise.all(mSnap.docs.map(async (d) => {
         const data = d.data();
-        const partsSnap = await db.collection('marathonParticipations').where('marathonId', '==', d.id).get();
-        const participants = partsSnap.docs.map((p) => {
-          const pdata = p.data();
-          return {
-            userId: pdata.userId,
-            displayName: typeof pdata.displayName === 'string' ? pdata.displayName : null,
-            japasCount: pdata.japasCount ?? 0,
-          };
-        });
-        participants.sort((a, b) => (b.japasCount || 0) - (a.japasCount || 0));
+        const leaderboard = await loadMarathonLeaderboard(db, d.id);
         return {
           id: d.id,
           templeId: data.templeId,
@@ -67,14 +78,58 @@ export async function GET(request) {
           targetJapas: data.targetJapas,
           startDate: data.startDate,
           joinedCount: data.joinedCount ?? 0,
-          leaderboard: participants.slice(0, 5).map((p, i) => ({
-            rank: i + 1,
-            uid: p.userId,
-            name: p.displayName || (p.userId ? String(p.userId).slice(0, 8) : '—'),
-            japasCount: p.japasCount,
-          })),
+          leaderboard,
         };
       }));
+    }
+
+    // Community marathons (admin-created): same location fields, no templeId
+    if (state) {
+      let communityQuery = db.collection('marathons').where('isCommunity', '==', true).where('state', '==', state);
+      const communitySnap = await communityQuery.get();
+      let communityMarathons = communitySnap.docs.map((d) => {
+        const data = d.data();
+        return {
+          id: d.id,
+          data,
+        };
+      });
+      if (district) communityMarathons = communityMarathons.filter((m) => (m.data.district || '') === district);
+      if (cityTownVillage) {
+        const q = normalize(cityTownVillage);
+        communityMarathons = communityMarathons.filter((m) => {
+          const v = normalize(m.data.cityTownVillage);
+          return v.includes(q) || q.includes(v);
+        });
+      }
+      if (area) {
+        const q = normalize(area);
+        communityMarathons = communityMarathons.filter((m) => {
+          const v = normalize(m.data.area);
+          return v.includes(q) || q.includes(v);
+        });
+      }
+      for (const { id, data } of communityMarathons) {
+        const leaderboard = await loadMarathonLeaderboard(db, id);
+        const syntheticTemple = {
+          id,
+          name: data.communityName || 'Community',
+          state: data.state,
+          district: data.district,
+          cityTownVillage: data.cityTownVillage,
+          area: data.area,
+        };
+        temples.push(syntheticTemple);
+        marathonsByTemple[id] = [{
+          id,
+          templeId: null,
+          deityId: data.deityId,
+          targetJapas: data.targetJapas,
+          startDate: data.startDate,
+          joinedCount: data.joinedCount ?? 0,
+          leaderboard,
+        }];
+      }
     }
 
     return jsonResponse({ temples, marathonsByTemple });

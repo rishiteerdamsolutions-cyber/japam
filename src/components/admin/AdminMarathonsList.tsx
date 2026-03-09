@@ -12,6 +12,7 @@ interface Marathon {
   id: string;
   templeName: string;
   priestUsername: string;
+  isCommunity?: boolean;
   deityName: string;
   targetJapas: number;
   startDate: string;
@@ -22,9 +23,10 @@ interface Marathon {
 interface AdminMarathonsListProps {
   adminToken: string | null;
   onUnauthorized?: () => void;
+  refreshTrigger?: number;
 }
 
-export function AdminMarathonsList({ adminToken, onUnauthorized }: AdminMarathonsListProps) {
+export function AdminMarathonsList({ adminToken, onUnauthorized, refreshTrigger }: AdminMarathonsListProps) {
   const [marathons, setMarathons] = useState<Marathon[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -66,7 +68,7 @@ export function AdminMarathonsList({ adminToken, onUnauthorized }: AdminMarathon
 
   useEffect(() => {
     loadMarathons();
-  }, [adminToken]);
+  }, [adminToken, refreshTrigger]);
 
   const handleDelete = async (marathonId: string) => {
     if (!adminToken) return;
@@ -100,7 +102,7 @@ export function AdminMarathonsList({ adminToken, onUnauthorized }: AdminMarathon
         <div key={m.id} className="p-4 rounded-xl bg-black/30 border border-amber-500/20 flex flex-wrap items-start justify-between gap-2">
           <div>
             <p className="font-medium text-amber-200">{m.deityName} • {m.targetJapas} japas</p>
-            <p className="text-amber-200/70 text-xs">Temple: {m.templeName} • Priest: {m.priestUsername}</p>
+            <p className="text-amber-200/70 text-xs">{m.isCommunity ? 'Community:' : 'Temple:'} {m.templeName} • {m.isCommunity ? 'Admin' : `Priest: ${m.priestUsername}`}</p>
             <p className="text-amber-200/60 text-xs">Started {m.startDate} • {m.joinedCount} joined</p>
             {m.topParticipants.length > 0 && (
               <div className="mt-2 pt-2 border-t border-amber-500/10">

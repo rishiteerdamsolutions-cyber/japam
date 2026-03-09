@@ -34,7 +34,9 @@
     "settings": "سيٽنگون",
     "signedIn": "سائن ان ٿي ويو",
     "premium": "پرائميم",
-    "pro": "پرو"
+    "pro": "پرو",
+    "general": "general",
+    "offerDakshinaToUnlock": "offer_dakshina_to_unlock"
   },
   "game": {
     "jai": "جَي!",
@@ -400,5 +402,29 @@
     "your_rank_card": "your_rank_card",
     "youre_offline_some_features_may_not_work_until_youre_back_online": "youre_offline_some_features_may_not_work_until_youre_back_online",
     "youve_completed_the_first_2_levels_offer_dakshina_once_to_unlock_levels_350": "youve_completed_the_first_2_levels_offer_dakshina_once_to_unlock_levels_350"
+  },
+  "mahaYagnas": {
+    "loading": "لوڊ ٿي رهيو آهي…",
+    "join": "join",
+    "joined": "joined"
+  },
+  "japaDashboard": {
+    "close": "close",
+    "yourName": "your_name",
+    "title": "japa_dashboard",
+    "lifetimeMantraCount": "lifetime_mantra_count",
+    "dailyGoal": "daily_goal_n_japas_levels_15",
+    "downloadPdf": "download_pdf",
+    "useHandwriting": "use_your_own_handwriting_optional",
+    "handwritingInstructions": "write_your_nama_phrase_on_paper_take_a_photo_go_to_removebg_to_remove_the_background_then_upload_the_image_here_it_will_appear_in_the_pdf_at_the_same_size_as_the_default_text_we_dont_save_your_imageyou_may_save_it_on_your_device_for_future_downloads",
+    "exampleUpload": "example_of_what_to_upload",
+    "imageReady": "image_ready",
+    "uploadImageError": "please_upload_an_image_file_png_jpg_etc",
+    "couldNotReadFile": "could_not_read_file",
+    "detailsForPdf": "details_for_pdf_optional",
+    "name": "name",
+    "gotram": "gotram",
+    "mobileNumber": "mobile_number",
+    "generating": "generating"
   }
 }

@@ -1,10 +1,10 @@
 {
   "landing": {
-    "title": "Japam",
+    "title": "JAPAM",
     "tagline": "Match & Chant",
     "description": "Match divine candies. Hear mantras. Build your japa.",
     "beginJapa": "Begin Japa",
-    "tryAsGuest": "Try as Guest",
+    "tryAsGuest": "Continue as guest",
     "builtBy": "Built by",
     "copyright": "All rights reserved.",
     "contact": "Contact",
@@ -15,16 +15,17 @@
     "apiDocs": "API Docs"
   },
   "videoModal": {
-    "title1": "Japam",
-    "title2": "Digital Mantra Practice",
+    "title1": "JAPAM",
+    "title2": "DIGITAL MANTRA PRACTICE",
     "skip": "Skip"
   },
   "menu": {
     "back": "← Back",
+    "general": "General",
     "signIn": "Sign in",
     "signOut": "Sign out",
     "donate": "Donate",
-    "title": "Japam",
+    "title": "JAPAM",
     "tagline": "Match & Chant",
     "generalJapa": "General Japa",
     "istaDevata": "Ista Devata Japa",
@@ -32,12 +33,17 @@
     "mahaJapaYagnas": "Maha Japa Yagnas",
     "japaCount": "Japa Count",
     "levels": "Levels",
+    "offerDakshinaToUnlock": "Offer Dakshina to unlock",
     "settings": "Settings",
     "signedIn": "Signed in",
     "premium": "Premium",
     "pro": "Pro"
   },
   "game": {
+    "resumeJapa": "Resume Japa?",
+    "resumeJapaMessage": "You have a saved session. Continue where you left off?",
+    "resume": "Resume",
+    "startFresh": "Start fresh",
     "jai": "Jai!",
     "tryAgain": "Try Again",
     "marathonComplete": "Marathon complete!",
@@ -85,6 +91,27 @@
     "effectiveContribution": "Effective contribution",
     "loadFailed": "Failed to load",
     "joinFailed": "Failed to join"
+  },
+  "japaDashboard": {
+    "title": "Japa Dashboard",
+    "lifetimeMantraCount": "Lifetime mantra count",
+    "totalJapas": "{{count}} total japas",
+    "dailyGoal": "Daily goal: {n} japas (Levels 1–5)",
+    "downloadPdf": "Download PDF",
+    "downloadPdfTitle": "Download PDF",
+    "useHandwriting": "Use your own handwriting (optional)",
+    "handwritingInstructions": "Write your nama phrase on paper, take a photo. Go to remove.bg to remove the background, then upload the image here. It will appear in the PDF at the same size as the default text. We don't save your image—you may save it on your device for future downloads.",
+    "exampleUpload": "Example of what to upload:",
+    "imageReady": "Image ready",
+    "detailsForPdf": "Details for PDF (optional)",
+    "name": "Name",
+    "yourName": "Your name",
+    "gotram": "Gotram",
+    "mobileNumber": "Mobile number",
+    "generating": "Generating…",
+    "close": "Close",
+    "uploadImageError": "Please upload an image file (PNG, JPG, etc.)",
+    "couldNotReadFile": "Could not read file"
   },
   "deities": {
     "rama": "Rama",

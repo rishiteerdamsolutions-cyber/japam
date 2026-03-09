@@ -79,6 +79,12 @@ import * as apavargaGroupsHandler from './_handlers/apavarga/groups.js';
 import * as apavargaGroupsManageHandler from './_handlers/apavarga/groups-manage.js';
 import * as apavargaCleanupHandler from './_handlers/apavarga/cleanup.js';
 import * as cronRefreshActiveUsersHandler from './_handlers/cron/refresh-active-users.js';
+import * as cronUpdateMahaYagnaCountersHandler from './_handlers/cron/update-maha-yagna-counters.js';
+import * as mahaYagnasListHandler from './_handlers/maha-yagnas/list.js';
+import * as mahaYagnasMyContributionHandler from './_handlers/maha-yagnas/my-contribution.js';
+import * as adminMahaYagnasHandler from './_handlers/admin/maha-yagnas.js';
+import * as adminMahaYagnasEditHandler from './_handlers/admin/maha-yagnas-edit.js';
+import * as priestMahaYagnasHandler from './_handlers/priest/maha-yagnas.js';
 import * as healthHandler from './_handlers/health.js';
 
 function getPathSegments(request) {
@@ -166,6 +172,14 @@ const HANDLERS = {
   'POST apavarga/groups/manage': apavargaGroupsManageHandler,
   'POST apavarga/cleanup': apavargaCleanupHandler,
   'GET cron/refresh-active-users': cronRefreshActiveUsersHandler,
+  'GET cron/update-maha-yagna-counters': cronUpdateMahaYagnaCountersHandler,
+  'GET maha-yagnas/list': mahaYagnasListHandler,
+  'GET maha-yagnas/my-contribution': mahaYagnasMyContributionHandler,
+  'GET admin/maha-yagnas': adminMahaYagnasHandler,
+  'POST admin/maha-yagnas': adminMahaYagnasHandler,
+  'POST admin/maha-yagnas-edit': adminMahaYagnasEditHandler,
+  'GET priest/maha-yagnas': priestMahaYagnasHandler,
+  'POST priest/maha-yagnas': priestMahaYagnasHandler,
   'GET health': healthHandler,
 };
 

@@ -17,6 +17,20 @@ interface Marathon {
   topParticipants?: { uid: string; name: string; japasCount: number; lastActiveAt?: string | null }[];
 }
 
+interface MahaYagna {
+  id: string;
+  name: string;
+  deityId: string;
+  deityName: string;
+  mantra: string;
+  goalJapas: number;
+  currentJapas: number;
+  participantCount: number;
+  startDate: string;
+  endDate: string;
+  status: string;
+}
+
 export function PriestPage() {
   const navigate = useNavigate();
   const [token, setToken] = useState<string | null>(() => localStorage.getItem(PRIEST_TOKEN_KEY));
@@ -36,6 +50,22 @@ export function PriestPage() {
   const [createDate, setCreateDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [creating, setCreating] = useState(false);
   const [createError, setCreateError] = useState<string | null>(null);
+
+  const [mahaYagnas, setMahaYagnas] = useState<MahaYagna[]>([]);
+  const [mahaLoading, setMahaLoading] = useState(true);
+  const [showMahaCreate, setShowMahaCreate] = useState(false);
+  const [mahaName, setMahaName] = useState('');
+  const [mahaDeity, setMahaDeity] = useState('');
+  const [mahaMantra, setMahaMantra] = useState('');
+  const [mahaGoal, setMahaGoal] = useState('');
+  const [mahaStart, setMahaStart] = useState(() => new Date().toISOString().slice(0, 10));
+  const [mahaEnd, setMahaEnd] = useState(() => {
+    const d = new Date();
+    d.setMonth(d.getMonth() + 3);
+    return d.toISOString().slice(0, 10);
+  });
+  const [mahaCreating, setMahaCreating] = useState(false);
+  const [mahaCreateError, setMahaCreateError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!token) return;
@@ -63,6 +93,88 @@ export function PriestPage() {
     })();
     return () => { cancelled = true; };
   }, [token]);
+
+  useEffect(() => {
+    if (!token) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const url = API_BASE ? `${API_BASE}/api/priest/maha-yagnas` : '/api/priest/maha-yagnas';
+        const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+        const data = await res.json().catch(() => ({}));
+        if (!cancelled) {
+          if (res.status === 401) return;
+          setMahaYagnas(data.yagnas || []);
+        }
+      } catch {
+        if (!cancelled) setMahaYagnas([]);
+      } finally {
+        if (!cancelled) setMahaLoading(false);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [token]);
+
+  const handleMahaCreate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!token || !mahaName.trim() || !mahaDeity || !mahaMantra.trim() || !mahaGoal || !mahaStart || !mahaEnd) return;
+    const goal = Math.round(Number(mahaGoal));
+    if (!Number.isFinite(goal) || goal < 1) {
+      setMahaCreateError('Goal japas must be a positive number');
+      return;
+    }
+    setMahaCreating(true);
+    setMahaCreateError(null);
+    try {
+      const url = API_BASE ? `${API_BASE}/api/priest/maha-yagnas` : '/api/priest/maha-yagnas';
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          name: mahaName.trim(),
+          deityId: mahaDeity,
+          mantra: mahaMantra.trim(),
+          goalJapas: goal,
+          startDate: mahaStart,
+          endDate: mahaEnd,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setMahaCreateError(data.error || 'Failed');
+        return;
+      }
+      setShowMahaCreate(false);
+      setMahaName('');
+      setMahaDeity('');
+      setMahaMantra('');
+      setMahaGoal('');
+      setMahaStart(new Date().toISOString().slice(0, 10));
+      const endD = new Date();
+      endD.setMonth(endD.getMonth() + 3);
+      setMahaEnd(endD.toISOString().slice(0, 10));
+      setMahaYagnas((prev) => [
+        ...prev,
+        {
+          id: data.yagnaId,
+          name: mahaName.trim(),
+          deityId: mahaDeity,
+          deityName: deityName(mahaDeity),
+          mantra: mahaMantra.trim(),
+          goalJapas: goal,
+          currentJapas: 0,
+          participantCount: 0,
+          startDate: mahaStart,
+          endDate: mahaEnd,
+          status: 'active',
+        },
+      ]);
+    } catch {
+      setMahaCreateError('Failed');
+    } finally {
+      setMahaCreating(false);
+    }
+  };
 
   const handleLogout = () => {
     localStorage.removeItem(PRIEST_TOKEN_KEY);
@@ -228,6 +340,121 @@ export function PriestPage() {
               {creating ? 'Creating…' : 'Create'}
             </button>
             <button type="button" onClick={() => setShowCreate(false)} className="px-4 py-2 rounded-xl bg-white/10 text-amber-200">
+              Cancel
+            </button>
+          </div>
+        </form>
+      )}
+
+      <h2 className="text-lg font-semibold text-amber-200 mb-4 mt-10">Maha Japa Yagnas</h2>
+      {mahaLoading ? (
+        <p className="text-amber-200/70 text-sm">Loading…</p>
+      ) : mahaYagnas.length === 0 ? (
+        <p className="text-amber-200/60 text-sm mb-4">No Maha Japa Yagnas yet. Create one below.</p>
+      ) : (
+        <div className="space-y-3 mb-6">
+          {mahaYagnas.map((y) => (
+            <div key={y.id} className="p-4 rounded-xl bg-black/30 border border-amber-500/20">
+              <p className="font-medium text-amber-200">{y.name}</p>
+              <p className="text-amber-200/70 text-xs">{y.deityName} • {y.mantra}</p>
+              <p className="text-amber-200/80 text-sm mt-2">
+                Goal: {y.goalJapas.toLocaleString()} • Current: {y.currentJapas.toLocaleString()} • {y.participantCount} participants
+              </p>
+              <p className="text-amber-200/60 text-xs">{y.startDate} – {y.endDate} • {y.status}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {!showMahaCreate ? (
+        <button
+          type="button"
+          onClick={() => setShowMahaCreate(true)}
+          className="px-6 py-3 rounded-xl bg-amber-500 text-white font-semibold"
+        >
+          Create Maha Japa Yagna
+        </button>
+      ) : (
+        <form onSubmit={handleMahaCreate} className="p-4 rounded-xl bg-black/30 border border-amber-500/20 space-y-4">
+          <h3 className="text-amber-400 font-medium">New Maha Japa Yagna (Temple)</h3>
+          <div>
+            <label className="text-amber-200/80 text-sm block mb-1">Name</label>
+            <input
+              type="text"
+              value={mahaName}
+              onChange={(e) => setMahaName(e.target.value)}
+              placeholder="e.g. Shiva Maha Japa Yagna"
+              className="w-full px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30"
+              required
+            />
+          </div>
+          <div>
+            <label className="text-amber-200/80 text-sm block mb-1">Deity</label>
+            <select
+              value={mahaDeity}
+              onChange={(e) => {
+                setMahaDeity(e.target.value);
+                const d = DEITIES.find((x) => x.id === e.target.value);
+                if (d) setMahaMantra(d.mantra);
+              }}
+              className="w-full px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30"
+              required
+            >
+              <option value="">Select deity</option>
+              {DEITIES.map((d) => (
+                <option key={d.id} value={d.id}>{d.name}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="text-amber-200/80 text-sm block mb-1">Mantra</label>
+            <input
+              type="text"
+              value={mahaMantra}
+              onChange={(e) => setMahaMantra(e.target.value)}
+              placeholder="e.g. Om Namah Shivaya"
+              className="w-full px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30"
+              required
+            />
+          </div>
+          <div>
+            <label className="text-amber-200/80 text-sm block mb-1">Goal japas</label>
+            <input
+              type="number"
+              min={1}
+              value={mahaGoal}
+              onChange={(e) => setMahaGoal(e.target.value)}
+              placeholder="e.g. 100000000"
+              className="w-full px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30"
+              required
+            />
+          </div>
+          <div>
+            <label className="text-amber-200/80 text-sm block mb-1">Start date</label>
+            <input
+              type="date"
+              value={mahaStart}
+              onChange={(e) => setMahaStart(e.target.value)}
+              className="w-full px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30"
+              required
+            />
+          </div>
+          <div>
+            <label className="text-amber-200/80 text-sm block mb-1">End date</label>
+            <input
+              type="date"
+              value={mahaEnd}
+              onChange={(e) => setMahaEnd(e.target.value)}
+              className="w-full px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30"
+              required
+            />
+          </div>
+          {mahaCreateError && <p className="text-red-400 text-sm">{mahaCreateError}</p>}
+          <div className="flex gap-2">
+            <button type="submit" disabled={mahaCreating} className="px-6 py-2 rounded-xl bg-amber-500 text-white font-semibold disabled:opacity-50">
+              {mahaCreating ? 'Creating…' : 'Create'}
+            </button>
+            <button type="button" onClick={() => setShowMahaCreate(false)} className="px-4 py-2 rounded-xl bg-white/10 text-amber-200">
               Cancel
             </button>
           </div>

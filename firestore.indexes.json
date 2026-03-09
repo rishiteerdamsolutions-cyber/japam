@@ -30,6 +30,22 @@
       "fields": [
         { "fieldPath": "expiresAt", "order": "ASCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "mahaJapaYagnas",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "deityId", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "mahaJapaYagnaUsers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "yagnaId", "order": "ASCENDING" },
+        { "fieldPath": "userId", "order": "ASCENDING" }
+      ]
     }
   ],
   "fieldOverrides": []

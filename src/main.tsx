@@ -26,10 +26,12 @@ const AdminLayout = lazy(() => import('./pages/admin/AdminLayout').then(m => ({ 
 const AdminPricingPage = lazy(() => import('./pages/admin/AdminPricingPage').then(m => ({ default: m.AdminPricingPage })))
 const AdminTemplesPage = lazy(() => import('./pages/admin/AdminTemplesPage').then(m => ({ default: m.AdminTemplesPage })))
 const AdminMarathonsPage = lazy(() => import('./pages/admin/AdminMarathonsPage').then(m => ({ default: m.AdminMarathonsPage })))
+const AdminMahaYagnasPage = lazy(() => import('./pages/admin/AdminMahaYagnasPage').then(m => ({ default: m.AdminMahaYagnasPage })))
 const AdminUsersPage = lazy(() => import('./pages/admin/AdminUsersPage').then(m => ({ default: m.AdminUsersPage })))
 const AdminLevelsPage = lazy(() => import('./pages/admin/AdminLevelsPage').then(m => ({ default: m.AdminLevelsPage })))
 const PriestPage = lazy(() => import('./pages/PriestPage').then(m => ({ default: m.PriestPage })))
 const MarathonsPage = lazy(() => import('./pages/MarathonsPage').then(m => ({ default: m.MarathonsPage })))
+const MahaYagnasPage = lazy(() => import('./pages/MahaYagnasPage').then(m => ({ default: m.MahaYagnasPage })))
 const SettingsPage = lazy(() => import('./pages/SettingsPage').then(m => ({ default: m.SettingsPage })))
 const ApavargaPage = lazy(() => import('./pages/ApavargaPage').then(m => ({ default: m.ApavargaPage })))
 const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage').then(m => ({ default: m.PrivacyPolicyPage })))
@@ -71,12 +73,14 @@ createRoot(document.getElementById('root')!).render(
             <Route path="pricing" element={<AdminPricingPage />} />
             <Route path="temples" element={<AdminTemplesPage />} />
             <Route path="marathons" element={<AdminMarathonsPage />} />
+            <Route path="maha-yagnas" element={<AdminMahaYagnasPage />} />
             <Route path="levels" element={<AdminLevelsPage />} />
             <Route path="users" element={<AdminUsersPage />} />
           </Route>
         </Route>
         <Route path="/priest" element={<PriestPage />} />
         <Route path="/marathons" element={<MarathonsPage />} />
+        <Route path="/maha-yagnas" element={<MahaYagnasPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/apavarga" element={<ApavargaPage />} />
         <Route path="/privacy" element={<PrivacyPolicyPage />} />

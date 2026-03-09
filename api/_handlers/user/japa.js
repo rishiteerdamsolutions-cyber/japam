@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, isUserUnlocked } from '../_lib.js';
 import admin from 'firebase-admin';
 
 /** GET /api/user/japa - Load japa counts for current user (Firebase ID token required) */
@@ -96,6 +96,44 @@ export async function POST(request) {
         } catch {}
       }
     }
+
+    // Maha Japa Yagna: attribute japas for Pro users only
+    const proUser = await isUserUnlocked(db, uid);
+    if (proUser && Object.keys(deltas).length > 0) {
+      const today = new Date().toISOString().slice(0, 10);
+      for (const deityId of DEITY_IDS) {
+        const add = deltas[deityId];
+        if (!add || add <= 0) continue;
+        const yagnasSnap = await db
+          .collection('mahaJapaYagnas')
+          .where('status', '==', 'active')
+          .where('deityId', '==', deityId)
+          .get();
+        for (const yDoc of yagnasSnap.docs) {
+          const yData = yDoc.data();
+          const startDate = yData.startDate || '';
+          const endDate = yData.endDate || '';
+          if (startDate > today || endDate < today) continue;
+          const yagnaId = yDoc.id;
+          const docId = `${yagnaId}_${uid}`;
+          const userRef = db.collection('mahaJapaYagnaUsers').doc(docId);
+          const userSnap = await userRef.get();
+          if (userSnap.exists) {
+            await userRef.update({
+              userJapas: admin.firestore.FieldValue.increment(add),
+            });
+          } else {
+            await userRef.set({
+              yagnaId,
+              userId: uid,
+              userJapas: add,
+              joinedAt: admin.firestore.FieldValue.serverTimestamp(),
+            });
+          }
+        }
+      }
+    }
+
     return jsonResponse({ ok: true }, 200);
   } catch (e) {
     console.error('user japa POST', e);

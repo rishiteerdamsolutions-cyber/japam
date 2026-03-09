@@ -179,6 +179,12 @@ export function MainMenu({ onSelect, onOpenMap, onOpenJapaDashboard, onOpenSetti
             {t('menu.japaMarathons')}
           </button>
           <button
+            onClick={() => navigate('/maha-yagnas')}
+            className="text-amber-200 font-medium text-sm hover:text-amber-400 transition-colors"
+          >
+            {t('menu.mahaJapaYagnas')}
+          </button>
+          <button
             onClick={onOpenJapaDashboard}
             className="text-amber-200 font-medium text-sm hover:text-amber-400 transition-colors"
           >

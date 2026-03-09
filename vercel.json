@@ -8,6 +8,7 @@
   ],
   "crons": [
     {"path": "/api/apavarga/cleanup", "schedule": "0 0 * * *"},
-    {"path": "/api/cron/refresh-active-users", "schedule": "30 21 * * *"}
+    {"path": "/api/cron/refresh-active-users", "schedule": "30 21 * * *"},
+    {"path": "/api/cron/update-maha-yagna-counters", "schedule": "0 0 * * *"}
   ]
 }

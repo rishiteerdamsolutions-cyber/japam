@@ -82,7 +82,11 @@ export function GamePage() {
           const saved = data as unknown as PausedGameState;
           const savedMode = saved.mode ?? null;
           const savedMarathon = saved.marathonId ?? null;
-          const savedYagna = saved.yagnaId ?? null;
+          const savedYagna =
+            saved.yagnaId ??
+            (saved.key && saved.key.startsWith('japam-paused-yagna-')
+              ? saved.key.replace('japam-paused-yagna-', '')
+              : null);
           const modeMatches = isMarathon
             ? (yagnaId ? savedYagna === yagnaId : savedMarathon === marathonId)
             : savedMode === mode;
@@ -123,7 +127,11 @@ export function GamePage() {
 
   const handleResume = () => {
     if (resumePending) {
-      restoreGame(resumePending);
+      const saved = { ...resumePending } as PausedGameState;
+      if (!saved.yagnaId && saved.key?.startsWith('japam-paused-yagna-')) {
+        saved.yagnaId = saved.key.replace('japam-paused-yagna-', '');
+      }
+      restoreGame(saved);
       setResumePending(null);
       setResumeKey(null);
       setJustRestored(true);

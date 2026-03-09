@@ -81,6 +81,7 @@ export async function POST(request) {
       japasByDeity: raw.japasByDeity && typeof raw.japasByDeity === 'object' ? raw.japasByDeity : {},
       marathonId: typeof raw.marathonId === 'string' ? raw.marathonId : null,
       marathonTargetJapas: typeof raw.marathonTargetJapas === 'number' && Number.isFinite(raw.marathonTargetJapas) ? raw.marathonTargetJapas : null,
+      yagnaId: typeof raw.yagnaId === 'string' ? raw.yagnaId : null,
       savedAt: typeof raw.savedAt === 'number' && Number.isFinite(raw.savedAt) ? raw.savedAt : Date.now(),
     };
     if (!safe.key || !safe.mode || safe.levelIndex == null || safe.moves == null) {

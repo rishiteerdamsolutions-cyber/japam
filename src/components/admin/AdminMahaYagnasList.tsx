@@ -11,6 +11,7 @@ interface Temple {
 interface Yagna {
   id: string;
   name: string;
+  description?: string;
   deityId: string;
   deityName: string;
   mantra: string;
@@ -50,6 +51,19 @@ export function AdminMahaYagnasList({ adminToken, onUnauthorized }: AdminMahaYag
   });
   const [createTempleId, setCreateTempleId] = useState('');
   const [createError, setCreateError] = useState<string | null>(null);
+
+  const [editingYagna, setEditingYagna] = useState<Yagna | null>(null);
+  const [editName, setEditName] = useState('');
+  const [editDescription, setEditDescription] = useState('');
+  const [editDeityId, setEditDeityId] = useState('');
+  const [editMantra, setEditMantra] = useState('');
+  const [editGoal, setEditGoal] = useState('');
+  const [editStart, setEditStart] = useState('');
+  const [editEnd, setEditEnd] = useState('');
+  const [editStatus, setEditStatus] = useState<'active' | 'completed'>('active');
+  const [editTempleId, setEditTempleId] = useState('');
+  const [editSaving, setEditSaving] = useState(false);
+  const [editError, setEditError] = useState<string | null>(null);
 
   const loadYagnas = () => {
     if (!adminToken) return;
@@ -166,6 +180,68 @@ export function AdminMahaYagnasList({ adminToken, onUnauthorized }: AdminMahaYag
     }
   };
 
+  const openEdit = (y: Yagna) => {
+    setEditingYagna(y);
+    setEditName(y.name);
+    setEditDescription(y.description ?? '');
+    setEditDeityId(y.deityId);
+    setEditMantra(y.mantra);
+    setEditGoal(String(y.goalJapas));
+    setEditStart(y.startDate);
+    setEditEnd(y.endDate);
+    setEditStatus((y.status === 'completed' ? 'completed' : 'active') as 'active' | 'completed');
+    setEditTempleId(y.templeId ?? '');
+    setEditError(null);
+    loadTemples();
+  };
+
+  const handleEdit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!adminToken || !editingYagna) return;
+    const goal = Math.round(Number(editGoal));
+    if (!Number.isFinite(goal) || goal < 1) {
+      setEditError('Goal japas must be a positive number');
+      return;
+    }
+    setEditSaving(true);
+    setEditError(null);
+    try {
+      const url = API_BASE ? `${API_BASE}/api/admin/maha-yagnas-edit` : '/api/admin/maha-yagnas-edit';
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${adminToken}`, 'X-Admin-Token': adminToken },
+        body: JSON.stringify({
+          token: adminToken,
+          yagnaId: editingYagna.id,
+          name: editName.trim(),
+          description: editDescription.trim(),
+          deityId: editDeityId,
+          mantra: editMantra.trim(),
+          goalJapas: goal,
+          startDate: editStart,
+          endDate: editEnd,
+          templeId: editTempleId.trim() || null,
+          status: editStatus,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.status === 401) {
+        onUnauthorized?.();
+        return;
+      }
+      if (!res.ok) {
+        setEditError(data.error || 'Failed');
+        return;
+      }
+      setEditingYagna(null);
+      loadYagnas();
+    } catch {
+      setEditError('Failed');
+    } finally {
+      setEditSaving(false);
+    }
+  };
+
   if (loading) return <p className="text-amber-200/70 text-sm">Loading…</p>;
   if (error) return <p className="text-red-400 text-sm">{error}</p>;
 
@@ -181,6 +257,125 @@ export function AdminMahaYagnasList({ adminToken, onUnauthorized }: AdminMahaYag
           {showCreate ? 'Cancel' : 'Create Yagna'}
         </button>
       </div>
+
+      {editingYagna && (
+        <form onSubmit={handleEdit} className="p-4 rounded-xl bg-black/30 border border-amber-500/30 space-y-3">
+          <h3 className="text-amber-300 font-medium">Edit Maha Japa Yagna</h3>
+          <div>
+            <label className="text-amber-200/80 text-sm block mb-1">Name</label>
+            <input
+              type="text"
+              value={editName}
+              onChange={(e) => setEditName(e.target.value)}
+              placeholder="e.g. Global Shiva Maha Japa Yagna"
+              className="w-full max-w-md px-3 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30 text-sm"
+              required
+            />
+          </div>
+          <div>
+            <label className="text-amber-200/80 text-sm block mb-1">Description (optional)</label>
+            <input
+              type="text"
+              value={editDescription}
+              onChange={(e) => setEditDescription(e.target.value)}
+              className="w-full max-w-md px-3 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30 text-sm"
+            />
+          </div>
+          <div>
+            <label className="text-amber-200/80 text-sm block mb-1">Deity</label>
+            <select
+              value={editDeityId}
+              onChange={(e) => {
+                setEditDeityId(e.target.value);
+                const d = DEITIES.find((x) => x.id === e.target.value);
+                if (d) setEditMantra(d.mantra);
+              }}
+              className="w-full max-w-md px-3 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30 text-sm"
+              required
+            >
+              {DEITIES.map((d) => (
+                <option key={d.id} value={d.id}>{d.name}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="text-amber-200/80 text-sm block mb-1">Mantra</label>
+            <input
+              type="text"
+              value={editMantra}
+              onChange={(e) => setEditMantra(e.target.value)}
+              className="w-full max-w-md px-3 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30 text-sm"
+              required
+            />
+          </div>
+          <div>
+            <label className="text-amber-200/80 text-sm block mb-1">Goal japas</label>
+            <input
+              type="number"
+              min={1}
+              value={editGoal}
+              onChange={(e) => setEditGoal(e.target.value)}
+              className="w-full max-w-md px-3 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30 text-sm"
+              required
+            />
+          </div>
+          <div className="flex gap-4">
+            <div>
+              <label className="text-amber-200/80 text-sm block mb-1">Start date</label>
+              <input
+                type="date"
+                value={editStart}
+                onChange={(e) => setEditStart(e.target.value)}
+                className="px-3 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30 text-sm"
+                required
+              />
+            </div>
+            <div>
+              <label className="text-amber-200/80 text-sm block mb-1">End date</label>
+              <input
+                type="date"
+                value={editEnd}
+                onChange={(e) => setEditEnd(e.target.value)}
+                className="px-3 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30 text-sm"
+                required
+              />
+            </div>
+          </div>
+          <div>
+            <label className="text-amber-200/80 text-sm block mb-1">Status</label>
+            <select
+              value={editStatus}
+              onChange={(e) => setEditStatus(e.target.value as 'active' | 'completed')}
+              className="w-full max-w-xs px-3 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30 text-sm"
+            >
+              <option value="active">Active</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
+          <div>
+            <label className="text-amber-200/80 text-sm block mb-1">Temple (optional, leave empty for Global)</label>
+            <select
+              value={editTempleId}
+              onChange={(e) => setEditTempleId(e.target.value)}
+              className="w-full max-w-md px-3 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30 text-sm"
+            >
+              <option value="">Global</option>
+              {temples.map((t) => (
+                <option key={t.id} value={t.id}>{t.name}</option>
+              ))}
+            </select>
+          </div>
+          {editError && <p className="text-red-400 text-sm">{editError}</p>}
+          <div className="flex gap-2">
+            <button type="submit" disabled={editSaving} className="px-4 py-2 rounded-lg bg-amber-500 text-white text-sm font-medium disabled:opacity-50">
+              {editSaving ? 'Saving…' : 'Save'}
+            </button>
+            <button type="button" onClick={() => setEditingYagna(null)} className="px-4 py-2 rounded-lg bg-white/10 text-amber-200 text-sm">
+              Cancel
+            </button>
+          </div>
+        </form>
+      )}
 
       {showCreate && (
         <form onSubmit={handleCreate} className="p-4 rounded-xl bg-black/30 border border-amber-500/20 space-y-3">
@@ -292,15 +487,24 @@ export function AdminMahaYagnasList({ adminToken, onUnauthorized }: AdminMahaYag
         <p className="text-amber-200/60 text-sm">No Maha Japa Yagnas yet.</p>
       ) : (
         yagnas.map((y) => (
-          <div key={y.id} className="p-4 rounded-xl bg-black/30 border border-amber-500/20">
-            <p className="font-medium text-amber-200">{y.name}</p>
-            <p className="text-amber-200/70 text-xs">{y.deityName} • {y.mantra}</p>
-            <p className="text-amber-200/60 text-xs mt-1">
-              Goal: {y.goalJapas.toLocaleString()} • Current: {y.currentJapas.toLocaleString()} • {y.participantCount} participants
-            </p>
-            <p className="text-amber-200/60 text-xs">
-              {y.startDate} – {y.endDate} • {y.templeName} • {y.status}
-            </p>
+          <div key={y.id} className="p-4 rounded-xl bg-black/30 border border-amber-500/20 flex flex-wrap items-start justify-between gap-2">
+            <div>
+              <p className="font-medium text-amber-200">{y.name}</p>
+              <p className="text-amber-200/70 text-xs">{y.deityName} • {y.mantra}</p>
+              <p className="text-amber-200/60 text-xs mt-1">
+                Goal: {y.goalJapas.toLocaleString()} • Current: {y.currentJapas.toLocaleString()} • {y.participantCount} participants
+              </p>
+              <p className="text-amber-200/60 text-xs">
+                {y.startDate} – {y.endDate} • {y.templeName} • {y.status}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => openEdit(y)}
+              className="text-xs px-2 py-1 rounded bg-amber-500/80 text-white hover:bg-amber-500 shrink-0"
+            >
+              Edit
+            </button>
           </div>
         ))
       )}

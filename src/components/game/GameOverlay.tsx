@@ -22,32 +22,32 @@ export function GameOverlay({ status, isMarathon, onRetry, onMenu, onNext }: Gam
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="bg-[#1a1a2e] rounded-2xl p-6 max-w-sm w-full text-center"
+          className="bg-[#1a1a2e] rounded-2xl p-4 sm:p-6 max-w-sm w-full text-center min-w-0"
         >
-          <h2 className="text-2xl font-bold text-amber-400 mb-2">
+          <h2 className="text-xl sm:text-2xl font-bold text-amber-400 mb-2 break-words">
             {status === 'won' ? (isMarathon ? t('game.marathonComplete') : t('game.jai')) : t('game.tryAgain')}
           </h2>
-          <p className="text-amber-200/80 mb-6">
+          <p className="text-amber-200/80 mb-6 text-sm sm:text-base break-words">
             {status === 'won' ? (isMarathon ? t('game.marathonTargetReached') : t('game.youCompletedJapas')) : t('game.outOfMoves')}
           </p>
           <div className="flex flex-col gap-2">
             {status === 'won' && onNext && (
               <button
                 onClick={onNext}
-                className="w-full py-3 rounded-xl bg-amber-500 text-white font-semibold"
+                className="w-full py-3 rounded-xl bg-amber-500 text-white font-semibold text-sm sm:text-base break-words min-h-[44px]"
               >
                 {t('game.nextLevel')}
               </button>
             )}
             <button
               onClick={onRetry}
-              className="w-full py-3 rounded-xl bg-amber-500/80 text-white font-semibold"
+              className="w-full py-3 rounded-xl bg-amber-500/80 text-white font-semibold text-sm sm:text-base break-words min-h-[44px]"
             >
               {t('game.retry')}
             </button>
             <button
               onClick={onMenu}
-              className="w-full py-3 rounded-xl border border-amber-500/50 text-amber-400"
+              className="w-full py-3 rounded-xl border border-amber-500/50 text-amber-400 text-sm sm:text-base break-words min-h-[44px]"
             >
               {t('game.menu')}
             </button>

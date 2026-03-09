@@ -22,7 +22,7 @@ export function AppFooter() {
         <span>AI Developer India</span>
       </div>
       <p className="text-white/30">© {new Date().getFullYear()} Japam. {t('landing.copyright')}</p>
-      <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+      <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 break-words">
         <a href="/contact" className="hover:text-white/70 transition-colors underline underline-offset-2">{t('landing.contact')}</a>
         <span className="text-white/20">|</span>
         <a href="/privacy" className="hover:text-white/70 transition-colors underline underline-offset-2">{t('landing.privacy')}</a>

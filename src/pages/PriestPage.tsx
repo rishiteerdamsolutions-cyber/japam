@@ -67,6 +67,24 @@ export function PriestPage() {
   const [mahaCreating, setMahaCreating] = useState(false);
   const [mahaCreateError, setMahaCreateError] = useState<string | null>(null);
 
+  const [editingMarathon, setEditingMarathon] = useState<Marathon | null>(null);
+  const [editDeity, setEditDeity] = useState('');
+  const [editTarget, setEditTarget] = useState('');
+  const [editDate, setEditDate] = useState('');
+  const [editSaving, setEditSaving] = useState(false);
+  const [editError, setEditError] = useState<string | null>(null);
+
+  const [editingMahaYagna, setEditingMahaYagna] = useState<MahaYagna | null>(null);
+  const [mahaEditName, setMahaEditName] = useState('');
+  const [mahaEditDeity, setMahaEditDeity] = useState('');
+  const [mahaEditMantra, setMahaEditMantra] = useState('');
+  const [mahaEditGoal, setMahaEditGoal] = useState('');
+  const [mahaEditStart, setMahaEditStart] = useState('');
+  const [mahaEditEnd, setMahaEditEnd] = useState('');
+  const [mahaEditStatus, setMahaEditStatus] = useState<'active' | 'completed'>('active');
+  const [mahaEditSaving, setMahaEditSaving] = useState(false);
+  const [mahaEditError, setMahaEditError] = useState<string | null>(null);
+
   useEffect(() => {
     if (!token) return;
     let cancelled = false;
@@ -228,6 +246,112 @@ export function PriestPage() {
     }
   };
 
+  const openMarathonEdit = (m: Marathon) => {
+    setEditingMarathon(m);
+    setEditDeity(m.deityId);
+    setEditTarget(String(m.targetJapas));
+    setEditDate(m.startDate);
+    setEditError(null);
+  };
+
+  const handleMarathonEdit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!token || !editingMarathon) return;
+    const target = Math.round(Number(editTarget));
+    if (!Number.isFinite(target) || target < 1) {
+      setEditError('Target japas must be a positive number');
+      return;
+    }
+    setEditSaving(true);
+    setEditError(null);
+    try {
+      const url = API_BASE ? `${API_BASE}/api/priest/marathon-edit` : '/api/priest/marathon-edit';
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          marathonId: editingMarathon.id,
+          deityId: editDeity,
+          targetJapas: target,
+          startDate: editDate,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setEditError(data.error || 'Failed');
+        return;
+      }
+      setEditingMarathon(null);
+      setMarathons((prev) =>
+        prev.map((m) =>
+          m.id === editingMarathon.id ? { ...m, deityId: editDeity, targetJapas: target, startDate: editDate } : m
+        )
+      );
+    } catch {
+      setEditError('Failed');
+    } finally {
+      setEditSaving(false);
+    }
+  };
+
+  const openMahaEdit = (y: MahaYagna) => {
+    setEditingMahaYagna(y);
+    setMahaEditName(y.name);
+    setMahaEditDeity(y.deityId);
+    setMahaEditMantra(y.mantra);
+    setMahaEditGoal(String(y.goalJapas));
+    setMahaEditStart(y.startDate);
+    setMahaEditEnd(y.endDate);
+    setMahaEditStatus((y.status === 'completed' ? 'completed' : 'active') as 'active' | 'completed');
+    setMahaEditError(null);
+  };
+
+  const handleMahaEdit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!token || !editingMahaYagna) return;
+    const goal = Math.round(Number(mahaEditGoal));
+    if (!Number.isFinite(goal) || goal < 1) {
+      setMahaEditError('Goal japas must be a positive number');
+      return;
+    }
+    setMahaEditSaving(true);
+    setMahaEditError(null);
+    try {
+      const url = API_BASE ? `${API_BASE}/api/priest/maha-yagnas-edit` : '/api/priest/maha-yagnas-edit';
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          yagnaId: editingMahaYagna.id,
+          name: mahaEditName.trim(),
+          deityId: mahaEditDeity,
+          mantra: mahaEditMantra.trim(),
+          goalJapas: goal,
+          startDate: mahaEditStart,
+          endDate: mahaEditEnd,
+          status: mahaEditStatus,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setMahaEditError(data.error || 'Failed');
+        return;
+      }
+      setEditingMahaYagna(null);
+      setMahaYagnas((prev) =>
+        prev.map((y) =>
+          y.id === editingMahaYagna.id
+            ? { ...y, name: mahaEditName.trim(), deityId: mahaEditDeity, mantra: mahaEditMantra.trim(), goalJapas: goal, startDate: mahaEditStart, endDate: mahaEditEnd, status: mahaEditStatus }
+            : y
+        )
+      );
+    } catch {
+      setMahaEditError('Failed');
+    } finally {
+      setMahaEditSaving(false);
+    }
+  };
+
   if (!token) {
     return (
       <div className="min-h-screen bg-[#1a1a2e] p-6 flex flex-col items-center justify-center">
@@ -260,6 +384,54 @@ export function PriestPage() {
       </div>
 
       <h2 className="text-lg font-semibold text-amber-200 mb-4">Marathons</h2>
+      {editingMarathon && (
+        <form onSubmit={handleMarathonEdit} className="mb-6 p-4 rounded-xl bg-black/30 border border-amber-500/30 space-y-4">
+          <h3 className="text-amber-400 font-medium">Edit marathon</h3>
+          <div>
+            <label className="text-amber-200/80 text-sm block mb-1">Deity</label>
+            <select
+              value={editDeity}
+              onChange={(e) => setEditDeity(e.target.value)}
+              className="w-full px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30"
+              required
+            >
+              {DEITIES.map((d) => (
+                <option key={d.id} value={d.id}>{d.name}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="text-amber-200/80 text-sm block mb-1">Target japas</label>
+            <input
+              type="number"
+              min={1}
+              value={editTarget}
+              onChange={(e) => setEditTarget(e.target.value)}
+              className="w-full px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30"
+              required
+            />
+          </div>
+          <div>
+            <label className="text-amber-200/80 text-sm block mb-1">Start date</label>
+            <input
+              type="date"
+              value={editDate}
+              onChange={(e) => setEditDate(e.target.value)}
+              className="w-full px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30"
+              required
+            />
+          </div>
+          {editError && <p className="text-red-400 text-sm">{editError}</p>}
+          <div className="flex gap-2">
+            <button type="submit" disabled={editSaving} className="px-6 py-2 rounded-xl bg-amber-500 text-white font-semibold disabled:opacity-50">
+              {editSaving ? 'Saving…' : 'Save'}
+            </button>
+            <button type="button" onClick={() => setEditingMarathon(null)} className="px-4 py-2 rounded-xl bg-white/10 text-amber-200">
+              Cancel
+            </button>
+          </div>
+        </form>
+      )}
       {loading ? (
         <p className="text-amber-200/70 text-sm">Loading…</p>
       ) : marathons.length === 0 ? (
@@ -267,22 +439,31 @@ export function PriestPage() {
       ) : (
         <div className="space-y-3 mb-6">
           {marathons.map((m) => (
-            <div key={m.id} className="p-4 rounded-xl bg-black/30 border border-amber-500/20">
-              <p className="font-medium text-amber-200">{deityName(m.deityId)} • Target: {m.targetJapas}</p>
-              <p className="text-amber-200/70 text-xs">Started: {m.startDate}</p>
-              <p className="text-amber-200/80 text-sm mt-2">
-                Joined: {m.joinedCount} • Today: {m.japasToday} • Total: {m.totalJapas}
-              </p>
-              {m.topParticipants && m.topParticipants.length > 0 && (
-                <div className="mt-3 pl-3 border-l-2 border-amber-500/20">
-                  <p className="text-amber-200/70 text-xs font-medium mb-1">Top participants (with last active)</p>
-                  {m.topParticipants.map((p, idx) => (
-                    <p key={`${p.uid}-${idx}`} className="text-amber-200/60 text-xs">
-                      {idx + 1}. {p.name} — {p.japasCount} japas {p.lastActiveAt ? `• last active ${new Date(p.lastActiveAt).toLocaleString()}` : ''}
-                    </p>
-                  ))}
-                </div>
-              )}
+            <div key={m.id} className="p-4 rounded-xl bg-black/30 border border-amber-500/20 flex flex-wrap items-start justify-between gap-2">
+              <div>
+                <p className="font-medium text-amber-200">{deityName(m.deityId)} • Target: {m.targetJapas}</p>
+                <p className="text-amber-200/70 text-xs">Started: {m.startDate}</p>
+                <p className="text-amber-200/80 text-sm mt-2">
+                  Joined: {m.joinedCount} • Today: {m.japasToday} • Total: {m.totalJapas}
+                </p>
+                {m.topParticipants && m.topParticipants.length > 0 && (
+                  <div className="mt-3 pl-3 border-l-2 border-amber-500/20">
+                    <p className="text-amber-200/70 text-xs font-medium mb-1">Top participants (with last active)</p>
+                    {m.topParticipants.map((p, idx) => (
+                      <p key={`${p.uid}-${idx}`} className="text-amber-200/60 text-xs">
+                        {idx + 1}. {p.name} — {p.japasCount} japas {p.lastActiveAt ? `• last active ${new Date(p.lastActiveAt).toLocaleString()}` : ''}
+                      </p>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={() => openMarathonEdit(m)}
+                className="text-xs px-2 py-1 rounded bg-amber-500/80 text-white hover:bg-amber-500 shrink-0"
+              >
+                Edit
+              </button>
             </div>
           ))}
         </div>
@@ -347,6 +528,100 @@ export function PriestPage() {
       )}
 
       <h2 className="text-lg font-semibold text-amber-200 mb-4 mt-10">Maha Japa Yagnas</h2>
+      {editingMahaYagna && (
+        <form onSubmit={handleMahaEdit} className="mb-6 p-4 rounded-xl bg-black/30 border border-amber-500/30 space-y-4">
+          <h3 className="text-amber-400 font-medium">Edit Maha Japa Yagna</h3>
+          <div>
+            <label className="text-amber-200/80 text-sm block mb-1">Name</label>
+            <input
+              type="text"
+              value={mahaEditName}
+              onChange={(e) => setMahaEditName(e.target.value)}
+              placeholder="e.g. Shiva Maha Japa Yagna"
+              className="w-full px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30"
+              required
+            />
+          </div>
+          <div>
+            <label className="text-amber-200/80 text-sm block mb-1">Deity</label>
+            <select
+              value={mahaEditDeity}
+              onChange={(e) => {
+                setMahaEditDeity(e.target.value);
+                const d = DEITIES.find((x) => x.id === e.target.value);
+                if (d) setMahaEditMantra(d.mantra);
+              }}
+              className="w-full px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30"
+              required
+            >
+              {DEITIES.map((d) => (
+                <option key={d.id} value={d.id}>{d.name}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="text-amber-200/80 text-sm block mb-1">Mantra</label>
+            <input
+              type="text"
+              value={mahaEditMantra}
+              onChange={(e) => setMahaEditMantra(e.target.value)}
+              className="w-full px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30"
+              required
+            />
+          </div>
+          <div>
+            <label className="text-amber-200/80 text-sm block mb-1">Goal japas</label>
+            <input
+              type="number"
+              min={1}
+              value={mahaEditGoal}
+              onChange={(e) => setMahaEditGoal(e.target.value)}
+              className="w-full px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30"
+              required
+            />
+          </div>
+          <div>
+            <label className="text-amber-200/80 text-sm block mb-1">Start date</label>
+            <input
+              type="date"
+              value={mahaEditStart}
+              onChange={(e) => setMahaEditStart(e.target.value)}
+              className="w-full px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30"
+              required
+            />
+          </div>
+          <div>
+            <label className="text-amber-200/80 text-sm block mb-1">End date</label>
+            <input
+              type="date"
+              value={mahaEditEnd}
+              onChange={(e) => setMahaEditEnd(e.target.value)}
+              className="w-full px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30"
+              required
+            />
+          </div>
+          <div>
+            <label className="text-amber-200/80 text-sm block mb-1">Status</label>
+            <select
+              value={mahaEditStatus}
+              onChange={(e) => setMahaEditStatus(e.target.value as 'active' | 'completed')}
+              className="w-full px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30"
+            >
+              <option value="active">Active</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
+          {mahaEditError && <p className="text-red-400 text-sm">{mahaEditError}</p>}
+          <div className="flex gap-2">
+            <button type="submit" disabled={mahaEditSaving} className="px-6 py-2 rounded-xl bg-amber-500 text-white font-semibold disabled:opacity-50">
+              {mahaEditSaving ? 'Saving…' : 'Save'}
+            </button>
+            <button type="button" onClick={() => setEditingMahaYagna(null)} className="px-4 py-2 rounded-xl bg-white/10 text-amber-200">
+              Cancel
+            </button>
+          </div>
+        </form>
+      )}
       {mahaLoading ? (
         <p className="text-amber-200/70 text-sm">Loading…</p>
       ) : mahaYagnas.length === 0 ? (
@@ -354,13 +629,22 @@ export function PriestPage() {
       ) : (
         <div className="space-y-3 mb-6">
           {mahaYagnas.map((y) => (
-            <div key={y.id} className="p-4 rounded-xl bg-black/30 border border-amber-500/20">
-              <p className="font-medium text-amber-200">{y.name}</p>
-              <p className="text-amber-200/70 text-xs">{y.deityName} • {y.mantra}</p>
-              <p className="text-amber-200/80 text-sm mt-2">
-                Goal: {y.goalJapas.toLocaleString()} • Current: {y.currentJapas.toLocaleString()} • {y.participantCount} participants
-              </p>
-              <p className="text-amber-200/60 text-xs">{y.startDate} – {y.endDate} • {y.status}</p>
+            <div key={y.id} className="p-4 rounded-xl bg-black/30 border border-amber-500/20 flex flex-wrap items-start justify-between gap-2">
+              <div>
+                <p className="font-medium text-amber-200">{y.name}</p>
+                <p className="text-amber-200/70 text-xs">{y.deityName} • {y.mantra}</p>
+                <p className="text-amber-200/80 text-sm mt-2">
+                  Goal: {y.goalJapas.toLocaleString()} • Current: {y.currentJapas.toLocaleString()} • {y.participantCount} participants
+                </p>
+                <p className="text-amber-200/60 text-xs">{y.startDate} – {y.endDate} • {y.status}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => openMahaEdit(y)}
+                className="text-xs px-2 py-1 rounded bg-amber-500/80 text-white hover:bg-amber-500 shrink-0"
+              >
+                Edit
+              </button>
             </div>
           ))}
         </div>

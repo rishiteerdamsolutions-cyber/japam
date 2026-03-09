@@ -49,7 +49,7 @@ export function Landing({ onEnterApp, onGuestPlay }: LandingProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-5xl sm:text-6xl font-bold text-white mb-2 tracking-tight drop-shadow-[0_0_20px_rgba(251,191,36,0.5)]"
+              className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-2 tracking-tight drop-shadow-[0_0_20px_rgba(251,191,36,0.5)] break-words"
               style={{ fontFamily: 'serif' }}
             >
               {t('landing.title')}
@@ -58,7 +58,7 @@ export function Landing({ onEnterApp, onGuestPlay }: LandingProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.25, duration: 0.4 }}
-              className="text-amber-200 text-xl font-medium"
+              className="text-amber-200 text-base sm:text-lg md:text-xl font-medium break-words px-2"
             >
               {t('landing.tagline')}
             </motion.p>
@@ -70,7 +70,7 @@ export function Landing({ onEnterApp, onGuestPlay }: LandingProps) {
             transition={{ delay: 0.3, duration: 0.5 }}
             className="flex-1 px-4 max-w-md mx-auto w-full flex flex-col items-center"
           >
-            <p className="text-center text-white/95 text-base leading-relaxed mb-8 drop-shadow-md">
+            <p className="text-center text-white/95 text-sm sm:text-base leading-relaxed mb-8 drop-shadow-md break-words max-w-md">
               {t('landing.description')}
             </p>
 
@@ -80,7 +80,7 @@ export function Landing({ onEnterApp, onGuestPlay }: LandingProps) {
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.98 }}
               onClick={onEnterApp}
-              className="w-full max-w-xs py-5 rounded-2xl bg-amber-500 text-white font-bold text-xl shadow-[0_0_30px_rgba(245,158,11,0.4)] hover:shadow-[0_0_40px_rgba(245,158,11,0.5)] hover:bg-amber-400 transition-all duration-200"
+              className="w-full max-w-xs py-4 sm:py-5 rounded-2xl bg-amber-500 text-white font-bold text-base sm:text-lg md:text-xl shadow-[0_0_30px_rgba(245,158,11,0.4)] hover:shadow-[0_0_40px_rgba(245,158,11,0.5)] hover:bg-amber-400 transition-all duration-200 break-words"
             >
               {t('landing.beginJapa')}
             </motion.button>
@@ -92,7 +92,7 @@ export function Landing({ onEnterApp, onGuestPlay }: LandingProps) {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={onGuestPlay}
-                className="w-full max-w-xs mt-3 py-4 rounded-2xl bg-white/10 text-white font-semibold text-base border border-white/15 hover:bg-white/15 transition-colors"
+                className="w-full max-w-xs mt-3 py-3 sm:py-4 rounded-2xl bg-white/10 text-white font-semibold text-sm sm:text-base border border-white/15 hover:bg-white/15 transition-colors break-words"
               >
                 {t('landing.tryAsGuest')}
               </motion.button>
@@ -116,7 +116,7 @@ export function Landing({ onEnterApp, onGuestPlay }: LandingProps) {
             <p className="text-white/40 text-xs text-center">
               © {new Date().getFullYear()} Japam. {t('landing.copyright')}
             </p>
-            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-white/50">
+            <div className="flex flex-wrap items-center justify-center gap-x-3 sm:gap-x-4 gap-y-1 text-xs text-white/50 break-words">
               <a href="/contact" className="hover:text-white/80 transition-colors underline underline-offset-2">{t('landing.contact')}</a>
               <span className="text-white/20">|</span>
               <a href="/privacy" className="hover:text-white/80 transition-colors underline underline-offset-2">{t('landing.privacy')}</a>

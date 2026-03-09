@@ -208,7 +208,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
         paddingRight: 'calc(1rem + env(safe-area-inset-right, 0px))',
       }}
     >
-      <div className="w-full max-w-md flex items-center justify-between shrink-0 mb-1">
+      <div className="w-full max-w-md flex items-center justify-between shrink-0 mb-1 min-w-0 gap-2">
         <div className="flex items-center gap-2">
           <button
             onClick={onBack}
@@ -281,9 +281,9 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
       {status === 'won' && (
         isGuest ? (
           <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center z-20 p-4">
-            <div className="bg-[#1a1a2e] rounded-2xl p-6 max-w-sm w-full text-center">
-              <h2 className="text-2xl font-bold text-amber-400 mb-3">Jai!</h2>
-              <p className="text-amber-200/90 mb-6">
+            <div className="bg-[#1a1a2e] rounded-2xl p-4 sm:p-6 max-w-sm w-full text-center min-w-0">
+              <h2 className="text-xl sm:text-2xl font-bold text-amber-400 mb-3 break-words">Jai!</h2>
+              <p className="text-amber-200/90 mb-6 text-sm sm:text-base break-words">
                 Do your ista devata japa? Sign in with Google
               </p>
               <div className="mb-4">
@@ -322,8 +322,8 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
       )}
       {showBreakReminder && status === 'playing' && (
         <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center z-20 p-4">
-          <div className="bg-[#1a1a2e] rounded-2xl p-6 max-w-sm w-full text-center">
-            <p className="text-amber-200/90 mb-8">
+          <div className="bg-[#1a1a2e] rounded-2xl p-4 sm:p-6 max-w-sm w-full text-center min-w-0">
+            <p className="text-amber-200/90 mb-8 text-sm sm:text-base break-words">
               {isMarathon
                 ? 'You have been doing japa for 20 minutes, please take a break.'
                 : 'You have been doing japa for 20 minutes, please take a break after this current level.'}

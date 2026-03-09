@@ -30,7 +30,7 @@ export function LanguageDropdown({ className = '' }: LanguageDropdownProps) {
         aria-haspopup="listbox"
         aria-label="Select language"
       >
-        <span className="truncate max-w-[100px] sm:max-w-[120px]">{current.name}</span>
+        <span className="truncate max-w-[90px] sm:max-w-[120px] min-w-0">{current.name}</span>
         <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
@@ -59,7 +59,7 @@ export function LanguageDropdown({ className = '' }: LanguageDropdownProps) {
             </button>
           ))}
           <div className="border-t border-white/10 mt-2 pt-2 px-4">
-            <p className="text-amber-200/60 text-xs leading-relaxed">
+            <p className="text-amber-200/60 text-xs leading-relaxed break-words">
               {t('language.disclaimer')}
             </p>
           </div>

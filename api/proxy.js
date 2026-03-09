@@ -65,6 +65,7 @@ import * as adminBlockUserHandler from './_handlers/admin/block-user.js';
 import * as adminUnblockUserHandler from './_handlers/admin/unblock-user.js';
 import * as adminDeleteTempleHandler from './_handlers/admin/delete-temple.js';
 import * as adminDeleteMarathonHandler from './_handlers/admin/delete-marathon.js';
+import * as adminMarathonEditHandler from './_handlers/admin/marathon-edit.js';
 import * as apavargaJoinHandler from './_handlers/apavarga/join.js';
 import * as apavargaChatsHandler from './_handlers/apavarga/chats.js';
 import * as apavargaMessagesHandler from './_handlers/apavarga/messages.js';
@@ -86,6 +87,8 @@ import * as mahaYagnasJoinHandler from './_handlers/maha-yagnas/join.js';
 import * as adminMahaYagnasHandler from './_handlers/admin/maha-yagnas.js';
 import * as adminMahaYagnasEditHandler from './_handlers/admin/maha-yagnas-edit.js';
 import * as priestMahaYagnasHandler from './_handlers/priest/maha-yagnas.js';
+import * as priestMarathonEditHandler from './_handlers/priest/marathon-edit.js';
+import * as priestMahaYagnasEditHandler from './_handlers/priest/maha-yagnas-edit.js';
 import * as healthHandler from './_handlers/health.js';
 
 function getPathSegments(request) {
@@ -131,6 +134,7 @@ const HANDLERS = {
   'POST admin/unblock-user': adminUnblockUserHandler,
   'POST admin/delete-temple': adminDeleteTempleHandler,
   'POST admin/delete-marathon': adminDeleteMarathonHandler,
+  'POST admin/marathon-edit': adminMarathonEditHandler,
   'GET levels-config': levelsConfigHandler,
   'GET priest/marathons': priestMarathonsHandler,
   'POST priest/marathons': priestMarathonsHandler,
@@ -182,6 +186,8 @@ const HANDLERS = {
   'POST admin/maha-yagnas-edit': adminMahaYagnasEditHandler,
   'GET priest/maha-yagnas': priestMahaYagnasHandler,
   'POST priest/maha-yagnas': priestMahaYagnasHandler,
+  'POST priest/marathon-edit': priestMarathonEditHandler,
+  'POST priest/maha-yagnas-edit': priestMahaYagnasEditHandler,
   'GET health': healthHandler,
 };
 

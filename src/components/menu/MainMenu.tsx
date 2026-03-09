@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AppFooter } from '../layout/AppFooter';
-import { LanguageDropdown } from '../ui/LanguageDropdown';
 import { DEITIES } from '../../data/deities';
 import { GoogleSignIn } from '../auth/GoogleSignIn';
 import { JapamLogo } from '../ui/JapamLogo';
@@ -53,7 +52,6 @@ export function MainMenu({ onSelect, onOpenMap, onOpenJapaDashboard, onOpenSetti
             {t('menu.back')}
           </button>
           <div className="flex items-center gap-2 flex-1 min-w-0 justify-end">
-          <LanguageDropdown className="shrink-0" />
           {loading && (
             <span className="text-amber-200/60 text-sm">…</span>
           )}
@@ -88,7 +86,7 @@ export function MainMenu({ onSelect, onOpenMap, onOpenJapaDashboard, onOpenSetti
                     <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-green-500 flex items-center justify-center text-white text-[10px] font-bold" title={t('menu.pro')}>✓</span>
                   )}
                 </div>
-                <span className="text-amber-200/90 text-sm truncate max-w-[120px]" title={displayName}>
+                <span className="text-amber-200/90 text-xs sm:text-sm truncate max-w-[80px] sm:max-w-[120px] min-w-0" title={displayName}>
                   {displayName}
                   {isPremium && <span className="ml-1 text-xs text-amber-400">({t('menu.premium')})</span>}
                   {isPro && !isPremium && <span className="ml-1 text-xs text-green-400">({t('menu.pro')})</span>}
@@ -120,11 +118,11 @@ export function MainMenu({ onSelect, onOpenMap, onOpenJapaDashboard, onOpenSetti
           />
         )}
 
-        <JapamLogo size={100} className="mt-4 drop-shadow-lg" />
-        <h1 className="text-4xl font-bold text-amber-400 mt-2 mb-1 drop-shadow-lg" style={{ fontFamily: 'serif' }}>
+        <JapamLogo size={100} className="mt-4 drop-shadow-lg shrink-0" />
+        <h1 className="text-3xl sm:text-4xl font-bold text-amber-400 mt-2 mb-1 drop-shadow-lg truncate w-full max-w-full text-center" style={{ fontFamily: 'serif' }}>
           {t('menu.title')}
         </h1>
-        <p className="text-amber-200/90 text-sm mb-6">{t('menu.tagline')}</p>
+        <p className="text-amber-200/90 text-xs sm:text-sm mb-6 break-words text-center">{t('menu.tagline')}</p>
 
         {!user && (
           <div className="mb-6">
@@ -137,7 +135,7 @@ export function MainMenu({ onSelect, onOpenMap, onOpenJapaDashboard, onOpenSetti
           aria-label="Play General Japa mode"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          className="w-full py-4 rounded-2xl bg-amber-500/95 text-white font-bold text-lg shadow-lg shadow-amber-500/30 mb-4"
+          className="w-full py-3 sm:py-4 rounded-2xl bg-amber-500/95 text-white font-bold text-base sm:text-lg shadow-lg shadow-amber-500/30 mb-4 break-words min-h-[48px]"
           onClick={() => onSelect('general')}
         >
           {t('menu.generalJapa')}
@@ -164,14 +162,14 @@ export function MainMenu({ onSelect, onOpenMap, onOpenJapaDashboard, onOpenSetti
                   className="w-full h-full object-cover"
                 />
               </div>
-              <span className="py-2 px-2 text-sm font-semibold text-white w-full text-center truncate">
+              <span className="py-2 px-1.5 sm:px-2 text-xs sm:text-sm font-semibold text-white w-full text-center truncate min-w-0" title={t(`deities.${deity.id}`)}>
                 {t(`deities.${deity.id}`)}
               </span>
             </motion.button>
           ))}
         </div>
 
-        <div className="flex flex-wrap gap-4 mt-2 mb-8">
+        <div className="flex flex-wrap gap-2 sm:gap-4 mt-2 mb-8 justify-center">
           <button
             onClick={() => navigate('/marathons')}
             className="text-amber-200 font-medium text-sm hover:text-amber-400 transition-colors"

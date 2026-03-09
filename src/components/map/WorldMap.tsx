@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useProgressStore, progressKey } from '../../store/progressStore';
 import { useUnlockStore, FIRST_LOCKED_LEVEL_INDEX } from '../../store/unlockStore';
 import { useLevelsConfigStore } from '../../store/levelsConfigStore';
@@ -17,13 +18,14 @@ interface WorldMapProps {
 }
 
 export function WorldMap({ mode: initialMode, onSelectLevel, onBack }: WorldMapProps) {
+  const { t } = useTranslation();
   const [mapMode, setMapMode] = useState<GameMode>(initialMode);
   const { levelProgress, getCurrentLevelIndex } = useProgressStore();
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
   const loadLevelsConfig = useLevelsConfigStore((s) => s.load);
   const maxRevealedLevelIndex = useLevelsConfigStore((s) => s.maxRevealedLevelIndex);
   const currentLevelIndex = getCurrentLevelIndex(mapMode);
-  const levelsTitle = mapMode === 'general' ? 'Levels' : `${mapMode.charAt(0).toUpperCase() + mapMode.slice(1)} Levels`;
+  const levelsTitle = mapMode === 'general' ? t('menu.levels') : `${t(`deities.${mapMode}`)} ${t('menu.levels')}`;
 
   useEffect(() => {
     loadLevelsConfig();
@@ -37,21 +39,23 @@ export function WorldMap({ mode: initialMode, onSelectLevel, onBack }: WorldMapP
     <div className="min-h-screen bg-gradient-to-b from-[#1a1a2e] to-[#16213e] p-4 pb-[env(safe-area-inset-bottom)] max-w-lg mx-auto">
       <AppHeader title={levelsTitle} showBack onBack={onBack} />
 
-      <div className="flex flex-wrap gap-1 mb-4">
+      <div className="flex flex-wrap gap-1 mb-4 min-w-0">
         <button
           onClick={() => setMapMode('general')}
-          className={`px-2 py-1 rounded text-xs ${mapMode === 'general' ? 'bg-amber-500 text-white' : 'bg-black/20 text-amber-200'}`}
+          className={`px-2 py-1.5 rounded text-xs max-w-[5rem] sm:max-w-none truncate ${mapMode === 'general' ? 'bg-amber-500 text-white' : 'bg-black/20 text-amber-200'}`}
+          title={t('menu.general')}
         >
-          General
+          {t('menu.general')}
         </button>
         {DEITIES.map(d => (
           <button
             key={d.id}
             onClick={() => setMapMode(d.id)}
-            className={`px-2 py-1 rounded text-xs ${mapMode === d.id ? 'text-white' : 'bg-black/20 text-amber-200'}`}
+            className={`px-2 py-1.5 rounded text-xs max-w-[5rem] sm:max-w-none truncate ${mapMode === d.id ? 'text-white' : 'bg-black/20 text-amber-200'}`}
             style={{ backgroundColor: mapMode === d.id ? d.color : undefined }}
+            title={t(`deities.${d.id}`)}
           >
-            {d.name}
+            {t(`deities.${d.id}`)}
           </button>
         ))}
       </div>
@@ -79,7 +83,7 @@ export function WorldMap({ mode: initialMode, onSelectLevel, onBack }: WorldMapP
                       font-medium text-sm
                       ${canPlay ? 'bg-amber-500/30 text-amber-200' : isPaywalled ? 'bg-amber-500/20 text-amber-300' : 'bg-black/20 text-gray-500'}
                     `}
-                    title={isPaywalled ? 'Offer Dakshina to unlock' : undefined}
+                    title={isPaywalled ? t('menu.offerDakshinaToUnlock') : undefined}
                   >
                     <span>{idx + 1}</span>
                     {isPaywalled && <span className="text-xs">🔒</span>}

@@ -90,12 +90,15 @@ export async function verifyFirebaseUser(request) {
   }
 }
 
-/** Check if user has paid (unlocked). Uses unlockedUsers collection. */
+/** Check if user has paid (unlocked). Uses unlockedUsers and users/{uid}/data/unlock (backwards compatibility). */
 export async function isUserUnlocked(db, uid) {
   if (!uid) return false;
   try {
-    const snap = await db.collection('unlockedUsers').doc(uid).get();
-    return snap.exists;
+    const [unlockSnap, unlockedUsersSnap] = await Promise.all([
+      db.doc(`users/${uid}/data/unlock`).get(),
+      db.collection('unlockedUsers').doc(uid).get(),
+    ]);
+    return Boolean((unlockSnap.exists && unlockSnap.data()?.levelsUnlocked) || unlockedUsersSnap.exists);
   } catch {
     return false;
   }

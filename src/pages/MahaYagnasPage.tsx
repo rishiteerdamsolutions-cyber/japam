@@ -205,7 +205,7 @@ export function MahaYagnasPage() {
                       type="button"
                       onClick={() => handleJoin(y.id)}
                       disabled={joiningYagnaId === y.id}
-                      className="px-4 py-2 rounded-lg bg-amber-500 text-white text-sm font-medium disabled:opacity-50 whitespace-nowrap"
+                      className="px-4 py-2 rounded-lg bg-amber-500 text-white text-sm font-medium disabled:opacity-50 break-words min-h-[44px]"
                     >
                       {joiningYagnaId === y.id ? t('mahaYagnas.joining') : t('mahaYagnas.join')}
                     </button>

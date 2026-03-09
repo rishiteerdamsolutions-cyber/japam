@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { GameScreen } from '../components/game/GameScreen';
 import { Paywall } from '../components/payment/Paywall';
 import { useGameStore, type PausedGameState } from '../store/gameStore';
@@ -12,6 +13,7 @@ import { LEVELS } from '../data/levels';
 import type { GameMode } from '../types';
 
 export function GamePage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const guestParam = searchParams.get('guest');
@@ -153,22 +155,22 @@ export function GamePage() {
     return (
       <div className="fixed inset-0 bg-black/80 flex flex-col items-center justify-center z-30 p-4">
         <div className="bg-[#1a1a2e] rounded-2xl p-6 max-w-sm w-full text-center">
-          <h2 className="text-xl font-bold text-amber-400 mb-2">Resume Japa?</h2>
+          <h2 className="text-xl font-bold text-amber-400 mb-2">{t('game.resumeJapa')}</h2>
           <p className="text-amber-200/80 mb-6 text-sm">
-            You have a saved session. Continue where you left off?
+            {t('game.resumeJapaMessage')}
           </p>
           <div className="flex flex-col gap-2">
             <button
               onClick={handleResume}
               className="w-full py-3 rounded-xl bg-amber-500 text-white font-semibold"
             >
-              Resume
+              {t('game.resume')}
             </button>
             <button
               onClick={handleStartFresh}
               className="w-full py-3 rounded-xl border border-amber-500/50 text-amber-400"
             >
-              Start fresh
+              {t('game.startFresh')}
             </button>
           </div>
         </div>
@@ -195,7 +197,7 @@ export function GamePage() {
   if (!pauseCheckDone && !isGuest) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#1a1a2e]">
-        <div className="text-amber-400 text-sm">Loading…</div>
+        <div className="text-amber-400 text-sm">{t('common.loading')}</div>
       </div>
     );
   }

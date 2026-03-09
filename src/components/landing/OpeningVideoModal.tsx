@@ -65,7 +65,7 @@ export function OpeningVideoModal({ onClose, videoSrc, videoSrcs }: OpeningVideo
         <motion.h1
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-neon animate-neon-pulse font-bold mb-6 text-center drop-shadow-lg w-full overflow-visible flex flex-col items-center gap-0.5 sm:gap-1"
+          className="text-neon animate-neon-pulse font-bold mb-6 text-center drop-shadow-lg w-full max-w-full min-w-0 overflow-visible flex flex-col items-center gap-0.5 sm:gap-1 break-words"
           style={{
             fontFamily: "inherit",
             fontSize: 'clamp(0.8rem, 4.5vw, 2.5rem)',

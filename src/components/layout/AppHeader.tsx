@@ -29,17 +29,17 @@ export function AppHeader({ title, showBack, onBack, rightElement }: AppHeaderPr
   return (
     <>
       <header className="flex items-center justify-between gap-2 w-full mb-4 min-h-[44px]">
-        <div className="flex items-center gap-2 min-w-0 flex-1">
+        <div className="flex items-center gap-2 min-w-0 flex-1 overflow-hidden">
           {showBack && onBack && (
             <button
               type="button"
               onClick={onBack}
-              className="text-amber-400 text-sm font-medium hover:text-amber-300 flex-shrink-0"
+              className="text-amber-400 text-xs sm:text-sm font-medium hover:text-amber-300 flex-shrink-0"
             >
               ← Back
             </button>
           )}
-          <h1 className="text-xl font-bold text-amber-400 truncate" style={{ fontFamily: 'serif' }}>
+          <h1 className="text-base sm:text-xl font-bold text-amber-400 truncate min-w-0" style={{ fontFamily: 'serif' }} title={title}>
             {title}
           </h1>
         </div>
@@ -56,7 +56,7 @@ export function AppHeader({ title, showBack, onBack, rightElement }: AppHeaderPr
           )}
           {!loading && user && (
             <>
-              <div className="flex items-center gap-1.5 min-w-0 max-w-[140px]">
+              <div className="flex items-center gap-1.5 min-w-0 max-w-[100px] sm:max-w-[140px]">
                 <div
                   className={`relative flex-shrink-0 w-8 h-8 rounded-full border-2 flex items-center justify-center text-amber-200 font-semibold text-xs
                     ${isPremium ? 'border-amber-400 ring-2 ring-amber-400/50 bg-amber-500/20' : isPro ? 'border-green-500 ring-2 ring-green-500/50 bg-green-500/20' : 'border-amber-500/40 bg-black/30'}`}

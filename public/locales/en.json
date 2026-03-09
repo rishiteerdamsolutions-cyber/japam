@@ -90,7 +90,21 @@
     "yourShare": "Your share",
     "effectiveContribution": "Effective contribution",
     "loadFailed": "Failed to load",
-    "joinFailed": "Failed to join"
+    "joinFailed": "Failed to join",
+    "play": "Play",
+    "showLeaderboard": "Show leaderboard",
+    "hideLeaderboard": "Hide leaderboard",
+    "shareMyRank": "Share my rank",
+    "preparing": "Preparing…",
+    "topParticipants": "Top participants",
+    "noParticipants": "No participants yet",
+    "yourYagnas": "Your yagnas",
+    "yourYagnasDesc": "Do your japa for these yagnas — your japas count toward the collective goal.",
+    "rankCard": "Your rank card",
+    "downloaded": "Your leaderboard image is downloaded.",
+    "downloadAgain": "Download again",
+    "downloadNotice": "Downloaded. To post on WhatsApp Status: open WhatsApp → Status → My Status → add the downloaded image.",
+    "shareFailed": "Could not generate/download the image."
   },
   "japaDashboard": {
     "title": "Japa Dashboard",

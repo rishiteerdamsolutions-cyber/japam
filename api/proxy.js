@@ -84,6 +84,7 @@ import * as cronUpdateMahaYagnaCountersHandler from './_handlers/cron/update-mah
 import * as mahaYagnasListHandler from './_handlers/maha-yagnas/list.js';
 import * as mahaYagnasMyContributionHandler from './_handlers/maha-yagnas/my-contribution.js';
 import * as mahaYagnasJoinHandler from './_handlers/maha-yagnas/join.js';
+import * as mahaYagnasLeaderboardHandler from './_handlers/maha-yagnas/leaderboard.js';
 import * as adminMahaYagnasHandler from './_handlers/admin/maha-yagnas.js';
 import * as adminMahaYagnasEditHandler from './_handlers/admin/maha-yagnas-edit.js';
 import * as priestMahaYagnasHandler from './_handlers/priest/maha-yagnas.js';
@@ -181,6 +182,7 @@ const HANDLERS = {
   'GET maha-yagnas/list': mahaYagnasListHandler,
   'GET maha-yagnas/my-contribution': mahaYagnasMyContributionHandler,
   'POST maha-yagnas/join': mahaYagnasJoinHandler,
+  'GET maha-yagnas/leaderboard': mahaYagnasLeaderboardHandler,
   'GET admin/maha-yagnas': adminMahaYagnasHandler,
   'POST admin/maha-yagnas': adminMahaYagnasHandler,
   'POST admin/maha-yagnas-edit': adminMahaYagnasEditHandler,

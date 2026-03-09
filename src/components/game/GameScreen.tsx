@@ -18,6 +18,7 @@ interface GameScreenProps {
   isMarathon?: boolean;
   marathonId?: string | null;
   marathonTargetJapas?: number | null;
+  yagnaId?: string | null;
   isGuest?: boolean;
   justRestored?: boolean;
   onJustRestoredCleared?: () => void;
@@ -25,7 +26,7 @@ interface GameScreenProps {
   onNextLevel?: (mode: 'general' | string, levelIndex: number) => void;
 }
 
-export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonTargetJapas, isGuest, justRestored, onJustRestoredCleared, onBack, onNextLevel }: GameScreenProps) {
+export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonTargetJapas, yagnaId, isGuest, justRestored, onJustRestoredCleared, onBack, onNextLevel }: GameScreenProps) {
   const { t } = useTranslation();
   const initGame = useGameStore(s => s.initGame);
   const status = useGameStore(s => s.status);
@@ -64,15 +65,15 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
       return;
     }
     prevRestoredRef.current = false;
-    if (isMarathon && marathonTargetJapas != null && marathonId) {
-      initGame(mode as 'general', 0, { marathonId, marathonTargetJapas });
+    if (isMarathon && marathonTargetJapas != null && (marathonId || yagnaId)) {
+      initGame(mode as 'general', 0, { marathonId: marathonId ?? undefined, marathonTargetJapas, yagnaId: yagnaId ?? undefined });
     } else if (isGuest) {
       initGame('general', 0, { overrideJapaTarget: 11, isGuest: true });
     } else {
       initGame(mode as 'general', levelIndex);
     }
     prevGenerationRef.current = 0;
-  }, [mode, levelIndex, isMarathon, marathonTargetJapas, marathonId, isGuest, justRestored, onJustRestoredCleared, initGame]);
+  }, [mode, levelIndex, isMarathon, marathonTargetJapas, marathonId, yagnaId, isGuest, justRestored, onJustRestoredCleared, initGame]);
 
   const user = useAuthStore(s => s.user);
   const getPausedKey = useGameStore(s => s.getPausedKey);

@@ -21,15 +21,18 @@ export function GamePage() {
   const mode = (isGuest ? 'general' : (searchParams.get('mode') || 'general')) as GameMode;
   const levelParam = searchParams.get('level');
   const marathonId = searchParams.get('marathon');
+  const yagnaId = searchParams.get('yagna');
   const targetParam = searchParams.get('target');
   const marathonTargetJapas = targetParam ? parseInt(targetParam, 10) : null;
+  const gameContextId = yagnaId || marathonId;
+  const isMarathon = !!(marathonId || yagnaId) && marathonTargetJapas != null;
 
   const maxRevealedLevelIndex = useLevelsConfigStore((s) => s.maxRevealedLevelIndex);
   const loadLevelsConfig = useLevelsConfigStore((s) => s.load);
   const revealedMax = maxRevealedLevelIndex ?? 999;
   const levelIndex = isGuest
     ? 0
-    : marathonId
+    : gameContextId
     ? 0
     : Math.max(0, Math.min(LEVELS.length - 1, revealedMax, parseInt(levelParam || '0', 10) || 0));
 
@@ -45,15 +48,15 @@ export function GamePage() {
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
   const user = useAuthStore((s) => s.user);
   const authLoading = useAuthStore((s) => s.loading);
-
-  const isMarathon = !!marathonId && marathonTargetJapas != null;
   const isLocked = !isGuest && !isMarathon && levelIndex >= FIRST_LOCKED_LEVEL_INDEX && levelsUnlocked !== true;
 
   useEffect(() => {
     loadLevelsConfig();
   }, [loadLevelsConfig]);
 
-  const expectedKey = isMarathon ? `japam-paused-marathon-${marathonId}` : `japam-paused-${mode}-${levelIndex}`;
+  const expectedKey = isMarathon
+    ? (yagnaId ? `japam-paused-yagna-${yagnaId}` : `japam-paused-marathon-${marathonId}`)
+    : `japam-paused-${mode}-${levelIndex}`;
 
   useEffect(() => {
     if (paywallPending) return;
@@ -79,8 +82,9 @@ export function GamePage() {
           const saved = data as unknown as PausedGameState;
           const savedMode = saved.mode ?? null;
           const savedMarathon = saved.marathonId ?? null;
+          const savedYagna = saved.yagnaId ?? null;
           const modeMatches = isMarathon
-            ? savedMarathon === marathonId
+            ? (yagnaId ? savedYagna === yagnaId : savedMarathon === marathonId)
             : savedMode === mode;
           if (modeMatches) {
             setResumePending(saved);
@@ -115,7 +119,7 @@ export function GamePage() {
     };
     load();
     return () => { cancelled = true; };
-  }, [mode, levelIndex, isMarathon, marathonId, expectedKey, isLocked, paywallPending, user?.uid, authLoading]);
+  }, [mode, levelIndex, isMarathon, marathonId, yagnaId, expectedKey, isLocked, paywallPending, user?.uid, authLoading]);
 
   const handleResume = () => {
     if (resumePending) {
@@ -207,12 +211,13 @@ export function GamePage() {
       mode={mode}
       levelIndex={levelIndex}
       isMarathon={isMarathon}
-      marathonId={marathonId}
+      marathonId={yagnaId ? null : marathonId}
       marathonTargetJapas={marathonTargetJapas}
+      yagnaId={yagnaId}
       isGuest={isGuest}
       justRestored={justRestored}
       onJustRestoredCleared={() => setJustRestored(false)}
-      onBack={() => (isMarathon ? navigate('/marathons') : isGuest ? navigate('/') : navigate('/levels'))}
+      onBack={() => (isMarathon ? (yagnaId ? navigate('/maha-yagnas') : navigate('/marathons')) : isGuest ? navigate('/') : navigate('/levels'))}
       onNextLevel={isMarathon ? undefined : (m, idx) => handleNextLevel(m as GameMode, idx)}
     />
   );

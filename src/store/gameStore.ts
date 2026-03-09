@@ -26,6 +26,7 @@ export interface PausedGameState {
   levelIndex: number;
   marathonId?: string;
   marathonTargetJapas?: number;
+  yagnaId?: string;
   savedAt: number;
   version?: number;
 }
@@ -42,6 +43,7 @@ interface GameState {
   levelIndex: number;
   marathonId: string | null;
   marathonTargetJapas: number | null;
+  yagnaId: string | null;
   overrideJapaTarget: number | null;
   isGuest: boolean;
   selectedCell: { row: number; col: number } | null;
@@ -60,7 +62,7 @@ interface GameState {
 const getLevel = (index: number) => LEVELS[index] ?? LEVELS[0];
 
 interface GameActions {
-  initGame: (mode: GameMode, levelIndex?: number, options?: { marathonId?: string; marathonTargetJapas?: number; overrideJapaTarget?: number; isGuest?: boolean }) => void;
+  initGame: (mode: GameMode, levelIndex?: number, options?: { marathonId?: string; marathonTargetJapas?: number; yagnaId?: string; overrideJapaTarget?: number; isGuest?: boolean }) => void;
   restoreGame: (state: PausedGameState) => void;
   savePausedState: () => PausedGameState | null;
   getPausedKey: () => string;
@@ -88,6 +90,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   levelIndex: 0,
   marathonId: null,
   marathonTargetJapas: null,
+  yagnaId: null,
   overrideJapaTarget: null,
   isGuest: false,
   selectedCell: null,
@@ -111,6 +114,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const deityMode = mode !== 'general' ? (mode as DeityId) : undefined;
     const marathonId = options?.marathonId ?? null;
     const marathonTargetJapas = options?.marathonTargetJapas ?? null;
+    const yagnaId = options?.yagnaId ?? null;
     const overrideJapaTarget = options?.overrideJapaTarget ?? null;
     const isGuest = options?.isGuest === true;
     const moves = marathonTargetJapas != null ? 999999 : level.moves;
@@ -130,6 +134,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       levelIndex,
       marathonId,
       marathonTargetJapas,
+      yagnaId,
       overrideJapaTarget,
       isGuest,
       selectedCell: null,
@@ -147,7 +152,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   },
 
   getPausedKey: () => {
-    const { mode, levelIndex, marathonId } = get();
+    const { mode, levelIndex, marathonId, yagnaId } = get();
+    if (yagnaId) return `${PAUSED_KEY_PREFIX}yagna-${yagnaId}`;
     if (marathonId) return `${PAUSED_KEY_PREFIX}marathon-${marathonId}`;
     return `${PAUSED_KEY_PREFIX}${mode}-${levelIndex}`;
   },
@@ -167,6 +173,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       levelIndex: state.levelIndex,
       marathonId: state.marathonId ?? undefined,
       marathonTargetJapas: state.marathonTargetJapas ?? undefined,
+      yagnaId: state.yagnaId ?? undefined,
       savedAt: Date.now(),
       version: 2
     };
@@ -193,6 +200,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       levelIndex: saved.levelIndex,
       marathonId: saved.marathonId ?? null,
       marathonTargetJapas: saved.marathonTargetJapas ?? null,
+      yagnaId: saved.yagnaId ?? null,
       selectedCell: null,
       lastMatches: [],
       lastSwappedTypes: null,
@@ -395,13 +403,12 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   },
 
   reset: () => {
-    const { mode, levelIndex, marathonId, marathonTargetJapas, overrideJapaTarget, isGuest } = get();
-    get().initGame(
-      mode,
-      levelIndex,
-      marathonId
-        ? { marathonId, marathonTargetJapas: marathonTargetJapas ?? undefined, overrideJapaTarget: overrideJapaTarget ?? undefined, isGuest }
-        : { overrideJapaTarget: overrideJapaTarget ?? undefined, isGuest },
-    );
+    const { mode, levelIndex, marathonId, marathonTargetJapas, yagnaId, overrideJapaTarget, isGuest } = get();
+    const opts = yagnaId
+      ? { yagnaId, marathonTargetJapas: marathonTargetJapas ?? undefined, overrideJapaTarget: overrideJapaTarget ?? undefined, isGuest }
+      : marathonId
+      ? { marathonId, marathonTargetJapas: marathonTargetJapas ?? undefined, overrideJapaTarget: overrideJapaTarget ?? undefined, isGuest }
+      : { overrideJapaTarget: overrideJapaTarget ?? undefined, isGuest };
+    get().initGame(mode, levelIndex, opts);
   }
 }));

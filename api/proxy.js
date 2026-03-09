@@ -82,6 +82,7 @@ import * as cronRefreshActiveUsersHandler from './_handlers/cron/refresh-active-
 import * as cronUpdateMahaYagnaCountersHandler from './_handlers/cron/update-maha-yagna-counters.js';
 import * as mahaYagnasListHandler from './_handlers/maha-yagnas/list.js';
 import * as mahaYagnasMyContributionHandler from './_handlers/maha-yagnas/my-contribution.js';
+import * as mahaYagnasJoinHandler from './_handlers/maha-yagnas/join.js';
 import * as adminMahaYagnasHandler from './_handlers/admin/maha-yagnas.js';
 import * as adminMahaYagnasEditHandler from './_handlers/admin/maha-yagnas-edit.js';
 import * as priestMahaYagnasHandler from './_handlers/priest/maha-yagnas.js';
@@ -175,6 +176,7 @@ const HANDLERS = {
   'GET cron/update-maha-yagna-counters': cronUpdateMahaYagnaCountersHandler,
   'GET maha-yagnas/list': mahaYagnasListHandler,
   'GET maha-yagnas/my-contribution': mahaYagnasMyContributionHandler,
+  'POST maha-yagnas/join': mahaYagnasJoinHandler,
   'GET admin/maha-yagnas': adminMahaYagnasHandler,
   'POST admin/maha-yagnas': adminMahaYagnasHandler,
   'POST admin/maha-yagnas-edit': adminMahaYagnasEditHandler,

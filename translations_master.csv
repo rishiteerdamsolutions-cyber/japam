@@ -1,0 +1,336 @@
+ID|KEY|English|Telugu|Hindi|Tamil|Kannada|Malayalam|Bengali|Marathi|Gujarati|Punjabi|Odia|Assamese|Urdu|Sanskrit|Nepali|Konkani|Manipuri|Bodo|Dogri|Santali|Kashmiri|Sindhi
+1|settings|Settings|అమరికలు|सेटिंग्स|அமைப்புகள்|ಸೆಟ್ಟಿಂಗ್‌ಗಳು|ക്രമീകരണങ്ങൾ|সেটিংস|सेटिंग्ज|સેટિંગ્સ|ਸੈਟਿੰਗਾਂ|ସେଟିଂସ୍|ছেটিংছ|سیٹنگز|सेटिङ्गानि|सेटिङहरू|सेटिंग्स|ꯁꯦꯇꯤꯡꯁꯤꯡ|सेटिङ|सेटिंग्स|ᱥᱮᱴᱤᱝᱥ|سیٹنگز|سيٽنگون
+2|profile|Profile|||||||||||||||||||||
+3|sign_in|Sign in|సైన్ ఇన్|साइन इन|உள்நுழையுங்கள்|ಸೈನ್ ಇನ್|സൈൻ ഇൻ|সাইন ইন|साइन इन|સાઇન ઇન|ਸਾਇਨ ਇਨ|ସାଇନ୍ ଇନ୍|ছাইন ইন|سائن ان|प्रवेशः|साइन इन|साइन इन|ꯁꯥꯏꯟ ꯏꯟ|साइन इन|साइन इन|ᱥᱟᱭᱱ ᱤᱱ|سائن ان|سائن ان
+4|sign_out|Sign out|సైన్ అవుట్|साइन आउट|வெளியேறுங்கள்|ಸೈನ್ ಔಟ್|സൈൻ ഔട്ട്|সাইন আউট|साइन आउट|સાઇન આઉટ|ਸਾਇਨ ਆਊਟ|ସାଇନ୍ ଆଉଟ୍|ছাইন আউট|سائن آؤٹ|निर्गमः|साइन आउट|साइन आउट|ꯁꯥꯏꯟ ꯑꯥꯎꯠ|साइन आउट|साइन आउट|ᱥᱟᱭᱱ ᱟᱣᱩᱴ|سائن آؤٹ|سائن آئوٽ
+5|sign_in_with_google|Sign in with Google|||||||||||||||||||||
+6|begin_japa|Begin Japa|జపం ప్రారంభించండి|जप शुरू करें|ஜபம் தொடங்குங்கள்|ಜಪ ಪ್ರಾರಂಭಿಸಿ|ജപം ആരംഭിക്കുക|জপ শুরু করুন|जप सुरू करा|જપ શરૂ કરો|ਜਪ ਸ਼ੁਰੂ ਕਰੋ|ଜପ ଆରମ୍ଭ କରନ୍ତୁ|জপ আৰম্ভ কৰক|جپ شروع کریں|जपं आरभत|जप सुरु गर्नुहोस्|जप सुरू करात|ꯖꯄ ꯁꯨꯔꯨ ꯇꯧꯌꯨ|जप सुरु खालाम|जप शुरू करो|ᱡᱚᱯ ᱮᱦᱚᱵ ᱠᱚᱨᱚ|جپ شروع کرو|جپ شروع ڪريو
+7|cancel|Cancel|రద్దు|रद्द करें|ரத்து|ರದ್ದು|റദ്ദാക്കുക|বাতিল|रद्द|રદ કરો|ਰੱਦ ਕਰੋ|ବାତିଲ|বাতিল|منسوخ|रद्द|रद्द|रद्द|ꯔꯥꯗꯗꯥ|रद्द|रद्द|ᱨᱟᱫᱽ|منسوخ|رد
+8|ok|OK|సరే|ठीक है|சரி|ಸರಿ|ശരി|ঠিক আছে|ठीक|ઠીક|ਠੀਕ|ଠିକ୍|ঠিক আছে|ٹھیک|सम्यक्|ठीक छ|ठीक|ꯊꯥꯏꯛ|ठिक|ठीक|ᱴᱷᱤᱠ|ٹھیک|ٺيڪ
+9|donate|Donate|దానం చేయండి|दान करें|தானம் செய்யுங்கள்|ದಾನ ಮಾಡಿ|ദാനം ചെയ്യുക|দান করুন|दान करा|દાન કરો|ਦਾਨ ਕਰੋ|ଦାନ କରନ୍ତୁ|দান কৰক|عطیہ دیں|दानं कुरुत|दान गर्नुहोस्|दान करात|ꯗꯥꯅꯥ ꯇꯧꯌꯨ|दान खालाम|दान करो|ᱫᱟᱱ ᱠᱚᱨᱚ|عطیہ دیو|عطيو ڪريو
+10|privacy_policy|Privacy Policy|గోప్యతా విధానం|गोपनीयता नीति|தனியுரிமைக் கொள்கை|ಗೌಪ್ಯತಾ ನೀತಿ|സ്വകാര്യതാ നയം|গোপনীয়তা নীতি|गोपनीयता धोरण|ગોપનીયતા નીતિ|ਗੋਪਨੀਯਤਾ ਨੀਤੀ|ଗୋପନୀୟତା ନୀତି|গোপনীয়তা নীতি|رازداری کی پالیسی|गोपनीयतानीतिः|गोपनीयता नीति|गोपनीयता धोरण|ꯒꯣꯄꯅꯤꯌꯥꯇꯥ ꯅꯤꯇꯤ|गोपनीयता नीति|गोपनीयता नीति|ᱜᱚᱯᱱᱤᱭᱚᱛᱟ ᱱᱤᱛᱤ|رازداری پالیسی|رازداري پاليسي
+11|terms_conditions|Terms & Conditions|నిబంధనలు మరియు షరతులు|नियम और शर्तें|விதிமுறைகள் மற்றும் நிபந்தனைகள்|ನಿಯಮಗಳು ಮತ್ತು ಷರತ್ತುಗಳು|നിബന്ധനകളും വ്യവസ്ഥകളും|শর্তাবলী|अटी आणि नियम|નિયમો અને શરતો|ਸ਼ਰਤਾਂ ਅਤੇ ਨਿਯਮ|ନିୟମ ଓ ଶରତ|চৰ্তাৱলী|شرائط و ضوابط|नियमाश्च शर्ताश्च|सर्तहरू र नियमहरू|अटी आनी नियम|ꯁꯦꯔꯇꯁꯤꯡ ꯑꯃꯗꯤ ꯅꯤꯌꯝꯁꯤꯡ|नियम आरो शर्त|शर्तें आरू नियम|ᱥᱮᱨᱢᱟ ᱟᱨ ᱱᱤᱭᱚᱢ|شرائط تہ قوانین|شرطون ۽ قانون
+12|refund_cancellation|Refund & Cancellation|వాపసు మరియు రద్దు|रिफंड और रद्दीकरण|பணத்திரும்பம் மற்றும் ரத்து|ಮರುಪಾವತಿ ಮತ್ತು ರದ್ದತಿ|റിഫണ്ടും റദ്ദാക്കലും|রিফান্ড ও বাতিল|परतावा आणि रद्द|રિફંડ અને રદ|ਰਿਫੰਡ ਅਤੇ ਰੱਦ|ଫେରସ୍ତ ଓ ବାତିଲ|পৰিবৰ্তন আৰু বাতিল|واپسی اور منسوخی|प्रत्यावर्तनं च रद्दीकरणं च|फिर्ता र रद्द|परतावो आनी रद्द|ꯋꯥꯄꯁꯤ ꯑꯃꯗꯤ ꯔꯥꯗꯗꯥ|फिर्ता आरो रद्द|वापसी आरू रद्द|ᱯᱷᱤᱨᱛᱟ ᱟᱨ ᱨᱟᱫᱽ|واپسی تہ منسوخی|واپسي ۽ رد
+13|shipping_delivery|Shipping & Delivery|రవాణా మరియు డెలివరీ|शिपिंग और डिलीवरी|அனுப்புதல் மற்றும் விநியோகம்|ಶಿಪ್ಪಿಂಗ್ ಮತ್ತು ಡೆಲಿವರಿ|ഷിപ്പിംഗും ഡെലിവറിയും|শিপিং ও ডেলিভারি|शिपिंग आणि डिलिव्हरी|શિપિંગ અને ડિલિવરી|ਸ਼ਿਪਿੰਗ ਅਤੇ ਡਿਲਿਵਰੀ|ପ୍ରେରଣ ଓ ବିତରଣ|পাঠোৱা আৰু বিতৰণ|شپنگ اور ڈیلیوری|प्रेषणं च वितरणं च|पठाउने र वितरण|शिपिंग आनी डिलिव्हरी|ꯁꯤꯄꯤꯡ ꯑꯃꯗꯤ ꯗꯦꯂꯤꯚꯦꯔꯤ|पठानाय आरो बितरण|भेजण आरू डिलिवरी|ᱯᱟᱦᱟᱴ ᱟᱨ ᱰᱮᱞᱤᱵᱷᱟᱨᱤ|شپنگ تہ ڈیلیوری|شپنگ ۽ ڊليوري
+14|api_docs|API Docs|API పత్రాలు|API दस्तावेज़|API ஆவணங்கள்|API ದಾಖಲೆಗಳು|API ഡോക്യുമെന്റുകൾ|API নথি|API दस्तऐवज|API દસ્તાવેજો|API ਦਸਤਾਵੇਜ਼|API ଦଲିଲ|API দলিল|API دستاویزات|API दस्तावेजानि|API कागजात|API दस्तावेज|API ꯗꯁꯇꯥꯚꯦꯖꯁꯤꯡ|API दस्तावेज|API दस्तावेज|API ᱫᱚᱥᱴᱟᱵᱮᱡ|API دستاویزات|API دستاويز
+15|contact|Contact|సంప్రదించండి|संपर्क|தொடர்பு|ಸಂಪರ್ಕಿಸಿ|ബന്ധപ്പെടുക|যোগাযোগ|संपर्क|સંપર્ક કરો|ਸੰਪਰਕ|ଯୋଗାଯୋଗ|যোগাযোগ|رابطہ|सम्पर्कः|सम्पर्क|संपर्क|ꯁꯝꯄꯔꯀꯧ|सम्पर्क|संपर्क|ᱥᱚᱢᱯᱚᱨᱚᱠ|رابطہ|رابطو
+16|back|← Back|← వెనుక|← वापस|← பின்செல்|← ಹಿಂದೆ|← പിന്നോട്ട്|← পিছনে|← मागे|← પાછું|← ਪਿੱਛੇ|← ପଛକୁ|← পিছলৈ|← پیچھے|← पृष्ठतः|← पछाडि|← फाटीं|← ꯄꯤꯆꯍꯨ|← पिन्थाव|← पिछे|← ᱯᱤᱪᱷᱮ|← پچھے|← پوئتي
+17|menu|Menu|మెను|मेन्यू|பட்டியல்|ಮೆನು|മെനു|মেনু|मेनू|મેનૂ|ਮੀਨੂ|ମେନୁ|মেনু|مینو|मेनु|मेनु|मेनू|ꯃꯦꯅꯨ|मेनु|मेनू|ᱢᱮᱱᱩ|مینو|مينيو
+18|later|Later|తర్వాత|बाद में|பின்னர்|ನಂತರ|പിന്നീട്|পরে|नंतर|પછી|ਬਾਅਦ ਵਿੱਚ|ପରେ|পিছত|بعد میں|अनन्तरम्|पछि|उपरांत|ꯃꯇꯨꯡꯗ|उननि|बाद च|ᱯᱟᱹᱪᱷᱟᱹ|بعد|پوءِ
+19|save|Save|సేవ్ చేయండి|सेव करें|சேமிக்கவும்|ಉಳಿಸಿ|സേവ് ചെയ്യുക|সেভ করুন|जतन करा|સાચવો|ਸੇਵ ਕਰੋ|ସେଭ୍ କରନ୍ତୁ|সংৰক্ষণ কৰক|محفوظ کریں|सञ्चयत|सेव गर्नुहोस्|सेव करात|ꯁꯦꯚ ꯇꯧꯌꯨ|सेव खालाम|सेव करो|ᱥᱮᱵ ᱠᱚᱨᱚ|محفوظ کرو|محفوظ ڪريو
+20|saving|Saving…|సేవ్ అవుతోంది…|सेव हो रहा है…|சேமிக்கிறது…|ಉಳಿಸುತ್ತಿದೆ…|സേവ് ചെയ്യുന്നു…|সেভ হচ্ছে…|जतन होत आहे…|સાચવી રહ્યું છે…|ਸੇਵ ਹੋ ਰਿਹਾ ਹੈ…|ସେଭ୍ ହେଉଛି…|সংৰক্ষণ হৈ আছে…|محفوظ ہو رہا ہے…|सञ्चयति…|सेव हुँदैछ…|सेव जाता…|ꯁꯦꯚ ꯇꯧꯈꯤꯕ…|सेव जादों…|सेव हो रिया…|ᱥᱮᱵ ᱦᱩᱭᱮᱱᱟ…|محفوظ تھوان چھو…|محفوظ ٿي رهيو آهي…
+21|loading|Loading…|లోడ్ అవుతోంది…|लोड हो रहा है…|ஏற்றுகிறது…|ಲೋಡ್ ಆಗುತ್ತಿದೆ…|ലോഡ് ചെയ്യുന്നു…|লোড হচ্ছে…|लोड होत आहे…|લોડ થઈ રહ્યું છે…|ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ…|ଲୋଡ୍ ହେଉଛି…|লোড হৈ আছে…|لوڈ ہو رہا ہے…|लोड् भवति…|लोड हुँदैछ…|लोड जाता…|ꯂꯣꯗꯤꯡ…|लोड जादों…|लोड हो रिया…|ᱞᱚᱰ ᱦᱩᱭᱮᱱᱟ…|لوڈ تھوان چھو…|لوڊ ٿي رهيو آهي…
+22|close|Close|||||||||||||||||||||
+23|dismiss|Dismiss|||||||||||||||||||||
+24|reload|Reload|||||||||||||||||||||
+25|back_to_home|Back to home|||||||||||||||||||||
+26|japam|Japam|జపం|जपम|ஜபம்|ಜಪಂ|ജപം|জপম|जपम|જપમ|ਜਪਮ|ଜପମ|জপম|جپم|जपम्|जपम|जपम|ꯖꯄꯝ|जपम|जपम|ᱡᱚᱯᱚᱢ|جپم|جپم
+27|match_chant|Match & Chant|సరిపోల్చండి, జపించండి|मिलान करें, जप करें|பொருத்துங்கள், ஜபியுங்கள்|ಹೊಂದಿಸಿ, ಜಪಿಸಿ|ചേർക്കുക, ജപിക്കുക|মিলান, জপ করুন|जुळवा, जप करा|જોડો, જપ કરો|ਮਿਲਾਓ, ਜਪ ਕਰੋ|ମିଳାନ୍ତୁ, ଜପ କରନ୍ତୁ|মিলাওক, জপ কৰক|ملائیں، جپ کریں|मेलयत, जपत|मिलाउनुहोस्, जप गर्नुहोस्|जुळवात, जप करात|ꯃꯤꯂꯥꯎ, ꯖꯄ ꯇꯧ|मिलाओ, जप खालाम|मिलाओ, जप करो|ᱢᱤᱞᱟᱣ, ᱡᱚᱯ ᱠᱚᱨᱚ|ملاؤ، جپ کرو|ملائيو، جپ ڪريو
+28|match_divine_candies_hear_mantras_build_your_japa|Match divine candies. Hear mantras. Build your japa.|దివ్య మిఠాయిలు సరిపోల్చండి. మంత్రాలు వినండి. మీ జపాన్ని పెంపొందించండి.|दिव्य मिठाइयाँ मिलाएँ। मंत्र सुनें। अपना जप बनाएँ।|திவ்ய மிட்டாய்களை பொருத்துங்கள். மந்திரங்களை கேளுங்கள். உங்கள் ஜபத்தை வளர்த்தெடுங்கள்.|ದಿವ್ಯ ಸಿಹಿತಿಂಡಿಗಳನ್ನು ಹೊಂದಿಸಿ. ಮಂತ್ರಗಳನ್ನು ಕೇಳಿ. ನಿಮ್ಮ ಜಪವನ್ನು ಬೆಳೆಸಿ.|ദിവ്യ മിഠായികൾ ചേർക്കുക. മന്ത്രങ്ങൾ കേൾക്കുക. നിങ്ങളുടെ ജപം വളർത്തുക.|দৈব মিঠাই মিলান। মন্ত্র শুনুন। আপনার জপ গড়ে তুলুন।|दिव्य मिठाई जुळवा. मंत्र ऐका. आपला जप वाढवा.|દિવ્ય મિઠાઈ જોડો. મંત્ર સાંભળો. તમારો જપ વધારો.|ਦਿਵਿਆ ਮਿਠਾਈਆਂ ਮਿਲਾਓ। ਮੰਤਰ ਸੁਣੋ। ਆਪਣਾ ਜਪ ਵਧਾਓ।|ଦିବ୍ୟ ମିଠାଇ ମିଳାନ୍ତୁ। ମନ୍ତ୍ର ଶୁଣନ୍ତୁ। ଆପଣଙ୍କ ଜପ ବଢାନ୍ତୁ।|দৈৱিক মিঠাই মিলাওক। মন্ত্ৰ শুনক। আপোনাৰ জপ গঢ়ক।|الہی مٹھائیاں ملائیں۔ منتر سنیں۔ اپنا جپ بنائیں۔|दिव्यमोदकान् मेलयत। मन्त्रान् शृणुत। स्वजपं वर्धयत।|दिव्य मिठाई मिलाउनुहोस्। मन्त्र सुन्नुहोस्। आफ्नो जप बढाउनुहोस्।|दैवी मिठाय जुळवात। मंत्र आयकात। तुमचो जप वाडयात।|ꯗꯤꯕꯤꯌꯥ ꯃꯤꯊꯥꯏ ꯃꯤꯂꯥꯎ। ꯃꯟꯇ꯭ꯔ ꯈꯦꯟꯅꯕꯤꯌꯨ। ꯅꯪꯒꯤ ꯖꯄ ꯄꯥꯟꯕꯤꯌꯨ।|दैवी मिठाइ मिलाओ। मन्त्र सुनो। नों जप बांदो।|दैवी मिठाई मिलाओ। मन्त्र सुनो। अपणा जप बढाओ।|ᱫᱤᱵᱤ ᱢᱤᱴᱷᱟᱹᱭ ᱢᱤᱞᱟᱣ। ᱢᱚᱱᱛᱨᱚ ᱥᱮᱨᱮᱧ ᱠᱚᱨᱚ। ᱟᱢ ᱡᱚᱯ ᱵᱟᱲᱦᱟᱣ।|دیوی مٹھائی ملاؤ۔ منتر سنو۔ خپل جپ بناؤ۔|ديوي مٺائي ملائيو۔ منتر ٻڌيو۔ پنهنجو جپ وڌائيو۔
+29|try_as_guest|Try as Guest|అతిథిగా ప్రయత్నించండి|अतिथि के रूप में आज़माएँ|விருந்தினராக முயற்சிக்குங்கள்|ಅತಿಥಿಯಾಗಿ ಪ್ರಯತ್ನಿಸಿ|അതിഥിയായി പരീക്ഷിക്കുക|অতিথি হিসেবে চেষ্টা করুন|अतिथी म्हणून प्रयत्न करा|અતિથિ તરીકે પ્રયાસ કરો|ਮਹਿਮਾਨ ਵਜੋਂ ਕੋਸ਼ਿਸ਼ ਕਰੋ|ଅତିଥି ଭାବରେ ଚେଷ୍ଟା କରନ୍ତୁ|অতিথি হিচাপে চেষ্টা কৰক|مہمان کے طور پر کوشش کریں|अतिथिरूपेण प्रयत्नत|अतिथिको रूपमा प्रयास गर्नुहोस्|अतिथी म्हणून प्रयत्न करात|ꯑꯇꯤꯊꯤ ꯑꯣꯏꯅ ꯇꯨꯡꯕꯤꯌꯨ|अतिथि बिदिं प्रयास खालाम|मेहमान बन के कोशिश करो|ᱟᱹᱛᱩᱭ ᱞᱮᱠᱟᱛᱮ ᱮᱴᱮᱢ ᱠᱚᱨᱚ|مہمان بنیو کوشش کرو|مهمان طور ڪوشش ڪريو
+30|built_by|Built by|రూపొందించినవారు|द्वारा निर्मित|உருவாக்கியவர்|ನಿರ್ಮಿಸಿದವರು|നിർമ്മിച്ചത്|তৈরি করেছেন|बनवणारे|બનાવનાર|ਬਣਾਉਣ ਵਾਲੇ|ନିର୍ମାଣକାରୀ|নিৰ্মাণকাৰী|بنانے والے|निर्माता|निर्माण गर्ने|बांदपी|ꯁꯦꯝꯕꯤꯕꯥ꯫|बानानाय|बनावैया|ᱵᱮᱱᱟᱣᱤᱡ|بنان والے|ٺاهيندڙ
+31|ai_developer_india|AI Developer India|||||||||||||||||||||
+32|all_rights_reserved|All rights reserved.|అన్ని హక్కులు ప్రత్యేకం.|सर्वाधिकार सुरक्षित।|அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.|ಎಲ್ಲ ಹಕ್ಕುಗಳೂ ಕಾಯ್ದಿರಿಸಿವೆ.|എല്ലാ അവകാശങ്ങളും നിക്ഷിപ്തം.|সমস্ত অধিকার সংরক্ষিত।|सर्व हक्क राखीव.|બધા અધિકારો અનામત.|ਸਾਰੇ ਅਧਿਕਾਰ ਰਾਖਵੇਂ।|ସମସ୍ତ ଅଧିକାର ସଂରକ୍ଷିତ।|সকলো অধিকাৰ সংৰক্ষিত।|جملہ حقوق محفوظ ہیں۔|सर्वाधिकाराः सुरक्षिताः।|सर्वाधिकार सुरक्षित।|सगळे अधिकार राखिल्ले।|ꯄꯥꯟꯕ ꯑꯣꯏꯕ ꯑꯁꯤ ꯂꯧꯁꯤꯟꯂꯦ꯫|गासै अधिकार रैखाथि।|सब अधिकार सुरक्षित।|ᱥᱟᱱᱟᱢ ᱟᱹᱭᱩᱵ ᱨᱟᱠᱷᱟᱣᱤᱡ।|سارے حقوق محفوظ۔|سمورا حق محفوظ آهن۔
+33|japam|JAPAM|జపం|जपम|ஜபம்|ಜಪಂ|ജപം|জপম|जपम|જપમ|ਜਪਮ|ଜପମ|জপম|جپم|जपम्|जपम|जपम|ꯖꯄꯝ|जपम|जपम|ᱡᱚᱯᱚᱢ|جپم|جپم
+34|digital_mantra_practice|DIGITAL MANTRA PRACTICE|డిజిటల్ మంత్ర సాధన|डिजिटल मंत्र साधना|டிஜிட்டல் மந்திர பயிற்சி|ಡಿಜಿಟಲ್ ಮಂತ್ರ ಸಾಧನೆ|ഡിജിറ്റൽ മന്ത്ര സാധന|ডিজিটাল মন্ত্র সাধনা|डिजिटल मंत्र साधना|ડિજિટલ મંત્ર સાધના|ਡਿਜਿਟਲ ਮੰਤਰ ਸਾਧਨਾ|ଡିଜିଟାଲ ମନ୍ତ୍ର ସାଧନା|ডিজিটেল মন্ত্ৰ সাধনা|ڈیجیٹل منتر سادھنا|डिजिटलमन्त्रसाधना|डिजिटल मन्त्र साधना|डिजिटल मंत्र साधना|ꯗꯤꯖꯤꯇꯦꯜ ꯃꯟꯇ꯭ꯔ ꯁꯥꯗꯍꯅꯥ|डिजिटल मन्त्र साधना|डिजिटल मन्त्र साधना|ᱰᱤᱡᱤᱴᱟᱞ ᱢᱚᱱᱛᱨᱚ ᱥᱟᱫᱷᱚᱱᱟ|ڈیجیٹل منتر سادھنا|ڊجيٽل منتر سادھنا
+35|skip|Skip|దాటివెళ్ళండి|छोड़ें|தவிர்க்கவும்|ಬಿಟ್ಟುಬಿಡಿ|ഒഴിവാക്കുക|এড়িয়ে যান|वगळा|છોડો|ਛੱਡੋ|ଛାଡିଦିଅନ୍ତୁ|বাদ দিয়ক|چھوڑیں|अतिक्रम्य गच्छत|छोड्नुहोस्|वगळात|ꯆꯣꯔꯕꯤꯌꯨ|नागिर|छोड़ो|ᱪᱷᱟᱹᱰᱤᱭᱟᱭ|چھوڑو|ڇڏيو
+36|japam_mantra_match|Japam - Mantra Match|||||||||||||||||||||
+37|match_gems_complete_japas_for_your_favourite_deity_and_join_community_japa_marathons|Match gems, complete japas for your favourite deity, and join community Japa Marathons.|||||||||||||||||||||
+38|jai|Jai!|జై!|जय!|ஜெய்!|ಜೈ!|ജയ്!|জয়!|जय!|જય!|ਜੈ!|ଜୟ!|জয়!|جے!|जय!|जय!|जय!|ꯖꯥꯏ!|जय!|जय!|ᱡᱚᱭ!|جے!|جَي!
+39|try_again|Try Again|మళ్ళీ ప్రయత్నించండి|पुनः प्रयास करें|மீண்டும் முயற்சிக்குங்கள்|ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ|വീണ്ടും ശ്രമിക്കുക|আবার চেষ্টা করুন|पुन्हा प्रयत्न करा|ફરી પ્રયાસ કરો|ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ|ପୁନର୍ବାର ଚେଷ୍ଟା କରନ୍ତୁ|আকৌ চেষ্টা কৰক|دوبارہ کوشش کریں|पुनः प्रयत्नत|फेरि प्रयास गर्नुहोस्|पुनः प्रयत्न करात|ꯑꯍꯦꯟꯕ ꯇꯨꯡꯕꯤꯌꯨ|फिन नाय प्रयास खालाम|फेर कोशिश करो|ᱫᱩᱵᱟᱹᱨ ᱮᱴᱮᱢ ᱠᱚᱨᱚ|دوبارہ کوشش کرو|ٻيهر ڪوشش ڪريو
+40|marathon_complete|Marathon complete!|మేరథాన్ పూర్తయింది!|मैराथन पूर्ण!|மாரத்தான் முடிந்தது!|ಮ್ಯಾರಥಾನ್ ಪೂರ್ಣ!|മാരത്തോൺ പൂർത്തിയായി!|ম্যারাথন সম্পূর্ণ!|मॅराथॉन पूर्ण!|મેરાથોન પૂર્ણ!|ਮੈਰਾਥਨ ਪੂਰਾ!|ମାରାଥନ୍ ସମାପ୍ତ!|মেৰাথন সম্পূৰ্ণ!|میراتھن مکمل!|मैराथनं समाप्तम्!|म्याराथन पूरा!|मॅराथॉन पुराय!|ꯃꯦꯔꯥꯊꯟ ꯄꯨꯔꯥ!|मेराथन जोबोर!|मैराथन पूरा!|ᱢᱮᱨᱟᱴᱷᱚᱱ ᱯᱩᱨᱟᱹ!|میراتھن مکمل!|ميٿن مڪمل!
+41|you_completed_the_japas|You completed the japas!|మీరు జపాలు పూర్తి చేసారు!|आपने जप पूरे कर लिए!|ஜபங்களை முடித்துவிட்டீர்கள்!|ಜಪಗಳನ್ನು ಪೂರ್ಣಗೊಳಿಸಿದ್ದೀರಿ!|ജപങ്ങൾ പൂർത്തിയാക്കി!|জপ সম্পন্ন করেছেন!|जप पूर्ण केले!|જપ પૂર્ણ કર્યા!|ਜਪ ਪੂਰੇ ਕੀਤੇ!|ଜପ ସମାପ୍ତ କରିଛନ୍ତି!|জপ সম্পূৰ্ণ কৰিলে!|جپ مکمل کر لیے!|जपानि समाप्तानि!|जप पूरा गर्नुभयो!|जप पुराय केलें!|ꯖꯄꯁꯤꯡ ꯄꯨꯔꯥ ꯇꯧꯈꯤ!|जप जोबोर खालाम!|जप पूरे करे!|ᱡᱚᱯ ᱯᱩᱨᱟᱹ ᱠᱮᱫᱟ!|جپ مکمل کیتے!|جپ مڪمل ڪيا!
+42|you_reached_the_marathon_target|You reached the marathon target!|మీరు మేరథాన్ లక్ష్యాన్ని చేరుకున్నారు!|आप मैराथन लक्ष्य तक पहुँच गए!|மாரத்தான் இலக்கை அடைந்துவிட்டீர்கள்!|ಮ್ಯಾರಥಾನ್ ಗುರಿ ತಲುಪಿದ್ದೀರಿ!|മാരത്തോൺ ലക്ഷ്യം നേടി!|ম্যারাথন লক্ষ্য পূরণ করেছেন!|मॅराथॉन लक्ष्य गाठले!|મેરાથોન લક્ષ્ય પહોંચ્યા!|ਮੈਰਾਥਨ ਟੀਚਾ ਪ੍ਰਾਪਤ ਕੀਤਾ!|ମାରାଥନ୍ ଲକ୍ଷ୍ୟ ପ୍ରାପ୍ତ କରିଛନ୍ତି!|মেৰাথন লক্ষ্য পালে!|میراتھن ہدف پا لیا!|मैराथनलक्ष्यं प्राप्तम्!|म्याराथन लक्ष्य पुग्नुभयो!|मॅराथॉन लक्ष्य पावलें!|ꯃꯦꯔꯥꯊꯟ ꯂꯥꯛꯁꯤꯌꯥ ꯄꯥꯈꯤ!|मेराथन लक्ष्य गोनां खालाम!|मैराथन लक्ष्य पौछे!|ᱢᱮᱨᱟᱴᱷᱚᱱ ᱞᱟᱠᱷᱭᱚ ᱯᱟᱹᱧᱮᱞᱮᱱᱟ!|میراتھن ہدف پا گۄ!|ميٿن هدف پايو!
+43|out_of_moves_chant_more_next_time|Out of moves. Chant more next time!|మూవులు ముగిశాయి. తదుపరిసారి ఎక్కువ జపించండి!|चालें खत्म। अगली बार और जप करें!|நகர்வுகள் முடிந்துவிட்டன. அடுத்த முறை அதிகம் ஜபியுங்கள்!|ಚಲನೆಗಳು ಮುಗಿದವು. ಮುಂದಿನ ಸಲ ಹೆಚ್ಚು ಜಪಿಸಿ!|നീക്കങ്ങൾ തീർന്നു. അടുത്ത തവണ കൂടുതൽ ജപിക്കുക!|চাল শেষ। পরের বার আরও জপ করুন!|चाल संपल्या. पुढच्या वेळी अधिक जप करा!|ચાલો ખતમ. આગળ વધુ જપ કરો!|ਚਾਲਾਂ ਖਤਮ। ਅਗਲੀ ਵਾਰ ਹੋਰ ਜਪ ਕਰੋ!|ଚାଲ ସମାପ୍ତ। ପରବର୍ତ୍ତୀ ବାର ଅଧିକ ଜପ କରନ୍ତୁ!|চাল শেষ। পিছত বেছি জপ কৰক!|چالیں ختم۔ اگلی بار زیادہ جپ کریں!|चालाः समाप्ताः। पुनः अधिकं जपत!|चाल सकियो। अर्को पटक धेरै जप गर्नुहोस्!|चाल संपल्यो। फुडें चड जप करात!|ꯆꯥꯂꯁꯤꯡ ꯃꯨꯇꯈꯤ। ꯑꯍꯦꯟꯕ ꯃꯃꯥꯡ ꯃꯈꯥ ꯖꯄ ꯇꯧꯌꯨ!|चाल खम। फिन बेसाद जप खालाम!|चाल खतम। अगली बार ज्यादा जप करो!|ᱪᱟᱞ ᱢᱩᱪᱟᱹᱫ। ᱤᱱᱟᱹ ᱚᱠᱛᱚ ᱵᱟᱹᱲᱛᱤ ᱡᱚᱯ ᱠᱚᱨᱚ!|چال ختم۔ اگلی وار زیادہ جپ کرو!|چالون ختم۔ ايندڙ ڀيري وڌيڪ جپ ڪريو!
+44|next_level|Next Level|తదుపరి స్థాయి|अगला स्तर|அடுத்த நிலை|ಮುಂದಿನ ಹಂತ|അടുത്ത ലെവൽ|পরবর্তী স্তর|पुढचा स्तर|આગળનું સ્તર|ਅਗਲੀ ਸਤਰ|ପରବର୍ତ୍ତୀ ସ୍ତର|পৰৱৰ্তী স্তৰ|اگلی سطح|अग्रिमस्तरः|अर्को तह|फुडलो स्तर|ꯑꯍꯦꯟꯕ ꯁꯇꯔ|गोदोम स्तर|अगला स्तर|ᱤᱱᱟᱹ ᱥᱴᱚᱨ|اگلی سطح|ايندڙ سطح
+45|retry|Retry|మళ్ళీ ప్రయత్నించండి|पुनः प्रयास करें|மீண்டும் முயற்சி|ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ|വീണ്ടും ശ്രമിക്കുക|আবার চেষ্টা করুন|पुन्हा प्रयत्न करा|ફરી પ્રયાસ કરો|ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ|ପୁନର୍ବାର ଚେଷ୍ଟା କରନ୍ତୁ|আকৌ চেষ্টা কৰক|دوبارہ کوشش کریں|पुनः प्रयत्नत|फेरि प्रयास गर्नुहोस्|पुनः प्रयत्न करात|ꯑꯍꯦꯟꯕ ꯇꯨꯡꯕꯤꯌꯨ|फिन नाय प्रयास खालाम|फेर कोशिश करो|ᱫᱩᱵᱟᱹᱨ ᱮᱴᱮᱢ ᱠᱚᱨᱚ|دوبارہ کوشش کرو|ٻيهر ڪوشش ڪريو
+46|japas|Japas|జపాలు|जप|ஜபங்கள்|ಜಪಗಳು|ജപങ്ങൾ|জপ|जप|જપ|ਜਪ|ଜପ|জপ|جپ|जपानि|जप|जप|ꯖꯄꯁꯤꯡ|जप|जप|ᱡᱚᱯ|جپ|جپ
+47|moves|Moves|మూవులు|चालें|நகர்வுகள்|ಚಲನೆಗಳು|നീക്കങ്ങൾ|চাল|चाल|ચાલો|ਚਾਲਾਂ|ଚାଲ|চাল|چالیں|चालाः|चालहरू|चाल|ꯆꯥꯂꯁꯤꯡ|चाल|चाल|ᱪᱟᱞ|چال|چالون
+48|pause|Pause|ఆపండి|रोकें|இடைநிறுத்து|ವಿರಾಮ|നിർത്തുക|বিরতি|विराम|વિરામ|ਰੁਕੋ|ବିରାମ|বিৰাম|روکیں|विरामः|रोक्नुहोस्|विराम|ꯔꯣꯀꯕꯤꯌꯨ|रोक|रुको|ᱨᱩᱠᱟᱹ|روکو|روڪيو
+49|exit|Exit|నిష్క్రమించండి|बाहर निकलें|வெளியேறு|ನಿರ್ಗಮಿಸಿ|പുറത്തുകടക്കുക|প্রস্থান|बाहेर पडा|બહાર નીકળો|ਬਾਹਰ ਨਿਕਲੋ|ବାହାରକୁ ଯାଆନ୍ତୁ|ওলাই যাওক|باہر نکلیں|निर्गच्छत|बाहिर निस्कनुहोस्|बाहेर सरात|ꯕꯥꯍꯤꯔ ꯅꯤꯀꯂꯕꯤꯌꯨ|नागिर|बाहर निकलो|ᱵᱟᱦᱤᱨ ᱱᱤᱠᱞᱟᱭ|باہر نکلو|ٻاهر نڪريو
+50|music_on|Music ON|||||||||||||||||||||
+51|music_off|Music OFF|||||||||||||||||||||
+52|vol|Vol|||||||||||||||||||||
+53|do_your_ista_devata_japa_sign_in_with_google|Do your ista devata japa? Sign in with Google|||||||||||||||||||||
+54|continue_as_guest|Continue as guest|||||||||||||||||||||
+55|could_not_save_pause_check_internet_and_try_again|Could not save pause. Check internet and try again.|||||||||||||||||||||
+56|you_have_been_doing_japa_for_20_minutes_please_take_a_break|You have been doing japa for 20 minutes, please take a break.|||||||||||||||||||||
+57|you_have_been_doing_japa_for_20_minutes_please_take_a_break_after_this_current_level|You have been doing japa for 20 minutes, please take a break after this current level.|||||||||||||||||||||
+58|time_to_chant_your_favourite_gods_name|Time to chant your favourite God's name.|||||||||||||||||||||
+59|general_japa|General Japa|సాధారణ జపం|सामान्य जप|பொது ஜபம்|ಸಾಮಾನ್ಯ ಜಪ|പൊതു ജപം|সাধারণ জপ|सामान्य जप|સામાન્ય જપ|ਆਮ ਜਪ|ସାଧାରଣ ଜପ|সাধাৰণ জপ|عام جپ|सामान्यजपम्|सामान्य जप|सामान्य जप|ꯁꯥꯃꯥꯅ꯭ꯌꯥ ꯖꯄ|सामान्य जप|सामान्य जप|ᱥᱟᱢᱟᱱᱭᱚ ᱡᱚᱯ|عام جپ|عام جپ
+60|ista_devata_japa|Ista Devata Japa|ఇష్ట దైవ జపం|इष्ट देवता जप|இஷ்ட தேவதை ஜபம்|ಇಷ್ಟ ದೇವತಾ ಜಪ|ഇഷ്ട ദേവതാ ജപം|ইষ্ট দেবতা জপ|इष्ट देवता जप|ઇષ્ટ દેવતા જપ|ਇਸ਼ਟ ਦੇਵਤਾ ਜਪ|ଇଷ୍ଟ ଦେବତା ଜପ|ইষ্ট দেৱতা জপ|اِشٹ دیوتا جپ|इष्टदेवताजपम्|इष्ट देवता जप|इष्ट देवता जप|ꯏꯁꯇꯥ ꯗꯦꯚꯥꯇꯥ ꯖꯄ|इष्ट देवता जप|इष्ट देवता जप|ᱤᱥᱴ ᱫᱮᱣᱚᱛᱟ ᱡᱚᱯ|ایشٹ دیوتا جپ|اشٽ ديوتا جپ
+61|japa_marathons|Japa Marathons|జప మేరథాన్లు|जप मैराथन|ஜப மாரத்தான்|ಜಪ ಮ್ಯಾರಥಾನ್‌ಗಳು|ജപ മാരത്തോണുകൾ|জপ ম্যারাথন|जप मॅराथॉन|જપ મેરાથોન|ਜਪ ਮੈਰਾਥਨ|ଜପ ମାରାଥନ୍|জপ মেৰাথন|جپ میراتھن|जपमैराथनानि|जप म्याराथन|जप मॅराथॉन|ꯖꯄ ꯃꯦꯔꯥꯊꯟ|जप मेराथन|जप मैराथन|ᱡᱚᱯ ᱢᱮᱨᱟᱴᱷᱚᱱ|جپ میراتھن|جپ ميٿن
+62|japa_count|Japa Count|జప సంఖ్య|जप गिनती|ஜப எண்ணிக்கை|ಜಪ ಎಣಿಕೆ|ജപ എണ്ണം|জপ সংখ্যা|जप संख्या|જપ ગણતરી|ਜਪ ਗਿਣਤੀ|ଜପ ସଂଖ୍ୟା|জপ সংখ্যা|جپ گنتی|जपसङ्ख्या|जप गणना|जप संख्या|ꯖꯄ ꯒꯟꯅꯥꯇꯤ|जप गणना|जप गिनती|ᱡᱚᱯ ᱜᱚᱱᱚᱱᱟ|جپ گنتی|جپ ڳڻپ
+63|levels|Levels|స్థాయిలు|स्तर|நிலைகள்|ಹಂತಗಳು|ലെവലുകൾ|স্তর|स्तर|સ્તરો|ਸਤਰਾਂ|ସ୍ତର|স্তৰ|سطحیں|स्तराः|तहहरू|स्तर|ꯁꯇꯔꯁꯤꯡ|स्तर|स्तर|ᱥᱴᱚᱨ|سطح|سطحون
+64|signed_in|Signed in|సైన్ ఇన్ చేయబడింది|साइन इन हो चुका है|உள்நுழைந்துள்ளீர்கள்|ಸೈನ್ ಇನ್ ಆಗಿದ್ದೀರಿ|സൈൻ ഇൻ ചെയ്തിരിക്കുന്നു|সাইন ইন করা হয়েছে|साइन इन केले आहे|સાઇન ઇન થયેલ છે|ਸਾਇਨ ਇਨ ਹੋ ਚੁੱਕੇ ਹੋ|ସାଇନ୍ ଇନ୍ ହୋଇଛନ୍ତି|ছাইন ইন কৰা হৈছে|سائن ان ہو چکے ہیں|प्रविष्टम्|साइन इन भएको छ|साइन इन जालां|ꯁꯥꯏꯟ ꯏꯟ ꯇꯧꯈꯤ|साइन इन जादों|साइन इन होया|ᱥᱟᱭᱱ ᱤᱱ ᱦᱩᱭᱮᱱᱟ|سائن ان تھیو|سائن ان ٿي ويو
+65|premium|Premium|ప్రీమియం|प्रीमियम|பிரீமியம்|ಪ್ರೀಮಿಯಂ|പ്രീമിയം|প্রিমিয়াম|प्रीमियम|પ્રીમિયમ|ਪ੍ਰੀਮੀਅਮ|ପ୍ରିମିଅମ୍|প্ৰিমিয়াম|پریمیم|प्रीमियम|प्रिमियम|प्रीमियम|ꯄ꯭ꯔꯤꯃꯤꯌꯝ|प्रीमियम|प्रीमियम|ᱯᱨᱤᱢᱤᱭᱟᱢ|پریمیم|پرائميم
+66|pro|Pro|ప్రో|प्रो|ப்ரோ|ಪ್ರೋ|പ്രോ|প্রো|प्रो|પ્રો|ਪ੍ਰੋ|ପ୍ରୋ|প্ৰো|پرو|प्रो|प्रो|प्रो|ꯄ꯭ꯔꯣ|प्रो|प्रो|ᱯᱨᱚ|پرو|پرو
+67|general|General|||||||||||||||||||||
+68|offer_dakshina_to_unlock|Offer Dakshina to unlock|||||||||||||||||||||
+69|play_general_japa_mode|Play General Japa mode|||||||||||||||||||||
+70|update_available|Update available|||||||||||||||||||||
+71|update_now|Update Now|||||||||||||||||||||
+72|updating|Updating…|||||||||||||||||||||
+73|updated|Updated!|||||||||||||||||||||
+74|ready_to_work_offline|Ready to work offline|||||||||||||||||||||
+75|install_japam|Install Japam|||||||||||||||||||||
+76|add_to_home_screen_for_the_best_experience|Add to home screen for the best experience|||||||||||||||||||||
+77|install|Install|||||||||||||||||||||
+78|install_japam_app|Install Japam App|||||||||||||||||||||
+79|youre_offline_some_features_may_not_work_until_youre_back_online|You're offline. Some features may not work until you're back online.|||||||||||||||||||||
+80|there_may_be_mistakes_in_translations_we_will_improve|There may be mistakes in translations. We will improve.|అనువాదాలలో పొరపాట్లు ఉండవచ్చు. మేము మెరుగుపరుస్తాము.|अनुवाद में गलतियाँ हो सकती हैं। हम सुधार करेंगे।|மொழிபெயர்ப்புகளில் பிழைகள் இருக்கலாம். நாங்கள் மேம்படுத்துவோம்.|ಭಾಷಾಂತರಗಳಲ್ಲಿ ತಪ್ಪುಗಳಿರಬಹುದು. ನಾವು ಸುಧಾರಿಸುತ್ತೇವೆ.|പരിഭാഷകളിൽ പിശകുകൾ ഉണ്ടാകാം. ഞങ്ങൾ മെച്ചപ്പെടുത്തും.|অনুবাদে ভুল থাকতে পারে। আমরা উন্নতি করব।|अनुवादात चुका असू शकतात. आम्ही सुधारणा करू.|અનુવાદમાં ભૂલો હોઈ શકે. અમે સુધારણા કરીશું.|ਅਨੁਵਾਦਾਂ ਵਿੱਚ ਗਲਤੀਆਂ ਹੋ ਸਕਦੀਆਂ ਹਨ। ਅਸੀਂ ਸੁਧਾਰ ਕਰਾਂਗੇ।|ଅନୁବାଦରେ ଭୁଲ ରହିପାରେ। ଆମେ ସୁଧାରିବୁ।|অনুবাদত ভুল থাকিব পাৰে। আমি উন্নতি কৰিম।|ترجموں میں غلطیاں ہو سکتی ہیں۔ ہم بہتری کریں گے۔|अनुवादेषु दोषाः भवेयुः। वयं सुधारयिष्यामः।|अनुवादमा गल्ती हुन सक्छ। हामी सुधार गर्नेछौं।|अनुवादांत चुकी आसूं येता। आमी सुधार करतलो।|ꯑꯅꯨꯕꯥꯗꯁꯤꯡꯗ ꯒꯂꯇꯤ ꯂꯩꯕ ꯌꯥꯏ। ꯑꯩꯈꯣꯏ ꯁꯨꯗꯍꯥꯔ ꯇꯧꯒꯅꯤ꯫|अनुवादाव गल्ति थानो हागौ। आमि सुधारनाय खालामगौ।|अनुवाद च गलती हो सकदी ऐ। असीं सुधार करगे।|ᱚᱱᱩᱵᱟᱫ ᱨᱮ ᱜᱚᱞᱛᱤ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ। ᱟᱲᱟᱜ ᱥᱩᱫᱷᱟᱹᱨ ᱠᱚᱢᱚᱭᱟ।|ترجمے چ غلطیاں ہو سکن۔ اسہ سدھار کریو۔|ترجمن ۾ غلطيون ٿي سگهن ٿيون۔ اسان سڌارو ڪنداسين۔
+81|rama|Rama|రామ|राम|ராம|ರಾಮ|രാമ|রাম|राम|રામ|ਰਾਮ|ରାମ|ৰাম|رام|रामः|राम|राम|ꯔꯥꯃꯥ|राम|राम|ᱨᱟᱢ|رام|رام
+82|shiva|Shiva|శివ|शिव|சிவ|ಶಿವ|ശിവ|শিব|शिव|શિવ|ਸ਼ਿਵ|ଶିବ|শিৱ|شیو|शिवः|शिव|शिव|ꯁꯤꯚꯥ|शिव|शिव|ᱥᱤᱵ|شیو|شيوا
+83|ganesh|Ganesh|గణేశ|गणेश|விநாயகர்|ಗಣೇಶ|ഗണേശ|গণেশ|गणेश|ગણેશ|ਗਣੇਸ਼|ଗଣେଶ|গণেশ|گنیش|गणेशः|गणेश|गणेश|ꯒꯅꯦꯁ|गणेश|गणेश|ᱜᱚᱱᱮᱥ|گنیش|ڳڻيش
+84|surya|Surya|సూర్య|सूर्य|சூரியன்|ಸೂರ್ಯ|സൂര്യൻ|সূর্য|सूर्य|સૂર્ય|ਸੂਰਜ|ସୂର୍ଯ୍ୟ|সূৰ্য|سوریہ|सूर्यः|सूर्य|सूर्य|ꯁꯨꯔ꯭ꯌꯥ|सूर्य|सूर्य|ᱥᱩᱨᱭᱚ|سوریہ|سوريا
+85|shakthi|Shakthi|శక్తి|शक्ति|சக்தி|ಶಕ್ತಿ|ശക്തി|শক্তি|शक्ती|શક્તિ|ਸ਼ਕਤੀ|ଶକ୍ତି|শক্তি|شکتی|शक्तिः|शक्ति|शक्ती|ꯁꯛꯇꯤ|शक्ति|शक्ति|ᱥᱚᱠᱛᱤ|شکتی|شڪتي
+86|krishna|Krishna|కృష్ణ|कृष्ण|கிருஷ்ணன்|ಕೃಷ್ಣ|കൃഷ്ണൻ|কৃষ্ণ|कृष्ण|કૃષ્ણ|ਕ੍ਰਿਸ਼ਨ|କୃଷ୍ଣ|কৃষ্ণ|کرشن|कृष्णः|कृष्ण|कृष्ण|ꯀ꯭ꯔꯤꯁ꯭ꯅꯥ|कृष्ण|कृष्ण|ᱠᱨᱤᱥᱱᱚ|کرشن|ڪرشڻ
+87|shanmukha|Shanmukha|శన్ముఖ|षण्मुख|முருகன்|ಮುರುಗನ್|മുരുകൻ|কার্তিক|कार्तिक|કાર્તિક|ਕਾਰਤਿਕ|କାର୍ତ୍ତିକେୟ|কাৰ্তিক|کارتک|कार्तिकेयः|कार्तिक|कार्तिक|ꯀꯥꯔꯇꯤꯀꯥ|कार्तिक|कार्तिक|ᱠᱟᱨᱛᱤᱠ|کارتک|ڪارتيڪ
+88|venkateswara|Venkateswara|వేంకటేశ్వర|वेंकटेश्वर|வெங்கடேசுவரர்|ವೆಂಕಟೇಶ್ವರ|വെങ്കടേശ്വരൻ|বেঙ্কটেশ্বর|वेंकटेश्वर|વેંકટેશ્વર|ਵੇਂਕਟੇਸ਼ਵਰ|ବେଙ୍କଟେଶ୍ୱର|বেঙ্কটেশ্বৰ|وینکٹیشور|वेङ्कटेश्वरः|वेङ्कटेश्वर|वेंकटेश्वर|ꯚꯦꯡꯀꯇꯦꯁꯚꯥꯔꯥ|वेङ्कटेश्वर|वेङ्कटेश्वर|ᱵᱮᱝᱠᱚᱴᱮᱥᱣᱚᱨ|وینکٹیشور|وينڪٽيشور
+89|profile_name|Profile name|||||||||||||||||||||
+90|this_name_appears_on_marathon_leaderboards_and_next_to_your_profile|This name appears on marathon leaderboards and next to your profile.|||||||||||||||||||||
+91|your_name|Your name|||||||||||||||||||||
+92|lifetime_appreciations_received|Lifetime appreciations received|||||||||||||||||||||
+93|daily_reminder|Daily reminder|||||||||||||||||||||
+94|set_a_daily_time_to_get_a_notification_reminder|Set a daily time to get a notification reminder.|||||||||||||||||||||
+95|install_the_app_for_100_reliable_notifications|Install the app for 100% reliable notifications|||||||||||||||||||||
+96|browser_tabs_can_be_closed_installing_japam_to_your_home_screen_ensures_reminders_always_fire_on_time|Browser tabs can be closed. Installing Japam to your home screen ensures reminders always fire on time.|||||||||||||||||||||
+97|on_iphone_tap_share_add_to_home_screen_on_android_tap_the_browser_menu_install_app|On iPhone: tap Share → Add to Home Screen. On Android: tap the browser menu → Install app.|||||||||||||||||||||
+98|app_installed_notifications_will_work_reliably|App installed — notifications will work reliably|||||||||||||||||||||
+99|notifications_blocked_enable_them_in_your_browserdevice_settings_for_this_site|Notifications blocked. Enable them in your browser/device settings for this site.|||||||||||||||||||||
+100|allow_notifications_so_reminders_can_appear|Allow notifications so reminders can appear.|||||||||||||||||||||
+101|allow_notifications|Allow notifications|||||||||||||||||||||
+102|enable_reminder|Enable reminder|||||||||||||||||||||
+103|on|ON|||||||||||||||||||||
+104|off|OFF|||||||||||||||||||||
+105|time|Time|||||||||||||||||||||
+106|send_test_notification|Send test notification|||||||||||||||||||||
+107|sending|Sending…|||||||||||||||||||||
+108|apavarga|Apavarga|||||||||||||||||||||
+109|coming_soon|Coming Soon|||||||||||||||||||||
+110|the_spiritual_social_network_for_seekers_connect_with_priests_share_mantras_and_find_your_community|The spiritual social network for seekers — connect with priests, share mantras, and find your community.|||||||||||||||||||||
+111|learn_more|Learn more →|||||||||||||||||||||
+112|background_music|Background Music|||||||||||||||||||||
+113|priest_login|Priest login|||||||||||||||||||||
+114|sign_in_with_google_above_then_enter_your_priest_username_and_password_given_by_admin_to_link_your_account|Sign in with Google above, then enter your priest username and password (given by admin) to link your account.|||||||||||||||||||||
+115|priest_username_eg_pujarivenkateswara|Priest username (e.g. pujari@venkateswara)|||||||||||||||||||||
+116|priest_password_visible|Priest password (visible)|||||||||||||||||||||
+117|link_priest_account|Link priest account|||||||||||||||||||||
+118|linking|Linking…|||||||||||||||||||||
+119|linked_go_to_priest_dashboard|Linked! Go to Priest dashboard.|||||||||||||||||||||
+120|go_to_priest_dashboard|Go to Priest dashboard →|||||||||||||||||||||
+121|sign_in_with_google_first_then_enter_priest_credentials|Sign in with Google first, then enter priest credentials|||||||||||||||||||||
+122|invalid_credentials|Invalid credentials|||||||||||||||||||||
+123|failed_to_link|Failed to link|||||||||||||||||||||
+124|contact_feedback|Contact & Feedback|||||||||||||||||||||
+125|contact_on_whatsapp|Contact on WhatsApp|||||||||||||||||||||
+126|suggest_a_new_deity_japa|Suggest a new deity / japa|||||||||||||||||||||
+127|mantra_audio_plays_on_every_match_always_on|Mantra audio plays on every match (always on)|||||||||||||||||||||
+128|japam_reminder|Japam reminder 🙏|||||||||||||||||||||
+129|unlock_all_levels|Unlock all levels|||||||||||||||||||||
+130|youve_completed_the_first_2_levels_offer_dakshina_once_to_unlock_levels_350|You've completed the first 2 levels. Offer Dakshina once to unlock levels 3–50.|||||||||||||||||||||
+131|loading_price|Loading price…|||||||||||||||||||||
+132|opening|Opening…|||||||||||||||||||||
+133|opening_payment|Opening payment|||||||||||||||||||||
+134|pay_price_to_unlock_all_levels|Pay ₹{price} to unlock all levels|||||||||||||||||||||
+135|offer_dakshina_price_unlock|Offer Dakshina ₹{price} & unlock|||||||||||||||||||||
+136|close_and_continue_later|Close and continue later|||||||||||||||||||||
+137|please_sign_in_first|Please sign in first|||||||||||||||||||||
+138|failed_to_create_order|Failed to create order|||||||||||||||||||||
+139|invalid_create_order_response|Invalid create-order response|||||||||||||||||||||
+140|verification_failed|Verification failed|||||||||||||||||||||
+141|payment_was_cancelled_or_failed|Payment was cancelled or failed|||||||||||||||||||||
+142|payment_failed|Payment failed|||||||||||||||||||||
+143|fund_japam|Fund Japam|||||||||||||||||||||
+144|you_should_be_a_member_to_donate_buy_monthly_plan_do_a_108_japa_and_please_donate|You should be a member to donate. Buy monthly plan, do a 108 japa and please donate.|||||||||||||||||||||
+145|you_can_also_fund_this_startup_through_charity_for_sanathana_dharma|You can also fund this startup through charity for sanathana dharma.|||||||||||||||||||||
+146|you_can_fund_this_startup_through_charity_for_sanathana_dharma|You can fund this startup through charity for sanathana dharma.|||||||||||||||||||||
+147|custom_amount|Custom amount (₹)|||||||||||||||||||||
+148|minimum_donation_is_1|Minimum donation is ₹1|||||||||||||||||||||
+149|donation_failed|Donation failed|||||||||||||||||||||
+150|thanks_to_our_donors|Thanks to our donors|||||||||||||||||||||
+151|you_can_also_fund_this_startup_through_charity_for_sanathana_dharma|You can also fund this startup through charity for Sanathana Dharma.|||||||||||||||||||||
+152|donor|Donor|||||||||||||||||||||
+153|lifetime_donor|Lifetime Donor|||||||||||||||||||||
+154|life_time_donor|Life Time Donor|||||||||||||||||||||
+155|back_to_japam|← Back to Japam|||||||||||||||||||||
+156|api_reference|API Reference|||||||||||||||||||||
+157|base_url_api|Base URL: /api|||||||||||||||||||||
+158|openapi_30_spec_openapijson|OpenAPI 3.0 spec: /openapi.json|||||||||||||||||||||
+159|key_endpoints|Key endpoints|||||||||||||||||||||
+160|health_check|Health check|||||||||||||||||||||
+161|unlock_price|Unlock price|||||||||||||||||||||
+162|create_payment_order|Create payment order|||||||||||||||||||||
+163|verify_payment_bearer|Verify payment (Bearer)|||||||||||||||||||||
+164|admin_login|Admin login|||||||||||||||||||||
+165|priest_login|Priest login|||||||||||||||||||||
+166|discover_marathons|Discover marathons|||||||||||||||||||||
+167|japa_marathons|Japa Marathons|జప మేరథాన్లు|जप मैराथन|ஜப மாரத்தான்|ಜಪ ಮ್ಯಾರಥಾನ್‌ಗಳು|ജപ മാരത്തോണുകൾ|জপ ম্যারাথন|जप मॅराथॉन|જપ મેરાથોન|ਜਪ ਮੈਰਾਥਨ|ଜପ ମାରାଥନ୍|জপ মেৰাথন|جپ میراتھن|जपमैराथनानि|जप म्याराथन|जप मॅराथॉन|ꯖꯄ ꯃꯦꯔꯥꯊꯟ|जप मेराथन|जप मैराथन|ᱡᱚᱯ ᱢᱮᱨᱟᱴᱷᱚᱱ|جپ میراتھن|جپ ميٿن
+168|priest|Priest|||||||||||||||||||||
+169|discover_marathons_by_location_and_join_to_contribute_your_japas|Discover marathons by location and join to contribute your japas.|||||||||||||||||||||
+170|your_marathons|Your marathons|||||||||||||||||||||
+171|do_your_japa_for_these_marathons_your_japas_count_toward_the_marathon|Do your japa for these marathons — your japas count toward the marathon.|||||||||||||||||||||
+172|target_n_japas_your_japas_n|Target {n} japas • Your japas: {n}|||||||||||||||||||||
+173|japa|Japa|||||||||||||||||||||
+174|show_leaderboard|Show leaderboard|||||||||||||||||||||
+175|hide_leaderboard|Hide leaderboard|||||||||||||||||||||
+176|top_participants|Top participants|||||||||||||||||||||
+177|share_my_rank|Share my rank|||||||||||||||||||||
+178|preparing|Preparing…|||||||||||||||||||||
+179|your_rank_card|Your rank card|||||||||||||||||||||
+180|your_leaderboard_image_is_downloaded|Your leaderboard image is downloaded.|||||||||||||||||||||
+181|to_post_it_on_whatsapp_status_whatsapp_status_my_status_add_the_downloaded_image|To post it on WhatsApp Status: WhatsApp → Status → My Status → add the downloaded image.|||||||||||||||||||||
+182|download_again|Download again|||||||||||||||||||||
+183|state_required|State (required)|||||||||||||||||||||
+184|select_state|Select State|||||||||||||||||||||
+185|district_optional|District (optional)|||||||||||||||||||||
+186|any|Any|||||||||||||||||||||
+187|city_town_village_optional|City / Town / Village (optional)|||||||||||||||||||||
+188|eg_hyderabad|e.g. Hyderabad|||||||||||||||||||||
+189|area_optional|Area (optional)|||||||||||||||||||||
+190|eg_secunderabad|e.g. Secunderabad|||||||||||||||||||||
+191|search|Search|||||||||||||||||||||
+192|searching|Searching…|||||||||||||||||||||
+193|no_temples_in_this_location_yet|No temples in this location yet.|||||||||||||||||||||
+194|no_active_marathons|No active marathons|||||||||||||||||||||
+195|started_date_n_joined|Started {date} • {n} joined|||||||||||||||||||||
+196|join|Join|||||||||||||||||||||
+197|joined|Joined|||||||||||||||||||||
+198|pro_required|Pro required|||||||||||||||||||||
+199|japa_marathon|JAPA MARATHON|||||||||||||||||||||
+200|temple|Temple|||||||||||||||||||||
+201|top_participants|Top participants|||||||||||||||||||||
+202|vacant|Vacant|||||||||||||||||||||
+203|match_chant_and_climb_the_leaderboard|Match, chant, and climb the leaderboard.|||||||||||||||||||||
+204|join_at|Join at|||||||||||||||||||||
+205|wwwjapamdigital|www.japam.digital|||||||||||||||||||||
+206|pro_member_required_to_join_marathons_unlock_full_access_first|Pro member required to join marathons. Unlock full access first.|||||||||||||||||||||
+207|please_sign_in_again_to_join|Please sign in again to join.|||||||||||||||||||||
+208|only_users_who_have_full_access_can_join_marathons|Only users who have full access can join marathons.|||||||||||||||||||||
+209|please_sign_in_to_join_a_marathon|Please sign in to join a marathon.|||||||||||||||||||||
+210|failed_to_join|Failed to join.|||||||||||||||||||||
+211|my_rank_n_in_this_japa_marathon|My rank {n} in this Japa Marathon!|||||||||||||||||||||
+212|downloaded_to_post_on_whatsapp_status_open_whatsapp_status_my_status_add_the_downloaded_image|Downloaded. To post on WhatsApp Status: open WhatsApp → Status → My Status → add the downloaded image.|||||||||||||||||||||
+213|could_not_generatedownload_the_image_please_try_again|Could not generate/download the image. Please try again.|||||||||||||||||||||
+214|you|(You)|||||||||||||||||||||
+215|japa_dashboard|Japa Dashboard|||||||||||||||||||||
+216|lifetime_mantra_count|Lifetime mantra count|||||||||||||||||||||
+217|total_japas|total japas|||||||||||||||||||||
+218|daily_goal_n_japas_levels_15|Daily goal: {n} japas (Levels 1–5)|||||||||||||||||||||
+219|download_pdf|Download PDF|||||||||||||||||||||
+220|use_your_own_handwriting_optional|Use your own handwriting (optional)|||||||||||||||||||||
+221|write_your_nama_phrase_on_paper_take_a_photo_go_to_removebg_to_remove_the_background_then_upload_the_image_here_it_will_appear_in_the_pdf_at_the_same_size_as_the_default_text_we_dont_save_your_imageyou_may_save_it_on_your_device_for_future_downloads|Write your nama phrase on paper, take a photo. Go to remove.bg to remove the background, then upload the image here. It will appear in the PDF at the same size as the default text. We don't save your image—you may save it on your device for future downloads.|||||||||||||||||||||
+222|example_of_what_to_upload|Example of what to upload:|||||||||||||||||||||
+223|sample_handwriting|Sample handwriting|||||||||||||||||||||
+224|image_ready|Image ready|||||||||||||||||||||
+225|please_upload_an_image_file_png_jpg_etc|Please upload an image file (PNG, JPG, etc.)|||||||||||||||||||||
+226|could_not_read_file|Could not read file|||||||||||||||||||||
+227|details_for_pdf_optional|Details for PDF (optional)|||||||||||||||||||||
+228|name|Name|||||||||||||||||||||
+229|gotram|Gotram|||||||||||||||||||||
+230|mobile_number|Mobile number|||||||||||||||||||||
+231|generating|Generating…|||||||||||||||||||||
+232|removebg|remove.bg|||||||||||||||||||||
+233|priest_dashboard|Priest Dashboard|||||||||||||||||||||
+234|sign_in_with_google_first_then_link_your_priest_account_in_settings|Sign in with Google first, then link your priest account in Settings.|||||||||||||||||||||
+235|go_to_settings|Go to Settings|||||||||||||||||||||
+236|back_to_japam|← Back to Japam|||||||||||||||||||||
+237|marathons|Marathons|||||||||||||||||||||
+238|log_out|Log out|||||||||||||||||||||
+239|loading|Loading…|లోడ్ అవుతోంది…|लोड हो रहा है…|ஏற்றுகிறது…|ಲೋಡ್ ಆಗುತ್ತಿದೆ…|ലോഡ് ചെയ്യുന്നു…|লোড হচ্ছে…|लोड होत आहे…|લોડ થઈ રહ્યું છે…|ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ…|ଲୋଡ୍ ହେଉଛି…|লোড হৈ আছে…|لوڈ ہو رہا ہے…|लोड् भवति…|लोड हुँदैछ…|लोड जाता…|ꯂꯣꯗꯤꯡ…|लोड जादों…|लोड हो रिया…|ᱞᱚᱰ ᱦᱩᱭᱮᱱᱟ…|لوڈ تھوان چھو…|لوڊ ٿي رهيو آهي…
+240|no_marathons_yet_create_one_below|No marathons yet. Create one below.|||||||||||||||||||||
+241|target_n|Target: {n}|||||||||||||||||||||
+242|started_date|Started: {date}|||||||||||||||||||||
+243|joined_n_today_n_total_n|Joined: {n} • Today: {n} • Total: {n}|||||||||||||||||||||
+244|top_participants_with_last_active|Top participants (with last active)|||||||||||||||||||||
+245|create_marathon|Create marathon|||||||||||||||||||||
+246|new_marathon|New marathon|||||||||||||||||||||
+247|deity|Deity|||||||||||||||||||||
+248|select_deity|Select deity|||||||||||||||||||||
+249|target_japas|Target japas|||||||||||||||||||||
+250|start_date|Start date|||||||||||||||||||||
+251|creating|Creating…|||||||||||||||||||||
+252|create|Create|||||||||||||||||||||
+253|failed|Failed|||||||||||||||||||||
+254|admin_unlock_price|Admin – Unlock price|||||||||||||||||||||
+255|pricing|Pricing|||||||||||||||||||||
+256|temples|Temples|||||||||||||||||||||
+257|marathons|Marathons|||||||||||||||||||||
+258|users|Users|||||||||||||||||||||
+259|checking_access|Checking access…|||||||||||||||||||||
+260|access_denied_admin_only|Access denied. Admin only.|||||||||||||||||||||
+261|actual_price_charged_to_user_in_rupees|Actual price (charged to user) in rupees|||||||||||||||||||||
+262|display_price_strikethrough_in_rupees|Display price (strikethrough) in rupees|||||||||||||||||||||
+263|minimum_1_for_actual_price|Minimum ₹1 for actual price|||||||||||||||||||||
+264|minimum_1_for_display_price|Minimum ₹1 for display price|||||||||||||||||||||
+265|failed_to_save|Failed to save|||||||||||||||||||||
+266|saved_paywall_display_actual|Saved. Paywall: ~~₹{display}~~ ₹{actual}|||||||||||||||||||||
+267|failed_to_save_check_firestore_rules_or_api|Failed to save (check Firestore rules or API)|||||||||||||||||||||
+268|add_temple_priest|Add Temple / Priest|||||||||||||||||||||
+269|active_marathons|Active Marathons|||||||||||||||||||||
+270|users_who_paid_unlock|Users who paid (unlock)|||||||||||||||||||||
+271|total_n|Total: {n}|||||||||||||||||||||
+272|loading|Loading…|లోడ్ అవుతోంది…|लोड हो रहा है…|ஏற்றுகிறது…|ಲೋಡ್ ಆಗುತ್ತಿದೆ…|ലോഡ് ചെയ്യുന്നു…|লোড হচ্ছে…|लोड होत आहे…|લોડ થઈ રહ્યું છે…|ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ…|ଲୋଡ୍ ହେଉଛି…|লোড হৈ আছে…|لوڈ ہو رہا ہے…|लोड् भवति…|लोड हुँदैछ…|लोड जाता…|ꯂꯣꯗꯤꯡ…|लोड जादों…|लोड हो रिया…|ᱞᱚᱰ ᱦᱩᱭᱮᱱᱟ…|لوڈ تھوان چھو…|لوڊ ٿي رهيو آهي…
+273|no_paid_users_yet_new_payments_will_appear_here|No paid users yet. New payments will appear here.|||||||||||||||||||||
+274|email|Email|||||||||||||||||||||
+275|user_id|User ID|||||||||||||||||||||
+276|paid_at|Paid at|||||||||||||||||||||
+277|key|—|||||||||||||||||||||
+278|something_went_wrong|Something went wrong|||||||||||||||||||||
+279|were_sorry_the_app_encountered_an_error_please_refresh_the_page_or_try_again_later|We're sorry. The app encountered an error. Please refresh the page or try again later.|||||||||||||||||||||
+280|account_disabled|Account disabled|||||||||||||||||||||
+281|your_account_has_been_restricted_please_contact_support|Your account has been restricted. Please contact support.|||||||||||||||||||||
+282|sign_in_with_google_to_play|Sign in with Google to play|||||||||||||||||||||
+283|sign_in_with_google_to_play_and_save_your_progress|Sign in with Google to play and save your progress|||||||||||||||||||||
+284|last_updated|Last updated:|||||||||||||||||||||
+285|1_introduction|1. Introduction|||||||||||||||||||||
+286|welcome_to_japam_we_our_or_us_a_digital_mantra_practice_platform|Welcome to Japam (""we"", ""our"", or ""us""), a digital mantra practice platform...|||||||||||||||||||||
+287|2_information_we_collect|2. Information We Collect|||||||||||||||||||||
+288|3_how_we_use_your_information|3. How We Use Your Information|||||||||||||||||||||
+289|4_information_sharing|4. Information Sharing|||||||||||||||||||||
+290|5_data_storage_security|5. Data Storage & Security|||||||||||||||||||||
+291|6_notifications|6. Notifications|||||||||||||||||||||
+292|7_childrens_privacy|7. Children's Privacy|||||||||||||||||||||
+293|8_your_rights|8. Your Rights|||||||||||||||||||||
+294|9_cookies_local_storage|9. Cookies & Local Storage|||||||||||||||||||||
+295|10_third_party_links|10. Third-Party Links|||||||||||||||||||||
+296|11_changes_to_this_policy|11. Changes to This Policy|||||||||||||||||||||
+297|12_contact_us|12. Contact Us|||||||||||||||||||||
+298|developer|Developer:|||||||||||||||||||||
+299|website|Website:|||||||||||||||||||||
+300|whatsapp|WhatsApp:|||||||||||||||||||||
+301|app|App:|||||||||||||||||||||
+302|address|Address:|||||||||||||||||||||
+303|phone|Phone:|||||||||||||||||||||
+304|public_contact_details|Public Contact Details|||||||||||||||||||||
+305|contact_us_for_support_feedback_or_any_queries_regarding_japam|Contact us for support, feedback, or any queries regarding Japam.|||||||||||||||||||||
+306|for_support_refund_requests_or_policy_questions_please_use_the_contact_details_above_we_aim_to_respond_within_23_business_days|For support, refund requests, or policy questions, please use the contact details above. We aim to respond within 2–3 business days.|||||||||||||||||||||
+307|refund_and_cancellation_policy|Refund and Cancellation Policy|||||||||||||||||||||
+308|1_digital_products|1. Digital Products|||||||||||||||||||||
+309|japam_is_a_digital_mantra_practice_platform_all_purchases_pro_unlock_dakshina_donations_are_for_digital_access_only|Japam is a digital mantra practice platform. All purchases (Pro unlock, Dakshina, donations) are for digital access only.|||||||||||||||||||||
+310|2_refund_policy|2. Refund Policy|||||||||||||||||||||
+311|3_cancellation|3. Cancellation|||||||||||||||||||||
+312|4_disputes|4. Disputes|||||||||||||||||||||
+313|5_contact_us|5. Contact Us|||||||||||||||||||||
+314|shipping_and_delivery_policy|Shipping and Delivery Policy|||||||||||||||||||||
+315|1_digital_service_only|1. Digital Service Only|||||||||||||||||||||
+316|2_instant_delivery|2. Instant Delivery|||||||||||||||||||||
+317|3_access_method|3. Access Method|||||||||||||||||||||
+318|4_no_physical_address_required|4. No Physical Address Required|||||||||||||||||||||
+319|access_is_tied_to_your_account_google_sign_in_once_payment_is_verified|Access is tied to your account (Google sign-in). Once payment is verified...|||||||||||||||||||||
+320|select_language|Select language|||||||||||||||||||||
+321|sign_in_with_google_aria_label|Sign in with Google (aria-label)|||||||||||||||||||||
+322|share_japam_on_whatsapp_aria_label|Share Japam on WhatsApp (aria-label)|||||||||||||||||||||
+323|back_to_home_aria_label|Back to home (aria-label)|||||||||||||||||||||
+324|play_general_japa_mode_aria_label|Play General Japa mode (aria-label)|||||||||||||||||||||
+325|veda_bhoomi|Veda Bhoomi|||||||||||||||||||||
+326|upanishad_vanam|Upanishad Vanam|||||||||||||||||||||
+327|gita_kshetra|Gita Kshetra|||||||||||||||||||||
+328|ramayana_path|Ramayana Path|||||||||||||||||||||
+329|mahabharata_dham|Mahabharata Dham|||||||||||||||||||||
+330|purana_lok|Purana Lok|||||||||||||||||||||
+331|dharma_sindhu|Dharma Sindhu|||||||||||||||||||||
+332|rishi_ashram|Rishi Ashram|||||||||||||||||||||
+333|vedanga_grama|Vedanga Grama|||||||||||||||||||||
+334|darshana_dham|Darshana Dham|||||||||||||||||||||
+335|try_japam_a_beautiful_app_to_chant_your_favourite_gods_name_and_track_your_japas_play_here_httpswwwjapamdigital_join_the_community_complete_marathons_and_grow_your_spiritual_practice_daily|Try Japam – a beautiful app to chant your favourite God's name and track your japas! Play here: https://www.japam.digital Join the community, complete marathons, and grow your spiritual practice daily. 🕉️|||||||||||||||||||||

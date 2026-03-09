@@ -122,13 +122,6 @@ export async function POST(request) {
             await userRef.update({
               userJapas: admin.firestore.FieldValue.increment(add),
             });
-          } else {
-            await userRef.set({
-              yagnaId,
-              userId: uid,
-              userJapas: add,
-              joinedAt: admin.firestore.FieldValue.serverTimestamp(),
-            });
           }
         }
       }

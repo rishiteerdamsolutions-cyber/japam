@@ -118,9 +118,10 @@ export function OpeningVideoModal({ onClose, videoSrc, videoSrcs }: OpeningVideo
           <button
             type="button"
             onClick={onClose}
-            className="absolute top-3 right-3 px-4 py-2 rounded-xl bg-black/70 text-amber-200 text-sm font-semibold hover:bg-amber-500/30 hover:text-white transition-all"
+            className="absolute top-3 right-3 w-10 h-10 flex items-center justify-center rounded-full bg-black/70 text-amber-200 text-2xl leading-none hover:bg-amber-500/30 hover:text-white transition-all"
+            aria-label="Close"
           >
-            {t('videoModal.skip')}
+            ×
           </button>
         </motion.div>
       </div>

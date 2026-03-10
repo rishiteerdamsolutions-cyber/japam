@@ -163,6 +163,17 @@ export function GamePage() {
     initGame(nextMode, idx);
   };
 
+  const onJustRestoredCleared = useCallback(() => setJustRestored(false), []);
+  const onBack = useCallback(() => {
+    if (isMarathon) {
+      navigate(yagnaId ? '/maha-yagnas' : '/marathons');
+    } else if (isGuest) {
+      navigate('/');
+    } else {
+      navigate('/levels');
+    }
+  }, [navigate, isMarathon, yagnaId, isGuest]);
+
   if (resumePending) {
     return (
       <div className="fixed inset-0 bg-black/80 flex flex-col items-center justify-center z-30 p-4">
@@ -213,17 +224,6 @@ export function GamePage() {
       </div>
     );
   }
-
-  const onJustRestoredCleared = useCallback(() => setJustRestored(false), []);
-  const onBack = useCallback(() => {
-    if (isMarathon) {
-      navigate(yagnaId ? '/maha-yagnas' : '/marathons');
-    } else if (isGuest) {
-      navigate('/');
-    } else {
-      navigate('/levels');
-    }
-  }, [navigate, isMarathon, yagnaId, isGuest]);
 
   return (
     <GameScreen

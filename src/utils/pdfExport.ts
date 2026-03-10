@@ -43,28 +43,47 @@ async function colorizeImageToBlue(dataUrl: string): Promise<string> {
 }
 
 /**
- * Adds tiled handwritten images to the PDF.
- * Cell size matches the text-based layout: fontSize 5pt, lineHeight 8pt.
+ * Get image dimensions from data URL.
  */
-function addHandwrittenJapasToPdf(
+function getImageDimensions(dataUrl: string): Promise<{ w: number; h: number }> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve({ w: img.naturalWidth, h: img.naturalHeight });
+    img.onerror = () => reject(new Error('Failed to load image'));
+    img.src = dataUrl;
+  });
+}
+
+/**
+ * Adds tiled handwritten images to the PDF.
+ * Cell size scales with mantra length; image preserves aspect ratio and fits in cell.
+ */
+async function addHandwrittenJapasToPdf(
   doc: jsPDF,
   imageDataUrl: string,
   count: number,
+  mantra: string,
   startY: number,
   margin: number,
   lineHeight: number,
   fontSize: number
-): void {
+): Promise<void> {
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
   const usableWidth = pageWidth - margin * 2;
 
-  // Match text-based layout: each handwritten nama same size as mantra text
-  const cellHeight = lineHeight; // 8pt - same as text line height
-  const cellWidth = fontSize * 12; // ~60pt - approx width of a mantra at 5pt
+  // Cell size scales with mantra length: short mantras need less width, long need more
+  const charCount = mantra.length;
+  const baseWidth = fontSize * 6;
+  const perChar = fontSize * 1.5;
+  const cellWidth = Math.min(usableWidth * 0.4, Math.max(baseWidth, charCount * perChar));
+  const cellHeight = Math.max(lineHeight * 1.5, cellWidth * 0.25); // proportional height
   const cellPadding = 2;
   const cols = Math.max(1, Math.floor((usableWidth + cellPadding) / (cellWidth + cellPadding)));
   const rowHeight = cellHeight + cellPadding;
+
+  const { w: imgW, h: imgH } = await getImageDimensions(imageDataUrl);
+  const imgAspect = imgW / imgH;
 
   let y = startY;
   let x = margin;
@@ -77,13 +96,23 @@ function addHandwrittenJapasToPdf(
       x = margin;
       col = 0;
     }
+    // Fit image in cell preserving aspect ratio
+    let drawW = cellWidth;
+    let drawH = cellHeight;
+    if (imgAspect > cellWidth / cellHeight) {
+      drawH = cellWidth / imgAspect;
+    } else {
+      drawW = cellHeight * imgAspect;
+    }
+    const offsetX = (cellWidth - drawW) / 2;
+    const offsetY = (cellHeight - drawH) / 2;
     doc.addImage(
       imageDataUrl,
       'PNG',
-      x,
-      y,
-      cellWidth,
-      cellHeight,
+      x + offsetX,
+      y + offsetY,
+      drawW,
+      drawH,
       undefined,
       'FAST'
     );
@@ -148,7 +177,7 @@ export async function downloadMantraPdf(
 
   if (handwritingImageDataUrl) {
     const blueImageDataUrl = await colorizeImageToBlue(handwritingImageDataUrl);
-    addHandwrittenJapasToPdf(doc, blueImageDataUrl, count, y, margin, lineHeight, fontSize);
+    await addHandwrittenJapasToPdf(doc, blueImageDataUrl, count, mantra, y, margin, lineHeight, fontSize);
   } else {
     // Default: text-based japas
     const mantraRepeated = Array(count).fill(mantra).join(' ');

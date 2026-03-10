@@ -3,10 +3,10 @@ import { useJapaStore } from '../../store/japaStore';
 import { DEITIES } from '../../data/deities';
 import { DAILY_GOAL_JAPAS } from '../../data/levels';
 import { downloadMantraPdf, type PdfDetails } from '../../utils/pdfExport';
+import { removeBackgroundFromImage } from '../../utils/removeBackground';
 import { DonateThankYouBox } from '../donation/DonateThankYouBox';
 import { AppHeader } from '../layout/AppHeader';
 
-const REMOVE_BG_URL = 'https://www.remove.bg';
 /** Single sample image used across all deities and site-wide */
 const HANDWRITING_SAMPLE_SRC = '/SAMPLE%20NAMA%20IMAGE.png';
 
@@ -27,6 +27,7 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
   const [handwritingDataUrl, setHandwritingDataUrl] = useState<string | null>(null);
   const [downloadLoading, setDownloadLoading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [processingImage, setProcessingImage] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const total = counts.total;
@@ -47,7 +48,7 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
     setHandwritingDataUrl(null);
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setUploadError(null);
     setHandwritingDataUrl(null);
     const file = e.target.files?.[0];
@@ -56,13 +57,26 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
       setUploadError('Please upload an image file (PNG, JPG, etc.)');
       return;
     }
-    const reader = new FileReader();
-    reader.onload = () => {
-      const result = reader.result;
-      if (typeof result === 'string') setHandwritingDataUrl(result);
-    };
-    reader.onerror = () => setUploadError('Could not read file');
-    reader.readAsDataURL(file);
+    setProcessingImage(true);
+    try {
+      const dataUrl = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = reader.result;
+          if (typeof result === 'string') resolve(result);
+          else reject(new Error('Could not read file'));
+        };
+        reader.onerror = () => reject(new Error('Could not read file'));
+        reader.readAsDataURL(file);
+      });
+      const cleaned = await removeBackgroundFromImage(dataUrl);
+      setHandwritingDataUrl(cleaned);
+    } catch {
+      setUploadError('Could not process image. Use white paper only.');
+    } finally {
+      setProcessingImage(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
   };
 
   const handleDownloadSubmit = async () => {
@@ -140,14 +154,6 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
             <h2 className="text-xl font-bold text-amber-400 mb-4">Download PDF</h2>
 
             <div className="mb-4 p-3 rounded-lg bg-black/30 border border-amber-500/20">
-              <p className="text-amber-200/90 text-xs mb-2 font-medium">Use your own handwriting (optional)</p>
-              <p className="text-amber-200/70 text-[11px] mb-2 leading-relaxed">
-                Write your nama phrase on paper, take a photo. Go to{' '}
-                <a href={REMOVE_BG_URL} target="_blank" rel="noopener noreferrer" className="text-amber-400 underline">
-                  remove.bg
-                </a>
-                {' '}to remove the background, then upload the image here. It will appear in the PDF at the same size as the default text. We don&apos;t save your image—you may save it on your device for future downloads.
-              </p>
               <p className="text-amber-200/80 text-[11px] mb-2">Example of what to upload:</p>
               <div className="mb-2 flex justify-center">
                 <img
@@ -156,14 +162,19 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
                   className="max-h-14 object-contain border border-amber-500/20 rounded bg-white/5"
                 />
               </div>
+              <p className="text-amber-200/70 text-[11px] mb-2">
+                Write the nama in your own language and handwriting on white paper only. Upload so that only the nama is visible — no extra space.
+              </p>
               <input
                 ref={fileInputRef}
                 type="file"
                 accept="image/*"
                 onChange={handleFileChange}
-                className="block w-full text-amber-200/80 text-xs file:mr-2 file:py-1.5 file:px-3 file:rounded file:border-0 file:bg-amber-500/80 file:text-white file:text-xs"
+                disabled={processingImage}
+                className="block w-full text-amber-200/80 text-xs file:mr-2 file:py-1.5 file:px-3 file:rounded file:border-0 file:bg-amber-500/80 file:text-white file:text-xs disabled:opacity-60"
               />
-              {handwritingDataUrl && (
+              {processingImage && <p className="text-amber-400 text-xs mt-2">Processing…</p>}
+              {handwritingDataUrl && !processingImage && (
                 <p className="text-emerald-400 text-xs mt-2">Image ready</p>
               )}
               {uploadError && (

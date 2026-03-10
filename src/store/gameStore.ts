@@ -320,7 +320,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     }
     // Only count japa for user's direct manual match (1 japa per match), NOT cascading matches
     const isMultiMatch = pendingMatchBatch.length > 1 || deityMatches.size > 1;
-    const useIntendedOnly = isUserDirectMatch && isMultiMatch && intendedDeity && deityMatches.has(intendedDeity);
+    const useIntendedOnly = gameMode === 'general' && isUserDirectMatch && isMultiMatch && intendedDeity && deityMatches.has(intendedDeity);
 
     let japaDelta = 0;
     if (isUserDirectMatch) {

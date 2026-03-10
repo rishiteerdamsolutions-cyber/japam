@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useGameStore } from '../../store/gameStore';
 import { LEVELS } from '../../data/levels';
+import type { DeityId } from '../../data/deities';
 
 export function HUD() {
   const { t } = useTranslation();
@@ -12,8 +13,8 @@ export function HUD() {
   const marathonTargetJapas = useGameStore((s) => s.marathonTargetJapas);
   const overrideJapaTarget = useGameStore((s) => s.overrideJapaTarget);
   const level = LEVELS[levelIndex];
-  const deityTarget = mode !== 'general' ? (mode as string) : undefined;
-  const japasNeeded = deityTarget ? (japasByDeity?.[deityTarget] ?? 0) : japasThisLevel;
+  const deityTarget: DeityId | undefined = mode !== 'general' ? (mode as DeityId) : undefined;
+  const japasNeeded = deityTarget ? (japasByDeity[deityTarget] ?? 0) : japasThisLevel;
   const japaTarget = overrideJapaTarget ?? marathonTargetJapas ?? level?.japaTarget ?? 15;
 
   return (

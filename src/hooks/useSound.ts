@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react';
-import { getDeity } from '../data/deities';
+import { DEITY_IDS, getDeity } from '../data/deities';
 import type { DeityId } from '../data/deities';
 
 let audioContext: AudioContext | null = null;
@@ -19,7 +19,22 @@ const DEITY_FREQUENCIES: Record<DeityId, number> = {
   shakthi: 587,
   krishna: 659,
   shanmukha: 698,
-  venkateswara: 784
+  venkateswara: 784,
+  hanuman: 415,
+  narasimha: 466,
+  lakshmi: 494,
+  durga: 523,
+  saraswati: 554,
+  ayyappan: 587,
+  jagannath: 622,
+  dattatreya: 659,
+  saiBaba: 698,
+  narayana: 740,
+  iskcon: 784,
+  guru: 830,
+  shani: 440,
+  rahu: 466,
+  ketu: 494,
 };
 
 function playDeityTone(ctx: AudioContext, deity: DeityId) {
@@ -54,7 +69,7 @@ async function preloadMantras() {
     // decodeAudioData + playback are more reliable after resume
     await ctx.resume().catch(() => {});
   }
-  const deities: DeityId[] = ['rama', 'shiva', 'ganesh', 'surya', 'shakthi', 'krishna', 'shanmukha', 'venkateswara'];
+  const deities: DeityId[] = DEITY_IDS;
   for (const id of deities) {
     try {
       const d = getDeity(id);

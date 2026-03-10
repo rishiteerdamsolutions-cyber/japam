@@ -1,30 +1,15 @@
 import { create } from 'zustand';
-import type { DeityId } from '../data/deities';
+import { DEITY_IDS, type DeityId } from '../data/deities';
 import { loadUserJapa, saveUserJapa } from '../lib/firestore';
 import { useAuthStore } from './authStore';
 
-export interface JapaCounts {
-  rama: number;
-  shiva: number;
-  ganesh: number;
-  surya: number;
-  shakthi: number;
-  krishna: number;
-  shanmukha: number;
-  venkateswara: number;
+export interface JapaCounts extends Record<DeityId, number> {
   total: number;
 }
 
 const initial: JapaCounts = {
-  rama: 0,
-  shiva: 0,
-  ganesh: 0,
-  surya: 0,
-  shakthi: 0,
-  krishna: 0,
-  shanmukha: 0,
-  venkateswara: 0,
-  total: 0
+  ...DEITY_IDS.reduce((acc, id) => ({ ...acc, [id]: 0 }), {} as Record<DeityId, number>),
+  total: 0,
 };
 
 interface JapaStore {
@@ -65,7 +50,7 @@ export const useJapaStore = create<JapaStore>((setState, getState) => ({
     const { counts } = getState();
     const next = {
       ...counts,
-      [deity]: counts[deity] + count,
+      [deity]: (counts[deity] ?? 0) + count,
       total: counts.total + count
     };
     setState({ counts: next });

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import type { Board, Match, Position } from '../engine/types';
-import type { DeityId } from '../data/deities';
+import { DEITY_IDS, type DeityId } from '../data/deities';
 import type { GameMode } from '../types';
 import { createBoard, swapGems, removeMatches, fillGaps } from '../engine/board';
 import { findMatches, getAllMatchPositions, getMatchBonusAudio, hasValidMoves } from '../engine/matcher';
@@ -74,9 +74,8 @@ interface GameActions {
   reset: () => void;
 }
 
-const emptyJapas = (): Record<DeityId, number> => ({
-  rama: 0, shiva: 0, ganesh: 0, surya: 0, shakthi: 0, krishna: 0, shanmukha: 0, venkateswara: 0
-});
+const emptyJapas = (): Record<DeityId, number> =>
+  DEITY_IDS.reduce((acc, id) => ({ ...acc, [id]: 0 }), {} as Record<DeityId, number>);
 
 export const useGameStore = create<GameState & GameActions>((set, get) => ({
   board: [],

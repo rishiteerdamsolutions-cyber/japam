@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { GameScreen } from '../components/game/GameScreen';
@@ -214,6 +214,17 @@ export function GamePage() {
     );
   }
 
+  const onJustRestoredCleared = useCallback(() => setJustRestored(false), []);
+  const onBack = useCallback(() => {
+    if (isMarathon) {
+      navigate(yagnaId ? '/maha-yagnas' : '/marathons');
+    } else if (isGuest) {
+      navigate('/');
+    } else {
+      navigate('/levels');
+    }
+  }, [navigate, isMarathon, yagnaId, isGuest]);
+
   return (
     <GameScreen
       mode={mode}
@@ -224,8 +235,8 @@ export function GamePage() {
       yagnaId={yagnaId}
       isGuest={isGuest}
       justRestored={justRestored}
-      onJustRestoredCleared={() => setJustRestored(false)}
-      onBack={() => (isMarathon ? (yagnaId ? navigate('/maha-yagnas') : navigate('/marathons')) : isGuest ? navigate('/') : navigate('/levels'))}
+      onJustRestoredCleared={onJustRestoredCleared}
+      onBack={onBack}
       onNextLevel={isMarathon ? undefined : (m, idx) => handleNextLevel(m as GameMode, idx)}
     />
   );

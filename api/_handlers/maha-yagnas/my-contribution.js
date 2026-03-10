@@ -28,14 +28,12 @@ export async function GET(request) {
 
       const totalJapas = typeof yData.currentJapas === 'number' ? yData.currentJapas : 0;
       const userShare = totalJapas > 0 ? (100 * userJapas) / totalJapas : 0;
-      const effectiveContribution = userJapas / 5;
 
       contributions.push({
         yagnaId,
         userJapas,
         totalJapas,
         userSharePercentage: Math.round(userShare * 100) / 100,
-        effectiveContribution: Math.round(effectiveContribution * 100) / 100,
       });
     }
 

@@ -122,6 +122,13 @@ export async function POST(request) {
             await userRef.update({
               userJapas: admin.firestore.FieldValue.increment(add),
             });
+            // Keep yagna global counter updated in real time (so % updates immediately).
+            // Status completion is still handled by daily cron for simplicity.
+            try {
+              await db.doc(`mahaJapaYagnas/${yagnaId}`).update({
+                currentJapas: admin.firestore.FieldValue.increment(add),
+              });
+            } catch {}
           }
         }
       }

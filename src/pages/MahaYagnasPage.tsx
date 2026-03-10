@@ -33,7 +33,6 @@ interface Contribution {
   userJapas: number;
   totalJapas: number;
   userSharePercentage: number;
-  effectiveContribution: number;
 }
 
 function formatNum(n: number): string {
@@ -279,7 +278,13 @@ export function MahaYagnasPage() {
                       <div className="min-w-0 flex-1">
                         <p className="text-amber-200 font-medium truncate">{y.name} • {deityName(y.deityId)}</p>
                         <p className="text-amber-200/60 text-xs">
-                          {t('mahaYagnas.goal')}: {formatNum(y.goalJapas)} • {t('mahaYagnas.yourJapas')}: {formatNum(contrib.userJapas)}
+                          {t('mahaYagnas.yourJapas')}: {formatNum(contrib.userJapas)} / {formatNum(y.goalJapas)} (
+                          {(y.goalJapas > 0 ? (100 * contrib.userJapas) / y.goalJapas : 0).toFixed(2)}%)
+                          {' '}•{' '}
+                          {t('mahaYagnas.totalYagnaJapas')}: {formatNum(contrib.totalJapas)} / {formatNum(y.goalJapas)} (
+                          {(y.goalJapas > 0 ? (100 * contrib.totalJapas) / y.goalJapas : 0).toFixed(2)}%)
+                          {' '}•{' '}
+                          {t('mahaYagnas.yourShare')}: {(contrib.totalJapas > 0 ? (100 * contrib.userJapas) / contrib.totalJapas : 0).toFixed(2)}%
                         </p>
                       </div>
                       <div className="flex flex-col items-end gap-1 shrink-0">
@@ -468,19 +473,30 @@ export function MahaYagnasPage() {
                     <div className="mt-4 pt-3 border-t border-amber-500/10 grid grid-cols-2 gap-2 text-sm">
                       <div className="min-w-0">
                         <p className="text-amber-200/60 break-words">{t('mahaYagnas.yourJapas')}</p>
-                        <p className="text-amber-200 font-medium">{formatNum(contrib.userJapas)}</p>
+                        <p className="text-amber-200 font-medium">
+                          {formatNum(contrib.userJapas)} / {formatNum(y.goalJapas)}
+                        </p>
+                        <p className="text-amber-200/60 text-xs">
+                          {(y.goalJapas > 0 ? (100 * contrib.userJapas) / y.goalJapas : 0).toFixed(2)}% of target
+                        </p>
                       </div>
                       <div className="min-w-0">
                         <p className="text-amber-200/60 break-words">{t('mahaYagnas.totalYagnaJapas')}</p>
-                        <p className="text-amber-200 font-medium">{formatNum(contrib.totalJapas)}</p>
+                        <p className="text-amber-200 font-medium">
+                          {formatNum(contrib.totalJapas)} / {formatNum(y.goalJapas)}
+                        </p>
+                        <p className="text-amber-200/60 text-xs">
+                          {(y.goalJapas > 0 ? (100 * contrib.totalJapas) / y.goalJapas : 0).toFixed(2)}% complete
+                        </p>
                       </div>
                       <div className="min-w-0">
                         <p className="text-amber-200/60 break-words">{t('mahaYagnas.yourShare')}</p>
-                        <p className="text-amber-200 font-medium">{contrib.userSharePercentage.toFixed(2)}%</p>
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-amber-200/60 break-words">{t('mahaYagnas.effectiveContribution')}</p>
-                        <p className="text-amber-200 font-medium">{contrib.effectiveContribution.toFixed(0)}</p>
+                        <p className="text-amber-200 font-medium">
+                          {(contrib.totalJapas > 0 ? (100 * contrib.userJapas) / contrib.totalJapas : 0).toFixed(2)}%
+                        </p>
+                        <p className="text-amber-200/60 text-xs">
+                          of all japas done so far
+                        </p>
                       </div>
                     </div>
                   </>

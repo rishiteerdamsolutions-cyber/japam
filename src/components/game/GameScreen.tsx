@@ -108,7 +108,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
     }
   }, [status, user?.uid, getPausedKey]);
 
-  const handlePause = useCallback(async () => {
+  const saveAndExit = useCallback(async () => {
     const payload = savePausedState();
     if (payload) {
       if (user?.uid) {
@@ -117,7 +117,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
         const ok = await saveUserPausedGame(user.uid, payload as unknown as Record<string, unknown>, user);
         setPauseSaving(false);
         if (!ok) {
-          setPauseError('Could not save pause. Check internet and try again.');
+          setPauseError('Could not save. Check internet and try again.');
           return;
         }
       } else {
@@ -126,8 +126,19 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
         } catch {}
       }
       onBack();
+    } else {
+      onBack();
     }
   }, [savePausedState, user?.uid, user, onBack]);
+
+  // Both Back and Pause save then exit — retain japa count and allow resume.
+  const handleBack = useCallback(() => {
+    saveAndExit();
+  }, [saveAndExit]);
+
+  const handlePause = useCallback(() => {
+    saveAndExit();
+  }, [saveAndExit]);
 
   useEffect(() => {
     if (lastMatches.length === 0 || matchGeneration === prevGenerationRef.current) return;
@@ -212,7 +223,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
       <div className="w-full max-w-md flex items-center justify-between shrink-0 mb-1 min-w-0 gap-2">
         <div className="flex items-center gap-2">
           <button
-            onClick={onBack}
+            onClick={handleBack}
             className="text-amber-400 text-sm py-1 px-2"
           >
             {t('game.back')}

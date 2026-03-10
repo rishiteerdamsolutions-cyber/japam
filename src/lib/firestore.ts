@@ -273,12 +273,12 @@ export async function saveUserPausedGame(_uid: string, pausedGame: Record<string
   return false;
 }
 
-/** Save japa. Logged-in: backend API only. */
+/** Save japa. Logged-in: backend API only. Uses token retry so japas save reliably (e.g. Maha Japa Yagna). */
 export async function saveUserJapa(_uid: string, counts: JapaCounts): Promise<void> {
-  const token = await getFirebaseIdToken();
+  const token = await getIdTokenWithRetry(null);
   if (!token) return;
   const url = apiUrl('/api/user/japa');
-  for (let attempt = 0; attempt < 2; attempt++) {
+  for (let attempt = 0; attempt < 3; attempt++) {
     try {
       const res = await fetch(url, {
         method: 'POST',
@@ -287,8 +287,8 @@ export async function saveUserJapa(_uid: string, counts: JapaCounts): Promise<vo
       });
       if (res.ok) return;
     } catch {
-      if (attempt === 1) return;
-      await new Promise((r) => setTimeout(r, 500));
+      if (attempt === 2) return;
+      await new Promise((r) => setTimeout(r, 300));
     }
   }
 }

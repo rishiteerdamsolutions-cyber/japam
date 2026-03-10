@@ -4,10 +4,16 @@ import { LEVELS } from '../../data/levels';
 
 export function HUD() {
   const { t } = useTranslation();
-  const { moves, japasThisLevel, japasByDeity, mode, levelIndex, marathonTargetJapas, overrideJapaTarget } = useGameStore();
+  const moves = useGameStore((s) => s.moves);
+  const mode = useGameStore((s) => s.mode);
+  const levelIndex = useGameStore((s) => s.levelIndex);
+  const japasThisLevel = useGameStore((s) => s.japasThisLevel);
+  const japasByDeity = useGameStore((s) => s.japasByDeity);
+  const marathonTargetJapas = useGameStore((s) => s.marathonTargetJapas);
+  const overrideJapaTarget = useGameStore((s) => s.overrideJapaTarget);
   const level = LEVELS[levelIndex];
-  const deityTarget = mode !== 'general' ? mode : undefined;
-  const japasNeeded = deityTarget ? (japasByDeity[deityTarget] ?? 0) : japasThisLevel;
+  const deityTarget = mode !== 'general' ? (mode as string) : undefined;
+  const japasNeeded = deityTarget ? (japasByDeity?.[deityTarget] ?? 0) : japasThisLevel;
   const japaTarget = overrideJapaTarget ?? marathonTargetJapas ?? level?.japaTarget ?? 15;
 
   return (

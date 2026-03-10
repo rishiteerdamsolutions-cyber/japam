@@ -26,7 +26,13 @@ export async function GET(request) {
       const endDate = yData.endDate || '';
       if (endDate < today) continue;
 
-      const totalJapas = typeof yData.currentJapas === 'number' ? yData.currentJapas : 0;
+      // Sum all participants' japas so total is consistent with user contributions.
+      // (yData.currentJapas can lag if cron hasn't run or there was a sync gap.)
+      const allUsersSnap = await db.collection('mahaJapaYagnaUsers').where('yagnaId', '==', yagnaId).get();
+      let totalJapas = 0;
+      for (const d of allUsersSnap.docs) {
+        totalJapas += typeof d.data().userJapas === 'number' ? d.data().userJapas : 0;
+      }
       const userShare = totalJapas > 0 ? (100 * userJapas) / totalJapas : 0;
 
       contributions.push({

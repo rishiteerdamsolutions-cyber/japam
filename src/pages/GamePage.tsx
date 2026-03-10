@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { GameScreen } from '../components/game/GameScreen';
 import { Paywall } from '../components/payment/Paywall';
 import { useGameStore, type PausedGameState } from '../store/gameStore';
-import { loadUserPausedGame, saveUserPausedGame } from '../lib/firestore';
+import { loadUserPausedGame, saveUserPausedGame, resetMahaYagnaContribution } from '../lib/firestore';
 import { useUnlockStore } from '../store/unlockStore';
 import { useAuthStore } from '../store/authStore';
 import { useLevelsConfigStore } from '../store/levelsConfigStore';
@@ -141,6 +141,7 @@ export function GamePage() {
   const handleStartFresh = async () => {
     if (resumeKey) {
       if (user?.uid) {
+        if (yagnaId) await resetMahaYagnaContribution(yagnaId, user);
         await saveUserPausedGame(user.uid, null, user, resumeKey);
       } else {
         try {

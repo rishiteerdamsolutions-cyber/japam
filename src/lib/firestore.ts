@@ -273,6 +273,23 @@ export async function saveUserPausedGame(_uid: string, pausedGame: Record<string
   return false;
 }
 
+/** Reset user's japa count for a Maha Japa Yagna to 0 (Start fresh). */
+export async function resetMahaYagnaContribution(yagnaId: string, user?: User | null): Promise<boolean> {
+  const token = await getIdTokenWithRetry(user);
+  if (!token) return false;
+  const url = apiUrl('/api/maha-yagnas/reset-contribution');
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ yagnaId }),
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
 /** Save japa. Logged-in: backend API only. Uses token retry so japas save reliably (e.g. Maha Japa Yagna). */
 export async function saveUserJapa(_uid: string, counts: JapaCounts): Promise<void> {
   const token = await getIdTokenWithRetry(null);

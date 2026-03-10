@@ -47,7 +47,9 @@ export function AdminPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#1a1a2e] p-6 flex flex-col items-center justify-center">
+    <div className="relative min-h-screen bg-cover bg-center p-6 flex flex-col items-center justify-center" style={{ backgroundImage: 'url(/images/adminpagebg.png)' }}>
+      <div className="absolute inset-0 bg-black/60" aria-hidden />
+      <div className="relative z-10 flex flex-col items-center justify-center w-full">
       <h1 className="text-2xl font-bold text-amber-400 mb-6">Admin login</h1>
       <form onSubmit={handleLogin} className="w-full max-w-xs space-y-4">
         <div>
@@ -88,6 +90,7 @@ export function AdminPage() {
       >
         ← Back to Japam
       </button>
+      </div>
     </div>
   );
 }

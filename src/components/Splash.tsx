@@ -1,18 +1,22 @@
 import { motion } from 'framer-motion';
 import { JapamLogo } from './ui/JapamLogo';
 
+const BG_IMAGE = '/images/splashbg.png';
+
 interface SplashProps {
   onComplete: () => void;
 }
 
 export function Splash({ onComplete }: SplashProps) {
   return (
-    <motion.div
-      initial={{ opacity: 1 }}
-      animate={{ opacity: 1 }}
-      className="min-h-screen bg-gradient-to-b from-[#1a1a2e] to-[#16213e] flex flex-col items-center justify-center"
-      onAnimationComplete={() => setTimeout(onComplete, 800)}
-    >
+    <div className="relative min-h-screen bg-cover bg-center flex flex-col items-center justify-center" style={{ backgroundImage: `url(${BG_IMAGE})` }}>
+      <div className="absolute inset-0 bg-black/60" aria-hidden />
+      <motion.div
+        initial={{ opacity: 1 }}
+        animate={{ opacity: 1 }}
+        className="relative z-10 flex flex-col items-center justify-center min-h-screen w-full"
+        onAnimationComplete={() => setTimeout(onComplete, 800)}
+      >
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -38,6 +42,7 @@ export function Splash({ onComplete }: SplashProps) {
       >
         Match & Chant
       </motion.p>
-    </motion.div>
+      </motion.div>
+    </div>
   );
 }

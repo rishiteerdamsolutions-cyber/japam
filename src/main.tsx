@@ -39,13 +39,14 @@ const TermsPage = lazy(() => import('./pages/TermsPage').then(m => ({ default: m
 const RefundCancellationPage = lazy(() => import('./pages/RefundCancellationPage').then(m => ({ default: m.RefundCancellationPage })))
 const ShippingDeliveryPage = lazy(() => import('./pages/ShippingDeliveryPage').then(m => ({ default: m.ShippingDeliveryPage })))
 const ContactPage = lazy(() => import('./pages/ContactPage').then(m => ({ default: m.ContactPage })))
-const ApiDocsPage = lazy(() => import('./pages/ApiDocsPage').then(m => ({ default: m.ApiDocsPage })))
-
 function PageFallback() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#1a1a2e] gap-3">
+    <div className="relative min-h-screen flex flex-col items-center justify-center gap-3 bg-cover bg-center" style={{ backgroundImage: 'url(/images/pagefallbackbg.png)' }}>
+      <div className="absolute inset-0 bg-black/60" aria-hidden />
+      <div className="relative z-10 flex flex-col items-center gap-3">
       <div className="w-10 h-10 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" aria-hidden />
       <p className="text-amber-400 text-sm">Loading…</p>
+      </div>
     </div>
   )
 }
@@ -88,7 +89,6 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/refund-cancellation" element={<RefundCancellationPage />} />
         <Route path="/shipping-delivery" element={<ShippingDeliveryPage />} />
         <Route path="/contact" element={<ContactPage />} />
-        <Route path="/api-docs" element={<ApiDocsPage />} />
       </Routes>
       </Suspense>
       <WhatsAppFab />

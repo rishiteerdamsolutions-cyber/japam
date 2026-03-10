@@ -16,13 +16,16 @@ export function SignInRequired({ onBack, message = 'Sign in with Google to play'
   if (!isFirebaseConfigured) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#1a1a2e] to-[#16213e] p-4 pb-[env(safe-area-inset-bottom)] flex flex-col items-center justify-center">
-      <button onClick={onBack} className="absolute top-4 left-4 text-amber-400 text-sm">
+    <div className="relative min-h-screen bg-cover bg-center p-4 pb-[env(safe-area-inset-bottom)] flex flex-col items-center justify-center" style={{ backgroundImage: 'url(/images/signinpagebg.png)' }}>
+      <div className="absolute inset-0 bg-black/60" aria-hidden />
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen w-full">
+      <button onClick={onBack} className="absolute top-4 left-4 text-amber-400 text-sm z-20">
         ← Back
       </button>
       <p className="text-amber-200 text-center mb-6">{message}</p>
       <GoogleSignIn />
       <AppFooter />
+      </div>
     </div>
   );
 }

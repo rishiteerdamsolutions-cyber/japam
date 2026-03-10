@@ -102,7 +102,9 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#1a1a2e] to-[#16213e] p-4 pb-[env(safe-area-inset-bottom)] max-w-lg mx-auto">
+    <div className="relative min-h-screen bg-cover bg-center p-4 pb-[env(safe-area-inset-bottom)] max-w-lg mx-auto" style={{ backgroundImage: 'url(/images/japadashboardbg.png)' }}>
+      <div className="absolute inset-0 bg-black/60" aria-hidden />
+      <div className="relative z-10">
       <AppHeader title="Japa Dashboard" showBack onBack={onBack} />
 
       <p className="text-amber-200/80 text-sm mb-4">
@@ -236,6 +238,7 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }

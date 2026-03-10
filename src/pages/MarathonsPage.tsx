@@ -234,7 +234,9 @@ export function MarathonsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#1a1a2e] to-[#16213e] p-4 pb-[env(safe-area-inset-bottom)] max-w-lg mx-auto">
+    <div className="relative min-h-screen bg-cover bg-center p-4 pb-[env(safe-area-inset-bottom)] max-w-lg mx-auto" style={{ backgroundImage: 'url(/images/marathonspagebg.png)' }}>
+      <div className="absolute inset-0 bg-black/60" aria-hidden />
+      <div className="relative z-10">
       {shareResult && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 p-4">
           <div className="bg-[#1a1a2e] rounded-2xl border border-amber-500/30 p-6 max-w-sm w-full shadow-xl">
@@ -510,6 +512,7 @@ export function MarathonsPage() {
         </div>
       )}
       <AppFooter />
+      </div>
     </div>
   );
 }

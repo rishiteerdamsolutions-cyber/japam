@@ -36,7 +36,9 @@ export function WorldMap({ mode: initialMode, onSelectLevel, onBack }: WorldMapP
   const episodesToShow = EPISODES.filter(ep => ep.id <= maxEpisodeId);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#1a1a2e] to-[#16213e] p-4 pb-[env(safe-area-inset-bottom)] max-w-lg mx-auto">
+    <div className="relative min-h-screen bg-cover bg-center p-4 pb-[env(safe-area-inset-bottom)] max-w-lg mx-auto" style={{ backgroundImage: 'url(/images/levelspagebg.png)' }}>
+      <div className="absolute inset-0 bg-black/60" aria-hidden />
+      <div className="relative z-10">
       <AppHeader title={levelsTitle} showBack onBack={onBack} />
 
       <div className="flex flex-wrap gap-1 mb-4 min-w-0">
@@ -100,6 +102,7 @@ export function WorldMap({ mode: initialMode, onSelectLevel, onBack }: WorldMapP
         ))}
       </div>
       <AppFooter />
+      </div>
     </div>
   );
 }

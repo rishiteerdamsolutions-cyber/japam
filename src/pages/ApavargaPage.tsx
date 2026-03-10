@@ -40,8 +40,10 @@ export function ApavargaPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#1a1a2e] via-[#16213e] to-[#0f0c29] pb-12">
-      <div className="max-w-lg mx-auto px-4">
+    <div className="relative min-h-screen bg-cover bg-center pb-12" style={{ backgroundImage: 'url(/images/apavargapagebg.png)' }}>
+      <div className="absolute inset-0 bg-black/60" aria-hidden />
+      <div className="relative z-10 flex flex-col min-h-screen">
+        <div className="max-w-lg mx-auto px-4 flex-1">
         <AppHeader title="Apavarga" showBack onBack={() => navigate('/settings')} />
 
         {/* Hero */}
@@ -122,8 +124,9 @@ export function ApavargaPage() {
             We will message you on WhatsApp when Apavarga is ready to join.
           </p>
         </motion.div>
+        </div>
+        <AppFooter />
       </div>
-      <AppFooter />
     </div>
   );
 }

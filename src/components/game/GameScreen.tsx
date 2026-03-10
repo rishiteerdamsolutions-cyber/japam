@@ -212,15 +212,15 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
   };
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-b from-[#1a1a2e] to-[#16213e] flex flex-col items-center overflow-hidden"
-      style={{
+    <div className="fixed inset-0 bg-cover bg-center flex flex-col items-center overflow-hidden" style={{ backgroundImage: 'url(/images/gameplaybg.png)' }}>
+      <div className="absolute inset-0 bg-black/60" aria-hidden />
+      <div className="relative z-10 flex flex-col items-center w-full flex-1 min-h-0" style={{
         paddingTop: 'calc(1rem + env(safe-area-inset-top, 0px))',
         paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom, 0px))',
         paddingLeft: 'calc(1rem + env(safe-area-inset-left, 0px))',
         paddingRight: 'calc(1rem + env(safe-area-inset-right, 0px))',
-      }}
-    >
-      <div className="w-full max-w-md flex items-center justify-between shrink-0 mb-1 min-w-0 gap-2">
+      }}>
+        <div className="w-full max-w-md flex items-center justify-between shrink-0 mb-1 min-w-0 gap-2">
         <div className="flex items-center gap-2">
           <button
             onClick={handleBack}
@@ -352,6 +352,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }

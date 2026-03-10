@@ -217,7 +217,9 @@ export function MahaYagnasPage() {
   const joinedYagnas = yagnas.filter((y) => contribByYagna.has(y.id));
 
   return (
-    <div className="min-h-screen bg-[#1a1a2e] flex flex-col">
+    <div className="relative min-h-screen bg-cover bg-center flex flex-col" style={{ backgroundImage: 'url(/images/mahayagnaspagebg.png)' }}>
+      <div className="absolute inset-0 bg-black/60" aria-hidden />
+      <div className="relative z-10 flex flex-col flex-1">
       {shareResult && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 p-4">
           <div className="bg-[#1a1a2e] rounded-2xl border border-amber-500/30 p-6 max-w-sm w-full shadow-xl">
@@ -507,6 +509,7 @@ export function MahaYagnasPage() {
         </div>
       </main>
       <AppFooter />
+      </div>
     </div>
   );
 }

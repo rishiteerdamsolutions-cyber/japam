@@ -28,7 +28,7 @@ export const Gem = memo(function Gem({ deity, selected, onClick, sparkle, matche
       `}
       style={{
         backgroundColor: d.color,
-        border: `3px solid ${d.color}`,
+        border: `1px solid ${d.color}`,
         boxShadow: matched
           ? `0 0 16px ${d.color}, 0 0 24px rgba(255,255,255,0.8), inset 0 0 8px rgba(255,255,255,0.5)`
           : selected
@@ -42,7 +42,8 @@ export const Gem = memo(function Gem({ deity, selected, onClick, sparkle, matche
         src={d.image}
         alt={d.name}
         draggable={false}
-        className="absolute inset-0 w-full h-full object-cover rounded-lg pointer-events-none"
+        className="absolute inset-0 w-full h-full object-cover object-center rounded-lg pointer-events-none"
+        style={{ transform: 'scale(1.25)' }}
       />
     </button>
   );

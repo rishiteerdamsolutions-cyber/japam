@@ -1,20 +1,16 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 
-const OPENING_VIDEO_1 = '/openingvideo1.mp4';
-const OPENING_VIDEO_2 = '/opening video2.mp4';
+const OPENING_VIDEO = '/openingvideo.mp4';
 
 interface OpeningVideoModalProps {
   onClose: () => void;
-  /** Optional: single source (legacy) or array for sequence. Default: [video1, video2]. */
+  /** Optional override. Default: openingvideo.mp4 */
   videoSrc?: string;
-  videoSrcs?: string[];
 }
 const TYPE_DELAY_MS = 120;
 const BG_IMAGE = '/images/videomodalbg.png';
-
-const DEFAULT_SOURCES = [OPENING_VIDEO_1, OPENING_VIDEO_2];
 
 /** Split by grapheme clusters so Indic scripts (Telugu, Devanagari, etc.) render correctly. split('') breaks combining chars → dotted circles. */
 function graphemeSplit(str: string): string[] {
@@ -22,7 +18,7 @@ function graphemeSplit(str: string): string[] {
   return [...new Intl.Segmenter('und', { granularity: 'grapheme' }).segment(str)].map((s) => s.segment);
 }
 
-export function OpeningVideoModal({ onClose, videoSrc, videoSrcs }: OpeningVideoModalProps) {
+export function OpeningVideoModal({ onClose, videoSrc }: OpeningVideoModalProps) {
   const { t } = useTranslation();
   const TITLE_LINE1 = t('videoModal.title1');
   const TITLE_LINE2 = t('videoModal.title2');
@@ -31,9 +27,8 @@ export function OpeningVideoModal({ onClose, videoSrc, videoSrcs }: OpeningVideo
   const sep = graphemeSplit(' - ');
   const totalGraphemes = graphemes1.length + sep.length + graphemes2.length;
   const [typedLength, setTypedLength] = useState(0);
-  const sources = videoSrcs?.length ? videoSrcs : videoSrc ? [videoSrc] : DEFAULT_SOURCES;
-  const [currentIndex, setCurrentIndex] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const src = videoSrc ?? OPENING_VIDEO;
 
   useEffect(() => {
     if (typedLength >= totalGraphemes) return;
@@ -41,19 +36,10 @@ export function OpeningVideoModal({ onClose, videoSrc, videoSrcs }: OpeningVideo
     return () => clearTimeout(id);
   }, [typedLength, totalGraphemes]);
 
-  const handleEnded = useCallback(() => {
-    const next = currentIndex + 1;
-    if (next < sources.length) {
-      setCurrentIndex(next);
-    } else {
-      onClose();
-    }
-  }, [currentIndex, sources, onClose]);
-
   useEffect(() => {
     const el = videoRef.current;
     if (el) el.play().catch(() => {});
-  }, [currentIndex]);
+  }, []);
 
   return (
     <div
@@ -103,17 +89,16 @@ export function OpeningVideoModal({ onClose, videoSrc, videoSrcs }: OpeningVideo
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.25 }}
-          className="relative w-full max-w-2xl aspect-video rounded-2xl overflow-hidden bg-black/90 shadow-2xl ring-2 ring-amber-400/60 ring-offset-2 ring-offset-transparent"
+          className="relative w-full max-w-[min(90vw,400px)] aspect-square rounded-2xl overflow-hidden bg-black/90 shadow-2xl ring-2 ring-amber-400/60 ring-offset-2 ring-offset-transparent"
         >
           <video
-            key={currentIndex}
             ref={videoRef}
-            src={sources[currentIndex]}
+            src={src}
             className="w-full h-full object-contain"
             muted
             autoPlay
             playsInline
-            onEnded={handleEnded}
+            onEnded={onClose}
           />
           <button
             type="button"

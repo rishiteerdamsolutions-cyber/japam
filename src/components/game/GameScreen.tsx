@@ -7,6 +7,7 @@ import { ActiveUsersStrip } from './ActiveUsersStrip';
 import { useGameStore } from '../../store/gameStore';
 import { useAuthStore } from '../../store/authStore';
 import { saveUserPausedGame } from '../../lib/firestore';
+import { setLastPausedGame } from '../../lib/pausedGame';
 import { useSound, stopAllMantras, stopMatchBonusAudio } from '../../hooks/useSound';
 import { useSettingsStore } from '../../store/settingsStore';
 import type { DeityId } from '../../data/deities';
@@ -129,6 +130,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
           localStorage.removeItem(key);
         } catch {}
       }
+      setLastPausedGame(null);
     }
   }, [status, user?.uid, getPausedKey]);
 
@@ -149,6 +151,13 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
           localStorage.setItem(payload.key, JSON.stringify(payload));
         } catch {}
       }
+      setLastPausedGame({
+        mode: payload.mode,
+        levelIndex: payload.levelIndex,
+        marathonId: payload.marathonId,
+        marathonTargetJapas: payload.marathonTargetJapas,
+        yagnaId: payload.yagnaId,
+      });
       onBack();
     } else {
       onBack();

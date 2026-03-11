@@ -153,6 +153,19 @@ export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
           </div>
         )}
 
+        <motion.button
+          type="button"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          initial={{ opacity: 0, y: 4 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+          onClick={() => onSelect('general')}
+          className="w-full mb-4 py-3 px-4 rounded-2xl bg-amber-500/20 border-2 border-amber-500/50 hover:border-amber-400/70 hover:bg-amber-500/30 transition-colors flex items-center justify-center gap-2"
+        >
+          <span className="text-amber-400 font-semibold text-sm">{t('menu.generalJapa')}</span>
+        </motion.button>
+
         <p className="text-amber-200/80 text-xs uppercase tracking-wider mb-2 mt-2">{t('menu.istaDevata')}</p>
         <div className="grid grid-cols-2 gap-3 w-full mb-6">
           {DEITIES.map((deity, i) => (

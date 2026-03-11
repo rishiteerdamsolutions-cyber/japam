@@ -5,6 +5,7 @@ import { GameScreen } from '../components/game/GameScreen';
 import { Paywall } from '../components/payment/Paywall';
 import { useGameStore, type PausedGameState } from '../store/gameStore';
 import { loadUserPausedGame, saveUserPausedGame, resetMahaYagnaContribution } from '../lib/firestore';
+import { setLastPausedGame } from '../lib/pausedGame';
 import { useUnlockStore } from '../store/unlockStore';
 import { useAuthStore } from '../store/authStore';
 import { useLevelsConfigStore } from '../store/levelsConfigStore';
@@ -148,6 +149,7 @@ export function GamePage() {
           localStorage.removeItem(resumeKey);
         } catch {}
       }
+      setLastPausedGame(null);
       setResumePending(null);
       setResumeKey(null);
     }

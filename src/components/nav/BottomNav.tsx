@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useProgressStore } from '../../store/progressStore';
 import { useAuthStore } from '../../store/authStore';
 import { isFirebaseConfigured } from '../../lib/firebase';
+import { getLastPausedGame } from '../../lib/pausedGame';
 
 const NAV_LEFT = [
   { id: 'marathons', path: '/marathons', icon: TrophyIcon, labelKey: 'menu.japaMarathons' },
@@ -67,6 +68,20 @@ export function BottomNav() {
   const handlePlay = () => {
     if (needsSignIn) {
       navigate('/signin');
+      return;
+    }
+    const lastPaused = getLastPausedGame();
+    if (lastPaused?.mode != null && lastPaused?.levelIndex != null) {
+      const params = new URLSearchParams({
+        mode: lastPaused.mode,
+        level: String(lastPaused.levelIndex),
+      });
+      if (lastPaused.yagnaId) params.set('yagna', lastPaused.yagnaId);
+      if (lastPaused.marathonId) params.set('marathon', lastPaused.marathonId);
+      if (lastPaused.marathonId || lastPaused.yagnaId) {
+        params.set('target', String(lastPaused.marathonTargetJapas ?? 108));
+      }
+      navigate(`/game?${params}`);
       return;
     }
     const level = getCurrentLevelIndex('general');

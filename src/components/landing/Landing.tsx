@@ -4,10 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { OpeningVideoModal } from './OpeningVideoModal';
 import { JapamLogo } from '../ui/JapamLogo';
 import { LanguageDropdown } from '../ui/LanguageDropdown';
+import { AppFooter } from '../layout/AppFooter';
 import { useAuthStore } from '../../store/authStore';
-
-const A_LOGO_SRC = '/images/A-logo.png';
-const BG_IMAGE = '/images/landingpagebg.png';
 
 interface LandingProps {
   onEnterApp: () => void;
@@ -27,11 +25,8 @@ export function Landing({ onEnterApp, onGuestPlay }: LandingProps) {
         )}
       </AnimatePresence>
 
-      <div
-        className="relative min-h-screen flex flex-col bg-cover bg-center"
-        style={{ backgroundImage: `url(${BG_IMAGE})` }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/55 to-black/75" aria-hidden />
+      <div className="relative min-h-screen flex flex-col overflow-hidden">
+        <div className="absolute inset-0 bg-gloss-landing" aria-hidden />
         <div className="relative z-10 flex flex-col min-h-screen">
           <header className="relative pt-16 sm:pt-24 pb-6 px-4 text-center">
             <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-20">
@@ -99,35 +94,7 @@ export function Landing({ onEnterApp, onGuestPlay }: LandingProps) {
             )}
           </motion.section>
 
-          <footer className="relative z-10 mt-auto py-6 px-4 flex flex-col items-center justify-center text-white/70 text-sm border-t border-white/10 gap-3">
-            <div className="flex items-center gap-2">
-              <span>{t('landing.builtBy')}</span>
-              <a
-                href="https://aideveloperindia.store"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1.5 hover:opacity-100 transition-opacity"
-                aria-label="AI Developer India"
-              >
-                <img src={A_LOGO_SRC} alt="AI Developer India" className="h-6 w-auto object-contain opacity-90 hover:opacity-100" />
-              </a>
-              <span>AI Developer India</span>
-            </div>
-            <p className="text-white/40 text-xs text-center">
-              © {new Date().getFullYear()} Japam. {t('landing.copyright')}
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-x-3 sm:gap-x-4 gap-y-1 text-xs text-white/50 break-words">
-              <a href="/contact" className="hover:text-white/80 transition-colors underline underline-offset-2">{t('landing.contact')}</a>
-              <span className="text-white/20">|</span>
-              <a href="/privacy" className="hover:text-white/80 transition-colors underline underline-offset-2">{t('landing.privacy')}</a>
-              <span className="text-white/20">|</span>
-              <a href="/terms" className="hover:text-white/80 transition-colors underline underline-offset-2">{t('landing.terms')}</a>
-              <span className="text-white/20">|</span>
-              <a href="/refund-cancellation" className="hover:text-white/80 transition-colors underline underline-offset-2">{t('landing.refund')}</a>
-              <span className="text-white/20">|</span>
-              <a href="/shipping-delivery" className="hover:text-white/80 transition-colors underline underline-offset-2">{t('landing.shipping')}</a>
-            </div>
-          </footer>
+          <AppFooter />
         </div>
       </div>
     </>

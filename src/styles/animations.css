@@ -76,3 +76,104 @@
     rgba(0,0,0,0.8) 100%
   );
 }
+
+/* Glossy single-color backgrounds – no images, polished gradients */
+.bg-gloss-menu {
+  background: linear-gradient(160deg, #1a1410 0%, #2d1810 40%, #1a1410 100%);
+  position: relative;
+}
+.bg-gloss-menu::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.04) 50%, transparent 100%);
+  pointer-events: none;
+}
+.bg-gloss-game {
+  background: linear-gradient(160deg, #0f1a1a 0%, #152520 40%, #0f1a1a 100%);
+  position: relative;
+}
+.bg-gloss-game::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.04) 50%, transparent 100%);
+  pointer-events: none;
+}
+.bg-gloss-levels {
+  background: linear-gradient(160deg, #0f1419 0%, #1a2030 40%, #0f1419 100%);
+  position: relative;
+}
+.bg-gloss-levels::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.04) 50%, transparent 100%);
+  pointer-events: none;
+}
+.bg-gloss-japa {
+  background: linear-gradient(160deg, #1a1610 0%, #2a2015 40%, #1a1610 100%);
+  position: relative;
+}
+.bg-gloss-japa::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.04) 50%, transparent 100%);
+  pointer-events: none;
+}
+.bg-gloss-marathons {
+  background: linear-gradient(160deg, #1a1210 0%, #2a1810 40%, #1a1210 100%);
+  position: relative;
+}
+.bg-gloss-marathons::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.04) 50%, transparent 100%);
+  pointer-events: none;
+}
+.bg-gloss-mahayagnas {
+  background: linear-gradient(160deg, #15101a 0%, #1f1525 40%, #15101a 100%);
+  position: relative;
+}
+.bg-gloss-mahayagnas::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.04) 50%, transparent 100%);
+  pointer-events: none;
+}
+.bg-gloss-landing {
+  background: linear-gradient(160deg, #1a1410 0%, #251a10 40%, #1a1410 100%);
+  position: relative;
+}
+.bg-gloss-landing::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.04) 50%, transparent 100%);
+  pointer-events: none;
+}
+.bg-gloss-signin {
+  background: linear-gradient(160deg, #0f1419 0%, #151c25 40%, #0f1419 100%);
+  position: relative;
+}
+.bg-gloss-signin::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.04) 50%, transparent 100%);
+  pointer-events: none;
+}
+.bg-gloss-settings {
+  background: linear-gradient(160deg, #16161a 0%, #1a1a20 40%, #16161a 100%);
+  position: relative;
+}
+.bg-gloss-settings::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.04) 50%, transparent 100%);
+  pointer-events: none;
+}

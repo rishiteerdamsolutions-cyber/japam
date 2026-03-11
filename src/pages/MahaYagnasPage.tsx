@@ -219,8 +219,7 @@ export function MahaYagnasPage() {
 
   return (
     <div className="relative min-h-screen flex flex-col overflow-hidden">
-      <div className="absolute -inset-[8%] bg-cover bg-center bg-page-float" style={{ backgroundImage: 'url(/images/mahayagnaspagebg.png)' }} aria-hidden />
-      <div className="absolute inset-0 bg-playful-overlay" aria-hidden />
+      <div className="absolute inset-0 bg-gloss-mahayagnas" aria-hidden />
       <div className="relative z-10 flex flex-col flex-1">
       {shareResult && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 p-4">

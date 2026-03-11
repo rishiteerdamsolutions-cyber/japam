@@ -13,8 +13,6 @@ import { useUnlockStore } from '../../store/unlockStore';
 import type { GameMode } from '../../store/gameStore';
 import { useProfileStore } from '../../store/profileStore';
 
-const BG_IMAGE = '/images/game%20menupagebg.png';
-
 function GearIcon() {
   return (
     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -69,8 +67,7 @@ export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
 
   return (
     <div className="relative min-h-screen flex flex-col items-center p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] overflow-hidden">
-      <div className="absolute -inset-[8%] bg-cover bg-center bg-page-float" style={{ backgroundImage: `url(${BG_IMAGE})` }} aria-hidden />
-      <div className="absolute inset-0 bg-playful-overlay" aria-hidden />
+      <div className="absolute inset-0 bg-gloss-menu" aria-hidden />
       <div className="relative z-10 w-full max-w-sm flex flex-col items-center">
         {/* Top: back to home (left) and user/sign in (right) */}
         <div className="w-full flex justify-between items-center gap-2 mt-2 mb-1 min-h-[44px]">

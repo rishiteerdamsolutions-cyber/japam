@@ -237,8 +237,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
 
   return (
     <div className="fixed inset-0 flex flex-col items-center overflow-hidden">
-      <div className="absolute -inset-[8%] bg-cover bg-center bg-page-float" style={{ backgroundImage: 'url(/images/gameplaybg.png)' }} aria-hidden />
-      <div className="absolute inset-0 bg-playful-overlay" aria-hidden />
+      <div className="absolute inset-0 bg-gloss-game" aria-hidden />
       <div className="relative z-10 flex flex-col items-center w-full flex-1 min-h-0" style={{
         paddingTop: 'calc(1rem + env(safe-area-inset-top, 0px))',
         paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom, 0px))',
@@ -250,21 +249,6 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
           {t('game.back')}
         </button>
         <div className="flex items-center gap-1 sm:gap-2">
-          {status === 'playing' && !isGuest && (
-            <button
-              onClick={handlePause}
-              disabled={pauseSaving}
-              className="p-2 rounded-lg text-amber-400/90 hover:bg-white/10 min-h-[44px] min-w-[44px] flex items-center justify-center disabled:opacity-50"
-              aria-label={t('game.pause')}
-            >
-              <PauseIcon />
-            </button>
-          )}
-          {status === 'playing' && isGuest && (
-            <button onClick={onBack} className="p-2 rounded-lg text-amber-400/90 hover:bg-white/10 min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label={t('game.exit')}>
-              <ExitIcon />
-            </button>
-          )}
           <button
             type="button"
             onClick={handleToggleMusic}
@@ -306,6 +290,36 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
       <div className="flex-1 w-full max-w-md min-h-0 flex items-center justify-center">
         <Board />
       </div>
+
+      {status === 'playing' && (
+        <div
+          className="w-full max-w-md shrink-0 flex justify-center items-center py-2 border-t border-white/10 bg-black/60 backdrop-blur-sm"
+          style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}
+          role="group"
+          aria-label="Game controls"
+        >
+          {!isGuest ? (
+            <button
+              type="button"
+              onClick={handlePause}
+              disabled={pauseSaving}
+              aria-label={t('game.pause')}
+              className="flex-shrink-0 w-14 h-14 -mt-5 rounded-full bg-amber-500 shadow-lg shadow-amber-500/40 flex items-center justify-center text-white border-4 border-black/80 hover:bg-amber-400 active:scale-95 transition-transform disabled:opacity-50"
+            >
+              <PauseIcon />
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={onBack}
+              aria-label={t('game.exit')}
+              className="flex-shrink-0 w-14 h-14 -mt-5 rounded-full bg-amber-500 shadow-lg shadow-amber-500/40 flex items-center justify-center text-white border-4 border-black/80 hover:bg-amber-400 active:scale-95 transition-transform"
+            >
+              <ExitIcon />
+            </button>
+          )}
+        </div>
+      )}
 
       {status === 'won' && (
         isGuest ? (

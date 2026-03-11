@@ -1,9 +1,16 @@
+import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useProgressStore } from '../../store/progressStore';
+import { useAuthStore } from '../../store/authStore';
+import { isFirebaseConfigured } from '../../lib/firebase';
 
-const NAV_ITEMS = [
+const NAV_LEFT = [
   { id: 'marathons', path: '/marathons', icon: TrophyIcon, labelKey: 'menu.japaMarathons' },
   { id: 'maha-yagnas', path: '/maha-yagnas', icon: FlameIcon, labelKey: 'menu.mahaJapaYagnas' },
+] as const;
+
+const NAV_RIGHT = [
   { id: 'japa', path: '/japa', icon: ChartIcon, labelKey: 'menu.japaCount' },
   { id: 'levels', path: '/levels', icon: MapIcon, labelKey: 'menu.levels' },
 ] as const;
@@ -40,35 +47,73 @@ function MapIcon() {
   );
 }
 
+function PlayIcon() {
+  return (
+    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M8 5v14l11-7z" />
+    </svg>
+  );
+}
+
 export function BottomNav() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   const pathname = location.pathname;
+  const getCurrentLevelIndex = useProgressStore((s) => s.getCurrentLevelIndex);
+  const user = useAuthStore((s) => s.user);
+  const needsSignIn = isFirebaseConfigured && !user;
+
+  const handlePlay = () => {
+    if (needsSignIn) {
+      navigate('/signin');
+      return;
+    }
+    const level = getCurrentLevelIndex('general');
+    navigate(`/game?mode=general&level=${level}`);
+  };
+
+  const NavItem = ({ path, icon: Icon, labelKey }: { path: string; icon: () => React.ReactNode; labelKey: string }) => {
+    const isActive = pathname === path;
+    return (
+      <button
+        type="button"
+        onClick={() => navigate(path)}
+        className={`flex flex-col items-center justify-center flex-1 min-w-0 py-2 px-1 gap-0.5 transition-colors ${
+          isActive ? 'text-amber-400' : 'text-amber-200/70 hover:text-amber-300'
+        }`}
+        aria-current={isActive ? 'page' : undefined}
+      >
+        <Icon />
+        <span className="text-[10px] sm:text-xs truncate max-w-full">{t(labelKey)}</span>
+      </button>
+    );
+  };
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-30 flex items-center justify-around bg-black/80 backdrop-blur-md border-t border-white/10 pt-2"
+      className="fixed bottom-0 left-0 right-0 z-30 flex items-center justify-between px-2 bg-black/80 backdrop-blur-md border-t border-white/10 pt-2"
       style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}
       aria-label="Bottom navigation"
     >
-      {NAV_ITEMS.map(({ id, path, icon: Icon, labelKey }) => {
-        const isActive = pathname === path;
-        return (
-          <button
-            key={id}
-            type="button"
-            onClick={() => navigate(path)}
-            className={`flex flex-col items-center justify-center flex-1 min-w-0 py-2 px-1 gap-0.5 transition-colors ${
-              isActive ? 'text-amber-400' : 'text-amber-200/70 hover:text-amber-300'
-            }`}
-            aria-current={isActive ? 'page' : undefined}
-          >
-            <Icon />
-            <span className="text-[10px] sm:text-xs truncate max-w-full">{t(labelKey)}</span>
-          </button>
-        );
-      })}
+      <div className="flex flex-1 justify-around min-w-0">
+        {NAV_LEFT.map((item) => (
+          <NavItem key={item.id} {...item} />
+        ))}
+      </div>
+      <button
+        type="button"
+        onClick={handlePlay}
+        aria-label={t('menu.generalJapa')}
+        className="flex-shrink-0 w-14 h-14 -mt-5 rounded-full bg-amber-500 shadow-lg shadow-amber-500/40 flex items-center justify-center text-white border-4 border-black/80 hover:bg-amber-400 active:scale-95 transition-transform mx-1"
+      >
+        <PlayIcon />
+      </button>
+      <div className="flex flex-1 justify-around min-w-0">
+        {NAV_RIGHT.map((item) => (
+          <NavItem key={item.id} {...item} />
+        ))}
+      </div>
     </nav>
   );
 }

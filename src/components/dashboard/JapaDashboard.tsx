@@ -103,8 +103,9 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
   };
 
   return (
-    <div className="relative min-h-screen bg-cover bg-center p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] max-w-lg mx-auto" style={{ backgroundImage: 'url(/images/japadashboardbg.png)' }}>
-      <div className="absolute inset-0 bg-black/70" aria-hidden />
+    <div className="relative min-h-screen p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] max-w-lg mx-auto overflow-hidden">
+      <div className="absolute -inset-[8%] bg-cover bg-center bg-page-float" style={{ backgroundImage: 'url(/images/japadashboardbg.png)' }} aria-hidden />
+      <div className="absolute inset-0 bg-playful-overlay" aria-hidden />
       <div className="relative z-10">
       <AppHeader title="Japa Dashboard" showBack onBack={onBack} />
 

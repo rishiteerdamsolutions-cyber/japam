@@ -40,21 +40,12 @@ function HeartIcon() {
   );
 }
 
-function ChartIcon() {
-  return (
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-    </svg>
-  );
-}
-
 interface MainMenuProps {
   onSelect: (mode: GameMode) => void;
-  onOpenJapaDashboard: () => void;
   onOpenSettings: () => void;
 }
 
-export function MainMenu({ onSelect, onOpenJapaDashboard, onOpenSettings }: MainMenuProps) {
+export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user, loading, signOut } = useAuthStore();
@@ -77,11 +68,9 @@ export function MainMenu({ onSelect, onOpenJapaDashboard, onOpenSettings }: Main
   const initial = (displayName && displayName.charAt(0).toUpperCase()) || '?';
 
   return (
-    <div
-      className="relative min-h-screen flex flex-col items-center p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] bg-cover bg-center"
-      style={{ backgroundImage: `url(${BG_IMAGE})` }}
-    >
-      <div className="absolute inset-0 bg-black/70" aria-hidden />
+    <div className="relative min-h-screen flex flex-col items-center p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] overflow-hidden">
+      <div className="absolute -inset-[8%] bg-cover bg-center bg-page-float" style={{ backgroundImage: `url(${BG_IMAGE})` }} aria-hidden />
+      <div className="absolute inset-0 bg-playful-overlay" aria-hidden />
       <div className="relative z-10 w-full max-w-sm flex flex-col items-center">
         {/* Top: back to home (left) and user/sign in (right) */}
         <div className="w-full flex justify-between items-center gap-2 mt-2 mb-1 min-h-[44px]">
@@ -198,28 +187,6 @@ export function MainMenu({ onSelect, onOpenJapaDashboard, onOpenSettings }: Main
         <div className="mb-24" />
         <AppFooter />
         <BottomNav />
-        {/* Primary FAB - Play */}
-        <motion.button
-          type="button"
-          aria-label="Play General Japa"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => onSelect('general')}
-          className="fixed bottom-[calc(4.5rem+env(safe-area-inset-bottom))] right-4 z-40 w-14 h-14 rounded-2xl bg-amber-500 shadow-lg shadow-amber-500/40 flex items-center justify-center text-white font-bold text-sm"
-        >
-          Play
-        </motion.button>
-        {/* Secondary FAB - Japa Count */}
-        <motion.button
-          type="button"
-          aria-label="Japa Count"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => onOpenJapaDashboard()}
-          className="fixed bottom-[calc(4.5rem+env(safe-area-inset-bottom))] right-20 z-40 w-11 h-11 rounded-xl bg-black/60 border border-amber-500/50 flex items-center justify-center text-amber-400 [&>svg]:w-5 [&>svg]:h-5"
-        >
-          <ChartIcon />
-        </motion.button>
       </div>
     </div>
   );

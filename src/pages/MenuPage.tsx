@@ -21,18 +21,9 @@ export function MenuPage() {
     navigate(`/game?mode=${encodeURIComponent(mode)}&level=${level}`);
   };
 
-  const handleOpenJapa = () => {
-    if (needsSignIn) {
-      navigate('/signin');
-      return;
-    }
-    navigate('/japa');
-  };
-
   return (
     <MainMenu
       onSelect={handleSelect}
-      onOpenJapaDashboard={handleOpenJapa}
       onOpenSettings={() => navigate('/settings')}
     />
   );

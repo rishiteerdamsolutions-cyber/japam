@@ -17,10 +17,10 @@ export function WhatsAppFab() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Share Japam on WhatsApp"
-      className="fixed right-4 z-10 flex items-center justify-center w-14 h-14 rounded-full shadow-xl border border-white/10 active:scale-95 transition-transform"
+      className="fixed right-4 z-40 flex items-center justify-center w-14 h-14 rounded-full shadow-xl border border-white/10 active:scale-95 transition-transform hover:scale-105"
       style={{
         backgroundColor: WHATSAPP_GREEN,
-        bottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))',
+        bottom: 'calc(4.5rem + env(safe-area-inset-bottom, 0px))',
       }}
     >
       <svg viewBox="0 0 32 32" className="w-7 h-7 text-white" fill="currentColor" aria-hidden="true">

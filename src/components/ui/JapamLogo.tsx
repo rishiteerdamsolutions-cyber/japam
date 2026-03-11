@@ -21,7 +21,8 @@ export function JapamLogo({ size = 120, className = '' }: JapamLogoProps) {
   const mainBeadSize = Math.round(size * 0.34);
   const beadSize = Math.round(size * 0.24);
   const ringRadius = (size - mainBeadSize) * 0.42;
-  const numBeads = DEITIES.length;
+  const logoDeities = DEITIES.slice(0, 8);
+  const numBeads = logoDeities.length;
   const startAngle = -Math.PI / 2;
 
   return (
@@ -31,7 +32,7 @@ export function JapamLogo({ size = 120, className = '' }: JapamLogoProps) {
       aria-hidden
     >
       {/* Deity beads in a ring – each shows deity image in deity color with border */}
-      {DEITIES.map((deity, i) => {
+      {logoDeities.map((deity, i) => {
         const angle = startAngle + (i / numBeads) * 2 * Math.PI;
         const x = center + ringRadius * Math.cos(angle);
         const y = center + ringRadius * Math.sin(angle);

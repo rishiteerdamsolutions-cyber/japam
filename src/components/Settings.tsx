@@ -192,7 +192,7 @@ export function Settings({ onBack }: SettingsProps) {
       className="relative min-h-screen p-4 pb-[env(safe-area-inset-bottom)] bg-cover bg-center"
       style={{ backgroundImage: `url(${BG_IMAGE})` }}
     >
-      <div className="absolute inset-0 bg-black/65" aria-hidden />
+      <div className="absolute inset-0 bg-black/70" aria-hidden />
       <div className="relative z-10 max-w-md mx-auto">
         <AppHeader title="Settings" showBack onBack={onBack} />
 

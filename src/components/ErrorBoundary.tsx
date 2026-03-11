@@ -33,7 +33,7 @@ export class ErrorBoundary extends Component<Props, State> {
       if (this.props.fallback) return this.props.fallback;
       return (
         <div className="relative min-h-screen flex flex-col items-center justify-center text-white p-6 bg-cover bg-center" style={{ backgroundImage: 'url(/images/errorpagebg.png)' }}>
-          <div className="absolute inset-0 bg-black/60" aria-hidden />
+          <div className="absolute inset-0 bg-black/70" aria-hidden />
           <div className="relative z-10 flex flex-col items-center">
           <h1 className="text-xl font-bold text-amber-400 mb-2">Something went wrong</h1>
           <p className="text-amber-200/80 text-sm text-center mb-4 max-w-md">

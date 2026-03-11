@@ -10,7 +10,7 @@ interface SplashProps {
 export function Splash({ onComplete }: SplashProps) {
   return (
     <div className="relative min-h-screen bg-cover bg-center flex flex-col items-center justify-center" style={{ backgroundImage: `url(${BG_IMAGE})` }}>
-      <div className="absolute inset-0 bg-black/60" aria-hidden />
+      <div className="absolute inset-0 bg-black/70" aria-hidden />
       <motion.div
         initial={{ opacity: 1 }}
         animate={{ opacity: 1 }}

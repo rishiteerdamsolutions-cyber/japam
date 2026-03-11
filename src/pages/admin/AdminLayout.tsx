@@ -29,7 +29,7 @@ export function AdminLayout() {
 
   return (
     <div className="relative min-h-screen bg-cover bg-center p-4 pb-[env(safe-area-inset-bottom)]" style={{ backgroundImage: 'url(/images/adminlayoutbg.png)' }}>
-      <div className="absolute inset-0 bg-black/60" aria-hidden />
+      <div className="absolute inset-0 bg-black/70" aria-hidden />
       <div className="relative z-10">
       <div className="flex items-center justify-between mb-6">
         <button type="button" onClick={() => navigate(-1)} className="text-amber-400 text-sm">

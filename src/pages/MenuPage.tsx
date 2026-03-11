@@ -21,14 +21,6 @@ export function MenuPage() {
     navigate(`/game?mode=${encodeURIComponent(mode)}&level=${level}`);
   };
 
-  const handleOpenMap = () => {
-    if (needsSignIn) {
-      navigate('/signin');
-      return;
-    }
-    navigate('/levels');
-  };
-
   const handleOpenJapa = () => {
     if (needsSignIn) {
       navigate('/signin');
@@ -40,7 +32,6 @@ export function MenuPage() {
   return (
     <MainMenu
       onSelect={handleSelect}
-      onOpenMap={handleOpenMap}
       onOpenJapaDashboard={handleOpenJapa}
       onOpenSettings={() => navigate('/settings')}
     />

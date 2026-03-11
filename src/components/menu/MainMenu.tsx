@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AppFooter } from '../layout/AppFooter';
+import { BottomNav } from '../nav/BottomNav';
 import { DEITIES } from '../../data/deities';
 import { GoogleSignIn } from '../auth/GoogleSignIn';
 import { JapamLogo } from '../ui/JapamLogo';
@@ -14,19 +15,60 @@ import { useProfileStore } from '../../store/profileStore';
 
 const BG_IMAGE = '/images/game%20menupagebg.png';
 
+function GearIcon() {
+  return (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+    </svg>
+  );
+}
+
+function DotsVerticalIcon() {
+  return (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+    </svg>
+  );
+}
+
+function HeartIcon() {
+  return (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+    </svg>
+  );
+}
+
+function ChartIcon() {
+  return (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+    </svg>
+  );
+}
+
 interface MainMenuProps {
   onSelect: (mode: GameMode) => void;
-  onOpenMap: () => void;
   onOpenJapaDashboard: () => void;
   onOpenSettings: () => void;
 }
 
-export function MainMenu({ onSelect, onOpenMap, onOpenJapaDashboard, onOpenSettings }: MainMenuProps) {
+export function MainMenu({ onSelect, onOpenJapaDashboard, onOpenSettings }: MainMenuProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user, loading, signOut } = useAuthStore();
   const tier = useUnlockStore((s) => s.tier);
   const [showDonate, setShowDonate] = useState(false);
+  const [showMoreMenu, setShowMoreMenu] = useState(false);
+  const moreMenuRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (moreMenuRef.current && !moreMenuRef.current.contains(e.target as Node)) setShowMoreMenu(false);
+    };
+    document.addEventListener('click', handler);
+    return () => document.removeEventListener('click', handler);
+  }, []);
   const profileName = useProfileStore((s) => s.displayName);
   const fallbackName = user?.displayName || (user?.email ? user.email.split('@')[0] : null);
   const displayName = profileName || fallbackName || t('menu.signedIn');
@@ -36,10 +78,10 @@ export function MainMenu({ onSelect, onOpenMap, onOpenJapaDashboard, onOpenSetti
 
   return (
     <div
-      className="relative min-h-screen flex flex-col items-center p-4 pb-[env(safe-area-inset-bottom)] bg-cover bg-center"
+      className="relative min-h-screen flex flex-col items-center p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] bg-cover bg-center"
       style={{ backgroundImage: `url(${BG_IMAGE})` }}
     >
-      <div className="absolute inset-0 bg-black/60" aria-hidden />
+      <div className="absolute inset-0 bg-black/70" aria-hidden />
       <div className="relative z-10 w-full max-w-sm flex flex-col items-center">
         {/* Top: back to home (left) and user/sign in (right) */}
         <div className="w-full flex justify-between items-center gap-2 mt-2 mb-1 min-h-[44px]">
@@ -67,45 +109,40 @@ export function MainMenu({ onSelect, onOpenMap, onOpenJapaDashboard, onOpenSetti
             </div>
           )}
           {!loading && user && (
-            <div className="flex items-center gap-2 flex-wrap justify-end">
-              <div className="flex items-center gap-1.5 min-w-0">
+            <div className="flex items-center gap-1 sm:gap-2 justify-end">
+              <button type="button" onClick={() => {}} className="flex items-center gap-1.5 min-w-0 min-h-[44px] rounded-lg px-1" title={displayName} aria-label={displayName}>
                 <div
-                  className={`relative flex-shrink-0 w-9 h-9 rounded-full border-2 flex items-center justify-center text-amber-200 font-semibold text-sm
+                  className={`relative flex-shrink-0 w-8 h-8 rounded-full border-2 flex items-center justify-center text-amber-200 font-semibold text-sm
                     ${isPremium ? 'border-amber-400 ring-2 ring-amber-400/50 bg-amber-500/20' : isPro ? 'border-green-500 ring-2 ring-green-500/50 bg-green-500/20' : 'border-amber-500/40 bg-black/30'}`}
-                  title={isPremium ? t('menu.premium') : isPro ? t('menu.pro') : undefined}
                 >
                   {user.photoURL ? (
                     <img src={user.photoURL} alt="" className="w-full h-full rounded-full object-cover" />
                   ) : (
                     <span>{initial}</span>
                   )}
-                  {isPremium && (
-                    <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-amber-500 flex items-center justify-center text-white text-[10px] font-bold" title={t('menu.premium')}>★</span>
-                  )}
-                  {isPro && !isPremium && (
-                    <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-green-500 flex items-center justify-center text-white text-[10px] font-bold" title={t('menu.pro')}>✓</span>
-                  )}
+                  {isPremium && <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-amber-500 flex items-center justify-center text-white text-[9px] font-bold">★</span>}
+                  {isPro && !isPremium && <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-green-500 flex items-center justify-center text-white text-[9px] font-bold">✓</span>}
                 </div>
-                <span className="text-amber-200/90 text-xs sm:text-sm truncate max-w-[80px] sm:max-w-[120px] min-w-0" title={displayName}>
-                  {displayName}
-                  {isPremium && <span className="ml-1 text-xs text-amber-400">({t('menu.premium')})</span>}
-                  {isPro && !isPremium && <span className="ml-1 text-xs text-green-400">({t('menu.pro')})</span>}
-                </span>
+                <span className="hidden sm:inline text-amber-200/90 text-xs truncate max-w-[60px]" title={displayName}>{displayName}</span>
+              </button>
+              <button type="button" onClick={() => setShowDonate(true)} className="p-2 rounded-lg text-amber-400/90 hover:bg-white/10 hover:text-amber-400 min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label={t('menu.donate')}>
+                <HeartIcon />
+              </button>
+              <button type="button" onClick={() => onOpenSettings()} className="p-2 rounded-lg text-amber-400/90 hover:bg-white/10 hover:text-amber-400 min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label={t('menu.settings')}>
+                <GearIcon />
+              </button>
+              <div className="relative" ref={moreMenuRef}>
+                <button type="button" onClick={() => setShowMoreMenu((v) => !v)} className="p-2 rounded-lg text-amber-400/90 hover:bg-white/10 hover:text-amber-400 min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="More" aria-expanded={showMoreMenu}>
+                  <DotsVerticalIcon />
+                </button>
+                {showMoreMenu && (
+                  <div className="absolute right-0 top-full mt-1 py-1 rounded-xl bg-black/90 border border-amber-500/30 shadow-xl z-50 min-w-[120px]">
+                    <button type="button" onClick={() => { signOut(); setShowMoreMenu(false); }} className="w-full px-4 py-2 text-left text-amber-200/90 hover:bg-white/10 text-sm">
+                      {t('menu.signOut')}
+                    </button>
+                  </div>
+                )}
               </div>
-              <button
-                type="button"
-                onClick={() => setShowDonate(true)}
-                className="text-amber-400/90 text-xs font-medium hover:text-amber-400 whitespace-nowrap"
-              >
-                {t('menu.donate')}
-              </button>
-              <button
-                type="button"
-                onClick={() => signOut()}
-                className="text-amber-400/80 text-xs font-medium hover:text-amber-400 whitespace-nowrap"
-              >
-                {t('menu.signOut')}
-              </button>
             </div>
           )}
           </div>
@@ -119,7 +156,7 @@ export function MainMenu({ onSelect, onOpenMap, onOpenJapaDashboard, onOpenSetti
         )}
 
         <JapamLogo size={100} className="mt-4 drop-shadow-lg shrink-0" />
-        <h1 className="text-3xl sm:text-4xl font-bold text-amber-400 mt-2 mb-1 drop-shadow-lg truncate w-full max-w-full text-center" style={{ fontFamily: 'serif' }}>
+        <h1 className="text-3xl sm:text-4xl font-bold text-amber-400 mt-2 mb-1 drop-shadow-lg heading-on-bg truncate w-full max-w-full text-center" style={{ fontFamily: 'serif' }}>
           {t('menu.title')}
         </h1>
         <p className="text-amber-200/90 text-xs sm:text-sm mb-6 break-words text-center">{t('menu.tagline')}</p>
@@ -130,18 +167,7 @@ export function MainMenu({ onSelect, onOpenMap, onOpenJapaDashboard, onOpenSetti
           </div>
         )}
 
-        <motion.button
-          type="button"
-          aria-label="Play General Japa mode"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          className="w-full py-3 sm:py-4 rounded-2xl bg-amber-500/95 text-white font-bold text-base sm:text-lg shadow-lg shadow-amber-500/30 mb-4 break-words min-h-[48px]"
-          onClick={() => onSelect('general')}
-        >
-          {t('menu.generalJapa')}
-        </motion.button>
-
-        <p className="text-amber-200/80 text-xs uppercase tracking-wider mb-2">{t('menu.istaDevata')}</p>
+        <p className="text-amber-200/80 text-xs uppercase tracking-wider mb-2 mt-2">{t('menu.istaDevata')}</p>
         <div className="grid grid-cols-2 gap-3 w-full mb-6">
           {DEITIES.map((deity, i) => (
             <motion.button
@@ -169,39 +195,31 @@ export function MainMenu({ onSelect, onOpenMap, onOpenJapaDashboard, onOpenSetti
           ))}
         </div>
 
-        <div className="flex flex-wrap gap-2 sm:gap-4 mt-2 mb-8 justify-center">
-          <button
-            onClick={() => navigate('/marathons')}
-            className="text-amber-200 font-medium text-sm hover:text-amber-400 transition-colors"
-          >
-            {t('menu.japaMarathons')}
-          </button>
-          <button
-            onClick={() => navigate('/maha-yagnas')}
-            className="text-amber-200 font-medium text-sm hover:text-amber-400 transition-colors"
-          >
-            {t('menu.mahaJapaYagnas')}
-          </button>
-          <button
-            onClick={onOpenJapaDashboard}
-            className="text-amber-200 font-medium text-sm hover:text-amber-400 transition-colors"
-          >
-            {t('menu.japaCount')}
-          </button>
-          <button
-            onClick={onOpenMap}
-            className="text-amber-200 font-medium text-sm hover:text-amber-400 transition-colors"
-          >
-            {t('menu.levels')}
-          </button>
-          <button
-            onClick={onOpenSettings}
-            className="text-amber-200 font-medium text-sm hover:text-amber-400 transition-colors"
-          >
-            {t('menu.settings')}
-          </button>
-        </div>
+        <div className="mb-24" />
         <AppFooter />
+        <BottomNav />
+        {/* Primary FAB - Play */}
+        <motion.button
+          type="button"
+          aria-label="Play General Japa"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => onSelect('general')}
+          className="fixed bottom-[calc(4.5rem+env(safe-area-inset-bottom))] right-4 z-40 w-14 h-14 rounded-2xl bg-amber-500 shadow-lg shadow-amber-500/40 flex items-center justify-center text-white font-bold text-sm"
+        >
+          Play
+        </motion.button>
+        {/* Secondary FAB - Japa Count */}
+        <motion.button
+          type="button"
+          aria-label="Japa Count"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => onOpenJapaDashboard()}
+          className="fixed bottom-[calc(4.5rem+env(safe-area-inset-bottom))] right-20 z-40 w-11 h-11 rounded-xl bg-black/60 border border-amber-500/50 flex items-center justify-center text-amber-400 [&>svg]:w-5 [&>svg]:h-5"
+        >
+          <ChartIcon />
+        </motion.button>
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import { useLevelsConfigStore } from '../../store/levelsConfigStore';
 import { DonateThankYouBox } from '../donation/DonateThankYouBox';
 import { AppHeader } from '../layout/AppHeader';
 import { AppFooter } from '../layout/AppFooter';
+import { BottomNav } from '../nav/BottomNav';
 import { LEVELS } from '../../data/levels';
 import { EPISODES } from '../../data/episodes';
 import { DEITIES } from '../../data/deities';
@@ -36,8 +37,8 @@ export function WorldMap({ mode: initialMode, onSelectLevel, onBack }: WorldMapP
   const episodesToShow = EPISODES.filter(ep => ep.id <= maxEpisodeId);
 
   return (
-    <div className="relative min-h-screen bg-cover bg-center p-4 pb-[env(safe-area-inset-bottom)] max-w-lg mx-auto" style={{ backgroundImage: 'url(/images/levelspagebg.png)' }}>
-      <div className="absolute inset-0 bg-black/60" aria-hidden />
+    <div className="relative min-h-screen bg-cover bg-center p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] max-w-lg mx-auto" style={{ backgroundImage: 'url(/images/levelspagebg.png)' }}>
+      <div className="absolute inset-0 bg-black/70" aria-hidden />
       <div className="relative z-10">
       <AppHeader title={levelsTitle} showBack onBack={onBack} />
 
@@ -102,6 +103,7 @@ export function WorldMap({ mode: initialMode, onSelectLevel, onBack }: WorldMapP
         ))}
       </div>
       <AppFooter />
+      <BottomNav />
       </div>
     </div>
   );

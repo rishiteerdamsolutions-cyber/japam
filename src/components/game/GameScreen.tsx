@@ -12,6 +12,30 @@ import { useSettingsStore } from '../../store/settingsStore';
 import type { DeityId } from '../../data/deities';
 import { GoogleSignIn } from '../auth/GoogleSignIn';
 
+function PauseIcon() {
+  return (
+    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
+    </svg>
+  );
+}
+
+function ExitIcon() {
+  return (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+    </svg>
+  );
+}
+
+function MusicIcon() {
+  return (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+    </svg>
+  );
+}
+
 interface GameScreenProps {
   mode: 'general' | string;
   levelIndex: number;
@@ -220,46 +244,37 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
         paddingLeft: 'calc(1rem + env(safe-area-inset-left, 0px))',
         paddingRight: 'calc(1rem + env(safe-area-inset-right, 0px))',
       }}>
-        <div className="w-full max-w-md flex items-center justify-between shrink-0 mb-1 min-w-0 gap-2">
-        <div className="flex items-center gap-2">
-          <button
-            onClick={handleBack}
-            className="text-amber-400 text-sm py-1 px-2"
-          >
-            {t('game.back')}
-          </button>
+        <div className="w-full max-w-md flex items-center justify-between shrink-0 mb-1 min-w-0 gap-2 min-h-[44px]">
+        <button onClick={handleBack} className="text-amber-400 text-sm font-medium py-2 px-2 -ml-2 min-h-[44px] flex items-center" aria-label={t('game.back')}>
+          {t('game.back')}
+        </button>
+        <div className="flex items-center gap-1 sm:gap-2">
           {status === 'playing' && !isGuest && (
             <button
               onClick={handlePause}
               disabled={pauseSaving}
-              className="text-amber-400 text-sm py-1 px-2 border border-amber-500/50 rounded disabled:opacity-50"
+              className="p-2 rounded-lg text-amber-400/90 hover:bg-white/10 min-h-[44px] min-w-[44px] flex items-center justify-center disabled:opacity-50"
+              aria-label={t('game.pause')}
             >
-              {pauseSaving ? t('common.saving') : t('game.pause')}
+              <PauseIcon />
             </button>
           )}
           {status === 'playing' && isGuest && (
-            <button
-              onClick={onBack}
-              className="text-amber-400 text-sm py-1 px-2 border border-amber-500/50 rounded"
-            >
-              {t('game.exit')}
+            <button onClick={onBack} className="p-2 rounded-lg text-amber-400/90 hover:bg-white/10 min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label={t('game.exit')}>
+              <ExitIcon />
             </button>
           )}
-        </div>
-        <div className="flex items-center gap-2 text-xs text-amber-200/80">
           <button
             type="button"
             onClick={handleToggleMusic}
-            className={`px-2 py-1 rounded-lg border text-[11px] ${
-              bgMusicEnabled
-                ? 'bg-amber-500 text-black border-amber-400'
-                : 'bg-black/40 text-amber-200 border-amber-500/40'
+            className={`p-2 rounded-lg min-h-[44px] min-w-[44px] flex items-center justify-center ${
+              bgMusicEnabled ? 'bg-amber-500/80 text-black' : 'bg-black/40 text-amber-200'
             }`}
+            aria-label={bgMusicEnabled ? 'Music ON' : 'Music OFF'}
           >
-            {bgMusicEnabled ? 'Music ON' : 'Music OFF'}
+            <MusicIcon />
           </button>
           <div className={`flex items-center gap-1 ${bgMusicEnabled ? '' : 'opacity-50'}`}>
-            <span className="text-[11px]">Vol</span>
             <input
               type="range"
               min={0}
@@ -268,7 +283,8 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
               value={Math.round((bgMusicVolume ?? 0.25) * 100)}
               onChange={handleVolumeChange}
               disabled={!bgMusicEnabled}
-              className="w-20 accent-amber-500"
+              className="w-16 sm:w-20 accent-amber-500 h-6"
+              aria-label="Volume"
             />
           </div>
         </div>

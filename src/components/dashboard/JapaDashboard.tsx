@@ -6,6 +6,7 @@ import { downloadMantraPdf, type PdfDetails } from '../../utils/pdfExport';
 import { removeBackgroundFromImage } from '../../utils/removeBackground';
 import { DonateThankYouBox } from '../donation/DonateThankYouBox';
 import { AppHeader } from '../layout/AppHeader';
+import { BottomNav } from '../nav/BottomNav';
 
 /** Single sample image used across all deities and site-wide */
 const HANDWRITING_SAMPLE_SRC = '/SAMPLE%20NAMA%20IMAGE.png';
@@ -102,8 +103,8 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
   };
 
   return (
-    <div className="relative min-h-screen bg-cover bg-center p-4 pb-[env(safe-area-inset-bottom)] max-w-lg mx-auto" style={{ backgroundImage: 'url(/images/japadashboardbg.png)' }}>
-      <div className="absolute inset-0 bg-black/60" aria-hidden />
+    <div className="relative min-h-screen bg-cover bg-center p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] max-w-lg mx-auto" style={{ backgroundImage: 'url(/images/japadashboardbg.png)' }}>
+      <div className="absolute inset-0 bg-black/70" aria-hidden />
       <div className="relative z-10">
       <AppHeader title="Japa Dashboard" showBack onBack={onBack} />
 
@@ -238,6 +239,7 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
           </div>
         </div>
       )}
+      <BottomNav />
       </div>
     </div>
   );

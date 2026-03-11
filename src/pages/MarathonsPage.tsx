@@ -8,6 +8,7 @@ import { useUnlockStore } from '../store/unlockStore';
 import { auth } from '../lib/firebase';
 import { DonateThankYouBox } from '../components/donation/DonateThankYouBox';
 import { AppHeader } from '../components/layout/AppHeader';
+import { BottomNav } from '../components/nav/BottomNav';
 import { paddedLeaderboard, renderRankCardBlob } from '../lib/rankCard';
 
 const STATES = [...INDIA_REGIONS.states, ...INDIA_REGIONS.union_territories];
@@ -234,8 +235,8 @@ export function MarathonsPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-cover bg-center p-4 pb-[env(safe-area-inset-bottom)] max-w-lg mx-auto" style={{ backgroundImage: 'url(/images/marathonspagebg.png)' }}>
-      <div className="absolute inset-0 bg-black/60" aria-hidden />
+    <div className="relative min-h-screen bg-cover bg-center p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] max-w-lg mx-auto" style={{ backgroundImage: 'url(/images/marathonspagebg.png)' }}>
+      <div className="absolute inset-0 bg-black/70" aria-hidden />
       <div className="relative z-10">
       {shareResult && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 p-4">
@@ -512,6 +513,7 @@ export function MarathonsPage() {
         </div>
       )}
       <AppFooter />
+      <BottomNav />
       </div>
     </div>
   );

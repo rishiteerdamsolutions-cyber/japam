@@ -43,8 +43,8 @@ function createLevels() {
       episode: Math.ceil(id / 10),
       japaTarget,
       moves: 80,
-      rows: 8,
-      cols: 8,
+      rows: 6,
+      cols: 6,
       maxGemTypes,
     });
   }

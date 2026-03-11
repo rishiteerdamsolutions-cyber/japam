@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AppHeader } from '../components/layout/AppHeader';
+import { BottomNav } from '../components/nav/BottomNav';
 import { AppFooter } from '../components/layout/AppFooter';
 import { DEITIES } from '../data/deities';
 import { useAuthStore } from '../store/authStore';
@@ -218,7 +219,7 @@ export function MahaYagnasPage() {
 
   return (
     <div className="relative min-h-screen bg-cover bg-center flex flex-col" style={{ backgroundImage: 'url(/images/mahayagnaspagebg.png)' }}>
-      <div className="absolute inset-0 bg-black/60" aria-hidden />
+      <div className="absolute inset-0 bg-black/70" aria-hidden />
       <div className="relative z-10 flex flex-col flex-1">
       {shareResult && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 p-4">
@@ -246,7 +247,7 @@ export function MahaYagnasPage() {
         </div>
       )}
       <AppHeader title={t('mahaYagnas.title')} showBack onBack={() => navigate('/menu')} />
-      <main className="flex-1 p-4 pb-[env(safe-area-inset-bottom)] max-w-2xl mx-auto w-full min-w-0">
+      <main className="flex-1 p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] max-w-2xl mx-auto w-full min-w-0">
         <p className="text-amber-200/80 text-sm mb-4 break-words">
           {t('mahaYagnas.description')}
         </p>
@@ -509,6 +510,7 @@ export function MahaYagnasPage() {
         </div>
       </main>
       <AppFooter />
+      <BottomNav />
       </div>
     </div>
   );

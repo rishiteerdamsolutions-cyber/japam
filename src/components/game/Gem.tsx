@@ -28,14 +28,14 @@ export const Gem = memo(function Gem({ deity, selected, onClick, sparkle, matche
       `}
       style={{
         backgroundColor: d.color,
-        border: `1px solid ${d.color}`,
+        border: `3px solid ${d.color}`,
         boxShadow: matched
           ? `0 0 16px ${d.color}, 0 0 24px rgba(255,255,255,0.8), inset 0 0 8px rgba(255,255,255,0.5)`
           : selected
-            ? `0 0 12px ${d.color}`
+            ? `0 0 12px ${d.color}, 0 0 0 2px ${d.color}`
             : sparkle
-              ? `0 0 16px ${d.color}, inset 0 0 8px rgba(255,255,255,0.4)`
-              : `inset 0 2px 4px rgba(0,0,0,0.2)`
+              ? `0 0 16px ${d.color}, 0 0 0 2px ${d.color}, inset 0 0 8px rgba(255,255,255,0.4)`
+              : `0 0 0 1px rgba(0,0,0,0.3), 0 0 6px ${d.color}, inset 0 2px 4px rgba(0,0,0,0.2)`
       }}
     >
       <img

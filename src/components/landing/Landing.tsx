@@ -26,7 +26,7 @@ export function Landing({ onEnterApp, onGuestPlay }: LandingProps) {
       </AnimatePresence>
 
       <div className="relative min-h-screen flex flex-col overflow-hidden">
-        <div className="absolute inset-0 bg-gloss-landing" aria-hidden />
+        <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
         <div className="relative z-10 flex flex-col min-h-screen">
           <header className="relative pt-16 sm:pt-24 pb-6 px-4 text-center">
             <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-20">

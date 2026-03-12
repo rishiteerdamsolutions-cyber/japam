@@ -18,7 +18,7 @@ export function SignInRequired({ onBack, message = 'Sign in with Google to play'
 
   return (
     <div className="relative min-h-screen p-4 pb-[env(safe-area-inset-bottom)] flex flex-col items-center overflow-hidden">
-      <div className="absolute inset-0 bg-gloss-signin" aria-hidden />
+      <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen w-full max-w-sm">
         <button
           onClick={onBack}

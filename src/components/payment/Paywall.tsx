@@ -106,7 +106,7 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4" role="dialog" aria-modal="true" aria-labelledby="paywall-title">
-      <div className="bg-[#1a1a2e] rounded-2xl border border-amber-500/30 p-6 max-w-sm w-full shadow-xl">
+      <div className="bg-[#C2185B]/90 rounded-2xl border border-amber-500/30 p-6 max-w-sm w-full shadow-xl">
         <h2 id="paywall-title" className="text-xl font-bold text-amber-400 mb-2">Unlock all levels</h2>
         <p className="text-amber-200/90 text-sm mb-4">
           You've completed the first 2 levels. Offer Dakshina once to unlock levels 3–50.

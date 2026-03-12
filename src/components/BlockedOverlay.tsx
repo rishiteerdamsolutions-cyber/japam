@@ -13,7 +13,7 @@ export function BlockedOverlay() {
   if (!user || !userBlocked) return null;
 
   return (
-    <div className="fixed inset-0 z-[9998] flex flex-col items-center justify-center gap-4 bg-[#1a1a2e] text-white px-6">
+    <div className="fixed inset-0 z-[9998] flex flex-col items-center justify-center gap-4 bg-gloss-bubblegum text-white px-6">
       <h1 className="text-xl font-semibold text-amber-400">Account disabled</h1>
       <p className="text-center text-sm text-gray-400">Your account has been restricted. Please contact support.</p>
       <button

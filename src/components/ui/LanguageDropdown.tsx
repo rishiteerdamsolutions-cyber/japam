@@ -38,7 +38,7 @@ export function LanguageDropdown({ className = '' }: LanguageDropdownProps) {
 
       {open && (
         <div
-          className="absolute right-0 top-full mt-1 py-2 min-w-[200px] max-h-[70vh] overflow-y-auto rounded-xl bg-[#1a1a2e] border border-amber-500/30 shadow-xl z-50"
+          className="absolute right-0 top-full mt-1 py-2 min-w-[200px] max-h-[70vh] overflow-y-auto rounded-xl bg-[#C2185B]/95 border border-amber-500/30 shadow-xl z-50"
           role="listbox"
         >
           {LANGUAGES.map((lang) => (

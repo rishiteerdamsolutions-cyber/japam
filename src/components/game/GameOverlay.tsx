@@ -22,7 +22,7 @@ export function GameOverlay({ status, isMarathon, onRetry, onMenu, onNext }: Gam
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="bg-[#1a1a2e] rounded-2xl p-4 sm:p-6 max-w-sm w-full text-center min-w-0"
+          className="bg-[#C2185B]/90 rounded-2xl p-4 sm:p-6 max-w-sm w-full text-center min-w-0"
         >
           <h2 className="text-xl sm:text-2xl font-bold text-amber-400 mb-2 break-words">
             {status === 'won' ? (isMarathon ? t('game.marathonComplete') : t('game.jai')) : t('game.tryAgain')}

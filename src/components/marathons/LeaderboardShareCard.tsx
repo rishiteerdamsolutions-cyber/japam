@@ -31,7 +31,7 @@ export const LeaderboardShareCard: FC<LeaderboardShareCardProps> = ({
         width: 720,
         height: 1280,
         padding: 32,
-        background: 'linear-gradient(to bottom, #1a1a2e, #16213e)',
+        background: 'linear-gradient(165deg, #C2185B 0%, #D81B60 25%, #E91E63 50%, #D81B60 75%, #C2185B 100%)',
         color: 'white',
         fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
       }}
@@ -61,7 +61,7 @@ export const LeaderboardShareCard: FC<LeaderboardShareCardProps> = ({
           style={{
             borderRadius: 16,
             padding: 16,
-            backgroundColor: 'rgba(0,0,0,0.35)',
+            backgroundColor: 'rgba(0,0,0,0.2)',
           }}
         >
           {top.map((p) => {
@@ -87,7 +87,7 @@ export const LeaderboardShareCard: FC<LeaderboardShareCardProps> = ({
                       width: 28,
                       height: 28,
                       borderRadius: 9999,
-                      backgroundColor: isCurrent ? '#FBBF24' : 'rgba(55,65,81,0.9)',
+                      backgroundColor: isCurrent ? '#FBBF24' : 'rgba(194,24,91,0.6)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',

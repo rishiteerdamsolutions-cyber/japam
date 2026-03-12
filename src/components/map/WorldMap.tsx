@@ -38,7 +38,7 @@ export function WorldMap({ mode: initialMode, onSelectLevel, onBack }: WorldMapP
 
   return (
     <div className="relative min-h-screen p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] max-w-lg mx-auto overflow-hidden">
-      <div className="absolute inset-0 bg-gloss-levels" aria-hidden />
+      <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10">
       <AppHeader title={levelsTitle} showBack onBack={onBack} />
 

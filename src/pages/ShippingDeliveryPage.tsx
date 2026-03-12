@@ -5,8 +5,8 @@ export function ShippingDeliveryPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="relative min-h-screen bg-cover bg-center text-white" style={{ backgroundImage: 'url(/images/shippingpagebg.png)' }}>
-      <div className="absolute inset-0 bg-black/70" aria-hidden />
+    <div className="relative min-h-screen text-white">
+      <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10 max-w-2xl mx-auto px-4 py-8">
         <div className="flex items-center gap-3 mb-8">
           <button

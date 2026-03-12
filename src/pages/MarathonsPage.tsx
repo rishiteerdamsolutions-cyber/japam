@@ -236,11 +236,11 @@ export function MarathonsPage() {
 
   return (
     <div className="relative min-h-screen p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] max-w-lg mx-auto overflow-hidden">
-      <div className="absolute inset-0 bg-gloss-marathons" aria-hidden />
+      <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10">
       {shareResult && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 p-4">
-          <div className="bg-[#1a1a2e] rounded-2xl border border-amber-500/30 p-6 max-w-sm w-full shadow-xl">
+          <div className="bg-[#C2185B]/90 rounded-2xl border border-amber-500/30 p-6 max-w-sm w-full shadow-xl">
             <h2 className="text-xl font-bold text-amber-400 mb-2">Your rank card</h2>
             <p className="text-amber-200/80 text-sm mb-3">Your leaderboard image is downloaded.</p>
             <p className="text-amber-200/70 text-xs mb-4">To post it on WhatsApp Status: WhatsApp → Status → My Status → add the downloaded image.</p>

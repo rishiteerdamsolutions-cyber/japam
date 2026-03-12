@@ -206,7 +206,7 @@ export function Settings({ onBack }: SettingsProps) {
 
   return (
     <div className="relative min-h-screen p-4 pb-[env(safe-area-inset-bottom)] overflow-hidden">
-      <div className="absolute inset-0 bg-gloss-settings" aria-hidden />
+      <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10 max-w-md mx-auto">
         <AppHeader title="Settings" showBack onBack={onBack} />
 

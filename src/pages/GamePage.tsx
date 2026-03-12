@@ -180,7 +180,7 @@ export function GamePage() {
   if (resumePending) {
     return (
       <div className="fixed inset-0 bg-black/80 flex flex-col items-center justify-center z-30 p-4">
-        <div className="bg-[#1a1a2e] rounded-2xl p-6 max-w-sm w-full text-center">
+        <div className="bg-[#C2185B]/90 rounded-2xl p-6 max-w-sm w-full text-center">
           <h2 className="text-xl font-bold text-amber-400 mb-2">{t('game.resumeJapa')}</h2>
           <p className="text-amber-200/80 mb-6 text-sm">
             {t('game.resumeJapaMessage')}

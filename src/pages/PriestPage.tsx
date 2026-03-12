@@ -354,8 +354,8 @@ export function PriestPage() {
 
   if (!token) {
     return (
-      <div className="relative min-h-screen bg-cover bg-center p-6 flex flex-col items-center justify-center" style={{ backgroundImage: 'url(/images/priestpagebg.png)' }}>
-        <div className="absolute inset-0 bg-black/70" aria-hidden />
+      <div className="relative min-h-screen p-6 flex flex-col items-center justify-center">
+        <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
         <div className="relative z-10 flex flex-col items-center">
         <h1 className="text-2xl font-bold text-amber-400 mb-4">Priest Dashboard</h1>
         <p className="text-amber-200/80 text-center mb-6 max-w-sm">
@@ -375,8 +375,8 @@ export function PriestPage() {
   const deityName = (id: string) => DEITIES.find((d) => d.id === id)?.name ?? id;
 
   return (
-    <div className="relative min-h-screen bg-cover bg-center p-4 pb-[env(safe-area-inset-bottom)]" style={{ backgroundImage: 'url(/images/priestpagebg.png)' }}>
-      <div className="absolute inset-0 bg-black/70" aria-hidden />
+    <div className="relative min-h-screen p-4 pb-[env(safe-area-inset-bottom)]">
+      <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10">
       <div className="flex items-center justify-between mb-6">
         <div>

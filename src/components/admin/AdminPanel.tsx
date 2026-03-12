@@ -102,7 +102,7 @@ export function AdminPanel({ onBack, passwordAuth, adminToken, onLogout }: Admin
 
   if (isAdmin === null) {
     return (
-      <div className="min-h-screen bg-[#1a1a2e] p-4 flex items-center justify-center">
+      <div className="min-h-screen bg-gloss-bubblegum p-4 flex items-center justify-center">
         <p className="text-amber-200">Checking access…</p>
       </div>
     );
@@ -110,7 +110,7 @@ export function AdminPanel({ onBack, passwordAuth, adminToken, onLogout }: Admin
 
   if (!isAdmin) {
     return (
-      <div className="min-h-screen bg-[#1a1a2e] p-4 flex flex-col items-center justify-center">
+      <div className="min-h-screen bg-gloss-bubblegum p-4 flex flex-col items-center justify-center">
         <p className="text-red-400 mb-4">Access denied. Admin only.</p>
         <button onClick={onBack} className="text-amber-400 underline">
           Back
@@ -120,7 +120,7 @@ export function AdminPanel({ onBack, passwordAuth, adminToken, onLogout }: Admin
   }
 
   return (
-    <div className="min-h-screen bg-[#1a1a2e] p-4 pb-[env(safe-area-inset-bottom)]">
+    <div className="min-h-screen bg-gloss-bubblegum p-4 pb-[env(safe-area-inset-bottom)]">
       <div className="flex items-center justify-between mb-6">
         <button onClick={onBack} className="text-amber-400 text-sm">
           ← Back

@@ -62,8 +62,9 @@ export async function renderRankCardBlob(opts: RenderRankCardOptions): Promise<B
       ctx.drawImage(bgImg, 0, 0, width, height);
     } else {
       const bg = ctx.createLinearGradient(0, 0, 0, height);
-      bg.addColorStop(0, '#1a1a2e');
-      bg.addColorStop(1, '#0f1b3d');
+      bg.addColorStop(0, '#E91E63');
+      bg.addColorStop(0.5, '#D81B60');
+      bg.addColorStop(1, '#C2185B');
       ctx.fillStyle = bg;
       ctx.fillRect(0, 0, width, height);
     }

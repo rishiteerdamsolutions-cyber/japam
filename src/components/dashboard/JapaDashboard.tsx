@@ -104,7 +104,7 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
 
   return (
     <div className="relative min-h-screen p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] max-w-lg mx-auto overflow-hidden">
-      <div className="absolute inset-0 bg-gloss-japa" aria-hidden />
+      <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10">
       <AppHeader title="Japa Dashboard" showBack onBack={onBack} />
 
@@ -153,7 +153,7 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
 
       {downloadModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 overflow-y-auto">
-          <div className="bg-[#1a1a2e] rounded-2xl border border-amber-500/30 p-6 max-w-sm w-full shadow-xl my-4">
+          <div className="bg-[#C2185B]/90 rounded-2xl border border-amber-500/30 p-6 max-w-sm w-full shadow-xl my-4">
             <h2 className="text-xl font-bold text-amber-400 mb-4">Download PDF</h2>
 
             <div className="mb-4 p-3 rounded-lg bg-black/30 border border-amber-500/20">

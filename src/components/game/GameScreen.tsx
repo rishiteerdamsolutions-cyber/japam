@@ -1,10 +1,10 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Board } from './Board';
-import { HUD } from './HUD';
 import { GameOverlay } from './GameOverlay';
 import { ActiveUsersStrip } from './ActiveUsersStrip';
 import { useGameStore } from '../../store/gameStore';
+import { LEVELS } from '../../data/levels';
 import { useAuthStore } from '../../store/authStore';
 import { saveUserPausedGame } from '../../lib/firestore';
 import { setLastPausedGame } from '../../lib/pausedGame';
@@ -34,6 +34,62 @@ function MusicIcon() {
     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
     </svg>
+  );
+}
+
+function GameBottomStrip({ isGuest, pauseSaving, onPause, onBack }: {
+  isGuest: boolean;
+  pauseSaving: boolean;
+  onPause: () => void;
+  onBack: () => void;
+}) {
+  const { t } = useTranslation();
+  const moves = useGameStore((s) => s.moves);
+  const mode = useGameStore((s) => s.mode);
+  const levelIndex = useGameStore((s) => s.levelIndex);
+  const japasThisLevel = useGameStore((s) => s.japasThisLevel);
+  const japasByDeity = useGameStore((s) => s.japasByDeity);
+  const marathonTargetJapas = useGameStore((s) => s.marathonTargetJapas);
+  const overrideJapaTarget = useGameStore((s) => s.overrideJapaTarget);
+  const level = LEVELS[levelIndex];
+  const deityTarget: DeityId | undefined = mode !== 'general' ? (mode as DeityId) : undefined;
+  const japasNeeded = deityTarget ? (japasByDeity[deityTarget] ?? 0) : japasThisLevel;
+  const japaTarget = overrideJapaTarget ?? marathonTargetJapas ?? level?.japaTarget ?? 15;
+
+  return (
+    <div
+      className="fixed bottom-0 left-0 right-0 z-20 flex items-center justify-between px-4 py-2 rounded-t-2xl bg-black/70 backdrop-blur-md border-t border-white/10"
+      style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}
+      role="group"
+      aria-label="Game controls"
+    >
+      <div className="flex-1 min-w-0 text-amber-200 text-xs sm:text-sm truncate" title={`${t('game.japas')}: ${japasNeeded} / ${japaTarget}`}>
+        {t('game.japas')}: {japasNeeded} / {japaTarget}
+      </div>
+      {!isGuest ? (
+        <button
+          type="button"
+          onClick={onPause}
+          disabled={pauseSaving}
+          aria-label={t('game.pause')}
+          className="flex-shrink-0 w-14 h-14 -mt-5 rounded-full bg-amber-500 shadow-lg shadow-amber-500/40 flex items-center justify-center text-white border-4 border-black/80 hover:bg-amber-400 active:scale-95 transition-transform disabled:opacity-50 mx-1"
+        >
+          <PauseIcon />
+        </button>
+      ) : (
+        <button
+          type="button"
+          onClick={onBack}
+          aria-label={t('game.exit')}
+          className="flex-shrink-0 w-14 h-14 -mt-5 rounded-full bg-amber-500 shadow-lg shadow-amber-500/40 flex items-center justify-center text-white border-4 border-black/80 hover:bg-amber-400 active:scale-95 transition-transform mx-1"
+        >
+          <ExitIcon />
+        </button>
+      )}
+      <div className="flex-1 min-w-0 text-amber-200 text-xs sm:text-sm font-medium text-right">
+        {t('game.moves')}: {moves}
+      </div>
+    </div>
   );
 }
 
@@ -292,7 +348,6 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
       )}
 
       <div className="shrink-0 w-full max-w-md">
-        <HUD />
         <ActiveUsersStrip />
       </div>
 
@@ -301,33 +356,15 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
       </div>
 
       {status === 'playing' && (
-        <div
-          className="w-full max-w-md shrink-0 flex justify-center items-center py-2 border-t border-white/10 bg-black/60 backdrop-blur-sm"
-          style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}
-          role="group"
-          aria-label="Game controls"
-        >
-          {!isGuest ? (
-            <button
-              type="button"
-              onClick={handlePause}
-              disabled={pauseSaving}
-              aria-label={t('game.pause')}
-              className="flex-shrink-0 w-14 h-14 -mt-5 rounded-full bg-amber-500 shadow-lg shadow-amber-500/40 flex items-center justify-center text-white border-4 border-black/80 hover:bg-amber-400 active:scale-95 transition-transform disabled:opacity-50"
-            >
-              <PauseIcon />
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={onBack}
-              aria-label={t('game.exit')}
-              className="flex-shrink-0 w-14 h-14 -mt-5 rounded-full bg-amber-500 shadow-lg shadow-amber-500/40 flex items-center justify-center text-white border-4 border-black/80 hover:bg-amber-400 active:scale-95 transition-transform"
-            >
-              <ExitIcon />
-            </button>
-          )}
-        </div>
+        <>
+          <div className="shrink-0 h-20" aria-hidden />
+          <GameBottomStrip
+            isGuest={!!isGuest}
+            pauseSaving={pauseSaving}
+            onPause={handlePause}
+            onBack={onBack}
+          />
+        </>
       )}
 
       {status === 'won' && (

@@ -18,7 +18,12 @@ export async function GET(request) {
   }
 }
 
-const DEITY_IDS = ['rama', 'shiva', 'ganesh', 'surya', 'shakthi', 'krishna', 'shanmukha', 'venkateswara'];
+/** All deity IDs that can earn japas (must match frontend deities.ts for Maha Japa Yagna + marathon attribution). */
+const DEITY_IDS = [
+  'rama', 'shiva', 'ganesh', 'surya', 'shakthi', 'krishna', 'shanmukha', 'venkateswara',
+  'hanuman', 'narasimha', 'lakshmi', 'durga', 'saraswati', 'ayyappan', 'jagannath', 'dattatreya',
+  'saiBaba', 'narayana', 'iskcon', 'guru', 'shani', 'rahu', 'ketu'
+];
 
 /** POST /api/user/japa - Save japa counts for current user (Firebase ID token required). Also attributes deltas to joined marathons by deity. */
 export async function POST(request) {
@@ -33,15 +38,17 @@ export async function POST(request) {
     const prev = (prevSnap.exists && prevSnap.data()) || {};
     await db.doc(`users/${uid}/data/japa`).set(counts, { merge: true });
 
-    // Keep a public summary doc updated for global leaderboards/active users UI.
+    // Keep a public summary doc updated for global leaderboards/active users UI (Yesterday's achievers strip).
     try {
       const totalFromBody = typeof counts.total === 'number' ? counts.total : null;
       const computedTotal = DEITY_IDS.reduce((a, deity) => a + (typeof counts[deity] === 'number' ? counts[deity] : 0), 0);
+      const now = admin.firestore.FieldValue.serverTimestamp();
       await db.doc(`publicUsers/${uid}`).set(
         {
           uid,
           totalJapas: Math.max(0, Math.round(totalFromBody ?? computedTotal)),
-          updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+          updatedAt: now,
+          lastActiveAt: now,
         },
         { merge: true },
       );
@@ -55,7 +62,8 @@ export async function POST(request) {
       if (d > 0) deltas[deity] = d;
     }
 
-    // Skip marathon logic for users who have never joined (saves query for non-marathon users)
+    // Skip marathon logic for users who have never joined (saves query for non-marathon users).
+    // Do NOT return early here — Maha Japa Yagna attribution must always run for Pro users.
     let hasJoinedMarathon = null;
     try {
       const profileSnap = await db.doc(`users/${uid}/data/profile`).get();
@@ -65,9 +73,9 @@ export async function POST(request) {
         else if (pd.hasJoinedMarathon === false) hasJoinedMarathon = false;
       }
     } catch {}
-    if (hasJoinedMarathon === false) return jsonResponse({ ok: true }, 200);
+    const skipMarathon = hasJoinedMarathon === false;
 
-    if (Object.keys(deltas).length > 0) {
+    if (!skipMarathon && Object.keys(deltas).length > 0) {
       const partsSnap = await db.collection('marathonParticipations').where('userId', '==', uid).get();
       const today = new Date().toISOString().slice(0, 10);
       for (const partDoc of partsSnap.docs) {

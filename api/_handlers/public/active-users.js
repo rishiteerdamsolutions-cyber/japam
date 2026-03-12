@@ -34,16 +34,52 @@ export async function GET() {
       const data = snap.data() || {};
       users = Array.isArray(data.users) ? data.users : [];
     }
-    // Fallback: if cache empty (e.g. first deploy before cron runs), do live query once
+    // Fallback: if cache empty (e.g. first deploy before cron runs), do live query
     if (users.length === 0) {
       const cutoff = new Date(Date.now() - DAY_MS);
-      const liveSnap = await db
-        .collection('publicUsers')
-        .where('lastActiveAt', '>=', cutoff)
-        .orderBy('lastActiveAt', 'desc')
-        .limit(50)
-        .get();
-      users = liveSnap.docs.map((d) => mapDocToUser(d, d.data() || {}));
+      let liveDocs = [];
+      try {
+        const liveSnap = await db
+          .collection('publicUsers')
+          .where('lastActiveAt', '>=', cutoff)
+          .orderBy('lastActiveAt', 'desc')
+          .limit(50)
+          .get();
+        liveDocs = liveSnap.docs;
+      } catch {
+        // lastActiveAt index may not exist
+      }
+      if (liveDocs.length > 0) {
+        users = liveDocs.map((d) => mapDocToUser(d, d.data() || {}));
+      } else {
+        // lastActiveAt may be missing on older docs; fallback to updatedAt
+        const fallbackSnap = await db
+          .collection('publicUsers')
+          .where('updatedAt', '>=', cutoff)
+          .orderBy('updatedAt', 'desc')
+          .limit(50)
+          .get();
+        users = fallbackSnap.docs.map((d) => {
+          const data = d.data() || {};
+          const ts = data.lastActiveAt ?? data.updatedAt;
+          const lastActiveAt = ts && typeof ts.toDate === 'function' ? ts.toDate().toISOString() : null;
+          const updatedTs = data.updatedAt;
+          const updatedAt = updatedTs && typeof updatedTs.toDate === 'function' ? updatedTs.toDate().toISOString() : null;
+          const appreciations = data.appreciations && typeof data.appreciations === 'object' ? data.appreciations : {};
+          return {
+            uid: String(data.uid || d.id),
+            name: typeof data.name === 'string' && data.name.trim() ? data.name.trim() : null,
+            totalJapas: typeof data.totalJapas === 'number' ? data.totalJapas : 0,
+            appreciations: {
+              heart: typeof appreciations.heart === 'number' ? appreciations.heart : 0,
+              like: typeof appreciations.like === 'number' ? appreciations.like : 0,
+              clap: typeof appreciations.clap === 'number' ? appreciations.clap : 0,
+            },
+            lastActiveAt,
+            updatedAt,
+          };
+        });
+      }
       users.sort((a, b) => (b.totalJapas || 0) - (a.totalJapas || 0));
     }
 

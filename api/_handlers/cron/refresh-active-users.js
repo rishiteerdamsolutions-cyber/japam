@@ -16,16 +16,31 @@ export async function GET(request) {
     if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
 
     const cutoff = new Date(Date.now() - DAY_MS);
-    const snap = await db
-      .collection('publicUsers')
-      .where('lastActiveAt', '>=', cutoff)
-      .orderBy('lastActiveAt', 'desc')
-      .limit(50)
-      .get();
+    let docs = [];
+    try {
+      const snap = await db
+        .collection('publicUsers')
+        .where('lastActiveAt', '>=', cutoff)
+        .orderBy('lastActiveAt', 'desc')
+        .limit(50)
+        .get();
+      docs = snap.docs;
+    } catch {
+      // lastActiveAt index may not exist
+    }
+    if (docs.length === 0) {
+      const fallback = await db
+        .collection('publicUsers')
+        .where('updatedAt', '>=', cutoff)
+        .orderBy('updatedAt', 'desc')
+        .limit(50)
+        .get();
+      docs = fallback.docs;
+    }
 
-    const users = snap.docs.map((d) => {
+    const users = docs.map((d) => {
       const data = d.data() || {};
-      const ts = data.lastActiveAt;
+      const ts = data.lastActiveAt ?? data.updatedAt;
       const lastActiveAt = ts && typeof ts.toDate === 'function' ? ts.toDate().toISOString() : null;
       const updatedTs = data.updatedAt;
       const updatedAt = updatedTs && typeof updatedTs.toDate === 'function' ? updatedTs.toDate().toISOString() : null;

@@ -187,12 +187,25 @@
     linear-gradient(165deg, #C2185B 0%, #D81B60 25%, #E91E63 50%, #D81B60 75%, #C2185B 100%);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -2px 20px rgba(0,0,0,0.15);
 }
+@keyframes stars-blink {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
 .bg-gloss-bubblegum::after {
   content: '';
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(115deg, transparent 0%, transparent 38%, rgba(255,255,255,0.4) 48%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.4) 52%, transparent 62%, transparent 100%),
-    linear-gradient(180deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 25%, transparent 50%, transparent 75%, rgba(0,0,0,0.1) 100%);
+    radial-gradient(circle at 15% 20%, rgba(255,255,255,0.6) 0%, transparent 1.5%),
+    radial-gradient(circle at 85% 15%, rgba(255,255,255,0.55) 0%, transparent 1.2%),
+    radial-gradient(circle at 45% 35%, rgba(255,255,255,0.5) 0%, transparent 1%),
+    radial-gradient(circle at 70% 55%, rgba(255,255,255,0.6) 0%, transparent 1.2%),
+    radial-gradient(circle at 25% 65%, rgba(255,255,255,0.5) 0%, transparent 1%),
+    radial-gradient(circle at 90% 75%, rgba(255,255,255,0.55) 0%, transparent 1.2%),
+    radial-gradient(circle at 55% 85%, rgba(255,255,255,0.5) 0%, transparent 1%),
+    radial-gradient(circle at 8% 45%, rgba(255,255,255,0.45) 0%, transparent 0.8%),
+    radial-gradient(circle at 75% 30%, rgba(255,255,255,0.45) 0%, transparent 0.8%),
+    radial-gradient(circle at 35% 90%, rgba(255,255,255,0.4) 0%, transparent 0.7%);
+  animation: stars-blink 2.5s ease-in-out infinite;
   pointer-events: none;
 }

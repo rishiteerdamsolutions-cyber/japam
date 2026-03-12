@@ -10,7 +10,7 @@ export function PWAUpdatePrompt() {
   const [updated, setUpdated] = useState(false);
   const [offlineReady, setOfflineReady] = useState(false);
   const [updateSW, setUpdateSW] = useState<(() => void) | null>(null);
-  const registrationRef = useRef<ServiceWorkerRegistration | null>(null);
+  const registrationRef = useRef<ServiceWorkerRegistration | null | undefined>(null);
 
   useEffect(() => {
     const update = registerSW({
@@ -20,8 +20,8 @@ export function PWAUpdatePrompt() {
       onOfflineReady() {
         setOfflineReady(true);
       },
-      onRegisteredSW(swUrl, registration) {
-        if (registration) registrationRef.current = registration;
+      onRegisteredSW(_swUrl, reg) {
+        registrationRef.current = reg ?? null;
       },
     });
     setUpdateSW(() => update);

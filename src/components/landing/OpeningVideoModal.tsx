@@ -44,18 +44,15 @@ export function OpeningVideoModal({ onClose, videoSrc }: OpeningVideoModalProps)
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center p-4 bg-gloss-bubblegum">
       <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px]" aria-hidden />
       <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-full min-w-0 px-4 sm:px-6">
-        <motion.h1
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-neon animate-neon-pulse font-bold mb-6 text-center drop-shadow-lg w-full max-w-full min-w-0 overflow-visible flex flex-col items-center gap-0.5 sm:gap-1 break-words"
-          style={{
-            fontFamily: "inherit",
-            fontSize: 'clamp(0.8rem, 4.5vw, 2.5rem)',
-            letterSpacing: 'clamp(0.02em, 0.8vw, 0.12em)',
-            lineHeight: 1.3,
-          }}
+          className="mb-6 text-center w-full max-w-full min-w-0 overflow-visible flex flex-col items-center gap-0.5 sm:gap-1 break-words"
         >
-          <span className="block">
+          <span
+            className="block text-3xl sm:text-4xl font-bold text-amber-400 drop-shadow-lg heading-on-bg"
+            style={{ fontFamily: 'serif' }}
+          >
             {graphemes1.map((g, i) => (
               <motion.span
                 key={`l1-${i}`}
@@ -67,7 +64,15 @@ export function OpeningVideoModal({ onClose, videoSrc }: OpeningVideoModalProps)
               </motion.span>
             ))}
           </span>
-          <span className="block">
+          <span
+            className="block text-neon animate-neon-pulse font-bold drop-shadow-lg"
+            style={{
+              fontFamily: 'inherit',
+              fontSize: 'clamp(0.8rem, 4.5vw, 2.5rem)',
+              letterSpacing: 'clamp(0.02em, 0.8vw, 0.12em)',
+              lineHeight: 1.3,
+            }}
+          >
             {graphemes2.map((g, i) => (
               <motion.span
                 key={`l2-${i}`}
@@ -79,7 +84,7 @@ export function OpeningVideoModal({ onClose, videoSrc }: OpeningVideoModalProps)
               </motion.span>
             ))}
           </span>
-        </motion.h1>
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}

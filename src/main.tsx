@@ -41,8 +41,8 @@ const ShippingDeliveryPage = lazy(() => import('./pages/ShippingDeliveryPage').t
 const ContactPage = lazy(() => import('./pages/ContactPage').then(m => ({ default: m.ContactPage })))
 function PageFallback() {
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-center gap-3 bg-cover bg-center" style={{ backgroundImage: 'url(/images/pagefallbackbg.png)' }}>
-      <div className="absolute inset-0 bg-black/70" aria-hidden />
+    <div className="relative min-h-screen flex flex-col items-center justify-center gap-3">
+      <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10 flex flex-col items-center gap-3">
       <div className="w-10 h-10 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" aria-hidden />
       <p className="text-amber-400 text-sm">Loading…</p>

@@ -10,6 +10,7 @@ import { DonateThankYouBox } from './donation/DonateThankYouBox';
 import { AppHeader } from './layout/AppHeader';
 import { loadMyAppreciations, type MyAppreciations } from '../lib/firestore';
 import { useReminderStore } from '../store/reminderStore';
+import { JAPAM_CHECK_UPDATES_EVENT } from './PWAUpdatePrompt';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -396,6 +397,18 @@ export function Settings({ onBack }: SettingsProps) {
             </form>
             {priestMessage && <p className="text-amber-200 text-xs mb-2">{priestMessage}</p>}
             {user && <Link to="/priest" className="text-amber-400 text-sm hover:underline">Go to Priest dashboard</Link>}
+          </section>
+
+          <section className="border-b border-white/10 py-4 space-y-3">
+            <h2 className="text-amber-400 font-medium text-sm">App updates</h2>
+            <p className="text-amber-200/70 text-xs mb-2">Check if a new version of Japam is available.</p>
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent(JAPAM_CHECK_UPDATES_EVENT))}
+              className="w-full py-2 rounded-lg bg-amber-500/80 text-white text-sm font-medium hover:bg-amber-500"
+            >
+              Check for updates
+            </button>
           </section>
 
           <section className="border-b border-white/10 py-4 space-y-3">

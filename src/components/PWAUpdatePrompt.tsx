@@ -1,5 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { registerSW } from 'virtual:pwa-register';
+
+export const JAPAM_CHECK_UPDATES_EVENT = 'japam-check-updates';
 
 export function PWAUpdatePrompt() {
   const [needRefresh, setNeedRefresh] = useState(false);
@@ -7,8 +9,11 @@ export function PWAUpdatePrompt() {
   const [updated, setUpdated] = useState(false);
   const [offlineReady, setOfflineReady] = useState(false);
   const [updateSW, setUpdateSW] = useState<(() => void) | null>(null);
+  const registrationRef = useRef<ServiceWorkerRegistration | null>(null);
 
   useEffect(() => {
+    const CHECK_INTERVAL_MS = 60 * 1000; // Check every 60 seconds
+    let intervalId: ReturnType<typeof setInterval> | null = null;
     const update = registerSW({
       onNeedRefresh() {
         setNeedRefresh(true);
@@ -16,8 +21,33 @@ export function PWAUpdatePrompt() {
       onOfflineReady() {
         setOfflineReady(true);
       },
+      onRegisteredSW(swUrl, registration) {
+        if (!registration) return;
+        registrationRef.current = registration;
+        const checkForUpdates = async () => {
+          if (!navigator.onLine || registration.installing) return;
+          try {
+            const resp = await fetch(swUrl, {
+              cache: 'no-store',
+              headers: { 'cache-control': 'no-cache' },
+            });
+            if (resp?.status === 200) await registration.update();
+          } catch {
+            // Offline or network error, skip
+          }
+        };
+        intervalId = setInterval(checkForUpdates, CHECK_INTERVAL_MS);
+      },
     });
     setUpdateSW(() => update);
+    const handleManualCheck = () => {
+      registrationRef.current?.update();
+    };
+    window.addEventListener(JAPAM_CHECK_UPDATES_EVENT, handleManualCheck);
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+      window.removeEventListener(JAPAM_CHECK_UPDATES_EVENT, handleManualCheck);
+    };
   }, []);
 
   const handleUpdate = () => {

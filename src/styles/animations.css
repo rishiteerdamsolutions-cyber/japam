@@ -179,9 +179,9 @@
 }
 
 /* Bubblegum Pink (Candy Crush style) – used for video modal, apavarga, menu, game. Revert: see docs/ORIGINAL_BACKGROUND_BACKUP.md */
+/* Do NOT add position:relative here – it overrides fixed/absolute on modal and breaks full-screen cover */
 .bg-gloss-bubblegum {
   background: linear-gradient(160deg, #FFC1CC 0%, #F5A5B3 40%, #FFC1CC 100%);
-  position: relative;
 }
 .bg-gloss-bubblegum::after {
   content: '';

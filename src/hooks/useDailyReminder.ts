@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { useAuthStore } from '../store/authStore';
 import { useReminderStore } from '../store/reminderStore';
+import { useProfileStore } from '../store/profileStore';
 
 function nextOccurrenceMs(hhmm: string): number | null {
   const m = hhmm.match(/^(\d{2}):(\d{2})$/);
@@ -67,17 +68,27 @@ function playAlarmBeep() {
   }
 }
 
+function buildNotificationText(displayName: string | null): { title: string; body: string } {
+  const name = displayName?.trim() || null;
+  const greeting = name ? `Namaskaram ${name} \uD83D\uDE4F` : 'Japam reminder \uD83D\uDE4F';
+  const body = name
+    ? "It's time for your daily japa! Chant your favourite God's name and remove obstacles. Open Japam now."
+    : "Time to chant your favourite God's name. Open Japam for your daily japa.";
+  return { title: greeting, body };
+}
+
 export function useDailyReminder() {
   const user = useAuthStore((s) => s.user);
   const loading = useAuthStore((s) => s.loading);
   const reminder = useReminderStore((s) => s.reminder);
   const loaded = useReminderStore((s) => s.loaded);
   const load = useReminderStore((s) => s.load);
+  const displayName = useProfileStore((s) => s.displayName);
 
   const uid = user?.uid ?? null;
   const key = useMemo(
-    () => `${uid ?? 'no-user'}|${reminder.enabled ? '1' : '0'}|${reminder.time ?? ''}`,
-    [uid, reminder.enabled, reminder.time],
+    () => `${uid ?? 'no-user'}|${reminder.enabled ? '1' : '0'}|${reminder.time ?? ''}|${displayName ?? ''}`,
+    [uid, reminder.enabled, reminder.time, displayName],
   );
 
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -104,7 +115,8 @@ export function useDailyReminder() {
       const delay = Math.max(500, nextMs - Date.now());
       timeoutRef.current = setTimeout(() => {
         if (cancelled) return;
-        showNotification('Japam reminder \uD83D\uDE4F', "Time to chant your favourite God's name.").catch(() => {});
+        const { title, body } = buildNotificationText(displayName);
+        showNotification(title, body).catch(() => {});
         playAlarmBeep();
         schedule();
       }, delay);

@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { registerSW } from 'virtual:pwa-register';
 
 export const JAPAM_CHECK_UPDATES_EVENT = 'japam-check-updates';
+export const JAPAM_CHECK_RESULT_EVENT = 'japam-check-updates-result';
 
 export function PWAUpdatePrompt() {
   const [needRefresh, setNeedRefresh] = useState(false);
@@ -12,8 +13,6 @@ export function PWAUpdatePrompt() {
   const registrationRef = useRef<ServiceWorkerRegistration | null>(null);
 
   useEffect(() => {
-    const CHECK_INTERVAL_MS = 60 * 1000; // Check every 60 seconds
-    let intervalId: ReturnType<typeof setInterval> | null = null;
     const update = registerSW({
       onNeedRefresh() {
         setNeedRefresh(true);
@@ -22,32 +21,28 @@ export function PWAUpdatePrompt() {
         setOfflineReady(true);
       },
       onRegisteredSW(swUrl, registration) {
-        if (!registration) return;
-        registrationRef.current = registration;
-        const checkForUpdates = async () => {
-          if (!navigator.onLine || registration.installing) return;
-          try {
-            const resp = await fetch(swUrl, {
-              cache: 'no-store',
-              headers: { 'cache-control': 'no-cache' },
-            });
-            if (resp?.status === 200) await registration.update();
-          } catch {
-            // Offline or network error, skip
-          }
-        };
-        intervalId = setInterval(checkForUpdates, CHECK_INTERVAL_MS);
+        if (registration) registrationRef.current = registration;
       },
     });
     setUpdateSW(() => update);
-    const handleManualCheck = () => {
-      registrationRef.current?.update();
+    const handleManualCheck = async () => {
+      let reg = registrationRef.current;
+      if (!reg && 'serviceWorker' in navigator) {
+        reg = await navigator.serviceWorker.getRegistration();
+      }
+      if (!reg) {
+        window.dispatchEvent(new CustomEvent(JAPAM_CHECK_RESULT_EVENT, { detail: { ok: false, reason: 'no-sw' } }));
+        return;
+      }
+      try {
+        await reg.update();
+        window.dispatchEvent(new CustomEvent(JAPAM_CHECK_RESULT_EVENT, { detail: { ok: true } }));
+      } catch {
+        window.dispatchEvent(new CustomEvent(JAPAM_CHECK_RESULT_EVENT, { detail: { ok: false, reason: 'error' } }));
+      }
     };
     window.addEventListener(JAPAM_CHECK_UPDATES_EVENT, handleManualCheck);
-    return () => {
-      if (intervalId) clearInterval(intervalId);
-      window.removeEventListener(JAPAM_CHECK_UPDATES_EVENT, handleManualCheck);
-    };
+    return () => window.removeEventListener(JAPAM_CHECK_UPDATES_EVENT, handleManualCheck);
   }, []);
 
   const handleUpdate = () => {

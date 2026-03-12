@@ -347,7 +347,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
         </div>
       )}
 
-      <div className="shrink-0 w-full max-w-md">
+      <div className="relative z-20 shrink-0 w-full max-w-md mt-1 -mx-1 px-1 py-2 rounded-lg bg-black/20">
         <ActiveUsersStrip />
       </div>
 

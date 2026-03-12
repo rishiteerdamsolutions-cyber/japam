@@ -10,7 +10,7 @@ import { DonateThankYouBox } from './donation/DonateThankYouBox';
 import { AppHeader } from './layout/AppHeader';
 import { loadMyAppreciations, type MyAppreciations } from '../lib/firestore';
 import { useReminderStore } from '../store/reminderStore';
-import { JAPAM_CHECK_UPDATES_EVENT } from './PWAUpdatePrompt';
+import { JAPAM_CHECK_UPDATES_EVENT, JAPAM_CHECK_RESULT_EVENT } from './PWAUpdatePrompt';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -50,10 +50,27 @@ export function Settings({ onBack }: SettingsProps) {
     return Notification.permission;
   });
   const [testingNotif, setTestingNotif] = useState(false);
+  const [checkingUpdate, setCheckingUpdate] = useState(false);
+  const [checkUpdateMessage, setCheckUpdateMessage] = useState<string | null>(null);
 
   // Install prompt
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState(false);
+
+  useEffect(() => {
+    const onCheckResult = (e: Event) => {
+      setCheckingUpdate(false);
+      const detail = (e as CustomEvent<{ ok: boolean; reason?: string }>).detail;
+      if (detail.ok) {
+        setCheckUpdateMessage("Checked. If an update is available, you'll see the banner below.");
+      } else {
+        setCheckUpdateMessage("Couldn't check. Try refreshing the page.");
+      }
+      setTimeout(() => setCheckUpdateMessage(null), 4000);
+    };
+    window.addEventListener(JAPAM_CHECK_RESULT_EVENT, onCheckResult);
+    return () => window.removeEventListener(JAPAM_CHECK_RESULT_EVENT, onCheckResult);
+  }, []);
 
   useEffect(() => {
     if (window.matchMedia('(display-mode: standalone)').matches) setIsInstalled(true);
@@ -404,11 +421,19 @@ export function Settings({ onBack }: SettingsProps) {
             <p className="text-amber-200/70 text-xs mb-2">Check if a new version of Japam is available.</p>
             <button
               type="button"
-              onClick={() => window.dispatchEvent(new CustomEvent(JAPAM_CHECK_UPDATES_EVENT))}
-              className="w-full py-2 rounded-lg bg-amber-500/80 text-white text-sm font-medium hover:bg-amber-500"
+              disabled={checkingUpdate}
+              onClick={() => {
+                setCheckingUpdate(true);
+                setCheckUpdateMessage(null);
+                window.dispatchEvent(new CustomEvent(JAPAM_CHECK_UPDATES_EVENT));
+              }}
+              className="w-full py-2 rounded-lg bg-amber-500/80 text-white text-sm font-medium hover:bg-amber-500 disabled:opacity-70"
             >
-              Check for updates
+              {checkingUpdate ? 'Checking…' : 'Check for updates'}
             </button>
+            {checkUpdateMessage && (
+              <p className="text-amber-200/80 text-xs">{checkUpdateMessage}</p>
+            )}
           </section>
 
           <section className="border-b border-white/10 py-4 space-y-3">

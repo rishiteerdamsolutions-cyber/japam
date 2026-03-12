@@ -88,7 +88,7 @@ export function ActiveUsersStrip() {
   const durationMs = Math.max(8000, totalW * 40);
 
   return (
-    <div className="w-full mt-2">
+    <div className="w-full">
       <div className="flex items-center justify-between mb-1 px-0.5">
         <div className="text-[11px] text-amber-200/70">{t('activeUsers.yesterdaysAchievers')}</div>
         {!uid && (
@@ -111,7 +111,7 @@ export function ActiveUsersStrip() {
       `}</style>
 
       <div
-        className="w-full overflow-hidden"
+        className="w-full overflow-hidden rounded-lg"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
         onTouchStart={() => setPaused(true)}

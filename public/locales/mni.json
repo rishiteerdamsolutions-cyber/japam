@@ -36,7 +36,8 @@
     "premium": "ꯄ꯭ꯔꯤꯃꯤꯌꯝ",
     "pro": "ꯄ꯭ꯔꯣ",
     "general": "general",
-    "offerDakshinaToUnlock": "offer_dakshina_to_unlock"
+    "offerDakshinaToUnlock": "offer_dakshina_to_unlock",
+    "mahaJapaYagnas": "ꯃꯍꯥ ꯖꯄ ꯌꯖ꯭ꯪ"
   },
   "game": {
     "jai": "ꯖꯥꯏ!",
@@ -73,7 +74,22 @@
     "shakthi": "ꯁꯛꯇꯤ",
     "krishna": "ꯀ꯭ꯔꯤꯁ꯭ꯅꯥ",
     "shanmukha": "ꯀꯥꯔꯇꯤꯀꯥ",
-    "venkateswara": "ꯚꯦꯡꯀꯇꯦꯁꯚꯥꯔꯥ"
+    "venkateswara": "ꯚꯦꯡꯀꯇꯦꯁꯚꯥꯔꯥ",
+    "hanuman": "ꯍꯥꯅꯨꯃꯥꯟ",
+    "narasimha": "ꯅꯥꯔꯥꯁꯤꯝꯍꯥ",
+    "lakshmi": "ꯂꯛꯁ꯭ꯃꯤ",
+    "durga": "ꯗꯨꯔꯒꯥ",
+    "saraswati": "ꯁꯔꯁꯚꯇꯤ",
+    "ayyappan": "ꯑꯌ꯭ꯌꯥꯄꯄꯟ",
+    "jagannath": "ꯖꯒꯟꯅꯥꯊ",
+    "dattatreya": "ꯗꯇꯇꯥꯇ꯭ꯔꯦꯌꯥ",
+    "saiBaba": "ꯁꯥꯏ ꯕꯥꯕꯥ",
+    "narayana": "ꯅꯥꯔꯥꯌꯟ",
+    "iskcon": "ꯏꯁ꯭ꯀꯣꯟ",
+    "guru": "ꯒꯨꯔꯨ",
+    "shani": "ꯁꯥꯅꯤ",
+    "rahu": "ꯔꯥꯍꯨ",
+    "ketu": "ꯀꯦꯇꯨ"
   },
   "shared": {
     "10_third_party_links": "10_third_party_links",
@@ -401,7 +417,23 @@
     "your_name": "your_name",
     "your_rank_card": "your_rank_card",
     "youre_offline_some_features_may_not_work_until_youre_back_online": "youre_offline_some_features_may_not_work_until_youre_back_online",
-    "youve_completed_the_first_2_levels_offer_dakshina_once_to_unlock_levels_350": "youve_completed_the_first_2_levels_offer_dakshina_once_to_unlock_levels_350"
+    "youve_completed_the_first_2_levels_offer_dakshina_once_to_unlock_levels_350": "youve_completed_the_first_2_levels_offer_dakshina_once_to_unlock_levels_350",
+    "ayyappan": "ꯑꯌ꯭ꯌꯥꯄꯄꯟ",
+    "dattatreya": "ꯗꯇꯇꯥꯇ꯭ꯔꯦꯌꯥ",
+    "durga": "ꯗꯨꯔꯒꯥ",
+    "guru": "ꯒꯨꯔꯨ",
+    "hanuman": "ꯍꯥꯅꯨꯃꯥꯟ",
+    "iskcon": "ꯏꯁ꯭ꯀꯣꯟ",
+    "jagannath": "ꯖꯒꯟꯅꯥꯊ",
+    "ketu": "ꯀꯦꯇꯨ",
+    "lakshmi": "ꯂꯛꯁ꯭ꯃꯤ",
+    "maha_japa_yagnas": "ꯃꯍꯥ ꯖꯄ ꯌꯖ꯭ꯪ",
+    "narasimha": "ꯅꯥꯔꯥꯁꯤꯝꯍꯥ",
+    "narayana": "ꯅꯥꯔꯥꯌꯟ",
+    "rahu": "ꯔꯥꯍꯨ",
+    "saiBaba": "ꯁꯥꯏ ꯕꯥꯕꯥ",
+    "saraswati": "ꯁꯔꯁꯚꯇꯤ",
+    "shani": "ꯁꯥꯅꯤ"
   },
   "mahaYagnas": {
     "loading": "ꯂꯣꯗꯤꯡ…",

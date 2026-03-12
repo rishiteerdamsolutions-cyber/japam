@@ -36,7 +36,8 @@
     "premium": "പ്രീമിയം",
     "pro": "പ്രോ",
     "general": "general",
-    "offerDakshinaToUnlock": "offer_dakshina_to_unlock"
+    "offerDakshinaToUnlock": "offer_dakshina_to_unlock",
+    "mahaJapaYagnas": "മഹാ ജപ യജ്ഞം"
   },
   "game": {
     "jai": "ജയ്!",
@@ -73,7 +74,22 @@
     "shakthi": "ശക്തി",
     "krishna": "കൃഷ്ണൻ",
     "shanmukha": "മുരുകൻ",
-    "venkateswara": "വെങ്കടേശ്വരൻ"
+    "venkateswara": "വെങ്കടേശ്വരൻ",
+    "hanuman": "ഹനുമാൻ",
+    "narasimha": "നരസിംഹം",
+    "lakshmi": "ലക്ഷ്മി",
+    "durga": "ദുർഗ",
+    "saraswati": "സരസ്വതി",
+    "ayyappan": "ഐയ്യപ്പൻ",
+    "jagannath": "ജഗന്നാഥൻ",
+    "dattatreya": "ദത്താത്രേയൻ",
+    "saiBaba": "സായി ബാബ",
+    "narayana": "നാരായണൻ",
+    "iskcon": "ഇസ്കോൺ",
+    "guru": "ഗുരു",
+    "shani": "ശനി",
+    "rahu": "രാഹു",
+    "ketu": "കേതു"
   },
   "shared": {
     "10_third_party_links": "10_third_party_links",
@@ -401,7 +417,23 @@
     "your_name": "your_name",
     "your_rank_card": "your_rank_card",
     "youre_offline_some_features_may_not_work_until_youre_back_online": "youre_offline_some_features_may_not_work_until_youre_back_online",
-    "youve_completed_the_first_2_levels_offer_dakshina_once_to_unlock_levels_350": "youve_completed_the_first_2_levels_offer_dakshina_once_to_unlock_levels_350"
+    "youve_completed_the_first_2_levels_offer_dakshina_once_to_unlock_levels_350": "youve_completed_the_first_2_levels_offer_dakshina_once_to_unlock_levels_350",
+    "ayyappan": "ഐയ്യപ്പൻ",
+    "dattatreya": "ദത്താത്രേയൻ",
+    "durga": "ദുർഗ",
+    "guru": "ഗുരു",
+    "hanuman": "ഹനുമാൻ",
+    "iskcon": "ഇസ്കോൺ",
+    "jagannath": "ജഗന്നാഥൻ",
+    "ketu": "കേതു",
+    "lakshmi": "ലക്ഷ്മി",
+    "maha_japa_yagnas": "മഹാ ജപ യജ്ഞം",
+    "narasimha": "നരസിംഹം",
+    "narayana": "നാരായണൻ",
+    "rahu": "രാഹു",
+    "saiBaba": "സായി ബാബ",
+    "saraswati": "സരസ്വതി",
+    "shani": "ശനി"
   },
   "mahaYagnas": {
     "loading": "ലോഡ് ചെയ്യുന്നു…",

@@ -1,4 +1,4 @@
-import { getDb, verifyPriestToken, jsonResponse } from '../_lib.js';
+import { getDb, verifyPriestForApi, jsonResponse } from '../_lib.js';
 
 function getPriestToken(request, body) {
   const auth = request.headers.get('authorization');
@@ -10,10 +10,10 @@ function getPriestToken(request, body) {
 export async function GET(request) {
   try {
     const token = getPriestToken(request, {});
-    const priest = verifyPriestToken(token);
-    if (!priest) return jsonResponse({ error: 'Invalid or expired session' }, 401);
     const db = getDb();
     if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
+    const priest = await verifyPriestForApi(token, db);
+    if (!priest) return jsonResponse({ error: 'Invalid or expired session' }, 401);
 
     const snap = await db.collection('marathons').where('templeId', '==', priest.templeId).get();
     const marathons = [];
@@ -84,7 +84,9 @@ export async function POST(request) {
   try {
     const body = await request.json().catch(() => ({}));
     const token = getPriestToken(request, body);
-    const priest = verifyPriestToken(token);
+    const db = getDb();
+    if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
+    const priest = await verifyPriestForApi(token, db);
     if (!priest) return jsonResponse({ error: 'Invalid or expired session' }, 401);
     const { deityId, targetJapas, startDate } = body;
     if (!deityId || !targetJapas || !startDate) {
@@ -94,8 +96,6 @@ export async function POST(request) {
     if (!Number.isFinite(target) || target < 1) {
       return jsonResponse({ error: 'targetJapas must be a positive number' }, 400);
     }
-    const db = getDb();
-    if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
 
     const marathon = {
       templeId: priest.templeId,

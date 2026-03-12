@@ -1,4 +1,4 @@
-import { getDb, verifyPriestToken, jsonResponse } from '../_lib.js';
+import { getDb, verifyPriestForApi, jsonResponse } from '../_lib.js';
 
 function getPriestToken(request, body) {
   const auth = request?.headers?.get?.('authorization');
@@ -11,14 +11,13 @@ export async function POST(request) {
   try {
     const body = await request.json().catch(() => ({}));
     const token = getPriestToken(request, body);
-    const priest = verifyPriestToken(token);
+    const db = getDb();
+    if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
+    const priest = await verifyPriestForApi(token, db);
     if (!priest) return jsonResponse({ error: 'Invalid or expired session' }, 401);
 
     const yagnaId = body?.yagnaId && typeof body.yagnaId === 'string' ? body.yagnaId.trim() : null;
     if (!yagnaId) return jsonResponse({ error: 'yagnaId required' }, 400);
-
-    const db = getDb();
-    if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
 
     const docRef = db.doc(`mahaJapaYagnas/${yagnaId}`);
     const snap = await docRef.get();

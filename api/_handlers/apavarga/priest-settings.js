@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyPriestToken } from '../_lib.js';
+import { getDb, jsonResponse, verifyPriestForApi } from '../_lib.js';
 
 function getBearerToken(request) {
   const auth = request?.headers?.get?.('authorization') || request?.headers?.get?.('Authorization');
@@ -12,7 +12,7 @@ export async function GET(request) {
   if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
 
   const priestToken = getBearerToken(request);
-  const priest = priestToken ? verifyPriestToken(priestToken) : null;
+  const priest = priestToken ? await verifyPriestForApi(priestToken, db) : null;
   if (!priest) return jsonResponse({ error: 'Unauthorized' }, 401);
 
   const snap = await db.collection('apavargaPriestSettings').doc(priest.templeId).get();
@@ -29,7 +29,7 @@ export async function POST(request) {
   if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
 
   const priestToken = getBearerToken(request);
-  const priest = priestToken ? verifyPriestToken(priestToken) : null;
+  const priest = priestToken ? await verifyPriestForApi(priestToken, db) : null;
   if (!priest) return jsonResponse({ error: 'Unauthorized' }, 401);
 
   const body = await request.json().catch(() => ({}));

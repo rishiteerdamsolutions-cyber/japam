@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser, verifyPriestToken, isUserUnlocked } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, verifyPriestForApi, isUserUnlocked } from '../_lib.js';
 
 function getBearerToken(request) {
   const auth = request?.headers?.get?.('authorization') || request?.headers?.get?.('Authorization');
@@ -13,7 +13,7 @@ export async function GET(request) {
 
   const firebaseUid = await verifyFirebaseUser(request);
   const priestToken = getBearerToken(request);
-  const priest = priestToken ? verifyPriestToken(priestToken) : null;
+  const priest = priestToken ? await verifyPriestForApi(priestToken, db) : null;
 
   if (priest) {
     const snap = await db.collection('apavargaAppointments')

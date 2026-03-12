@@ -1,4 +1,4 @@
-import { getDb, verifyPriestToken, jsonResponse } from '../_lib.js';
+import { getDb, verifyPriestForApi, jsonResponse } from '../_lib.js';
 
 function getPriestToken(request, body) {
   const auth = request?.headers?.get?.('authorization');
@@ -11,14 +11,13 @@ export async function POST(request) {
   try {
     const body = await request.json().catch(() => ({}));
     const token = getPriestToken(request, body);
-    const priest = verifyPriestToken(token);
+    const db = getDb();
+    if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
+    const priest = await verifyPriestForApi(token, db);
     if (!priest) return jsonResponse({ error: 'Invalid or expired session' }, 401);
 
     const marathonId = body?.marathonId && typeof body.marathonId === 'string' ? body.marathonId.trim() : null;
     if (!marathonId) return jsonResponse({ error: 'marathonId required' }, 400);
-
-    const db = getDb();
-    if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
 
     const docRef = db.doc(`marathons/${marathonId}`);
     const snap = await docRef.get();

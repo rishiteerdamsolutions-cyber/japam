@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser, verifyPriestToken, isUserUnlocked, isValidFirestoreDocId } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, isUserUnlocked, isValidFirestoreDocId } from '../_lib.js';
 
 function getBearerToken(request) {
   const auth = request?.headers?.get?.('authorization') || request?.headers?.get?.('Authorization');

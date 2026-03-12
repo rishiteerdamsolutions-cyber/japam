@@ -25,8 +25,14 @@ export async function POST(request) {
       return jsonResponse({ error: 'Invalid username or password' }, 401);
     }
 
-    await doc.ref.update({ priestUserId: userId.trim() });
-    const token = createPriestToken(templeId, templeName);
+    const linkedUid = data.priestUserId;
+    const currentUid = userId.trim();
+    if (linkedUid && linkedUid !== currentUid) {
+      return jsonResponse({ error: 'This priest account is already linked to another Google account.' }, 403);
+    }
+
+    await doc.ref.update({ priestUserId: currentUid });
+    const token = createPriestToken(templeId, templeName, currentUid);
     return jsonResponse({ ok: true, token, templeId, templeName });
   } catch (e) {
     console.error('priest link', e);

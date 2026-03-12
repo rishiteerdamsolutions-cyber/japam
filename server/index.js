@@ -62,9 +62,10 @@ function validatePriestPassword(password) {
   return caps >= 2 && digits >= 2 && small >= 2 && symbols >= 2;
 }
 
-function createPriestToken(templeId, templeName) {
-  const payload = JSON.stringify({ templeId, templeName, priest: true, exp: Date.now() + 24 * 60 * 60 * 1000 });
-  const raw = Buffer.from(payload).toString('base64url');
+function createPriestToken(templeId, templeName, uid) {
+  const payload = { templeId, templeName, priest: true, exp: Date.now() + 24 * 60 * 60 * 1000 };
+  if (uid) payload.uid = uid;
+  const raw = Buffer.from(JSON.stringify(payload)).toString('base64url');
   const sig = crypto.createHmac('sha256', PRIEST_SECRET).update(raw).digest('base64url');
   return raw + '.' + sig;
 }
@@ -218,8 +219,13 @@ app.post('/api/priest/link', async (req, res) => {
     if (!verifyPassword(priestPassword, data.priestPasswordHash)) {
       return res.status(401).json({ error: 'Invalid username or password' });
     }
-    await doc.ref.update({ priestUserId: userId.trim() });
-    const token = createPriestToken(templeId, templeName);
+    const linkedUid = data.priestUserId;
+    const currentUid = userId.trim();
+    if (linkedUid && linkedUid !== currentUid) {
+      return res.status(403).json({ error: 'This priest account is already linked to another Google account.' });
+    }
+    await doc.ref.update({ priestUserId: currentUid });
+    const token = createPriestToken(templeId, templeName, currentUid);
     res.json({ ok: true, token, templeId, templeName });
   } catch (e) {
     console.error('priest link', e);
@@ -244,6 +250,11 @@ app.post('/api/priest-login', async (req, res) => {
     const templeName = data.name || '';
     if (!verifyPassword(password, data.priestPasswordHash)) {
       return res.status(401).json({ error: 'Invalid username or password' });
+    }
+    if (data.priestUserId) {
+      return res.status(403).json({
+        error: 'This priest account is linked. Sign in with Google at japam.digital and link from Settings.',
+      });
     }
     const token = createPriestToken(templeId, templeName);
     res.json({ token, templeId, templeName });
@@ -372,9 +383,9 @@ app.get('/api/admin/list-temples', async (req, res) => {
 app.get('/api/priest/marathons', async (req, res) => {
   try {
     const token = req.headers.authorization?.startsWith('Bearer ') ? req.headers.authorization.slice(7) : null;
-    const priest = verifyPriestToken(token);
-    if (!priest) return res.status(401).json({ error: 'Invalid or expired session' });
     if (!db) return res.status(503).json({ error: 'Database not configured' });
+    const priest = await verifyPriestForApi(token, db);
+    if (!priest) return res.status(401).json({ error: 'Invalid or expired session' });
     const snap = await db.collection('marathons').where('templeId', '==', priest.templeId).get();
     const marathons = snap.docs.map((d) => {
       const data = d.data();
@@ -390,13 +401,13 @@ app.get('/api/priest/marathons', async (req, res) => {
 app.post('/api/priest/marathons', async (req, res) => {
   try {
     const token = req.headers.authorization?.startsWith('Bearer ') ? req.headers.authorization.slice(7) : null;
-    const priest = verifyPriestToken(token);
+    if (!db) return res.status(503).json({ error: 'Database not configured' });
+    const priest = await verifyPriestForApi(token, db);
     if (!priest) return res.status(401).json({ error: 'Invalid or expired session' });
     const { deityId, targetJapas, startDate } = req.body || {};
     if (!deityId || !targetJapas || !startDate) return res.status(400).json({ error: 'deityId, targetJapas, startDate required' });
     const target = Math.round(Number(targetJapas));
     if (!Number.isFinite(target) || target < 1) return res.status(400).json({ error: 'targetJapas must be positive' });
-    if (!db) return res.status(503).json({ error: 'Database not configured' });
     const marathon = { templeId: priest.templeId, deityId, targetJapas: target, startDate, joinedCount: 0, japasToday: 0, totalJapas: 0, createdAt: new Date().toISOString() };
     const docRef = await db.collection('marathons').add(marathon);
     res.json({ ok: true, marathonId: docRef.id });
@@ -415,7 +426,25 @@ function verifyPriestToken(token) {
     if (payload.exp < Date.now() || !payload.templeId) return null;
     const expected = crypto.createHmac('sha256', PRIEST_SECRET).update(raw).digest('base64url');
     if (sig !== expected) return null;
-    return { templeId: payload.templeId, templeName: payload.templeName || '' };
+    const result = { templeId: payload.templeId, templeName: payload.templeName || '' };
+    if (payload.uid) result.uid = payload.uid;
+    return result;
+  } catch {
+    return null;
+  }
+}
+
+async function verifyPriestForApi(token, database) {
+  const priest = verifyPriestToken(token);
+  if (!priest || !database) return null;
+  try {
+    const templeSnap = await database.collection('temples').doc(priest.templeId).get();
+    const temple = templeSnap.data();
+    const linkedUid = temple?.priestUserId;
+    if (linkedUid) {
+      if (!priest.uid || priest.uid !== linkedUid) return null;
+    }
+    return priest;
   } catch {
     return null;
   }

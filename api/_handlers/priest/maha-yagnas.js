@@ -1,4 +1,4 @@
-import { getDb, verifyPriestToken, jsonResponse } from '../_lib.js';
+import { getDb, verifyPriestForApi, jsonResponse } from '../_lib.js';
 import admin from 'firebase-admin';
 
 const DEITY_NAMES = { rama: 'Rama', shiva: 'Shiva', ganesh: 'Ganesh', surya: 'Surya', shakthi: 'Shakthi', krishna: 'Krishna', shanmukha: 'Shanmukha', venkateswara: 'Venkateswara' };
@@ -13,11 +13,10 @@ function getPriestToken(request, body) {
 export async function GET(request) {
   try {
     const token = getPriestToken(request, {});
-    const priest = verifyPriestToken(token);
-    if (!priest) return jsonResponse({ error: 'Invalid or expired session' }, 401);
-
     const db = getDb();
     if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
+    const priest = await verifyPriestForApi(token, db);
+    if (!priest) return jsonResponse({ error: 'Invalid or expired session' }, 401);
 
     const snap = await db.collection('mahaJapaYagnas').where('templeId', '==', priest.templeId).get();
     const yagnas = [];
@@ -51,7 +50,9 @@ export async function POST(request) {
   try {
     const body = await request.json().catch(() => ({}));
     const token = getPriestToken(request, body);
-    const priest = verifyPriestToken(token);
+    const db = getDb();
+    if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
+    const priest = await verifyPriestForApi(token, db);
     if (!priest) return jsonResponse({ error: 'Invalid or expired session' }, 401);
 
     const { name, description, deityId, mantra, goalJapas, startDate, endDate } = body;
@@ -61,9 +62,6 @@ export async function POST(request) {
 
     const goal = Math.round(Number(goalJapas));
     if (!Number.isFinite(goal) || goal < 1) return jsonResponse({ error: 'goalJapas must be a positive number' }, 400);
-
-    const db = getDb();
-    if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
 
     const yagna = {
       name: String(name).trim(),

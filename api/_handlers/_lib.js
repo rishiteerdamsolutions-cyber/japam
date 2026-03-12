@@ -199,17 +199,18 @@ export function verifyPassword(password, stored) {
   }
 }
 
-/** Create priest JWT with templeId. */
-export function createPriestToken(templeId, templeName) {
+/** Create priest JWT with templeId. Optional uid binds token to linked Gmail. */
+export function createPriestToken(templeId, templeName, uid) {
   const secret = getPriestSecret();
   if (!secret) throw new Error('PRIEST_SECRET or ADMIN_SECRET not configured');
-  const payload = JSON.stringify({ templeId, templeName, priest: true, exp: Date.now() + 24 * 60 * 60 * 1000 });
-  const raw = Buffer.from(payload).toString('base64url');
+  const payload = { templeId, templeName, priest: true, exp: Date.now() + 24 * 60 * 60 * 1000 };
+  if (uid) payload.uid = uid;
+  const raw = Buffer.from(JSON.stringify(payload)).toString('base64url');
   const sig = crypto.createHmac('sha256', secret).update(raw).digest('base64url');
   return raw + '.' + sig;
 }
 
-/** Verify priest token, return { templeId, templeName } or null. */
+/** Verify priest token, return { templeId, templeName, uid? } or null. */
 export function verifyPriestToken(token) {
   const secret = getPriestSecret();
   if (!secret) return null;
@@ -221,7 +222,26 @@ export function verifyPriestToken(token) {
     if (payload.exp < Date.now() || !payload.templeId) return null;
     const expected = crypto.createHmac('sha256', secret).update(raw).digest('base64url');
     if (sig !== expected) return null;
-    return { templeId: payload.templeId, templeName: payload.templeName || '' };
+    const result = { templeId: payload.templeId, templeName: payload.templeName || '' };
+    if (payload.uid) result.uid = payload.uid;
+    return result;
+  } catch {
+    return null;
+  }
+}
+
+/** Verify priest token for API calls. For linked temples (priestUserId set), token must have matching uid. */
+export async function verifyPriestForApi(token, db) {
+  const priest = verifyPriestToken(token);
+  if (!priest || !db) return null;
+  try {
+    const templeSnap = await db.collection('temples').doc(priest.templeId).get();
+    const temple = templeSnap.data();
+    const linkedUid = temple?.priestUserId;
+    if (linkedUid) {
+      if (!priest.uid || priest.uid !== linkedUid) return null;
+    }
+    return priest;
   } catch {
     return null;
   }

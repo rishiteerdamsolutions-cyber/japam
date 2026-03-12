@@ -29,6 +29,13 @@ export async function POST(request) {
       return jsonResponse({ error: 'Invalid username or password' }, 401);
     }
 
+    if (data.priestUserId) {
+      return jsonResponse(
+        { error: 'This priest account is linked. Sign in with Google at japam.digital and link from Settings.' },
+        403
+      );
+    }
+
     await logAudit('priest_login', { templeId, templeName, priestUsername: username.trim() });
     const token = createPriestToken(templeId, templeName);
     return jsonResponse({ token, templeId, templeName });

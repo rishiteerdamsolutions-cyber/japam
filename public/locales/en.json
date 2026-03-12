@@ -39,6 +39,10 @@
     "premium": "Premium",
     "pro": "Pro"
   },
+  "activeUsers": {
+    "yesterdaysAchievers": "Yesterday's achievers",
+    "signInToReact": "Sign in to send ❤️ 👍 👏"
+  },
   "game": {
     "resumeJapa": "Resume Japa?",
     "resumeJapaMessage": "You have a saved session. Continue where you left off?",

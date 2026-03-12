@@ -10,7 +10,6 @@ interface OpeningVideoModalProps {
   videoSrc?: string;
 }
 const TYPE_DELAY_MS = 120;
-const BG_IMAGE = '/images/videomodalbg.png';
 
 /** Split by grapheme clusters so Indic scripts (Telugu, Devanagari, etc.) render correctly. split('') breaks combining chars → dotted circles. */
 function graphemeSplit(str: string): string[] {
@@ -42,11 +41,8 @@ export function OpeningVideoModal({ onClose, videoSrc }: OpeningVideoModalProps)
   }, []);
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center p-4 bg-cover bg-center"
-      style={{ backgroundImage: `url(${BG_IMAGE})` }}
-    >
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-[2px]" aria-hidden />
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center p-4 bg-gloss-bubblegum">
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px]" aria-hidden />
       <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-full min-w-0 px-4 sm:px-6">
         <motion.h1
           initial={{ opacity: 0 }}

@@ -223,7 +223,7 @@ export function GamePage() {
   if (!pauseCheckDone && !isGuest) {
     return (
       <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gloss-game" aria-hidden />
+        <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
         <div className="relative z-10 text-amber-400 text-sm">{t('common.loading')}</div>
       </div>
     );

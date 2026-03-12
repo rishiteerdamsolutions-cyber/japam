@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { loadPublicActiveUsers, sendUserReaction, type PublicActiveUser } from '../../lib/firestore';
 import { useAuthStore } from '../../store/authStore';
 
@@ -20,6 +21,7 @@ function labelForReaction(type: ReactionType): string {
 }
 
 export function ActiveUsersStrip() {
+  const { t } = useTranslation();
   const user = useAuthStore((s) => s.user);
   const uid = user?.uid ?? null;
 
@@ -88,9 +90,9 @@ export function ActiveUsersStrip() {
   return (
     <div className="w-full mt-2">
       <div className="flex items-center justify-between mb-1 px-0.5">
-        <div className="text-[11px] text-amber-200/70">Active recently</div>
+        <div className="text-[11px] text-amber-200/70">{t('activeUsers.yesterdaysAchievers')}</div>
         {!uid && (
-          <div className="text-[10px] text-amber-200/45">Sign in to send ❤️ 👍 👏</div>
+          <div className="text-[10px] text-amber-200/45">{t('activeUsers.signInToReact')}</div>
         )}
       </div>
 

@@ -246,7 +246,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
 
   return (
     <div className="fixed inset-0 flex flex-col items-center overflow-hidden">
-      <div className="absolute inset-0 bg-gloss-game" aria-hidden />
+      <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10 flex flex-col items-center w-full flex-1 min-h-0" style={{
         paddingTop: 'calc(1rem + env(safe-area-inset-top, 0px))',
         paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom, 0px))',

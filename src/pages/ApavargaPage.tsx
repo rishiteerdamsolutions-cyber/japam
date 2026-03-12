@@ -40,8 +40,8 @@ export function ApavargaPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="relative min-h-screen bg-cover bg-center pb-12" style={{ backgroundImage: 'url(/images/apavargapagebg.png)' }}>
-      <div className="absolute inset-0 bg-black/70" aria-hidden />
+    <div className="relative min-h-screen pb-12 bg-gloss-bubblegum">
+      <div className="absolute inset-0 bg-black/40" aria-hidden />
       <div className="relative z-10 flex flex-col min-h-screen">
         <div className="max-w-lg mx-auto px-4 flex-1">
         <AppHeader title="Apavarga" showBack onBack={() => navigate('/settings')} />

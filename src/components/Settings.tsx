@@ -227,9 +227,9 @@ export function Settings({ onBack }: SettingsProps) {
                   <p className="text-amber-200/50 text-xs">Loading…</p>
                 ) : (
                   <div className="flex gap-4">
-                    <span className="text-amber-200/80 text-xs">Heart {appreciations?.heart ?? 0}</span>
-                    <span className="text-amber-200/80 text-xs">Like {appreciations?.like ?? 0}</span>
-                    <span className="text-amber-200/80 text-xs">Clap {appreciations?.clap ?? 0}</span>
+                    <span className="text-amber-200/80 text-xs">❤️ {appreciations?.heart ?? 0}</span>
+                    <span className="text-amber-200/80 text-xs">👍 {appreciations?.like ?? 0}</span>
+                    <span className="text-amber-200/80 text-xs">👏 {appreciations?.clap ?? 0}</span>
                   </div>
                 )}
               </div>

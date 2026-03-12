@@ -1,16 +1,14 @@
 import { motion } from 'framer-motion';
 import { JapamLogo } from './ui/JapamLogo';
 
-const BG_IMAGE = '/images/splashbg.png';
-
 interface SplashProps {
   onComplete: () => void;
 }
 
 export function Splash({ onComplete }: SplashProps) {
   return (
-    <div className="relative min-h-screen bg-cover bg-center flex flex-col items-center justify-center" style={{ backgroundImage: `url(${BG_IMAGE})` }}>
-      <div className="absolute inset-0 bg-black/70" aria-hidden />
+    <div className="relative min-h-screen flex flex-col items-center justify-center">
+      <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <motion.div
         initial={{ opacity: 1 }}
         animate={{ opacity: 1 }}

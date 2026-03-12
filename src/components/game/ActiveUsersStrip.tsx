@@ -73,13 +73,19 @@ export function ActiveUsersStrip() {
 
   if (loading && visible.length === 0) {
     return (
-      <div className="w-full overflow-hidden">
-        <div className="text-[11px] text-amber-200/50">Active users loading…</div>
+      <div className="w-full">
+        <div className="text-[11px] text-amber-200/50">{t('activeUsers.yesterdaysAchievers')} — loading…</div>
       </div>
     );
   }
 
-  if (visible.length === 0) return null;
+  if (visible.length === 0) {
+    return (
+      <div className="w-full">
+        <div className="text-[11px] text-amber-200/60">{t('activeUsers.yesterdaysAchievers')} — no recent achievers yet</div>
+      </div>
+    );
+  }
 
   // Card width + gap
   const CARD_W = 222; // 220px card + 2px gap

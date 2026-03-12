@@ -67,12 +67,19 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'prompt',
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'sw.ts',
+      injectManifest: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024
+      },
       manifest: {
         name: 'Japam',
         short_name: 'Japam',
         description: 'Match-3 puzzle game for mantra chanting',
-        theme_color: '#FF9933',
-        background_color: '#1a1a2e',
+        theme_color: '#D81B60',
+        background_color: '#D81B60',
         display: 'standalone',
         orientation: 'portrait',
         scope: '/',
@@ -82,10 +89,6 @@ export default defineConfig({
           { src: '/images/favicon.png', sizes: '512x512', type: 'image/png' },
           { src: '/images/favicon.png', sizes: 'any', type: 'image/png', purpose: 'maskable any' }
         ]
-      },
-      workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
-        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024
       }
     })
   ]

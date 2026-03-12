@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AppFooter } from '../layout/AppFooter';
 import { BottomNav } from '../nav/BottomNav';
+import { ActiveUsersStrip } from '../game/ActiveUsersStrip';
 import { DEITIES } from '../../data/deities';
 import { GoogleSignIn } from '../auth/GoogleSignIn';
 import { JapamLogo } from '../ui/JapamLogo';
@@ -132,6 +133,10 @@ export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
             </div>
           )}
           </div>
+        </div>
+
+        <div className="relative z-20 shrink-0 w-full mt-1 -mx-1 px-1 py-2 rounded-lg bg-black/20 mb-2">
+          <ActiveUsersStrip />
         </div>
 
         {showDonate && (

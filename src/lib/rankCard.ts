@@ -236,15 +236,21 @@ export async function renderRankCardBlob(opts: RenderRankCardOptions): Promise<B
 
     y = cardY + cardH + 56;
 
-    // ——— Footer: Japam branding (as on menu) + CTA + website ———
+    // ——— Footer: JAPAM branding — exact match of menu h1 (amber-400, serif, heading-on-bg) ———
     const footerFont = 'Georgia, "Times New Roman", serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
 
-    // Japam logo text (menu style)
-    ctx.font = `700 56px ${footerFont}`;
-    ctx.fillStyle = 'rgba(253, 230, 138, 0.98)';
-    ctx.fillText('Japam', centerX, y);
+    // JAPAM — same as menu: text-3xl/text-4xl, font-bold, text-amber-400 (#FBBF24), drop-shadow-lg, heading-on-bg
+    ctx.font = '700 36px ' + footerFont;
+    ctx.fillStyle = '#FBBF24'; // Tailwind amber-400
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 2;
+    ctx.shadowBlur = 8;
+    ctx.fillText('JAPAM', centerX, y);
+    ctx.shadowColor = 'transparent';
+    ctx.shadowBlur = 0;
     y += 72;
 
     const ctaH = wrapAndDraw('Match, chant, and climb the leaderboard.', maxW, 38, '600', 'rgba(255,255,255,0.9)', y, 8, footerFont);

@@ -7,7 +7,7 @@ declare let self: ServiceWorkerGlobalScope
 cleanupOutdatedCaches()
 precacheAndRoute(self.__WB_MANIFEST)
 
-// For registerType: 'prompt' — skip waiting when client sends SKIP_WAITING
+// For registerType: 'prompt' — only skip waiting when user clicks "Update Now"
 self.addEventListener('message', (event: ExtendableMessageEvent) => {
   if (event.data?.type === 'SKIP_WAITING') self.skipWaiting()
 })
@@ -30,6 +30,3 @@ self.addEventListener('notificationclick', (event: NotificationEvent) => {
     })
   )
 })
-
-self.skipWaiting()
-clientsClaim()

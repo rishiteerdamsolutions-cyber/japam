@@ -292,7 +292,13 @@ export async function resetMahaYagnaContribution(yagnaId: string, user?: User | 
 
 /** Save japa. Logged-in: backend API only. Uses token retry so japas save reliably (e.g. Maha Japa Yagna). */
 export async function saveUserJapa(_uid: string, counts: JapaCounts): Promise<void> {
-  const token = await getIdTokenWithRetry(null);
+  let token = await getIdTokenWithRetry(null);
+  if (!token) {
+    try {
+      const u = auth?.currentUser;
+      if (u) token = await u.getIdToken(true);
+    } catch {}
+  }
   if (!token) return;
   const url = apiUrl('/api/user/japa');
   for (let attempt = 0; attempt < 3; attempt++) {

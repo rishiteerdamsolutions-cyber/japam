@@ -18,7 +18,13 @@ export async function GET() {
       if (startDate > today) continue;
 
       const goalJapas = typeof data.goalJapas === 'number' ? data.goalJapas : 0;
-      const currentJapas = typeof data.currentJapas === 'number' ? data.currentJapas : 0;
+      // Use sum of userJapas as source of truth (consistent with my-contribution)
+      const usersSnap = await db.collection('mahaJapaYagnaUsers').where('yagnaId', '==', d.id).get();
+      let currentJapas = 0;
+      for (const u of usersSnap.docs) {
+        const uj = typeof u.data().userJapas === 'number' ? u.data().userJapas : 0;
+        currentJapas += uj;
+      }
       const daysRemaining = endDate ? Math.max(0, Math.ceil((new Date(endDate) - new Date()) / (24 * 60 * 60 * 1000))) : null;
       const pct = goalJapas > 0 ? Math.min(100, (100 * currentJapas) / goalJapas) : 0;
 

@@ -104,6 +104,20 @@ export function MahaYagnasPage() {
     loadContributions();
   }, [loadContributions]);
 
+  // Refetch list and contributions when user returns to this page (visibility/focus)
+  useEffect(() => {
+    const onVisible = () => {
+      const listUrl = API_BASE ? `${API_BASE}/api/maha-yagnas/list` : '/api/maha-yagnas/list';
+      fetch(listUrl)
+        .then((r) => r.json().catch(() => ({})))
+        .then((d) => Array.isArray((d as { yagnas?: Yagna[] }).yagnas) && setYagnas((d as { yagnas: Yagna[] }).yagnas));
+      loadContributions();
+    };
+    const handler = () => { if (document.visibilityState === 'visible') onVisible(); };
+    document.addEventListener('visibilitychange', handler);
+    return () => document.removeEventListener('visibilitychange', handler);
+  }, [loadContributions]);
+
   const handleJoin = async (yagnaId: string) => {
     if (!user?.uid || !isPro) return;
     const idToken = await auth?.currentUser?.getIdToken?.().catch(() => null);
@@ -162,12 +176,14 @@ export function MahaYagnasPage() {
     setShareNotice(null);
     setSharing(true);
     try {
+      const contrib = contribByYagna.get(y.id);
       const blob = await renderRankCardBlob({
         title: 'MAHA JAPA YAGNA',
         headerName: y.name,
         deityName: deityName(y.deityId),
         leaderboard: paddedLeaderboard(lb),
         currentUserUid: user.uid,
+        currentUserJapasOverride: contrib?.userJapas,
       });
       if (!blob) throw new Error('Failed to generate image');
       const url = URL.createObjectURL(blob);

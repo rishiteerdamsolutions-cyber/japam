@@ -32,12 +32,14 @@ export interface RenderRankCardOptions {
   deityName: string;
   leaderboard: LeaderboardEntry[];
   currentUserUid: string;
+  /** Use this for current user's japas when fresher than leaderboard (fixes stale count) */
+  currentUserJapasOverride?: number;
 }
 
 export async function renderRankCardBlob(opts: RenderRankCardOptions): Promise<Blob | null> {
   try {
     const width = 720;
-    const height = 1280;
+    const height = 1400; // extra space for wrapped text and larger footer
     const canvas = document.createElement('canvas');
     canvas.width = width;
     canvas.height = height;
@@ -90,6 +92,31 @@ export async function renderRankCardBlob(opts: RenderRankCardOptions): Promise<B
       return `${t}…`;
     };
 
+    /** Wrap long text into lines that fit maxW; draw centered; return total height. */
+    const wrapAndDraw = (text: string, maxW: number, fontSize: number, weight: string, color: string, startY: number, lineSpacing = 4, font = fontFamily): number => {
+      const raw = String(text || '').trim();
+      if (!raw) return 0;
+      ctx.font = `${weight} ${fontSize}px ${font}`;
+      const words = raw.split(/\s+/);
+      const lines: string[] = [];
+      let line = '';
+      for (const w of words) {
+        const test = line ? `${line} ${w}` : w;
+        if (ctx.measureText(test).width <= maxW) line = test;
+        else {
+          if (line) lines.push(line);
+          line = ctx.measureText(w).width <= maxW ? w : truncate(w, maxW);
+        }
+      }
+      if (line) lines.push(line);
+      const lineH = fontSize + lineSpacing;
+      for (let i = 0; i < lines.length; i++) {
+        ctx.fillStyle = color;
+        ctx.fillText(lines[i]!, centerX, startY + i * lineH);
+      }
+      return lines.length * lineH;
+    };
+
     const fitFont = (weight: string, maxPx: number, text: string, maxW: number) => {
       let px = maxPx;
       while (px > 12) {
@@ -101,34 +128,30 @@ export async function renderRankCardBlob(opts: RenderRankCardOptions): Promise<B
     };
 
     const centerX = width / 2;
-    const maxW = width - pad * 2;
+    const maxW = width - pad * 4; // extra side padding for long names
 
     // ——— Header ———
     let y = pad + 24;
     const titleText = (opts.title || 'MAHA JAPA YAGNA').toUpperCase();
     const titlePx = fitFont('600', 18, titleText, maxW);
-    ctx.font = `${600} ${titlePx}px ${fontFamily}`;
+    ctx.font = `600 ${titlePx}px ${fontFamily}`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
     ctx.fillStyle = 'rgba(251, 191, 36, 0.95)';
     ctx.fillText(titleText, centerX, y);
-    y += titlePx + 16;
+    y += titlePx + 20;
 
-    ctx.font = `700 48px ${fontFamily}`;
-    const headerText = truncate(opts.headerName || 'Yagna', maxW);
-    const headerPx = fitFont('700', 48, headerText, maxW);
-    ctx.font = `${700} ${headerPx}px ${fontFamily}`;
-    ctx.fillStyle = '#FFFFFF';
-    ctx.fillText(headerText, centerX, y);
-    y += headerPx + 8;
+    // Header name: wrap to multiple lines if long, centered, clean
+    const headerName = String(opts.headerName || 'Yagna').trim();
+    const headerPx = 40;
+    const headerH = wrapAndDraw(headerName, maxW, headerPx, '700', '#FFFFFF', y, 6);
+    y += (headerH || headerPx + 6) + 12;
 
-    ctx.font = `500 28px ${fontFamily}`;
-    const deityText = truncate(`${opts.deityName} Japa`, maxW);
-    const deityPx = fitFont('500', 28, deityText, maxW);
-    ctx.font = `${500} ${deityPx}px ${fontFamily}`;
-    ctx.fillStyle = 'rgba(253, 230, 138, 0.95)';
-    ctx.fillText(deityText, centerX, y);
-    y += deityPx + 36;
+    // Deity line: wrap if long
+    const deityLine = `${opts.deityName || ''} Japa`.trim();
+    const deityPx = 26;
+    const deityH = wrapAndDraw(deityLine, maxW, deityPx, '500', 'rgba(253, 230, 138, 0.95)', y, 4);
+    y += (deityH || deityPx + 4) + 36;
 
     // ——— "Top participants" label ———
     ctx.font = `600 22px ${fontFamily}`;
@@ -190,7 +213,10 @@ export async function renderRankCardBlob(opts: RenderRankCardOptions): Promise<B
 
       const textX = cardX + 72;
       const nameText = isVacant ? 'Vacant' : String(p.name || '');
-      const japasText = isVacant ? '—' : `${p.japasCount} japas`;
+      const japasCount = (isCurrent && typeof opts.currentUserJapasOverride === 'number' && opts.currentUserJapasOverride > (p.japasCount || 0))
+        ? opts.currentUserJapasOverride
+        : (p.japasCount ?? 0);
+      const japasText = isVacant ? '—' : `${japasCount} japas`;
       const nameMaxW = cardW - 100;
 
       ctx.textAlign = 'left';
@@ -208,16 +234,24 @@ export async function renderRankCardBlob(opts: RenderRankCardOptions): Promise<B
       ctx.fillText(japasText, textX, rowY + 72);
     }
 
-    y = cardY + cardH + 40;
+    y = cardY + cardH + 56;
 
-    // ——— Footer ———
+    // ——— Footer: Japam branding (as on menu) + CTA + website ———
+    const footerFont = 'Georgia, "Times New Roman", serif';
     ctx.textAlign = 'center';
-    ctx.fillStyle = 'rgba(255,255,255,0.75)';
-    ctx.font = `500 20px ${fontFamily}`;
-    ctx.fillText('Match, chant, and climb the leaderboard.', centerX, y);
-    y += 28;
-    ctx.font = `600 26px ${fontFamily}`;
-    ctx.fillStyle = 'rgba(251, 191, 36, 0.95)';
+    ctx.textBaseline = 'top';
+
+    // Japam logo text (menu style)
+    ctx.font = `700 56px ${footerFont}`;
+    ctx.fillStyle = 'rgba(253, 230, 138, 0.98)';
+    ctx.fillText('Japam', centerX, y);
+    y += 72;
+
+    const ctaH = wrapAndDraw('Match, chant, and climb the leaderboard.', maxW, 38, '600', 'rgba(255,255,255,0.9)', y, 8, footerFont);
+    y += (ctaH || 46) + 16;
+
+    ctx.font = `700 48px ${footerFont}`;
+    ctx.fillStyle = 'rgba(251, 191, 36, 0.98)';
     ctx.fillText('www.japam.digital', centerX, y);
 
     const dataUrl = canvas.toDataURL('image/png');

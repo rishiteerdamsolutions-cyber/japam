@@ -4,6 +4,7 @@ import { Board } from './Board';
 import { GameOverlay } from './GameOverlay';
 import { ActiveUsersStrip } from './ActiveUsersStrip';
 import { useGameStore } from '../../store/gameStore';
+import { useJapaStore } from '../../store/japaStore';
 import { LEVELS } from '../../data/levels';
 import { useAuthStore } from '../../store/authStore';
 import { saveUserPausedGame } from '../../lib/firestore';
@@ -178,6 +179,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
 
   useEffect(() => {
     if (status === 'won') {
+      if (user?.uid && (yagnaId || marathonId)) flushJapas().catch(() => {});
       const key = getPausedKey();
       if (user?.uid) {
         saveUserPausedGame(user.uid, null, user, key);
@@ -188,7 +190,9 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
       }
       setLastPausedGame(null);
     }
-  }, [status, user?.uid, getPausedKey]);
+  }, [status, user?.uid, getPausedKey, yagnaId, marathonId, flushJapas]);
+
+  const flushJapas = useJapaStore((s) => s.flushJapas);
 
   const saveAndExit = useCallback(async () => {
     const payload = savePausedState();
@@ -196,6 +200,8 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
       if (user?.uid) {
         setPauseError(null);
         setPauseSaving(true);
+        // Flush japas first so Maha Yagna / marathon attribution is persisted
+        if (yagnaId || marathonId) await flushJapas();
         const ok = await saveUserPausedGame(user.uid, payload as unknown as Record<string, unknown>, user);
         setPauseSaving(false);
         if (!ok) {
@@ -216,14 +222,21 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
       });
       onBack();
     } else {
+      if (user?.uid && (yagnaId || marathonId)) await flushJapas();
       onBack();
     }
-  }, [savePausedState, user?.uid, user, onBack]);
+  }, [savePausedState, user?.uid, user, onBack, flushJapas, yagnaId, marathonId]);
 
   // Both Back and Pause save then exit — retain japa count and allow resume.
   const handleBack = useCallback(() => {
     saveAndExit();
   }, [saveAndExit]);
+
+  // When leaving via overlay (won/lost), flush japas before navigating.
+  const handleMenuBack = useCallback(async () => {
+    if (user?.uid && (yagnaId || marathonId)) await flushJapas();
+    onBack();
+  }, [user?.uid, yagnaId, marathonId, flushJapas, onBack]);
 
   const handlePause = useCallback(() => {
     saveAndExit();
@@ -397,7 +410,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
             status="won"
             isMarathon={isMarathon}
             onRetry={reset}
-            onMenu={onBack}
+            onMenu={handleMenuBack}
             onNext={isMarathon ? undefined : handleNext}
           />
         )
@@ -406,7 +419,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
         <GameOverlay
           status="lost"
           onRetry={reset}
-          onMenu={onBack}
+          onMenu={handleMenuBack}
         />
       )}
       {showBreakReminder && status === 'playing' && (

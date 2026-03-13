@@ -186,6 +186,8 @@ export function MarathonsPage() {
     setSharing(true);
     try {
       const currentEntry = marathon.leaderboard?.find((p) => p.uid === user.uid);
+      const myM = myMarathons.find((m) => m.marathonId === marathon.id);
+      const japasOverride = myM && (myM.japasCount ?? 0) > (currentEntry?.japasCount ?? 0) ? myM.japasCount : undefined;
       const rankText = currentEntry ? `My rank ${currentEntry.rank} in this Japa Marathon! ` : '';
       const shareText = `${rankText}Join at www.japam.digital`;
 
@@ -195,6 +197,7 @@ export function MarathonsPage() {
         deityName: deityName(marathon.deityId),
         leaderboard: paddedMarathonLeaderboard(marathon.leaderboard),
         currentUserUid: user.uid,
+        currentUserJapasOverride: japasOverride,
       });
       if (!blob) throw new Error('Failed to generate image');
 

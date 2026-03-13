@@ -158,6 +158,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
   }, [mode, levelIndex, isMarathon, marathonTargetJapas, marathonId, yagnaId, isGuest, justRestored, onJustRestoredCleared, initGame]);
 
   const user = useAuthStore(s => s.user);
+  const flushJapas = useJapaStore((s) => s.flushJapas);
   const getPausedKey = useGameStore(s => s.getPausedKey);
   const [showBreakReminder, setShowBreakReminder] = useState(false);
   const [pauseSaving, setPauseSaving] = useState(false);
@@ -191,8 +192,6 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
       setLastPausedGame(null);
     }
   }, [status, user?.uid, getPausedKey, yagnaId, marathonId, flushJapas]);
-
-  const flushJapas = useJapaStore((s) => s.flushJapas);
 
   const saveAndExit = useCallback(async () => {
     const payload = savePausedState();

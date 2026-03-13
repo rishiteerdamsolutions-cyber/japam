@@ -7,7 +7,6 @@ import { BottomNav } from '../nav/BottomNav';
 import { ActiveUsersStrip } from '../game/ActiveUsersStrip';
 import { DEITIES } from '../../data/deities';
 import { GoogleSignIn } from '../auth/GoogleSignIn';
-import { JapamLogo } from '../ui/JapamLogo';
 import { DonateModal } from '../donation/DonateModal';
 import { useAuthStore } from '../../store/authStore';
 import { useUnlockStore } from '../../store/unlockStore';
@@ -146,8 +145,7 @@ export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
           />
         )}
 
-        <JapamLogo size={100} className="mt-4 drop-shadow-lg shrink-0" />
-        <h1 className="text-3xl sm:text-4xl font-bold text-amber-400 mt-2 mb-1 drop-shadow-lg heading-on-bg truncate w-full max-w-full text-center" style={{ fontFamily: 'serif' }}>
+        <h1 className="text-3xl sm:text-4xl font-bold text-amber-400 mt-6 mb-1 drop-shadow-lg heading-on-bg truncate w-full max-w-full text-center" style={{ fontFamily: 'serif' }}>
           {t('menu.title')}
         </h1>
         <p className="text-amber-200/90 text-xs sm:text-sm mb-6 break-words text-center">{t('menu.tagline')}</p>

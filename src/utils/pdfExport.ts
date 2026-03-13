@@ -43,6 +43,34 @@ async function colorizeImageToBlue(dataUrl: string): Promise<string> {
 }
 
 /**
+ * Composites a transparent image onto a white background.
+ * Many PDF viewers render transparent PNGs incorrectly (e.g. as colored boxes);
+ * using opaque white-background images ensures readable output.
+ */
+async function compositeOnWhiteBackground(dataUrl: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    if (!dataUrl.startsWith('data:')) img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        reject(new Error('Could not get canvas context'));
+        return;
+      }
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0);
+      resolve(canvas.toDataURL('image/png'));
+    };
+    img.onerror = () => reject(new Error('Failed to load image'));
+    img.src = dataUrl;
+  });
+}
+
+/**
  * Get image dimensions from data URL.
  */
 function getImageDimensions(dataUrl: string): Promise<{ w: number; h: number }> {
@@ -114,7 +142,7 @@ async function addHandwrittenJapasToPdf(
       drawW,
       drawH,
       undefined,
-      'FAST'
+      'NONE'
     );
     col++;
     if (col >= cols) {
@@ -177,7 +205,8 @@ export async function downloadMantraPdf(
 
   if (handwritingImageDataUrl) {
     const blueImageDataUrl = await colorizeImageToBlue(handwritingImageDataUrl);
-    await addHandwrittenJapasToPdf(doc, blueImageDataUrl, count, mantra, y, margin, lineHeight, fontSize);
+    const opaqueImageDataUrl = await compositeOnWhiteBackground(blueImageDataUrl);
+    await addHandwrittenJapasToPdf(doc, opaqueImageDataUrl, count, mantra, y, margin, lineHeight, fontSize);
   } else {
     // Default: text-based japas
     const mantraRepeated = Array(count).fill(mantra).join(' ');

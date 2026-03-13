@@ -128,7 +128,7 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
           return (
             <div key={deity.id} className="bg-black/20 rounded-xl p-3">
               <div className="flex justify-between items-center mb-1 gap-2">
-                <span className="font-medium text-white shrink-0" style={{ color: deity.color }}>
+                <span className="font-medium text-amber-400 shrink-0">
                   {deity.name}
                 </span>
                 <span className="text-amber-200 shrink-0">{count.toLocaleString()}</span>

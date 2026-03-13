@@ -37,7 +37,11 @@ Place your mantra audio files in `public/sounds/`:
 - `shanmukha.mp3`
 - `venkateswara.mp3`
 
-Until these files are added, the app uses a placeholder tone. Update `src/data/deities.ts` if your file names differ.
+Until these files are added, the app uses a placeholder tone. See `AUDIO_FILES_NEEDED.md` for the full list and update instructions.
+
+## Opening Video
+
+The landing page plays `public/openingvideo.mp4` on first visit. To replace it: overwrite this file with a new video. Use painted/artistic imagery only for best visual consistency.
 
 ## Google Sign-In
 

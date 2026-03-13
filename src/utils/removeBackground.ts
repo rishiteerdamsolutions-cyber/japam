@@ -18,8 +18,8 @@ export async function removeBackgroundFromImage(dataUrl: string): Promise<string
       ctx.drawImage(img, 0, 0);
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
       const data = imageData.data;
-      // Threshold: pixels lighter than this become transparent
-      const threshold = 235;
+      // Threshold: pixels lighter than this become transparent (white/cream paper)
+      const threshold = 248;
       for (let i = 0; i < data.length; i += 4) {
         const r = data[i]!;
         const g = data[i + 1]!;

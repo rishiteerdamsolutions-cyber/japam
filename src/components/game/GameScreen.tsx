@@ -157,6 +157,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
 
   const savePausedState = useGameStore(s => s.savePausedState);
   const prevRestoredRef = useRef(false);
+  const prevStatusRef = useRef<string>(status);
 
   useEffect(() => {
     clearPendingAudio();
@@ -181,24 +182,8 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
       prevGenerationRef.current = 0;
     };
 
-    if (useLives) {
-      let cancelled = false;
-      (async () => {
-        await load(getIdToken);
-        if (cancelled) return;
-        const ok = await consume(getIdToken);
-        if (cancelled) return;
-        if (!ok) {
-          setShowOutOfLives(true);
-          return;
-        }
-        doInit();
-      })();
-      return () => { cancelled = true; };
-    } else {
-      doInit();
-    }
-  }, [mode, levelIndex, isMarathon, marathonTargetJapas, marathonId, yagnaId, isGuest, justRestored, onJustRestoredCleared, initGame, useLives, load, consume, getIdToken]);
+    doInit();
+  }, [mode, levelIndex, isMarathon, marathonTargetJapas, marathonId, yagnaId, isGuest, justRestored, onJustRestoredCleared, initGame]);
   const flushJapas = useJapaStore((s) => s.flushJapas);
   const getPausedKey = useGameStore(s => s.getPausedKey);
   const [showBreakReminder, setShowBreakReminder] = useState(false);
@@ -218,6 +203,27 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
       if (breakTimerRef.current) clearTimeout(breakTimerRef.current);
     };
   }, [status, scheduleBreakReminder]);
+
+  // Consume 1 life only when user LOSES (runs out of moves). Winning levels does not consume.
+  useEffect(() => {
+    if (status !== 'lost') {
+      prevStatusRef.current = status;
+      return;
+    }
+    if (!useLives || !user || prevStatusRef.current === 'lost') return;
+    prevStatusRef.current = 'lost';
+    let cancelled = false;
+    (async () => {
+      const ok = await consume(getIdToken);
+      if (cancelled) return;
+      if (!ok) {
+        await load(getIdToken);
+        if (cancelled) return;
+        if (useLivesStore.getState().lives <= 0) setShowOutOfLives(true);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [status, useLives, user, consume, load, getIdToken]);
 
   useEffect(() => {
     if (status === 'won') {
@@ -282,28 +288,14 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
     saveAndExit();
   }, [saveAndExit]);
 
-  const handleRetry = useCallback(async () => {
-    if (useLives) {
-      await load(getIdToken);
-      const ok = await consume(getIdToken);
-      if (!ok) {
-        setShowOutOfLives(true);
-        return;
-      }
-    }
+  const handleRetry = useCallback(() => {
     reset();
-  }, [useLives, load, consume, getIdToken, reset]);
+  }, [reset]);
 
-  const handleRetryAfterLife = useCallback(async () => {
-    const ok = await consume(getIdToken);
-    if (!ok) return;
+  const handleRetryAfterLife = useCallback(() => {
     setShowOutOfLives(false);
-    if (isMarathon && marathonTargetJapas != null && (marathonId || yagnaId)) {
-      initGame(mode as 'general', 0, { marathonId: marathonId ?? undefined, marathonTargetJapas, yagnaId: yagnaId ?? undefined });
-    } else {
-      initGame(mode as 'general', levelIndex);
-    }
-  }, [consume, getIdToken, isMarathon, marathonTargetJapas, marathonId, yagnaId, mode, levelIndex, initGame]);
+    reset();
+  }, [reset]);
 
   useEffect(() => {
     if (lastMatches.length === 0 || matchGeneration === prevGenerationRef.current) return;

@@ -2,6 +2,7 @@
  * Remove white/light background from an image using canvas.
  * Works for handwriting on white or cream paper — no external service needed.
  * Makes light pixels transparent; keeps darker pixels (ink) visible.
+ * Uses strict near-white check to avoid colored boxes (leftover bg pixels).
  */
 export async function removeBackgroundFromImage(dataUrl: string): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -18,14 +19,14 @@ export async function removeBackgroundFromImage(dataUrl: string): Promise<string
       ctx.drawImage(img, 0, 0);
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
       const data = imageData.data;
-      // Threshold: pixels lighter than this become transparent (white/cream paper)
-      const threshold = 248;
+      // Strict: pixel is background (→ transparent) only if ALL channels are near white
+      // Prevents colored boxes from leftover almost-white pixels
+      const minChannel = 245;
       for (let i = 0; i < data.length; i += 4) {
         const r = data[i]!;
         const g = data[i + 1]!;
         const b = data[i + 2]!;
-        const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
-        if (luminance >= threshold) {
+        if (r >= minChannel && g >= minChannel && b >= minChannel) {
           data[i + 3] = 0;
         }
       }

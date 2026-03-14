@@ -7,42 +7,6 @@ export interface PdfDetails {
 }
 
 /**
- * Colorizes an image (dark-on-transparent) to blue ink using canvas.
- * Used in-memory only; image is never persisted.
- */
-async function colorizeImageToBlue(dataUrl: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    if (!dataUrl.startsWith('data:')) img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = img.width;
-      canvas.height = img.height;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) {
-        reject(new Error('Could not get canvas context'));
-        return;
-      }
-      ctx.drawImage(img, 0, 0);
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const data = imageData.data;
-      for (let i = 0; i < data.length; i += 4) {
-        const alpha = data[i + 3]!;
-        if (alpha > 0) {
-          data[i] = 37;     // R for #2563eb
-          data[i + 1] = 99; // G
-          data[i + 2] = 235; // B
-        }
-      }
-      ctx.putImageData(imageData, 0, 0);
-      resolve(canvas.toDataURL('image/png'));
-    };
-    img.onerror = () => reject(new Error('Failed to load image'));
-    img.src = dataUrl;
-  });
-}
-
-/**
  * Composites a transparent image onto white and exports as JPEG.
  * Opaque JPEG avoids PDF viewer issues with transparent PNGs (e.g. colored boxes).
  */
@@ -83,7 +47,8 @@ function getImageDimensions(dataUrl: string): Promise<{ w: number; h: number }> 
 
 /**
  * Adds handwritten nama images to the PDF in horizontal rows, one by one.
- * Layout: left-to-right, wrap to next row when needed. Each nama sized from image aspect ratio.
+ * Cell size is responsive to uploaded image dimensions: short namas = narrower cells (more per row),
+ * long namas = wider cells (fewer per row). Layout: left-to-right, wrap when needed.
  */
 async function addHandwrittenJapasToPdf(
   doc: jsPDF,
@@ -99,12 +64,23 @@ async function addHandwrittenJapasToPdf(
   const { w: imgW, h: imgH } = await getImageDimensions(imageDataUrl);
   const imgAspect = imgW / imgH;
 
-  // Each nama: fixed height for readability, width from aspect (horizontal layout, left-to-right)
-  const cellHeight = 52;
-  const cellWidth = Math.min(
-    usableWidth / 3,
-    Math.max(36, cellHeight * imgAspect)
-  );
+  // Responsive cell size from image aspect ratio
+  const minCellWidth = 24;
+  const maxCellWidth = usableWidth;
+  const minCellHeight = 38;
+  const maxCellHeight = 72;
+
+  let cellHeight = 52;
+  let cellWidth = cellHeight * imgAspect;
+
+  if (cellWidth > maxCellWidth) {
+    cellWidth = maxCellWidth;
+    cellHeight = Math.min(maxCellHeight, Math.max(minCellHeight, cellWidth / imgAspect));
+  } else if (cellWidth < minCellWidth) {
+    cellWidth = minCellWidth;
+    cellHeight = Math.min(maxCellHeight, Math.max(minCellHeight, cellWidth / imgAspect));
+  }
+
   const cellPadding = 6;
   const cols = Math.max(1, Math.floor((usableWidth + cellPadding) / (cellWidth + cellPadding)));
   const rowHeight = cellHeight + cellPadding;
@@ -121,13 +97,24 @@ async function addHandwrittenJapasToPdf(
       x = margin;
       col = 0;
     }
+    // Preserve aspect ratio: fit image inside cell
+    const cellAspect = cellWidth / cellHeight;
+    let drawW = cellWidth;
+    let drawH = cellHeight;
+    if (imgAspect > cellAspect) {
+      drawH = cellWidth / imgAspect;
+    } else {
+      drawW = cellHeight * imgAspect;
+    }
+    const offsetX = (cellWidth - drawW) / 2;
+    const offsetY = (cellHeight - drawH) / 2;
     doc.addImage(
       imageDataUrl,
       imageFormat,
-      x,
-      y,
-      cellWidth,
-      cellHeight,
+      x + offsetX,
+      y + offsetY,
+      drawW,
+      drawH,
       undefined,
       'FAST'
     );
@@ -191,8 +178,8 @@ export async function downloadMantraPdf(
   y += lineHeight * 2;
 
   if (handwritingImageDataUrl) {
-    const blueImageDataUrl = await colorizeImageToBlue(handwritingImageDataUrl);
-    const opaqueImageDataUrl = await compositeOnWhiteAsJpeg(blueImageDataUrl);
+    // Use handwriting as-is (background already removed); composite on white for PDF compatibility
+    const opaqueImageDataUrl = await compositeOnWhiteAsJpeg(handwritingImageDataUrl);
     await addHandwrittenJapasToPdf(doc, opaqueImageDataUrl, count, y, margin);
   } else {
     // Default: text-based japas

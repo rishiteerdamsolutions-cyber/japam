@@ -157,6 +157,7 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
             <h2 className="text-xl font-bold text-amber-400 mb-4">Download PDF</h2>
 
             <div className="mb-4 p-3 rounded-lg bg-black/30 border border-amber-500/20">
+              <p className="text-amber-200/80 text-[11px] mb-2 font-medium">Steps: 1) Upload your handwritten nama → 2) White background is removed → 3) PDF is generated with your handwriting repeated</p>
               <p className="text-amber-200/80 text-[11px] mb-2">Example of what to upload:</p>
               <div className="mb-2 flex justify-center">
                 <img

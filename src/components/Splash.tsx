@@ -27,7 +27,7 @@ export function Splash({ onComplete }: SplashProps) {
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.1 }}
-        className="text-4xl font-bold text-amber-400 mb-2"
+        className="text-4xl font-bold text-amber-400 mb-2 drop-shadow-lg heading-on-bg"
         style={{ fontFamily: 'serif' }}
       >
         Japam

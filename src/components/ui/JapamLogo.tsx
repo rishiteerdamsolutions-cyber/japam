@@ -62,9 +62,9 @@ export function JapamLogo({ size = 120, className = '' }: JapamLogoProps) {
         );
       })}
 
-      {/* Main candy with "Japam" */}
+      {/* Main candy with "Japam" — same style as menu: amber-400, serif, heading-on-bg */}
       <div
-        className="absolute rounded-lg flex items-center justify-center font-bold text-white drop-shadow-md"
+        className="absolute rounded-lg flex items-center justify-center font-bold drop-shadow-lg heading-on-bg"
         style={{
           left: center - mainBeadSize / 2,
           top: center - mainBeadSize / 2,
@@ -75,6 +75,7 @@ export function JapamLogo({ size = 120, className = '' }: JapamLogoProps) {
           boxShadow: 'inset 0 2px 6px rgba(0,0,0,0.25), 0 2px 8px rgba(0,0,0,0.2)',
           fontFamily: 'serif',
           fontSize: Math.max(10, mainBeadSize * 0.28),
+          color: '#FBBF24',
         }}
       >
         Japam

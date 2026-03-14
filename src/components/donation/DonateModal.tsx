@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { JapamBrand } from '../ui/JapamBrand';
 import { openCashfreeCheckout } from '../../lib/cashfree';
 import { auth } from '../../lib/firebase';
 import { useAuthStore } from '../../store/authStore';
@@ -89,7 +90,7 @@ export function DonateModal({ onClose, onDonated }: DonateModalProps) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
         <div className="bg-[#C2185B]/90 rounded-2xl border border-amber-500/30 p-6 max-w-sm w-full shadow-xl">
-          <h2 className="text-xl font-bold text-amber-400 mb-2">Fund Japam</h2>
+          <h2 className="text-xl font-bold mb-2">Fund <JapamBrand>Japam</JapamBrand></h2>
           <p className="text-amber-200/90 text-sm mb-4">
             You should be a member to donate. Buy monthly plan, do a 108 japa and please donate.
           </p>
@@ -111,7 +112,7 @@ export function DonateModal({ onClose, onDonated }: DonateModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
       <div className="bg-[#C2185B]/90 rounded-2xl border border-amber-500/30 p-6 max-w-sm w-full shadow-xl">
-        <h2 className="text-xl font-bold text-amber-400 mb-2">Fund Japam</h2>
+        <h2 className="text-xl font-bold mb-2">Fund <JapamBrand>Japam</JapamBrand></h2>
         <p className="text-amber-200/90 text-sm mb-4">
           You can fund this startup through charity for sanathana dharma.
         </p>

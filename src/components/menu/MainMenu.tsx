@@ -7,6 +7,7 @@ import { BottomNav } from '../nav/BottomNav';
 import { ActiveUsersStrip } from '../game/ActiveUsersStrip';
 import { DEITIES } from '../../data/deities';
 import { GoogleSignIn } from '../auth/GoogleSignIn';
+import { JapamBrand } from '../ui/JapamBrand';
 import { DonateModal } from '../donation/DonateModal';
 import { useAuthStore } from '../../store/authStore';
 import { useUnlockStore } from '../../store/unlockStore';
@@ -145,8 +146,8 @@ export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
           />
         )}
 
-        <h1 className="text-3xl sm:text-4xl font-bold text-amber-400 mt-6 mb-1 drop-shadow-lg heading-on-bg truncate w-full max-w-full text-center" style={{ fontFamily: 'serif' }}>
-          {t('menu.title')}
+        <h1 className="text-3xl sm:text-4xl mt-6 mb-1 truncate w-full max-w-full text-center">
+          <JapamBrand as="span" className="block">{t('menu.title')}</JapamBrand>
         </h1>
         <p className="text-amber-200/90 text-xs sm:text-sm mb-6 break-words text-center">{t('menu.tagline')}</p>
 

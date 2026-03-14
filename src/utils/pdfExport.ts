@@ -135,10 +135,12 @@ export async function downloadMantraPdf(
 
   let y = margin;
 
-  // Heading: JAPAM
+  // Heading: JAPAM — same branding as menu (amber-400, serif)
   doc.setFontSize(titleSize);
-  doc.setFont('helvetica', 'bold');
+  doc.setFont('times', 'bold');
+  doc.setTextColor(251, 191, 36); // amber-400 #FBBF24
   doc.text('JAPAM', margin, y);
+  doc.setTextColor(0, 0, 0);
   y += lineHeight * 2.5;
 
   // User details if provided

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { JapamBrand } from '../components/ui/JapamBrand';
 
 /** API docs placeholder – links to OpenAPI spec. */
 export function ApiDocsPage() {
@@ -6,7 +7,7 @@ export function ApiDocsPage() {
     <div className="min-h-screen bg-gloss-bubblegum text-amber-200 p-6">
       <div className="max-w-2xl mx-auto">
         <Link to="/" className="text-amber-400 hover:text-amber-300 text-sm mb-6 inline-block">
-          ← Back to Japam
+          ← Back to <JapamBrand className="inline text-sm">Japam</JapamBrand>
         </Link>
         <h1 className="text-2xl font-bold text-amber-400 mb-4">API Reference</h1>
         <p className="text-amber-200/90 mb-4">

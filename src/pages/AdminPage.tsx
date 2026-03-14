@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { JapamBrand } from '../components/ui/JapamBrand';
 import { getStoredAdminToken, setStoredAdminToken } from '../lib/adminAuth';
 
 const API_BASE = import.meta.env.VITE_API_URL ?? '';
@@ -88,7 +89,7 @@ export function AdminPage() {
         onClick={() => navigate('/', { replace: true })}
         className="text-amber-400 text-sm mt-6 underline"
       >
-        ← Back to Japam
+        ← Back to <JapamBrand className="inline text-sm">Japam</JapamBrand>
       </button>
       </div>
     </div>

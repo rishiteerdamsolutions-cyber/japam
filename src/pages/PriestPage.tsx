@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { JapamBrand } from '../components/ui/JapamBrand';
 import { DEITIES } from '../data/deities';
 
 const API_BASE = import.meta.env.VITE_API_URL ?? '';
@@ -365,7 +366,7 @@ export function PriestPage() {
           Go to Settings
         </Link>
         <Link to="/" className="text-amber-200/70 text-sm mt-4 underline">
-          ← Back to Japam
+          ← Back to <JapamBrand className="inline text-sm">Japam</JapamBrand>
         </Link>
         </div>
       </div>

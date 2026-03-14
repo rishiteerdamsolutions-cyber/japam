@@ -110,13 +110,6 @@ export function AppFooter() {
   return (
     <footer className="mt-auto pt-6 pb-4 px-4 flex flex-col items-center gap-3 text-white/40 text-xs border-t border-white/10">
       <div className="flex items-center justify-center gap-1 flex-wrap">
-        <FooterIcon
-          href="https://aideveloperindia.store"
-          label={t('landing.builtBy') + ' AI Developer India'}
-          isImage
-          imageSrc="/images/A-logo.png"
-          imageAlt="AI Developer India"
-        />
         <FooterIcon href="/contact" label={t('landing.contact')} icon={ContactIcon} />
         <FooterIcon href="/privacy" label={t('landing.privacy')} icon={PrivacyIcon} />
         <FooterIcon href="/terms" label={t('landing.terms')} icon={TermsIcon} />

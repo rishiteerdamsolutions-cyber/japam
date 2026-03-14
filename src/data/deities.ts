@@ -21,7 +21,8 @@ export type DeityId =
   | 'guru'
   | 'shani'
   | 'rahu'
-  | 'ketu';
+  | 'ketu'
+  | 'bramhamgaaru';
 
 export interface Deity {
   id: DeityId;
@@ -56,6 +57,7 @@ export const DEITIES: Deity[] = [
   { id: 'shani', name: 'Shani', color: '#37474F', mantraAudio: '/sounds/shani.m4a', mantra: 'Om Shan Shanicharaya Namaha', image: '/images/deities/shani.png' },
   { id: 'rahu', name: 'Rahu', color: '#455A64', mantraAudio: '/sounds/rahu.m4a', mantra: 'Om Raam Rahave Namaha', image: '/images/deities/rahu.png' },
   { id: 'ketu', name: 'Ketu', color: '#5D4037', mantraAudio: '/sounds/ketu.m4a', mantra: 'Om Kem Ketave Namaha', image: '/images/deities/ketu.png' },
+  { id: 'bramhamgaaru', name: 'Bramhamgaaru', color: '#B71C1C', mantraAudio: '/sounds/bramhamgaaru.m4a', mantra: 'Om Brahmaye Namaha', image: '/images/deities/bramhamgaaru.png' },
 ];
 
 export const DEITY_IDS: DeityId[] = DEITIES.map((d) => d.id);

@@ -72,8 +72,8 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
       });
       const cleaned = await removeBackgroundFromImage(dataUrl);
       setHandwritingDataUrl(cleaned);
-    } catch {
-      setUploadError('Could not process image. Use white paper only.');
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : 'Network error. Please try again.');
     } finally {
       setProcessingImage(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
@@ -177,7 +177,11 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
                 disabled={processingImage}
                 className="block w-full text-amber-200/80 text-xs file:mr-2 file:py-1.5 file:px-3 file:rounded file:border-0 file:bg-amber-500/80 file:text-white file:text-xs disabled:opacity-60"
               />
-              {processingImage && <p className="text-amber-400 text-xs mt-2">Processing…</p>}
+              {processingImage && (
+                <p className="text-amber-400 text-xs mt-2">
+                  Removing background… (first time may take a minute to load AI model)
+                </p>
+              )}
               {handwritingDataUrl && !processingImage && (
                 <p className="text-emerald-400 text-xs mt-2">Image ready</p>
               )}

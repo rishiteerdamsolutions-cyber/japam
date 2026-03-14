@@ -81,7 +81,7 @@ async function addHandwrittenJapasToPdf(
     cellHeight = Math.min(maxCellHeight, Math.max(minCellHeight, cellWidth / imgAspect));
   }
 
-  const cellPadding = 6;
+  const cellPadding = 4;
   const cols = Math.max(1, Math.floor((usableWidth + cellPadding) / (cellWidth + cellPadding)));
   const rowHeight = cellHeight + cellPadding;
   const imageFormat = imageDataUrl.startsWith('data:image/jpeg') ? 'JPEG' : 'PNG';

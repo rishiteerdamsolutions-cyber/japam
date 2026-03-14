@@ -35,6 +35,7 @@ const DEITY_FREQUENCIES: Record<DeityId, number> = {
   shani: 440,
   rahu: 466,
   ketu: 494,
+  bramhamgaaru: 523,
 };
 
 function playDeityTone(ctx: AudioContext, deity: DeityId) {

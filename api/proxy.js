@@ -33,7 +33,9 @@ function withCors(response, request) {
 
 import * as priceHandler from './_handlers/price.js';
 import * as createOrderHandler from './_handlers/create-order.js';
+import * as createLivesOrderHandler from './_handlers/create-lives-order.js';
 import * as verifyUnlockHandler from './_handlers/verify-unlock.js';
+import * as verifyLivesHandler from './_handlers/verify-lives.js';
 import * as adminLoginHandler from './_handlers/admin-login.js';
 import * as priestLoginHandler from './_handlers/priest-login.js';
 import * as adminSetPriceHandler from './_handlers/admin/set-price.js';
@@ -53,6 +55,9 @@ import * as userJapaHandler from './_handlers/user/japa.js';
 import * as userUnlockHandler from './_handlers/user/unlock.js';
 import * as userProfileHandler from './_handlers/user/profile.js';
 import * as userPausedGameHandler from './_handlers/user/paused-game.js';
+import * as userLivesHandler from './_handlers/user/lives.js';
+import * as userLivesConsumeHandler from './_handlers/user/lives-consume.js';
+import * as userLivesGrantHandler from './_handlers/user/lives-grant.js';
 import * as userReactHandler from './_handlers/user/react.js';
 import * as publicActiveUsersHandler from './_handlers/public/active-users.js';
 import * as userReminderHandler from './_handlers/user/reminder.js';
@@ -60,6 +65,8 @@ import * as donateOrderHandler from './_handlers/donate-order.js';
 import * as verifyDonateHandler from './_handlers/verify-donate.js';
 import * as donorsHandler from './_handlers/donors.js';
 import * as levelsConfigHandler from './_handlers/levels-config.js';
+import * as configRewardVideosHandler from './_handlers/config/reward-videos.js';
+import * as adminRewardVideosHandler from './_handlers/admin/reward-videos.js';
 import * as adminLevelsHandler from './_handlers/admin/levels.js';
 import * as adminBlockUserHandler from './_handlers/admin/block-user.js';
 import * as adminUnblockUserHandler from './_handlers/admin/unblock-user.js';
@@ -117,7 +124,9 @@ function jsonResponse(data, status = 404) {
 const HANDLERS = {
   'GET price': priceHandler,
   'POST create-order': createOrderHandler,
+  'POST create-lives-order': createLivesOrderHandler,
   'POST verify-unlock': verifyUnlockHandler,
+  'POST verify-lives': verifyLivesHandler,
   'POST admin-login': adminLoginHandler,
   'POST priest-login': priestLoginHandler,
   'POST admin/set-price': adminSetPriceHandler,
@@ -138,6 +147,8 @@ const HANDLERS = {
   'POST admin/delete-marathon': adminDeleteMarathonHandler,
   'POST admin/marathon-edit': adminMarathonEditHandler,
   'GET levels-config': levelsConfigHandler,
+  'GET config/reward-videos': configRewardVideosHandler,
+  'POST admin/reward-videos': adminRewardVideosHandler,
   'GET priest/marathons': priestMarathonsHandler,
   'POST priest/marathons': priestMarathonsHandler,
   'POST priest/link': priestLinkHandler,
@@ -153,6 +164,9 @@ const HANDLERS = {
   'POST user/profile': userProfileHandler,
   'GET user/paused-game': userPausedGameHandler,
   'POST user/paused-game': userPausedGameHandler,
+  'GET user/lives': userLivesHandler,
+  'POST user/lives/consume': userLivesConsumeHandler,
+  'POST user/lives/grant': userLivesGrantHandler,
   'POST user/react': userReactHandler,
   'GET public/active-users': publicActiveUsersHandler,
   'GET user/reminder': userReminderHandler,

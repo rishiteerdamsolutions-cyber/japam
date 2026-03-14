@@ -71,6 +71,7 @@ interface GameActions {
   processMatches: (accumulated?: { deity: DeityId; count: number; combo: number }[]) => void;
   commitMatch: (accumulated: { deity: DeityId; count: number; combo: number }[], isUserDirectMatch?: boolean) => void;
   finalizeMatchChain: (accumulated: { deity: DeityId; count: number; combo: number }[]) => void;
+  addMoves: (n: number) => void;
   reset: () => void;
 }
 
@@ -399,6 +400,13 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       lastMatches: accumulated,
       matchGeneration: accumulated.length > 0 ? state.matchGeneration + 1 : state.matchGeneration
     });
+  },
+
+  addMoves: (n: number) => {
+    const { moves, status } = get();
+    if (status !== 'lost') return;
+    const add = Math.max(1, Math.floor(n));
+    set({ moves: moves + add, status: 'playing' });
   },
 
   reset: () => {

@@ -2,12 +2,14 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { GameScreen } from '../components/game/GameScreen';
+import { OutOfLivesOverlay } from '../components/game/OutOfLivesOverlay';
 import { Paywall } from '../components/payment/Paywall';
 import { useGameStore, type PausedGameState } from '../store/gameStore';
 import { loadUserPausedGame, saveUserPausedGame, resetMahaYagnaContribution } from '../lib/firestore';
 import { setLastPausedGame } from '../lib/pausedGame';
 import { useUnlockStore } from '../store/unlockStore';
 import { useAuthStore } from '../store/authStore';
+import { useLivesStore } from '../store/livesStore';
 import { useLevelsConfigStore } from '../store/levelsConfigStore';
 import { FIRST_LOCKED_LEVEL_INDEX } from '../store/unlockStore';
 import { LEVELS } from '../data/levels';
@@ -42,6 +44,9 @@ export function GamePage() {
   const [resumeKey, setResumeKey] = useState<string | null>(null);
   const [justRestored, setJustRestored] = useState(false);
   const [pauseCheckDone, setPauseCheckDone] = useState(false);
+  const [outOfLivesBlocked, setOutOfLivesBlocked] = useState(false);
+  const [lifeConsumedForSession, setLifeConsumedForSession] = useState(false);
+  const [livesRetryTrigger, setLivesRetryTrigger] = useState(0);
 
   const initGame = useGameStore((s) => s.initGame);
   const restoreGame = useGameStore((s) => s.restoreGame);
@@ -54,6 +59,51 @@ export function GamePage() {
   useEffect(() => {
     loadLevelsConfig();
   }, [loadLevelsConfig]);
+
+  const loadLives = useLivesStore((s) => s.load);
+  const consumeLife = useLivesStore((s) => s.consume);
+  const userForLives = useAuthStore((s) => s.user);
+
+  // Load lives for signed-in users (general mode only; marathons don't use lives)
+  useEffect(() => {
+    if (userForLives?.uid && !isGuest && !isMarathon) {
+      loadLives(() => userForLives.getIdToken());
+    }
+  }, [userForLives?.uid, isGuest, isMarathon, loadLives]);
+
+  // Lives gate: consume 1 life before starting a level (general mode, signed-in, not resuming)
+  const needsLivesCheck = !isGuest && !isMarathon && !!user?.uid && pauseCheckDone && !resumePending && !paywallPending && !justRestored;
+  useEffect(() => {
+    if (!needsLivesCheck || lifeConsumedForSession) return;
+    let cancelled = false;
+    const run = async () => {
+      await loadLives(() => user?.getIdToken() ?? Promise.resolve(null));
+      if (cancelled || !user) return;
+      const { lives: currentLives } = useLivesStore.getState();
+      if (currentLives <= 0) {
+        setOutOfLivesBlocked(true);
+        return;
+      }
+      const ok = await consumeLife(() => user.getIdToken());
+      if (cancelled) return;
+      if (!ok) {
+        await loadLives(() => user.getIdToken());
+        if (cancelled) return;
+        if (useLivesStore.getState().lives <= 0) setOutOfLivesBlocked(true);
+        else setLifeConsumedForSession(true);
+        return;
+      }
+      setLifeConsumedForSession(true);
+      setOutOfLivesBlocked(false);
+    };
+    run();
+    return () => { cancelled = true; };
+  }, [needsLivesCheck, lifeConsumedForSession, user, loadLives, consumeLife, livesRetryTrigger]);
+
+  // Reset life consumed when navigating to a different level (each level needs 1 life)
+  useEffect(() => {
+    setLifeConsumedForSession(false);
+  }, [mode, levelIndex]);
 
   const expectedKey = isMarathon
     ? (yagnaId ? `japam-paused-yagna-${yagnaId}` : `japam-paused-marathon-${marathonId}`)
@@ -216,6 +266,31 @@ export function GamePage() {
           });
         }}
       />
+    );
+  }
+
+  // Out of lives: show overlay, allow watch ad / buy lives to retry
+  if (outOfLivesBlocked && needsLivesCheck) {
+    return (
+      <div className="fixed inset-0 bg-gloss-bubblegum">
+        <OutOfLivesOverlay
+          onClose={onBack}
+          onRetryAfterLife={() => {
+            setOutOfLivesBlocked(false);
+            setLivesRetryTrigger((n) => n + 1);
+          }}
+        />
+      </div>
+    );
+  }
+
+  // Waiting for lives check/consume (signed-in, general mode)
+  if (needsLivesCheck && !lifeConsumedForSession && !outOfLivesBlocked) {
+    return (
+      <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
+        <div className="relative z-10 text-amber-400 text-sm">{t('common.loading')}</div>
+      </div>
     );
   }
 

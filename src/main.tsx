@@ -29,6 +29,7 @@ const AdminMarathonsPage = lazy(() => import('./pages/admin/AdminMarathonsPage')
 const AdminMahaYagnasPage = lazy(() => import('./pages/admin/AdminMahaYagnasPage').then(m => ({ default: m.AdminMahaYagnasPage })))
 const AdminUsersPage = lazy(() => import('./pages/admin/AdminUsersPage').then(m => ({ default: m.AdminUsersPage })))
 const AdminLevelsPage = lazy(() => import('./pages/admin/AdminLevelsPage').then(m => ({ default: m.AdminLevelsPage })))
+const AdminVideosPage = lazy(() => import('./pages/admin/AdminVideosPage').then(m => ({ default: m.AdminVideosPage })))
 const PriestPage = lazy(() => import('./pages/PriestPage').then(m => ({ default: m.PriestPage })))
 const MarathonsPage = lazy(() => import('./pages/MarathonsPage').then(m => ({ default: m.MarathonsPage })))
 const MahaYagnasPage = lazy(() => import('./pages/MahaYagnasPage').then(m => ({ default: m.MahaYagnasPage })))
@@ -76,6 +77,7 @@ createRoot(document.getElementById('root')!).render(
             <Route path="marathons" element={<AdminMarathonsPage />} />
             <Route path="maha-yagnas" element={<AdminMahaYagnasPage />} />
             <Route path="levels" element={<AdminLevelsPage />} />
+            <Route path="videos" element={<AdminVideosPage />} />
             <Route path="users" element={<AdminUsersPage />} />
           </Route>
         </Route>

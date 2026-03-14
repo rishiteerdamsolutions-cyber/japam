@@ -73,30 +73,34 @@ export async function loadUserUnlock(_uid: string): Promise<UserUnlockData> {
 const DEFAULT_UNLOCK_PRICE_PAISE = 10800; // ₹108 (auspicious)
 const DEFAULT_DISPLAY_PRICE_PAISE = 9900; // ₹99 strikethrough
 
-/** Unlock + display price in paise. Tries /api/price first, then Firestore. */
-export async function loadPricingConfig(): Promise<{ unlockPricePaise: number; displayPricePaise: number }> {
+/** Unlock + display + lives price in paise. Tries /api/price first, then Firestore. */
+export async function loadPricingConfig(): Promise<{ unlockPricePaise: number; displayPricePaise: number; livesPricePaise: number }> {
   let unlock: number | null = null;
   let display: number | null = null;
+  let lives: number | null = null;
   try {
     const url = apiUrl('/api/price');
     const res = await fetchWithRetry(url);
     if (res.ok) {
-      const data = (await res.json()) as { unlockPricePaise?: number; displayPricePaise?: number };
+      const data = (await res.json()) as { unlockPricePaise?: number; displayPricePaise?: number; livesPricePaise?: number };
       const u = data?.unlockPricePaise;
       const d = data?.displayPricePaise;
+      const l = data?.livesPricePaise;
       if (typeof u === 'number' && u >= 100) unlock = Math.round(u);
       if (typeof d === 'number' && d >= 100) display = Math.round(d);
+      if (typeof l === 'number' && l >= 100) lives = Math.round(l);
     }
   } catch {
     // fallback to Firestore if API not available
   }
-  if ((unlock == null || display == null) && db) {
+  if ((unlock == null || display == null || lives == null) && db) {
     try {
       const snap = await getDoc(doc(db, 'config', 'pricing'));
       if (snap.exists()) {
-        const d = snap.data() as { unlockPricePaise?: number; displayPricePaise?: number };
+        const d = snap.data() as { unlockPricePaise?: number; displayPricePaise?: number; livesPricePaise?: number };
         if (unlock == null && typeof d?.unlockPricePaise === 'number' && d.unlockPricePaise >= 100) unlock = Math.round(d.unlockPricePaise);
         if (display == null && typeof d?.displayPricePaise === 'number' && d.displayPricePaise >= 100) display = Math.round(d.displayPricePaise);
+        if (lives == null && typeof d?.livesPricePaise === 'number' && d.livesPricePaise >= 100) lives = Math.round(d.livesPricePaise);
       }
     } catch {
       // ignore
@@ -105,6 +109,7 @@ export async function loadPricingConfig(): Promise<{ unlockPricePaise: number; d
   return {
     unlockPricePaise: unlock ?? DEFAULT_UNLOCK_PRICE_PAISE,
     displayPricePaise: display ?? DEFAULT_DISPLAY_PRICE_PAISE,
+    livesPricePaise: lives ?? 1900,
   };
 }
 

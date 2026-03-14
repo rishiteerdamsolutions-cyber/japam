@@ -2,9 +2,11 @@ import { useEffect, useRef, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Board } from './Board';
 import { GameOverlay } from './GameOverlay';
+import { OutOfLivesOverlay } from './OutOfLivesOverlay';
 import { ActiveUsersStrip } from './ActiveUsersStrip';
 import { useGameStore } from '../../store/gameStore';
 import { useJapaStore } from '../../store/japaStore';
+import { useLivesStore } from '../../store/livesStore';
 import { LEVELS } from '../../data/levels';
 import { useAuthStore } from '../../store/authStore';
 import { saveUserPausedGame } from '../../lib/firestore';
@@ -13,6 +15,8 @@ import { useSound, stopAllMantras, stopMatchBonusAudio } from '../../hooks/useSo
 import { useSettingsStore } from '../../store/settingsStore';
 import type { DeityId } from '../../data/deities';
 import { GoogleSignIn } from '../auth/GoogleSignIn';
+import { LivesDisplay } from '../lives/LivesDisplay';
+import { LivesModal } from '../lives/LivesModal';
 
 function PauseIcon() {
   return (
@@ -38,14 +42,18 @@ function MusicIcon() {
   );
 }
 
-function GameBottomStrip({ isGuest, pauseSaving, onPause, onBack }: {
+const LIVES_MAX = 5;
+
+function GameBottomStrip({ isGuest, pauseSaving, onPause, onBack, showLives }: {
   isGuest: boolean;
   pauseSaving: boolean;
   onPause: () => void;
   onBack: () => void;
+  showLives?: boolean;
 }) {
   const { t } = useTranslation();
   const moves = useGameStore((s) => s.moves);
+  const lives = useLivesStore((s) => s.lives);
   const mode = useGameStore((s) => s.mode);
   const levelIndex = useGameStore((s) => s.levelIndex);
   const japasThisLevel = useGameStore((s) => s.japasThisLevel);
@@ -64,8 +72,15 @@ function GameBottomStrip({ isGuest, pauseSaving, onPause, onBack }: {
       role="group"
       aria-label="Game controls"
     >
-      <div className="flex-1 min-w-0 text-amber-200 text-xs sm:text-sm truncate" title={`${t('game.japas')}: ${japasNeeded} / ${japaTarget}`}>
-        {t('game.japas')}: {japasNeeded} / {japaTarget}
+      <div className="flex-1 min-w-0 flex items-center gap-2">
+        {showLives && (
+          <span className="flex items-center gap-0.5 text-amber-200 text-xs sm:text-sm shrink-0" title={t('game.lives')}>
+            {'❤️'.repeat(Math.min(lives, LIVES_MAX))}{'🤍'.repeat(Math.max(0, LIVES_MAX - lives))} {lives}/{LIVES_MAX}
+          </span>
+        )}
+        <span className="text-amber-200 text-xs sm:text-sm truncate" title={`${t('game.japas')}: ${japasNeeded} / ${japaTarget}`}>
+          {t('game.japas')}: {japasNeeded} / {japaTarget}
+        </span>
       </div>
       {!isGuest ? (
         <button
@@ -110,6 +125,7 @@ interface GameScreenProps {
 
 export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonTargetJapas, yagnaId, isGuest, justRestored, onJustRestoredCleared, onBack, onNextLevel }: GameScreenProps) {
   const { t } = useTranslation();
+  const user = useAuthStore(s => s.user);
   const initGame = useGameStore(s => s.initGame);
   const status = useGameStore(s => s.status);
   const reset = useGameStore(s => s.reset);
@@ -125,6 +141,12 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
   const setBackgroundMusic = useSettingsStore(s => s.setBackgroundMusic);
   const setBackgroundMusicVolume = useSettingsStore(s => s.setBackgroundMusicVolume);
   const { playMantra, playMatchBonusAudio } = useSound(bgMusicEnabled, bgMusicVolume);
+
+  const useLives = !!user && !isGuest && !isMarathon;
+  const load = useLivesStore((s) => s.load);
+  const consume = useLivesStore((s) => s.consume);
+  const getIdToken = useCallback(async () => (user ? user.getIdToken() : null), [user]);
+  const [showOutOfLives, setShowOutOfLives] = useState(false);
 
   const clearPendingAudio = () => {
     for (const id of pendingTimersRef.current) clearTimeout(id);
@@ -147,17 +169,36 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
       return;
     }
     prevRestoredRef.current = false;
-    if (isMarathon && marathonTargetJapas != null && (marathonId || yagnaId)) {
-      initGame(mode as 'general', 0, { marathonId: marathonId ?? undefined, marathonTargetJapas, yagnaId: yagnaId ?? undefined });
-    } else if (isGuest) {
-      initGame('general', 0, { overrideJapaTarget: 11, isGuest: true });
-    } else {
-      initGame(mode as 'general', levelIndex);
-    }
-    prevGenerationRef.current = 0;
-  }, [mode, levelIndex, isMarathon, marathonTargetJapas, marathonId, yagnaId, isGuest, justRestored, onJustRestoredCleared, initGame]);
 
-  const user = useAuthStore(s => s.user);
+    const doInit = () => {
+      if (isMarathon && marathonTargetJapas != null && (marathonId || yagnaId)) {
+        initGame(mode as 'general', 0, { marathonId: marathonId ?? undefined, marathonTargetJapas, yagnaId: yagnaId ?? undefined });
+      } else if (isGuest) {
+        initGame('general', 0, { overrideJapaTarget: 11, isGuest: true });
+      } else {
+        initGame(mode as 'general', levelIndex);
+      }
+      prevGenerationRef.current = 0;
+    };
+
+    if (useLives) {
+      let cancelled = false;
+      (async () => {
+        await load(getIdToken);
+        if (cancelled) return;
+        const ok = await consume(getIdToken);
+        if (cancelled) return;
+        if (!ok) {
+          setShowOutOfLives(true);
+          return;
+        }
+        doInit();
+      })();
+      return () => { cancelled = true; };
+    } else {
+      doInit();
+    }
+  }, [mode, levelIndex, isMarathon, marathonTargetJapas, marathonId, yagnaId, isGuest, justRestored, onJustRestoredCleared, initGame, useLives, load, consume, getIdToken]);
   const flushJapas = useJapaStore((s) => s.flushJapas);
   const getPausedKey = useGameStore(s => s.getPausedKey);
   const [showBreakReminder, setShowBreakReminder] = useState(false);
@@ -241,6 +282,29 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
     saveAndExit();
   }, [saveAndExit]);
 
+  const handleRetry = useCallback(async () => {
+    if (useLives) {
+      await load(getIdToken);
+      const ok = await consume(getIdToken);
+      if (!ok) {
+        setShowOutOfLives(true);
+        return;
+      }
+    }
+    reset();
+  }, [useLives, load, consume, getIdToken, reset]);
+
+  const handleRetryAfterLife = useCallback(async () => {
+    const ok = await consume(getIdToken);
+    if (!ok) return;
+    setShowOutOfLives(false);
+    if (isMarathon && marathonTargetJapas != null && (marathonId || yagnaId)) {
+      initGame(mode as 'general', 0, { marathonId: marathonId ?? undefined, marathonTargetJapas, yagnaId: yagnaId ?? undefined });
+    } else {
+      initGame(mode as 'general', levelIndex);
+    }
+  }, [consume, getIdToken, isMarathon, marathonTargetJapas, marathonId, yagnaId, mode, levelIndex, initGame]);
+
   useEffect(() => {
     if (lastMatches.length === 0 || matchGeneration === prevGenerationRef.current) return;
     prevGenerationRef.current = matchGeneration;
@@ -301,6 +365,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
     }
   };
 
+  const [showLivesModal, setShowLivesModal] = useState(false);
   const handleToggleMusic = () => {
     setBackgroundMusic(!bgMusicEnabled);
   };
@@ -312,6 +377,15 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
     }
   };
 
+  if (showOutOfLives) {
+    return (
+      <OutOfLivesOverlay
+        onClose={onBack}
+        onRetryAfterLife={handleRetryAfterLife}
+      />
+    );
+  }
+
   return (
     <div className="fixed inset-0 flex flex-col items-center overflow-hidden">
       <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
@@ -322,10 +396,11 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
         paddingRight: 'calc(1rem + env(safe-area-inset-right, 0px))',
       }}>
         <div className="w-full max-w-md flex items-center justify-between shrink-0 mb-1 min-w-0 gap-2 min-h-[44px]">
-        <button onClick={handleBack} className="text-amber-400 text-sm font-medium py-2 px-2 -ml-2 min-h-[44px] flex items-center" aria-label={t('game.back')}>
+        <button onClick={handleBack} className="text-amber-400 text-sm font-medium py-2 px-2 -ml-2 min-h-[44px] flex items-center shrink-0" aria-label={t('game.back')}>
           {t('game.back')}
         </button>
-        <div className="flex items-center gap-1 sm:gap-2">
+        {!isGuest && <LivesDisplay onClick={() => setShowLivesModal(true)} compact className="shrink-0" />}
+        <div className="flex items-center gap-1 sm:gap-2 ml-auto">
           <button
             type="button"
             onClick={handleToggleMusic}
@@ -375,6 +450,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
             pauseSaving={pauseSaving}
             onPause={handlePause}
             onBack={onBack}
+            showLives={useLives}
           />
         </>
       )}
@@ -408,7 +484,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
           <GameOverlay
             status="won"
             isMarathon={isMarathon}
-            onRetry={reset}
+            onRetry={handleRetry}
             onMenu={handleMenuBack}
             onNext={isMarathon ? undefined : handleNext}
           />
@@ -417,10 +493,12 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
       {status === 'lost' && (
         <GameOverlay
           status="lost"
-          onRetry={reset}
+          onRetry={handleRetry}
           onMenu={handleMenuBack}
+          showWatchForMoves={useLives}
         />
       )}
+      {showLivesModal && <LivesModal onClose={() => setShowLivesModal(false)} />}
       {showBreakReminder && status === 'playing' && (
         <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center z-20 p-4">
           <div className="bg-[#C2185B]/90 rounded-2xl p-4 sm:p-6 max-w-sm w-full text-center min-w-0">

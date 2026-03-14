@@ -112,6 +112,8 @@ export async function getUnlockPricePaise() {
   return unlockPricePaise;
 }
 
+const LIVES_PRICE_PAISE = 1900; // ₹19 for 5 lives
+
 /** Returns both unlock (actual) and display (strikethrough) price in paise. */
 export async function getPricing() {
   const database = getDb();
@@ -121,13 +123,21 @@ export async function getPricing() {
       const data = snap?.data();
       const unlock = data?.unlockPricePaise;
       const display = data?.displayPricePaise;
+      const lives = data?.livesPricePaise;
       return {
         unlockPricePaise: typeof unlock === 'number' && unlock >= 100 ? Math.round(unlock) : UNLOCK_PRICE_PAISE,
         displayPricePaise: typeof display === 'number' && display >= 100 ? Math.round(display) : DEFAULT_DISPLAY_PRICE_PAISE,
+        livesPricePaise: typeof lives === 'number' && lives >= 100 ? Math.round(lives) : LIVES_PRICE_PAISE,
       };
     } catch {}
   }
-  return { unlockPricePaise: UNLOCK_PRICE_PAISE, displayPricePaise: DEFAULT_DISPLAY_PRICE_PAISE };
+  return { unlockPricePaise: UNLOCK_PRICE_PAISE, displayPricePaise: DEFAULT_DISPLAY_PRICE_PAISE, livesPricePaise: LIVES_PRICE_PAISE };
+}
+
+/** Lives pack price in paise (5 lives). */
+export async function getLivesPricePaise() {
+  const { livesPricePaise } = await getPricing();
+  return livesPricePaise;
 }
 
 function getPriestSecret() {

@@ -38,11 +38,12 @@ function createLevels() {
     }
     const maxGemTypes =
       id <= 2 ? 4 : id <= 4 ? 5 : id <= 10 ? 6 : id <= 20 ? 7 : id <= 50 ? 8 : id <= 200 ? 8 : 8;
+    const moves = id <= 10 ? 25 : id <= 50 ? 28 : 30;
     LEVELS.push({
       id: `level-${id}`,
       episode: Math.ceil(id / 10),
       japaTarget,
-      moves: 80,
+      moves,
       rows: 6,
       cols: 6,
       maxGemTypes,

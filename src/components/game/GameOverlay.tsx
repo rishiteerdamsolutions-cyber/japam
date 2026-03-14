@@ -1,5 +1,8 @@
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { RewardVideoModal } from './RewardVideoModal';
+import { useGameStore } from '../../store/gameStore';
 
 interface GameOverlayProps {
   status: 'won' | 'lost';
@@ -7,10 +10,29 @@ interface GameOverlayProps {
   onRetry: () => void;
   onMenu: () => void;
   onNext?: () => void;
+  showWatchForMoves?: boolean;
 }
 
-export function GameOverlay({ status, isMarathon, onRetry, onMenu, onNext }: GameOverlayProps) {
+export function GameOverlay({ status, isMarathon, onRetry, onMenu, onNext, showWatchForMoves }: GameOverlayProps) {
   const { t } = useTranslation();
+  const addMoves = useGameStore((s) => s.addMoves);
+  const [showVideo, setShowVideo] = useState(false);
+
+  const handleWatchComplete = () => {
+    addMoves(5);
+    setShowVideo(false);
+  };
+
+  if (showVideo && status === 'lost') {
+    return (
+      <RewardVideoModal
+        onComplete={handleWatchComplete}
+        onClose={() => setShowVideo(false)}
+        rewardLabel={t('game.continue')}
+      />
+    );
+  }
+
   return (
     <AnimatePresence>
       <motion.div
@@ -37,6 +59,14 @@ export function GameOverlay({ status, isMarathon, onRetry, onMenu, onNext }: Gam
                 className="w-full py-3 rounded-xl bg-amber-500 text-white font-semibold text-sm sm:text-base break-words min-h-[44px]"
               >
                 {t('game.nextLevel')}
+              </button>
+            )}
+            {status === 'lost' && showWatchForMoves && (
+              <button
+                onClick={() => setShowVideo(true)}
+                className="w-full py-3 rounded-xl bg-amber-500 text-white font-semibold text-sm sm:text-base break-words min-h-[44px]"
+              >
+                {t('game.watchForMoves')}
               </button>
             )}
             <button

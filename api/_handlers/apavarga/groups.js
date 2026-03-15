@@ -47,16 +47,34 @@ export async function POST(request) {
   if (!name || typeof name !== 'string') return jsonResponse({ error: 'name required' }, 400);
 
   const now = new Date().toISOString();
+  const groupName = name.trim().slice(0, 100);
   const ref = db.collection('apavargaGroups').doc();
-  await ref.set({
-    name: name.trim().slice(0, 100),
+  const chatRef = db.collection('apavargaChats').doc();
+  await chatRef.set({
+    type: 'group',
+    groupId: ref.id,
     templeId: priest.templeId,
     templeName: priest.templeName,
+    name: groupName,
+    participants: [],
+    adminOnlyMessaging: !!adminOnlyMessaging,
+    lastMessageAt: now,
+    createdAt: now,
+  });
+  await ref.set({
+    name: groupName,
+    templeId: priest.templeId,
+    templeName: priest.templeName,
+    chatId: chatRef.id,
     participants: [],
     adminOnlyMessaging: !!adminOnlyMessaging,
     createdAt: now,
     updatedAt: now,
   });
 
-  return jsonResponse({ groupId: ref.id, group: { id: ref.id, name: name.trim(), templeId: priest.templeId, participants: [], adminOnlyMessaging: !!adminOnlyMessaging } }, 201);
+  return jsonResponse({
+    groupId: ref.id,
+    chatId: chatRef.id,
+    group: { id: ref.id, chatId: chatRef.id, name: groupName, templeId: priest.templeId, participants: [], adminOnlyMessaging: !!adminOnlyMessaging },
+  }, 201);
 }

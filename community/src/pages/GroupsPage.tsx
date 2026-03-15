@@ -1,17 +1,35 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ListRow } from '../components/ListRow';
 import { NeoButton } from '../components/NeoButton';
+import { PriestAvatarCoin } from '../components/PriestAvatarCoin';
 import { fetchGroups, createGroup, manageGroup } from '../lib/apavargaApi';
 import { usePriestStore } from '../store/priestStore';
 
 interface Group {
   id: string;
   name: string;
+  chatId?: string;
   templeId?: string;
   participants?: string[];
   adminOnlyMessaging?: boolean;
+  lastMessageText?: string;
+  lastMessageAt?: string;
+}
+
+function formatTime(iso?: string): string {
+  if (!iso) return '';
+  const d = new Date(iso);
+  const now = new Date();
+  if (d.toDateString() === now.toDateString()) {
+    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+  if (new Date(now.getTime() - 86400000).toDateString() === d.toDateString()) return 'Yesterday';
+  return d.toLocaleDateString([], { month: 'short', day: 'numeric' });
 }
 
 export function GroupsPage() {
+  const navigate = useNavigate();
   const isPriest = !!usePriestStore((s) => s.token);
   const [groups, setGroups] = useState<Group[]>([]);
   const [loading, setLoading] = useState(true);
@@ -98,21 +116,27 @@ export function GroupsPage() {
           </div>
         )}
 
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           {groups.map((g) => (
-            <div key={g.id} className="p-4 rounded-2xl bg-[#151515] border border-white/10">
-              <p className="font-heading font-medium text-white">{g.name}</p>
-              <p className="text-white/50 text-xs font-mono mt-1">
-                {g.participants?.length || 0} members • {g.adminOnlyMessaging ? 'Admin-only' : 'All can post'}
-              </p>
+            <div key={g.id}>
+              <ListRow
+                avatar={<PriestAvatarCoin size={48} />}
+                title={g.name}
+                subtitle={g.lastMessageText || `${g.participants?.length ?? 0} members • ${g.adminOnlyMessaging ? 'Admin only' : 'All can post'}`}
+                trailing={formatTime(g.lastMessageAt)}
+                onClick={() => g.chatId && navigate(`/chats/${g.chatId}`)}
+                onKeyDown={(e) => e.key === 'Enter' && g.chatId && navigate(`/chats/${g.chatId}`)}
+              />
               {isPriest && (
-                <NeoButton
-                  variant="ghost"
-                  className="mt-2"
-                  onClick={() => handleToggleAdminOnly(g.id, !g.adminOnlyMessaging)}
-                >
-                  {g.adminOnlyMessaging ? 'Allow all to post' : 'Admin-only messaging'}
-                </NeoButton>
+                <div className="flex gap-2 mt-2 ml-14">
+                  <NeoButton
+                    variant="ghost"
+                    className="text-xs"
+                    onClick={() => handleToggleAdminOnly(g.id, !g.adminOnlyMessaging)}
+                  >
+                    {g.adminOnlyMessaging ? 'Allow all to post' : 'Admin-only'}
+                  </NeoButton>
+                </div>
               )}
             </div>
           ))}

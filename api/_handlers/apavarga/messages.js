@@ -49,7 +49,7 @@ export async function POST(request) {
   if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
 
   const body = await request.json().catch(() => ({}));
-  const { chatId, text, isAutoReply } = body;
+  const { chatId, text, isAutoReply, mediaUrl, mediaKind } = body;
   if (!chatId || !isValidFirestoreDocId(chatId) || typeof text !== 'string') return jsonResponse({ error: 'chatId and text required' }, 400);
 
   const firebaseUid = await verifyFirebaseUser(request);
@@ -73,34 +73,54 @@ export async function POST(request) {
   }
 
   const now = new Date().toISOString();
+  const trimmedText = text.trim().slice(0, 4000);
+  const senderType = isFromPriest ? 'priest' : 'seeker';
   const msgRef = chatRef.collection('messages').doc();
   await msgRef.set({
-    text: text.trim().slice(0, 4000),
-    senderType: isFromPriest ? 'priest' : 'seeker',
+    text: trimmedText,
+    senderType,
     senderUid: isFromPriest ? null : firebaseUid,
     templeId: isFromPriest ? priest.templeId : null,
     isAutoReply: !!isAutoReply,
+    mediaUrl: mediaUrl && typeof mediaUrl === 'string' ? mediaUrl.trim().slice(0, 2000) : null,
+    mediaKind: mediaKind && typeof mediaKind === 'string' ? mediaKind.slice(0, 20) : null,
     createdAt: now,
   });
 
-  await chatRef.update({ lastMessageAt: now });
+  const lastPreview = trimmedText.trim()
+    ? trimmedText.slice(0, 200)
+    : (mediaUrl ? '[Image]' : '[Media]');
+  await chatRef.update({
+    lastMessageAt: now,
+    lastMessageText: lastPreview,
+    lastMessageSenderType: senderType,
+  });
+  if (chat.groupId) {
+    const groupRef = db.collection('apavargaGroups').doc(chat.groupId);
+    await groupRef.update({ lastMessageAt: now, lastMessageText: lastPreview, updatedAt: now });
+  }
 
-  if (!isFromPriest && !isAutoReply) {
+  if (chat.type !== 'group' && !isFromPriest && !isAutoReply) {
     const prevMsgs = await chatRef.collection('messages').where('senderType', '==', 'priest').limit(1).get();
     if (prevMsgs.empty) {
       const settingsSnap = await db.collection('apavargaPriestSettings').doc(chat.templeId).get();
       const welcomeText = settingsSnap.exists ? (settingsSnap.data().welcomeAutoReply || '').trim() : '';
           if (welcomeText) {
             const autoRef = chatRef.collection('messages').doc();
+            const welcomeSlice = welcomeText.slice(0, 4000);
             await autoRef.set({
-              text: welcomeText.slice(0, 4000),
+              text: welcomeSlice,
               senderType: 'priest',
               senderUid: null,
               templeId: chat.templeId,
               isAutoReply: true,
               createdAt: now,
             });
-            await chatRef.update({ lastMessageAt: now });
+            await chatRef.update({
+              lastMessageAt: now,
+              lastMessageText: welcomeSlice.slice(0, 200),
+              lastMessageSenderType: 'priest',
+            });
           }
     }
   }

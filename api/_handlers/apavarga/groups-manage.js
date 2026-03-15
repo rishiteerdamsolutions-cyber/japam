@@ -26,20 +26,37 @@ export async function POST(request) {
   if (data.templeId !== priest.templeId) return jsonResponse({ error: 'Forbidden' }, 403);
 
   const participants = data.participants || [];
+  const chatId = data.chatId;
   const now = new Date().toISOString();
 
-  if (action === 'add' && uid) {
-    if (!participants.includes(uid)) {
-      await ref.update({ participants: [...participants, uid], updatedAt: now });
+  if (action === 'add' || action === 'addMember') {
+    const uidToAdd = uid;
+    if (!uidToAdd) return jsonResponse({ error: 'uid required for add' }, 400);
+    if (!participants.includes(uidToAdd)) {
+      const newParticipants = [...participants, uidToAdd];
+      await ref.update({ participants: newParticipants, updatedAt: now });
+      if (chatId) {
+        const chatRef = db.collection('apavargaChats').doc(chatId);
+        await chatRef.update({ participants: newParticipants });
+      }
     }
     return jsonResponse({ ok: true }, 200);
   }
   if (action === 'remove' && uid) {
-    await ref.update({ participants: participants.filter((p) => p !== uid), updatedAt: now });
+    const newParticipants = participants.filter((p) => p !== uid);
+    await ref.update({ participants: newParticipants, updatedAt: now });
+    if (chatId) {
+      const chatRef = db.collection('apavargaChats').doc(chatId);
+      await chatRef.update({ participants: newParticipants });
+    }
     return jsonResponse({ ok: true }, 200);
   }
   if (action === 'setAdminOnly' && typeof adminOnlyMessaging === 'boolean') {
     await ref.update({ adminOnlyMessaging, updatedAt: now });
+    if (chatId) {
+      const chatRef = db.collection('apavargaChats').doc(chatId);
+      await chatRef.update({ adminOnlyMessaging });
+    }
     return jsonResponse({ ok: true }, 200);
   }
 

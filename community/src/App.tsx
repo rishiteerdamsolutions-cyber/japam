@@ -13,6 +13,7 @@ import { StatusPage } from './pages/StatusPage';
 import { AppointmentsPage } from './pages/AppointmentsPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { GroupsPage } from './pages/GroupsPage';
+import { RealsPage } from './pages/RealsPage';
 
 function App() {
   const { user, loading: authLoading, init } = useAuthStore();
@@ -61,6 +62,7 @@ function App() {
           <Route path="/" element={<Navigate to="/chats" replace />} />
           <Route path="/chats" element={<ChatsPage />} />
           <Route path="/chats/:id" element={<ChatScreen />} />
+          <Route path="/reals" element={<RealsPage />} />
           <Route path="/status" element={<StatusPage />} />
           <Route path="/appointments" element={<AppointmentsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
@@ -94,6 +96,7 @@ function App() {
         <Route path="/" element={<Navigate to="/chats" replace />} />
         <Route path="/chats" element={<ChatsPage />} />
         <Route path="/chats/:id" element={<ChatScreen />} />
+        <Route path="/reals" element={<RealsPage />} />
         <Route path="/status" element={<StatusPage />} />
         <Route path="/appointments" element={<AppointmentsPage />} />
         <Route path="/profile" element={<ProfilePage />} />

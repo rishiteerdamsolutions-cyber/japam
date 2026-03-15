@@ -1,9 +1,11 @@
 import { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { NeoButton } from '../components/NeoButton';
 import { ChatBubble } from '../components/ChatBubble';
+import { ChatHeader } from '../components/ChatHeader';
+import { ChatInputBar } from '../components/ChatInputBar';
 import { PriestAvatarCoin } from '../components/PriestAvatarCoin';
 import { fetchMessages, sendMessage, fetchChat } from '../lib/apavargaApi';
+import { uploadApavargaMedia } from '../lib/firebase';
 import { usePriestStore } from '../store/priestStore';
 
 interface Message {
@@ -13,6 +15,8 @@ interface Message {
   senderUid?: string;
   templeId?: string;
   isAutoReply?: boolean;
+  mediaUrl?: string | null;
+  mediaKind?: string | null;
   createdAt: string;
 }
 
@@ -26,7 +30,9 @@ export function ChatScreen() {
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const [chatTempleName, setChatTempleName] = useState(templeName || '');
+  const [chatMeta, setChatMeta] = useState<{ type?: string; name?: string; participants?: string[]; adminOnlyMessaging?: boolean } | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -37,6 +43,7 @@ export function ChatScreen() {
         if (!cancelled) {
           setMessages(msgs);
           if (chat?.templeName) setChatTempleName(chat.templeName);
+          if (chat) setChatMeta({ type: chat.type, name: chat.name, participants: chat.participants, adminOnlyMessaging: chat.adminOnlyMessaging });
         }
       })
       .catch(() => {})
@@ -50,11 +57,13 @@ export function ChatScreen() {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const handleSend = async () => {
-    if (!id || !message.trim() || sending) return;
+  const handleSend = async (mediaUrl?: string, mediaKind?: string) => {
+    if (!id || sending) return;
+    const textToSend = message.trim() || (mediaUrl ? ' ' : '');
+    if (!textToSend && !mediaUrl) return;
     setSending(true);
     try {
-      await sendMessage(id, message.trim());
+      await sendMessage(id, textToSend, mediaUrl, mediaKind);
       setMessage('');
       const msgs = await fetchMessages(id);
       setMessages(msgs);
@@ -65,29 +74,62 @@ export function ChatScreen() {
     }
   };
 
-  const pollMessages = () => {
-    if (!id) return;
-    fetchMessages(id).then(setMessages);
+  const handleAttachment = () => {
+    fileInputRef.current?.click();
+  };
+
+  const onFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file || !id) return;
+    if (!file.type.startsWith('image/')) return;
+    setSending(true);
+    try {
+      const url = await uploadApavargaMedia(file, 'chat');
+      await sendMessage(id, ' ', url, 'image');
+      setMessage('');
+      const msgs = await fetchMessages(id);
+      setMessages(msgs);
+    } catch {
+      // ignore
+    } finally {
+      setSending(false);
+    }
   };
 
   useEffect(() => {
-    const t = setInterval(pollMessages, 5000);
+    if (!id) return;
+    const t = setInterval(() => fetchMessages(id).then(setMessages), 5000);
     return () => clearInterval(t);
   }, [id]);
 
   if (!id) return null;
 
+  const isGroup = chatMeta?.type === 'group';
+  const title = isGroup ? (chatMeta?.name || chatTempleName || 'Group') : (chatTempleName || templeName || 'Chat');
+  const subtitle = isGroup
+    ? `${chatMeta?.participants?.length ?? 0} participants${chatMeta?.adminOnlyMessaging ? ' • Admin only' : ''}`
+    : 'Verified priest';
+  const inputDisabled = isGroup && chatMeta?.adminOnlyMessaging && !isPriest;
+  const senderLabel = (m: Message) => (m.senderType === 'priest' ? (chatTempleName || 'Priest') : 'Seeker');
+
   return (
     <div className="min-h-screen bg-black flex flex-col">
-      <header className="sticky top-0 z-10 bg-black/95 backdrop-blur border-b border-white/10 px-4 py-3 flex items-center gap-4">
-        <button type="button" onClick={() => navigate(-1)} className="text-white/80 hover:text-white" aria-label="Back">←</button>
-        <PriestAvatarCoin size={40} />
-        <div className="flex-1 min-w-0">
-          <p className="font-heading font-medium text-white">{chatTempleName || templeName || 'Chat'}</p>
-          <p className="text-[#FFD700] text-[10px] font-mono">Verified priest</p>
-        </div>
-        <NeoButton variant="primaryGold" onClick={() => navigate('/appointments')}>Book</NeoButton>
-      </header>
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={onFileSelect}
+      />
+      <ChatHeader
+        title={title}
+        subtitle={subtitle}
+        avatar={<PriestAvatarCoin size={40} />}
+        onBack={() => navigate(-1)}
+        showBook={!isGroup}
+        onBook={() => navigate('/appointments')}
+      />
 
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {loading ? (
@@ -100,30 +142,24 @@ export function ChatScreen() {
               isOwn={m.senderType === (isPriest ? 'priest' : 'seeker')}
               isAutoReply={m.isAutoReply}
               timestamp={m.createdAt ? new Date(m.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : undefined}
+              senderName={isGroup ? senderLabel(m) : undefined}
+              mediaUrl={m.mediaUrl}
+              mediaKind={m.mediaKind}
             />
           ))
         )}
         <div ref={bottomRef} />
       </div>
 
-      <div
-        className="sticky bottom-0 p-4 bg-black/95 backdrop-blur border-t border-white/10"
-        style={{ paddingBottom: 'calc(1rem + env(safe-area-inset-bottom))' }}
-      >
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-            placeholder="Type a message..."
-            className="flex-1 px-4 py-3 rounded-xl bg-[#151515] text-white border border-white/20 placeholder:text-white/40 font-mono text-sm focus:outline-none focus:border-[#FFD700]/50"
-          />
-          <NeoButton variant="icon" onClick={handleSend} disabled={!message.trim() || sending}>
-            <span className="text-lg">➤</span>
-          </NeoButton>
-        </div>
-      </div>
+      <ChatInputBar
+        value={message}
+        onChange={setMessage}
+        onSend={() => handleSend()}
+        placeholder={inputDisabled ? 'Only admins can send' : 'Type a message...'}
+        disabled={inputDisabled}
+        sending={sending}
+        onAttachmentClick={handleAttachment}
+      />
     </div>
   );
 }

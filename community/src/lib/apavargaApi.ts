@@ -54,10 +54,10 @@ export async function fetchMessages(chatId: string) {
   return data.messages || [];
 }
 
-export async function sendMessage(chatId: string, text: string) {
+export async function sendMessage(chatId: string, text: string, mediaUrl?: string, mediaKind?: string) {
   const res = await apiFetch('/api/apavarga/messages', {
     method: 'POST',
-    body: JSON.stringify({ chatId, text }),
+    body: JSON.stringify({ chatId, text, mediaUrl, mediaKind }),
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(data.error || 'Failed');
@@ -163,6 +163,31 @@ export async function updatePriestSettings(welcomeAutoReply: string, appointment
   const res = await apiFetch('/api/apavarga/priest/settings', {
     method: 'POST',
     body: JSON.stringify({ welcomeAutoReply, appointmentAutoReply }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || 'Failed');
+  return data;
+}
+
+export async function fetchReals(beforeId?: string): Promise<{ id: string; mediaUrl: string; thumbnailUrl?: string | null; caption?: string; createdAt: string; templeName?: string | null }[]> {
+  const url = beforeId
+    ? `/api/apavarga/reals?limit=20&before=${encodeURIComponent(beforeId)}`
+    : '/api/apavarga/reals?limit=20';
+  const res = await apiFetch(url);
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || 'Failed');
+  return data.reals || [];
+}
+
+export async function createReal(mediaUrl: string, options?: { thumbnailUrl?: string; caption?: string; durationSeconds?: number }) {
+  const res = await apiFetch('/api/apavarga/reals', {
+    method: 'POST',
+    body: JSON.stringify({
+      mediaUrl,
+      thumbnailUrl: options?.thumbnailUrl,
+      caption: options?.caption,
+      durationSeconds: options?.durationSeconds,
+    }),
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(data.error || 'Failed');

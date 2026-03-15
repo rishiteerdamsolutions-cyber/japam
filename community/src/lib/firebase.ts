@@ -35,9 +35,9 @@ if (isFirebaseConfigured && app) {
 export { storage };
 
 /** Upload file to apavarga path, return download URL. 24h lifecycle via storage rules. */
-export async function uploadApavargaMedia(file: File, type: 'chat' | 'status'): Promise<string> {
+export async function uploadApavargaMedia(file: File, type: 'chat' | 'status' | 'real'): Promise<string> {
   if (!storage) throw new Error('Storage not configured');
-  const ext = file.name.split('.').pop() || 'jpg';
+  const ext = file.name.split('.').pop() || (type === 'real' ? 'mp4' : 'jpg');
   const path = `apavarga/${type}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
   const r = ref(storage, path);
   await uploadBytes(r, file);

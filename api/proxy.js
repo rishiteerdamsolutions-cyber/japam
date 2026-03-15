@@ -87,6 +87,7 @@ import * as apavargaTemplesHandler from './_handlers/apavarga/temples.js';
 import * as apavargaPriestSettingsHandler from './_handlers/apavarga/priest-settings.js';
 import * as apavargaGroupsHandler from './_handlers/apavarga/groups.js';
 import * as apavargaGroupsManageHandler from './_handlers/apavarga/groups-manage.js';
+import * as apavargaRealsHandler from './_handlers/apavarga/reals.js';
 import * as apavargaCleanupHandler from './_handlers/apavarga/cleanup.js';
 import * as cronRefreshActiveUsersHandler from './_handlers/cron/refresh-active-users.js';
 import * as cronUpdateMahaYagnaCountersHandler from './_handlers/cron/update-maha-yagna-counters.js';
@@ -195,6 +196,8 @@ const HANDLERS = {
   'GET apavarga/groups': apavargaGroupsHandler,
   'POST apavarga/groups': apavargaGroupsHandler,
   'POST apavarga/groups/manage': apavargaGroupsManageHandler,
+  'GET apavarga/reals': apavargaRealsHandler,
+  'POST apavarga/reals': apavargaRealsHandler,
   'POST apavarga/cleanup': apavargaCleanupHandler,
   'GET cron/refresh-active-users': cronRefreshActiveUsersHandler,
   'GET cron/update-maha-yagna-counters': cronUpdateMahaYagnaCountersHandler,

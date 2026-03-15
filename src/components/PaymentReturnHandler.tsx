@@ -57,7 +57,24 @@ export function PaymentReturnHandler() {
         // Ignore
       } finally {
         window.history.replaceState({}, '', location.pathname || '/');
-        navigate(isLives ? '/game' : '/menu', { replace: true });
+        if (isLives) {
+          try {
+            const raw = sessionStorage.getItem('japam_lives_return');
+            if (raw) {
+              const { mode, levelIndex } = JSON.parse(raw) as { mode?: string; levelIndex?: number };
+              sessionStorage.removeItem('japam_lives_return');
+              if (mode != null && levelIndex != null) {
+                navigate(`/game?mode=${encodeURIComponent(mode)}&level=${levelIndex}`, { replace: true });
+                return;
+              }
+            }
+          } catch {
+            // fall through to default
+          }
+          navigate('/game', { replace: true });
+        } else {
+          navigate('/menu', { replace: true });
+        }
       }
     })();
   }, [location.search, location.pathname, user?.uid, user?.displayName, user?.email, navigate, loadUnlock, loadLives]);

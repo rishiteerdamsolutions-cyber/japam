@@ -11,9 +11,10 @@ interface GameOverlayProps {
   onMenu: () => void;
   onNext?: () => void;
   showWatchForMoves?: boolean;
+  getIdToken?: () => Promise<string | null>;
 }
 
-export function GameOverlay({ status, isMarathon, onRetry, onMenu, onNext, showWatchForMoves }: GameOverlayProps) {
+export function GameOverlay({ status, isMarathon, onRetry, onMenu, onNext, showWatchForMoves, getIdToken }: GameOverlayProps) {
   const { t } = useTranslation();
   const addMoves = useGameStore((s) => s.addMoves);
   const [showVideo, setShowVideo] = useState(false);
@@ -29,6 +30,8 @@ export function GameOverlay({ status, isMarathon, onRetry, onMenu, onNext, showW
         onComplete={handleWatchComplete}
         onClose={() => setShowVideo(false)}
         rewardLabel={t('game.continue')}
+        rewardType="moves"
+        getIdToken={getIdToken}
       />
     );
   }

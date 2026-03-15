@@ -9,12 +9,17 @@ import { openCashfreeCheckout } from '../../lib/cashfree';
 import { getApiBase } from '../../lib/apiBase';
 import { fetchWithRetry } from '../../lib/fetchWithRetry';
 
+const LIVES_RETURN_KEY = 'japam_lives_return';
+
 interface OutOfLivesOverlayProps {
   onClose: () => void;
   onRetryAfterLife?: () => void;
+  /** Mode and level to return to after buying lives (so same level opens, Candy Crush style) */
+  returnMode?: string;
+  returnLevelIndex?: number;
 }
 
-export function OutOfLivesOverlay({ onClose, onRetryAfterLife }: OutOfLivesOverlayProps) {
+export function OutOfLivesOverlay({ onClose, onRetryAfterLife, returnMode, returnLevelIndex }: OutOfLivesOverlayProps) {
   const { t } = useTranslation();
   const user = useAuthStore((s) => s.user);
   const load = useLivesStore((s) => s.load);
@@ -63,13 +68,20 @@ export function OutOfLivesOverlay({ onClose, onRetryAfterLife }: OutOfLivesOverl
         setBuyError('Invalid response');
         return;
       }
+      try {
+        if (returnMode != null && returnLevelIndex != null) {
+          sessionStorage.setItem(LIVES_RETURN_KEY, JSON.stringify({ mode: returnMode, levelIndex: returnLevelIndex }));
+        }
+      } catch {
+        // ignore
+      }
       await openCashfreeCheckout(data.paymentSessionId, { redirectTarget: '_self' });
     } catch (e) {
       setBuyError(e instanceof Error ? e.message : 'Failed');
     } finally {
       setBuying(false);
     }
-  }, [user?.uid]);
+  }, [user?.uid, returnMode, returnLevelIndex]);
 
   const [livesPrice, setLivesPrice] = useState<number>(19);
   useEffect(() => {
@@ -84,6 +96,8 @@ export function OutOfLivesOverlay({ onClose, onRetryAfterLife }: OutOfLivesOverl
         onComplete={handleWatchComplete}
         onClose={() => setShowVideo(false)}
         rewardLabel={t('game.continue')}
+        rewardType="life"
+        getIdToken={getIdToken}
       />
     );
   }

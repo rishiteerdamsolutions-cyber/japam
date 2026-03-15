@@ -119,6 +119,8 @@ export function LivesModal({ onClose }: LivesModalProps) {
         onComplete={handleWatchComplete}
         onClose={() => setShowVideo(false)}
         rewardLabel={t('game.continue')}
+        rewardType="life"
+        getIdToken={getIdToken}
       />
     );
   }

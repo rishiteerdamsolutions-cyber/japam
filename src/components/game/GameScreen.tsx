@@ -363,6 +363,8 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
       <OutOfLivesOverlay
         onClose={onBack}
         onRetryAfterLife={handleRetryAfterLife}
+        returnMode={mode}
+        returnLevelIndex={levelIndex}
       />
     );
   }
@@ -476,6 +478,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
           onRetry={handleRetry}
           onMenu={handleMenuBack}
           showWatchForMoves={useLives}
+          getIdToken={useLives ? getIdToken : undefined}
         />
       )}
       {showLivesModal && <LivesModal onClose={() => setShowLivesModal(false)} />}

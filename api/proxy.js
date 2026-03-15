@@ -58,6 +58,7 @@ import * as userPausedGameHandler from './_handlers/user/paused-game.js';
 import * as userLivesHandler from './_handlers/user/lives.js';
 import * as userLivesConsumeHandler from './_handlers/user/lives-consume.js';
 import * as userLivesGrantHandler from './_handlers/user/lives-grant.js';
+import * as userRewardVideoEventHandler from './_handlers/user/reward-video-event.js';
 import * as userReactHandler from './_handlers/user/react.js';
 import * as publicActiveUsersHandler from './_handlers/public/active-users.js';
 import * as userReminderHandler from './_handlers/user/reminder.js';
@@ -67,6 +68,7 @@ import * as donorsHandler from './_handlers/donors.js';
 import * as levelsConfigHandler from './_handlers/levels-config.js';
 import * as configRewardVideosHandler from './_handlers/config/reward-videos.js';
 import * as adminRewardVideosHandler from './_handlers/admin/reward-videos.js';
+import * as adminRewardVideoAnalyticsHandler from './_handlers/admin/reward-video-analytics.js';
 import * as adminLevelsHandler from './_handlers/admin/levels.js';
 import * as adminBlockUserHandler from './_handlers/admin/block-user.js';
 import * as adminUnblockUserHandler from './_handlers/admin/unblock-user.js';
@@ -149,6 +151,7 @@ const HANDLERS = {
   'GET levels-config': levelsConfigHandler,
   'GET config/reward-videos': configRewardVideosHandler,
   'POST admin/reward-videos': adminRewardVideosHandler,
+  'GET admin/reward-video-analytics': adminRewardVideoAnalyticsHandler,
   'GET priest/marathons': priestMarathonsHandler,
   'POST priest/marathons': priestMarathonsHandler,
   'POST priest/link': priestLinkHandler,
@@ -167,6 +170,7 @@ const HANDLERS = {
   'GET user/lives': userLivesHandler,
   'POST user/lives/consume': userLivesConsumeHandler,
   'POST user/lives/grant': userLivesGrantHandler,
+  'POST user/reward-video-event': userRewardVideoEventHandler,
   'POST user/react': userReactHandler,
   'GET public/active-users': publicActiveUsersHandler,
   'GET user/reminder': userReminderHandler,

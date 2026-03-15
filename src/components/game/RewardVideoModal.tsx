@@ -1,7 +1,9 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { getApiBase } from '../../lib/apiBase';
+import { trackRewardVideoEvent } from '../../lib/rewardVideoAnalytics';
+import type { RewardType } from '../../lib/rewardVideoAnalytics';
 
 const WATCH_SECONDS = 30;
 
@@ -17,6 +19,10 @@ interface RewardVideoModalProps {
   onComplete: () => void;
   onClose?: () => void;
   rewardLabel?: string;
+  /** For analytics: 'moves' = +5 moves, 'life' = +1 life */
+  rewardType?: RewardType;
+  /** Callback to get Firebase ID token for analytics (optional; if not provided, analytics are skipped) */
+  getIdToken?: () => Promise<string | null>;
 }
 
 function extractYoutubeId(urlOrId: string): string {
@@ -31,13 +37,15 @@ function extractYoutubeId(urlOrId: string): string {
   return s.slice(-11);
 }
 
-export function RewardVideoModal({ onComplete, onClose, rewardLabel }: RewardVideoModalProps) {
+export function RewardVideoModal({ onComplete, onClose, rewardLabel, rewardType, getIdToken }: RewardVideoModalProps) {
   const { t } = useTranslation();
   const [items, setItems] = useState<RewardVideoItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [secondsLeft, setSecondsLeft] = useState(WATCH_SECONDS);
   const [canContinue, setCanContinue] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const trackedStarted = useRef(false);
+  const trackedCompleted = useRef(false);
 
   useEffect(() => {
     const base = getApiBase();
@@ -58,6 +66,20 @@ export function RewardVideoModal({ onComplete, onClose, rewardLabel }: RewardVid
 
   const video = items.length > 0 ? items[Math.floor(Math.random() * items.length)]! : null;
   const youtubeId = video ? extractYoutubeId(video.youtubeId) : null;
+  const videoType = video?.type ?? 'adyathmika';
+
+  useEffect(() => {
+    if (!youtubeId || !video || !getIdToken) return;
+    if (!trackedStarted.current) {
+      trackedStarted.current = true;
+      trackRewardVideoEvent(getIdToken, {
+        event: 'started',
+        videoId: youtubeId,
+        type: videoType,
+        rewardType: rewardType,
+      });
+    }
+  }, [youtubeId, video, videoType, rewardType, getIdToken]);
 
   useEffect(() => {
     if (!youtubeId || canContinue) return;
@@ -73,9 +95,29 @@ export function RewardVideoModal({ onComplete, onClose, rewardLabel }: RewardVid
     return () => clearInterval(id);
   }, [youtubeId, canContinue]);
 
+  useEffect(() => {
+    if (!canContinue || !youtubeId || !getIdToken || trackedCompleted.current) return;
+    trackedCompleted.current = true;
+    trackRewardVideoEvent(getIdToken, {
+      event: 'completed',
+      videoId: youtubeId,
+      type: videoType,
+      rewardType: rewardType,
+    });
+  }, [canContinue, youtubeId, videoType, rewardType, getIdToken]);
+
   const handleContinue = useCallback(() => {
-    if (canContinue) onComplete();
-  }, [canContinue, onComplete]);
+    if (!canContinue) return;
+    if (getIdToken && youtubeId) {
+      trackRewardVideoEvent(getIdToken, {
+        event: 'continue_clicked',
+        videoId: youtubeId,
+        type: videoType,
+        rewardType: rewardType,
+      });
+    }
+    onComplete();
+  }, [canContinue, onComplete, getIdToken, youtubeId, videoType, rewardType]);
 
   if (loading) {
     return (

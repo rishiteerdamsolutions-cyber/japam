@@ -46,6 +46,7 @@ export function AdminLayout() {
         <NavLink to="/admin/maha-yagnas">Maha Yagnas</NavLink>
         <NavLink to="/admin/levels">Levels</NavLink>
         <NavLink to="/admin/videos">Videos</NavLink>
+        <NavLink to="/admin/video-analytics">Video analytics</NavLink>
         <NavLink to="/admin/users">Paid users</NavLink>
       </nav>
       <Outlet />

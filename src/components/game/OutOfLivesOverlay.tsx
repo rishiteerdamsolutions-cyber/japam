@@ -19,7 +19,9 @@ export function OutOfLivesOverlay({ onClose, onRetryAfterLife }: OutOfLivesOverl
   const user = useAuthStore((s) => s.user);
   const load = useLivesStore((s) => s.load);
   const grant = useLivesStore((s) => s.grant);
+  const lives = useLivesStore((s) => s.lives);
   const nextRefillAt = useLivesStore((s) => s.nextRefillAt);
+  const canBuyLives = lives <= 0;
 
   const [showVideo, setShowVideo] = useState(false);
   const [buying, setBuying] = useState(false);
@@ -139,9 +141,10 @@ export function OutOfLivesOverlay({ onClose, onRetryAfterLife }: OutOfLivesOverl
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
             onClick={handleBuyLives}
-            disabled={buying}
+            disabled={buying || !canBuyLives}
             className="w-full py-3 rounded-xl bg-gradient-to-b from-rose-500 to-pink-600 text-white font-bold shadow-lg hover:shadow-xl disabled:opacity-50 transition-shadow"
             style={{ fontFamily: 'serif' }}
+            title={!canBuyLives ? t('game.buyLivesOnlyWhenZero', 'Buy only when you have no lives') : undefined}
           >
             {buying ? t('common.loading') : t('game.buyLives', { price: livesPrice })}
           </motion.button>

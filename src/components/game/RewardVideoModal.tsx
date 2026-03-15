@@ -132,12 +132,7 @@ export function RewardVideoModal({ onComplete, onClose, rewardLabel }: RewardVid
             allowFullScreen
           />
         </div>
-        <div className="mt-4 flex flex-col gap-2">
-          <p className="text-amber-200/80 text-sm text-center">
-            {canContinue
-              ? (rewardLabel || t('game.watchComplete'))
-              : t('game.watchForReward', { seconds: secondsLeft })}
-          </p>
+        <div className="mt-4">
           <button
             onClick={handleContinue}
             disabled={!canContinue}

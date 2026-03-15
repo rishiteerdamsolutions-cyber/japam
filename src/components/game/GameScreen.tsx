@@ -42,18 +42,14 @@ function MusicIcon() {
   );
 }
 
-const LIVES_MAX = 5;
-
-function GameBottomStrip({ isGuest, pauseSaving, onPause, onBack, showLives }: {
+function GameBottomStrip({ isGuest, pauseSaving, onPause, onBack }: {
   isGuest: boolean;
   pauseSaving: boolean;
   onPause: () => void;
   onBack: () => void;
-  showLives?: boolean;
 }) {
   const { t } = useTranslation();
   const moves = useGameStore((s) => s.moves);
-  const lives = useLivesStore((s) => s.lives);
   const mode = useGameStore((s) => s.mode);
   const levelIndex = useGameStore((s) => s.levelIndex);
   const japasThisLevel = useGameStore((s) => s.japasThisLevel);
@@ -72,15 +68,8 @@ function GameBottomStrip({ isGuest, pauseSaving, onPause, onBack, showLives }: {
       role="group"
       aria-label="Game controls"
     >
-      <div className="flex-1 min-w-0 flex items-center gap-2">
-        {showLives && (
-          <span className="flex items-center gap-0.5 text-amber-200 text-xs sm:text-sm shrink-0" title={t('game.lives')}>
-            {'❤️'.repeat(Math.min(lives, LIVES_MAX))}{'🤍'.repeat(Math.max(0, LIVES_MAX - lives))} {lives}/{LIVES_MAX}
-          </span>
-        )}
-        <span className="text-amber-200 text-xs sm:text-sm truncate" title={`${t('game.japas')}: ${japasNeeded} / ${japaTarget}`}>
-          {t('game.japas')}: {japasNeeded} / {japaTarget}
-        </span>
+      <div className="flex-1 min-w-0 text-amber-200 text-xs sm:text-sm truncate" title={`${t('game.japas')}: ${japasNeeded} / ${japaTarget}`}>
+        {t('game.japas')}: {japasNeeded} / {japaTarget}
       </div>
       {!isGuest ? (
         <button
@@ -391,7 +380,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
         <button onClick={handleBack} className="text-amber-400 text-sm font-medium py-2 px-2 -ml-2 min-h-[44px] flex items-center shrink-0" aria-label={t('game.back')}>
           {t('game.back')}
         </button>
-        {!isGuest && <LivesDisplay onClick={() => setShowLivesModal(true)} compact className="shrink-0" />}
+        {useLives && <LivesDisplay onClick={() => setShowLivesModal(true)} compact className="shrink-0" />}
         <div className="flex items-center gap-1 sm:gap-2 ml-auto">
           <button
             type="button"
@@ -442,7 +431,6 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
             pauseSaving={pauseSaving}
             onPause={handlePause}
             onBack={onBack}
-            showLives={useLives}
           />
         </>
       )}

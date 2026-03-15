@@ -72,6 +72,7 @@
     "refillIn": "Refill in {{hours}}h",
     "paymentFailed": "Payment verification failed",
     "paymentCancelled": "Payment was cancelled",
+    "buyLivesOnlyWhenZero": "Buy only when you have no lives",
     "back": "← Back",
     "pause": "Pause",
     "exit": "Exit",

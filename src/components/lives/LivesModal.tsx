@@ -13,8 +13,7 @@ import { fetchWithRetry } from '../../lib/fetchWithRetry';
 const MAX_LIVES = 5;
 
 function BigHeartWithNumber({ count }: { count: number }) {
-  const isFull = count >= MAX_LIVES;
-  const display = isFull ? '∞' : String(count);
+  const display = String(Math.min(Math.max(0, count), MAX_LIVES));
   return (
     <div className="relative w-24 h-24 sm:w-28 sm:h-28 mx-auto mb-4">
       <div
@@ -112,6 +111,7 @@ export function LivesModal({ onClose }: LivesModalProps) {
 
   const refillIn = nextRefillAt ? Math.max(0, Math.ceil((nextRefillAt - Date.now()) / (60 * 60 * 1000))) : 0;
   const isFull = lives >= MAX_LIVES;
+  const canBuyLives = lives <= 0;
 
   if (showVideo) {
     return (
@@ -164,9 +164,10 @@ export function LivesModal({ onClose }: LivesModalProps) {
           <motion.button
             type="button"
             onClick={handleBuyLives}
-            disabled={buying}
+            disabled={buying || !canBuyLives}
             className="w-full py-3 rounded-xl bg-gradient-to-b from-rose-500 to-pink-600 text-white font-bold shadow-lg hover:shadow-xl disabled:opacity-50 transition-shadow"
             style={{ fontFamily: 'serif' }}
+            title={!canBuyLives ? t('game.buyLivesOnlyWhenZero', 'Buy only when you have no lives') : undefined}
           >
             {buying ? t('common.loading') : t('game.buyLives', { price: livesPrice })}
           </motion.button>

@@ -6,10 +6,9 @@ import { useEffect, useCallback } from 'react';
 
 const MAX_LIVES = 5;
 
-/** Glossy pink heart SVG with slot for number (use foreignObject or overlay) */
+/** Glossy pink heart SVG with current count (1–5), never infinity */
 function HeartWithNumber({ count, size = 24 }: { count: number; size?: number }) {
-  const isFull = count >= MAX_LIVES;
-  const display = isFull ? '∞' : String(count);
+  const display = String(Math.min(Math.max(0, count), MAX_LIVES));
   return (
     <div className="relative flex items-center justify-center shrink-0" style={{ width: size, height: size }}>
       <svg
@@ -97,6 +96,9 @@ export function LivesDisplay({ onClick, compact = true, className = '' }: LivesD
       `}
     >
       <HeartWithNumber count={lives} size={compact ? 20 : 28} />
+      <span className="font-semibold text-rose-900/90" style={{ fontSize: compact ? '0.75rem' : '0.85rem' }}>
+        {lives}/{MAX_LIVES}
+      </span>
       {statusText && (
         <span
           className="font-semibold text-rose-900/90 truncate max-w-[52px] sm:max-w-[70px]"

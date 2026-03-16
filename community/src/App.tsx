@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { signInWithCustomToken } from 'firebase/auth';
 import { useAuthStore } from './store/authStore';
 import { usePriestStore } from './store/priestStore';
 import { loadUnlock, canAccessCommunity, type UnlockData } from './lib/unlock';
 import { joinApavarga } from './lib/apavarga';
+import { auth } from './lib/firebase';
 import { WelcomePage } from './pages/WelcomePage';
 import { ProOnlyPage } from './pages/ProOnlyPage';
 import { AppLayout } from './components/AppLayout';
@@ -15,11 +17,22 @@ import { ProfilePage } from './pages/ProfilePage';
 import { GroupsPage } from './pages/GroupsPage';
 import { RealsPage } from './pages/RealsPage';
 
+function getCustomTokenFromHash(): string | null {
+  const hash = window.location.hash.slice(1);
+  if (!hash.startsWith('ct=')) return null;
+  try {
+    return decodeURIComponent(hash.slice(3));
+  } catch {
+    return null;
+  }
+}
+
 function App() {
   const { user, loading: authLoading, init } = useAuthStore();
   const { token: priestToken, init: initPriest } = usePriestStore();
   const [unlock, setUnlock] = useState<UnlockData | null>(null);
   const [unlockLoading, setUnlockLoading] = useState(false);
+  const [ssoChecking, setSsoChecking] = useState(() => Boolean(getCustomTokenFromHash()));
 
   useEffect(() => {
     return init();
@@ -27,6 +40,22 @@ function App() {
   useEffect(() => {
     initPriest();
   }, [initPriest]);
+
+  useEffect(() => {
+    const customToken = getCustomTokenFromHash();
+    if (!customToken || !auth) {
+      setSsoChecking(false);
+      return;
+    }
+    signInWithCustomToken(auth, customToken)
+      .then(() => {
+        window.history.replaceState(null, '', window.location.pathname + window.location.search);
+      })
+      .catch(() => {})
+      .finally(() => {
+        setSsoChecking(false);
+      });
+  }, []);
 
   useEffect(() => {
     if (!user) {
@@ -47,10 +76,10 @@ function App() {
     };
   }, [user]);
 
-  if (authLoading && !priestToken) {
+  if ((authLoading || ssoChecking) && !priestToken) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black">
-        <div className="text-[var(--primary)] text-sm font-mono">Loading…</div>
+        <div className="text-[var(--primary)] text-sm font-mono">{ssoChecking ? 'Opening…' : 'Loading…'}</div>
       </div>
     );
   }

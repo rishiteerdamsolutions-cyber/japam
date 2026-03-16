@@ -1,18 +1,51 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppHeader } from '../components/layout/AppHeader';
 import { AppFooter } from '../components/layout/AppFooter';
 import { useUnlockStore } from '../store/unlockStore';
+import { auth } from '../lib/firebase';
 
 const APAVARGA_URL = import.meta.env.VITE_APAVARGA_URL || '';
+const API_BASE = import.meta.env.VITE_API_URL ?? '';
 
 export function ApavargaPage() {
   const navigate = useNavigate();
   const tier = useUnlockStore((s) => s.tier);
   const isProOrPremium = tier === 'pro' || tier === 'premium';
+  const [opening, setOpening] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const enterApavarga = () => {
-    if (APAVARGA_URL) {
-      window.location.href = APAVARGA_URL;
+  const enterApavarga = async () => {
+    if (!APAVARGA_URL) return;
+    setOpening(true);
+    setError(null);
+    try {
+      const user = auth?.currentUser;
+      if (!user) {
+        setError('Please sign in first.');
+        return;
+      }
+      const idToken = await user.getIdToken();
+      const url = API_BASE ? `${API_BASE}/api/apavarga/custom-token` : '/api/apavarga/custom-token';
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setError(data?.error || 'Could not open Apavarga.');
+        return;
+      }
+      const customToken = data?.customToken;
+      if (!customToken) {
+        setError('Could not open Apavarga.');
+        return;
+      }
+      window.location.href = APAVARGA_URL + '#ct=' + encodeURIComponent(customToken);
+    } catch {
+      setError('Something went wrong. Try again.');
+    } finally {
+      setOpening(false);
     }
   };
 
@@ -32,14 +65,15 @@ export function ApavargaPage() {
               The spiritual social network for seekers. Chats, status, groups & reals.
             </p>
 
+            {error && <p className="text-amber-200/90 text-sm mb-2">{error}</p>}
             {isProOrPremium ? (
               <button
                 type="button"
                 onClick={enterApavarga}
-                disabled={!APAVARGA_URL}
+                disabled={!APAVARGA_URL || opening}
                 className="w-full max-w-sm mx-auto py-4 px-6 rounded-2xl bg-amber-500 hover:bg-amber-400 text-black font-semibold text-lg shadow-lg active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Log into Apavarga spiritual social network
+                {opening ? 'Opening…' : 'Log into Apavarga spiritual social network'}
               </button>
             ) : (
               <div className="rounded-2xl bg-black/40 border border-amber-500/30 p-5 text-center">

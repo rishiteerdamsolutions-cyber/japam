@@ -29,7 +29,7 @@ interface SettingsProps {
 export function Settings({ onBack }: SettingsProps) {
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
-  useUnlockStore((s) => s.tier);
+  const tier = useUnlockStore((s) => s.tier);
   const { backgroundMusicEnabled, backgroundMusicVolume, load, setBackgroundMusic, setBackgroundMusicVolume } = useSettingsStore();
   const { displayName, setDisplayName } = useProfileStore();
   const [localName, setLocalName] = useState(displayName ?? '');
@@ -358,9 +358,15 @@ export function Settings({ onBack }: SettingsProps) {
             <div className="flex justify-between items-start">
               <div>
                 <h2 className="text-amber-400 font-medium text-sm">Apavarga</h2>
-                <p className="text-amber-200/70 text-xs mt-0.5">Log into the Apavarga spiritual social network.</p>
+                {tier === 'pro' || tier === 'premium' ? (
+                  <p className="text-amber-200/70 text-xs mt-0.5">Log into the Apavarga spiritual social network.</p>
+                ) : (
+                  <p className="text-amber-200/70 text-xs mt-0.5">Become a Pro member to unlock the Apavarga Social Network.</p>
+                )}
               </div>
-              <span className="text-amber-400/80 text-xs">Log in</span>
+              <span className="text-amber-400/80 text-xs">
+                {tier === 'pro' || tier === 'premium' ? 'Log in' : 'Unlock'}
+              </span>
             </div>
           </button>
 

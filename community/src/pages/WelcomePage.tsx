@@ -47,9 +47,19 @@ export function WelcomePage({ ssoFailed }: WelcomePageProps) {
     }
   };
 
+  const japamUrl = import.meta.env.VITE_JAPAM_URL || (typeof window !== 'undefined' && window.location.pathname.startsWith('/apavarga') ? '/' : '/');
+
   if (mode === 'choose') {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-black">
+      <div className="min-h-screen flex flex-col bg-black">
+        <a
+          href={japamUrl}
+          className="flex items-center gap-2 px-4 py-3 text-[var(--primary)]/90 hover:text-[var(--primary)] font-mono text-sm"
+        >
+          <span>←</span>
+          <span>Back to Japam</span>
+        </a>
+        <div className="flex-1 flex flex-col items-center justify-center p-6">
         <div className="max-w-sm w-full text-center space-y-6">
           <h1 className="font-heading font-semibold text-2xl text-[var(--primary)]">Apavarga</h1>
           <p className="text-white/70 text-sm font-mono">
@@ -83,13 +93,22 @@ export function WelcomePage({ ssoFailed }: WelcomePageProps) {
             </div>
           </div>
         </div>
+        </div>
       </div>
     );
   }
 
   if (mode === 'priest') {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-black">
+      <div className="min-h-screen flex flex-col bg-black">
+        <a
+          href={japamUrl}
+          className="flex items-center gap-2 px-4 py-3 text-[var(--primary)]/90 hover:text-[var(--primary)] font-mono text-sm"
+        >
+          <span>←</span>
+          <span>Back to Japam</span>
+        </a>
+        <div className="flex-1 flex flex-col items-center justify-center p-6">
         <div className="max-w-sm w-full space-y-6">
           <h1 className="font-heading font-semibold text-2xl text-[var(--primary)] text-center">Priest Login</h1>
           <p className="text-white/70 text-sm font-mono text-center">
@@ -118,6 +137,7 @@ export function WelcomePage({ ssoFailed }: WelcomePageProps) {
           <NeoButton variant="ghost" fullWidth onClick={() => setMode('choose')}>
             ← Back
           </NeoButton>
+        </div>
         </div>
       </div>
     );

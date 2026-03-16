@@ -109,7 +109,7 @@ function FooterIcon({
 export function AppFooter() {
   const { t } = useTranslation();
   return (
-    <footer className="mt-auto pt-6 pb-4 px-4 flex flex-col items-center gap-3 text-white/40 text-xs border-t border-white/10">
+    <footer className="mt-auto pt-6 pb-4 px-4 flex flex-col items-center justify-center gap-3 text-white/40 text-xs border-t border-white/10 w-full">
       <div className="flex items-center justify-center gap-1 flex-wrap">
         <FooterIcon href="/contact" label={t('landing.contact')} icon={ContactIcon} />
         <FooterIcon href="/privacy" label={t('landing.privacy')} icon={PrivacyIcon} />
@@ -117,7 +117,9 @@ export function AppFooter() {
         <FooterIcon href="/refund-cancellation" label={t('landing.refund')} icon={RefundIcon} />
         <FooterIcon href="/shipping-delivery" label={t('landing.shipping')} icon={ShippingIcon} />
       </div>
-      <p className="text-white/30">© {new Date().getFullYear()} <JapamBrand className="inline text-xs">Japam</JapamBrand>. {t('landing.copyright')}</p>
+      <p className="text-white/30 text-center w-full">
+        © {new Date().getFullYear()} <JapamBrand className="inline text-xs align-baseline">Japam</JapamBrand>. {t('landing.copyright')}
+      </p>
     </footer>
   );
 }

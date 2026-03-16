@@ -57,7 +57,7 @@ export function ApavargaPage() {
       <div className="absolute inset-0 bg-black/40" aria-hidden />
       <div className="relative z-10 flex flex-col min-h-screen">
         <div className="max-w-lg mx-auto px-4 flex-1">
-          <AppHeader title="Apavarga" showBack onBack={() => navigate('/settings')} />
+          <AppHeader title="Apavarga" showBack onBack={() => navigate('/menu')} />
 
           <div className="text-center mt-12 mb-8">
             <div className="text-6xl mb-4">🕉️</div>

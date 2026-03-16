@@ -84,20 +84,22 @@ function SettingsCard({
 }) {
   return (
     <div className="rounded-2xl bg-black/20 border border-white/10 overflow-hidden">
-      <button
+        <button
         type="button"
         onClick={onToggle}
-        className="w-full flex items-center gap-4 p-4 text-left hover:bg-white/5 transition-colors"
+        className="w-full flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-3 sm:p-4 text-left hover:bg-white/5 transition-colors"
       >
-        <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400">
-          <Icon />
-        </div>
-        <div className="flex-1 min-w-0">
-          <span className="font-medium text-amber-200 block truncate">{label}</span>
-          {badge && <span className="text-amber-400/70 text-xs">{badge}</span>}
+        <div className="flex items-center gap-3 sm:flex-1 min-w-0">
+          <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400">
+            <Icon />
+          </div>
+          <div className="flex-1 min-w-0">
+            <span className="font-medium text-amber-200 block text-sm">{label}</span>
+            {badge && <span className="text-amber-400/70 text-xs block truncate">{badge}</span>}
+          </div>
         </div>
         <svg
-          className={`w-5 h-5 text-amber-400/60 flex-shrink-0 transition-transform ${expanded ? 'rotate-180' : ''}`}
+          className={`w-5 h-5 text-amber-400/60 flex-shrink-0 self-end sm:self-center transition-transform ${expanded ? 'rotate-180' : ''}`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -295,7 +297,7 @@ export function Settings({ onBack }: SettingsProps) {
           <GoogleSignIn />
         </section>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {user && (
             <SettingsCard
               icon={Icons.profile}

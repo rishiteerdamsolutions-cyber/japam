@@ -206,14 +206,14 @@ export async function fetchReals(beforeId?: string): Promise<{ id: string; media
   return data.reals || [];
 }
 
-export async function createReal(mediaUrl: string, options?: { thumbnailUrl?: string; caption?: string; durationSeconds?: number }) {
+export async function createReal(options: { mediaUrl?: string; thumbnailUrl?: string; caption?: string; durationSeconds?: number }) {
   const res = await apiFetch('/api/apavarga/reals', {
     method: 'POST',
     body: JSON.stringify({
-      mediaUrl,
-      thumbnailUrl: options?.thumbnailUrl,
-      caption: options?.caption,
-      durationSeconds: options?.durationSeconds,
+      mediaUrl: options.mediaUrl,
+      thumbnailUrl: options.thumbnailUrl,
+      caption: options.caption,
+      durationSeconds: options.durationSeconds,
     }),
   });
   const data = await res.json().catch(() => ({}));

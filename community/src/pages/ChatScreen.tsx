@@ -5,7 +5,6 @@ import { ChatHeader } from '../components/ChatHeader';
 import { ChatInputBar } from '../components/ChatInputBar';
 import { PriestAvatarCoin } from '../components/PriestAvatarCoin';
 import { fetchMessages, sendMessage, fetchChat } from '../lib/apavargaApi';
-import { uploadApavargaMedia } from '../lib/firebase';
 import { usePriestStore } from '../store/priestStore';
 
 interface Message {
@@ -32,7 +31,6 @@ export function ChatScreen() {
   const [chatTempleName, setChatTempleName] = useState(templeName || '');
   const [chatMeta, setChatMeta] = useState<{ type?: string; name?: string; otherDisplayName?: string; participants?: string[]; adminOnlyMessaging?: boolean } | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -122,13 +120,6 @@ export function ChatScreen() {
 
   return (
     <div className="min-h-screen bg-black flex flex-col">
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/*"
-        className="hidden"
-        onChange={onFileSelect}
-      />
       <ChatHeader
         title={title}
         subtitle={subtitle}
@@ -165,7 +156,6 @@ export function ChatScreen() {
         placeholder={inputDisabled ? 'Only admins can send' : 'Type a message...'}
         disabled={inputDisabled}
         sending={sending}
-        onAttachmentClick={handleAttachment}
       />
     </div>
   );

@@ -33,14 +33,19 @@ export async function GET(request) {
   return jsonResponse({ reals });
 }
 
-/** POST /api/apavarga/reals - Create a real. Body: { mediaUrl, thumbnailUrl?, caption?, durationSeconds? } */
+/** POST /api/apavarga/reals - Create a real.
+ * Body: { mediaUrl?, thumbnailUrl?, caption?, durationSeconds? }
+ * Either mediaUrl (video) OR caption (text-only) must be provided.
+ */
 export async function POST(request) {
   const db = getDb();
   if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
 
   const body = await request.json().catch(() => ({}));
   const { mediaUrl, thumbnailUrl, caption, durationSeconds } = body;
-  if (!mediaUrl || typeof mediaUrl !== 'string') return jsonResponse({ error: 'mediaUrl required' }, 400);
+  if ((!mediaUrl || typeof mediaUrl !== 'string') && !caption) {
+    return jsonResponse({ error: 'mediaUrl or caption required' }, 400);
+  }
 
   const firebaseUid = await verifyFirebaseUser(request);
   const priestToken = getBearerToken(request);
@@ -55,7 +60,7 @@ export async function POST(request) {
     creatorUid: priest ? null : firebaseUid,
     templeId: priest ? priest.templeId : null,
     templeName: priest ? priest.templeName : null,
-    mediaUrl: mediaUrl.trim().slice(0, 2000),
+    mediaUrl: mediaUrl && typeof mediaUrl === 'string' ? mediaUrl.trim().slice(0, 2000) : null,
     thumbnailUrl: thumbnailUrl ? String(thumbnailUrl).slice(0, 2000) : null,
     caption: caption ? String(caption).trim().slice(0, 500) : '',
     durationSeconds: typeof durationSeconds === 'number' ? durationSeconds : null,
@@ -64,6 +69,12 @@ export async function POST(request) {
 
   return jsonResponse({
     realId: ref.id,
-    real: { id: ref.id, mediaUrl: mediaUrl.trim(), thumbnailUrl: thumbnailUrl || null, caption: caption?.trim() || '', createdAt: now },
+    real: {
+      id: ref.id,
+      mediaUrl: mediaUrl && typeof mediaUrl === 'string' ? mediaUrl.trim() : null,
+      thumbnailUrl: thumbnailUrl || null,
+      caption: caption?.trim() || '',
+      createdAt: now,
+    },
   }, 201);
 }

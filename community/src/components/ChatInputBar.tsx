@@ -29,15 +29,17 @@ export function ChatInputBar({
       className="sticky bottom-0 p-3 bg-black/95 backdrop-blur border-t border-white/10 flex items-end gap-2"
       style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}
     >
-      <button
-        type="button"
-        onClick={onAttachmentClick}
-        disabled={disabled}
-        className="flex-shrink-0 p-2.5 rounded-xl bg-[#151515] text-white/60 hover:text-white border border-white/20 disabled:opacity-50"
-        aria-label="Attachment"
-      >
-        <span className="text-lg">📎</span>
-      </button>
+      {onAttachmentClick && (
+        <button
+          type="button"
+          onClick={onAttachmentClick}
+          disabled={disabled}
+          className="flex-shrink-0 p-2.5 rounded-xl bg-[#151515] text-white/60 hover:text-white border border-white/20 disabled:opacity-50"
+          aria-label="Attachment"
+        >
+          <span className="text-lg">📎</span>
+        </button>
+      )}
       <input
         type="text"
         value={value}

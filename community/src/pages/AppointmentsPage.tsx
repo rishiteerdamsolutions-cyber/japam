@@ -142,7 +142,9 @@ export function AppointmentsPage() {
         <div className="space-y-2">
           {appointments.map((a) => (
             <div key={a.id} className="p-4 rounded-2xl bg-[#151515] border border-white/10">
-              <p className="text-white font-mono text-sm">{isPriest ? a.seekerDisplayName || 'Seeker' : a.templeName || 'Temple'}</p>
+              <p className="text-white font-mono text-sm">
+                {isPriest ? (a.seekerDisplayName || 'Seeker') : (a.templeName || a.templeId || 'Temple')}
+              </p>
               <p className="text-white/60 text-xs font-mono mt-1">
                 {a.requestedAt} • {a.status}
               </p>

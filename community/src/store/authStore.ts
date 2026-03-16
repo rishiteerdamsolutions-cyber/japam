@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import {
-  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signOut as firebaseSignOut,
   onAuthStateChanged,
   type User,
@@ -25,7 +26,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     if (!isFirebaseConfigured) return;
     set({ error: null });
     try {
-      await signInWithPopup(auth, googleProvider);
+      await signInWithRedirect(auth, googleProvider);
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Sign-in failed';
       set({ error: msg });
@@ -48,6 +49,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({ loading: false });
       return () => {};
     }
+    getRedirectResult(auth).catch(() => {});
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       set({ user, loading: false });
     });

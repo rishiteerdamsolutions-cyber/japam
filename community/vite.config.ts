@@ -10,6 +10,7 @@ import { VitePWA } from 'vite-plugin-pwa'
  */
 export default defineConfig({
   root: '.',
+  base: process.env.NODE_ENV === 'production' ? '/apavarga/' : '/',
   server: {
     port: 5174,
     proxy: {

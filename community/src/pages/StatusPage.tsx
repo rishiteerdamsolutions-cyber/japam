@@ -47,7 +47,7 @@ export function StatusPage() {
     fetchStatusFeed()
       .then((feed) => {
         if (!cancelled) {
-          setStatuses(feed.statuses);
+          setStatuses((feed.statuses || []) as Status[]);
           setViewedAuthorKeys(feed.viewedAuthorKeys || []);
         }
       })
@@ -64,7 +64,7 @@ export function StatusPage() {
       setNewText('');
       setShowAdd(false);
       const feed = await fetchStatusFeed();
-      setStatuses(feed.statuses);
+      setStatuses((feed.statuses || []) as Status[]);
       setViewedAuthorKeys(feed.viewedAuthorKeys || []);
     } catch {
       // ignore

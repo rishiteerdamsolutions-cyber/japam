@@ -45,7 +45,7 @@ export function GroupsPage() {
   const [addToGroupId, setAddToGroupId] = useState<string | null>(null);
   const [seekers, setSeekers] = useState<Seeker[]>([]);
   const [seekersLoading, setSeekersLoading] = useState(false);
-  const [addingUid, setAddingUid] = useState<string | null>(null);
+  const [, setAddingUid] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;

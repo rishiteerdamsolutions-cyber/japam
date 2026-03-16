@@ -350,25 +350,34 @@ export function Settings({ onBack }: SettingsProps) {
             </section>
           )}
 
-          <button
-            type="button"
-            onClick={() => navigate('/apavarga')}
-            className="w-full text-left border-b border-white/10 py-4 hover:bg-white/5 rounded-lg px-2 -mx-2 transition-colors"
-          >
-            <div className="flex justify-between items-start">
-              <div>
-                <h2 className="text-amber-400 font-medium text-sm">Apavarga</h2>
-                {tier === 'pro' || tier === 'premium' ? (
+          {tier === 'pro' || tier === 'premium' ? (
+            <a
+              href="/apavarga"
+              className="w-full text-left border-b border-white/10 py-4 hover:bg-white/5 rounded-lg px-2 -mx-2 transition-colors block"
+            >
+              <div className="flex justify-between items-start">
+                <div>
+                  <h2 className="text-amber-400 font-medium text-sm">Apavarga</h2>
                   <p className="text-amber-200/70 text-xs mt-0.5">Log into the Apavarga spiritual social network.</p>
-                ) : (
-                  <p className="text-amber-200/70 text-xs mt-0.5">Become a Pro member to unlock the Apavarga Social Network.</p>
-                )}
+                </div>
+                <span className="text-amber-400/80 text-xs">Log in</span>
               </div>
-              <span className="text-amber-400/80 text-xs">
-                {tier === 'pro' || tier === 'premium' ? 'Log in' : 'Unlock'}
-              </span>
-            </div>
-          </button>
+            </a>
+          ) : (
+            <button
+              type="button"
+              onClick={() => navigate('/about-apavarga')}
+              className="w-full text-left border-b border-white/10 py-4 hover:bg-white/5 rounded-lg px-2 -mx-2 transition-colors"
+            >
+              <div className="flex justify-between items-start">
+                <div>
+                  <h2 className="text-amber-400 font-medium text-sm">Apavarga</h2>
+                  <p className="text-amber-200/70 text-xs mt-0.5">Become a Pro member to unlock the Apavarga Social Network.</p>
+                </div>
+                <span className="text-amber-400/80 text-xs">Unlock</span>
+              </div>
+            </button>
+          )}
 
           <section className="border-b border-white/10 py-4 space-y-3">
             <div className="flex justify-between items-center">

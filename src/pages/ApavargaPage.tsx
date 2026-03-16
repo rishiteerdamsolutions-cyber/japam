@@ -16,10 +16,13 @@ export function ApavargaPage() {
   const [error, setError] = useState<string | null>(null);
 
   const enterApavarga = async () => {
-    if (!APAVARGA_URL) return;
     setOpening(true);
     setError(null);
     try {
+      if (!APAVARGA_URL) {
+        window.location.href = '/apavarga';
+        return;
+      }
       const user = auth?.currentUser;
       if (!user) {
         setError('Please sign in first.');
@@ -66,14 +69,11 @@ export function ApavargaPage() {
             </p>
 
             {error && <p className="text-amber-200/90 text-sm mb-2">{error}</p>}
-            {!APAVARGA_URL && isProOrPremium && (
-              <p className="text-amber-200/80 text-sm mb-3">Apavarga isn’t linked yet. The admin needs to set the Apavarga app URL in settings.</p>
-            )}
             {isProOrPremium ? (
               <button
                 type="button"
                 onClick={enterApavarga}
-                disabled={!APAVARGA_URL || opening}
+                disabled={opening}
                 className="w-full max-w-sm mx-auto py-4 px-6 rounded-2xl bg-amber-500 hover:bg-amber-400 text-black font-semibold text-lg shadow-lg active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {opening ? 'Opening…' : 'Log into Apavarga spiritual social network'}

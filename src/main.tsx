@@ -87,7 +87,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/marathons" element={<MarathonsPage />} />
         <Route path="/maha-yagnas" element={<MahaYagnasPage />} />
         <Route path="/settings" element={<SettingsPage />} />
-        <Route path="/apavarga" element={<ApavargaPage />} />
+        <Route path="/about-apavarga" element={<ApavargaPage />} />
         <Route path="/privacy" element={<PrivacyPolicyPage />} />
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/refund-cancellation" element={<RefundCancellationPage />} />

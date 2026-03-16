@@ -39,7 +39,7 @@ export function ApavargaPage() {
                 disabled={!APAVARGA_URL}
                 className="w-full max-w-sm mx-auto py-4 px-6 rounded-2xl bg-amber-500 hover:bg-amber-400 text-black font-semibold text-lg shadow-lg active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {APAVARGA_URL ? 'Enter Apavarga' : 'Coming soon'}
+                Log into Apavarga spiritual social network
               </button>
             ) : (
               <div className="rounded-2xl bg-black/40 border border-amber-500/30 p-5 text-center">

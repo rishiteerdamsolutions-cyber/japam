@@ -358,9 +358,9 @@ export function Settings({ onBack }: SettingsProps) {
             <div className="flex justify-between items-start">
               <div>
                 <h2 className="text-amber-400 font-medium text-sm">Apavarga</h2>
-                <p className="text-amber-200/70 text-xs mt-0.5">Connect with priests, share mantras. Coming soon.</p>
+                <p className="text-amber-200/70 text-xs mt-0.5">Log into the Apavarga spiritual social network.</p>
               </div>
-              <span className="text-amber-400/80 text-xs">Learn more</span>
+              <span className="text-amber-400/80 text-xs">Log in</span>
             </div>
           </button>
 

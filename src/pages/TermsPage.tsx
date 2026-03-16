@@ -45,7 +45,7 @@ export function TermsPage() {
               <li>Leaderboards for marathon participants</li>
               <li>Daily reminder notifications for japa practice</li>
               <li>A Progressive Web App (PWA) installable on your device</li>
-              <li>Apavarga — a forthcoming spiritual social network (coming soon)</li>
+              <li>Apavarga — a spiritual social network for seekers</li>
             </ul>
           </section>
 

@@ -55,36 +55,13 @@ export function ChatScreen() {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const handleSend = async (mediaUrl?: string, mediaKind?: string) => {
+  const handleSend = async () => {
     if (!id || sending) return;
-    const textToSend = message.trim() || (mediaUrl ? ' ' : '');
-    if (!textToSend && !mediaUrl) return;
+    const textToSend = message.trim();
+    if (!textToSend) return;
     setSending(true);
     try {
-      await sendMessage(id, textToSend, mediaUrl, mediaKind);
-      setMessage('');
-      const msgs = await fetchMessages(id);
-      setMessages(msgs);
-    } catch {
-      // ignore
-    } finally {
-      setSending(false);
-    }
-  };
-
-  const handleAttachment = () => {
-    fileInputRef.current?.click();
-  };
-
-  const onFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    e.target.value = '';
-    if (!file || !id) return;
-    if (!file.type.startsWith('image/')) return;
-    setSending(true);
-    try {
-      const url = await uploadApavargaMedia(file, 'chat');
-      await sendMessage(id, ' ', url, 'image');
+      await sendMessage(id, textToSend);
       setMessage('');
       const msgs = await fetchMessages(id);
       setMessages(msgs);

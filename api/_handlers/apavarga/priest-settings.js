@@ -20,6 +20,9 @@ export async function GET(request) {
   return jsonResponse({
     welcomeAutoReply: data.welcomeAutoReply || '',
     appointmentAutoReply: data.appointmentAutoReply || '',
+    appointmentStartTime: data.appointmentStartTime || '09:00',
+    appointmentEndTime: data.appointmentEndTime || '17:00',
+    appointmentDays: data.appointmentDays || '1,2,3,4,5',
   });
 }
 
@@ -33,14 +36,18 @@ export async function POST(request) {
   if (!priest) return jsonResponse({ error: 'Unauthorized' }, 401);
 
   const body = await request.json().catch(() => ({}));
-  const { welcomeAutoReply, appointmentAutoReply } = body;
+  const { welcomeAutoReply, appointmentAutoReply, appointmentStartTime, appointmentEndTime, appointmentDays } = body;
 
   const ref = db.collection('apavargaPriestSettings').doc(priest.templeId);
-  await ref.set({
+  const updates = {
     welcomeAutoReply: (welcomeAutoReply || '').slice(0, 500),
     appointmentAutoReply: (appointmentAutoReply || '').slice(0, 500),
     updatedAt: new Date().toISOString(),
-  }, { merge: true });
+  };
+  if (appointmentStartTime != null) updates.appointmentStartTime = String(appointmentStartTime).slice(0, 10);
+  if (appointmentEndTime != null) updates.appointmentEndTime = String(appointmentEndTime).slice(0, 10);
+  if (appointmentDays != null) updates.appointmentDays = String(appointmentDays).slice(0, 50);
+  await ref.set(updates, { merge: true });
 
   return jsonResponse({ ok: true }, 200);
 }

@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react';
+import { NeoButton } from '../components/NeoButton';
 import { fetchReals, createReal } from '../lib/apavargaApi';
 
 interface Real {
   id: string;
   caption?: string;
   createdAt: string;
+  mediaUrl?: string | null;
+  thumbnailUrl?: string | null;
   templeName?: string | null;
+  authorDisplayName?: string | null;
 }
 
 export function RealsPage() {
@@ -81,13 +85,9 @@ export function RealsPage() {
       </header>
 
       <div className="p-4 space-y-4">
-        <button
-          type="button"
-          onClick={() => setShowNew(true)}
-          className="w-full py-3 rounded-xl bg-[var(--primary)] text-black font-medium border-b-4 border-[var(--primary-dark)]"
-        >
+        <NeoButton variant="primaryGold" fullWidth onClick={() => setShowNew(true)}>
           + Create real
-        </button>
+        </NeoButton>
 
         {showNew && (
           <div className="rounded-2xl bg-[#151515] border border-white/10 p-4 space-y-4">
@@ -101,21 +101,12 @@ export function RealsPage() {
             />
             {error && <p className="text-red-400 text-sm font-mono">{error}</p>}
             <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={handlePost}
-                disabled={!text.trim() || posting}
-                className="flex-1 py-3 rounded-xl bg-[var(--primary)] text-black font-medium disabled:opacity-50"
-              >
+              <NeoButton variant="primaryGold" onClick={handlePost} disabled={!text.trim() || posting}>
                 {posting ? 'Posting…' : 'Post'}
-              </button>
-              <button
-                type="button"
-                onClick={() => { setShowNew(false); setText(''); setError(null); }}
-                className="px-4 py-3 rounded-xl border border-white/30 text-white/80"
-              >
+              </NeoButton>
+              <NeoButton variant="ghost" onClick={() => { setShowNew(false); setText(''); setError(null); }}>
                 Cancel
-              </button>
+              </NeoButton>
             </div>
           </div>
         )}
@@ -123,23 +114,34 @@ export function RealsPage() {
         <div className="space-y-4">
           {reals.map((r) => (
             <div key={r.id} className="rounded-2xl bg-[#151515] border border-white/10 overflow-hidden">
-              <div className="p-3">
-                {r.caption && <p className="text-white/90 font-mono text-sm whitespace-pre-wrap">{r.caption}</p>}
-                {r.templeName && <p className="text-white/50 text-xs font-mono mt-1">{r.templeName}</p>}
+              <div className="p-3 flex items-start gap-3">
+                <div className="flex-1 min-w-0">
+                  <p className="text-[var(--primary)]/90 text-xs font-mono mb-1">
+                    {r.authorDisplayName || r.templeName || 'Anonymous'}
+                  </p>
+                  {r.mediaUrl && (
+                    <div className="rounded-xl overflow-hidden bg-black/40 my-2">
+                      {r.mediaUrl.match(/\.(mp4|webm|ogg)$/i) ? (
+                        <video src={r.mediaUrl} controls className="w-full max-h-64" playsInline />
+                      ) : (
+                        <img src={r.thumbnailUrl || r.mediaUrl} alt="" className="w-full max-h-64 object-cover" />
+                      )}
+                    </div>
+                  )}
+                  {r.caption && <p className="text-white/90 font-mono text-sm whitespace-pre-wrap">{r.caption}</p>}
+                  <p className="text-white/40 text-[10px] font-mono mt-1">
+                    {new Date(r.createdAt).toLocaleString()}
+                  </p>
+                </div>
               </div>
             </div>
           ))}
         </div>
         {reals.length === 0 && !showNew && <p className="text-white/50 text-xs font-mono">No reals yet. Create one above.</p>}
         {hasMore && reals.length > 0 && (
-          <button
-            type="button"
-            onClick={loadMore}
-            disabled={loadingMore}
-            className="w-full py-3 rounded-xl border border-white/20 text-white/80 font-mono text-sm disabled:opacity-50"
-          >
+          <NeoButton variant="ghost" fullWidth onClick={loadMore} disabled={loadingMore}>
             {loadingMore ? 'Loading…' : 'Load more'}
-          </button>
+          </NeoButton>
         )}
       </div>
     </div>

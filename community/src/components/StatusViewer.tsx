@@ -7,6 +7,7 @@ export interface StatusItem {
   templeName?: string;
   templeId?: string;
   authorUid?: string;
+  authorDisplayName?: string;
   mediaUrl?: string;
   createdAt: string;
   expiresAt: string;

@@ -186,10 +186,16 @@ export async function fetchPriestSettings() {
   return data;
 }
 
-export async function updatePriestSettings(welcomeAutoReply: string, appointmentAutoReply: string) {
+export async function updatePriestSettings(settings: {
+  welcomeAutoReply: string;
+  appointmentAutoReply: string;
+  appointmentStartTime?: string;
+  appointmentEndTime?: string;
+  appointmentDays?: string;
+}) {
   const res = await apiFetch('/api/apavarga/priest/settings', {
     method: 'POST',
-    body: JSON.stringify({ welcomeAutoReply, appointmentAutoReply }),
+    body: JSON.stringify(settings),
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(data.error || 'Failed');

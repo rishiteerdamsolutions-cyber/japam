@@ -14,7 +14,9 @@ function groupStatusesByAuthor(statuses: Status[]): AuthorGroup[] {
   const map = new Map<string, { authorLabel: string; statuses: Status[] }>();
   for (const s of statuses) {
     const key = s.authorType === 'priest' ? (s.templeId || '') : (s.authorUid || '');
-    const label = s.authorType === 'priest' ? (s.templeName || 'Temple') : 'Seeker';
+    const label = s.authorType === 'priest'
+      ? (s.templeName || 'Temple')
+      : (s.authorDisplayName || 'Seeker');
     if (!map.has(key)) map.set(key, { authorLabel: label, statuses: [] });
     map.get(key)!.statuses.push(s);
   }
@@ -198,7 +200,7 @@ export function StatusPage() {
             <div key={s.id} className="p-4 rounded-2xl bg-[#151515] border border-white/10">
               <p className="text-white/80 font-mono text-sm">{s.text}</p>
               <p className="text-white/50 text-[10px] font-mono mt-1">
-                {s.templeName || 'Seeker'} • Expires {new Date(s.expiresAt).toLocaleString()}
+                {s.authorDisplayName || s.templeName || 'Seeker'} • Expires {new Date(s.expiresAt).toLocaleString()}
               </p>
             </div>
           ))}

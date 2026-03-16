@@ -16,7 +16,7 @@ export function ChatBubble({ text, isOwn, timestamp, isAutoReply, senderName, me
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: 'spring', stiffness: 300, damping: 24 }}
-      className={`flex ${isOwn ? 'justify-end' : 'justify-start'}`}
+      className={`flex w-full ${isOwn ? 'justify-end' : 'justify-start'}`}
     >
       <div
         className={`

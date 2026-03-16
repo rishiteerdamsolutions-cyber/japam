@@ -19,13 +19,27 @@ export async function GET(request) {
   if (firebaseUid && !(await isUserUnlocked(db, firebaseUid))) return jsonResponse({ error: 'Pro membership required' }, 403);
 
   const snap = await db.collection('temples').get();
-  const temples = snap.docs
-    .filter((d) => d.data().priestUsername)
-    .map((d) => ({
-    id: d.id,
-    name: d.data().name || '',
-    priestUsername: d.data().priestUsername || '',
-  }));
+  const templeList = snap.docs.filter((d) => d.data().priestUsername);
+
+  const settingsSnaps = await Promise.all(
+    templeList.map((d) => db.collection('apavargaPriestSettings').doc(d.id).get())
+  );
+  const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+  const temples = templeList.map((d, i) => {
+    const data = d.data();
+    const settings = settingsSnaps[i]?.exists ? settingsSnaps[i].data() : null;
+    const days = settings?.appointmentDays ? settings.appointmentDays.split(',').map((x) => parseInt(x.trim(), 10)).filter((n) => !isNaN(n)) : [1, 2, 3, 4, 5];
+    const dayLabels = days.map((dayNum) => DAY_NAMES[dayNum]).filter(Boolean).join(', ') || 'Weekdays';
+    const start = settings?.appointmentStartTime || '09:00';
+    const end = settings?.appointmentEndTime || '17:00';
+    return {
+      id: d.id,
+      name: data.name || '',
+      priestUsername: data.priestUsername || '',
+      appointmentAvailability: `${dayLabels} ${start}–${end}`,
+    };
+  });
 
   return jsonResponse({ temples });
 }

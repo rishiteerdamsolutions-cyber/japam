@@ -27,7 +27,23 @@ export async function GET(request) {
     .limit(100)
     .get();
 
-  const statuses = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  const statusesRaw = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+
+  // Enrich with author display name for seeker statuses (authorUid)
+  const authorUids = [...new Set(statusesRaw.filter((s) => s.authorUid).map((s) => s.authorUid))];
+  const displayNames = {};
+  if (authorUids.length > 0 && db) {
+    const memberSnaps = await Promise.all(authorUids.map((uid) => db.collection('apavargaMembers').doc(uid).get()));
+    authorUids.forEach((uid, i) => {
+      const d = memberSnaps[i]?.exists ? memberSnaps[i].data() : null;
+      displayNames[uid] = (d?.displayName && String(d.displayName).trim()) || null;
+    });
+  }
+
+  const statuses = statusesRaw.map((s) => ({
+    ...s,
+    authorDisplayName: s.templeName || (s.authorUid ? (displayNames[s.authorUid] || `Seeker`) : null),
+  }));
 
   const viewerKey = firebaseUid || (priest ? priest.templeId : null);
   let viewedAuthorKeys = [];

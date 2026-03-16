@@ -29,7 +29,24 @@ export async function GET(request) {
   }
 
   const snap = await q.get();
-  const reals = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  const realsRaw = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+
+  // Enrich with creator display name for seeker posts (creatorUid)
+  const creatorUids = [...new Set(realsRaw.filter((r) => r.creatorUid).map((r) => r.creatorUid))];
+  const displayNames = {};
+  if (creatorUids.length > 0 && db) {
+    const memberSnaps = await Promise.all(creatorUids.map((uid) => db.collection('apavargaMembers').doc(uid).get()));
+    creatorUids.forEach((uid, i) => {
+      const d = memberSnaps[i]?.exists ? memberSnaps[i].data() : null;
+      displayNames[uid] = (d?.displayName && String(d.displayName).trim()) || null;
+    });
+  }
+
+  const reals = realsRaw.map((r) => ({
+    ...r,
+    authorDisplayName: r.templeName || (r.creatorUid ? (displayNames[r.creatorUid] || `Seeker`) : null),
+  }));
+
   return jsonResponse({ reals });
 }
 

@@ -11,13 +11,21 @@ export function ProfilePage() {
   const isPriest = !!priestToken;
   const [welcomeAutoReply, setWelcomeAutoReply] = useState('');
   const [appointmentAutoReply, setAppointmentAutoReply] = useState('');
+  const [appointmentStartTime, setAppointmentStartTime] = useState('09:00');
+  const [appointmentEndTime, setAppointmentEndTime] = useState('17:00');
+  const [appointmentDays, setAppointmentDays] = useState('1,2,3,4,5');
   const [loading, setLoading] = useState(false);
+
+  const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   useEffect(() => {
     if (isPriest) {
       fetchPriestSettings().then((s) => {
         setWelcomeAutoReply(s.welcomeAutoReply || '');
         setAppointmentAutoReply(s.appointmentAutoReply || '');
+        setAppointmentStartTime(s.appointmentStartTime || '09:00');
+        setAppointmentEndTime(s.appointmentEndTime || '17:00');
+        setAppointmentDays(s.appointmentDays || '1,2,3,4,5');
       }).catch(() => {});
     }
   }, [isPriest]);
@@ -31,12 +39,29 @@ export function ProfilePage() {
     if (!isPriest) return;
     setLoading(true);
     try {
-      await updatePriestSettings(welcomeAutoReply, appointmentAutoReply);
+      await updatePriestSettings({
+        welcomeAutoReply,
+        appointmentAutoReply,
+        appointmentStartTime,
+        appointmentEndTime,
+        appointmentDays,
+      });
     } catch {
       // ignore
     } finally {
       setLoading(false);
     }
+  };
+
+  const toggleAppointmentDay = (d: number) => {
+    const parts = appointmentDays.split(',').map((x) => x.trim()).filter(Boolean);
+    const set = new Set(parts.map(Number));
+    if (set.has(d)) {
+      set.delete(d);
+    } else {
+      set.add(d);
+    }
+    setAppointmentDays(Array.from(set).sort((a, b) => a - b).join(','));
   };
 
   return (
@@ -59,24 +84,68 @@ export function ProfilePage() {
         </div>
 
         {isPriest && (
-          <div className="rounded-2xl bg-[#151515] border border-white/10 p-4 space-y-4">
-            <h2 className="font-heading font-medium text-white">Auto-reply templates</h2>
-            <input
-              value={welcomeAutoReply}
-              onChange={(e) => setWelcomeAutoReply(e.target.value)}
-              placeholder="Welcome message (first-time seekers)"
-              className="w-full px-4 py-3 rounded-xl bg-black text-white border border-white/20 placeholder:text-white/40 font-mono text-sm"
-            />
-            <input
-              value={appointmentAutoReply}
-              onChange={(e) => setAppointmentAutoReply(e.target.value)}
-              placeholder="Appointment request acknowledgment"
-              className="w-full px-4 py-3 rounded-xl bg-black text-white border border-white/20 placeholder:text-white/40 font-mono text-sm"
-            />
-            <NeoButton variant="primaryGold" onClick={handleSaveSettings} disabled={loading}>
-              {loading ? 'Saving…' : 'Save'}
-            </NeoButton>
-          </div>
+          <>
+            <div className="rounded-2xl bg-[#151515] border border-white/10 p-4 space-y-4">
+              <h2 className="font-heading font-medium text-white">Auto-reply templates</h2>
+              <input
+                value={welcomeAutoReply}
+                onChange={(e) => setWelcomeAutoReply(e.target.value)}
+                placeholder="Welcome message (first-time seekers)"
+                className="w-full px-4 py-3 rounded-xl bg-black text-white border border-white/20 placeholder:text-white/40 font-mono text-sm"
+              />
+              <input
+                value={appointmentAutoReply}
+                onChange={(e) => setAppointmentAutoReply(e.target.value)}
+                placeholder="Appointment request acknowledgment"
+                className="w-full px-4 py-3 rounded-xl bg-black text-white border border-white/20 placeholder:text-white/40 font-mono text-sm"
+              />
+            </div>
+
+            <div className="rounded-2xl bg-[#151515] border border-white/10 p-4 space-y-4">
+              <h2 className="font-heading font-medium text-white">Appointment availability</h2>
+              <p className="text-white/60 text-xs font-mono">Set when seekers can book darshan with you</p>
+              <div className="flex flex-wrap gap-2">
+                {DAY_NAMES.map((name, d) => {
+                  const active = appointmentDays.split(',').map((x) => Number(x.trim())).includes(d);
+                  return (
+                    <button
+                      key={d}
+                      type="button"
+                      onClick={() => toggleAppointmentDay(d)}
+                      className={`px-3 py-2 rounded-xl font-mono text-sm border transition-colors ${
+                        active ? 'bg-[var(--primary)] text-black border-[var(--primary)]' : 'bg-black/40 text-white/70 border-white/20'
+                      }`}
+                    >
+                      {name}
+                    </button>
+                  );
+                })}
+              </div>
+              <div className="flex gap-4 items-center">
+                <div className="flex-1">
+                  <label className="text-white/60 text-[10px] font-mono block mb-1">From</label>
+                  <input
+                    type="time"
+                    value={appointmentStartTime}
+                    onChange={(e) => setAppointmentStartTime(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl bg-black text-white border border-white/20 font-mono text-sm"
+                  />
+                </div>
+                <div className="flex-1">
+                  <label className="text-white/60 text-[10px] font-mono block mb-1">To</label>
+                  <input
+                    type="time"
+                    value={appointmentEndTime}
+                    onChange={(e) => setAppointmentEndTime(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl bg-black text-white border border-white/20 font-mono text-sm"
+                  />
+                </div>
+              </div>
+              <NeoButton variant="primaryGold" onClick={handleSaveSettings} disabled={loading}>
+                {loading ? 'Saving…' : 'Save all settings'}
+              </NeoButton>
+            </div>
+          </>
         )}
 
         <NeoButton

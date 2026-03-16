@@ -22,7 +22,7 @@ export function AppointmentsPage() {
   const preselectedTempleId = searchParams.get('templeId');
   const isPriest = !!usePriestStore((s) => s.token);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const [temples, setTemples] = useState<{ id: string; name: string }[]>([]);
+  const [temples, setTemples] = useState<{ id: string; name: string; priestUsername?: string; appointmentAvailability?: string }[]>([]);
   const [loading, setLoading] = useState(true);
   const [showRequest, setShowRequest] = useState(!!preselectedTempleId);
   const [selectedTempleId, setSelectedTempleId] = useState(preselectedTempleId || '');
@@ -104,6 +104,35 @@ export function AppointmentsPage() {
       </header>
 
       <div className="p-4 space-y-4">
+        {!isPriest && temples.length > 0 && (
+          <div className="rounded-2xl bg-[#151515] border border-white/10 p-4 mb-4">
+            <h3 className="font-heading font-medium text-white mb-3">Temples available</h3>
+            <p className="text-white/60 text-xs font-mono mb-3">Book darshan with verified priests</p>
+            <div className="space-y-2 max-h-48 overflow-y-auto">
+              {temples.map((t) => (
+                <div key={t.id} className="flex items-center justify-between py-2 px-3 rounded-xl bg-black/40 border border-white/10">
+                  <div>
+                    <p className="text-white font-mono text-sm">{t.name}</p>
+                    {t.priestUsername && (
+                      <p className="text-[var(--primary)]/80 text-[10px] font-mono mt-0.5">
+                        Priest: {t.priestUsername}
+                      </p>
+                    )}
+                    {t.appointmentAvailability && (
+                      <p className="text-white/50 text-[10px] font-mono mt-0.5">
+                        Available: {t.appointmentAvailability}
+                      </p>
+                    )}
+                  </div>
+                  <NeoButton variant="primaryGold" onClick={() => { setSelectedTempleId(t.id); setShowRequest(true); }}>
+                    Book
+                  </NeoButton>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {!isPriest && (
           <NeoButton variant="primaryGold" fullWidth onClick={() => setShowRequest(true)}>
             Book appointment
@@ -120,7 +149,9 @@ export function AppointmentsPage() {
             >
               <option value="">Select temple</option>
               {temples.map((t) => (
-                <option key={t.id} value={t.id}>{t.name}</option>
+                <option key={t.id} value={t.id}>
+                  {t.name}{t.priestUsername ? ` — ${t.priestUsername}` : ''}
+                </option>
               ))}
             </select>
             <input
@@ -146,7 +177,7 @@ export function AppointmentsPage() {
                 {isPriest ? (a.seekerDisplayName || 'Seeker') : (a.templeName || a.templeId || 'Temple')}
               </p>
               <p className="text-white/60 text-xs font-mono mt-1">
-                {a.requestedAt} • {a.status}
+                {a.requestedAt ? new Date(a.requestedAt).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' }) : '—'} • {a.status}
               </p>
               {isPriest && a.status === 'requested' && (
                 <NeoButton variant="primaryGold" className="mt-2" onClick={() => handleConfirm(a.id)} disabled={confirming === a.id}>

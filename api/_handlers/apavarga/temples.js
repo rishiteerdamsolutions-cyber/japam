@@ -19,7 +19,7 @@ export async function GET(request) {
   if (firebaseUid && !(await isUserUnlocked(db, firebaseUid))) return jsonResponse({ error: 'Pro membership required' }, 403);
 
   const snap = await db.collection('temples').get();
-  const templeList = snap.docs.filter((d) => d.data().priestUsername);
+  const templeList = snap.docs.filter((d) => d.data().name);
 
   const settingsSnaps = await Promise.all(
     templeList.map((d) => db.collection('apavargaPriestSettings').doc(d.id).get())

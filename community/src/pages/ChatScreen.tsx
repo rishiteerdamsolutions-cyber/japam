@@ -96,7 +96,7 @@ export function ChatScreen() {
   const senderLabel = (m: Message) => (m.senderType === 'priest' ? (chatTempleName || 'Priest') : 'Seeker');
 
   return (
-    <div className="min-h-screen bg-black flex flex-col">
+    <div className="min-h-screen w-full bg-black flex flex-col">
       <ChatHeader
         title={title}
         subtitle={subtitle}
@@ -106,7 +106,7 @@ export function ChatScreen() {
         onBook={() => navigate('/appointments')}
       />
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 w-full min-w-0 overflow-y-auto p-4 space-y-4">
         {loading ? (
           <p className="text-white/60 font-mono text-sm">Loading…</p>
         ) : (

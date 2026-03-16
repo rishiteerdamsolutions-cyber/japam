@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { NeoButton } from '../components/NeoButton';
 import { fetchAppointments, requestAppointment, confirmAppointment, confirmArrival, fetchTemples } from '../lib/apavargaApi';
 import { usePriestStore } from '../store/priestStore';
@@ -101,6 +101,11 @@ export function AppointmentsPage() {
       <header className="sticky top-0 z-10 bg-black/95 backdrop-blur border-b border-white/10 px-4 py-4">
         <h1 className="font-heading font-semibold text-xl text-white">Appointments</h1>
         <p className="text-white/60 text-xs font-mono mt-1">{isPriest ? 'Manage requests' : 'Book darshan with priests'}</p>
+        {isPriest && (
+          <Link to="/profile" className="block mt-2 text-[var(--primary)] text-xs font-mono hover:underline">
+            Set your availability (time & days) →
+          </Link>
+        )}
       </header>
 
       <div className="p-4 space-y-4">

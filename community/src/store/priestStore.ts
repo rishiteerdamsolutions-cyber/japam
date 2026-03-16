@@ -2,6 +2,8 @@ import { create } from 'zustand';
 
 const PRIEST_TOKEN_KEY = 'apavarga_priest_token';
 const PRIEST_TEMPLE_KEY = 'apavarga_priest_temple';
+const JAPAM_PRIEST_TOKEN_KEY = 'japam_priest_token';
+const JAPAM_PRIEST_TEMPLE_KEY = 'japam_priest_temple';
 
 interface PriestState {
   token: string | null;
@@ -30,8 +32,18 @@ export const usePriestStore = create<PriestState>((set) => ({
   },
 
   init: () => {
-    const token = localStorage.getItem(PRIEST_TOKEN_KEY);
-    const s = localStorage.getItem(PRIEST_TEMPLE_KEY);
+    let token = localStorage.getItem(PRIEST_TOKEN_KEY);
+    let s = localStorage.getItem(PRIEST_TEMPLE_KEY);
+    if (!token || !s) {
+      const japamToken = localStorage.getItem(JAPAM_PRIEST_TOKEN_KEY);
+      const japamTemple = localStorage.getItem(JAPAM_PRIEST_TEMPLE_KEY);
+      if (japamToken && japamTemple) {
+        localStorage.setItem(PRIEST_TOKEN_KEY, japamToken);
+        localStorage.setItem(PRIEST_TEMPLE_KEY, japamTemple);
+        token = japamToken;
+        s = japamTemple;
+      }
+    }
     let templeId: string | null = null;
     let templeName: string | null = null;
     try {

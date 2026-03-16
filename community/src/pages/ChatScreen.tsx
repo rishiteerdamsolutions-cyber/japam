@@ -6,6 +6,7 @@ import { ChatInputBar } from '../components/ChatInputBar';
 import { PriestAvatarCoin } from '../components/PriestAvatarCoin';
 import { fetchMessages, sendMessage, fetchChat } from '../lib/apavargaApi';
 import { usePriestStore } from '../store/priestStore';
+import { useAuthStore } from '../store/authStore';
 
 interface Message {
   id: string;
@@ -23,6 +24,7 @@ export function ChatScreen() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const isPriest = !!usePriestStore((s) => s.token);
+  const currentUid = useAuthStore((s) => s.user?.uid);
   const templeName = usePriestStore((s) => s.templeName);
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState('');
@@ -94,6 +96,8 @@ export function ChatScreen() {
       : 'Verified priest';
   const inputDisabled = isGroup && chatMeta?.adminOnlyMessaging && !isPriest;
   const senderLabel = (m: Message) => (m.senderType === 'priest' ? (chatTempleName || 'Priest') : 'Seeker');
+  const isOwnMessage = (m: Message) =>
+    (m.senderType === 'priest' && isPriest) || (m.senderUid != null && m.senderUid === currentUid);
 
   return (
     <div className="min-h-screen w-full bg-black flex flex-col">
@@ -114,7 +118,7 @@ export function ChatScreen() {
             <ChatBubble
               key={m.id}
               text={m.text}
-              isOwn={m.senderType === (isPriest ? 'priest' : 'seeker')}
+              isOwn={isOwnMessage(m)}
               isAutoReply={m.isAutoReply}
               timestamp={m.createdAt ? new Date(m.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : undefined}
               senderName={isGroup ? senderLabel(m) : undefined}

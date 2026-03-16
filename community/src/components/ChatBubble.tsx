@@ -16,13 +16,13 @@ export function ChatBubble({ text, isOwn, timestamp, isAutoReply, senderName, me
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: 'spring', stiffness: 300, damping: 24 }}
-      className="w-full"
+      className={`flex w-full ${isOwn ? 'justify-end' : 'justify-start'}`}
     >
       <div
         className={`
           relative max-w-[85%] rounded-2xl px-4 py-3
           shadow-[6px_6px_0_rgba(0,0,0,0.4)]
-          ${isOwn ? 'bg-[var(--primary)] text-black rounded-br-md ml-auto' : 'bg-[#151515] text-white border border-white/10 rounded-bl-md mr-auto'}
+          ${isOwn ? 'bg-[var(--primary)] text-black rounded-br-md' : 'bg-[#151515] text-white border border-white/10 rounded-bl-md'}
         `}
       >
         {/* Tail: triangle at corner */}

@@ -80,6 +80,13 @@ function App() {
     };
   }, [user]);
 
+  const canAccess = unlock != null && canAccessCommunity(unlock);
+
+  useEffect(() => {
+    if (!user?.uid || !canAccess) return;
+    joinApavarga().catch(() => {});
+  }, [user?.uid, canAccess]);
+
   if ((authLoading || ssoChecking) && !priestToken) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black">
@@ -117,11 +124,9 @@ function App() {
     );
   }
 
-  if (!canAccessCommunity(unlock)) {
+  if (!canAccess) {
     return <ProOnlyPage unlock={unlock} />;
   }
-
-  joinApavarga().catch(() => {});
 
   return (
     <Routes>

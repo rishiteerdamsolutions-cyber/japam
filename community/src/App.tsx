@@ -33,6 +33,7 @@ function App() {
   const [unlock, setUnlock] = useState<UnlockData | null>(null);
   const [unlockLoading, setUnlockLoading] = useState(false);
   const [ssoChecking, setSsoChecking] = useState(() => Boolean(getCustomTokenFromHash()));
+  const [ssoFailed, setSsoFailed] = useState(false);
 
   useEffect(() => {
     return init();
@@ -51,7 +52,10 @@ function App() {
       .then(() => {
         window.history.replaceState(null, '', window.location.pathname + window.location.search);
       })
-      .catch(() => {})
+      .catch(() => {
+        setSsoFailed(true);
+        window.history.replaceState(null, '', window.location.pathname + window.location.search);
+      })
       .finally(() => {
         setSsoChecking(false);
       });
@@ -102,7 +106,7 @@ function App() {
   }
 
   if (!user) {
-    return <WelcomePage />;
+    return <WelcomePage ssoFailed={ssoFailed} />;
   }
 
   if (unlockLoading || unlock === null) {

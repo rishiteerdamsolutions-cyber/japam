@@ -66,6 +66,9 @@ export function ApavargaPage() {
             </p>
 
             {error && <p className="text-amber-200/90 text-sm mb-2">{error}</p>}
+            {!APAVARGA_URL && isProOrPremium && (
+              <p className="text-amber-200/80 text-sm mb-3">Apavarga isn’t linked yet. The admin needs to set the Apavarga app URL in settings.</p>
+            )}
             {isProOrPremium ? (
               <button
                 type="button"

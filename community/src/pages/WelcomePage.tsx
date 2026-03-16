@@ -4,7 +4,11 @@ import { NeoButton } from '../components/NeoButton';
 import { getApiBase } from '../lib/apiBase';
 import { usePriestStore } from '../store/priestStore';
 
-export function WelcomePage() {
+interface WelcomePageProps {
+  ssoFailed?: boolean;
+}
+
+export function WelcomePage({ ssoFailed }: WelcomePageProps) {
   const [mode, setMode] = useState<'choose' | 'priest'>('choose');
   const [priestUsername, setPriestUsername] = useState('');
   const [priestPassword, setPriestPassword] = useState('');
@@ -51,6 +55,11 @@ export function WelcomePage() {
           <p className="text-white/70 text-sm font-mono">
             Exclusive space for pro members and priests.
           </p>
+          {ssoFailed && (
+            <p className="text-amber-300/90 text-sm font-mono">
+              Sign-in from Japam didn’t work. Sign in with Google below to open the social network.
+            </p>
+          )}
           <div className="flex flex-col gap-4">
             <div>
               <p className="text-white/50 text-xs font-mono mb-2 text-center">Seekers (pro members)</p>

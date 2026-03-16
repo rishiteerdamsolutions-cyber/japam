@@ -47,7 +47,7 @@ export function WelcomePage() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-black">
         <div className="max-w-sm w-full text-center space-y-6">
-          <h1 className="font-heading font-semibold text-2xl text-[#FFD700]">Apavarga</h1>
+          <h1 className="font-heading font-semibold text-2xl text-[var(--primary)]">Apavarga</h1>
           <p className="text-white/70 text-sm font-mono">
             Exclusive space for pro members and priests.
           </p>
@@ -82,7 +82,7 @@ export function WelcomePage() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-black">
         <div className="max-w-sm w-full space-y-6">
-          <h1 className="font-heading font-semibold text-2xl text-[#FFD700] text-center">Priest Login</h1>
+          <h1 className="font-heading font-semibold text-2xl text-[var(--primary)] text-center">Priest Login</h1>
           <p className="text-white/70 text-sm font-mono text-center">
             Use the same username and password as in Japam.
           </p>
@@ -92,14 +92,14 @@ export function WelcomePage() {
               value={priestUsername}
               onChange={(e) => setPriestUsername(e.target.value)}
               placeholder="Priest username (e.g. pujari@venkateswara)"
-              className="w-full px-4 py-3 rounded-xl bg-[#151515] text-white border border-white/20 placeholder:text-white/40 font-mono text-sm focus:outline-none focus:border-[#FFD700]/50"
+              className="w-full px-4 py-3 rounded-xl bg-[#151515] text-white border border-white/20 placeholder:text-white/40 font-mono text-sm focus:outline-none focus:border-[var(--primary)]/50"
             />
             <input
               type="password"
               value={priestPassword}
               onChange={(e) => setPriestPassword(e.target.value)}
               placeholder="Password"
-              className="w-full px-4 py-3 rounded-xl bg-[#151515] text-white border border-white/20 placeholder:text-white/40 font-mono text-sm focus:outline-none focus:border-[#FFD700]/50"
+              className="w-full px-4 py-3 rounded-xl bg-[#151515] text-white border border-white/20 placeholder:text-white/40 font-mono text-sm focus:outline-none focus:border-[var(--primary)]/50"
             />
             {priestError && <p className="text-red-400 text-xs font-mono">{priestError}</p>}
             <NeoButton variant="primaryGold" fullWidth type="submit" disabled={priestLoading}>

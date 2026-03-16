@@ -25,12 +25,12 @@ export function ListRow({
       tabIndex={onClick ? 0 : undefined}
       onClick={onClick}
       onKeyDown={onKeyDown}
-      className={`flex items-center gap-3 p-3 rounded-xl bg-[#151515] border border-white/10 cursor-pointer hover:border-[#FFD700]/30 transition-colors active:bg-[#1a1a1a] ${className}`}
+      className={`flex items-center gap-3 p-3 rounded-xl bg-[#151515] border border-white/10 cursor-pointer hover:border-[var(--primary)]/30 transition-colors active:bg-[#1a1a1a] ${className}`}
     >
       <div className="flex-shrink-0 relative">
         {avatar}
         {unread && (
-          <span className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-[#FFD700]" aria-hidden />
+          <span className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-[var(--primary)]" aria-hidden />
         )}
       </div>
       <div className="flex-1 min-w-0">

@@ -47,6 +47,23 @@ export async function createChat(templeId: string) {
   return data;
 }
 
+export async function fetchSeekers(): Promise<{ uid: string; displayName: string | null }[]> {
+  const res = await apiFetch('/api/apavarga/seekers');
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || 'Failed');
+  return data.seekers || [];
+}
+
+export async function createSeekerChat(otherUid: string, otherDisplayName?: string) {
+  const res = await apiFetch('/api/apavarga/chats', {
+    method: 'POST',
+    body: JSON.stringify({ otherUid, otherDisplayName: otherDisplayName || undefined }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || 'Failed');
+  return data;
+}
+
 export async function fetchMessages(chatId: string) {
   const res = await apiFetch(`/api/apavarga/messages?chatId=${encodeURIComponent(chatId)}`);
   const data = await res.json().catch(() => ({}));
@@ -64,11 +81,21 @@ export async function sendMessage(chatId: string, text: string, mediaUrl?: strin
   return data;
 }
 
-export async function fetchStatusFeed() {
+export async function fetchStatusFeed(): Promise<{ statuses: unknown[]; viewedAuthorKeys: string[] }> {
   const res = await apiFetch('/api/apavarga/status/feed');
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(data.error || 'Failed');
-  return data.statuses || [];
+  return { statuses: data.statuses || [], viewedAuthorKeys: data.viewedAuthorKeys || [] };
+}
+
+export async function markStatusViewed(authorKey: string) {
+  const res = await apiFetch('/api/apavarga/status/viewed', {
+    method: 'POST',
+    body: JSON.stringify({ authorKey }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || 'Failed');
+  return data;
 }
 
 export async function createStatus(text: string, mediaUrl?: string, mediaKind?: string) {

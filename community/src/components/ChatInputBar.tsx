@@ -45,13 +45,13 @@ export function ChatInputBar({
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
         disabled={disabled}
-        className="flex-1 px-4 py-3 rounded-xl bg-[#151515] text-white border border-white/20 placeholder:text-white/40 font-mono text-sm focus:outline-none focus:border-[#FFD700]/50"
+        className="flex-1 px-4 py-3 rounded-xl bg-[#151515] text-white border border-white/20 placeholder:text-white/40 font-mono text-sm focus:outline-none focus:border-[var(--primary)]/50"
       />
       <button
         type="button"
         onClick={onSend}
         disabled={!value.trim() || disabled || sending}
-        className="flex-shrink-0 p-2.5 rounded-xl bg-[#FFD700] text-black border-b-4 border-[#B8860B] shadow-[4px_4px_0_rgba(0,0,0,0.4)] active:translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:translate-y-0"
+        className="flex-shrink-0 p-2.5 rounded-xl bg-[var(--primary)] text-black border-b-4 border-[var(--primary-dark)] shadow-[4px_4px_0_rgba(0,0,0,0.4)] active:translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:translate-y-0"
         aria-label="Send"
       >
         <span className="text-lg">➤</span>

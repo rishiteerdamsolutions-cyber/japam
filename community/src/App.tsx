@@ -50,7 +50,7 @@ function App() {
   if (authLoading && !priestToken) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black">
-        <div className="text-[#FFD700] text-sm font-mono">Loading…</div>
+        <div className="text-[var(--primary)] text-sm font-mono">Loading…</div>
       </div>
     );
   }
@@ -79,7 +79,7 @@ function App() {
   if (unlockLoading || unlock === null) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black">
-        <div className="text-[#FFD700] text-sm font-mono">Checking membership…</div>
+        <div className="text-[var(--primary)] text-sm font-mono">Checking membership…</div>
       </div>
     );
   }

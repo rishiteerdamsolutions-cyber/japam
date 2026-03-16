@@ -22,7 +22,7 @@ export function GoogleSignIn() {
       <div className="flex flex-col items-center gap-4">
         <div className="flex items-center gap-2 text-white text-sm font-mono">
           {user.photoURL && (
-            <img src={user.photoURL} alt="" className="w-8 h-8 rounded-full border-2 border-[#FFD700]/50" />
+            <img src={user.photoURL} alt="" className="w-8 h-8 rounded-full border-2 border-[var(--primary)]/50" />
           )}
           <span className="truncate max-w-[140px]">{user.displayName ?? user.email}</span>
         </div>

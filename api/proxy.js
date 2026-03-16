@@ -79,6 +79,7 @@ import * as apavargaJoinHandler from './_handlers/apavarga/join.js';
 import * as apavargaChatsHandler from './_handlers/apavarga/chats.js';
 import * as apavargaMessagesHandler from './_handlers/apavarga/messages.js';
 import * as apavargaStatusHandler from './_handlers/apavarga/status.js';
+import * as apavargaStatusViewedHandler from './_handlers/apavarga/status-viewed.js';
 import * as apavargaAppointmentsHandler from './_handlers/apavarga/appointments.js';
 import * as apavargaAppointmentsListHandler from './_handlers/apavarga/appointments-list.js';
 import * as apavargaAppointmentsConfirmHandler from './_handlers/apavarga/appointments-confirm.js';
@@ -88,6 +89,7 @@ import * as apavargaPriestSettingsHandler from './_handlers/apavarga/priest-sett
 import * as apavargaGroupsHandler from './_handlers/apavarga/groups.js';
 import * as apavargaGroupsManageHandler from './_handlers/apavarga/groups-manage.js';
 import * as apavargaRealsHandler from './_handlers/apavarga/reals.js';
+import * as apavargaSeekersHandler from './_handlers/apavarga/seekers.js';
 import * as apavargaCleanupHandler from './_handlers/apavarga/cleanup.js';
 import * as cronRefreshActiveUsersHandler from './_handlers/cron/refresh-active-users.js';
 import * as cronUpdateMahaYagnaCountersHandler from './_handlers/cron/update-maha-yagna-counters.js';
@@ -186,6 +188,7 @@ const HANDLERS = {
   'POST apavarga/messages': apavargaMessagesHandler,
   'GET apavarga/status/feed': apavargaStatusHandler,
   'POST apavarga/status': apavargaStatusHandler,
+  'POST apavarga/status/viewed': apavargaStatusViewedHandler,
   'POST apavarga/appointments/request': apavargaAppointmentsHandler,
   'GET apavarga/appointments/list': apavargaAppointmentsListHandler,
   'POST apavarga/appointments/confirm': apavargaAppointmentsConfirmHandler,
@@ -198,6 +201,7 @@ const HANDLERS = {
   'POST apavarga/groups/manage': apavargaGroupsManageHandler,
   'GET apavarga/reals': apavargaRealsHandler,
   'POST apavarga/reals': apavargaRealsHandler,
+  'GET apavarga/seekers': apavargaSeekersHandler,
   'POST apavarga/cleanup': apavargaCleanupHandler,
   'GET cron/refresh-active-users': cronRefreshActiveUsersHandler,
   'GET cron/update-maha-yagna-counters': cronUpdateMahaYagnaCountersHandler,

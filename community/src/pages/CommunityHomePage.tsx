@@ -6,11 +6,11 @@ export function CommunityHomePage() {
   return (
     <div className="min-h-screen flex flex-col p-6 bg-[#1a1a2e]">
       <header className="flex items-center justify-between mb-6">
-        <h1 className="text-xl font-semibold text-amber-200">Japam Community</h1>
+        <h1 className="text-xl font-semibold text-sky-200">Japam Community</h1>
         <button
           type="button"
           onClick={() => signOut()}
-          className="text-amber-400/80 text-sm underline hover:text-amber-400"
+          className="text-sky-400/80 text-sm underline hover:text-sky-400"
         >
           Sign out
         </button>

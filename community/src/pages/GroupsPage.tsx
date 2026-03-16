@@ -3,8 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { ListRow } from '../components/ListRow';
 import { NeoButton } from '../components/NeoButton';
 import { PriestAvatarCoin } from '../components/PriestAvatarCoin';
-import { fetchGroups, createGroup, manageGroup } from '../lib/apavargaApi';
+import { fetchGroups, createGroup, manageGroup, fetchSeekers } from '../lib/apavargaApi';
 import { usePriestStore } from '../store/priestStore';
+
+interface Seeker {
+  uid: string;
+  displayName: string | null;
+}
 
 interface Group {
   id: string;
@@ -37,6 +42,10 @@ export function GroupsPage() {
   const [newName, setNewName] = useState('');
   const [adminOnly, setAdminOnly] = useState(false);
   const [creating, setCreating] = useState(false);
+  const [addToGroupId, setAddToGroupId] = useState<string | null>(null);
+  const [seekers, setSeekers] = useState<Seeker[]>([]);
+  const [seekersLoading, setSeekersLoading] = useState(false);
+  const [addingUid, setAddingUid] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -70,6 +79,29 @@ export function GroupsPage() {
       setGroups(g);
     } catch {
       // ignore
+    }
+  };
+
+  useEffect(() => {
+    if (!addToGroupId || !isPriest) return;
+    setSeekersLoading(true);
+    fetchSeekers()
+      .then(setSeekers)
+      .catch(() => setSeekers([]))
+      .finally(() => setSeekersLoading(false));
+  }, [addToGroupId, isPriest]);
+
+  const handleAddParticipant = async (groupId: string, uid: string) => {
+    setAddingUid(uid);
+    try {
+      await manageGroup(groupId, 'addMember', uid);
+      const g = await fetchGroups();
+      setGroups(g);
+      setAddToGroupId(null);
+    } catch {
+      // ignore
+    } finally {
+      setAddingUid(null);
     }
   };
 
@@ -128,7 +160,14 @@ export function GroupsPage() {
                 onKeyDown={(e) => e.key === 'Enter' && g.chatId && navigate(`/chats/${g.chatId}`)}
               />
               {isPriest && (
-                <div className="flex gap-2 mt-2 ml-14">
+                <div className="flex flex-wrap gap-2 mt-2 ml-14">
+                  <NeoButton
+                    variant="ghost"
+                    className="text-xs"
+                    onClick={() => setAddToGroupId(g.id)}
+                  >
+                    Add participant
+                  </NeoButton>
                   <NeoButton
                     variant="ghost"
                     className="text-xs"
@@ -142,6 +181,40 @@ export function GroupsPage() {
           ))}
         </div>
         {groups.length === 0 && <p className="text-white/50 text-xs font-mono">No groups yet.</p>}
+
+        {addToGroupId && (() => {
+          const g = groups.find((x) => x.id === addToGroupId);
+          const existing = new Set(g?.participants || []);
+          const available = seekers.filter((s) => !existing.has(s.uid));
+          return (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80" role="dialog" aria-modal="true">
+              <div className="rounded-2xl bg-[#151515] border border-white/20 w-full max-w-sm max-h-[70vh] flex flex-col">
+                <div className="p-4 border-b border-white/10 flex justify-between items-center">
+                  <h3 className="font-heading font-medium text-white">Add participant</h3>
+                  <button type="button" onClick={() => setAddToGroupId(null)} className="text-white/60 hover:text-white text-xl">×</button>
+                </div>
+                <div className="overflow-y-auto p-3 space-y-1.5">
+                  {seekersLoading ? (
+                    <p className="text-white/50 text-xs font-mono py-2">Loading…</p>
+                  ) : available.length === 0 ? (
+                    <p className="text-white/50 text-xs font-mono py-2">No seekers to add or all are already in the group.</p>
+                  ) : (
+                    available.map((s) => (
+                      <ListRow
+                        key={s.uid}
+                        avatar={<div className="w-10 h-10 rounded-full bg-[var(--primary)]/20 border border-[var(--primary)]/40 flex items-center justify-center text-[var(--primary)] font-heading font-bold">ॐ</div>}
+                        title={s.displayName || s.uid.slice(0, 8)}
+                        subtitle="Seeker"
+                        onClick={() => handleAddParticipant(addToGroupId, s.uid)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleAddParticipant(addToGroupId, s.uid)}
+                      />
+                    ))
+                  )}
+                </div>
+              </div>
+            </div>
+          );
+        })()}
       </div>
     </div>
   );

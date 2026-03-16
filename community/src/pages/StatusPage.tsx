@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { NeoButton } from '../components/NeoButton';
 import { StatusViewer, type StatusItem } from '../components/StatusViewer';
-import { fetchStatusFeed, createStatus } from '../lib/apavargaApi';
+import { fetchStatusFeed, createStatus, markStatusViewed } from '../lib/apavargaApi';
 import { useAuthStore } from '../store/authStore';
 import { usePriestStore } from '../store/priestStore';
 
@@ -30,6 +30,7 @@ export function StatusPage() {
   const user = useAuthStore((s) => s.user);
   const { token: priestToken, templeId: priestTempleId } = usePriestStore();
   const [statuses, setStatuses] = useState<Status[]>([]);
+  const [viewedAuthorKeys, setViewedAuthorKeys] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAdd, setShowAdd] = useState(false);
   const [newText, setNewText] = useState('');
@@ -44,7 +45,12 @@ export function StatusPage() {
   useEffect(() => {
     let cancelled = false;
     fetchStatusFeed()
-      .then((s) => { if (!cancelled) setStatuses(s); })
+      .then((feed) => {
+        if (!cancelled) {
+          setStatuses(feed.statuses);
+          setViewedAuthorKeys(feed.viewedAuthorKeys || []);
+        }
+      })
       .catch(() => {})
       .finally(() => { if (!cancelled) setLoading(false); });
     return () => { cancelled = true; };
@@ -57,13 +63,21 @@ export function StatusPage() {
       await createStatus(newText.trim());
       setNewText('');
       setShowAdd(false);
-      const s = await fetchStatusFeed();
-      setStatuses(s);
+      const feed = await fetchStatusFeed();
+      setStatuses(feed.statuses);
+      setViewedAuthorKeys(feed.viewedAuthorKeys || []);
     } catch {
       // ignore
     } finally {
       setPosting(false);
     }
+  };
+
+  const openViewer = (g: AuthorGroup) => {
+    setViewer(g);
+    markStatusViewed(g.authorKey).then(() => {
+      setViewedAuthorKeys((prev) => (prev.includes(g.authorKey) ? prev : [...prev, g.authorKey]));
+    }).catch(() => {});
   };
 
   const handleReply = () => {
@@ -98,7 +112,7 @@ export function StatusPage() {
             onClick={() => setShowAdd(true)}
             className="flex-shrink-0 w-20 flex flex-col items-center gap-2"
           >
-            <div className="w-16 h-16 rounded-full border-2 border-[#FFD700] flex items-center justify-center bg-[#151515] text-2xl text-[#FFD700]">
+            <div className="w-16 h-16 rounded-full border-2 border-[var(--primary)] flex items-center justify-center bg-[#151515] text-2xl text-[var(--primary)]">
               +
             </div>
             <span className="text-[10px] font-mono text-white/70">My status</span>
@@ -106,11 +120,11 @@ export function StatusPage() {
           {myGroup && myGroup.statuses.length > 0 && (
             <button
               type="button"
-              onClick={() => setViewer(myGroup)}
+              onClick={() => setViewer(myGroup!)}
               className="flex-shrink-0 w-20 flex flex-col items-center gap-2"
             >
-              <div className="w-16 h-16 rounded-full border-2 border-[#FFD700]/60 flex items-center justify-center bg-[#1a1a1a] overflow-hidden">
-                <div className="w-full h-full bg-gradient-to-br from-[#FFD700]/20 to-transparent flex items-center justify-center p-2">
+              <div className="w-16 h-16 rounded-full border-2 border-[var(--primary)]/60 flex items-center justify-center bg-[#1a1a1a] overflow-hidden">
+                <div className="w-full h-full bg-gradient-to-br from-[var(--primary)]/20 to-transparent flex items-center justify-center p-2">
                   <span className="text-[10px] font-mono text-white/80 truncate text-center">
                     {myGroup.statuses[myGroup.statuses.length - 1]?.text?.slice(0, 20) || '…'}
                   </span>
@@ -121,15 +135,17 @@ export function StatusPage() {
           )}
           {authorGroups
             .filter((g) => g.authorKey !== myAuthorKey)
-            .map((g) => (
+            .map((g) => {
+              const unviewed = !viewedAuthorKeys.includes(g.authorKey);
+              return (
               <button
                 key={g.authorKey}
                 type="button"
-                onClick={() => setViewer(g)}
+                onClick={() => openViewer(g)}
                 className="flex-shrink-0 w-20 flex flex-col items-center gap-2"
               >
-                <div className="w-16 h-16 rounded-full border-2 border-[#FFD700]/60 flex items-center justify-center bg-[#1a1a1a] overflow-hidden">
-                  <div className="w-full h-full bg-gradient-to-br from-[#FFD700]/20 to-transparent flex items-center justify-center p-2">
+                <div className={`w-16 h-16 rounded-full border-2 flex items-center justify-center bg-[#1a1a1a] overflow-hidden ${unviewed ? 'border-[var(--primary)]' : 'border-[var(--primary)]/40'}`}>
+                  <div className="w-full h-full bg-gradient-to-br from-[var(--primary)]/20 to-transparent flex items-center justify-center p-2">
                     <span className="text-[10px] font-mono text-white/80 truncate text-center">
                       {g.statuses[g.statuses.length - 1]?.text?.slice(0, 20) || '…'}
                     </span>
@@ -139,7 +155,8 @@ export function StatusPage() {
                   {g.authorLabel}
                 </span>
               </button>
-            ))}
+              );
+            })}
         </div>
 
         {viewer && (
@@ -157,7 +174,7 @@ export function StatusPage() {
               value={newText}
               onChange={(e) => setNewText(e.target.value)}
               placeholder="Share a spiritual thought..."
-              className="w-full px-4 py-3 rounded-xl bg-black text-white border border-white/20 placeholder:text-white/40 font-mono text-sm focus:outline-none focus:border-[#FFD700]/50 min-h-[100px]"
+              className="w-full px-4 py-3 rounded-xl bg-black text-white border border-white/20 placeholder:text-white/40 font-mono text-sm focus:outline-none focus:border-[var(--primary)]/50 min-h-[100px]"
               maxLength={500}
             />
             <div className="flex gap-2">

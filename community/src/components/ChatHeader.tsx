@@ -26,7 +26,7 @@ export function ChatHeader({ title, subtitle, avatar, onBack, showBook, onBook }
       <div className="flex-1 min-w-0">
         <p className="font-heading font-medium text-white truncate">{title}</p>
         {subtitle != null && (
-          <p className="text-[#FFD700] text-[10px] font-mono truncate">{subtitle}</p>
+          <p className="text-[var(--primary)] text-[10px] font-mono truncate">{subtitle}</p>
         )}
       </div>
       <button
@@ -87,7 +87,7 @@ export function ChatHeader({ title, subtitle, avatar, onBack, showBook, onBook }
                 <li className="border-t border-white/10">
                   <button
                     type="button"
-                    className="w-full text-left px-4 py-2 text-sm text-[#FFD700] hover:bg-white/10"
+                    className="w-full text-left px-4 py-2 text-sm text-[var(--primary)] hover:bg-white/10"
                     onClick={() => { setMenuOpen(false); onBook(); }}
                   >
                     Book appointment

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ListRow } from '../components/ListRow';
 import { PriestAvatarCoin } from '../components/PriestAvatarCoin';
-import { fetchChats, fetchTemples, createChat } from '../lib/apavargaApi';
+import { fetchChats, fetchTemples, createChat, fetchSeekers, createSeekerChat } from '../lib/apavargaApi';
 
 interface Chat {
   id: string;
@@ -10,10 +10,16 @@ interface Chat {
   templeId?: string;
   templeName?: string;
   name?: string;
+  otherDisplayName?: string;
   participants?: string[];
   lastMessageAt?: string;
   lastMessageText?: string;
   lastMessageSenderType?: string;
+}
+
+interface Seeker {
+  uid: string;
+  displayName: string | null;
 }
 
 interface Temple {
@@ -47,6 +53,8 @@ export function ChatsPage() {
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [showNewChat, setShowNewChat] = useState(false);
+  const [seekers, setSeekers] = useState<Seeker[]>([]);
+  const [seekersLoading, setSeekersLoading] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -66,6 +74,17 @@ export function ChatsPage() {
     return () => { cancelled = true; };
   }, []);
 
+  useEffect(() => {
+    if (!showNewChat) return;
+    let cancelled = false;
+    setSeekersLoading(true);
+    fetchSeekers()
+      .then((s) => { if (!cancelled) setSeekers(s); })
+      .catch(() => {})
+      .finally(() => { if (!cancelled) setSeekersLoading(false); });
+    return () => { cancelled = true; };
+  }, [showNewChat]);
+
   const openOrCreateChat = async (templeId: string) => {
     const existing = chats.find((c) => c.templeId === templeId);
     if (existing) {
@@ -82,12 +101,35 @@ export function ChatsPage() {
     }
   };
 
+  const openOrCreateSeekerChat = async (seeker: Seeker) => {
+    const existing = chats.find(
+      (c) => c.type === 'direct_seeker' && c.participants?.includes(seeker.uid)
+    );
+    if (existing) {
+      navigate(`/chats/${existing.id}`);
+      setShowNewChat(false);
+      return;
+    }
+    try {
+      const data = await createSeekerChat(seeker.uid, seeker.displayName || undefined);
+      navigate(`/chats/${data.chatId}`);
+      setShowNewChat(false);
+      setChats((prev) => [data.chat, ...prev].filter(Boolean));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Failed');
+    }
+  };
+
+  const chatTitle = (c: Chat) => c.name || c.templeName || c.otherDisplayName || 'Chat';
   const filteredChats = search.trim()
-    ? chats.filter((c) => (c.templeName || 'Chat').toLowerCase().includes(search.trim().toLowerCase()))
+    ? chats.filter((c) => chatTitle(c).toLowerCase().includes(search.trim().toLowerCase()))
     : chats;
   const filteredTemples = search.trim() && showNewChat
     ? temples.filter((t) => t.name.toLowerCase().includes(search.trim().toLowerCase()))
     : temples;
+  const filteredSeekers = search.trim() && showNewChat
+    ? seekers.filter((s) => (s.displayName || s.uid).toLowerCase().includes(search.trim().toLowerCase()))
+    : seekers;
 
   if (loading) {
     return (
@@ -107,7 +149,7 @@ export function ChatsPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search chats"
-          className="mt-3 w-full px-4 py-2.5 rounded-xl bg-[#151515] text-white border border-white/20 placeholder:text-white/40 font-mono text-sm focus:outline-none focus:border-[#FFD700]/50"
+          className="mt-3 w-full px-4 py-2.5 rounded-xl bg-[#151515] text-white border border-white/20 placeholder:text-white/40 font-mono text-sm focus:outline-none focus:border-[var(--primary)]/50"
         />
       </header>
 
@@ -118,16 +160,16 @@ export function ChatsPage() {
           <button
             type="button"
             onClick={() => setShowNewChat(true)}
-            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#FFD700] text-black font-medium border-b-4 border-[#B8860B] shadow-[4px_4px_0_rgba(0,0,0,0.4)] active:translate-y-0.5"
+            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[var(--primary)] text-black font-medium border-b-4 border-[var(--primary-dark)] shadow-[4px_4px_0_rgba(0,0,0,0.4)] active:translate-y-0.5"
           >
             <span className="text-lg">+</span> New chat
           </button>
         )}
 
         {showNewChat && (
-          <div className="rounded-2xl bg-[#151515] border border-white/10 p-3 mb-4">
-            <h2 className="font-heading font-medium text-white text-sm mb-2">Start a chat with a priest</h2>
-            <div className="space-y-1.5 max-h-64 overflow-y-auto">
+          <div className="rounded-2xl bg-[#151515] border border-white/10 p-3 mb-4 space-y-4">
+            <h2 className="font-heading font-medium text-white text-sm mb-2">Talk to a priest</h2>
+            <div className="space-y-1.5 max-h-40 overflow-y-auto">
               {filteredTemples.length === 0 ? (
                 <p className="text-white/50 text-xs font-mono py-2">No temples match.</p>
               ) : (
@@ -139,6 +181,25 @@ export function ChatsPage() {
                     subtitle="Verified priest"
                     onClick={() => openOrCreateChat(t.id)}
                     onKeyDown={(e) => e.key === 'Enter' && openOrCreateChat(t.id)}
+                  />
+                ))
+              )}
+            </div>
+            <h2 className="font-heading font-medium text-white text-sm mb-2 pt-2 border-t border-white/10">Message a seeker</h2>
+            <div className="space-y-1.5 max-h-40 overflow-y-auto">
+              {seekersLoading ? (
+                <p className="text-white/50 text-xs font-mono py-2">Loading…</p>
+              ) : filteredSeekers.length === 0 ? (
+                <p className="text-white/50 text-xs font-mono py-2">No seekers match.</p>
+              ) : (
+                filteredSeekers.map((s) => (
+                  <ListRow
+                    key={s.uid}
+                    avatar={<div className="w-11 h-11 rounded-full bg-[var(--primary)]/20 border border-[var(--primary)]/40 flex items-center justify-center text-[var(--primary)] font-heading font-bold text-lg">ॐ</div>}
+                    title={s.displayName || s.uid.slice(0, 8)}
+                    subtitle="Seeker"
+                    onClick={() => openOrCreateSeekerChat(s)}
+                    onKeyDown={(e) => e.key === 'Enter' && openOrCreateSeekerChat(s)}
                   />
                 ))
               )}
@@ -159,7 +220,7 @@ export function ChatsPage() {
               <ListRow
                 key={chat.id}
                 avatar={<PriestAvatarCoin size={48} />}
-                title={chat.name || chat.templeName || 'Chat'}
+                title={chatTitle(chat)}
                 subtitle={chat.lastMessageText || 'Tap to open'}
                 trailing={formatChatTime(chat.lastMessageAt)}
                 onClick={() => navigate(`/chats/${chat.id}`)}

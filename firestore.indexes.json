@@ -25,6 +25,14 @@
       ]
     },
     {
+      "collectionGroup": "apavargaChats",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "type", "order": "ASCENDING" },
+        { "fieldPath": "participants", "order": "ASCENDING" }
+      ]
+    },
+    {
       "collectionGroup": "apavargaStatus",
       "queryScope": "COLLECTION",
       "fields": [

@@ -21,7 +21,7 @@ export function BottomNav() {
           to={to}
           className={({ isActive }) =>
             `flex flex-col items-center gap-1 py-2 px-4 rounded-xl transition-colors ${
-              isActive ? 'text-[#FFD700] bg-[#FFD700]/10' : 'text-white/60 hover:text-white'
+              isActive ? 'text-[var(--primary)] bg-[var(--primary)]/10' : 'text-white/60 hover:text-white'
             }`
           }
         >

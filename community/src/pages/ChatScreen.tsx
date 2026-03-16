@@ -30,7 +30,7 @@ export function ChatScreen() {
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
   const [chatTempleName, setChatTempleName] = useState(templeName || '');
-  const [chatMeta, setChatMeta] = useState<{ type?: string; name?: string; participants?: string[]; adminOnlyMessaging?: boolean } | null>(null);
+  const [chatMeta, setChatMeta] = useState<{ type?: string; name?: string; otherDisplayName?: string; participants?: string[]; adminOnlyMessaging?: boolean } | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -43,7 +43,7 @@ export function ChatScreen() {
         if (!cancelled) {
           setMessages(msgs);
           if (chat?.templeName) setChatTempleName(chat.templeName);
-          if (chat) setChatMeta({ type: chat.type, name: chat.name, participants: chat.participants, adminOnlyMessaging: chat.adminOnlyMessaging });
+          if (chat) setChatMeta({ type: chat.type, name: chat.name, otherDisplayName: chat.otherDisplayName, participants: chat.participants, adminOnlyMessaging: chat.adminOnlyMessaging });
         }
       })
       .catch(() => {})
@@ -106,10 +106,17 @@ export function ChatScreen() {
   if (!id) return null;
 
   const isGroup = chatMeta?.type === 'group';
-  const title = isGroup ? (chatMeta?.name || chatTempleName || 'Group') : (chatTempleName || templeName || 'Chat');
+  const isSeekerChat = chatMeta?.type === 'direct_seeker';
+  const title = isGroup
+    ? (chatMeta?.name || chatTempleName || 'Group')
+    : isSeekerChat
+      ? (chatMeta?.otherDisplayName || 'Seeker')
+      : (chatTempleName || templeName || 'Chat');
   const subtitle = isGroup
     ? `${chatMeta?.participants?.length ?? 0} participants${chatMeta?.adminOnlyMessaging ? ' • Admin only' : ''}`
-    : 'Verified priest';
+    : isSeekerChat
+      ? 'Seeker'
+      : 'Verified priest';
   const inputDisabled = isGroup && chatMeta?.adminOnlyMessaging && !isPriest;
   const senderLabel = (m: Message) => (m.senderType === 'priest' ? (chatTempleName || 'Priest') : 'Seeker');
 
@@ -127,7 +134,7 @@ export function ChatScreen() {
         subtitle={subtitle}
         avatar={<PriestAvatarCoin size={40} />}
         onBack={() => navigate(-1)}
-        showBook={!isGroup}
+        showBook={!isGroup && !isSeekerChat}
         onBook={() => navigate('/appointments')}
       />
 

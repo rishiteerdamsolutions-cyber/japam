@@ -10,13 +10,13 @@ type Variant = 'primaryGold' | 'secondaryWhite' | 'ghost' | 'icon';
 
 const variantStyles: Record<Variant, string> = {
   primaryGold:
-    'bg-[#FFD700] text-black border-b-4 border-[#B8860B] shadow-[6px_6px_0_rgba(0,0,0,0.4)] active:translate-y-1 active:border-b-0 active:shadow-[2px_2px_0_rgba(0,0,0,0.4)]',
+    'bg-[var(--primary)] text-black border-b-4 border-[var(--primary-dark)] shadow-[6px_6px_0_rgba(0,0,0,0.4)] active:translate-y-1 active:border-b-0 active:shadow-[2px_2px_0_rgba(0,0,0,0.4)]',
   secondaryWhite:
     'bg-white text-black border-b-4 border-[#c4c4c4] shadow-[6px_6px_0_rgba(0,0,0,0.4)] active:translate-y-1 active:border-b-0 active:shadow-[2px_2px_0_rgba(0,0,0,0.4)]',
   ghost:
     'bg-transparent text-white border border-white/30 active:bg-white/10',
   icon:
-    'bg-[#151515] text-[#FFD700] border-b-4 border-[#0a0a0a] shadow-[4px_4px_0_rgba(0,0,0,0.5)] active:translate-y-1 active:border-b-0 active:shadow-[2px_2px_0_rgba(0,0,0,0.5)] p-2',
+    'bg-[#151515] text-[var(--primary)] border-b-4 border-[#0a0a0a] shadow-[4px_4px_0_rgba(0,0,0,0.5)] active:translate-y-1 active:border-b-0 active:shadow-[2px_2px_0_rgba(0,0,0,0.5)] p-2',
 };
 
 interface NeoButtonProps {

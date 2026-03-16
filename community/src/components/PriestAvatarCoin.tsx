@@ -11,7 +11,7 @@ export function PriestAvatarCoin({ src, alt = 'Priest', size = 48 }: PriestAvata
       style={{
         width: size,
         height: size,
-        boxShadow: '4px 4px 0 rgba(0,0,0,0.5), inset 0 0 0 3px #FFD700',
+        boxShadow: '4px 4px 0 rgba(0,0,0,0.5), inset 0 0 0 3px var(--primary)',
       }}
     >
       {src ? (
@@ -22,7 +22,7 @@ export function PriestAvatarCoin({ src, alt = 'Priest', size = 48 }: PriestAvata
         />
       ) : (
         <div
-          className="w-full h-full bg-[#151515] flex items-center justify-center text-[#FFD700] font-heading font-bold"
+          className="w-full h-full bg-[#151515] flex items-center justify-center text-[var(--primary)] font-heading font-bold"
           style={{ fontSize: size * 0.4 }}
         >
           ॐ

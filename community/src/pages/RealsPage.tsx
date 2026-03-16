@@ -14,6 +14,8 @@ interface Real {
 export function RealsPage() {
   const [reals, setReals] = useState<Real[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
   const [showUpload, setShowUpload] = useState(false);
   const [uploadFile, setUploadFile] = useState<File | null>(null);
   const [caption, setCaption] = useState('');
@@ -24,11 +26,31 @@ export function RealsPage() {
   useEffect(() => {
     let cancelled = false;
     fetchReals()
-      .then((r) => { if (!cancelled) setReals(r); })
+      .then((r) => {
+        if (!cancelled) {
+          setReals(r);
+          setHasMore(r.length >= 20);
+        }
+      })
       .catch(() => {})
       .finally(() => { if (!cancelled) setLoading(false); });
     return () => { cancelled = true; };
   }, []);
+
+  const loadMore = async () => {
+    if (reals.length === 0 || loadingMore || !hasMore) return;
+    const lastId = reals[reals.length - 1].id;
+    setLoadingMore(true);
+    try {
+      const next = await fetchReals(lastId);
+      setReals((prev) => [...prev, ...next]);
+      setHasMore(next.length >= 20);
+    } catch {
+      // ignore
+    } finally {
+      setLoadingMore(false);
+    }
+  };
 
   const handleUpload = async () => {
     if (!uploadFile || uploading) return;
@@ -42,6 +64,7 @@ export function RealsPage() {
       setShowUpload(false);
       const list = await fetchReals();
       setReals(list);
+      setHasMore(list.length >= 20);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Upload failed');
     } finally {
@@ -68,7 +91,7 @@ export function RealsPage() {
         <button
           type="button"
           onClick={() => setShowUpload(true)}
-          className="w-full py-3 rounded-xl bg-[#FFD700] text-black font-medium border-b-4 border-[#B8860B]"
+          className="w-full py-3 rounded-xl bg-[var(--primary)] text-black font-medium border-b-4 border-[var(--primary-dark)]"
         >
           + Create real
         </button>
@@ -103,7 +126,7 @@ export function RealsPage() {
                 type="button"
                 onClick={handleUpload}
                 disabled={!uploadFile || uploading}
-                className="flex-1 py-3 rounded-xl bg-[#FFD700] text-black font-medium disabled:opacity-50"
+                className="flex-1 py-3 rounded-xl bg-[var(--primary)] text-black font-medium disabled:opacity-50"
               >
                 {uploading ? 'Uploading…' : 'Post'}
               </button>
@@ -141,6 +164,16 @@ export function RealsPage() {
           ))}
         </div>
         {reals.length === 0 && !showUpload && <p className="text-white/50 text-xs font-mono">No reals yet. Create one above.</p>}
+        {hasMore && reals.length > 0 && (
+          <button
+            type="button"
+            onClick={loadMore}
+            disabled={loadingMore}
+            className="w-full py-3 rounded-xl border border-white/20 text-white/80 font-mono text-sm disabled:opacity-50"
+          >
+            {loadingMore ? 'Loading…' : 'Load more'}
+          </button>
+        )}
       </div>
     </div>
   );

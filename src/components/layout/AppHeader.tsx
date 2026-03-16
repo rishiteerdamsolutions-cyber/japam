@@ -5,8 +5,6 @@ import { useAuthStore } from '../../store/authStore';
 import { useUnlockStore } from '../../store/unlockStore';
 import { DonateModal } from '../donation/DonateModal';
 import { useProfileStore } from '../../store/profileStore';
-import { LivesDisplay } from '../lives/LivesDisplay';
-import { LivesModal } from '../lives/LivesModal';
 
 function HeartIcon() {
   return (
@@ -48,7 +46,6 @@ export function AppHeader({ title, showBack, onBack, rightElement }: AppHeaderPr
   const tier = useUnlockStore((s) => s.tier);
   const profileName = useProfileStore((s) => s.displayName);
   const [showDonate, setShowDonate] = useState(false);
-  const [showLives, setShowLives] = useState(false);
 
   const fallbackName = user?.displayName ?? user?.email ?? null;
   const displayName = profileName ?? fallbackName ?? 'Signed in';
@@ -108,7 +105,6 @@ export function AppHeader({ title, showBack, onBack, rightElement }: AppHeaderPr
                   {displayName}
                 </span>
               </div>
-              <LivesDisplay onClick={() => setShowLives(true)} compact className="shrink-0" />
               <button
                 type="button"
                 onClick={() => setShowDonate(true)}
@@ -144,7 +140,6 @@ export function AppHeader({ title, showBack, onBack, rightElement }: AppHeaderPr
           onDonated={() => setShowDonate(false)}
         />
       )}
-      {showLives && <LivesModal onClose={() => setShowLives(false)} />}
     </>
   );
 }

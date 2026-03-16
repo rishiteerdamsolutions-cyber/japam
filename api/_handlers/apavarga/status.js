@@ -28,8 +28,18 @@ export async function GET(request) {
     .get();
 
   const statuses = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-  return jsonResponse({ statuses });
+
+  const viewerKey = firebaseUid || (priest ? priest.templeId : null);
+  let viewedAuthorKeys = [];
+  if (viewerKey) {
+    const viewSnap = await db.collection('apavargaStatusViews').doc(viewerKey).get();
+    const viewed = viewSnap.exists ? viewSnap.data()?.viewed || {} : {};
+    viewedAuthorKeys = Object.keys(viewed);
+  }
+
+  return jsonResponse({ statuses, viewedAuthorKeys });
 }
+
 
 /** POST /api/apavarga/status - Create status. Body: { text, mediaUrl?, mediaKind? } */
 export async function POST(request) {

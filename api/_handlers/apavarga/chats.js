@@ -54,8 +54,41 @@ export async function POST(request) {
   if (!(await isUserUnlocked(db, firebaseUid))) return jsonResponse({ error: 'Pro membership required' }, 403);
 
   const body = await request.json().catch(() => ({}));
-  const { templeId } = body;
-  if (!templeId || !isValidFirestoreDocId(templeId)) return jsonResponse({ error: 'templeId required' }, 400);
+  const { templeId, otherUid, otherDisplayName } = body;
+
+  // Seeker-to-seeker: create or get direct_seeker chat
+  if (otherUid && typeof otherUid === 'string') {
+    if (otherUid === firebaseUid) return jsonResponse({ error: 'Cannot chat with yourself' }, 400);
+    if (!(await isUserUnlocked(db, otherUid))) return jsonResponse({ error: 'That user is not a community member' }, 403);
+    const participants = [firebaseUid, otherUid].sort();
+    const existing = await db.collection('apavargaChats')
+      .where('type', '==', 'direct_seeker')
+      .where('participants', '==', participants)
+      .limit(1)
+      .get();
+    if (!existing.empty) {
+      const doc = existing.docs[0];
+      const data = doc.data();
+      return jsonResponse({ chatId: doc.id, chat: { id: doc.id, ...data, otherDisplayName: data.otherDisplayName || otherDisplayName } }, 200);
+    }
+    const now = new Date().toISOString();
+    const chatRef = db.collection('apavargaChats').doc();
+    await chatRef.set({
+      type: 'direct_seeker',
+      participants,
+      createdBy: firebaseUid,
+      otherDisplayName: otherDisplayName && typeof otherDisplayName === 'string' ? otherDisplayName.slice(0, 100) : null,
+      lastMessageAt: now,
+      createdAt: now,
+    });
+    return jsonResponse({
+      chatId: chatRef.id,
+      chat: { id: chatRef.id, type: 'direct_seeker', participants, otherDisplayName: otherDisplayName || null, lastMessageAt: now },
+    }, 201);
+  }
+
+  // Seeker–priest: create or get direct chat by templeId
+  if (!templeId || !isValidFirestoreDocId(templeId)) return jsonResponse({ error: 'templeId or otherUid required' }, 400);
 
   const templeSnap = await db.collection('temples').doc(templeId).get();
   if (!templeSnap.exists) return jsonResponse({ error: 'Temple not found' }, 404);

@@ -22,7 +22,7 @@ export function ChatBubble({ text, isOwn, timestamp, isAutoReply, senderName, me
         className={`
           relative max-w-[85%] rounded-2xl px-4 py-3
           shadow-[6px_6px_0_rgba(0,0,0,0.4)]
-          ${isOwn ? 'bg-[#FFD700] text-black rounded-br-md' : 'bg-[#151515] text-white border border-white/10 rounded-bl-md'}
+          ${isOwn ? 'bg-[var(--primary)] text-black rounded-br-md' : 'bg-[#151515] text-white border border-white/10 rounded-bl-md'}
         `}
       >
         {/* Tail: triangle at corner */}
@@ -33,7 +33,7 @@ export function ChatBubble({ text, isOwn, timestamp, isAutoReply, senderName, me
               ? {
                   right: -6,
                   bottom: 10,
-                  borderLeft: '6px solid #FFD700',
+                  borderLeft: '6px solid var(--primary)',
                   borderTop: '6px solid transparent',
                   borderBottom: '6px solid transparent',
                 }
@@ -50,7 +50,7 @@ export function ChatBubble({ text, isOwn, timestamp, isAutoReply, senderName, me
           <p className="text-[10px] font-mono text-white/70 mb-0.5">{senderName}</p>
         )}
         {isAutoReply && (
-          <span className="inline-block mb-1 px-2 py-0.5 rounded text-[10px] font-mono bg-[#FFD700]/20 text-[#FFD700] border border-[#FFD700]/40">
+          <span className="inline-block mb-1 px-2 py-0.5 rounded text-[10px] font-mono bg-[var(--primary)]/20 text-[var(--primary)] border border-[var(--primary)]/40">
             AUTO
           </span>
         )}

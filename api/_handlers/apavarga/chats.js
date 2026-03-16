@@ -47,25 +47,26 @@ export async function GET(request) {
   if (!firebaseUid) return jsonResponse({ error: 'Unauthorized' }, 401);
   if (!(await isUserUnlocked(db, firebaseUid))) return jsonResponse({ error: 'Pro membership required' }, 403);
 
-  let chatsSnap;
+  let chatsDocs = [];
   try {
-    chatsSnap = await db.collection('apavargaChats')
+    const chatsSnap = await db.collection('apavargaChats')
       .where('participants', 'array-contains', firebaseUid)
       .orderBy('lastMessageAt', 'desc')
       .limit(50)
       .get();
+    chatsDocs = chatsSnap.docs;
   } catch (e) {
     if (!isFirestoreIndexError(e)) throw e;
     // Fallback when index isn't ready: query without orderBy then sort in memory.
-    chatsSnap = await db.collection('apavargaChats')
+    const chatsSnap = await db.collection('apavargaChats')
       .where('participants', 'array-contains', firebaseUid)
       .limit(200)
       .get();
-    chatsSnap.docs = chatsSnap.docs
+    chatsDocs = chatsSnap.docs
       .sort((a, b) => ((b.data()?.lastMessageAt || '').localeCompare(a.data()?.lastMessageAt || '')))
       .slice(0, 50);
   }
-  const chats = await Promise.all(chatsSnap.docs.map(async (d) => {
+  const chats = await Promise.all(chatsDocs.map(async (d) => {
     const data = d.data();
     if (!data.templeName && data.templeId) {
       const t = await db.collection('temples').doc(data.templeId).get();

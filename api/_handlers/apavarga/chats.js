@@ -6,6 +6,11 @@ function getBearerToken(request) {
   return null;
 }
 
+function isFirestoreIndexError(e) {
+  const msg = (e?.message || e?.toString?.() || '').toLowerCase();
+  return msg.includes('requires an index') || msg.includes('failed_precondition');
+}
+
 /** GET /api/apavarga/chats - List chats for seeker (Firebase) or priest (priest token) */
 export async function GET(request) {
   const db = getDb();
@@ -16,23 +21,50 @@ export async function GET(request) {
   const priest = priestToken ? await verifyPriestForApi(priestToken, db) : null;
 
   if (priest) {
-    const chatsSnap = await db.collection('apavargaChats')
-      .where('templeId', '==', priest.templeId)
-      .orderBy('lastMessageAt', 'desc')
-      .limit(50)
-      .get();
-    const chats = chatsSnap.docs.map((d) => ({ id: d.id, ...d.data(), templeName: priest.templeName }));
+    let chatsDocs = [];
+    try {
+      const chatsSnap = await db.collection('apavargaChats')
+        .where('templeId', '==', priest.templeId)
+        .orderBy('lastMessageAt', 'desc')
+        .limit(50)
+        .get();
+      chatsDocs = chatsSnap.docs;
+    } catch (e) {
+      if (!isFirestoreIndexError(e)) throw e;
+      // Fallback when index isn't ready: query without orderBy then sort in memory.
+      const chatsSnap = await db.collection('apavargaChats')
+        .where('templeId', '==', priest.templeId)
+        .limit(200)
+        .get();
+      chatsDocs = chatsSnap.docs
+        .sort((a, b) => ((b.data()?.lastMessageAt || '').localeCompare(a.data()?.lastMessageAt || '')))
+        .slice(0, 50);
+    }
+    const chats = chatsDocs.map((d) => ({ id: d.id, ...d.data(), templeName: priest.templeName }));
     return jsonResponse({ chats });
   }
 
   if (!firebaseUid) return jsonResponse({ error: 'Unauthorized' }, 401);
   if (!(await isUserUnlocked(db, firebaseUid))) return jsonResponse({ error: 'Pro membership required' }, 403);
 
-  const chatsSnap = await db.collection('apavargaChats')
-    .where('participants', 'array-contains', firebaseUid)
-    .orderBy('lastMessageAt', 'desc')
-    .limit(50)
-    .get();
+  let chatsSnap;
+  try {
+    chatsSnap = await db.collection('apavargaChats')
+      .where('participants', 'array-contains', firebaseUid)
+      .orderBy('lastMessageAt', 'desc')
+      .limit(50)
+      .get();
+  } catch (e) {
+    if (!isFirestoreIndexError(e)) throw e;
+    // Fallback when index isn't ready: query without orderBy then sort in memory.
+    chatsSnap = await db.collection('apavargaChats')
+      .where('participants', 'array-contains', firebaseUid)
+      .limit(200)
+      .get();
+    chatsSnap.docs = chatsSnap.docs
+      .sort((a, b) => ((b.data()?.lastMessageAt || '').localeCompare(a.data()?.lastMessageAt || '')))
+      .slice(0, 50);
+  }
   const chats = await Promise.all(chatsSnap.docs.map(async (d) => {
     const data = d.data();
     if (!data.templeName && data.templeId) {
@@ -61,11 +93,23 @@ export async function POST(request) {
     if (otherUid === firebaseUid) return jsonResponse({ error: 'Cannot chat with yourself' }, 400);
     if (!(await isUserUnlocked(db, otherUid))) return jsonResponse({ error: 'That user is not a community member' }, 403);
     const participants = [firebaseUid, otherUid].sort();
-    const existing = await db.collection('apavargaChats')
-      .where('type', '==', 'direct_seeker')
-      .where('participants', '==', participants)
-      .limit(1)
-      .get();
+    let existing;
+    try {
+      existing = await db.collection('apavargaChats')
+        .where('type', '==', 'direct_seeker')
+        .where('participants', '==', participants)
+        .limit(1)
+        .get();
+    } catch (e) {
+      if (!isFirestoreIndexError(e)) throw e;
+      // Fallback when index isn't ready: query by participants only then filter.
+      const snap = await db.collection('apavargaChats')
+        .where('participants', '==', participants)
+        .limit(10)
+        .get();
+      const match = snap.docs.find((d) => d.data()?.type === 'direct_seeker');
+      existing = { empty: !match, docs: match ? [match] : [] };
+    }
     if (!existing.empty) {
       const doc = existing.docs[0];
       const data = doc.data();

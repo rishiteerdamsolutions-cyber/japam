@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { NeoButton } from '../components/NeoButton';
 import { StatusViewer, type StatusItem } from '../components/StatusViewer';
@@ -80,7 +80,7 @@ export function StatusPage() {
     }).catch(() => {});
   };
 
-  const handleReply = () => {
+  const handleReply = useCallback(() => {
     if (!viewer) return;
     setViewer(null);
     if (viewer.statuses[0]?.authorType === 'priest' && viewer.statuses[0]?.templeId) {
@@ -88,7 +88,9 @@ export function StatusPage() {
     } else {
       navigate('/chats');
     }
-  };
+  }, [viewer, navigate]);
+
+  const onCloseViewer = useCallback(() => setViewer(null), []);
 
   if (loading) {
     return (
@@ -163,7 +165,7 @@ export function StatusPage() {
           <StatusViewer
             statuses={viewer.statuses}
             authorLabel={viewer.authorLabel}
-            onClose={() => setViewer(null)}
+            onClose={onCloseViewer}
             onReply={handleReply}
           />
         )}

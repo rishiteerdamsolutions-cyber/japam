@@ -23,7 +23,7 @@ export function ChatScreen() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const isPriest = !!usePriestStore((s) => s.token);
-  const { templeName } = usePriestStore((s) => ({ templeName: s.templeName }));
+  const templeName = usePriestStore((s) => s.templeName);
   const [messages, setMessages] = useState<Message[]>([]);
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(true);

@@ -21,7 +21,9 @@ export async function GET(request) {
   const snap = await db.collection('temples').get();
   const templeList = snap.docs.filter((d) => {
     const data = d.data();
-    return (data.name && String(data.name).trim()) || (data.priestUsername && String(data.priestUsername).trim());
+    const hasName = (data.name && String(data.name).trim()) || (data.templeName && String(data.templeName).trim());
+    const hasPriest = data.priestUsername && String(data.priestUsername).trim();
+    return hasName || hasPriest;
   });
 
   const settingsSnaps = await Promise.all(

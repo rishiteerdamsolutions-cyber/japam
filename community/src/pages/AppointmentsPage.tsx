@@ -144,32 +144,36 @@ export function AppointmentsPage() {
             Booking confirmed! The priest has been notified.
           </div>
         )}
-        {!isPriest && temples.length > 0 && (
+        {!isPriest && (
           <div className="rounded-2xl bg-[#151515] border border-white/10 p-4 mb-4">
             <h3 className="font-heading font-medium text-white mb-3">Temples available</h3>
             <p className="text-white/60 text-xs font-mono mb-3">Book darshan with verified priests</p>
-            <div className="space-y-2 max-h-48 overflow-y-auto">
-              {temples.map((t) => (
-                <div key={t.id} className="flex items-center justify-between py-2 px-3 rounded-xl bg-black/40 border border-white/10">
-                  <div>
-                    <p className="text-white font-mono text-sm">{t.name}</p>
-                    {t.priestUsername && (
-                      <p className="text-[var(--primary)]/80 text-[10px] font-mono mt-0.5">
-                        Priest: {t.priestUsername}
-                      </p>
-                    )}
-                    {t.appointmentAvailability && (
-                      <p className="text-white/50 text-[10px] font-mono mt-0.5">
-                        Available: {t.appointmentAvailability}
-                      </p>
-                    )}
+            {temples.length > 0 ? (
+              <div className="space-y-2 max-h-48 overflow-y-auto">
+                {temples.map((t) => (
+                  <div key={t.id} className="flex items-center justify-between py-2 px-3 rounded-xl bg-black/40 border border-white/10">
+                    <div>
+                      <p className="text-white font-mono text-sm">{t.name}</p>
+                      {t.priestUsername && (
+                        <p className="text-[var(--primary)]/80 text-[10px] font-mono mt-0.5">
+                          Priest: {t.priestUsername}
+                        </p>
+                      )}
+                      {t.appointmentAvailability && (
+                        <p className="text-white/50 text-[10px] font-mono mt-0.5">
+                          Available: {t.appointmentAvailability}
+                        </p>
+                      )}
+                    </div>
+                    <NeoButton variant="primaryGold" onClick={() => { setSelectedTempleId(t.id); setShowRequest(true); }}>
+                      Book
+                    </NeoButton>
                   </div>
-                  <NeoButton variant="primaryGold" onClick={() => { setSelectedTempleId(t.id); setShowRequest(true); }}>
-                    Book
-                  </NeoButton>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-white/50 text-xs font-mono py-4">No temples available for appointments yet. Add temples via Admin → Temples and ensure priests have set up their accounts.</p>
+            )}
           </div>
         )}
 
@@ -187,7 +191,7 @@ export function AppointmentsPage() {
               onChange={(e) => setSelectedTempleId(e.target.value)}
               className="w-full px-4 py-3 rounded-xl bg-black text-white border border-white/20 font-mono text-sm"
             >
-              <option value="">Select temple</option>
+              <option value="">{temples.length > 0 ? 'Select temple' : 'No temples available'}</option>
               {temples.map((t) => (
                 <option key={t.id} value={t.id}>
                   {t.name}{t.priestUsername ? ` — ${t.priestUsername}` : ''}

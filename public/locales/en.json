@@ -76,6 +76,7 @@
     "back": "← Back",
     "pause": "Pause",
     "exit": "Exit",
+    "refreshBoard": "No matches? Refresh board",
     "lives": "Lives",
     "livesFull": "Full",
     "livesUnlimited": "Unlimited lives",

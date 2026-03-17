@@ -72,6 +72,7 @@ interface GameActions {
   commitMatch: (accumulated: { deity: DeityId; count: number; combo: number }[], isUserDirectMatch?: boolean) => void;
   finalizeMatchChain: (accumulated: { deity: DeityId; count: number; combo: number }[]) => void;
   addMoves: (n: number) => void;
+  refreshBoard: () => void;
   reset: () => void;
 }
 
@@ -407,6 +408,23 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     if (status !== 'lost') return;
     const add = Math.max(1, Math.floor(n));
     set({ moves: moves + add, status: 'playing' });
+  },
+
+  refreshBoard: () => {
+    const state = get();
+    if (state.status !== 'playing' || state.board.length === 0) return;
+    const level = getLevel(state.levelIndex);
+    const deityMode = state.mode !== 'general' ? (state.mode as DeityId) : undefined;
+    let board = createBoard(level.rows, level.cols, state.maxGemTypes, deityMode);
+    while (!hasValidMoves(board)) {
+      board = createBoard(level.rows, level.cols, state.maxGemTypes, deityMode);
+    }
+    set({
+      board,
+      selectedCell: null,
+      matchHighlightPositions: null,
+      pendingMatchBatch: null,
+    });
   },
 
   reset: () => {

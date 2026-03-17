@@ -281,6 +281,11 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
     reset();
   }, [reset]);
 
+  const refreshBoard = useGameStore(s => s.refreshBoard);
+  const handleRefreshBoard = useCallback(() => {
+    refreshBoard();
+  }, [refreshBoard]);
+
   const handleRetryAfterLife = useCallback(() => {
     setShowOutOfLives(false);
     reset();
@@ -427,6 +432,19 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
       <div className="relative z-20 shrink-0 w-full max-w-md mt-1 -mx-1 px-1 py-2 rounded-lg bg-black/20">
         <ActiveUsersStrip />
       </div>
+
+      {status === 'playing' && (
+        <div className="shrink-0 w-full max-w-md mt-2 flex justify-center">
+          <button
+            type="button"
+            onClick={handleRefreshBoard}
+            aria-label={t('game.refreshBoard')}
+            className="px-4 py-2 rounded-xl bg-amber-500/80 text-black font-medium text-sm border-2 border-amber-400/60 shadow-md hover:bg-amber-400 active:scale-95 transition-transform"
+          >
+            {t('game.refreshBoard')}
+          </button>
+        </div>
+      )}
 
       <div className="flex-1 w-full max-w-md min-h-0 flex items-center justify-center">
         <Board />

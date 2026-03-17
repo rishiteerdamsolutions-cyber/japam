@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ListRow } from '../components/ListRow';
 import { PriestAvatarCoin } from '../components/PriestAvatarCoin';
+import { usePriestStore } from '../store/priestStore';
 import { fetchChats, fetchTemples, createChat, fetchSeekers, createSeekerChat } from '../lib/apavargaApi';
 
 interface Chat {
@@ -24,6 +25,8 @@ interface Temple {
 
 export function PeoplePage() {
   const navigate = useNavigate();
+  const { token: priestToken, templeId: priestTempleId } = usePriestStore();
+  const isPriest = !!priestToken;
   const [chats, setChats] = useState<Chat[]>([]);
   const [temples, setTemples] = useState<Temple[]>([]);
   const [seekers, setSeekers] = useState<Seeker[]>([]);
@@ -81,9 +84,12 @@ export function PeoplePage() {
     }
   };
 
-  const filteredTemples = search.trim()
-    ? temples.filter((t) => t.name.toLowerCase().includes(search.trim().toLowerCase()))
+  const templesForDisplay = isPriest
+    ? temples.filter((t) => t.id !== priestTempleId)
     : temples;
+  const filteredTemples = search.trim()
+    ? templesForDisplay.filter((t) => t.name.toLowerCase().includes(search.trim().toLowerCase()))
+    : templesForDisplay;
   const filteredSeekers = search.trim()
     ? seekers.filter((s) => (s.displayName || s.uid).toLowerCase().includes(search.trim().toLowerCase()))
     : seekers;
@@ -113,6 +119,7 @@ export function PeoplePage() {
       <div className="p-4 space-y-6">
         {error && <p className="text-red-400 text-sm font-mono">{error}</p>}
 
+        {!isPriest && (
         <section>
           <h2 className="font-heading font-medium text-white text-sm mb-2">Talk to a priest</h2>
           <div className="space-y-1.5">
@@ -132,6 +139,7 @@ export function PeoplePage() {
             )}
           </div>
         </section>
+        )}
 
         <section>
           <h2 className="font-heading font-medium text-white text-sm mb-2">Message a seeker</h2>

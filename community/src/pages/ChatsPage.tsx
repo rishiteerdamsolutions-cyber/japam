@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ListRow } from '../components/ListRow';
 import { PriestAvatarCoin } from '../components/PriestAvatarCoin';
-import { fetchChats, fetchTemples } from '../lib/apavargaApi';
+import { fetchChats } from '../lib/apavargaApi';
 
 interface Chat {
   id: string;
@@ -15,12 +15,6 @@ interface Chat {
   lastMessageAt?: string;
   lastMessageText?: string;
   lastMessageSenderType?: string;
-}
-
-interface Temple {
-  id: string;
-  name: string;
-  priestUsername: string;
 }
 
 function formatChatTime(iso?: string): string {
@@ -43,19 +37,15 @@ function formatChatTime(iso?: string): string {
 export function ChatsPage() {
   const navigate = useNavigate();
   const [chats, setChats] = useState<Chat[]>([]);
-  const [temples, setTemples] = useState<Temple[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
 
   useEffect(() => {
     let cancelled = false;
-    Promise.all([fetchChats(), fetchTemples()])
-      .then(([c, t]) => {
-        if (!cancelled) {
-          setChats(c);
-          setTemples(t);
-        }
+    fetchChats()
+      .then((c) => {
+        if (!cancelled) setChats(c);
       })
       .catch((e) => {
         if (!cancelled) setError(e.message || 'Failed');

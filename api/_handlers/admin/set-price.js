@@ -19,10 +19,14 @@ export async function POST(request) {
     }
     const displayPricePaise = Math.round(Number(body?.displayPricePaise ?? 9900));
     const safeDisplay = Number.isFinite(displayPricePaise) && displayPricePaise >= 100 ? displayPricePaise : 9900;
+    const appointmentFeePaise = body?.appointmentFeePaise != null ? Math.round(Number(body.appointmentFeePaise)) : undefined;
+    const safeAppointmentFee = appointmentFeePaise != null && Number.isFinite(appointmentFeePaise) && appointmentFeePaise >= 100 ? appointmentFeePaise : undefined;
     const db = getDb();
     if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
-    await db.doc('config/pricing').set({ unlockPricePaise, displayPricePaise: safeDisplay }, { merge: true });
-    await logAudit('admin_set_price', { unlockPricePaise, displayPricePaise: safeDisplay });
+    const update = { unlockPricePaise, displayPricePaise: safeDisplay };
+    if (safeAppointmentFee != null) update.appointmentFeePaise = safeAppointmentFee;
+    await db.doc('config/pricing').set(update, { merge: true });
+    await logAudit('admin_set_price', { unlockPricePaise, displayPricePaise: safeDisplay, appointmentFeePaise: safeAppointmentFee });
     return jsonResponse({ ok: true });
   } catch (e) {
     console.error('admin set-price', e);

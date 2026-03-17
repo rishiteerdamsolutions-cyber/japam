@@ -95,6 +95,9 @@ export function ProfilePage() {
     <div className="min-h-screen bg-black pb-24">
       <header className="sticky top-0 z-10 bg-black/95 backdrop-blur border-b border-white/10 px-4 py-4">
         <h1 className="font-heading font-semibold text-xl text-white">Profile</h1>
+        <p className="text-white/60 text-xs font-mono mt-0.5">
+          {isPriest ? 'Set appointment availability and auto-replies' : 'Manage blocked users'}
+        </p>
       </header>
 
       <div className="p-4 space-y-6">

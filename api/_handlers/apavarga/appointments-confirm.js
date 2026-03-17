@@ -28,11 +28,11 @@ export async function POST(request) {
 
   const now = new Date().toISOString();
   await ref.update({
-    status: 'confirmed',
-    confirmedAt: now,
+    status: 'accepted',
+    acceptedAt: now,
     seekerArrivalConfirmed: false,
     updatedAt: now,
   });
 
-  return jsonResponse({ ok: true, status: 'confirmed' }, 200);
+  return jsonResponse({ ok: true, status: 'accepted' }, 200);
 }

@@ -19,7 +19,10 @@ export async function GET(request) {
   if (firebaseUid && !(await isUserUnlocked(db, firebaseUid))) return jsonResponse({ error: 'Pro membership required' }, 403);
 
   const snap = await db.collection('temples').get();
-  const templeList = snap.docs.filter((d) => d.data().name);
+  const templeList = snap.docs.filter((d) => {
+    const data = d.data();
+    return (data.name && String(data.name).trim()) || (data.priestUsername && String(data.priestUsername).trim());
+  });
 
   const settingsSnaps = await Promise.all(
     templeList.map((d) => db.collection('apavargaPriestSettings').doc(d.id).get())
@@ -33,9 +36,10 @@ export async function GET(request) {
     const dayLabels = days.map((dayNum) => DAY_NAMES[dayNum]).filter(Boolean).join(', ') || 'Weekdays';
     const start = settings?.appointmentStartTime || '09:00';
     const end = settings?.appointmentEndTime || '17:00';
+    const displayName = (data.name && String(data.name).trim()) || (data.templeName && String(data.templeName).trim()) || data.priestUsername || d.id;
     return {
       id: d.id,
-      name: data.name || '',
+      name: displayName,
       priestUsername: data.priestUsername || '',
       appointmentAvailability: `${dayLabels} ${start}–${end}`,
     };

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams, useLocation, Link } from 'react-router-dom';
 import { NeoButton } from '../components/NeoButton';
-import { fetchAppointments, requestAppointment, confirmAppointment, confirmArrival, fetchTemples } from '../lib/apavargaApi';
+import { fetchAppointments, requestAppointment, confirmAppointment, confirmArrival, fetchTemples, createAppointmentPaymentOrder, fetchAppointmentFeePaise } from '../lib/apavargaApi';
+import { openCashfreeCheckout } from '../lib/cashfree';
 import { usePriestStore } from '../store/priestStore';
 
 interface Appointment {
@@ -12,6 +13,7 @@ interface Appointment {
   templeName?: string;
   requestedAt: string;
   status: string;
+  acceptedAt?: string;
   confirmedAt?: string;
   seekerArrivalConfirmed?: boolean;
   createdAt: string;
@@ -19,8 +21,11 @@ interface Appointment {
 
 export function AppointmentsPage() {
   const [searchParams] = useSearchParams();
+  const location = useLocation();
   const preselectedTempleId = searchParams.get('templeId');
   const isPriest = !!usePriestStore((s) => s.token);
+  const paymentSuccess = (location.state as { paymentSuccess?: boolean })?.paymentSuccess;
+  const paymentError = (location.state as { paymentError?: string })?.paymentError;
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [temples, setTemples] = useState<{ id: string; name: string; priestUsername?: string; appointmentAvailability?: string }[]>([]);
   const [loading, setLoading] = useState(true);
@@ -29,14 +34,18 @@ export function AppointmentsPage() {
   const [requestedAt, setRequestedAt] = useState('');
   const [requesting, setRequesting] = useState(false);
   const [confirming, setConfirming] = useState<string | null>(null);
+  const [paying, setPaying] = useState<string | null>(null);
+  const [payError, setPayError] = useState<string | null>(null);
+  const [appointmentFeeRupees, setAppointmentFeeRupees] = useState<number>(108);
 
   useEffect(() => {
     let cancelled = false;
-    Promise.all([fetchAppointments(), fetchTemples()])
-      .then(([a, t]) => {
+    Promise.all([fetchAppointments(), fetchTemples(), fetchAppointmentFeePaise()])
+      .then(([a, t, feePaise]) => {
         if (!cancelled) {
           setAppointments(a);
           setTemples(t);
+          setAppointmentFeeRupees(Math.round(feePaise / 100));
           if (preselectedTempleId) setSelectedTempleId(preselectedTempleId);
         }
       })
@@ -88,6 +97,21 @@ export function AppointmentsPage() {
     }
   };
 
+  const handlePay = async (id: string) => {
+    setPayError(null);
+    setPaying(id);
+    try {
+      const { paymentSessionId } = await createAppointmentPaymentOrder(id);
+      await openCashfreeCheckout(paymentSessionId, { redirectTarget: '_self' });
+      const a = await fetchAppointments();
+      setAppointments(a);
+    } catch (e) {
+      setPayError(e instanceof Error ? e.message : 'Payment failed');
+    } finally {
+      setPaying(null);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-black pb-24 flex items-center justify-center">
@@ -109,6 +133,17 @@ export function AppointmentsPage() {
       </header>
 
       <div className="p-4 space-y-4">
+        {(payError || paymentError) && (
+          <div className="rounded-lg bg-red-500/20 border border-red-500/40 text-red-200 text-sm px-3 py-2 flex items-center justify-between gap-2">
+            <span>{payError || paymentError}</span>
+            <button type="button" onClick={() => { setPayError(null); window.history.replaceState({}, '', location.pathname); }} className="underline">Dismiss</button>
+          </div>
+        )}
+        {paymentSuccess && (
+          <div className="rounded-lg bg-green-500/20 border border-green-500/40 text-green-200 text-sm px-3 py-2">
+            Booking confirmed! The priest has been notified.
+          </div>
+        )}
         {!isPriest && temples.length > 0 && (
           <div className="rounded-2xl bg-[#151515] border border-white/10 p-4 mb-4">
             <h3 className="font-heading font-medium text-white mb-3">Temples available</h3>
@@ -186,13 +221,33 @@ export function AppointmentsPage() {
               </p>
               {isPriest && a.status === 'requested' && (
                 <NeoButton variant="primaryGold" className="mt-2" onClick={() => handleConfirm(a.id)} disabled={confirming === a.id}>
-                  {confirming === a.id ? 'Confirming…' : 'Confirm'}
+                  {confirming === a.id ? 'Accepting…' : 'Accept'}
                 </NeoButton>
               )}
+              {isPriest && a.status === 'accepted' && (
+                <p className="text-amber-300/90 text-xs font-mono mt-2">Waiting for seeker to pay ₹{appointmentFeeRupees}</p>
+              )}
+              {isPriest && a.status === 'confirmed' && (
+                <p className="text-green-400/90 text-xs font-mono mt-2">Booking confirmed</p>
+              )}
+              {!isPriest && a.status === 'accepted' && (
+                <div className="mt-2 space-y-2">
+                  <p className="text-amber-200/90 text-xs font-mono">Appointment accepted at the set time. Pay ₹{appointmentFeeRupees} to confirm.</p>
+                  <NeoButton variant="primaryGold" onClick={() => handlePay(a.id)} disabled={paying === a.id}>
+                    {paying === a.id ? 'Opening payment…' : `Pay ₹${appointmentFeeRupees}`}
+                  </NeoButton>
+                </div>
+              )}
               {!isPriest && a.status === 'confirmed' && !a.seekerArrivalConfirmed && (
-                <NeoButton variant="primaryGold" className="mt-2" onClick={() => handleArrivalConfirm(a.id)} disabled={confirming === a.id}>
-                  {confirming === a.id ? 'Confirming…' : "I'm coming"}
-                </NeoButton>
+                <div className="mt-2 space-y-2">
+                  <p className="text-green-400/90 text-xs font-mono">Booking confirmed</p>
+                  <NeoButton variant="primaryGold" onClick={() => handleArrivalConfirm(a.id)} disabled={confirming === a.id}>
+                    {confirming === a.id ? 'Confirming…' : "I'm coming"}
+                  </NeoButton>
+                </div>
+              )}
+              {!isPriest && a.status === 'confirmed' && a.seekerArrivalConfirmed && (
+                <p className="text-green-400/90 text-xs font-mono mt-2">Booking confirmed • You confirmed arrival</p>
               )}
             </div>
           ))}

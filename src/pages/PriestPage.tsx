@@ -463,13 +463,25 @@ export function PriestPage() {
                   </div>
                 )}
               </div>
-              <button
-                type="button"
-                onClick={() => openMarathonEdit(m)}
-                className="text-xs px-2 py-1 rounded bg-amber-500/80 text-white hover:bg-amber-500 shrink-0"
-              >
-                Edit
-              </button>
+              <div className="flex flex-col gap-1 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const link = `${typeof window !== 'undefined' ? window.location.origin : ''}/marathons?templeId=${encodeURIComponent(temple?.templeId || '')}`;
+                    navigator.clipboard?.writeText(link).then(() => alert('Link copied! Share with devotees.')).catch(() => {});
+                  }}
+                  className="text-xs px-2 py-1 rounded bg-green-600/80 text-white hover:bg-green-600"
+                >
+                  Share link
+                </button>
+                <button
+                  type="button"
+                  onClick={() => openMarathonEdit(m)}
+                  className="text-xs px-2 py-1 rounded bg-amber-500/80 text-white hover:bg-amber-500"
+                >
+                  Edit
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -644,13 +656,25 @@ export function PriestPage() {
                 </p>
                 <p className="text-amber-200/60 text-xs">{y.startDate} – {y.endDate} • {y.status}</p>
               </div>
-              <button
-                type="button"
-                onClick={() => openMahaEdit(y)}
-                className="text-xs px-2 py-1 rounded bg-amber-500/80 text-white hover:bg-amber-500 shrink-0"
-              >
-                Edit
-              </button>
+              <div className="flex flex-col gap-1 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const link = `${typeof window !== 'undefined' ? window.location.origin : ''}/maha-yagnas?yagnaId=${encodeURIComponent(y.id)}`;
+                    navigator.clipboard?.writeText(link).then(() => alert('Link copied! Share with devotees.')).catch(() => {});
+                  }}
+                  className="text-xs px-2 py-1 rounded bg-green-600/80 text-white hover:bg-green-600"
+                >
+                  Copy link
+                </button>
+                <button
+                  type="button"
+                  onClick={() => openMahaEdit(y)}
+                  className="text-xs px-2 py-1 rounded bg-amber-500/80 text-white hover:bg-amber-500"
+                >
+                  Edit
+                </button>
+              </div>
             </div>
           ))}
         </div>

@@ -93,21 +93,26 @@ function verifyAdminToken(token) {
 
 const DEFAULT_PRICE_PAISE = 1000; // ₹10
 const DEFAULT_DISPLAY_PAISE = 9900; // ₹99 strikethrough
+const DEFAULT_APPOINTMENT_FEE_PAISE = 10800; // ₹108 priest appointment
 
 async function getPricing() {
-  if (!db) return { unlockPricePaise: DEFAULT_PRICE_PAISE, displayPricePaise: DEFAULT_DISPLAY_PAISE };
+  if (!db) return { unlockPricePaise: DEFAULT_PRICE_PAISE, displayPricePaise: DEFAULT_DISPLAY_PAISE, livesPricePaise: 1900, appointmentFeePaise: DEFAULT_APPOINTMENT_FEE_PAISE };
   try {
     const snap = await db.doc('config/pricing').get();
     const data = snap.data();
     const unlock = data?.unlockPricePaise;
     const display = data?.displayPricePaise;
+    const lives = data?.livesPricePaise;
+    const appointmentFee = data?.appointmentFeePaise;
     return {
       unlockPricePaise: typeof unlock === 'number' && unlock >= 100 ? Math.round(unlock) : DEFAULT_PRICE_PAISE,
       displayPricePaise: typeof display === 'number' && display >= 100 ? Math.round(display) : DEFAULT_DISPLAY_PAISE,
+      livesPricePaise: typeof lives === 'number' && lives >= 100 ? Math.round(lives) : 1900,
+      appointmentFeePaise: typeof appointmentFee === 'number' && appointmentFee >= 100 ? Math.round(appointmentFee) : DEFAULT_APPOINTMENT_FEE_PAISE,
     };
   } catch (e) {
     console.error('getPricing', e);
-    return { unlockPricePaise: DEFAULT_PRICE_PAISE, displayPricePaise: DEFAULT_DISPLAY_PAISE };
+    return { unlockPricePaise: DEFAULT_PRICE_PAISE, displayPricePaise: DEFAULT_DISPLAY_PAISE, livesPricePaise: 1900, appointmentFeePaise: DEFAULT_APPOINTMENT_FEE_PAISE };
   }
 }
 
@@ -122,7 +127,7 @@ app.get('/api/price', async (req, res) => {
     res.json(pricing);
   } catch (e) {
     console.error('get price', e);
-    res.status(500).json({ unlockPricePaise: DEFAULT_PRICE_PAISE, displayPricePaise: DEFAULT_DISPLAY_PAISE });
+    res.status(500).json({ unlockPricePaise: DEFAULT_PRICE_PAISE, displayPricePaise: DEFAULT_DISPLAY_PAISE, livesPricePaise: 1900, appointmentFeePaise: DEFAULT_APPOINTMENT_FEE_PAISE });
   }
 });
 
@@ -194,8 +199,12 @@ app.post('/api/admin/set-price', async (req, res) => {
     }
     const displayPricePaise = Math.round(Number(req.body?.displayPricePaise ?? 9900));
     const safeDisplay = Number.isFinite(displayPricePaise) && displayPricePaise >= 100 ? displayPricePaise : 9900;
+    const appointmentFeePaise = req.body?.appointmentFeePaise != null ? Math.round(Number(req.body.appointmentFeePaise)) : undefined;
+    const safeAppointmentFee = appointmentFeePaise != null && Number.isFinite(appointmentFeePaise) && appointmentFeePaise >= 100 ? appointmentFeePaise : undefined;
     if (!db) return res.status(503).json({ error: 'Database not configured' });
-    await db.doc('config/pricing').set({ unlockPricePaise, displayPricePaise: safeDisplay }, { merge: true });
+    const update = { unlockPricePaise, displayPricePaise: safeDisplay };
+    if (safeAppointmentFee != null) update.appointmentFeePaise = safeAppointmentFee;
+    await db.doc('config/pricing').set(update, { merge: true });
     res.json({ ok: true });
   } catch (e) {
     console.error('admin set-price', e);

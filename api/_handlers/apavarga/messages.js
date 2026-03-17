@@ -102,12 +102,12 @@ export async function POST(request) {
     lastMessageText: lastPreview,
     lastMessageSenderType: senderType,
   });
-  if (chat.groupId) {
+  if (chat.groupId && isValidFirestoreDocId(chat.groupId)) {
     const groupRef = db.collection('apavargaGroups').doc(chat.groupId);
     await groupRef.update({ lastMessageAt: now, lastMessageText: lastPreview, updatedAt: now });
   }
 
-  if (chat.type !== 'group' && !isFromPriest && !isAutoReply) {
+  if (chat.type !== 'group' && chat.templeId && !isFromPriest && !isAutoReply) {
     const prevMsgs = await chatRef.collection('messages').where('senderType', '==', 'priest').limit(1).get();
     if (prevMsgs.empty) {
       const settingsSnap = await db.collection('apavargaPriestSettings').doc(chat.templeId).get();

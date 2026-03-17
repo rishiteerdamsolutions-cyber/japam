@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AppHeader } from '../components/layout/AppHeader';
 import { BottomNav } from '../components/nav/BottomNav';
@@ -43,6 +43,8 @@ function formatNum(n: number): string {
 export function MahaYagnasPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const urlYagnaId = searchParams.get('yagnaId');
   const user = useAuthStore((s) => s.user);
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
   const isPro = levelsUnlocked === true;
@@ -103,6 +105,14 @@ export function MahaYagnasPage() {
   useEffect(() => {
     loadContributions();
   }, [loadContributions]);
+
+  useEffect(() => {
+    if (!urlYagnaId || yagnas.length === 0) return;
+    const el = document.getElementById(`yagna-${urlYagnaId}`);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [urlYagnaId, yagnas.length]);
 
   // Refetch list and contributions when user returns to this page (visibility/focus)
   useEffect(() => {
@@ -390,8 +400,9 @@ export function MahaYagnasPage() {
 
             return (
               <div
+                id={`yagna-${y.id}`}
                 key={y.id}
-                className="p-4 rounded-2xl bg-black/30 border border-amber-500/20 overflow-hidden"
+                className={`p-4 rounded-2xl bg-black/30 border overflow-hidden ${urlYagnaId === y.id ? 'border-amber-400 ring-2 ring-amber-500/50' : 'border-amber-500/20'}`}
               >
                 <div className="flex gap-4 min-w-0">
                   <div className="w-16 h-16 rounded-xl overflow-hidden bg-black/40 shrink-0">

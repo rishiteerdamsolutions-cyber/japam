@@ -105,6 +105,7 @@ export async function isUserUnlocked(db, uid) {
 }
 
 const DEFAULT_DISPLAY_PRICE_PAISE = 9900; // ₹99 strikethrough
+const DEFAULT_APPOINTMENT_FEE_PAISE = 10800; // ₹108 priest appointment fee
 
 /** Current price: Firestore config/pricing if set by admin, else UNLOCK_PRICE_PAISE. Never returns < 100. */
 export async function getUnlockPricePaise() {
@@ -114,7 +115,13 @@ export async function getUnlockPricePaise() {
 
 const LIVES_PRICE_PAISE = 1900; // ₹19 for 5 lives
 
-/** Returns both unlock (actual) and display (strikethrough) price in paise. */
+/** Priest appointment fee in paise (admin-configurable). */
+export async function getAppointmentFeePaise() {
+  const { appointmentFeePaise } = await getPricing();
+  return appointmentFeePaise;
+}
+
+/** Returns both unlock (actual) and display (strikethrough) price in paise, plus lives and appointment fee. */
 export async function getPricing() {
   const database = getDb();
   if (database) {
@@ -124,14 +131,21 @@ export async function getPricing() {
       const unlock = data?.unlockPricePaise;
       const display = data?.displayPricePaise;
       const lives = data?.livesPricePaise;
+      const appointmentFee = data?.appointmentFeePaise;
       return {
         unlockPricePaise: typeof unlock === 'number' && unlock >= 100 ? Math.round(unlock) : UNLOCK_PRICE_PAISE,
         displayPricePaise: typeof display === 'number' && display >= 100 ? Math.round(display) : DEFAULT_DISPLAY_PRICE_PAISE,
         livesPricePaise: typeof lives === 'number' && lives >= 100 ? Math.round(lives) : LIVES_PRICE_PAISE,
+        appointmentFeePaise: typeof appointmentFee === 'number' && appointmentFee >= 100 ? Math.round(appointmentFee) : DEFAULT_APPOINTMENT_FEE_PAISE,
       };
     } catch {}
   }
-  return { unlockPricePaise: UNLOCK_PRICE_PAISE, displayPricePaise: DEFAULT_DISPLAY_PRICE_PAISE, livesPricePaise: LIVES_PRICE_PAISE };
+  return {
+    unlockPricePaise: UNLOCK_PRICE_PAISE,
+    displayPricePaise: DEFAULT_DISPLAY_PRICE_PAISE,
+    livesPricePaise: LIVES_PRICE_PAISE,
+    appointmentFeePaise: DEFAULT_APPOINTMENT_FEE_PAISE,
+  };
 }
 
 /** Lives pack price in paise (5 lives). */

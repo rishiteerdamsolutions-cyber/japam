@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { AppFooter } from '../components/layout/AppFooter';
 import INDIA_REGIONS from '../data/indiaRegions.json';
 import { DEITIES } from '../data/deities';
@@ -47,6 +47,8 @@ interface MyMarathon {
 
 export function MarathonsPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const urlTempleId = searchParams.get('templeId');
   const user = useAuthStore((s) => s.user);
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
   const isPro = levelsUnlocked === true;
@@ -91,6 +93,33 @@ export function MarathonsPage() {
     load();
   }, [user?.uid, isPro]);
   const districts = state?.districts ?? [];
+
+  useEffect(() => {
+    if (!urlTempleId) return;
+    setLoading(true);
+    setSearched(true);
+    const params = new URLSearchParams();
+    params.set('templeId', urlTempleId);
+    const url = API_BASE ? `${API_BASE}/api/marathons/discover?${params}` : `/api/marathons/discover?${params}`;
+    fetch(url)
+      .then((r) => r.json())
+      .then((data) => {
+        setTemples(data.temples || []);
+        setMarathonsByTemple(data.marathonsByTemple || {});
+        const t = (data.temples || [])[0];
+        if (t) {
+          setStateName(t.state || '');
+          setDistrictName(t.district || '');
+          setCityName(t.cityTownVillage || '');
+          setAreaName(t.area || '');
+        }
+      })
+      .catch(() => {
+        setTemples([]);
+        setMarathonsByTemple({});
+      })
+      .finally(() => setLoading(false));
+  }, [urlTempleId]);
 
   const paddedMarathonLeaderboard = (lb?: { rank: number; uid: string; name: string; japasCount: number }[]) =>
     paddedLeaderboard(lb);

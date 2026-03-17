@@ -115,6 +115,15 @@ export async function fetchTemples() {
   return data.temples || [];
 }
 
+/** Appointment fee in paise (from admin config). Default 10800 (₹108). */
+export async function fetchAppointmentFeePaise(): Promise<number> {
+  const base = getApiBase();
+  const res = await fetch(`${base}/api/price`);
+  const data = (await res.json().catch(() => ({}))) as { appointmentFeePaise?: number };
+  const p = data?.appointmentFeePaise;
+  return typeof p === 'number' && p >= 100 ? Math.round(p) : 10800;
+}
+
 export async function requestAppointment(templeId: string, requestedAt: string) {
   const res = await apiFetch('/api/apavarga/appointments/request', {
     method: 'POST',
@@ -136,6 +145,26 @@ export async function confirmAppointment(appointmentId: string) {
   const res = await apiFetch('/api/apavarga/appointments/confirm', {
     method: 'POST',
     body: JSON.stringify({ appointmentId }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || 'Failed');
+  return data;
+}
+
+export async function createAppointmentPaymentOrder(appointmentId: string) {
+  const res = await apiFetch('/api/apavarga/appointments/pay-order', {
+    method: 'POST',
+    body: JSON.stringify({ appointmentId }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || 'Failed');
+  return data as { orderId: string; paymentSessionId: string; amount: number };
+}
+
+export async function verifyAppointmentPayment(orderId: string) {
+  const res = await apiFetch('/api/apavarga/appointments/pay-verify', {
+    method: 'POST',
+    body: JSON.stringify({ order_id: orderId }),
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(data.error || 'Failed');

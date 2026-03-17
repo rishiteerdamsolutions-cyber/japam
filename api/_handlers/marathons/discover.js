@@ -24,20 +24,33 @@ async function loadMarathonLeaderboard(db, marathonId) {
 }
 
 /** GET /api/marathons/discover?state=&district=&cityTownVillage=&area=
+ * Also supports ?templeId=XXX to discover marathons for a specific temple.
  * Returns temples and their marathons for the given location. No auth required.
- * State required; district, cityTownVillage, area optional. Case-insensitive for city/area.
+ * State required (or templeId); district, cityTownVillage, area optional. Case-insensitive for city/area.
  * Also includes community marathons (admin-created) with same location fields.
  */
 export async function GET(request) {
   try {
     const url = new URL(request.url);
-    const state = (url.searchParams.get('state') || '').trim();
-    const district = (url.searchParams.get('district') || '').trim();
-    const cityTownVillage = (url.searchParams.get('cityTownVillage') || '').trim();
-    const area = (url.searchParams.get('area') || '').trim();
+    let state = (url.searchParams.get('state') || '').trim();
+    let district = (url.searchParams.get('district') || '').trim();
+    let cityTownVillage = (url.searchParams.get('cityTownVillage') || '').trim();
+    let area = (url.searchParams.get('area') || '').trim();
+    const templeId = (url.searchParams.get('templeId') || '').trim();
 
     const db = getDb();
     if (!db) return jsonResponse({ temples: [], marathonsByTemple: {} }, 200);
+
+    if (templeId) {
+      const templeSnap = await db.collection('temples').doc(templeId).get();
+      if (templeSnap.exists) {
+        const t = templeSnap.data();
+        state = state || (t.state || '');
+        district = district || (t.district || '');
+        cityTownVillage = cityTownVillage || (t.cityTownVillage || '');
+        area = area || (t.area || '');
+      }
+    }
 
     // Filter at DB level for state and district
     let query = db.collection('temples');
@@ -63,12 +76,29 @@ export async function GET(request) {
       const q = normalize(area);
       temples = temples.filter((t) => normalize(t.area).includes(q) || q.includes(normalize(t.area)));
     }
+    if (templeId) {
+      temples = temples.filter((t) => t.id === templeId);
+      if (temples.length === 0) {
+        const templeSnap = await db.collection('temples').doc(templeId).get();
+        if (templeSnap.exists) {
+          const t = templeSnap.data();
+          temples = [{
+            id: templeSnap.id,
+            name: t.name,
+            state: t.state,
+            district: t.district,
+            cityTownVillage: t.cityTownVillage,
+            area: t.area,
+          }];
+        }
+      }
+    }
 
     const templeIds = temples.map((t) => t.id);
     const marathonsByTemple = {};
-    for (const templeId of templeIds) {
-      const mSnap = await db.collection('marathons').where('templeId', '==', templeId).get();
-      marathonsByTemple[templeId] = await Promise.all(mSnap.docs.map(async (d) => {
+    for (const tid of templeIds) {
+      const mSnap = await db.collection('marathons').where('templeId', '==', tid).get();
+      marathonsByTemple[tid] = await Promise.all(mSnap.docs.map(async (d) => {
         const data = d.data();
         const leaderboard = await loadMarathonLeaderboard(db, d.id);
         return {

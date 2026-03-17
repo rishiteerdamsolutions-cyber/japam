@@ -7,7 +7,7 @@ const tabs = [
   { to: '/appointments', label: 'Appointments', icon: '📅' },
   { to: '/groups', label: 'Groups', icon: '👥' },
   { to: '/status', label: 'Status', icon: '✨' },
-  { to: '/profile', label: 'Profile', icon: '⚙️' },
+  { to: '/profile', label: 'Profile', icon: '👤' },
 ];
 
 export function BottomNav() {

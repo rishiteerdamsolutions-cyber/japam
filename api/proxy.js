@@ -86,6 +86,8 @@ import * as apavargaAppointmentsHandler from './_handlers/apavarga/appointments.
 import * as apavargaAppointmentsListHandler from './_handlers/apavarga/appointments-list.js';
 import * as apavargaAppointmentsConfirmHandler from './_handlers/apavarga/appointments-confirm.js';
 import * as apavargaAppointmentsArrivalHandler from './_handlers/apavarga/appointments-arrival.js';
+import * as apavargaAppointmentsPayOrderHandler from './_handlers/apavarga/appointments-pay-order.js';
+import * as apavargaAppointmentsPayVerifyHandler from './_handlers/apavarga/appointments-pay-verify.js';
 import * as apavargaTemplesHandler from './_handlers/apavarga/temples.js';
 import * as apavargaPriestSettingsHandler from './_handlers/apavarga/priest-settings.js';
 import * as apavargaGroupsHandler from './_handlers/apavarga/groups.js';
@@ -199,6 +201,8 @@ const HANDLERS = {
   'GET apavarga/appointments/list': apavargaAppointmentsListHandler,
   'POST apavarga/appointments/confirm': apavargaAppointmentsConfirmHandler,
   'POST apavarga/appointments/arrival-confirm': apavargaAppointmentsArrivalHandler,
+  'POST apavarga/appointments/pay-order': apavargaAppointmentsPayOrderHandler,
+  'POST apavarga/appointments/pay-verify': apavargaAppointmentsPayVerifyHandler,
   'GET apavarga/temples': apavargaTemplesHandler,
   'GET apavarga/priest/settings': apavargaPriestSettingsHandler,
   'POST apavarga/priest/settings': apavargaPriestSettingsHandler,

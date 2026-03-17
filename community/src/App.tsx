@@ -9,6 +9,7 @@ import { auth } from './lib/firebase';
 import { WelcomePage } from './pages/WelcomePage';
 import { ProOnlyPage } from './pages/ProOnlyPage';
 import { AppLayout } from './components/AppLayout';
+import { AppointmentPaymentReturnHandler } from './components/AppointmentPaymentReturnHandler';
 import { ChatsPage } from './pages/ChatsPage';
 import { ChatScreen } from './pages/ChatScreen';
 import { PeoplePage } from './pages/PeoplePage';
@@ -98,6 +99,8 @@ function App() {
 
   if (priestToken) {
     return (
+      <>
+        <AppointmentPaymentReturnHandler />
       <Routes>
         <Route element={<AppLayout isPriest />}>
           <Route path="/" element={<Navigate to="/chats" replace />} />
@@ -111,6 +114,7 @@ function App() {
           <Route path="/groups" element={<GroupsPage />} />
         </Route>
       </Routes>
+      </>
     );
   }
 
@@ -131,6 +135,8 @@ function App() {
   }
 
   return (
+    <>
+      <AppointmentPaymentReturnHandler />
     <Routes>
       <Route element={<AppLayout />}>
         <Route path="/" element={<Navigate to="/chats" replace />} />
@@ -144,6 +150,7 @@ function App() {
         <Route path="/groups" element={<GroupsPage />} />
       </Route>
     </Routes>
+    </>
   );
 }
 

@@ -4,7 +4,7 @@ import { ChatBubble } from '../components/ChatBubble';
 import { ChatHeader } from '../components/ChatHeader';
 import { ChatInputBar } from '../components/ChatInputBar';
 import { PriestAvatarCoin } from '../components/PriestAvatarCoin';
-import { fetchMessages, sendMessage, fetchChat } from '../lib/apavargaApi';
+import { fetchMessages, sendMessage, fetchChat, fetchBlockedUsers, blockUser, unblockUser } from '../lib/apavargaApi';
 import { usePriestStore } from '../store/priestStore';
 import { useAuthStore } from '../store/authStore';
 
@@ -32,7 +32,15 @@ export function ChatScreen() {
   const [sending, setSending] = useState(false);
   const [chatTempleName, setChatTempleName] = useState(templeName || '');
   const [chatMeta, setChatMeta] = useState<{ type?: string; name?: string; otherDisplayName?: string; participants?: string[]; adminOnlyMessaging?: boolean } | null>(null);
+  const [blockedSet, setBlockedSet] = useState<Set<string>>(new Set());
+  const [blocking, setBlocking] = useState(false);
+  const [sendError, setSendError] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+
+  const otherUid = chatMeta?.type === 'direct_seeker' && chatMeta?.participants?.length === 2 && currentUid
+    ? chatMeta.participants.find((p) => p !== currentUid)
+    : undefined;
+  const isBlocked = otherUid ? blockedSet.has(otherUid) : false;
 
   useEffect(() => {
     if (!id) return;
@@ -54,6 +62,43 @@ export function ChatScreen() {
   }, [id]);
 
   useEffect(() => {
+    if (chatMeta?.type !== 'direct_seeker' || !currentUid) return;
+    fetchBlockedUsers()
+      .then((list) => setBlockedSet(new Set(list)))
+      .catch(() => {});
+  }, [chatMeta?.type, currentUid]);
+
+  const handleBlock = async () => {
+    if (!otherUid || blocking) return;
+    setBlocking(true);
+    try {
+      await blockUser(otherUid);
+      setBlockedSet((s) => new Set([...s, otherUid]));
+    } catch {
+      // ignore
+    } finally {
+      setBlocking(false);
+    }
+  };
+
+  const handleUnblock = async () => {
+    if (!otherUid || blocking) return;
+    setBlocking(true);
+    try {
+      await unblockUser(otherUid);
+      setBlockedSet((s) => {
+        const next = new Set(s);
+        next.delete(otherUid);
+        return next;
+      });
+    } catch {
+      // ignore
+    } finally {
+      setBlocking(false);
+    }
+  };
+
+  useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
@@ -67,8 +112,9 @@ export function ChatScreen() {
       setMessage('');
       const msgs = await fetchMessages(id);
       setMessages(msgs);
-    } catch {
-      // ignore
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : '';
+      setSendError(msg || 'Failed to send');
     } finally {
       setSending(false);
     }
@@ -108,6 +154,10 @@ export function ChatScreen() {
         onBack={() => navigate(-1)}
         showBook={!isGroup && !isSeekerChat}
         onBook={() => navigate('/appointments')}
+        showBlock={isSeekerChat && !!otherUid && typeof otherUid === 'string'}
+        isBlocked={isBlocked}
+        onBlock={handleBlock}
+        onUnblock={handleUnblock}
       />
 
       <div className="flex-1 w-full min-w-0 overflow-y-auto p-4 space-y-4">
@@ -129,6 +179,13 @@ export function ChatScreen() {
         )}
         <div ref={bottomRef} />
       </div>
+
+      {sendError && (
+        <div className="px-4 py-2 bg-red-500/20 border-t border-red-500/40 text-red-300 text-sm font-mono">
+          {sendError}
+          <button type="button" onClick={() => setSendError(null)} className="ml-2 underline">Dismiss</button>
+        </div>
+      )}
 
       <ChatInputBar
         value={message}

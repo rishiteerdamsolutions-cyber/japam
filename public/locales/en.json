@@ -78,6 +78,7 @@
     "exit": "Exit",
     "lives": "Lives",
     "livesFull": "Full",
+    "livesUnlimited": "Unlimited lives",
     "totalLives": "Total lives",
     "nextLifeIn": "Next life in {{hours}}h",
     "outOfLives": "Out of lives",

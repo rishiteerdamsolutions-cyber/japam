@@ -2,7 +2,7 @@ import { useAuthStore } from '../store/authStore';
 import { usePriestStore } from '../store/priestStore';
 import { NeoButton } from '../components/NeoButton';
 import { PriestAvatarCoin } from '../components/PriestAvatarCoin';
-import { fetchPriestSettings, updatePriestSettings } from '../lib/apavargaApi';
+import { fetchPriestSettings, updatePriestSettings, fetchBlockedUsers, unblockUser, fetchSeekers } from '../lib/apavargaApi';
 import { useEffect, useState } from 'react';
 
 export function ProfilePage() {
@@ -15,6 +15,8 @@ export function ProfilePage() {
   const [appointmentEndTime, setAppointmentEndTime] = useState('17:00');
   const [appointmentDays, setAppointmentDays] = useState('1,2,3,4,5');
   const [loading, setLoading] = useState(false);
+  const [blockedUids, setBlockedUids] = useState<string[]>([]);
+  const [seekers, setSeekers] = useState<{ uid: string; displayName: string | null }[]>([]);
 
   const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -29,6 +31,31 @@ export function ProfilePage() {
       }).catch(() => {});
     }
   }, [isPriest]);
+
+  useEffect(() => {
+    if (isPriest) return;
+    let cancelled = false;
+    Promise.all([fetchBlockedUsers(), fetchSeekers()])
+      .then(([b, s]) => {
+        if (!cancelled) {
+          setBlockedUids(b);
+          setSeekers(s);
+        }
+      })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, [isPriest]);
+
+  const getDisplayName = (uid: string) => seekers.find((s) => s.uid === uid)?.displayName || uid.slice(0, 8);
+
+  const handleUnblock = async (blockedUid: string) => {
+    try {
+      await unblockUser(blockedUid);
+      setBlockedUids((prev) => prev.filter((u) => u !== blockedUid));
+    } catch {
+      // ignore
+    }
+  };
 
   const handlePriestSignOut = () => {
     clearPriest();
@@ -146,6 +173,35 @@ export function ProfilePage() {
               </NeoButton>
             </div>
           </>
+        )}
+
+        {!isPriest && blockedUids.length > 0 && (
+          <div className="rounded-2xl bg-[#151515] border border-white/10 p-4 space-y-3">
+            <h2 className="font-heading font-medium text-white">Blocked users</h2>
+            <p className="text-white/60 text-xs font-mono">You have blocked these users. They cannot message you.</p>
+            <div className="space-y-2">
+              {blockedUids.map((uid) => (
+                <div
+                  key={uid}
+                  className="flex items-center justify-between gap-3 py-2 px-3 rounded-xl bg-black/40 border border-white/10"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-10 h-10 rounded-full bg-[var(--primary)]/20 border border-[var(--primary)]/40 flex items-center justify-center text-[var(--primary)] font-heading font-bold shrink-0">
+                      ॐ
+                    </div>
+                    <span className="font-mono text-sm text-white truncate">{getDisplayName(uid)}</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleUnblock(uid)}
+                    className="px-3 py-1.5 rounded-lg text-xs font-mono bg-white/10 text-white hover:bg-white/20 shrink-0"
+                  >
+                    Unblock
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
         )}
 
         <NeoButton

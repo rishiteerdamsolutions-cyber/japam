@@ -77,6 +77,8 @@ import * as adminDeleteMarathonHandler from './_handlers/admin/delete-marathon.j
 import * as adminMarathonEditHandler from './_handlers/admin/marathon-edit.js';
 import * as apavargaJoinHandler from './_handlers/apavarga/join.js';
 import * as apavargaChatsHandler from './_handlers/apavarga/chats.js';
+import * as apavargaBlocksHandler from './_handlers/apavarga/blocks.js';
+import * as apavargaBlocksUnblockHandler from './_handlers/apavarga/blocks-unblock.js';
 import * as apavargaMessagesHandler from './_handlers/apavarga/messages.js';
 import * as apavargaStatusHandler from './_handlers/apavarga/status.js';
 import * as apavargaStatusViewedHandler from './_handlers/apavarga/status-viewed.js';
@@ -185,6 +187,9 @@ const HANDLERS = {
   'POST apavarga/join': apavargaJoinHandler,
   'GET apavarga/chats': apavargaChatsHandler,
   'POST apavarga/chats': apavargaChatsHandler,
+  'GET apavarga/blocks': apavargaBlocksHandler,
+  'POST apavarga/blocks': apavargaBlocksHandler,
+  'POST apavarga/blocks/unblock': apavargaBlocksUnblockHandler,
   'GET apavarga/messages': apavargaMessagesHandler,
   'POST apavarga/messages': apavargaMessagesHandler,
   'GET apavarga/status/feed': apavargaStatusHandler,

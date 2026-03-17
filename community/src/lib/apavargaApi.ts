@@ -212,6 +212,33 @@ export async function fetchReals(beforeId?: string): Promise<{ id: string; media
   return data.reals || [];
 }
 
+export async function fetchBlockedUsers(): Promise<string[]> {
+  const res = await apiFetch('/api/apavarga/blocks');
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || 'Failed');
+  return data.blocked || [];
+}
+
+export async function blockUser(blockedUid: string) {
+  const res = await apiFetch('/api/apavarga/blocks', {
+    method: 'POST',
+    body: JSON.stringify({ blockedUid }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || 'Failed');
+  return data;
+}
+
+export async function unblockUser(blockedUid: string) {
+  const res = await apiFetch('/api/apavarga/blocks/unblock', {
+    method: 'POST',
+    body: JSON.stringify({ blockedUid }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || 'Failed');
+  return data;
+}
+
 export async function createReal(options: { mediaUrl?: string; thumbnailUrl?: string; caption?: string; durationSeconds?: number }) {
   const res = await apiFetch('/api/apavarga/reals', {
     method: 'POST',

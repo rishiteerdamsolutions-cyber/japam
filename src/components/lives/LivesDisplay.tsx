@@ -6,9 +6,9 @@ import { useEffect, useCallback } from 'react';
 
 const MAX_LIVES = 5;
 
-/** Glossy pink heart SVG with current count (1–5), never infinity */
-function HeartWithNumber({ count, size = 24 }: { count: number; size?: number }) {
-  const display = String(Math.min(Math.max(0, count), MAX_LIVES));
+/** Glossy pink heart SVG with current count (1–5) or infinity. Never show 0 in game. */
+function HeartWithNumber({ count, size = 24, infinity = false }: { count: number; size?: number; infinity?: boolean }) {
+  const display = infinity ? '∞' : String(Math.min(Math.max(1, count), MAX_LIVES));
   return (
     <div className="relative flex items-center justify-center shrink-0" style={{ width: size, height: size }}>
       <svg
@@ -57,9 +57,11 @@ interface LivesDisplayProps {
   /** Compact mode for header (smaller pill) */
   compact?: boolean;
   className?: string;
+  /** Marathon / Maha Yagna: show heart with ∞ (unlimited lives) */
+  unlimited?: boolean;
 }
 
-export function LivesDisplay({ onClick, compact = true, className = '' }: LivesDisplayProps) {
+export function LivesDisplay({ onClick, compact = true, className = '', unlimited = false }: LivesDisplayProps) {
   const { t } = useTranslation();
   const user = useAuthStore((s) => s.user);
   const lives = useLivesStore((s) => s.lives);
@@ -69,10 +71,34 @@ export function LivesDisplay({ onClick, compact = true, className = '' }: LivesD
   const getIdToken = useCallback(async () => (user ? user.getIdToken() : null), [user]);
 
   useEffect(() => {
-    if (user?.uid) load(getIdToken);
-  }, [user?.uid, load, getIdToken]);
+    if (!unlimited && user?.uid) load(getIdToken);
+  }, [unlimited, user?.uid, load, getIdToken]);
 
   if (!user?.uid) return null;
+
+  if (unlimited) {
+    return (
+      <div
+        role="img"
+        aria-label={t('game.livesUnlimited', 'Unlimited lives')}
+        className={`
+          flex items-center gap-1.5 rounded-full
+          bg-gradient-to-b from-pink-400/90 to-rose-600/95
+          shadow-[0_2px_8px_rgba(236,72,153,0.4),inset_0_1px_0_rgba(255,255,255,0.3)]
+          border border-pink-300/40
+          ${compact ? 'px-2 py-1.5' : 'px-3 py-2'}
+          ${className}
+        `}
+      >
+        <HeartWithNumber count={5} size={compact ? 20 : 28} infinity />
+        <span className="font-semibold text-rose-900/90" style={{ fontSize: compact ? '0.75rem' : '0.85rem' }}>
+          ∞
+        </span>
+      </div>
+    );
+  }
+
+  if (lives <= 0) return null;
 
   const isFull = lives >= MAX_LIVES;
   const refillIn = nextRefillAt ? Math.max(0, Math.ceil((nextRefillAt - Date.now()) / (60 * 60 * 1000))) : 0;

@@ -7,9 +7,14 @@ interface ChatHeaderProps {
   onBack: () => void;
   showBook?: boolean;
   onBook?: () => void;
+  /** For direct_seeker: show Block/Unblock */
+  showBlock?: boolean;
+  isBlocked?: boolean;
+  onBlock?: () => void;
+  onUnblock?: () => void;
 }
 
-export function ChatHeader({ title, subtitle, avatar, onBack, showBook, onBook }: ChatHeaderProps) {
+export function ChatHeader({ title, subtitle, avatar, onBack, showBook, onBook, showBlock, isBlocked, onBlock, onUnblock }: ChatHeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -56,6 +61,21 @@ export function ChatHeader({ title, subtitle, avatar, onBack, showBook, onBook }
               className="absolute right-0 top-full mt-1 py-2 min-w-[180px] bg-[#1a1a1a] border border-white/10 rounded-xl shadow-xl z-20"
               role="menu"
             >
+              {showBlock && (isBlocked ? onUnblock : onBlock) && (
+                <li>
+                  <button
+                    type="button"
+                    className={`w-full text-left px-4 py-2 text-sm hover:bg-white/10 ${isBlocked ? 'text-amber-400' : 'text-red-400'}`}
+                    onClick={() => {
+                      setMenuOpen(false);
+                      if (isBlocked) onUnblock?.();
+                      else onBlock?.();
+                    }}
+                  >
+                    {isBlocked ? 'Unblock' : 'Block'}
+                  </button>
+                </li>
+              )}
               <li>
                 <button
                   type="button"

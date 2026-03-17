@@ -382,7 +382,14 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
         <button onClick={handleBack} className="text-amber-400 text-sm font-medium py-2 px-2 -ml-2 min-h-[44px] flex items-center shrink-0" aria-label={t('game.back')}>
           {t('game.back')}
         </button>
-        {useLives && <LivesDisplay onClick={() => setShowLivesModal(true)} compact className="shrink-0" />}
+        {(useLives || (!!user && !isGuest && isMarathon)) && (
+            <LivesDisplay
+              onClick={useLives ? () => setShowLivesModal(true) : undefined}
+              compact
+              className="shrink-0"
+              unlimited={!!user && !isGuest && isMarathon}
+            />
+          )}
         <div className="flex items-center gap-1 sm:gap-2 ml-auto">
           <button
             type="button"

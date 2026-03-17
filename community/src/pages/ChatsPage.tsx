@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { ListRow } from '../components/ListRow';
 import { PriestAvatarCoin } from '../components/PriestAvatarCoin';
-import { fetchChats, fetchTemples, createChat, fetchSeekers, createSeekerChat } from '../lib/apavargaApi';
+import { fetchChats, fetchTemples } from '../lib/apavargaApi';
 
 interface Chat {
   id: string;
@@ -15,11 +15,6 @@ interface Chat {
   lastMessageAt?: string;
   lastMessageText?: string;
   lastMessageSenderType?: string;
-}
-
-interface Seeker {
-  uid: string;
-  displayName: string | null;
 }
 
 interface Temple {
@@ -52,9 +47,6 @@ export function ChatsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
-  const [showNewChat, setShowNewChat] = useState(false);
-  const [seekers, setSeekers] = useState<Seeker[]>([]);
-  const [seekersLoading, setSeekersLoading] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -74,62 +66,10 @@ export function ChatsPage() {
     return () => { cancelled = true; };
   }, []);
 
-  useEffect(() => {
-    if (!showNewChat) return;
-    let cancelled = false;
-    setSeekersLoading(true);
-    fetchSeekers()
-      .then((s) => { if (!cancelled) setSeekers(s); })
-      .catch(() => {})
-      .finally(() => { if (!cancelled) setSeekersLoading(false); });
-    return () => { cancelled = true; };
-  }, [showNewChat]);
-
-  const openOrCreateChat = async (templeId: string) => {
-    const existing = chats.find((c) => c.templeId === templeId);
-    if (existing) {
-      navigate(`/chats/${existing.id}`);
-      setShowNewChat(false);
-      return;
-    }
-    try {
-      const data = await createChat(templeId);
-      navigate(`/chats/${data.chatId}`);
-      setShowNewChat(false);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed');
-    }
-  };
-
-  const openOrCreateSeekerChat = async (seeker: Seeker) => {
-    const existing = chats.find(
-      (c) => c.type === 'direct_seeker' && c.participants?.includes(seeker.uid)
-    );
-    if (existing) {
-      navigate(`/chats/${existing.id}`);
-      setShowNewChat(false);
-      return;
-    }
-    try {
-      const data = await createSeekerChat(seeker.uid, seeker.displayName || undefined);
-      navigate(`/chats/${data.chatId}`);
-      setShowNewChat(false);
-      setChats((prev) => [data.chat, ...prev].filter(Boolean));
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed');
-    }
-  };
-
   const chatTitle = (c: Chat) => c.name || c.templeName || c.otherDisplayName || 'Chat';
   const filteredChats = search.trim()
     ? chats.filter((c) => chatTitle(c).toLowerCase().includes(search.trim().toLowerCase()))
     : chats;
-  const filteredTemples = search.trim() && showNewChat
-    ? temples.filter((t) => t.name.toLowerCase().includes(search.trim().toLowerCase()))
-    : temples;
-  const filteredSeekers = search.trim() && showNewChat
-    ? seekers.filter((s) => (s.displayName || s.uid).toLowerCase().includes(search.trim().toLowerCase()))
-    : seekers;
 
   if (loading) {
     return (
@@ -156,63 +96,12 @@ export function ChatsPage() {
       <div className="p-4 space-y-2">
         {error && <p className="text-red-400 text-sm font-mono">{error}</p>}
 
-        {!showNewChat && (
-          <button
-            type="button"
-            onClick={() => setShowNewChat(true)}
-            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[var(--primary)] text-black font-medium border-b-4 border-[var(--primary-dark)] shadow-[4px_4px_0_rgba(0,0,0,0.4)] active:translate-y-0.5"
-          >
-            <span className="text-lg">+</span> New chat
-          </button>
-        )}
-
-        {showNewChat && (
-          <div className="rounded-2xl bg-[#151515] border border-white/10 p-3 mb-4 space-y-4">
-            <h2 className="font-heading font-medium text-white text-sm mb-2">Talk to a priest</h2>
-            <div className="space-y-1.5 max-h-40 overflow-y-auto">
-              {filteredTemples.length === 0 ? (
-                <p className="text-white/50 text-xs font-mono py-2">No temples match.</p>
-              ) : (
-                filteredTemples.map((t) => (
-                  <ListRow
-                    key={t.id}
-                    avatar={<PriestAvatarCoin size={44} />}
-                    title={t.name}
-                    subtitle="Verified priest"
-                    onClick={() => openOrCreateChat(t.id)}
-                    onKeyDown={(e) => e.key === 'Enter' && openOrCreateChat(t.id)}
-                  />
-                ))
-              )}
-            </div>
-            <h2 className="font-heading font-medium text-white text-sm mb-2 pt-2 border-t border-white/10">Message a seeker</h2>
-            <div className="space-y-1.5 max-h-40 overflow-y-auto">
-              {seekersLoading ? (
-                <p className="text-white/50 text-xs font-mono py-2">Loading…</p>
-              ) : filteredSeekers.length === 0 ? (
-                <p className="text-white/50 text-xs font-mono py-2">No seekers match.</p>
-              ) : (
-                filteredSeekers.map((s) => (
-                  <ListRow
-                    key={s.uid}
-                    avatar={<div className="w-11 h-11 rounded-full bg-[var(--primary)]/20 border border-[var(--primary)]/40 flex items-center justify-center text-[var(--primary)] font-heading font-bold text-lg">ॐ</div>}
-                    title={s.displayName || s.uid.slice(0, 8)}
-                    subtitle="Seeker"
-                    onClick={() => openOrCreateSeekerChat(s)}
-                    onKeyDown={(e) => e.key === 'Enter' && openOrCreateSeekerChat(s)}
-                  />
-                ))
-              )}
-            </div>
-            <button
-              type="button"
-              onClick={() => setShowNewChat(false)}
-              className="mt-2 w-full py-2 text-white/60 text-sm font-mono hover:text-white"
-            >
-              Cancel
-            </button>
-          </div>
-        )}
+        <Link
+          to="/people"
+          className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[var(--primary)] text-black font-medium border-b-4 border-[var(--primary-dark)] shadow-[4px_4px_0_rgba(0,0,0,0.4)] active:translate-y-0.5"
+        >
+          <span className="text-lg">+</span> New chat
+        </Link>
 
         {filteredChats.length > 0 && (
           <div className="space-y-1.5">
@@ -230,7 +119,7 @@ export function ChatsPage() {
           </div>
         )}
 
-        {!showNewChat && filteredChats.length === 0 && temples.length === 0 && (
+        {filteredChats.length === 0 && (
           <p className="text-white/50 text-xs font-mono mt-6">No chats yet. Tap New chat to start.</p>
         )}
       </div>

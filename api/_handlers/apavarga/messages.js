@@ -1,4 +1,5 @@
 import { getDb, jsonResponse, verifyFirebaseUser, verifyPriestForApi, isUserUnlocked, isValidFirestoreDocId } from '../_lib.js';
+import { isBlocked } from './blocks.js';
 
 function getBearerToken(request) {
   const auth = request?.headers?.get?.('authorization') || request?.headers?.get?.('Authorization');
@@ -70,6 +71,12 @@ export async function POST(request) {
   } else {
     if (!chat.participants?.includes(firebaseUid)) return jsonResponse({ error: 'Forbidden' }, 403);
     if (chat.adminOnlyMessaging) return jsonResponse({ error: 'Only priest can send messages' }, 403);
+    if (chat.type === 'direct_seeker' && chat.participants?.length === 2) {
+      const receiverUid = chat.participants.find((p) => p !== firebaseUid);
+      if (receiverUid && (await isBlocked(db, receiverUid, firebaseUid))) {
+        return jsonResponse({ error: 'You cannot message this user. They have blocked you.' }, 403);
+      }
+    }
   }
 
   const now = new Date().toISOString();

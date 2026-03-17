@@ -11,6 +11,7 @@ import { ProOnlyPage } from './pages/ProOnlyPage';
 import { AppLayout } from './components/AppLayout';
 import { ChatsPage } from './pages/ChatsPage';
 import { ChatScreen } from './pages/ChatScreen';
+import { PeoplePage } from './pages/PeoplePage';
 import { StatusPage } from './pages/StatusPage';
 import { AppointmentsPage } from './pages/AppointmentsPage';
 import { ProfilePage } from './pages/ProfilePage';
@@ -102,6 +103,7 @@ function App() {
           <Route path="/" element={<Navigate to="/chats" replace />} />
           <Route path="/chats" element={<ChatsPage />} />
           <Route path="/chats/:id" element={<ChatScreen />} />
+          <Route path="/people" element={<PeoplePage />} />
           <Route path="/reals" element={<RealsPage />} />
           <Route path="/status" element={<StatusPage />} />
           <Route path="/appointments" element={<AppointmentsPage />} />
@@ -134,6 +136,7 @@ function App() {
         <Route path="/" element={<Navigate to="/chats" replace />} />
         <Route path="/chats" element={<ChatsPage />} />
         <Route path="/chats/:id" element={<ChatScreen />} />
+        <Route path="/people" element={<PeoplePage />} />
         <Route path="/reals" element={<RealsPage />} />
         <Route path="/status" element={<StatusPage />} />
         <Route path="/appointments" element={<AppointmentsPage />} />

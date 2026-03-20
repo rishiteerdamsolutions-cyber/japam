@@ -1,4 +1,4 @@
-import { getDb, getUnlockPricePaise, jsonResponse, UNLOCK_PRICE_PAISE } from './_lib.js';
+import { getDb, getUnlockPricePaise, jsonResponse, UNLOCK_PRICE_PAISE, verifyFirebaseUser } from './_lib.js';
 import admin from 'firebase-admin';
 
 const CASHFREE_APP_ID = process.env.CASHFREE_APP_ID || process.env.CASHFREE_CLIENT_ID;
@@ -16,9 +16,13 @@ function getErrorMessage(e) {
 
 export async function POST(request) {
   try {
+    const uid = await verifyFirebaseUser(request);
+    if (!uid) return jsonResponse({ error: 'Unauthorized' }, 401);
+
     const body = await request.json().catch(() => ({}));
     const { userId } = body;
     if (!userId) return jsonResponse({ error: 'userId required' }, 400);
+    if (userId !== uid) return jsonResponse({ error: 'userId must match authenticated user' }, 403);
 
     if (!CASHFREE_APP_ID || !CASHFREE_SECRET) {
       console.error('create-order: CASHFREE_APP_ID or CASHFREE_SECRET not set');

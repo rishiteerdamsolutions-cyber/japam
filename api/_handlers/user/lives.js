@@ -1,11 +1,6 @@
-import { getDb, jsonResponse, verifyFirebaseUser } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, shouldRefillLivesAtNoonIST, getNextNoonISTMs } from '../_lib.js';
 
 const MAX_LIVES = 5;
-const REFILL_HOURS = 24;
-
-function getRefillMs() {
-  return REFILL_HOURS * 60 * 60 * 1000;
-}
 
 /** GET /api/user/lives - Load lives for current user (Bearer required) */
 export async function GET(request) {
@@ -25,8 +20,8 @@ export async function GET(request) {
       const ts = data.lastRefillAt;
       lastRefillAt = ts?.toMillis ? ts.toMillis() : (ts && typeof ts === 'number' ? ts : now);
 
-      // Refill if 24h passed
-      if (now - lastRefillAt >= getRefillMs()) {
+      // Refill at noon IST (12 PM India): lives restored to 5
+      if (shouldRefillLivesAtNoonIST(now, lastRefillAt)) {
         lives = MAX_LIVES;
         lastRefillAt = now;
         await db.doc(`users/${uid}/data/lives`).set({ lives, lastRefillAt: new Date(lastRefillAt) }, { merge: true });
@@ -35,7 +30,7 @@ export async function GET(request) {
       await db.doc(`users/${uid}/data/lives`).set({ lives, lastRefillAt: new Date(lastRefillAt) }, { merge: true });
     }
 
-    const nextRefillAt = lastRefillAt + getRefillMs();
+    const nextRefillAt = getNextNoonISTMs(now);
     return jsonResponse({ lives, lastRefillAt, nextRefillAt });
   } catch (e) {
     console.error('user lives GET', e);

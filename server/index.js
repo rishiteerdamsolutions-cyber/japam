@@ -133,8 +133,11 @@ app.get('/api/price', async (req, res) => {
 
 app.post('/api/create-order', async (req, res) => {
   try {
+    const uid = await verifyFirebaseUser(req);
+    if (!uid) return res.status(401).json({ error: 'Unauthorized' });
     const { userId } = req.body || {};
     if (!userId) return res.status(400).json({ error: 'userId required' });
+    if (userId !== uid) return res.status(403).json({ error: 'userId must match authenticated user' });
     if (!CASHFREE_APP_ID || !CASHFREE_SECRET) return res.status(503).json({ error: 'Payment not configured' });
     const amountPaise = await getUnlockPricePaise();
     const orderId = `japam-${String(userId).slice(-12)}-${Date.now().toString(36).slice(-6)}`.replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 45);
@@ -572,8 +575,11 @@ app.post('/api/verify-unlock', async (req, res) => {
 
 app.post('/api/donate-order', async (req, res) => {
   try {
+    const uid = await verifyFirebaseUser(req);
+    if (!uid) return res.status(401).json({ error: 'Unauthorized' });
     const { userId, amountPaise } = req.body || {};
     if (!userId) return res.status(400).json({ error: 'userId required' });
+    if (userId !== uid) return res.status(403).json({ error: 'userId must match authenticated user' });
     const amount = Math.round(Number(amountPaise));
     if (!Number.isFinite(amount) || amount < 100) return res.status(400).json({ error: 'Minimum donation is ₹1 (100 paise)' });
     if (amount > 10000000) return res.status(400).json({ error: 'Amount too large' });

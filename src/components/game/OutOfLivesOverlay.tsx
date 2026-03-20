@@ -28,6 +28,15 @@ export function OutOfLivesOverlay({ onClose, onRetryAfterLife, returnMode, retur
   const nextRefillAt = useLivesStore((s) => s.nextRefillAt);
   const canBuyLives = lives <= 0;
 
+  // Load fresh lives on mount (handles midnight refill while overlay was open)
+  useEffect(() => {
+    const refresh = async () => {
+      if (!user) return;
+      await load(() => user.getIdToken());
+    };
+    refresh();
+  }, [user, load]);
+
   const [showVideo, setShowVideo] = useState(false);
   const [buying, setBuying] = useState(false);
   const [buyError, setBuyError] = useState<string | null>(null);
@@ -140,6 +149,18 @@ export function OutOfLivesOverlay({ onClose, onRetryAfterLife, returnMode, retur
           {t('game.outOfLivesMessage')}
         </motion.p>
         <div className="flex flex-col gap-2">
+          {lives > 0 && onRetryAfterLife && (
+            <motion.button
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 }}
+              onClick={onRetryAfterLife}
+              className="w-full py-3 rounded-xl bg-gradient-to-b from-emerald-500 to-green-600 text-white font-bold shadow-lg hover:shadow-xl transition-shadow"
+              style={{ fontFamily: 'serif' }}
+            >
+              {t('game.continue')}
+            </motion.button>
+          )}
           <motion.button
             initial={{ opacity: 0, y: 5 }}
             animate={{ opacity: 1, y: 0 }}

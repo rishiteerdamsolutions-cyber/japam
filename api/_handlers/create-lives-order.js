@@ -1,4 +1,4 @@
-import { getDb, getLivesPricePaise, jsonResponse } from './_lib.js';
+import { getDb, getLivesPricePaise, jsonResponse, verifyFirebaseUser } from './_lib.js';
 import admin from 'firebase-admin';
 
 const LIVES_PRICE_PAISE = 1900;
@@ -8,9 +8,13 @@ const CASHFREE_BASE = process.env.CASHFREE_ENV === 'sandbox' ? 'https://sandbox.
 
 export async function POST(request) {
   try {
+    const uid = await verifyFirebaseUser(request);
+    if (!uid) return jsonResponse({ error: 'Unauthorized' }, 401);
+
     const body = await request.json().catch(() => ({}));
     const { userId } = body;
     if (!userId) return jsonResponse({ error: 'userId required' }, 400);
+    if (userId !== uid) return jsonResponse({ error: 'userId must match authenticated user' }, 403);
 
     if (!CASHFREE_APP_ID || !CASHFREE_SECRET) {
       return jsonResponse({ error: 'Payment not configured (missing Cashfree keys)' }, 503);

@@ -1,11 +1,6 @@
-import { getDb, jsonResponse, verifyFirebaseUser } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, shouldRefillLivesAtNoonIST } from '../_lib.js';
 
 const MAX_LIVES = 5;
-const REFILL_HOURS = 24;
-
-function getRefillMs() {
-  return REFILL_HOURS * 60 * 60 * 1000;
-}
 
 /** POST /api/user/lives/consume - Consume 1 life for level start. Returns 403 if 0 lives. */
 export async function POST(request) {
@@ -27,7 +22,7 @@ export async function POST(request) {
       const ts = data.lastRefillAt;
       lastRefillAt = ts?.toMillis ? ts.toMillis() : (ts && typeof ts === 'number' ? ts : now);
 
-      if (now - lastRefillAt >= getRefillMs()) {
+      if (shouldRefillLivesAtNoonIST(now, lastRefillAt)) {
         lives = MAX_LIVES;
         lastRefillAt = now;
       }

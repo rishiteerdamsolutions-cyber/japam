@@ -30,6 +30,13 @@
 - **CRON_SECRET** – Optional; falls back to ADMIN_SECRET for cron.
 - **PRIEST_SECRET** – Optional; falls back to ADMIN_SECRET for priest tokens.
 
+## Firestore & IDOR (Added)
+
+| Gap | Fix |
+|-----|-----|
+| No Firestore security rules | Added `firestore.rules`: config/pricing and config/admins read for authenticated; config/pricing write for admins only; all other paths deny. Deploy with `firebase deploy --only firestore`. |
+| IDOR in create-order, donate-order, create-lives-order | All three now require Firebase auth and validate `userId === token.uid`. Returns 403 if mismatch. |
+
 ## Next Steps (Optional)
 
 - Add Sentry: `npm i @sentry/react` and call `reportError` via `Sentry.captureException`.

@@ -180,8 +180,10 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
   const [pauseError, setPauseError] = useState<string | null>(null);
 
   const breakTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const sessionStartRef = useRef<number>(0);
   const scheduleBreakReminder = useCallback(() => {
     if (breakTimerRef.current) clearTimeout(breakTimerRef.current);
+    sessionStartRef.current = Date.now();
     breakTimerRef.current = setTimeout(() => setShowBreakReminder(true), 20 * 60 * 1000);
   }, []);
 
@@ -192,6 +194,19 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
       if (breakTimerRef.current) clearTimeout(breakTimerRef.current);
     };
   }, [status, scheduleBreakReminder]);
+
+  // When tab becomes visible, check if 20 min passed (handles mobile timer throttling)
+  useEffect(() => {
+    if (status !== 'playing') return;
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && sessionStartRef.current > 0) {
+        const elapsed = Date.now() - sessionStartRef.current;
+        if (elapsed >= 20 * 60 * 1000) setShowBreakReminder(true);
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', onVisibilityChange);
+  }, [status]);
 
   // Consume 1 life only when user LOSES (runs out of moves). Winning levels does not consume.
   useEffect(() => {
@@ -235,7 +250,6 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
       if (user?.uid) {
         setPauseError(null);
         setPauseSaving(true);
-        // Flush japas first so Maha Yagna / marathon attribution is persisted
         if (yagnaId || marathonId) await flushJapas();
         const ok = await saveUserPausedGame(user.uid, payload as unknown as Record<string, unknown>, user);
         setPauseSaving(false);
@@ -286,10 +300,13 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
     refreshBoard();
   }, [refreshBoard]);
 
+  const addMoves = useGameStore((s) => s.addMoves);
   const handleRetryAfterLife = useCallback(() => {
     setShowOutOfLives(false);
-    reset();
-  }, [reset]);
+    const level = LEVELS[currentLevelIndex];
+    const movesToAdd = level?.moves ?? 20;
+    addMoves(movesToAdd);
+  }, [addMoves, currentLevelIndex]);
 
   useEffect(() => {
     if (lastMatches.length === 0 || matchGeneration === prevGenerationRef.current) return;
@@ -512,8 +529,8 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
           <div className="bg-[#C2185B]/90 rounded-2xl p-4 sm:p-6 max-w-sm w-full text-center min-w-0">
             <p className="text-amber-200/90 mb-8 text-sm sm:text-base break-words">
               {isMarathon
-                ? 'You have been doing japa for 20 minutes, please take a break.'
-                : 'You have been doing japa for 20 minutes, please take a break after this current level.'}
+                ? t('you_have_been_doing_japa_for_20_minutes_please_take_a_break')
+                : t('you_have_been_doing_japa_for_20_minutes_please_take_a_break_after_this_current_level')}
             </p>
             <button
               onClick={() => {

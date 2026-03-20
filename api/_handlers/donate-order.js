@@ -1,4 +1,4 @@
-import { getDb, jsonResponse } from './_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser } from './_lib.js';
 import admin from 'firebase-admin';
 
 const CASHFREE_APP_ID = process.env.CASHFREE_APP_ID || process.env.CASHFREE_CLIENT_ID;
@@ -8,9 +8,13 @@ const CASHFREE_BASE = process.env.CASHFREE_ENV === 'sandbox' ? 'https://sandbox.
 /** POST /api/donate-order - Create Cashfree order for donation. Body: { userId, amountPaise }. Amount min 100 paise. */
 export async function POST(request) {
   try {
+    const uid = await verifyFirebaseUser(request);
+    if (!uid) return jsonResponse({ error: 'Unauthorized' }, 401);
+
     const body = await request.json().catch(() => ({}));
     const { userId, amountPaise } = body;
     if (!userId) return jsonResponse({ error: 'userId required' }, 400);
+    if (userId !== uid) return jsonResponse({ error: 'userId must match authenticated user' }, 403);
 
     const amount = Math.round(Number(amountPaise));
     if (!Number.isFinite(amount) || amount < 100) {

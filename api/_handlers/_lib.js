@@ -4,6 +4,23 @@
 export const UNLOCK_PRICE_PAISE = 10800; // ₹108 default (auspicious); admin can override via /admin in rupees
 
 import crypto from 'crypto';
+
+/** IST (Asia/Kolkata) noon: 12:00 PM IST = 06:30 UTC. Refill boundary at noon IST for easy daytime testing. */
+const MS_PER_DAY = 24 * 60 * 60 * 1000;
+const IST_NOON_UTC_MS = 6 * 60 * 60 * 1000 + 30 * 60 * 1000; // 06:30 UTC = 12:00 PM IST
+
+/** Refill at noon IST: if a new "noon boundary" has passed since lastRefillAt, refill. */
+export function shouldRefillLivesAtNoonIST(now, lastRefillAt) {
+  const lastIstDay = Math.floor((lastRefillAt - IST_NOON_UTC_MS) / MS_PER_DAY);
+  const todayIstDay = Math.floor((now - IST_NOON_UTC_MS) / MS_PER_DAY);
+  return todayIstDay > lastIstDay;
+}
+
+/** Next noon IST in ms since epoch. */
+export function getNextNoonISTMs(now) {
+  const todayIstDay = Math.floor((now - IST_NOON_UTC_MS) / MS_PER_DAY);
+  return (todayIstDay + 1) * MS_PER_DAY + IST_NOON_UTC_MS;
+}
 import admin from 'firebase-admin';
 
 let db = null;

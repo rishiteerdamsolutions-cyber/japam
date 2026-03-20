@@ -66,6 +66,18 @@ export function GamePage() {
     }
   }, [userForLives?.uid, isGuest, isMarathon, loadLives]);
 
+  // Reload lives when user returns to tab (e.g. after midnight refill)
+  useEffect(() => {
+    if (!userForLives?.uid || isGuest || isMarathon) return;
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        loadLives(() => userForLives.getIdToken());
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', onVisibilityChange);
+  }, [userForLives?.uid, isGuest, isMarathon, loadLives]);
+
   const expectedKey = isMarathon
     ? (yagnaId ? `japam-paused-yagna-${yagnaId}` : `japam-paused-marathon-${marathonId}`)
     : `japam-paused-${mode}-${levelIndex}`;
@@ -193,8 +205,11 @@ export function GamePage() {
       <div className="fixed inset-0 bg-black/80 flex flex-col items-center justify-center z-30 p-4">
         <div className="bg-[#C2185B]/90 rounded-2xl p-6 max-w-sm w-full text-center">
           <h2 className="text-xl font-bold text-amber-400 mb-2">{t('game.resumeJapa')}</h2>
-          <p className="text-amber-200/80 mb-6 text-sm">
+          <p className="text-amber-200/80 mb-4 text-sm">
             {t('game.resumeJapaMessage')}
+          </p>
+          <p className="text-amber-300/70 text-xs mb-6 italic">
+            {t('game.saveProgressTip')}
           </p>
           <div className="flex flex-col gap-2">
             <button

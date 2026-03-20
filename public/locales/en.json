@@ -46,6 +46,7 @@
   "game": {
     "resumeJapa": "Resume Japa?",
     "resumeJapaMessage": "You have a saved session. Continue where you left off?",
+    "saveProgressTip": "Tip: To save progress when leaving, use the Back or Pause button. Do not close the app without saving.",
     "resume": "Resume",
     "startFresh": "Start fresh",
     "jai": "Jai!",

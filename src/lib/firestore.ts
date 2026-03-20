@@ -263,24 +263,36 @@ export async function loadUserPausedGame(_uid: string, user?: User | null, key?:
   return null;
 }
 
-/** Save paused game. Logged-in: backend API only. Pass null to clear. When clearing, pass key so only that game is cleared. */
-export async function saveUserPausedGame(_uid: string, pausedGame: Record<string, unknown> | null, user?: User | null, key?: string | null): Promise<boolean> {
+/** Save paused game. Logged-in: backend API only. Pass null to clear. When clearing, pass key so only that game is cleared.
+ *  Use keepalive: true when saving on page unload (visibilitychange/pagehide) so the request can complete after the page closes. */
+export async function saveUserPausedGame(
+  _uid: string,
+  pausedGame: Record<string, unknown> | null,
+  user?: User | null,
+  key?: string | null,
+  options?: { keepalive?: boolean }
+): Promise<boolean> {
   const token = await getIdTokenWithRetry(user);
   if (!token) return false;
   const url = apiUrl('/api/user/paused-game');
   const body = pausedGame == null ? { pausedGame: null, key: key || undefined } : { pausedGame };
+  const fetchOpts: RequestInit = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    body: JSON.stringify(body),
+  };
+  if (options?.keepalive) {
+    (fetchOpts as RequestInit & { keepalive?: boolean }).keepalive = true;
+  }
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(body),
-      });
+      const res = await fetch(url, fetchOpts);
       if (res.ok) return true;
     } catch {
       // ignore
     }
-    await new Promise((r) => setTimeout(r, 250));
+    if (!options?.keepalive) await new Promise((r) => setTimeout(r, 250));
+    else break; // keepalive: one attempt only, page may close
   }
   return false;
 }

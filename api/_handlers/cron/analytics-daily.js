@@ -51,7 +51,7 @@ export async function runDailyAnalyticsAggregation(db) {
       avg_japam_per_user: avgJapamPerUser,
       streak_distribution: streakDistribution,
       day1_day2_retention_pct: retention.day1_day2_retention_pct,
-      day1_day7_retention_pct: retention.day1_day7_retention_pct,
+      day1_week1_retention_pct: retention.day1_week1_retention_pct,
       champion_count: champions.championIds.size,
     },
     { merge: true },

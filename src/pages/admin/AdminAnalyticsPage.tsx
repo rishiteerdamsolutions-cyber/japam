@@ -6,14 +6,21 @@ const API_BASE = import.meta.env.VITE_API_URL ?? '';
 
 type OverviewPayload = {
   users?: { total_users?: number; active_users_today?: number; new_users_today?: number; returning_users_today?: number };
-  retention?: { day1_day2_retention_pct?: number; day1_day7_retention_pct?: number; streak_distribution?: Record<string, number> };
+  retention?: { day1_day2_retention_pct?: number; day1_week1_retention_pct?: number; streak_distribution?: Record<string, number> };
   activity?: { total_japam_today?: number; avg_japam_per_user?: number; top_users?: { uid: string; total_japam: number; current_streak: number; user_type: string }[] };
-  virality?: { total_shares?: number; rank_card_downloads?: number; referral_growth?: number };
+  virality?: {
+    total_shares?: number;
+    marathon_rank_downloads?: number;
+    maha_yagna_rank_downloads?: number;
+    japa_pdf_downloads?: number;
+    referral_growth?: number;
+  };
   alerts?: {
     high_value_users_inactive?: { uid: string }[];
     broke_streak_yesterday?: { uid: string }[];
     stuck_onboarding?: { uid: string }[];
   };
+  referrals?: { referrerName: string; referredName: string; isPro: boolean; createdAt: string }[];
 };
 
 type AnalyticsUser = {
@@ -79,11 +86,13 @@ export function AdminAnalyticsPage() {
       newToday: u.new_users_today || 0,
       returningToday: u.returning_users_today || 0,
       d1d2: r.day1_day2_retention_pct || 0,
-      d1d7: r.day1_day7_retention_pct || 0,
+      d1Week1: r.day1_week1_retention_pct || 0,
       japamToday: a.total_japam_today || 0,
       avgJapam: a.avg_japam_per_user || 0,
       shares: v.total_shares || 0,
-      rankDownloads: v.rank_card_downloads || 0,
+      marathonRankDownloads: v.marathon_rank_downloads || 0,
+      mahaYagnaRankDownloads: v.maha_yagna_rank_downloads || 0,
+      japaPdfDownloads: v.japa_pdf_downloads || 0,
       referrals: v.referral_growth || 0,
     };
   }, [overview]);
@@ -109,9 +118,9 @@ export function AdminAnalyticsPage() {
           subtitle="Of users active on a day, % who did japam the next day"
         />
         <MetricCard
-          title="Still Active After a Week"
-          value={`${cards.d1d7}%`}
-          subtitle="Of users active on a day, % still doing japam a week later"
+          title="Came Back Within 1 Week"
+          value={`${cards.d1Week1}%`}
+          subtitle="Of users active on a day, % who did japam again anytime in the next 6 days"
         />
         <MetricCard
           title="Avg Chants per Active User"
@@ -123,8 +132,28 @@ export function AdminAnalyticsPage() {
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <MetricCard title="Japam Today" value={cards.japamToday} />
         <MetricCard title="Total Shares" value={cards.shares} />
-        <MetricCard title="Rank Card Downloads" value={cards.rankDownloads} />
-        <MetricCard title="Referral Growth" value={cards.referrals} />
+        <MetricCard
+          title="Referral Growth"
+          value={cards.referrals}
+          subtitle="Users who signed up via referral link (Pro + Free)"
+        />
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <MetricCard
+          title="Marathon Rank Cards"
+          value={cards.marathonRankDownloads}
+          subtitle="Rank card downloads from Japa Marathons"
+        />
+        <MetricCard
+          title="Maha Yagna Rank Cards"
+          value={cards.mahaYagnaRankDownloads}
+          subtitle="Rank card downloads from Maha Japa Yagnas"
+        />
+        <MetricCard
+          title="Japa PDF (Handwritten Naamas)"
+          value={cards.japaPdfDownloads}
+          subtitle="PDF downloads with handwritten deity names"
+        />
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
@@ -137,6 +166,28 @@ export function AdminAnalyticsPage() {
                 <span>{u.total_japam} japam • streak {u.current_streak}</span>
               </div>
             ))}
+          </div>
+        </div>
+        <div className="rounded-xl border border-amber-500/30 bg-black/25 p-4">
+          <h2 className="text-amber-300 font-semibold mb-3">Referrals (who brought whom)</h2>
+          <div className="space-y-1 text-sm text-amber-100 max-h-48 overflow-y-auto">
+            {(overview?.referrals || []).length === 0 ? (
+              <p className="text-amber-200/60">No referrals yet</p>
+            ) : (
+              (overview?.referrals || []).map((r, i) => (
+                <div key={i} className="border-b border-amber-500/15 pb-1">
+                  <span className="font-medium">{r.referredName}</span>
+                  <span className="text-amber-200/50 text-xs ml-1">
+                    {r.isPro ? '(Pro)' : '(Free)'}
+                  </span>
+                  <span className="text-amber-200/70"> came via </span>
+                  <span className="font-medium">{r.referrerName}</span>
+                  <span className="text-amber-200/60 text-xs ml-1">
+                    {r.createdAt ? new Date(r.createdAt).toLocaleDateString() : ''}
+                  </span>
+                </div>
+              ))
+            )}
           </div>
         </div>
         <div className="rounded-xl border border-amber-500/30 bg-black/25 p-4">

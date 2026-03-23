@@ -96,7 +96,13 @@ async function markDailyActivity(db, uid, behaviorRef, now, todayDay) {
   return { becameActiveToday, firstTrackedToday };
 }
 
+async function ensureRefCodeIndex(db, uid, code) {
+  if (!code || typeof code !== 'string' || code.length < 4) return;
+  await db.doc(`refCodes/${code.toUpperCase()}`).set({ uid }, { merge: true });
+}
+
 async function syncBehaviorMirror(db, uid, payload) {
+  if (payload.referral_code) void ensureRefCodeIndex(db, uid, payload.referral_code);
   await db.doc(`analyticsUsers/${uid}`).set(
     {
       uid,
@@ -210,19 +216,24 @@ export async function trackShareEvent(db, uid, eventType) {
   await behaviorRef.set(next, { merge: true });
   await syncBehaviorMirror(db, uid, next);
   await markDailyActivity(db, uid, behaviorRef, now, todayDay);
-  await db.doc(`analyticsDaily/${todayDay}`).set(
-    {
-      day: todayDay,
-      updated_at: now,
-      total_shares: admin.firestore.FieldValue.increment(1),
-      rank_card_downloads: admin.firestore.FieldValue.increment(eventType === 'rank_card_download' ? 1 : 0),
-      share_clicks: admin.firestore.FieldValue.increment(eventType === 'share_click' ? 1 : 0),
-    },
-    { merge: true },
-  );
+  const updates = {
+    day: todayDay,
+    updated_at: now,
+    total_shares: admin.firestore.FieldValue.increment(1),
+    share_clicks: admin.firestore.FieldValue.increment(eventType === 'share_click' ? 1 : 0),
+    marathon_rank_downloads: admin.firestore.FieldValue.increment(eventType === 'marathon_rank_card' ? 1 : 0),
+    maha_yagna_rank_downloads: admin.firestore.FieldValue.increment(eventType === 'maha_yagna_rank_card' ? 1 : 0),
+    japa_pdf_downloads: admin.firestore.FieldValue.increment(eventType === 'japa_pdf' ? 1 : 0),
+  };
+  await db.doc(`analyticsDaily/${todayDay}`).set(updates, { merge: true });
 }
 
 export async function trackReferral(db, uid, referredUid = null) {
+  // Idempotent: if this referral pair already exists, skip (avoids double-count from sign-in + Pro flows)
+  if (referredUid) {
+    const existingRef = await db.doc(`analyticsReferrals/${uid}_${referredUid}`).get();
+    if (existingRef.exists) return;
+  }
   const now = admin.firestore.FieldValue.serverTimestamp();
   const todayDay = toIsoDay(Date.now());
   const behaviorRef = db.doc(`users/${uid}/data/behavior`);
@@ -255,7 +266,7 @@ export async function trackReferral(db, uid, referredUid = null) {
     { merge: true },
   );
   if (referredUid) {
-    await db.doc(`analytics/referrals/${uid}_${referredUid}`).set(
+    await db.collection('analyticsReferrals').doc(`${uid}_${referredUid}`).set(
       {
         referrerUid: uid,
         referredUid,
@@ -275,28 +286,35 @@ export async function computeDailyRetention(db, baseDay) {
   const d2 = toIsoDay(parseIsoDay(baseDay) + DAY_MS);
   const d7 = toIsoDay(parseIsoDay(baseDay) + 7 * DAY_MS);
 
-  const [day1Snap, day2Snap, day7Snap] = await Promise.all([
-    db.collection('analyticsActivity').where('day', '==', d1).get(),
-    db.collection('analyticsActivity').where('day', '==', d2).get(),
-    db.collection('analyticsActivity').where('day', '==', d7).get(),
-  ]);
+  const dayKeys = [d1, d2];
+  for (let i = 3; i <= 7; i++) dayKeys.push(toIsoDay(parseIsoDay(baseDay) + i * DAY_MS));
+
+  const snaps = await Promise.all(
+    dayKeys.map((day) => db.collection('analyticsActivity').where('day', '==', day).get()),
+  );
   const toUid = (d) => d.data()?.uid || (d.id.includes('_') ? d.id.split('_')[1] : d.id);
-  const day1Set = new Set(day1Snap.docs.map(toUid).filter(Boolean));
-  const day2Set = new Set(day2Snap.docs.map(toUid).filter(Boolean));
-  const day7Set = new Set(day7Snap.docs.map(toUid).filter(Boolean));
+  const day1Set = new Set(snaps[0].docs.map(toUid).filter(Boolean));
+  const day2Set = new Set(snaps[1].docs.map(toUid).filter(Boolean));
+  const returnedWithinWeekSet = new Set();
+  for (let i = 1; i < snaps.length; i++) {
+    for (const doc of snaps[i].docs) {
+      const uid = toUid(doc);
+      if (uid) returnedWithinWeekSet.add(uid);
+    }
+  }
   let retained2 = 0;
-  let retained7 = 0;
+  let retainedWithinWeek = 0;
   for (const uid of day1Set) {
     if (day2Set.has(uid)) retained2 += 1;
-    if (day7Set.has(uid)) retained7 += 1;
+    if (returnedWithinWeekSet.has(uid)) retainedWithinWeek += 1;
   }
   const baseCount = day1Set.size;
   return {
     day1_users: baseCount,
     day1_day2_retained: retained2,
-    day1_day7_retained: retained7,
+    day1_week1_retained: retainedWithinWeek,
     day1_day2_retention_pct: baseCount > 0 ? Math.round((retained2 / baseCount) * 10000) / 100 : 0,
-    day1_day7_retention_pct: baseCount > 0 ? Math.round((retained7 / baseCount) * 10000) / 100 : 0,
+    day1_week1_retention_pct: baseCount > 0 ? Math.round((retainedWithinWeek / baseCount) * 10000) / 100 : 0,
   };
 }
 

@@ -433,3 +433,38 @@ export async function saveUserReminder(_uid: string, reminder: DailyReminder): P
     return false;
   }
 }
+
+/** Track share/download events for virality analytics. Fire-and-forget. */
+export type ShareEventType = 'marathon_rank_card' | 'maha_yagna_rank_card' | 'japa_pdf' | 'share_click';
+
+export async function trackShareEvent(event: ShareEventType): Promise<void> {
+  const token = await getFirebaseIdToken();
+  if (!token) return;
+  const url = apiUrl('/api/user/share-event');
+  try {
+    await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ event }),
+    });
+  } catch {
+    // fire-and-forget
+  }
+}
+
+/** Attribute current user (referred) to referrer when they become pro. Clears stored ref code. */
+export async function attributeReferral(referralCode: string): Promise<boolean> {
+  const token = await getFirebaseIdToken();
+  if (!token) return false;
+  const url = apiUrl('/api/user/referral-attribute');
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ referralCode }),
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}

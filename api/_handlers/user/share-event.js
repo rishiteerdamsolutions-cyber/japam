@@ -1,7 +1,12 @@
 import { getDb, jsonResponse, verifyFirebaseUser } from '../_lib.js';
 import { trackShareEvent } from '../_analytics.js';
 
-const VALID_EVENTS = new Set(['share_click', 'rank_card_download']);
+const VALID_EVENTS = new Set([
+  'share_click',
+  'marathon_rank_card',
+  'maha_yagna_rank_card',
+  'japa_pdf',
+]);
 
 /** POST /api/user/share-event - Track lightweight share actions for virality analytics. */
 export async function POST(request) {

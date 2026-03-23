@@ -9,6 +9,7 @@ import { useAuthStore } from '../store/authStore';
 import { useUnlockStore } from '../store/unlockStore';
 import { auth } from '../lib/firebase';
 import { paddedLeaderboard, renderRankCardBlob } from '../lib/rankCard';
+import { trackShareEvent } from '../lib/firestore';
 
 const API_BASE = import.meta.env.VITE_API_URL ?? '';
 
@@ -205,6 +206,7 @@ export function MahaYagnasPage() {
       a.click();
       document.body.removeChild(a);
       setShareNotice(t('mahaYagnas.downloadNotice') || 'Downloaded. To post on WhatsApp Status: open WhatsApp → Status → My Status → add the downloaded image.');
+      trackShareEvent('maha_yagna_rank_card').catch(() => {});
     } catch {
       setShareError(t('mahaYagnas.shareFailed') || 'Could not generate/download the image.');
     } finally {

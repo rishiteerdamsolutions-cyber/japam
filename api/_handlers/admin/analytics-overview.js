@@ -56,6 +56,50 @@ export async function GET(request) {
       .limit(20)
       .get();
 
+    let referralsSnap;
+    try {
+      referralsSnap = await db.collection('analyticsReferrals').orderBy('createdAt', 'desc').limit(50).get();
+    } catch {
+      referralsSnap = { docs: [] };
+    }
+    const referralIds = new Set();
+    for (const d of referralsSnap.docs) {
+      const data = d.data() || {};
+      referralIds.add(data.referrerUid);
+      referralIds.add(data.referredUid);
+    }
+    const uids = Array.from(referralIds);
+    let profileMap = new Map();
+    let unlockMap = new Map();
+    if (uids.length > 0) {
+      const profileRefs = uids.map((uid) => db.doc(`users/${uid}/data/profile`));
+      const unlockRefs = uids.map((uid) => db.collection('unlockedUsers').doc(uid));
+      const [profileSnaps, unlockSnaps] = await Promise.all([
+        db.getAll(...profileRefs),
+        db.getAll(...unlockRefs),
+      ]);
+      profileSnaps.forEach((s, i) => {
+        if (s.exists) profileMap.set(uids[i], s.data()?.displayName || null);
+      });
+      unlockSnaps.forEach((s, i) => {
+        if (s.exists) unlockMap.set(uids[i], s.data()?.email || null);
+      });
+    }
+    const referralsList = referralsSnap.docs.map((d) => {
+      const data = d.data() || {};
+      const referrerUid = data.referrerUid || '';
+      const referredUid = data.referredUid || '';
+      const isPro = unlockMap.has(referredUid);
+      return {
+        referrerUid,
+        referrerName: profileMap.get(referrerUid) || unlockMap.get(referrerUid) || referrerUid.slice(0, 12),
+        referredUid,
+        referredName: profileMap.get(referredUid) || unlockMap.get(referredUid) || referredUid.slice(0, 12),
+        isPro,
+        createdAt: tsToIso(data.createdAt),
+      };
+    });
+
     return jsonResponse(
       {
         users: {
@@ -66,7 +110,7 @@ export async function GET(request) {
         },
         retention: {
           day1_day2_retention_pct: retention.day1_day2_retention_pct,
-          day1_day7_retention_pct: retention.day1_day7_retention_pct,
+          day1_week1_retention_pct: retention.day1_week1_retention_pct,
           streak_distribution: streakDistribution,
         },
         activity: {
@@ -76,7 +120,9 @@ export async function GET(request) {
         },
         virality: {
           total_shares: todayData.total_shares || 0,
-          rank_card_downloads: todayData.rank_card_downloads || 0,
+          marathon_rank_downloads: todayData.marathon_rank_downloads || 0,
+          maha_yagna_rank_downloads: todayData.maha_yagna_rank_downloads || 0,
+          japa_pdf_downloads: todayData.japa_pdf_downloads || 0,
           referral_growth: todayData.referral_growth || 0,
         },
         alerts: {
@@ -89,6 +135,7 @@ export async function GET(request) {
           dau: yesterdayData.dau || 0,
           total_japam: yesterdayData.total_japam || 0,
         },
+        referrals: referralsList,
       },
       200,
     );

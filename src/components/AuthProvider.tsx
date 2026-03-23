@@ -6,6 +6,7 @@ import { useUnlockStore } from '../store/unlockStore';
 import { useSettingsStore } from '../store/settingsStore';
 import { useProfileStore } from '../store/profileStore';
 import { useDailyReminder } from '../hooks/useDailyReminder';
+import { RefAttribution } from './RefAttribution';
 
 /**
  * Keeps Firebase auth state in sync on every route.
@@ -44,5 +45,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       loadProfile();
     }
   }, [user?.uid, authLoading, loadProgress, loadJapa, loadUnlock, loadProfile]);
-  return <>{children}</>;
+  return (
+    <>
+      <RefAttribution />
+      {children}
+    </>
+  );
 }

@@ -10,6 +10,7 @@ import { DonateThankYouBox } from '../components/donation/DonateThankYouBox';
 import { AppHeader } from '../components/layout/AppHeader';
 import { BottomNav } from '../components/nav/BottomNav';
 import { paddedLeaderboard, renderRankCardBlob } from '../lib/rankCard';
+import { trackShareEvent } from '../lib/firestore';
 
 const STATES = [...INDIA_REGIONS.states, ...INDIA_REGIONS.union_territories];
 
@@ -242,6 +243,7 @@ export function MarathonsPage() {
       document.body.removeChild(a);
 
       setShareNotice('Downloaded. To post on WhatsApp Status: open WhatsApp → Status → My Status → add the downloaded image.');
+      trackShareEvent('marathon_rank_card').catch(() => {});
     } catch {
       setShareError('Could not generate/download the image. Please try again.');
     } finally {

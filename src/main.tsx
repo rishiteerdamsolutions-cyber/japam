@@ -9,6 +9,7 @@ import { ErrorBoundary } from './components/ErrorBoundary'
 initSentry()
 import { AuthProvider } from './components/AuthProvider'
 import { PaymentReturnHandler } from './components/PaymentReturnHandler'
+import { RefCapture } from './components/RefCapture'
 import { BlockedOverlay } from './components/BlockedOverlay'
 import { PWAUpdatePrompt } from './components/PWAUpdatePrompt'
 import { OfflineBanner } from './components/OfflineBanner'
@@ -60,6 +61,7 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <AuthProvider>
       <PaymentReturnHandler />
+      <RefCapture />
       <BlockedOverlay />
       <PWAUpdatePrompt />
       <OfflineBanner />

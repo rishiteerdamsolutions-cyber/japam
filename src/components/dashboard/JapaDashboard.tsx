@@ -3,6 +3,7 @@ import { useJapaStore } from '../../store/japaStore';
 import { DEITIES } from '../../data/deities';
 import { DAILY_GOAL_JAPAS } from '../../data/levels';
 import { downloadMantraPdf, type PdfDetails } from '../../utils/pdfExport';
+import { trackShareEvent } from '../../lib/firestore';
 import { removeBackgroundFromImage } from '../../utils/removeBackground';
 import { DonateThankYouBox } from '../donation/DonateThankYouBox';
 import { AppHeader } from '../layout/AppHeader';
@@ -96,6 +97,7 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
         details,
         handwritingDataUrl
       );
+      trackShareEvent('japa_pdf').catch(() => {});
       closeDownloadModal();
     } finally {
       setDownloadLoading(false);

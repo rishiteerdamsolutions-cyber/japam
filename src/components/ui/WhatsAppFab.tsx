@@ -1,16 +1,30 @@
+import { useAuthStore } from '../../store/authStore';
+
 const WHATSAPP_GREEN = '#25D366';
 
-const MESSAGE = `🙏 Try Japam – a beautiful app to chant your favourite God's name and track your japas!
-Play here: https://www.japam.digital
+const BASE_MESSAGE = `🙏 Try Japam – a beautiful app to chant your favourite God's name and track your japas!
+Play here: `;
+
+const BASE_MESSAGE_END = `
 Join the community, complete marathons, and grow your spiritual practice daily. 🕉️`;
 
-function waShareUrl() {
-  const text = encodeURIComponent(MESSAGE);
+function buildShareMessage(referralLink: string) {
+  return `${BASE_MESSAGE}${referralLink}${BASE_MESSAGE_END}`;
+}
+
+function waShareUrl(message: string) {
+  const text = encodeURIComponent(message);
   return `https://wa.me/?text=${text}`;
 }
 
 export function WhatsAppFab() {
-  const href = waShareUrl();
+  const user = useAuthStore((s) => s.user);
+  const baseUrl = typeof window !== 'undefined' ? window.location?.origin || 'https://www.japam.digital' : 'https://www.japam.digital';
+  const referralLink = user?.uid
+    ? `${baseUrl}?ref=${encodeURIComponent(user.uid.slice(0, 8).toUpperCase())}`
+    : baseUrl;
+  const message = buildShareMessage(referralLink);
+  const href = waShareUrl(message);
   return (
     <a
       href={href}

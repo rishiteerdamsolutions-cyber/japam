@@ -5,6 +5,8 @@ import { useUnlockStore } from '../store/unlockStore';
 import { useLivesStore } from '../store/livesStore';
 import { getApiBase } from '../lib/apiBase';
 import { auth } from '../lib/firebase';
+import { attributeReferral } from '../lib/firestore';
+import { getStoredRefCode, clearStoredRefCode } from './RefCapture';
 
 /** Handles return from Cashfree redirect when payment_return=1, payment_return=lives, or donate_return=1&order_id=xxx in URL */
 export function PaymentReturnHandler() {
@@ -51,6 +53,11 @@ export function PaymentReturnHandler() {
             await loadLives(() => (auth?.currentUser ?? user).getIdToken());
           } else {
             await loadUnlock(user.uid);
+            const refCode = getStoredRefCode();
+            if (refCode) {
+              await attributeReferral(refCode);
+              clearStoredRefCode();
+            }
           }
         }
       } catch {

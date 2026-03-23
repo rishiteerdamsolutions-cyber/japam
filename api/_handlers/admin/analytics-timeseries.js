@@ -18,7 +18,7 @@ export async function GET(request) {
     const url = new URL(request.url);
     const days = Math.min(90, Math.max(7, Number(url.searchParams.get('days') || 30)));
     const dayKeys = dateRange(days);
-    const snaps = await Promise.all(dayKeys.map((day) => db.doc(`analytics/daily/${day}`).get()));
+    const snaps = await Promise.all(dayKeys.map((day) => db.doc(`analyticsDaily/${day}`).get()));
     const series = dayKeys.map((day, idx) => {
       const data = snaps[idx].exists ? snaps[idx].data() || {} : {};
       return {

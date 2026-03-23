@@ -27,7 +27,7 @@ export async function runDailyAnalyticsAggregation(db) {
   }
 
   const retentionBase = getDayKeyFromOffset(-8);
-  const [todaySnap, usersSnap] = await Promise.all([db.doc(`analytics/daily/${today}`).get(), db.collection('analyticsUsers').get()]);
+  const [todaySnap, usersSnap] = await Promise.all([db.doc(`analyticsDaily/${today}`).get(), db.collection('analyticsUsers').get()]);
   const todayData = todaySnap.exists ? todaySnap.data() || {} : {};
   const dau = todayData.dau || 0;
   const totalJapam = todayData.total_japam || 0;
@@ -43,7 +43,7 @@ export async function runDailyAnalyticsAggregation(db) {
     else streakDistribution.sevenPlus += 1;
   }
 
-  await db.doc(`analytics/daily/${today}`).set(
+  await db.doc(`analyticsDaily/${today}`).set(
     {
       day: today,
       updated_at: admin.firestore.FieldValue.serverTimestamp(),

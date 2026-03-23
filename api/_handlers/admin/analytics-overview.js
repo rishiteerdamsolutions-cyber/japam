@@ -24,8 +24,8 @@ export async function GET(request) {
     const yesterday = getDayKeyFromOffset(-1);
     const retentionBase = getDayKeyFromOffset(-8);
     const [todaySnap, yesterdaySnap, topSnap, highValueInactiveSnap, onboardingStuckSnap, totalUsersAgg] = await Promise.all([
-      db.doc(`analytics/daily/${today}`).get(),
-      db.doc(`analytics/daily/${yesterday}`).get(),
+      db.doc(`analyticsDaily/${today}`).get(),
+      db.doc(`analyticsDaily/${yesterday}`).get(),
       db.collection('analyticsUsers').orderBy('total_japam', 'desc').limit(10).get(),
       db.collection('analyticsUsers').where('drop_off_stage', '==', 'high_value_loss').limit(20).get(),
       db.collection('analyticsUsers').where('drop_off_stage', '==', 'no_start').limit(20).get(),

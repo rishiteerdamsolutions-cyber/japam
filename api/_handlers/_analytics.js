@@ -61,8 +61,8 @@ function streakFromLastDate(lastJapamDate, todayDay, currentStreak) {
 }
 
 async function markDailyActivity(db, uid, behaviorRef, now, todayDay) {
-  const markerRef = db.doc(`analytics/activity/${todayDay}/users/${uid}`);
-  const dailyRef = db.doc(`analytics/daily/${todayDay}`);
+  const markerRef = db.doc(`analyticsActivity/${todayDay}_${uid}`);
+  const dailyRef = db.doc(`analyticsDaily/${todayDay}`);
   let becameActiveToday = false;
   let firstTrackedToday = false;
 
@@ -181,7 +181,7 @@ export async function upsertBehaviorFromJapa(db, uid, counts, prev) {
   if (becameActiveToday) {
     dailyUpdates.avg_japam_per_user = 0;
   }
-  await db.doc(`analytics/daily/${todayDay}`).set(dailyUpdates, { merge: true });
+  await db.doc(`analyticsDaily/${todayDay}`).set(dailyUpdates, { merge: true });
 }
 
 export async function trackShareEvent(db, uid, eventType) {
@@ -210,7 +210,7 @@ export async function trackShareEvent(db, uid, eventType) {
   await behaviorRef.set(next, { merge: true });
   await syncBehaviorMirror(db, uid, next);
   await markDailyActivity(db, uid, behaviorRef, now, todayDay);
-  await db.doc(`analytics/daily/${todayDay}`).set(
+  await db.doc(`analyticsDaily/${todayDay}`).set(
     {
       day: todayDay,
       updated_at: now,
@@ -246,7 +246,7 @@ export async function trackReferral(db, uid, referredUid = null) {
   next.drop_off_stage = detectDropOffStage(next);
   await behaviorRef.set(next, { merge: true });
   await syncBehaviorMirror(db, uid, next);
-  await db.doc(`analytics/daily/${todayDay}`).set(
+  await db.doc(`analyticsDaily/${todayDay}`).set(
     {
       day: todayDay,
       updated_at: now,
@@ -276,13 +276,14 @@ export async function computeDailyRetention(db, baseDay) {
   const d7 = toIsoDay(parseIsoDay(baseDay) + 7 * DAY_MS);
 
   const [day1Snap, day2Snap, day7Snap] = await Promise.all([
-    db.collection(`analytics/activity/${d1}/users`).get(),
-    db.collection(`analytics/activity/${d2}/users`).get(),
-    db.collection(`analytics/activity/${d7}/users`).get(),
+    db.collection('analyticsActivity').where('day', '==', d1).get(),
+    db.collection('analyticsActivity').where('day', '==', d2).get(),
+    db.collection('analyticsActivity').where('day', '==', d7).get(),
   ]);
-  const day1Set = new Set(day1Snap.docs.map((d) => d.id));
-  const day2Set = new Set(day2Snap.docs.map((d) => d.id));
-  const day7Set = new Set(day7Snap.docs.map((d) => d.id));
+  const toUid = (d) => d.data()?.uid || (d.id.includes('_') ? d.id.split('_')[1] : d.id);
+  const day1Set = new Set(day1Snap.docs.map(toUid).filter(Boolean));
+  const day2Set = new Set(day2Snap.docs.map(toUid).filter(Boolean));
+  const day7Set = new Set(day7Snap.docs.map(toUid).filter(Boolean));
   let retained2 = 0;
   let retained7 = 0;
   for (const uid of day1Set) {

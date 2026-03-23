@@ -60,6 +60,8 @@ import * as userLivesConsumeHandler from './_handlers/user/lives-consume.js';
 import * as userLivesGrantHandler from './_handlers/user/lives-grant.js';
 import * as userRewardVideoEventHandler from './_handlers/user/reward-video-event.js';
 import * as userReactHandler from './_handlers/user/react.js';
+import * as userShareEventHandler from './_handlers/user/share-event.js';
+import * as userReferralEventHandler from './_handlers/user/referral-event.js';
 import * as publicActiveUsersHandler from './_handlers/public/active-users.js';
 import * as userReminderHandler from './_handlers/user/reminder.js';
 import * as donateOrderHandler from './_handlers/donate-order.js';
@@ -97,6 +99,7 @@ import * as apavargaSeekersHandler from './_handlers/apavarga/seekers.js';
 import * as apavargaCustomTokenHandler from './_handlers/apavarga/custom-token.js';
 import * as apavargaCleanupHandler from './_handlers/apavarga/cleanup.js';
 import * as cronRefreshActiveUsersHandler from './_handlers/cron/refresh-active-users.js';
+import * as cronAnalyticsDailyHandler from './_handlers/cron/analytics-daily.js';
 import * as cronUpdateMahaYagnaCountersHandler from './_handlers/cron/update-maha-yagna-counters.js';
 import * as mahaYagnasListHandler from './_handlers/maha-yagnas/list.js';
 import * as mahaYagnasMyContributionHandler from './_handlers/maha-yagnas/my-contribution.js';
@@ -109,6 +112,9 @@ import * as priestMahaYagnasHandler from './_handlers/priest/maha-yagnas.js';
 import * as priestMarathonEditHandler from './_handlers/priest/marathon-edit.js';
 import * as priestMahaYagnasEditHandler from './_handlers/priest/maha-yagnas-edit.js';
 import * as healthHandler from './_handlers/health.js';
+import * as adminAnalyticsOverviewHandler from './_handlers/admin/analytics-overview.js';
+import * as adminAnalyticsUsersHandler from './_handlers/admin/analytics-users.js';
+import * as adminAnalyticsTimeseriesHandler from './_handlers/admin/analytics-timeseries.js';
 
 function getPathSegments(request) {
   const url = new URL(request.url);
@@ -180,6 +186,8 @@ const HANDLERS = {
   'POST user/lives/grant': userLivesGrantHandler,
   'POST user/reward-video-event': userRewardVideoEventHandler,
   'POST user/react': userReactHandler,
+  'POST user/share-event': userShareEventHandler,
+  'POST user/referral-event': userReferralEventHandler,
   'GET public/active-users': publicActiveUsersHandler,
   'GET user/reminder': userReminderHandler,
   'POST user/reminder': userReminderHandler,
@@ -215,7 +223,11 @@ const HANDLERS = {
   'POST apavarga/custom-token': apavargaCustomTokenHandler,
   'POST apavarga/cleanup': apavargaCleanupHandler,
   'GET cron/refresh-active-users': cronRefreshActiveUsersHandler,
+  'GET cron/analytics-daily': cronAnalyticsDailyHandler,
   'GET cron/update-maha-yagna-counters': cronUpdateMahaYagnaCountersHandler,
+  'GET admin/analytics-overview': adminAnalyticsOverviewHandler,
+  'GET admin/analytics-users': adminAnalyticsUsersHandler,
+  'GET admin/analytics-timeseries': adminAnalyticsTimeseriesHandler,
   'GET maha-yagnas/list': mahaYagnasListHandler,
   'GET maha-yagnas/my-contribution': mahaYagnasMyContributionHandler,
   'POST maha-yagnas/join': mahaYagnasJoinHandler,

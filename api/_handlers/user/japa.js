@@ -1,5 +1,6 @@
 import { getDb, jsonResponse, verifyFirebaseUser, isUserUnlocked } from '../_lib.js';
 import admin from 'firebase-admin';
+import { upsertBehaviorFromJapa } from '../_analytics.js';
 
 /** GET /api/user/japa - Load japa counts for current user (Firebase ID token required) */
 export async function GET(request) {
@@ -37,6 +38,7 @@ export async function POST(request) {
     const prevSnap = await db.doc(`users/${uid}/data/japa`).get();
     const prev = (prevSnap.exists && prevSnap.data()) || {};
     await db.doc(`users/${uid}/data/japa`).set(counts, { merge: true });
+    await upsertBehaviorFromJapa(db, uid, counts, prev);
 
     // Keep a public summary doc updated for global leaderboards/active users UI (Yesterday's achievers strip).
     try {

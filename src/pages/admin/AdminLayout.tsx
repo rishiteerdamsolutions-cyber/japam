@@ -48,6 +48,7 @@ export function AdminLayout() {
         <NavLink to="/admin/videos">Videos</NavLink>
         <NavLink to="/admin/video-analytics">Video analytics</NavLink>
         <NavLink to="/admin/users">Paid users</NavLink>
+        <NavLink to="/admin/analytics">Analytics</NavLink>
       </nav>
       <Outlet />
       </div>

@@ -1,0 +1,33 @@
+name: Daily Analytics Aggregation
+
+on:
+  schedule:
+    # 01:30 UTC daily (~07:00 IST)
+    - cron: "30 1 * * *"
+  workflow_dispatch:
+
+jobs:
+  run-daily-analytics:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger analytics daily endpoint
+        env:
+          ANALYTICS_CRON_URL: ${{ secrets.ANALYTICS_CRON_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          if [ -z "$ANALYTICS_CRON_URL" ]; then
+            echo "Missing ANALYTICS_CRON_URL secret"
+            exit 1
+          fi
+          if [ -z "$CRON_SECRET" ]; then
+            echo "Missing CRON_SECRET secret"
+            exit 1
+          fi
+          echo "Calling daily analytics endpoint..."
+          curl --fail --show-error --silent \
+            --max-time 60 \
+            --retry 3 \
+            --retry-delay 5 \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            "$ANALYTICS_CRON_URL"
+          echo "Daily analytics completed."

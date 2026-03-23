@@ -89,6 +89,14 @@ The app is built to handle many concurrent users and priests without breaking:
 
 **Recommendation**: For 10k users and 100 priests using the app and marathons at the same time, use **Vercel Pro** (or equivalent) and ensure Firebase/Firestore quotas are sufficient. The architecture (stateless API + Firestore) scales; the main thing to verify is your hosting plan’s invocation and concurrency limits.
 
+## Daily Analytics Scheduling
+
+Admin analytics heavy aggregation is designed to run once per day (not continuously).
+
+- Scheduler: GitHub Actions (`.github/workflows/daily-analytics.yml`)
+- Endpoint: `GET /api/cron/analytics-daily`
+- Setup guide: `docs/ANALYTICS_DAILY_SCHEDULER.md`
+
 ## Tech Stack
 
 - Vite + React 18 + TypeScript

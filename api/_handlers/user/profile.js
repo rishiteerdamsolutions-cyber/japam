@@ -1,5 +1,6 @@
 import { getDb, jsonResponse, verifyFirebaseUser } from '../_lib.js';
 import admin from 'firebase-admin';
+import { touchUserLogin } from '../_analytics.js';
 
 /** GET /api/user/profile - Get current user's profile (displayName). Firebase ID token required. */
 export async function GET(request) {
@@ -8,6 +9,7 @@ export async function GET(request) {
     if (!uid) return jsonResponse({ error: 'Unauthorized' }, 401);
     const db = getDb();
     if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
+    await touchUserLogin(db, uid);
     const snap = await db.doc(`users/${uid}/data/profile`).get();
     const data = snap.exists ? (snap.data() || {}) : {};
     const displayName = typeof data.displayName === 'string' ? data.displayName : null;
@@ -41,6 +43,7 @@ export async function POST(request) {
     if (!uid) return jsonResponse({ error: 'Unauthorized' }, 401);
     const db = getDb();
     if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
+    await touchUserLogin(db, uid);
     const body = await request.json().catch(() => ({}));
     let displayName = typeof body.displayName === 'string' ? body.displayName.trim() : '';
     if (!displayName) {

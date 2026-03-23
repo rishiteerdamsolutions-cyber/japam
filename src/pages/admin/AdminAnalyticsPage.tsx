@@ -103,9 +103,21 @@ export function AdminAnalyticsPage() {
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        <MetricCard title="D1→D2 Retention" value={`${cards.d1d2}%`} />
-        <MetricCard title="D1→D7 Retention" value={`${cards.d1d7}%`} />
-        <MetricCard title="Avg Japam / User" value={cards.avgJapam} />
+        <MetricCard
+          title="Came Back Next Day"
+          value={`${cards.d1d2}%`}
+          subtitle="Of users active on a day, % who did japam the next day"
+        />
+        <MetricCard
+          title="Still Active After a Week"
+          value={`${cards.d1d7}%`}
+          subtitle="Of users active on a day, % still doing japam a week later"
+        />
+        <MetricCard
+          title="Avg Chants per Active User"
+          value={cards.avgJapam}
+          subtitle="Today's japam ÷ active users"
+        />
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -167,11 +179,12 @@ export function AdminAnalyticsPage() {
   );
 }
 
-function MetricCard({ title, value }: { title: string; value: string | number }) {
+function MetricCard({ title, value, subtitle }: { title: string; value: string | number; subtitle?: string }) {
   return (
     <div className="rounded-xl border border-amber-500/30 bg-black/25 p-3">
-      <p className="text-xs text-amber-200/70">{title}</p>
+      <p className="text-sm font-medium text-amber-200">{title}</p>
       <p className="text-xl font-semibold text-amber-300">{value}</p>
+      {subtitle && <p className="text-[11px] text-amber-200/60 mt-1">{subtitle}</p>}
     </div>
   );
 }

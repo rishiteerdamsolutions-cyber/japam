@@ -1,26 +1,8 @@
-import { getDb, jsonResponse } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser } from '../_lib.js';
+import { buildMarathonLeaderboard } from './_marathonLeaderboard.js';
 
 function normalize(s) {
   return (s || '').trim().toLowerCase();
-}
-
-async function loadMarathonLeaderboard(db, marathonId) {
-  const partsSnap = await db.collection('marathonParticipations').where('marathonId', '==', marathonId).get();
-  const participants = partsSnap.docs.map((p) => {
-    const pdata = p.data();
-    return {
-      userId: pdata.userId,
-      displayName: typeof pdata.displayName === 'string' ? pdata.displayName : null,
-      japasCount: pdata.japasCount ?? 0,
-    };
-  });
-  participants.sort((a, b) => (b.japasCount || 0) - (a.japasCount || 0));
-  return participants.slice(0, 5).map((p, i) => ({
-    rank: i + 1,
-    uid: p.userId,
-    name: p.displayName || (p.userId ? String(p.userId).slice(0, 8) : '—'),
-    japasCount: p.japasCount,
-  }));
 }
 
 /** GET /api/marathons/discover?state=&district=&cityTownVillage=&area=
@@ -31,6 +13,7 @@ async function loadMarathonLeaderboard(db, marathonId) {
  */
 export async function GET(request) {
   try {
+    const viewerUid = (await verifyFirebaseUser(request)) || null;
     const url = new URL(request.url);
     let state = (url.searchParams.get('state') || '').trim();
     let district = (url.searchParams.get('district') || '').trim();
@@ -100,7 +83,7 @@ export async function GET(request) {
       const mSnap = await db.collection('marathons').where('templeId', '==', tid).get();
       marathonsByTemple[tid] = await Promise.all(mSnap.docs.map(async (d) => {
         const data = d.data();
-        const leaderboard = await loadMarathonLeaderboard(db, d.id);
+        const leaderboard = await buildMarathonLeaderboard(db, d.id, { topN: 5, viewerUid });
         return {
           id: d.id,
           templeId: data.templeId,
@@ -140,7 +123,7 @@ export async function GET(request) {
         });
       }
       for (const { id, data } of communityMarathons) {
-        const leaderboard = await loadMarathonLeaderboard(db, id);
+        const leaderboard = await buildMarathonLeaderboard(db, id, { topN: 5, viewerUid });
         const syntheticTemple = {
           id,
           name: data.communityName || 'Community',

@@ -1,4 +1,5 @@
 import { getDb, jsonResponse, verifyFirebaseUser } from '../_lib.js';
+import { buildMarathonLeaderboard } from './_marathonLeaderboard.js';
 
 /** GET /api/marathons/my-participations - List marathons the current user has joined. Requires Firebase auth. */
 export async function GET(request) {
@@ -32,30 +33,14 @@ export async function GET(request) {
         if (templeSnap.exists) templeName = templeSnap.data().name || '';
       }
 
-      // Include leaderboard so the app can show it in "Your marathons" without forcing a discover search.
+      // Top 5 + this user if ranked below top 5 (so rank card download works for everyone who joined).
       let leaderboard = [];
       try {
-        const partsForMarathonSnap = await db.collection('marathonParticipations').where('marathonId', '==', marathonId).get();
-        const participants = partsForMarathonSnap.docs.map((p) => {
-          const pdata = p.data();
-          return {
-            userId: pdata.userId,
-            displayName: typeof pdata.displayName === 'string' ? pdata.displayName : null,
-            japasCount: pdata.japasCount ?? 0,
-          };
-        });
-        participants.sort((a, b) => (b.japasCount || 0) - (a.japasCount || 0));
-        leaderboard = participants.slice(0, 5).map((p, i) => ({
-          rank: i + 1,
-          uid: p.userId,
-          name: p.displayName || (p.userId ? String(p.userId).slice(0, 8) : '—'),
-          japasCount: p.japasCount,
-        }));
+        leaderboard = await buildMarathonLeaderboard(db, marathonId, { topN: 5, viewerUid: uid });
       } catch {
         leaderboard = [];
       }
 
-      // Use japasCount from the participation doc directly (same doc the leaderboard reads from).
       const myEntry = leaderboard.find((p) => p.uid === uid);
       const japasCount = myEntry ? myEntry.japasCount : (data.japasCount ?? 0);
 

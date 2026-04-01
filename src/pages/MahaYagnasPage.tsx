@@ -107,6 +107,12 @@ export function MahaYagnasPage() {
     loadContributions();
   }, [loadContributions]);
 
+  // Leaderboard payload depends on auth (viewer row below top 10); avoid stale cache after sign-in.
+  useEffect(() => {
+    setLeaderboards({});
+    setOpenLeaderboard(new Set());
+  }, [user?.uid]);
+
   useEffect(() => {
     if (!urlYagnaId || yagnas.length === 0) return;
     const el = document.getElementById(`yagna-${urlYagnaId}`);
@@ -164,7 +170,9 @@ export function MahaYagnasPage() {
     setLoadingLeaderboard((prev) => new Set(prev).add(yagnaId));
     try {
       const url = API_BASE ? `${API_BASE}/api/maha-yagnas/leaderboard?yagnaId=${encodeURIComponent(yagnaId)}` : `/api/maha-yagnas/leaderboard?yagnaId=${encodeURIComponent(yagnaId)}`;
-      const res = await fetch(url);
+      const idToken = await auth?.currentUser?.getIdToken?.().catch(() => null);
+      const headers: HeadersInit = idToken ? { Authorization: `Bearer ${idToken}` } : {};
+      const res = await fetch(url, { headers });
       const data = (await res.json().catch(() => ({}))) as { leaderboard?: LeaderboardEntry[] };
       if (res.ok && Array.isArray(data.leaderboard)) {
         const entries = data.leaderboard as LeaderboardEntry[];
@@ -179,22 +187,38 @@ export function MahaYagnasPage() {
     }
   }, [leaderboards]);
 
-  const handleShare = async (y: Yagna, lb: LeaderboardEntry[]) => {
-    if (!user?.uid || lb.length === 0) return;
-    const hasUser = lb.some((p) => p.uid === user.uid);
-    if (!hasUser || sharing) return;
+  const handleShare = async (y: Yagna, lbIn?: LeaderboardEntry[]) => {
+    if (!user?.uid || sharing) return;
     setShareError(null);
     setShareNotice(null);
     setSharing(true);
     try {
+      let lb = lbIn;
+      if (!lb || lb.length === 0) {
+        const url = API_BASE
+          ? `${API_BASE}/api/maha-yagnas/leaderboard?yagnaId=${encodeURIComponent(y.id)}`
+          : `/api/maha-yagnas/leaderboard?yagnaId=${encodeURIComponent(y.id)}`;
+        const idToken = await auth?.currentUser?.getIdToken?.().catch(() => null);
+        const headers: HeadersInit = idToken ? { Authorization: `Bearer ${idToken}` } : {};
+        const res = await fetch(url, { headers });
+        const data = (await res.json().catch(() => ({}))) as { leaderboard?: LeaderboardEntry[] };
+        lb = res.ok && Array.isArray(data.leaderboard) ? (data.leaderboard as LeaderboardEntry[]) : [];
+        if (lb.length) setLeaderboards((prev) => ({ ...prev, [y.id]: lb! }));
+      }
+      if (!lb || lb.length === 0) {
+        setShareError(t('mahaYagnas.shareFailed') || 'Could not load leaderboard.');
+        return;
+      }
+
       const contrib = contribByYagna.get(y.id);
       const blob = await renderRankCardBlob({
         title: 'MAHA JAPA YAGNA',
         headerName: y.name,
         deityName: deityName(y.deityId),
-        leaderboard: paddedLeaderboard(lb),
+        leaderboard: lb,
         currentUserUid: user.uid,
         currentUserJapasOverride: contrib?.userJapas,
+        currentUserDisplayName: user.displayName || user.email?.split('@')[0] || undefined,
       });
       if (!blob) throw new Error('Failed to generate image');
       const url = URL.createObjectURL(blob);
@@ -302,7 +326,6 @@ export function MahaYagnasPage() {
                 const contrib = contribByYagna.get(y.id)!;
                 const lb = leaderboards[y.id] ?? [];
                 const showLb = openLeaderboard.has(y.id);
-                const hasUserInLb = lb.some((p) => p.uid === user?.uid);
                 return (
                   <div key={y.id} className="py-2 border-t border-amber-500/10 first:border-t-0 first:pt-0">
                     <div className="flex items-center justify-between gap-2">
@@ -328,6 +351,14 @@ export function MahaYagnasPage() {
                         </button>
                         <button
                           type="button"
+                          onClick={() => handleShare(y, lb.length ? lb : undefined)}
+                          disabled={sharing}
+                          className="shrink-0 px-3 py-1.5 rounded-lg bg-amber-500/90 text-white text-xs font-semibold shadow-md disabled:opacity-50"
+                        >
+                          {sharing ? (t('mahaYagnas.preparing') || 'Preparing…') : (t('mahaYagnas.downloadRankCard') || 'Download rank card')}
+                        </button>
+                        <button
+                          type="button"
                           onClick={() => toggleLeaderboard(y.id)}
                           disabled={loadingLeaderboard.has(y.id)}
                           className="text-[11px] text-amber-300 underline disabled:opacity-50"
@@ -340,16 +371,6 @@ export function MahaYagnasPage() {
                       <div className="mt-2 pl-2 border-l-2 border-amber-500/20">
                         <div className="flex items-center justify-between gap-2">
                           <p className="text-amber-200/70 text-xs font-medium mb-1">{t('mahaYagnas.topParticipants') || 'Top participants'}</p>
-                          {hasUserInLb && (
-                            <button
-                              type="button"
-                              onClick={() => handleShare(y, lb)}
-                              disabled={sharing}
-                              className="text-[11px] text-amber-300 underline disabled:opacity-50"
-                            >
-                              {sharing ? (t('mahaYagnas.preparing') || 'Preparing…') : (t('mahaYagnas.shareMyRank') || 'Share my rank')}
-                            </button>
-                          )}
                         </div>
                         {lb.length === 0 && !loadingLeaderboard.has(y.id) ? (
                           <p className="text-amber-200/50 text-xs">{t('mahaYagnas.noParticipants') || 'No participants yet'}</p>
@@ -469,6 +490,17 @@ export function MahaYagnasPage() {
                       </button>
                       <button
                         type="button"
+                        onClick={() => {
+                          const cur = leaderboards[y.id] ?? [];
+                          handleShare(y, cur.length ? cur : undefined);
+                        }}
+                        disabled={sharing}
+                        className="px-4 py-2 rounded-lg bg-amber-500/90 text-white text-sm font-semibold disabled:opacity-50"
+                      >
+                        {sharing ? (t('mahaYagnas.preparing') || 'Preparing…') : (t('mahaYagnas.downloadRankCard') || 'Download rank card')}
+                      </button>
+                      <button
+                        type="button"
                         onClick={() => toggleLeaderboard(y.id)}
                         disabled={loadingLeaderboard.has(y.id)}
                         className="px-4 py-2 rounded-lg border border-amber-500/50 text-amber-400 text-sm disabled:opacity-50"
@@ -480,16 +512,6 @@ export function MahaYagnasPage() {
                       <div className="mt-2 pl-2 border-l-2 border-amber-500/20">
                         <div className="flex items-center justify-between gap-2">
                           <p className="text-amber-200/70 text-xs font-medium mb-1">{t('mahaYagnas.topParticipants') || 'Top participants'}</p>
-                          {(leaderboards[y.id] ?? []).some((p) => p.uid === user.uid) && (
-                            <button
-                              type="button"
-                              onClick={() => handleShare(y, leaderboards[y.id] ?? [])}
-                              disabled={sharing}
-                              className="text-[11px] text-amber-300 underline disabled:opacity-50"
-                            >
-                              {sharing ? (t('mahaYagnas.preparing') || 'Preparing…') : (t('mahaYagnas.shareMyRank') || 'Share my rank')}
-                            </button>
-                          )}
                         </div>
                         {(leaderboards[y.id] ?? []).length === 0 && !loadingLeaderboard.has(y.id) ? (
                           <p className="text-amber-200/50 text-xs">{t('mahaYagnas.loading') || 'Loading…'}</p>

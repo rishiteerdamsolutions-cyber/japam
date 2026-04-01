@@ -1,5 +1,63 @@
 export type LeaderboardEntry = { rank: number; uid: string; name: string; japasCount: number };
 
+/** Rows for the PNG: ranks 1–5, optional ellipsis, then current user when rank > 5. */
+export type RankCardRow = { kind: 'player'; entry: LeaderboardEntry; isCurrent: boolean } | { kind: 'ellipsis' };
+
+/**
+ * Build rank card rows: always ranks 1–5 (vacant if empty slot); if the viewer is rank 6+,
+ * three vertical dots then their row with real rank.
+ */
+export function buildRankCardRows(
+  leaderboard: LeaderboardEntry[],
+  currentUserUid: string,
+  options?: { currentUserJapasOverride?: number; currentUserDisplayName?: string },
+): RankCardRow[] {
+  const overrideJp = options?.currentUserJapasOverride;
+  const dispName = options?.currentUserDisplayName?.trim() || 'You';
+
+  let participants = leaderboard
+    .filter((e) => e.uid)
+    .map((e) => ({ ...e }))
+    .sort((a, b) => a.rank - b.rank);
+
+  let userEntry = participants.find((e) => e.uid === currentUserUid);
+  if (!userEntry && currentUserUid) {
+    const jp = typeof overrideJp === 'number' ? overrideJp : 0;
+    if (participants.length === 0) {
+      userEntry = { rank: 1, uid: currentUserUid, name: dispName, japasCount: jp };
+      participants = [userEntry];
+    } else {
+      const maxRank = Math.max(...participants.map((p) => p.rank));
+      userEntry = {
+        rank: maxRank + 1,
+        uid: currentUserUid,
+        name: dispName,
+        japasCount: jp,
+      };
+      participants = [...participants, userEntry].sort((a, b) => a.rank - b.rank);
+    }
+  }
+
+  const byRank = new Map(participants.map((p) => [p.rank, p]));
+  const topFive: LeaderboardEntry[] = [];
+  for (let r = 1; r <= 5; r++) {
+    topFive.push(byRank.get(r) ?? { rank: r, uid: '', name: 'Vacant', japasCount: 0 });
+  }
+
+  const rows: RankCardRow[] = [];
+  for (const e of topFive) {
+    const isCurrent = !!(e.uid && e.uid === currentUserUid);
+    rows.push({ kind: 'player', entry: e, isCurrent });
+  }
+
+  if (userEntry && userEntry.rank > 5) {
+    rows.push({ kind: 'ellipsis' });
+    rows.push({ kind: 'player', entry: userEntry, isCurrent: true });
+  }
+
+  return rows;
+}
+
 export function paddedLeaderboard(lb?: LeaderboardEntry[]): LeaderboardEntry[] {
   const list = Array.isArray(lb) ? lb.slice(0, 10) : [];
   const out = [...list];
@@ -30,10 +88,13 @@ export interface RenderRankCardOptions {
   title: string;
   headerName: string;
   deityName: string;
+  /** Raw leaderboard from API (ranked entries); do not pre-pad to 10 for the card. */
   leaderboard: LeaderboardEntry[];
   currentUserUid: string;
   /** Use this for current user's japas when fresher than leaderboard (fixes stale count) */
   currentUserJapasOverride?: number;
+  /** Fallback name if the user is missing from leaderboard payload */
+  currentUserDisplayName?: string;
 }
 
 export async function renderRankCardBlob(opts: RenderRankCardOptions): Promise<Blob | null> {
@@ -159,11 +220,20 @@ export async function renderRankCardBlob(opts: RenderRankCardOptions): Promise<B
     ctx.fillText('Top participants', centerX, y);
     y += 40;
 
-    // ——— Leaderboard card (bg-black/30, amber border style) ———
-    const entries = paddedLeaderboard(opts.leaderboard).slice(0, 5);
+    // ——— Leaderboard card: top 5, optional ⋮, then viewer when rank > 5 ———
     const curUid = opts.currentUserUid;
     const rowH = 88;
-    const cardH = entries.length * rowH + 24;
+    const ellipsisRowH = 52;
+    const cardRows = buildRankCardRows(opts.leaderboard || [], curUid, {
+      currentUserJapasOverride: opts.currentUserJapasOverride,
+      currentUserDisplayName: opts.currentUserDisplayName,
+    });
+
+    let contentH = 24;
+    for (const row of cardRows) {
+      contentH += row.kind === 'ellipsis' ? ellipsisRowH : rowH;
+    }
+    const cardH = contentH;
     const cardX = pad;
     const cardY = y;
     const cardW = width - pad * 2;
@@ -183,11 +253,28 @@ export async function renderRankCardBlob(opts: RenderRankCardOptions): Promise<B
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    for (let i = 0; i < entries.length; i++) {
-      const p = entries[i]!;
-      const isCurrent = p.uid && p.uid === curUid;
+    let rowIndex = 0;
+    for (const row of cardRows) {
+      if (row.kind === 'ellipsis') {
+        const rowY = cardY + 12 + rowIndex;
+        const midX = cardX + cardW / 2;
+        const midY = rowY + ellipsisRowH / 2;
+        const dotR = 4;
+        const gap = 9;
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.42)';
+        for (let d = -1; d <= 1; d++) {
+          ctx.beginPath();
+          ctx.arc(midX, midY + d * gap, dotR, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        rowIndex += ellipsisRowH;
+        continue;
+      }
+
+      const p = row.entry;
+      const isCurrent = row.isCurrent;
       const isVacant = !p.uid;
-      const rowY = cardY + 12 + i * rowH;
+      const rowY = cardY + 12 + rowIndex;
 
       if (isCurrent) {
         ctx.fillStyle = 'rgba(251, 191, 36, 0.12)';
@@ -213,16 +300,18 @@ export async function renderRankCardBlob(opts: RenderRankCardOptions): Promise<B
 
       const textX = cardX + 72;
       const nameText = isVacant ? 'Vacant' : String(p.name || '');
-      const japasCount = (isCurrent && typeof opts.currentUserJapasOverride === 'number' && opts.currentUserJapasOverride > (p.japasCount || 0))
-        ? opts.currentUserJapasOverride
-        : (p.japasCount ?? 0);
+      const japasCount =
+        isCurrent &&
+        typeof opts.currentUserJapasOverride === 'number' &&
+        opts.currentUserJapasOverride > (p.japasCount || 0)
+          ? opts.currentUserJapasOverride
+          : (p.japasCount ?? 0);
       const japasText = isVacant ? '—' : `${japasCount} japas`;
       const nameMaxW = cardW - 100;
 
       ctx.textAlign = 'left';
       ctx.font = `600 22px ${fontFamily}`;
       ctx.fillStyle = isVacant ? 'rgba(255,255,255,0.5)' : '#FFFFFF';
-      ctx.font = `600 22px ${fontFamily}`;
       ctx.fillText(truncate(nameText, nameMaxW), textX, rowY + 28);
       if (isCurrent) {
         ctx.font = `500 14px ${fontFamily}`;
@@ -232,6 +321,8 @@ export async function renderRankCardBlob(opts: RenderRankCardOptions): Promise<B
       ctx.font = `500 16px ${fontFamily}`;
       ctx.fillStyle = 'rgba(255,255,255,0.7)';
       ctx.fillText(japasText, textX, rowY + 72);
+
+      rowIndex += rowH;
     }
 
     y = cardY + cardH + 56;

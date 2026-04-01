@@ -102,7 +102,11 @@ export function MarathonsPage() {
     const params = new URLSearchParams();
     params.set('templeId', urlTempleId);
     const url = API_BASE ? `${API_BASE}/api/marathons/discover?${params}` : `/api/marathons/discover?${params}`;
-    fetch(url)
+    (async () => {
+      const idToken = await auth?.currentUser?.getIdToken?.().catch(() => null);
+      const headers: HeadersInit = idToken ? { Authorization: `Bearer ${idToken}` } : {};
+      return fetch(url, { headers });
+    })()
       .then((r) => r.json())
       .then((data) => {
         setTemples(data.temples || []);
@@ -122,8 +126,22 @@ export function MarathonsPage() {
       .finally(() => setLoading(false));
   }, [urlTempleId]);
 
-  const paddedMarathonLeaderboard = (lb?: { rank: number; uid: string; name: string; japasCount: number }[]) =>
-    paddedLeaderboard(lb);
+  /** Raw leaderboard for rank card; ensures the downloader appears with correct japas when API omits them. */
+  const leaderboardForRankCard = (marathon: Marathon): { rank: number; uid: string; name: string; japasCount: number }[] => {
+    let lb = marathon.leaderboard ? marathon.leaderboard.map((e) => ({ ...e })) : [];
+    if (!user?.uid) return lb;
+    if (!lb.some((p) => p.uid === user.uid)) {
+      const myM = myMarathons.find((x) => x.marathonId === marathon.id);
+      const nextRank = lb.length > 0 ? Math.max(...lb.map((e) => e.rank)) + 1 : 1;
+      lb.push({
+        rank: nextRank,
+        uid: user.uid,
+        name: user.displayName || user.email?.split('@')[0] || 'You',
+        japasCount: myM?.japasCount ?? 0,
+      });
+    }
+    return lb;
+  };
 
   const handleSearch = () => {
     if (!stateName.trim()) return;
@@ -136,7 +154,11 @@ export function MarathonsPage() {
     if (cityName.trim()) params.set('cityTownVillage', cityName.trim());
     if (areaName.trim()) params.set('area', areaName.trim());
     const url = API_BASE ? `${API_BASE}/api/marathons/discover?${params}` : `/api/marathons/discover?${params}`;
-    fetch(url)
+    (async () => {
+      const idToken = await auth?.currentUser?.getIdToken?.().catch(() => null);
+      const headers: HeadersInit = idToken ? { Authorization: `Bearer ${idToken}` } : {};
+      return fetch(url, { headers });
+    })()
       .then((r) => r.json())
       .then((data) => {
         setTemples(data.temples || []);
@@ -206,16 +228,19 @@ export function MarathonsPage() {
 
   const handleShare = async (marathon: Marathon, temple: Temple) => {
     if (!user?.uid) return;
-    if (!marathon.leaderboard || marathon.leaderboard.length === 0) return;
-    const hasUser = marathon.leaderboard.some((p) => p.uid === user.uid);
-    if (!hasUser) return;
     if (sharing) return;
+
+    const lb = leaderboardForRankCard(marathon);
+    if (lb.length === 0) {
+      setShareError('Leaderboard not available yet. Try again in a moment.');
+      return;
+    }
 
     setShareError(null);
     setShareNotice(null);
     setSharing(true);
     try {
-      const currentEntry = marathon.leaderboard?.find((p) => p.uid === user.uid);
+      const currentEntry = lb.find((p) => p.uid === user.uid);
       const myM = myMarathons.find((m) => m.marathonId === marathon.id);
       const japasOverride = myM && (myM.japasCount ?? 0) > (currentEntry?.japasCount ?? 0) ? myM.japasCount : undefined;
       const rankText = currentEntry ? `My rank ${currentEntry.rank} in this Japa Marathon! ` : '';
@@ -225,9 +250,10 @@ export function MarathonsPage() {
         title: 'JAPA MARATHON',
         headerName: temple.name,
         deityName: deityName(marathon.deityId),
-        leaderboard: paddedMarathonLeaderboard(marathon.leaderboard),
+        leaderboard: lb,
         currentUserUid: user.uid,
         currentUserJapasOverride: japasOverride,
+        currentUserDisplayName: user.displayName || user.email?.split('@')[0] || undefined,
       });
       if (!blob) throw new Error('Failed to generate image');
 
@@ -354,6 +380,30 @@ export function MarathonsPage() {
                     >
                       Japa
                     </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const marathon: Marathon = {
+                          id: my.marathonId,
+                          templeId: my.templeId,
+                          deityId: my.deityId,
+                          targetJapas: my.targetJapas,
+                          startDate: my.startDate,
+                          joinedCount: 0,
+                          leaderboard: my.leaderboard,
+                        };
+                        const temple: Temple = {
+                          id: my.templeId,
+                          name: my.templeName || 'Temple',
+                          area: '',
+                        };
+                        handleShare(marathon, temple);
+                      }}
+                      disabled={sharing || !my.leaderboard?.length}
+                      className="shrink-0 px-3 py-1.5 rounded-lg bg-amber-500/90 text-white text-xs font-semibold shadow-md disabled:opacity-50"
+                    >
+                      {sharing ? 'Preparing…' : 'Download rank card'}
+                    </button>
                     {!!my.leaderboard && my.leaderboard.length > 0 && (
                       <button
                         type="button"
@@ -377,32 +427,6 @@ export function MarathonsPage() {
                   <div className="mt-2 pl-2 border-l-2 border-amber-500/20">
                     <div className="flex items-center justify-between gap-2">
                       <p className="text-amber-200/70 text-xs font-medium mb-1">Top participants</p>
-                      {!!user?.uid && my.leaderboard.some((p) => p.uid === user.uid) && (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const marathon: Marathon = {
-                              id: my.marathonId,
-                              templeId: my.templeId,
-                              deityId: my.deityId,
-                              targetJapas: my.targetJapas,
-                              startDate: my.startDate,
-                              joinedCount: 0,
-                              leaderboard: my.leaderboard,
-                            };
-                            const temple: Temple = {
-                              id: my.templeId,
-                              name: my.templeName || 'Temple',
-                              area: '',
-                            };
-                            handleShare(marathon, temple);
-                          }}
-                          disabled={sharing}
-                          className="text-[11px] text-amber-300 underline disabled:opacity-50"
-                        >
-                          {sharing ? 'Preparing…' : 'Share my rank'}
-                        </button>
-                      )}
                     </div>
                     {paddedLeaderboard(my.leaderboard).map((p) => (
                       <p key={p.rank} className="text-amber-200/60 text-xs">
@@ -494,10 +518,8 @@ export function MarathonsPage() {
                   ) : (
                     <div className="mt-3 space-y-2">
                       {marathons.map((m) => {
-                        const canShare =
-                          !!user?.uid &&
-                          !!m.leaderboard &&
-                          m.leaderboard.some((p) => p.uid === user.uid);
+                        const canDownload =
+                          !!user?.uid && joinedMarathonIds.has(m.id) && !!m.leaderboard && m.leaderboard.length > 0;
                         return (
                           <div key={m.id} className="py-2 border-t border-amber-500/10">
                             <div className="flex items-center justify-between gap-2">
@@ -513,14 +535,14 @@ export function MarathonsPage() {
                                 >
                                   {joining === m.id ? '…' : joinedMarathonIds.has(m.id) ? 'Joined' : !isPro ? 'Pro required' : 'Join'}
                                 </button>
-                                {canShare && (
+                                {canDownload && (
                                   <button
                                     type="button"
                                     onClick={() => handleShare(m, temple)}
                                     disabled={sharing}
-                                    className="text-[11px] text-amber-300 underline disabled:opacity-50"
+                                    className="px-3 py-1.5 rounded-lg bg-amber-500/90 text-white text-xs font-semibold shadow-md disabled:opacity-50"
                                   >
-                                    {sharing ? 'Preparing…' : 'Share my rank'}
+                                    {sharing ? 'Preparing…' : 'Download rank card'}
                                   </button>
                                 )}
                               </div>

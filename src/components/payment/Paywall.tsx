@@ -55,11 +55,13 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
     setError(null);
     setPaying(true);
     try {
+      const idToken = await currentUser.getIdToken().catch(() => null);
+      if (!idToken) throw new Error('Please sign in again');
       const base = getApiBase();
       const createUrl = base ? `${base}/api/create-order` : '/api/create-order';
       const res = await fetch(createUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
         body: JSON.stringify({ userId: currentUser.uid }),
       });
       if (!res.ok) {

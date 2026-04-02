@@ -45,10 +45,12 @@ export function DonateModal({ onClose, onDonated }: DonateModalProps) {
     setError(null);
     setPaying(true);
     try {
+      const idToken = await (auth?.currentUser ?? user).getIdToken().catch(() => null);
+      if (!idToken) throw new Error('Please sign in again');
       const createUrl = API_BASE ? `${API_BASE}/api/donate-order` : '/api/donate-order';
       const res = await fetch(createUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
         body: JSON.stringify({ userId: user.uid, amountPaise: amt }),
       });
       if (!res.ok) {

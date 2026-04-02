@@ -1,9 +1,10 @@
 import { create } from 'zustand';
 import {
   signInWithPopup,
-  
+  signInWithRedirect,
   signOut as firebaseSignOut,
   onAuthStateChanged,
+  type AuthError,
   type User,
 } from 'firebase/auth';
 import { auth, googleProvider, isFirebaseConfigured } from '../lib/firebase';
@@ -28,6 +29,11 @@ export const useAuthStore = create<AuthState>((set) => ({
     try {
       await signInWithPopup(auth, googleProvider);
     } catch (err) {
+      const authErr = err as AuthError;
+      if (authErr?.code === 'auth/popup-blocked') {
+        await signInWithRedirect(auth, googleProvider);
+        return;
+      }
       const msg = err instanceof Error ? err.message : 'Sign-in failed';
       set({ error: msg });
     }

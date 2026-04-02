@@ -85,11 +85,16 @@ export function LivesModal({ onClose }: LivesModalProps) {
     setBuyError(null);
     setBuying(true);
     try {
+      const idToken = await user.getIdToken().catch(() => null);
+      if (!idToken) {
+        setBuyError('Please sign in again');
+        return;
+      }
       const base = getApiBase();
       const url = base ? `${base}/api/create-lives-order` : '/api/create-lives-order';
       const res = await fetchWithRetry(url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
         body: JSON.stringify({ userId: user.uid }),
       });
       const data = (await res.json()) as { orderId?: string; paymentSessionId?: string; error?: string };

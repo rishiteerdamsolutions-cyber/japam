@@ -44,7 +44,7 @@ export const Gem = memo(function Gem({
     <div
       className={`
         gem-candy-frame w-full aspect-square touch-none transition-transform duration-150
-        ${falling ? 'gem-fall' : ''}
+        ${falling ? 'gem-fall isolate' : ''}
         ${selected ? 'ring-[3px] ring-amber-100 ring-offset-2 ring-offset-black/30 rounded-[0.85rem] scale-105 z-[2]' : ''}
         ${matched ? '' : 'active:scale-[0.97]'}
       `}
@@ -54,8 +54,8 @@ export const Gem = memo(function Gem({
         onFallAnimationEnd();
       }}
     >
-      <div className={`gem-candy-frame__clip ${spinClass} ${pausedClass}`}>
-        <div className="gem-candy-frame__glow" aria-hidden />
+      <div className={`gem-candy-frame__clip ${spinClass} ${pausedClass} ${matched ? 'gem-candy-frame__clip--matched' : ''}`}>
+        <div className={`gem-candy-frame__glow ${matched ? 'gem-candy-frame__glow--matched' : ''}`} aria-hidden />
         <button
         type="button"
         onClick={onClick}

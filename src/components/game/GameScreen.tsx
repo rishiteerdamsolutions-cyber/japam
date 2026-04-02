@@ -428,36 +428,34 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
               unlimited={!!user && !isGuest && isMarathon}
             />
           )}
-        <div className="flex flex-col items-end gap-1.5 ml-auto">
-          <div className="flex items-center gap-1 sm:gap-2">
-            <button
-              type="button"
-              onClick={handleToggleMusic}
-              className={`p-2 rounded-lg min-h-[44px] min-w-[44px] flex items-center justify-center ${
-                bgMusicEnabled ? 'bg-amber-500/80 text-black' : 'bg-black/40 text-amber-200'
-              }`}
-              aria-label={bgMusicEnabled ? 'Music ON' : 'Music OFF'}
-            >
-              <MusicIcon />
-            </button>
-            <div className={`flex items-center gap-1 ${bgMusicEnabled ? '' : 'opacity-50'}`}>
-              <input
-                type="range"
-                min={0}
-                max={100}
-                step={1}
-                value={Math.round((bgMusicVolume ?? 0.25) * 100)}
-                onChange={handleVolumeChange}
-                disabled={!bgMusicEnabled}
-                className="w-16 sm:w-20 accent-amber-500 h-6"
-                aria-label="Volume"
-              />
-            </div>
+        <div className="flex items-center gap-1 sm:gap-2 ml-auto flex-wrap justify-end">
+          <button
+            type="button"
+            onClick={handleToggleMusic}
+            className={`p-2 rounded-lg min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0 ${
+              bgMusicEnabled ? 'bg-amber-500/80 text-black' : 'bg-black/40 text-amber-200'
+            }`}
+            aria-label={bgMusicEnabled ? 'Music ON' : 'Music OFF'}
+          >
+            <MusicIcon />
+          </button>
+          <div className={`flex items-center gap-1 shrink-0 ${bgMusicEnabled ? '' : 'opacity-50'}`}>
+            <input
+              type="range"
+              min={0}
+              max={100}
+              step={1}
+              value={Math.round((bgMusicVolume ?? 0.25) * 100)}
+              onChange={handleVolumeChange}
+              disabled={!bgMusicEnabled}
+              className="w-16 sm:w-20 accent-amber-500 h-6"
+              aria-label="Volume"
+            />
           </div>
           <button
             type="button"
             onClick={handleToggleCandyBorderSpin}
-            className={`p-2 rounded-lg min-h-[44px] min-w-[44px] flex items-center justify-center self-end ${
+            className={`p-2 rounded-lg min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0 ${
               candyBorderSpinEnabled ? 'bg-amber-500/80 text-black' : 'bg-black/40 text-amber-200'
             }`}
             aria-label={
@@ -483,7 +481,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
         </div>
       )}
 
-      <div className="relative z-20 shrink-0 w-full max-w-md mt-1 -mx-1 px-1 py-2 rounded-lg bg-black/20">
+      <div className="relative z-20 shrink-0 w-full max-w-md mt-1 -mx-1 px-1 py-1 rounded-lg bg-black/20">
         <ActiveUsersStrip />
       </div>
 

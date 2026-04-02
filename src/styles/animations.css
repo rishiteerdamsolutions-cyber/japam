@@ -114,7 +114,9 @@
 }
 
 .gem-fall {
-  animation: gem-fall 0.25s ease-out;
+  animation: gem-fall 0.32s ease-out;
+  position: relative;
+  z-index: 2;
 }
 
 @keyframes sparkle {
@@ -184,6 +186,17 @@
 
 .gem-candy-frame--spin-paused .gem-candy-frame__glow {
   animation: none;
+}
+
+/* During match pop, hide rotating rim so it does not linger behind scaled candy */
+.gem-candy-frame__glow--matched {
+  opacity: 0;
+  animation: none !important;
+  transition: opacity 0.1s ease-out;
+}
+
+.gem-candy-frame__clip--matched {
+  background: transparent;
 }
 
 @media (prefers-reduced-motion: reduce) {

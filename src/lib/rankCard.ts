@@ -1,58 +1,93 @@
 export type LeaderboardEntry = { rank: number; uid: string; name: string; japasCount: number };
 
-/** Rows for the PNG: ranks 1–5, optional ellipsis, then current user when rank > 5. */
+/** Rows for the PNG: ranks 1–5, optional ellipsis, then viewer (rank 0 if not participated, or real rank if 6+). */
 export type RankCardRow = { kind: 'player'; entry: LeaderboardEntry; isCurrent: boolean } | { kind: 'ellipsis' };
 
+export type BuildRankCardRowsOptions = {
+  currentUserJapasOverride?: number;
+  currentUserDisplayName?: string;
+  /** When false, viewer row shows rank 0 after ellipsis. When true, use leaderboard / fallback rank. When omitted, infer from leaderboard presence. */
+  currentUserParticipated?: boolean;
+};
+
 /**
- * Build rank card rows: always ranks 1–5 (vacant if empty slot); if the viewer is rank 6+,
- * three vertical dots then their row with real rank.
+ * Build rank card rows: ranks 1–5 from leaderboard slots 1–5 only; then:
+ * - Not participated: ⋮ + rank 0 row with viewer name.
+ * - Participated, rank ≤ 5: only those five rows (viewer highlighted in place).
+ * - Participated, rank > 5: ⋮ + viewer row with real rank.
  */
 export function buildRankCardRows(
   leaderboard: LeaderboardEntry[],
   currentUserUid: string,
-  options?: { currentUserJapasOverride?: number; currentUserDisplayName?: string },
+  options?: BuildRankCardRowsOptions,
 ): RankCardRow[] {
   const overrideJp = options?.currentUserJapasOverride;
   const dispName = options?.currentUserDisplayName?.trim() || 'You';
+  const explicitParticipated = options?.currentUserParticipated;
 
-  let participants = leaderboard
+  const allEntries = leaderboard
     .filter((e) => e.uid)
     .map((e) => ({ ...e }))
     .sort((a, b) => a.rank - b.rank);
 
-  let userEntry = participants.find((e) => e.uid === currentUserUid);
-  if (!userEntry && currentUserUid) {
-    const jp = typeof overrideJp === 'number' ? overrideJp : 0;
-    if (participants.length === 0) {
-      userEntry = { rank: 1, uid: currentUserUid, name: dispName, japasCount: jp };
-      participants = [userEntry];
-    } else {
-      const maxRank = Math.max(...participants.map((p) => p.rank));
-      userEntry = {
-        rank: maxRank + 1,
+  const topSlots = new Map<number, LeaderboardEntry>();
+  for (const e of allEntries) {
+    if (e.rank >= 1 && e.rank <= 5) {
+      if (!topSlots.has(e.rank)) topSlots.set(e.rank, e);
+    }
+  }
+
+  const topFive: LeaderboardEntry[] = [];
+  for (let r = 1; r <= 5; r++) {
+    const e = topSlots.get(r);
+    topFive.push(e ?? { rank: r, uid: '', name: 'Vacant', japasCount: 0 });
+  }
+
+  const userEntry = currentUserUid ? allEntries.find((e) => e.uid === currentUserUid) : undefined;
+
+  const participated: boolean =
+    explicitParticipated === false
+      ? false
+      : explicitParticipated === true
+        ? true
+        : !!(currentUserUid && userEntry);
+
+  const rows: RankCardRow[] = [];
+  for (const e of topFive) {
+    const isCurrent = !!(currentUserUid && e.uid && e.uid === currentUserUid);
+    rows.push({ kind: 'player', entry: e, isCurrent });
+  }
+
+  if (!currentUserUid) {
+    return rows;
+  }
+
+  if (!participated) {
+    rows.push({ kind: 'ellipsis' });
+    rows.push({
+      kind: 'player',
+      entry: { rank: 0, uid: currentUserUid, name: dispName, japasCount: 0 },
+      isCurrent: true,
+    });
+    return rows;
+  }
+
+  const effectiveEntry: LeaderboardEntry =
+    userEntry ??
+    (() => {
+      const jp = typeof overrideJp === 'number' ? overrideJp : 0;
+      const maxR = allEntries.length ? Math.max(...allEntries.map((p) => p.rank)) : 0;
+      return {
+        rank: maxR + 1,
         uid: currentUserUid,
         name: dispName,
         japasCount: jp,
       };
-      participants = [...participants, userEntry].sort((a, b) => a.rank - b.rank);
-    }
-  }
+    })();
 
-  const byRank = new Map(participants.map((p) => [p.rank, p]));
-  const topFive: LeaderboardEntry[] = [];
-  for (let r = 1; r <= 5; r++) {
-    topFive.push(byRank.get(r) ?? { rank: r, uid: '', name: 'Vacant', japasCount: 0 });
-  }
-
-  const rows: RankCardRow[] = [];
-  for (const e of topFive) {
-    const isCurrent = !!(e.uid && e.uid === currentUserUid);
-    rows.push({ kind: 'player', entry: e, isCurrent });
-  }
-
-  if (userEntry && userEntry.rank > 5) {
+  if (effectiveEntry.rank > 5) {
     rows.push({ kind: 'ellipsis' });
-    rows.push({ kind: 'player', entry: userEntry, isCurrent: true });
+    rows.push({ kind: 'player', entry: effectiveEntry, isCurrent: true });
   }
 
   return rows;
@@ -95,6 +130,8 @@ export interface RenderRankCardOptions {
   currentUserJapasOverride?: number;
   /** Fallback name if the user is missing from leaderboard payload */
   currentUserDisplayName?: string;
+  /** Yagna/marathon participation; false forces rank 0 row on the card */
+  currentUserParticipated?: boolean;
 }
 
 export async function renderRankCardBlob(opts: RenderRankCardOptions): Promise<Blob | null> {
@@ -227,6 +264,7 @@ export async function renderRankCardBlob(opts: RenderRankCardOptions): Promise<B
     const cardRows = buildRankCardRows(opts.leaderboard || [], curUid, {
       currentUserJapasOverride: opts.currentUserJapasOverride,
       currentUserDisplayName: opts.currentUserDisplayName,
+      currentUserParticipated: opts.currentUserParticipated,
     });
 
     let contentH = 24;
@@ -306,7 +344,8 @@ export async function renderRankCardBlob(opts: RenderRankCardOptions): Promise<B
         opts.currentUserJapasOverride > (p.japasCount || 0)
           ? opts.currentUserJapasOverride
           : (p.japasCount ?? 0);
-      const japasText = isVacant ? '—' : `${japasCount} japas`;
+      const japasText =
+        isVacant || p.rank === 0 ? '—' : `${japasCount} japas`;
       const nameMaxW = cardW - 100;
 
       ctx.textAlign = 'left';

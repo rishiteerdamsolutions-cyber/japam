@@ -211,6 +211,7 @@ export function MahaYagnasPage() {
       }
 
       const contrib = contribByYagna.get(y.id);
+      const participated = contribByYagna.has(y.id);
       const blob = await renderRankCardBlob({
         title: 'MAHA JAPA YAGNA',
         headerName: y.name,
@@ -219,6 +220,7 @@ export function MahaYagnasPage() {
         currentUserUid: user.uid,
         currentUserJapasOverride: contrib?.userJapas,
         currentUserDisplayName: user.displayName || user.email?.split('@')[0] || undefined,
+        currentUserParticipated: participated,
       });
       if (!blob) throw new Error('Failed to generate image');
       const url = URL.createObjectURL(blob);

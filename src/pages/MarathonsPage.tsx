@@ -126,10 +126,13 @@ export function MarathonsPage() {
       .finally(() => setLoading(false));
   }, [urlTempleId]);
 
-  /** Raw leaderboard for rank card; ensures the downloader appears with correct japas when API omits them. */
-  const leaderboardForRankCard = (marathon: Marathon): { rank: number; uid: string; name: string; japasCount: number }[] => {
+  /** Raw leaderboard for rank card; only inject the viewer when they joined (API may omit their row briefly). */
+  const leaderboardForRankCard = (
+    marathon: Marathon,
+    participated: boolean,
+  ): { rank: number; uid: string; name: string; japasCount: number }[] => {
     let lb = marathon.leaderboard ? marathon.leaderboard.map((e) => ({ ...e })) : [];
-    if (!user?.uid) return lb;
+    if (!user?.uid || !participated) return lb;
     if (!lb.some((p) => p.uid === user.uid)) {
       const myM = myMarathons.find((x) => x.marathonId === marathon.id);
       const nextRank = lb.length > 0 ? Math.max(...lb.map((e) => e.rank)) + 1 : 1;
@@ -230,7 +233,8 @@ export function MarathonsPage() {
     if (!user?.uid) return;
     if (sharing) return;
 
-    const lb = leaderboardForRankCard(marathon);
+    const participated = joinedMarathonIds.has(marathon.id);
+    const lb = leaderboardForRankCard(marathon, participated);
     if (lb.length === 0) {
       setShareError('Leaderboard not available yet. Try again in a moment.');
       return;
@@ -243,7 +247,8 @@ export function MarathonsPage() {
       const currentEntry = lb.find((p) => p.uid === user.uid);
       const myM = myMarathons.find((m) => m.marathonId === marathon.id);
       const japasOverride = myM && (myM.japasCount ?? 0) > (currentEntry?.japasCount ?? 0) ? myM.japasCount : undefined;
-      const rankText = currentEntry ? `My rank ${currentEntry.rank} in this Japa Marathon! ` : '';
+      const rankText =
+        !participated ? 'My rank 0 in this Japa Marathon! ' : currentEntry ? `My rank ${currentEntry.rank} in this Japa Marathon! ` : '';
       const shareText = `${rankText}Join at www.japam.digital`;
 
       const blob = await renderRankCardBlob({
@@ -254,6 +259,7 @@ export function MarathonsPage() {
         currentUserUid: user.uid,
         currentUserJapasOverride: japasOverride,
         currentUserDisplayName: user.displayName || user.email?.split('@')[0] || undefined,
+        currentUserParticipated: participated,
       });
       if (!blob) throw new Error('Failed to generate image');
 

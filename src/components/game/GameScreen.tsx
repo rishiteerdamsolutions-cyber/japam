@@ -43,6 +43,15 @@ function MusicIcon() {
   );
 }
 
+function CandySpinIcon() {
+  return (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M4 12a8 8 0 018-8M20 12a8 8 0 01-8 8" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M15 3h4v4M5 21H1v-4" />
+    </svg>
+  );
+}
+
 function GameBottomStrip({ isGuest, pauseSaving, onPause, onBack }: {
   isGuest: boolean;
   pauseSaving: boolean;
@@ -130,6 +139,8 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
   const bgMusicVolume = useSettingsStore(s => s.backgroundMusicVolume);
   const setBackgroundMusic = useSettingsStore(s => s.setBackgroundMusic);
   const setBackgroundMusicVolume = useSettingsStore(s => s.setBackgroundMusicVolume);
+  const candyBorderSpinEnabled = useSettingsStore((s) => s.candyBorderSpinEnabled);
+  const setCandyBorderSpin = useSettingsStore((s) => s.setCandyBorderSpin);
   const { playMantra, playMatchBonusAudio } = useSound(bgMusicEnabled, bgMusicVolume);
 
   const useLives = !!user && !isGuest && !isMarathon;
@@ -374,6 +385,10 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
     setBackgroundMusic(!bgMusicEnabled);
   };
 
+  const handleToggleCandyBorderSpin = () => {
+    setCandyBorderSpin(!candyBorderSpinEnabled);
+  };
+
   const handleVolumeChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const value = Number(e.target.value);
     if (Number.isFinite(value)) {
@@ -413,30 +428,51 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
               unlimited={!!user && !isGuest && isMarathon}
             />
           )}
-        <div className="flex items-center gap-1 sm:gap-2 ml-auto">
+        <div className="flex flex-col items-end gap-1.5 ml-auto">
+          <div className="flex items-center gap-1 sm:gap-2">
+            <button
+              type="button"
+              onClick={handleToggleMusic}
+              className={`p-2 rounded-lg min-h-[44px] min-w-[44px] flex items-center justify-center ${
+                bgMusicEnabled ? 'bg-amber-500/80 text-black' : 'bg-black/40 text-amber-200'
+              }`}
+              aria-label={bgMusicEnabled ? 'Music ON' : 'Music OFF'}
+            >
+              <MusicIcon />
+            </button>
+            <div className={`flex items-center gap-1 ${bgMusicEnabled ? '' : 'opacity-50'}`}>
+              <input
+                type="range"
+                min={0}
+                max={100}
+                step={1}
+                value={Math.round((bgMusicVolume ?? 0.25) * 100)}
+                onChange={handleVolumeChange}
+                disabled={!bgMusicEnabled}
+                className="w-16 sm:w-20 accent-amber-500 h-6"
+                aria-label="Volume"
+              />
+            </div>
+          </div>
           <button
             type="button"
-            onClick={handleToggleMusic}
-            className={`p-2 rounded-lg min-h-[44px] min-w-[44px] flex items-center justify-center ${
-              bgMusicEnabled ? 'bg-amber-500/80 text-black' : 'bg-black/40 text-amber-200'
+            onClick={handleToggleCandyBorderSpin}
+            className={`p-2 rounded-lg min-h-[44px] min-w-[44px] flex items-center justify-center self-end ${
+              candyBorderSpinEnabled ? 'bg-amber-500/80 text-black' : 'bg-black/40 text-amber-200'
             }`}
-            aria-label={bgMusicEnabled ? 'Music ON' : 'Music OFF'}
+            aria-label={
+              candyBorderSpinEnabled
+                ? t('game.candyBorderSpinTurnOff')
+                : t('game.candyBorderSpinTurnOn')
+            }
+            title={
+              candyBorderSpinEnabled
+                ? t('game.candyBorderSpinTurnOff')
+                : t('game.candyBorderSpinTurnOn')
+            }
           >
-            <MusicIcon />
+            <CandySpinIcon />
           </button>
-          <div className={`flex items-center gap-1 ${bgMusicEnabled ? '' : 'opacity-50'}`}>
-            <input
-              type="range"
-              min={0}
-              max={100}
-              step={1}
-              value={Math.round((bgMusicVolume ?? 0.25) * 100)}
-              onChange={handleVolumeChange}
-              disabled={!bgMusicEnabled}
-              className="w-16 sm:w-20 accent-amber-500 h-6"
-              aria-label="Volume"
-            />
-          </div>
         </div>
       </div>
       {pauseError && (

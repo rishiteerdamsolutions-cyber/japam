@@ -11,6 +11,7 @@ import { LEVELS } from '../data/levels';
 import { useJapaStore } from './japaStore';
 import { useProgressStore } from './progressStore';
 import { stopAllMantras } from '../hooks/useSound';
+import { getMatchClearDelayMs } from '../game/matchVfx';
 
 export type { GameMode };
 export type GameStatus = 'playing' | 'won' | 'lost';
@@ -59,6 +60,9 @@ interface GameState {
   matchBonusAudio: MatchBonusAudio;
   /** Successful match-creating swaps this board; deity name hints hide after the first one. */
   hintsSwapCount: number;
+  /** Cells that received a new gem after gravity+fill (for fall-in animation). */
+  refillSpawnGeneration: number;
+  refillSpawnKeys: string[];
 }
 
 const getLevel = (index: number) => LEVELS[index] ?? LEVELS[0];
@@ -108,6 +112,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   matchAnimationTimeoutId: null,
   matchBonusAudio: 'none',
   hintsSwapCount: 0,
+  refillSpawnGeneration: 0,
+  refillSpawnKeys: [],
 
   initGame: (mode, levelIndex = 0, options) => {
     stopAllMantras();
@@ -153,6 +159,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       matchAnimationTimeoutId: null,
       matchBonusAudio: 'none',
       hintsSwapCount: 0,
+      refillSpawnGeneration: 0,
+      refillSpawnKeys: [],
     });
   },
 
@@ -218,6 +226,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       matchAnimationTimeoutId: null,
       matchBonusAudio: 'none',
       hintsSwapCount: 0,
+      refillSpawnGeneration: 0,
+      refillSpawnKeys: [],
     });
   },
 
@@ -301,7 +311,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       matchBonusAudio
     });
     const isUserDirectMatch = accumulated.length === 0;
-    const id = setTimeout(() => get().commitMatch(nextAccumulated, isUserDirectMatch), 500);
+    const clearMs = getMatchClearDelayMs(positions.length);
+    const id = setTimeout(() => get().commitMatch(nextAccumulated, isUserDirectMatch), clearMs);
     set({ matchAnimationTimeoutId: id });
   },
 
@@ -349,6 +360,17 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const { board: afterGravity } = applyGravity(board);
     const deityMode = get().mode !== 'general' ? (get().mode as DeityId) : undefined;
     const { board: filled } = fillGaps(afterGravity, get().maxGemTypes, deityMode);
+    const spawnKeys: string[] = [];
+    const gh = afterGravity.length;
+    const gw = afterGravity[0]?.length ?? 0;
+    for (let r = 0; r < gh; r++) {
+      for (let c = 0; c < gw; c++) {
+        if (!afterGravity[r][c] && filled[r][c]) spawnKeys.push(`${r},${c}`);
+      }
+    }
+    const stateBefore = get();
+    const nextRefillGen =
+      spawnKeys.length > 0 ? stateBefore.refillSpawnGeneration + 1 : stateBefore.refillSpawnGeneration;
     set({
       board: filled,
       score: totalScore,
@@ -356,7 +378,9 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       japasByDeity,
       firstMatchMade: true,
       matchHighlightPositions: null,
-      pendingMatchBatch: null
+      pendingMatchBatch: null,
+      refillSpawnKeys: spawnKeys,
+      refillSpawnGeneration: nextRefillGen,
     });
     get().processMatches(accumulated);
   },
@@ -405,7 +429,9 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       comboLevel: 0,
       status,
       lastMatches: accumulated,
-      matchGeneration: accumulated.length > 0 ? state.matchGeneration + 1 : state.matchGeneration
+      matchGeneration: accumulated.length > 0 ? state.matchGeneration + 1 : state.matchGeneration,
+      refillSpawnKeys: [],
+      refillSpawnGeneration: 0,
     });
   },
 
@@ -431,6 +457,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       matchHighlightPositions: null,
       pendingMatchBatch: null,
       hintsSwapCount: 0,
+      refillSpawnKeys: [],
+      refillSpawnGeneration: 0,
     });
   },
 

@@ -4,6 +4,100 @@
   100% { transform: scale(0); opacity: 0; }
 }
 
+/* Candy-style: anticipation pulse, bright peak, then pop (duration matches matchVfx.MATCH_POP_DURATION_MS) */
+@keyframes match-magic {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+    filter: brightness(1);
+  }
+  16% {
+    transform: scale(1.1);
+    opacity: 1;
+    filter: brightness(1.25);
+  }
+  32% {
+    transform: scale(1.22);
+    opacity: 1;
+    filter: brightness(1.45) saturate(1.15);
+  }
+  55% {
+    transform: scale(1.28);
+    opacity: 0.95;
+    filter: brightness(1.6) saturate(1.2);
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+    filter: brightness(1.2);
+  }
+}
+
+@keyframes match-spark-burst {
+  0% {
+    transform: translate(-50%, -50%) translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(var(--spark-tx), var(--spark-ty)) scale(0.25);
+    opacity: 0;
+  }
+}
+
+@keyframes board-shake-subtle {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  25% {
+    transform: translate3d(-1.5px, 1px, 0);
+  }
+  50% {
+    transform: translate3d(1.5px, -1px, 0);
+  }
+  75% {
+    transform: translate3d(-1px, -1px, 0);
+  }
+}
+
+.gem-match {
+  animation: match-magic 0.56s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.match-spark {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 9999px;
+  pointer-events: none;
+  animation: match-spark-burst 0.45s ease-out forwards;
+  box-shadow: 0 0 6px currentColor;
+}
+
+.board-match-shake {
+  animation: board-shake-subtle 0.09s ease-in-out 5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gem-match {
+    animation: match-pop 0.22s ease-out forwards !important;
+    animation-delay: 0ms !important;
+  }
+
+  .match-spark {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+
+  .board-match-shake {
+    animation: none !important;
+  }
+
+  .gem-fall {
+    animation-duration: 0.12s !important;
+  }
+}
+
 @keyframes gem-fall {
   from { transform: translateY(-100%); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
@@ -13,10 +107,6 @@
   0% { transform: scale(0.5); opacity: 0; }
   50% { transform: scale(1.2); opacity: 1; }
   100% { transform: scale(1); opacity: 0.8; }
-}
-
-.gem-match {
-  animation: match-pop 0.5s ease-out forwards;
 }
 
 .gem-match-highlight {
@@ -34,6 +124,72 @@
 
 .animate-sparkle {
   animation: sparkle 1s ease-in-out infinite;
+}
+
+/* Match-3 candy: rotating rim on left vs right half of the board */
+@keyframes gem-candy-spin-cw {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes gem-candy-spin-ccw {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+.gem-candy-frame {
+  position: relative;
+  border-radius: 0.85rem;
+  box-sizing: border-box;
+}
+
+/* Clips the rotating conic layer to the candy rim only */
+.gem-candy-frame__clip {
+  position: relative;
+  border-radius: 0.85rem;
+  padding: 4px;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.gem-candy-frame__glow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 200%;
+  height: 200%;
+  margin-left: -100%;
+  margin-top: -100%;
+  z-index: 0;
+  pointer-events: none;
+  background: conic-gradient(
+    from 0deg,
+    rgba(255, 255, 255, 0.2),
+    rgba(255, 251, 235, 0.95),
+    rgba(251, 191, 36, 0.9),
+    rgba(255, 255, 255, 0.75),
+    rgba(255, 251, 235, 0.95),
+    rgba(255, 255, 255, 0.2)
+  );
+  animation: gem-candy-spin-cw 5.5s linear infinite;
+}
+
+.gem-candy-frame--spin-left .gem-candy-frame__glow {
+  animation-name: gem-candy-spin-ccw;
+}
+
+.gem-candy-frame--spin-paused .gem-candy-frame__glow {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gem-candy-frame__glow {
+    animation: none;
+  }
 }
 
 /* Landing: neon title */

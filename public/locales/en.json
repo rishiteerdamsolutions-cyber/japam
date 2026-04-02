@@ -84,6 +84,8 @@
     "pause": "Pause",
     "exit": "Exit",
     "refreshBoard": "No matches? Refresh board",
+    "candyBorderSpinTurnOn": "Turn on rotating candy borders",
+    "candyBorderSpinTurnOff": "Turn off rotating candy borders",
     "lives": "Lives",
     "livesFull": "Full",
     "livesUnlimited": "Unlimited lives",

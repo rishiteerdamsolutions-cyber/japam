@@ -151,6 +151,31 @@ function playMatchBonusAudioInternal(type: MatchBonusAudioType) {
   }
 }
 
+/** Short “impact” when a large match clears (Web Audio; respects silent failures). */
+export function playMatchImpactSfx(matchedTileCount: number) {
+  if (matchedTileCount < 4) return;
+  try {
+    const ctx = getAudioContext();
+    if (ctx.state === 'suspended') ctx.resume().catch(() => {});
+    const now = ctx.currentTime;
+    const vol = Math.min(0.09, 0.035 + matchedTileCount * 0.006);
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(880, now);
+    osc.frequency.exponentialRampToValueAtTime(1320, now + 0.06);
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(vol, now + 0.018);
+    gain.gain.linearRampToValueAtTime(0, now + 0.13);
+    osc.start(now);
+    osc.stop(now + 0.15);
+  } catch {
+    /* ignore */
+  }
+}
+
 export function stopMatchBonusAudio() {
   for (const a of activeBonusAudios) {
     try {

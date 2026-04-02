@@ -57,6 +57,8 @@ interface GameState {
   pendingMatchBatch: Match[] | null;
   matchAnimationTimeoutId: ReturnType<typeof setTimeout> | null;
   matchBonusAudio: MatchBonusAudio;
+  /** Successful match-creating swaps this board; deity name hints hide after the first one. */
+  hintsSwapCount: number;
 }
 
 const getLevel = (index: number) => LEVELS[index] ?? LEVELS[0];
@@ -105,6 +107,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   pendingMatchBatch: null,
   matchAnimationTimeoutId: null,
   matchBonusAudio: 'none',
+  hintsSwapCount: 0,
 
   initGame: (mode, levelIndex = 0, options) => {
     stopAllMantras();
@@ -148,7 +151,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       matchHighlightPositions: null,
       pendingMatchBatch: null,
       matchAnimationTimeoutId: null,
-      matchBonusAudio: 'none'
+      matchBonusAudio: 'none',
+      hintsSwapCount: 0,
     });
   },
 
@@ -212,7 +216,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       matchHighlightPositions: null,
       pendingMatchBatch: null,
       matchAnimationTimeoutId: null,
-      matchBonusAudio: 'none'
+      matchBonusAudio: 'none',
+      hintsSwapCount: 0,
     });
   },
 
@@ -256,7 +261,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       moves: moves - 1,
       selectedCell: null,
       lastSwappedTypes: gemA && gemB ? [gemA, gemB] : null,
-      intendedDeity: gemA || null
+      intendedDeity: gemA || null,
+      hintsSwapCount: get().hintsSwapCount + 1,
     });
 
     get().processMatches([]);
@@ -424,6 +430,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       selectedCell: null,
       matchHighlightPositions: null,
       pendingMatchBatch: null,
+      hintsSwapCount: 0,
     });
   },
 

@@ -12,6 +12,8 @@ export default defineConfig({
   },
   server: {
     port: 5173,
+    // Listen on all interfaces so phones on the same Wi‑Fi can open http://<your-LAN-IP>:5173
+    host: true,
   },
   plugins: [
     {

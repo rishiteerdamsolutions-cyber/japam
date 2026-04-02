@@ -26,15 +26,27 @@ export type DeityId =
 
 export interface Deity {
   id: DeityId;
+  /** English short label (e.g. match-3 hints). Localized UI uses i18n `deities.{id}`. */
   name: string;
   color: string;
   mantraAudio: string;
   mantra: string;
+  /** Full artwork for menu, level select, etc. */
   image: string;
+  /** Optional face-focused asset for match-3 gems (falls back to `image` if omitted). */
+  imageGame?: string;
 }
 
 export const DEITIES: Deity[] = [
-  { id: 'rama', name: 'Rama', color: '#2E8B57', mantraAudio: '/sounds/rama.m4a', mantra: 'Ram', image: '/images/deities/rama.png' },
+  {
+    id: 'rama',
+    name: 'Rama',
+    color: '#2E8B57',
+    mantraAudio: '/sounds/rama.m4a',
+    mantra: 'Ram',
+    image: '/images/deities/rama.png',
+    imageGame: '/images/deities/game/rama-face.png',
+  },
   { id: 'shiva', name: 'Shiva', color: '#4FC3F7', mantraAudio: '/sounds/shiva.m4a', mantra: 'Om Namah Shivaya', image: '/images/deities/shiva.png' },
   { id: 'ganesh', name: 'Ganesh', color: '#E53935', mantraAudio: '/sounds/ganesh.m4a', mantra: 'Om Gan Ganapataye Namah', image: '/images/deities/ganesh.png' },
   { id: 'surya', name: 'Surya', color: '#FFD600', mantraAudio: '/sounds/surya.m4a', mantra: 'Om sooryaya Namaha', image: '/images/deities/surya.png' },
@@ -44,9 +56,33 @@ export const DEITIES: Deity[] = [
   { id: 'venkateswara', name: 'Venkateswara', color: '#6A1B9A', mantraAudio: '/sounds/venkateswara.m4a', mantra: 'Om namo Venkateshaaya', image: '/images/deities/venkateswara.png' },
   { id: 'hanuman', name: 'Hanuman', color: '#FF6F00', mantraAudio: '/sounds/hanuman.m4a', mantra: 'Om Sri Hanumate Namaha', image: '/images/deities/hanuman.png' },
   { id: 'narasimha', name: 'Narasimha', color: '#E65100', mantraAudio: '/sounds/narasimha.m4a', mantra: 'Om Namo Narasimhaya', image: '/images/deities/narasimha.png' },
-  { id: 'lakshmi', name: 'Lakshmi', color: '#F9A825', mantraAudio: '/sounds/lakshmi.m4a', mantra: 'Om Sri Mahalakshmyai Namaha', image: '/images/deities/lakshmi.png' },
-  { id: 'durga', name: 'Durga', color: '#C62828', mantraAudio: '/sounds/durga.m4a', mantra: 'Om Sri Durgaya Namaha', image: '/images/deities/durga.png' },
-  { id: 'saraswati', name: 'Saraswati', color: '#5C6BC0', mantraAudio: '/sounds/saraswati.m4a', mantra: 'Om Saraswatyai Namaha', image: '/images/deities/saraswati.png' },
+  {
+    id: 'lakshmi',
+    name: 'Lakshmi',
+    color: '#F9A825',
+    mantraAudio: '/sounds/lakshmi.m4a',
+    mantra: 'Om Sri Mahalakshmyai Namaha',
+    image: '/images/deities/lakshmi.png',
+    imageGame: '/images/deities/game/lakshmi-face.png',
+  },
+  {
+    id: 'durga',
+    name: 'Durga',
+    color: '#C62828',
+    mantraAudio: '/sounds/durga.m4a',
+    mantra: 'Om Sri Durgaya Namaha',
+    image: '/images/deities/durga.png',
+    imageGame: '/images/deities/game/durga-face.png',
+  },
+  {
+    id: 'saraswati',
+    name: 'Saraswati',
+    color: '#5C6BC0',
+    mantraAudio: '/sounds/saraswati.m4a',
+    mantra: 'Om Saraswatyai Namaha',
+    image: '/images/deities/saraswati.png',
+    imageGame: '/images/deities/game/saraswati-face.png',
+  },
   { id: 'ayyappan', name: 'Ayyappan', color: '#1B5E20', mantraAudio: '/sounds/ayyappan.m4a', mantra: 'Swamiye Saranam Ayyappa', image: '/images/deities/ayyappan.png' },
   { id: 'jagannath', name: 'Jagannath', color: '#0D47A1', mantraAudio: '/sounds/jagannath.m4a', mantra: 'Jai Jagannath', image: '/images/deities/jagannath.png' },
   { id: 'dattatreya', name: 'Dattatreya', color: '#1565C0', mantraAudio: '/sounds/dattatreya.m4a', mantra: 'Om Sri Dattatreyaya Namaha', image: '/images/deities/dattatreya.png' },

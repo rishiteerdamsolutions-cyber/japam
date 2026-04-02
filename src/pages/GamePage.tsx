@@ -10,6 +10,7 @@ import { useUnlockStore } from '../store/unlockStore';
 import { useAuthStore } from '../store/authStore';
 import { useLivesStore } from '../store/livesStore';
 import { useLevelsConfigStore } from '../store/levelsConfigStore';
+import { useProfileStore } from '../store/profileStore';
 import { FIRST_LOCKED_LEVEL_INDEX } from '../store/unlockStore';
 import { LEVELS } from '../data/levels';
 import type { GameMode } from '../types';
@@ -50,7 +51,28 @@ export function GamePage() {
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
   const user = useAuthStore((s) => s.user);
   const authLoading = useAuthStore((s) => s.loading);
+  const profileDisplayName = useProfileStore((s) => s.displayName);
+  const profileLoaded = useProfileStore((s) => s.loaded);
+  const setProfileDisplayName = useProfileStore((s) => s.setDisplayName);
   const isLocked = !isGuest && !isMarathon && levelIndex >= FIRST_LOCKED_LEVEL_INDEX && levelsUnlocked !== true;
+
+  const [playNameDraft, setPlayNameDraft] = useState('');
+  const [playNameSaving, setPlayNameSaving] = useState(false);
+  const [playNameError, setPlayNameError] = useState<string | null>(null);
+
+  const needPlayName =
+    !isGuest &&
+    !!user?.uid &&
+    profileLoaded &&
+    !(profileDisplayName && profileDisplayName.trim());
+
+  useEffect(() => {
+    if (!needPlayName || !user) return;
+    setPlayNameDraft((prev) => {
+      if (prev.trim()) return prev;
+      return user.displayName ?? (user.email?.split('@')[0] ?? '');
+    });
+  }, [needPlayName, user?.uid, user?.displayName, user?.email]);
 
   useEffect(() => {
     loadLevelsConfig();
@@ -200,6 +222,67 @@ export function GamePage() {
     }
   }, [navigate, isMarathon, yagnaId, isGuest]);
 
+  const handlePlayNameSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmed = playNameDraft.trim();
+    if (!trimmed) {
+      setPlayNameError(t('game.playNameRequired'));
+      return;
+    }
+    setPlayNameSaving(true);
+    setPlayNameError(null);
+    try {
+      const ok = await setProfileDisplayName(trimmed);
+      if (!ok) setPlayNameError(t('game.playNameError'));
+    } finally {
+      setPlayNameSaving(false);
+    }
+  };
+
+  const waitingProfile = !isGuest && !!user?.uid && !profileLoaded;
+
+  // Signed-in: wait for pause check and profile before resume / name gate / game.
+  if (!isGuest && (waitingProfile || !pauseCheckDone)) {
+    return (
+      <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
+        <div className="relative z-10 text-amber-400 text-sm">{t('common.loading')}</div>
+      </div>
+    );
+  }
+
+  if (needPlayName) {
+    return (
+      <div className="fixed inset-0 bg-black/80 flex flex-col items-center justify-center z-30 p-4">
+        <form
+          onSubmit={handlePlayNameSubmit}
+          className="bg-[#C2185B]/90 rounded-2xl p-6 max-w-sm w-full text-center space-y-4"
+        >
+          <h2 className="text-xl font-bold text-amber-400">{t('game.playNameTitle')}</h2>
+          <p className="text-amber-200/80 text-sm text-left">{t('game.playNameDescription')}</p>
+          <input
+            type="text"
+            value={playNameDraft}
+            onChange={(e) => setPlayNameDraft(e.target.value)}
+            maxLength={80}
+            autoComplete="name"
+            placeholder={user?.displayName || (user?.email ? user.email.split('@')[0] : '')}
+            className="w-full px-4 py-2.5 rounded-xl bg-black/30 text-white border border-white/10 text-sm focus:border-amber-500/50 focus:outline-none text-left"
+            aria-invalid={!!playNameError}
+          />
+          {playNameError && <p className="text-red-300/90 text-xs text-left">{playNameError}</p>}
+          <button
+            type="submit"
+            disabled={playNameSaving || !playNameDraft.trim()}
+            className="w-full py-3 rounded-xl bg-amber-500 text-white font-semibold disabled:opacity-50"
+          >
+            {playNameSaving ? t('game.playNameSaving') : t('game.playNameSave')}
+          </button>
+        </form>
+      </div>
+    );
+  }
+
   if (resumePending) {
     return (
       <div className="fixed inset-0 bg-black/80 flex flex-col items-center justify-center z-30 p-4">
@@ -242,16 +325,6 @@ export function GamePage() {
           });
         }}
       />
-    );
-  }
-
-  // Avoid starting a fresh game before we've checked for a paused game (prevents japa count from resetting on reload).
-  if (!pauseCheckDone && !isGuest) {
-    return (
-      <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
-        <div className="relative z-10 text-amber-400 text-sm">{t('common.loading')}</div>
-      </div>
     );
   }
 

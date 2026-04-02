@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import {
   signInWithPopup,
   signInWithRedirect,
+  getRedirectResult,
   signOut as firebaseSignOut,
   onAuthStateChanged,
   type AuthError,
@@ -55,6 +56,14 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({ loading: false });
       return () => {};
     }
+
+    // Completes signInWithRedirect when user returns to this origin (standard browsers).
+    // Cursor Simple Browser often fails on firebaseapp.com/__/auth/handler; sign in with Chrome/Safari instead.
+    getRedirectResult(auth)
+      .then((cred) => {
+        if (cred?.user) set({ user: cred.user, loading: false });
+      })
+      .catch(() => {});
 
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       set({ user, loading: false });

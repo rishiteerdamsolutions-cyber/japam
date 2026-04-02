@@ -1,6 +1,7 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Board } from './Board';
+import { BoardDeityHints } from './BoardDeityHints';
 import { GameOverlay } from './GameOverlay';
 import { OutOfLivesOverlay } from './OutOfLivesOverlay';
 import { ActiveUsersStrip } from './ActiveUsersStrip';
@@ -464,7 +465,10 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
       )}
 
       <div className="flex-1 w-full max-w-md min-h-0 flex items-center justify-center">
-        <Board />
+        <div className="relative w-full">
+          <BoardDeityHints />
+          <Board />
+        </div>
       </div>
 
       {status === 'playing' && (

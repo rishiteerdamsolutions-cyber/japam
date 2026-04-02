@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AppFooter } from './layout/AppFooter';
 import { useSettingsStore } from '../store/settingsStore';
@@ -129,6 +130,7 @@ interface SettingsProps {
 }
 
 export function Settings({ onBack }: SettingsProps) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
   const tier = useUnlockStore((s) => s.tier);
@@ -136,6 +138,7 @@ export function Settings({ onBack }: SettingsProps) {
   const { displayName, setDisplayName } = useProfileStore();
   const [localName, setLocalName] = useState(displayName ?? '');
   const [savingName, setSavingName] = useState(false);
+  const [nameSaveError, setNameSaveError] = useState<string | null>(null);
   const [appreciations, setAppreciations] = useState<MyAppreciations | null>(null);
   const [loadingAppreciations, setLoadingAppreciations] = useState(false);
   const [priestUsername, setPriestUsername] = useState('');
@@ -245,8 +248,14 @@ export function Settings({ onBack }: SettingsProps) {
   const handleNameSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user?.uid) return;
+    setNameSaveError(null);
     setSavingName(true);
-    try { await setDisplayName(localName); } finally { setSavingName(false); }
+    try {
+      const ok = await setDisplayName(localName);
+      if (!ok) setNameSaveError(t('game.playNameError'));
+    } finally {
+      setSavingName(false);
+    }
   };
 
   const handlePriestLink = async (e: React.FormEvent) => {
@@ -315,6 +324,7 @@ export function Settings({ onBack }: SettingsProps) {
                   placeholder={user.displayName || (user.email ? user.email.split('@')[0] : 'Your name')}
                   className="w-full px-4 py-2.5 rounded-xl bg-black/30 text-white border border-white/10 text-sm focus:border-amber-500/50 focus:outline-none"
                 />
+                {nameSaveError && <p className="text-red-300/90 text-xs">{nameSaveError}</p>}
                 <button type="submit" disabled={savingName || !localName.trim()} className="w-full py-2.5 rounded-xl bg-amber-500 text-white text-sm font-medium disabled:opacity-50">
                   {savingName ? 'Saving…' : 'Save'}
                 </button>

@@ -7,7 +7,8 @@ interface ProfileState {
   displayName: string | null;
   loaded: boolean;
   load: () => Promise<void>;
-  setDisplayName: (name: string) => Promise<void>;
+  /** Persists display name; updates store only on successful API response. */
+  setDisplayName: (name: string) => Promise<boolean>;
 }
 
 function apiUrl(path: string): string {
@@ -15,7 +16,7 @@ function apiUrl(path: string): string {
   return base ? `${base}${path.startsWith('/') ? path : `/${path}`}` : path;
 }
 
-export const useProfileStore = create<ProfileState>((setState) => ({
+export const useProfileStore = create<ProfileState>((setState, get) => ({
   displayName: null,
   loaded: false,
 
@@ -56,12 +57,18 @@ export const useProfileStore = create<ProfileState>((setState) => ({
 
   setDisplayName: async (name: string) => {
     const trimmed = name.trim();
-    setState({ displayName: trimmed || null });
+    if (!trimmed) return false;
     try {
       const user = auth?.currentUser;
-      if (!user || !trimmed) return;
+      if (!user) {
+        await get().load();
+        return false;
+      }
       const token = await user.getIdToken().catch(() => null);
-      if (!token) return;
+      if (!token) {
+        await get().load();
+        return false;
+      }
       const url = apiUrl('/api/user/profile');
       const res = await fetch(url, {
         method: 'POST',
@@ -73,10 +80,15 @@ export const useProfileStore = create<ProfileState>((setState) => ({
       }).catch(() => null);
 
       if (res && res.ok) {
+        setState({ displayName: trimmed });
         updateProfile(user, { displayName: trimmed }).catch(() => {});
+        return true;
       }
+      await get().load();
+      return false;
     } catch {
-      // ignore errors; UI already updated optimistically
+      await get().load();
+      return false;
     }
   },
 }));

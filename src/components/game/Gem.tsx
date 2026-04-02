@@ -14,6 +14,8 @@ interface GemProps {
 
 export const Gem = memo(function Gem({ deity, selected, onClick, sparkle, matched }: GemProps) {
   const d = getDeity(deity);
+  const tileSrc = d.imageGame ?? d.image;
+  const useFaceTile = Boolean(d.imageGame);
   return (
     <button
       type="button"
@@ -39,11 +41,11 @@ export const Gem = memo(function Gem({ deity, selected, onClick, sparkle, matche
       }}
     >
       <img
-        src={d.image}
+        src={tileSrc}
         alt={d.name}
         draggable={false}
-        className="absolute inset-0 w-full h-full object-cover object-center rounded-lg pointer-events-none"
-        style={{ transform: 'scale(1.25)' }}
+        className={`absolute inset-0 w-full h-full object-cover rounded-lg pointer-events-none ${useFaceTile ? 'object-[center_28%]' : 'object-center'}`}
+        style={{ transform: useFaceTile ? 'scale(1.12)' : 'scale(1.25)' }}
       />
     </button>
   );

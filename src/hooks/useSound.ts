@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { DEITY_IDS, getDeity } from '../data/deities';
 import type { DeityId } from '../data/deities';
+import { matchSfxUrlCandidates, type MatchSfxSelection } from '../lib/matchSfx';
 
 let audioContext: AudioContext | null = null;
 
@@ -121,58 +122,62 @@ export function stopAllMantras() {
   activeSources.length = 0;
 }
 
-export type MatchBonusAudioType = 'none' | 'bells' | 'conch' | 'conch_bells';
-
 const activeBonusAudios: HTMLAudioElement[] = [];
 
-function playMatchBonusAudioInternal(type: MatchBonusAudioType) {
-  if (type === 'none') return;
+function registerSfxAudio(audio: HTMLAudioElement) {
+  activeBonusAudios.push(audio);
+  audio.onended = () => {
+    const i = activeBonusAudios.indexOf(audio);
+    if (i >= 0) activeBonusAudios.splice(i, 1);
+  };
+}
+
+function playSfxPath(path: string, volume: number) {
+  const ctx = getAudioContext();
+  if (ctx.state === 'suspended') ctx.resume().catch(() => {});
+  const audio = new Audio(path);
+  audio.volume = volume;
+  registerSfxAudio(audio);
+  audio.play().catch(() => {
+    const i = activeBonusAudios.indexOf(audio);
+    if (i >= 0) activeBonusAudios.splice(i, 1);
+  });
+}
+
+/** Try per-deity URLs in order until one plays (missing files fall through). */
+function playFirstAvailableUrl(urls: string[], volume: number) {
   const ctx = getAudioContext();
   if (ctx.state === 'suspended') ctx.resume().catch(() => {});
 
-  const play = (path: string) => {
+  const tryAt = (index: number) => {
+    if (index >= urls.length) return;
+    const path = urls[index]!;
     const audio = new Audio(path);
-    audio.volume = 0.7;
-    activeBonusAudios.push(audio);
-    audio.play().catch(() => {});
-    audio.onended = () => {
+    audio.volume = volume;
+    const fail = () => {
       const i = activeBonusAudios.indexOf(audio);
       if (i >= 0) activeBonusAudios.splice(i, 1);
+      tryAt(index + 1);
     };
+    audio.addEventListener('error', fail, { once: true });
+    registerSfxAudio(audio);
+    audio.play().catch(fail);
   };
-
-  if (type === 'bells') {
-    play('/sounds/temple-bells.mp3');
-  } else if (type === 'conch') {
-    play('/sounds/conch.mp3');
-  } else {
-    play('/sounds/conch.mp3');
-    setTimeout(() => play('/sounds/temple-bells.mp3'), 200);
-  }
+  tryAt(0);
 }
 
-/** Short “impact” when a large match clears (Web Audio; respects silent failures). */
-export function playMatchImpactSfx(matchedTileCount: number) {
-  if (matchedTileCount < 4) return;
-  try {
-    const ctx = getAudioContext();
-    if (ctx.state === 'suspended') ctx.resume().catch(() => {});
-    const now = ctx.currentTime;
-    const vol = Math.min(0.09, 0.035 + matchedTileCount * 0.006);
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(880, now);
-    osc.frequency.exponentialRampToValueAtTime(1320, now + 0.06);
-    gain.gain.setValueAtTime(0, now);
-    gain.gain.linearRampToValueAtTime(vol, now + 0.018);
-    gain.gain.linearRampToValueAtTime(0, now + 0.13);
-    osc.start(now);
-    osc.stop(now + 0.15);
-  } catch {
-    /* ignore */
+/**
+ * One shot per move: main clip from `public/sounds/{3,4,5}match-sounds/`,
+ * plus temple bells on 4-matches and conch (shank) on 5-matches.
+ */
+export function playMatchSfxSelection(sel: MatchSfxSelection | null) {
+  if (!sel) return;
+  const urls = matchSfxUrlCandidates(sel.deity, sel.tier);
+  playFirstAvailableUrl(urls, 0.72);
+  if (sel.tier === 4) {
+    playSfxPath('/sounds/temple-bells.mp3', 0.38);
+  } else if (sel.tier === 5) {
+    playSfxPath('/sounds/conch.mp3', 0.44);
   }
 }
 
@@ -253,9 +258,9 @@ export function useSound(bgMusicEnabled: boolean, bgMusicVolume = 0.25) {
     }
   }, []);
 
-  const playMatchBonusAudio = useCallback((type: MatchBonusAudioType) => {
-    playMatchBonusAudioInternal(type);
+  const playMatchSfx = useCallback((sel: MatchSfxSelection | null) => {
+    playMatchSfxSelection(sel);
   }, []);
 
-  return { playMantra, playMatchBonusAudio };
+  return { playMantra, playMatchSfx };
 }

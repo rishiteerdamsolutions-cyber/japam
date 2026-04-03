@@ -131,7 +131,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
   const lastMatches = useGameStore(s => s.lastMatches);
   const lastSwappedTypes = useGameStore(s => s.lastSwappedTypes);
   const matchGeneration = useGameStore(s => s.matchGeneration);
-  const matchBonusAudio = useGameStore(s => s.matchBonusAudio);
+  const matchSfx = useGameStore(s => s.matchSfx);
   const currentLevelIndex = useGameStore(s => s.levelIndex);
   const prevGenerationRef = useRef(0);
   const pendingTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
@@ -141,7 +141,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
   const setBackgroundMusicVolume = useSettingsStore(s => s.setBackgroundMusicVolume);
   const candyBorderSpinEnabled = useSettingsStore((s) => s.candyBorderSpinEnabled);
   const setCandyBorderSpin = useSettingsStore((s) => s.setCandyBorderSpin);
-  const { playMantra, playMatchBonusAudio } = useSound(bgMusicEnabled, bgMusicVolume);
+  const { playMantra, playMatchSfx } = useSound(bgMusicEnabled, bgMusicVolume);
 
   const useLives = !!user && !isGuest && !isMarathon;
   const load = useLivesStore((s) => s.load);
@@ -360,16 +360,16 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
       const id = setTimeout(() => playMantra(deity), i * 200);
       pendingTimersRef.current.push(id);
     }
-    if (matchBonusAudio !== 'none') {
+    if (matchSfx) {
       const bonusDelay = Math.max(600, deduped.length * 200 + 400);
-      const id = setTimeout(() => playMatchBonusAudio(matchBonusAudio), bonusDelay);
+      const id = setTimeout(() => playMatchSfx(matchSfx), bonusDelay);
       pendingTimersRef.current.push(id);
     }
 
     return () => {
       clearPendingAudio();
     };
-  }, [lastMatches, matchGeneration, lastSwappedTypes, matchBonusAudio, playMantra, playMatchBonusAudio, mode]);
+  }, [lastMatches, matchGeneration, lastSwappedTypes, matchSfx, playMantra, playMatchSfx, mode]);
 
   const handleNext = () => {
     const nextIndex = Math.min(currentLevelIndex + 1, 49);

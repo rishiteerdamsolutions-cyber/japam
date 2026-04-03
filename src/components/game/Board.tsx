@@ -3,7 +3,7 @@ import { Gem } from './Gem';
 import { MatchParticles } from './MatchParticles';
 import { useGameStore } from '../../store/gameStore';
 import { useSettingsStore } from '../../store/settingsStore';
-import { primeAudio, playMatchImpactSfx } from '../../hooks/useSound';
+import { primeAudio } from '../../hooks/useSound';
 import { MATCH_STAGGER_MS } from '../../game/matchVfx';
 
 export function Board() {
@@ -42,11 +42,6 @@ export function Board() {
     setFallingKeys((prevKeys) => new Set([...prevKeys, ...keys]));
     useGameStore.setState({ refillSpawnKeys: [] });
   }, [refillSpawnGeneration, refillSpawnKeys]);
-
-  useEffect(() => {
-    if (!matchHighlightPositions?.length) return;
-    playMatchImpactSfx(matchHighlightPositions.length);
-  }, [matchHighlightPositions]);
 
   const clearFall = useCallback((key: string) => {
     setFallingKeys((prevKeys) => {

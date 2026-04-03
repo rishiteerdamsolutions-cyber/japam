@@ -114,19 +114,3 @@ export function hasLOrTShape(matches: Match[]): boolean {
   return false;
 }
 
-export type MatchBonusAudio = 'none' | 'bells' | 'conch' | 'conch_bells';
-
-/** 5+ → conch_bells, L/T → conch, 4 → bells */
-export function getMatchBonusAudio(matches: Match[]): MatchBonusAudio {
-  let has5 = false;
-  let has4 = false;
-  for (const m of matches) {
-    const n = m.positions.length;
-    if (n >= 5) has5 = true;
-    if (n === 4) has4 = true;
-  }
-  if (has5) return 'conch_bells';
-  if (hasLOrTShape(matches)) return 'conch';
-  if (has4) return 'bells';
-  return 'none';
-}

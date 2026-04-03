@@ -3,8 +3,8 @@ import type { Board, Match, Position } from '../engine/types';
 import { DEITY_IDS, type DeityId } from '../data/deities';
 import type { GameMode } from '../types';
 import { createBoard, swapGems, removeMatches, fillGaps } from '../engine/board';
-import { findMatches, getAllMatchPositions, getMatchBonusAudio, hasValidMoves } from '../engine/matcher';
-import type { MatchBonusAudio } from '../engine/matcher';
+import { findMatches, getAllMatchPositions, hasValidMoves } from '../engine/matcher';
+import { computeMatchSfxSelection, type MatchSfxSelection } from '../lib/matchSfx';
 import { applyGravity } from '../engine/gravity';
 import { calculateScore, getStars } from '../engine/scorer';
 import { LEVELS } from '../data/levels';
@@ -57,7 +57,8 @@ interface GameState {
   matchHighlightPositions: Position[] | null;
   pendingMatchBatch: Match[] | null;
   matchAnimationTimeoutId: ReturnType<typeof setTimeout> | null;
-  matchBonusAudio: MatchBonusAudio;
+  /** Set on first cascade batch of a move; used for one per-deity match SFX. */
+  matchSfx: MatchSfxSelection | null;
   /** Successful match-creating swaps this board; deity name hints hide after the first one. */
   hintsSwapCount: number;
   /** Cells that received a new gem after gravity+fill (for fall-in animation). */
@@ -110,7 +111,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   matchHighlightPositions: null,
   pendingMatchBatch: null,
   matchAnimationTimeoutId: null,
-  matchBonusAudio: 'none',
+  matchSfx: null,
   hintsSwapCount: 0,
   refillSpawnGeneration: 0,
   refillSpawnKeys: [],
@@ -157,7 +158,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       matchHighlightPositions: null,
       pendingMatchBatch: null,
       matchAnimationTimeoutId: null,
-      matchBonusAudio: 'none',
+      matchSfx: null,
       hintsSwapCount: 0,
       refillSpawnGeneration: 0,
       refillSpawnKeys: [],
@@ -224,7 +225,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       matchHighlightPositions: null,
       pendingMatchBatch: null,
       matchAnimationTimeoutId: null,
-      matchBonusAudio: 'none',
+      matchSfx: null,
       hintsSwapCount: 0,
       refillSpawnGeneration: 0,
       refillSpawnKeys: [],
@@ -304,11 +305,14 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       accumulated.length === 0 && currentMode !== 'general'
         ? matches.filter(m => m.deity === (currentMode as DeityId))
         : matches;
-    const matchBonusAudio = accumulated.length === 0 ? getMatchBonusAudio(sourceForBonus) : get().matchBonusAudio;
+    const matchSfx =
+      accumulated.length === 0
+        ? computeMatchSfxSelection(sourceForBonus, currentMode, get().intendedDeity)
+        : get().matchSfx;
     set({
       matchHighlightPositions: positions,
       pendingMatchBatch: matches,
-      matchBonusAudio
+      matchSfx,
     });
     const isUserDirectMatch = accumulated.length === 0;
     const clearMs = getMatchClearDelayMs(positions.length);
@@ -459,6 +463,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       hintsSwapCount: 0,
       refillSpawnKeys: [],
       refillSpawnGeneration: 0,
+      matchSfx: null,
     });
   },
 

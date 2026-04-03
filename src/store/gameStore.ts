@@ -59,6 +59,8 @@ interface GameState {
   matchAnimationTimeoutId: ReturnType<typeof setTimeout> | null;
   /** Set on first cascade batch of a move; used for one per-deity match SFX. */
   matchSfx: MatchSfxSelection | null;
+  /** Bumped when a new match batch starts (first cascade only) so UI plays SFX in sync with pop animation. */
+  matchSfxPlayToken: number;
   /** Successful match-creating swaps this board; deity name hints hide after the first one. */
   hintsSwapCount: number;
   /** Cells that received a new gem after gravity+fill (for fall-in animation). */
@@ -112,6 +114,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   pendingMatchBatch: null,
   matchAnimationTimeoutId: null,
   matchSfx: null,
+  matchSfxPlayToken: 0,
   hintsSwapCount: 0,
   refillSpawnGeneration: 0,
   refillSpawnKeys: [],
@@ -159,6 +162,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       pendingMatchBatch: null,
       matchAnimationTimeoutId: null,
       matchSfx: null,
+      matchSfxPlayToken: 0,
       hintsSwapCount: 0,
       refillSpawnGeneration: 0,
       refillSpawnKeys: [],
@@ -226,6 +230,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       pendingMatchBatch: null,
       matchAnimationTimeoutId: null,
       matchSfx: null,
+      matchSfxPlayToken: 0,
       hintsSwapCount: 0,
       refillSpawnGeneration: 0,
       refillSpawnKeys: [],
@@ -309,10 +314,13 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       accumulated.length === 0
         ? computeMatchSfxSelection(sourceForBonus, currentMode, get().intendedDeity)
         : get().matchSfx;
+    const matchSfxPlayToken =
+      accumulated.length === 0 && matchSfx ? get().matchSfxPlayToken + 1 : get().matchSfxPlayToken;
     set({
       matchHighlightPositions: positions,
       pendingMatchBatch: matches,
       matchSfx,
+      matchSfxPlayToken,
     });
     const isUserDirectMatch = accumulated.length === 0;
     const clearMs = getMatchClearDelayMs(positions.length);
@@ -464,6 +472,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       refillSpawnKeys: [],
       refillSpawnGeneration: 0,
       matchSfx: null,
+      matchSfxPlayToken: 0,
     });
   },
 

@@ -128,12 +128,8 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
   const initGame = useGameStore(s => s.initGame);
   const status = useGameStore(s => s.status);
   const reset = useGameStore(s => s.reset);
-  const lastMatches = useGameStore(s => s.lastMatches);
-  const lastSwappedTypes = useGameStore(s => s.lastSwappedTypes);
-  const matchGeneration = useGameStore(s => s.matchGeneration);
-  const matchSfx = useGameStore(s => s.matchSfx);
+  const matchSfxPlayToken = useGameStore((s) => s.matchSfxPlayToken);
   const currentLevelIndex = useGameStore(s => s.levelIndex);
-  const prevGenerationRef = useRef(0);
   const pendingTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const bgMusicEnabled = useSettingsStore(s => s.backgroundMusicEnabled);
   const bgMusicVolume = useSettingsStore(s => s.backgroundMusicVolume);
@@ -141,7 +137,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
   const setBackgroundMusicVolume = useSettingsStore(s => s.setBackgroundMusicVolume);
   const candyBorderSpinEnabled = useSettingsStore((s) => s.candyBorderSpinEnabled);
   const setCandyBorderSpin = useSettingsStore((s) => s.setCandyBorderSpin);
-  const { playMantra, playMatchSfx } = useSound(bgMusicEnabled, bgMusicVolume);
+  const { playMatchSfx } = useSound(bgMusicEnabled, bgMusicVolume);
 
   const useLives = !!user && !isGuest && !isMarathon;
   const load = useLivesStore((s) => s.load);
@@ -180,7 +176,6 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
       } else {
         initGame(mode as 'general', levelIndex);
       }
-      prevGenerationRef.current = 0;
     };
 
     doInit();
@@ -320,56 +315,12 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
     addMoves(movesToAdd);
   }, [addMoves, currentLevelIndex]);
 
+  /** Per-deity 3/4/5 match SFX: play as soon as the match pop animation starts (store bumps token with highlight). */
   useEffect(() => {
-    if (lastMatches.length === 0 || matchGeneration === prevGenerationRef.current) return;
-    prevGenerationRef.current = matchGeneration;
-
-    const swapped = lastSwappedTypes;
-    const intendedDeity = swapped?.[0] ?? null;
-    const uniqueDeities = new Set(lastMatches.map(m => m.deity));
-    const isMultiDeity = uniqueDeities.size > 1;
-
-    let filtered: typeof lastMatches;
-    if (mode === 'general') {
-      filtered = lastMatches.filter(m =>
-        m.combo === 1 && (!swapped || swapped.includes(m.deity))
-      );
-      if (isMultiDeity && intendedDeity && filtered.some(m => m.deity === intendedDeity)) {
-        filtered = filtered.filter(m => m.deity === intendedDeity);
-      }
-    } else {
-      const userSwappedTarget = swapped ? swapped.includes(mode as DeityId) : false;
-      filtered = userSwappedTarget
-        ? lastMatches.filter(m => m.deity === mode && m.combo === 1)
-        : [];
-    }
-
-    const deduped: typeof filtered = [];
-    const seen = new Set<string>();
-    for (const m of filtered) {
-      const key = `${m.deity}-${m.combo}`;
-      if (!seen.has(key)) {
-        seen.add(key);
-        deduped.push(m);
-      }
-    }
-
-    pendingTimersRef.current = [];
-    for (let i = 0; i < deduped.length; i++) {
-      const { deity } = deduped[i]!;
-      const id = setTimeout(() => playMantra(deity), i * 200);
-      pendingTimersRef.current.push(id);
-    }
-    if (matchSfx) {
-      const bonusDelay = Math.max(600, deduped.length * 200 + 400);
-      const id = setTimeout(() => playMatchSfx(matchSfx), bonusDelay);
-      pendingTimersRef.current.push(id);
-    }
-
-    return () => {
-      clearPendingAudio();
-    };
-  }, [lastMatches, matchGeneration, lastSwappedTypes, matchSfx, playMantra, playMatchSfx, mode]);
+    if (matchSfxPlayToken === 0) return;
+    const sel = useGameStore.getState().matchSfx;
+    if (sel) playMatchSfx(sel);
+  }, [matchSfxPlayToken, playMatchSfx]);
 
   const handleNext = () => {
     const nextIndex = Math.min(currentLevelIndex + 1, 49);

@@ -11,6 +11,7 @@ import { useLivesStore } from '../../store/livesStore';
 import { LEVELS } from '../../data/levels';
 import { useAuthStore } from '../../store/authStore';
 import { saveUserPausedGame } from '../../lib/firestore';
+import { gameDebug } from '../../lib/gameDebug';
 import { setLastPausedGame } from '../../lib/pausedGame';
 import { useSound, stopAllMantras, stopMatchBonusAudio } from '../../hooks/useSound';
 import { useSettingsStore } from '../../store/settingsStore';
@@ -169,6 +170,16 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
     prevRestoredRef.current = false;
 
     const doInit = () => {
+      gameDebug('GameScreen re-init effect → initGame', {
+        mode,
+        levelIndex,
+        isMarathon,
+        marathonTargetJapas,
+        marathonId,
+        yagnaId,
+        isGuest,
+        justRestored,
+      });
       if (isMarathon && marathonTargetJapas != null && (marathonId || yagnaId)) {
         initGame(mode as 'general', 0, { marathonId: marathonId ?? undefined, marathonTargetJapas, yagnaId: yagnaId ?? undefined });
       } else if (isGuest) {
@@ -180,6 +191,71 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
 
     doInit();
   }, [mode, levelIndex, isMarathon, marathonTargetJapas, marathonId, yagnaId, isGuest, justRestored, onJustRestoredCleared, initGame]);
+
+  /**
+   * Swipe-back / browser back often unmounts this screen without clicking Pause.
+   * Persist the same payload Pause would save, plus pagehide for full unloads.
+   */
+  useEffect(() => {
+    const persistQuiet = (reason: 'pagehide' | 'unmount') => {
+      const gs = useGameStore.getState();
+      if (gs.status !== 'playing' || !gs.board.length) {
+        gameDebug('persistQuiet skip', { reason, status: gs.status, boardLen: gs.board.length });
+        return;
+      }
+      const payload = gs.savePausedState();
+      if (!payload) {
+        gameDebug('persistQuiet skip (no payload)', { reason, isGuest: gs.isGuest });
+        return;
+      }
+      gameDebug('persistQuiet', {
+        reason,
+        key: payload.key,
+        levelIndex: payload.levelIndex,
+        japasThisLevel: gs.japasThisLevel,
+        mode: payload.mode,
+      });
+      const authUser = useAuthStore.getState().user;
+      if (authUser?.uid) {
+        void (async () => {
+          try {
+            if (gs.marathonTargetJapas != null && (gs.marathonId || gs.yagnaId)) {
+              await useJapaStore.getState().flushJapas();
+            }
+          } catch {
+            /* ignore */
+          }
+          await saveUserPausedGame(
+            authUser.uid,
+            payload as unknown as Record<string, unknown>,
+            authUser,
+            undefined,
+            { keepalive: reason === 'pagehide' },
+          );
+        })();
+      } else {
+        try {
+          localStorage.setItem(payload.key, JSON.stringify(payload));
+          setLastPausedGame({
+            mode: payload.mode,
+            levelIndex: payload.levelIndex,
+            marathonId: payload.marathonId,
+            marathonTargetJapas: payload.marathonTargetJapas,
+            yagnaId: payload.yagnaId,
+          });
+        } catch {
+          /* ignore */
+        }
+      }
+    };
+
+    const onPageHide = () => persistQuiet('pagehide');
+    window.addEventListener('pagehide', onPageHide);
+    return () => {
+      window.removeEventListener('pagehide', onPageHide);
+      persistQuiet('unmount');
+    };
+  }, []);
   const flushJapas = useJapaStore((s) => s.flushJapas);
   const getPausedKey = useGameStore(s => s.getPausedKey);
   const [showBreakReminder, setShowBreakReminder] = useState(false);

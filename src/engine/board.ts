@@ -1,6 +1,7 @@
 import type { Board, GemType } from './types';
 import { DEITY_IDS } from '../data/deities';
 import type { DeityId } from '../data/deities';
+import { sameLineGroup } from './gemKinds';
 
 /** When deityMode is set, that deity's gem is always included (required for deity-specific games). */
 export function createBoard(rows: number, cols: number, maxGemTypes = 8, deityMode?: DeityId): Board {
@@ -58,13 +59,19 @@ function wouldCreateMatch(
   };
 
   const horizontal =
-    (col >= 2 && getCell(row, col - 1) === gem && getCell(row, col - 2) === gem) ||
-    (col >= 1 && col < numCols - 1 && getCell(row, col - 1) === gem && getCell(row, col + 1) === gem) ||
-    (col < numCols - 2 && getCell(row, col + 1) === gem && getCell(row, col + 2) === gem);
+    (col >= 2 && sameLineGroup(getCell(row, col - 1), gem) && sameLineGroup(getCell(row, col - 2), gem)) ||
+    (col >= 1 &&
+      col < numCols - 1 &&
+      sameLineGroup(getCell(row, col - 1), gem) &&
+      sameLineGroup(getCell(row, col + 1), gem)) ||
+    (col < numCols - 2 && sameLineGroup(getCell(row, col + 1), gem) && sameLineGroup(getCell(row, col + 2), gem));
   const vertical =
-    (row >= 2 && getCell(row - 1, col) === gem && getCell(row - 2, col) === gem) ||
-    (row >= 1 && row < numRows - 1 && getCell(row - 1, col) === gem && getCell(row + 1, col) === gem) ||
-    (row < numRows - 2 && getCell(row + 1, col) === gem && getCell(row + 2, col) === gem);
+    (row >= 2 && sameLineGroup(getCell(row - 1, col), gem) && sameLineGroup(getCell(row - 2, col), gem)) ||
+    (row >= 1 &&
+      row < numRows - 1 &&
+      sameLineGroup(getCell(row - 1, col), gem) &&
+      sameLineGroup(getCell(row + 1, col), gem)) ||
+    (row < numRows - 2 && sameLineGroup(getCell(row + 1, col), gem) && sameLineGroup(getCell(row + 2, col), gem));
   return horizontal || vertical;
 }
 

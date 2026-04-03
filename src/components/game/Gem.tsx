@@ -1,9 +1,10 @@
 import { memo } from 'react';
-import { getDeity } from '../../data/deities';
-import type { DeityId } from '../../data/deities';
+import { DEITY_IDS, getDeity } from '../../data/deities';
+import type { GemType } from '../../engine/types';
+import { displayDeityId } from '../../engine/gemKinds';
 
 interface GemProps {
-  deity: DeityId;
+  gem: GemType;
   row: number;
   col: number;
   /** Left half of board: border shimmer rotates CCW; right half: CW. */
@@ -22,7 +23,7 @@ interface GemProps {
 }
 
 export const Gem = memo(function Gem({
-  deity,
+  gem,
   selected,
   onClick,
   sparkle,
@@ -33,7 +34,7 @@ export const Gem = memo(function Gem({
   borderSpin,
   borderSpinActive,
 }: GemProps) {
-  const d = getDeity(deity);
+  const d = getDeity(displayDeityId(gem) ?? DEITY_IDS[0]);
   const tileSrc = d.imageGame ?? d.image;
   const useFaceTile = Boolean(d.imageGame);
   const gameImgCentered = d.imageGameObjectPosition === 'center';

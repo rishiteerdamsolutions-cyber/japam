@@ -1,5 +1,6 @@
 import { useMemo, useState, useEffect } from 'react';
 import type { Board, Position } from '../../engine/types';
+import { displayDeityId } from '../../engine/gemKinds';
 import { getDeity } from '../../data/deities';
 import { MATCH_STAGGER_MS } from '../../game/matchVfx';
 
@@ -39,8 +40,9 @@ export function MatchParticles({ positions, board, rows, cols }: MatchParticlesP
     <div className="absolute inset-0 pointer-events-none z-[3] overflow-visible" aria-hidden>
       {sortedWithIndex.map(({ row: r, col: c, cellIndex }) => {
         const gem = board[r]?.[c];
-        if (!gem) return null;
-        const color = getDeity(gem).color;
+        const deityId = displayDeityId(gem);
+        if (!gem || !deityId) return null;
+        const color = getDeity(deityId).color;
         const leftPct = ((c + 0.5) / cols) * 100;
         const topPct = ((r + 0.5) / rows) * 100;
         const baseDelay = cellIndex * MATCH_STAGGER_MS;

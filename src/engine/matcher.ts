@@ -1,4 +1,6 @@
+import type { DeityId } from '../data/deities';
 import type { Board, Match, Position } from './types';
+import { baseDeityForLine, sameLineGroup } from './gemKinds';
 
 export function findMatches(board: Board): Match[] {
   const matches: Match[] = [];
@@ -10,17 +12,19 @@ export function findMatches(board: Board): Match[] {
     for (let c = 0; c < cols; c++) {
       const gem = board[r][c];
       if (!gem) continue;
+      const lineDeity = baseDeityForLine(gem);
+      if (!lineDeity) continue;
 
       const horizontal: Position[] = [];
       let cc = c;
-      while (cc < cols && board[r][cc] === gem) {
+      while (cc < cols && sameLineGroup(board[r][cc], gem)) {
         horizontal.push({ row: r, col: cc });
         cc++;
       }
 
       const vertical: Position[] = [];
       let rr = r;
-      while (rr < rows && board[rr][c] === gem) {
+      while (rr < rows && sameLineGroup(board[rr][c], gem)) {
         vertical.push({ row: rr, col: c });
         rr++;
       }
@@ -29,14 +33,14 @@ export function findMatches(board: Board): Match[] {
         const key = horizontal.map(p => `${p.row},${p.col}`).sort().join('|');
         if (!matched.has(key)) {
           matched.add(key);
-          matches.push({ deity: gem, positions: horizontal });
+          matches.push({ deity: lineDeity, positions: horizontal });
         }
       }
       if (vertical.length >= 3) {
         const key = vertical.map(p => `${p.row},${p.col}`).sort().join('|');
         if (!matched.has(key)) {
           matched.add(key);
-          matches.push({ deity: gem, positions: vertical });
+          matches.push({ deity: lineDeity, positions: vertical });
         }
       }
     }
@@ -88,7 +92,7 @@ export function getAllMatchPositions(matches: Match[]): Position[] {
 
 /** Whether this batch has overlapping horizontal + vertical matches (L or T shape) for same deity */
 export function hasLOrTShape(matches: Match[]): boolean {
-  const byDeity = new Map<Match['deity'], Match[]>();
+  const byDeity = new Map<DeityId, Match[]>();
   for (const m of matches) {
     const arr = byDeity.get(m.deity) ?? [];
     arr.push(m);

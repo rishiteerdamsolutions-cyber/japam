@@ -1,6 +1,7 @@
 import type { DeityId } from '../data/deities';
+import type { GemType } from './gemKinds';
 
-export type GemType = DeityId;
+export type { GemType };
 
 export type Board = (GemType | null)[][];
 
@@ -10,7 +11,7 @@ export interface Position {
 }
 
 export interface Match {
-  deity: GemType;
+  deity: DeityId;
   positions: Position[];
 }
 

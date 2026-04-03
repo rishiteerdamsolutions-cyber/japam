@@ -5,6 +5,8 @@ import { useGameStore } from '../../store/gameStore';
 import { useSettingsStore } from '../../store/settingsStore';
 import { primeAudio } from '../../hooks/useSound';
 import { MATCH_STAGGER_MS } from '../../game/matchVfx';
+import { cellShowsDeity } from '../../engine/gemKinds';
+import type { DeityId } from '../../data/deities';
 
 export function Board() {
   const candyBorderSpinEnabled = useSettingsStore((s) => s.candyBorderSpinEnabled);
@@ -140,13 +142,13 @@ export function Board() {
                 onClick={() => handleClick(r, c)}
               >
                 <Gem
-                  deity={cell}
+                  gem={cell}
                   row={r}
                   col={c}
                   borderSpin={c < cols / 2 ? 'left' : 'right'}
                   borderSpinActive={candyBorderSpinEnabled}
                   selected={selectedCell?.row === r && selectedCell?.col === c}
-                  sparkle={showSparkle && cell === mode}
+                  sparkle={showSparkle && cellShowsDeity(cell, mode as DeityId)}
                   matched={matchSet.has(cellKey(r, c))}
                   matchStaggerDelayMs={(staggerIndexByCell.get(cellKey(r, c)) ?? 0) * MATCH_STAGGER_MS}
                   falling={fallingKeys.has(cellKey(r, c))}

@@ -3,6 +3,7 @@ import { useGameStore } from '../../store/gameStore';
 import type { DeityId } from '../../data/deities';
 import { getDeity } from '../../data/deities';
 import type { Board } from '../../engine/types';
+import { displayDeityId } from '../../engine/gemKinds';
 
 /** Hide name + arrow hints after this many successful (match-making) swaps (board changes a lot after matches). */
 const VISIBLE_UNTIL_SUCCESSFUL_SWAPS = 1;
@@ -63,9 +64,10 @@ export function BoardDeityHints() {
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
         const g = board[r][c];
-        if (g && !seen.has(g)) {
-          seen.add(g);
-          ids.push(g);
+        const id = displayDeityId(g);
+        if (id && !seen.has(id)) {
+          seen.add(id);
+          ids.push(id);
         }
       }
     }

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import type { Board, Match, Position } from '../engine/types';
+import type { Board, GemType, Match, Position } from '../engine/types';
+import { displayDeityId } from '../engine/gemKinds';
 import { DEITY_IDS, type DeityId } from '../data/deities';
 import type { GameMode } from '../types';
 import { createBoard, swapGems, removeMatches, fillGaps } from '../engine/board';
@@ -12,6 +13,7 @@ import { useJapaStore } from './japaStore';
 import { useProgressStore } from './progressStore';
 import { stopAllMantras } from '../hooks/useSound';
 import { getMatchClearDelayMs } from '../game/matchVfx';
+import { gameDebug } from '../lib/gameDebug';
 
 export type { GameMode };
 export type GameStatus = 'playing' | 'won' | 'lost';
@@ -28,6 +30,9 @@ export interface PausedGameState {
   marathonId?: string;
   marathonTargetJapas?: number;
   yagnaId?: string;
+  /** Present when paused game was guest play (e.g. /game?guest=1). */
+  isGuest?: boolean;
+  overrideJapaTarget?: number | null;
   savedAt: number;
   version?: number;
 }
@@ -49,8 +54,8 @@ interface GameState {
   isGuest: boolean;
   selectedCell: { row: number; col: number } | null;
   lastMatches: { deity: DeityId; count: number; combo: number }[];
-  lastSwappedTypes: [DeityId, DeityId] | null;
-  intendedDeity: DeityId | null;
+  lastSwappedTypes: [GemType, GemType] | null;
+  intendedDeity: GemType | null;
   matchGeneration: number;
   firstMatchMade: boolean;
   maxGemTypes: number;
@@ -120,6 +125,14 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   refillSpawnKeys: [],
 
   initGame: (mode, levelIndex = 0, options) => {
+    gameDebug('initGame', {
+      mode,
+      levelIndex,
+      marathonId: options?.marathonId ?? null,
+      yagnaId: options?.yagnaId ?? null,
+      marathonTarget: options?.marathonTargetJapas ?? null,
+      guest: options?.isGuest === true,
+    });
     stopAllMantras();
     const { matchAnimationTimeoutId } = get();
     if (matchAnimationTimeoutId != null) clearTimeout(matchAnimationTimeoutId);
@@ -179,7 +192,6 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
 
   savePausedState: (): PausedGameState | null => {
     const state = get();
-    if (state.isGuest) return null;
     if (state.status !== 'playing' || state.board.length === 0) return null;
     const key = get().getPausedKey();
     const payload: PausedGameState = {
@@ -192,6 +204,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       marathonId: state.marathonId ?? undefined,
       marathonTargetJapas: state.marathonTargetJapas ?? undefined,
       yagnaId: state.yagnaId ?? undefined,
+      isGuest: state.isGuest,
+      overrideJapaTarget: state.overrideJapaTarget ?? undefined,
       savedAt: Date.now(),
       version: 2
     };
@@ -219,6 +233,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       marathonId: saved.marathonId ?? null,
       marathonTargetJapas: saved.marathonTargetJapas ?? null,
       yagnaId: saved.yagnaId ?? null,
+      overrideJapaTarget: saved.overrideJapaTarget ?? null,
+      isGuest: saved.isGuest ?? false,
       selectedCell: null,
       lastMatches: [],
       lastSwappedTypes: null,
@@ -312,7 +328,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
         : matches;
     const matchSfx =
       accumulated.length === 0
-        ? computeMatchSfxSelection(sourceForBonus, currentMode, get().intendedDeity)
+        ? computeMatchSfxSelection(sourceForBonus, currentMode, displayDeityId(get().intendedDeity))
         : get().matchSfx;
     const matchSfxPlayToken =
       accumulated.length === 0 && matchSfx ? get().matchSfxPlayToken + 1 : get().matchSfxPlayToken;
@@ -350,14 +366,20 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     }
     // Only count japa for user's direct manual match (1 japa per match), NOT cascading matches
     const isMultiMatch = pendingMatchBatch.length > 1 || deityMatches.size > 1;
-    const useIntendedOnly = gameMode === 'general' && isUserDirectMatch && isMultiMatch && intendedDeity && deityMatches.has(intendedDeity);
+    const intendedDeityId = displayDeityId(intendedDeity);
+    const useIntendedOnly =
+      gameMode === 'general' &&
+      isUserDirectMatch &&
+      isMultiMatch &&
+      intendedDeityId != null &&
+      deityMatches.has(intendedDeityId);
 
     let japaDelta = 0;
     if (isUserDirectMatch) {
       for (const [deity] of deityMatches) {
         const shouldCountJapa = gameMode === 'general' || gameMode === deity;
         if (!shouldCountJapa) continue;
-        if (useIntendedOnly && deity !== intendedDeity) continue;
+        if (useIntendedOnly && deity !== intendedDeityId) continue;
         const japaCount = 1; // 1 japa per manual match (e.g. 3 candies matched = 1 japa)
         japasByDeity[deity] = (japasByDeity[deity] ?? 0) + japaCount;
         if (!isGuest) japaStore.addJapa(deity, japaCount);

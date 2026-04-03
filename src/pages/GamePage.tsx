@@ -44,6 +44,7 @@ export function GamePage() {
   const [resumeKey, setResumeKey] = useState<string | null>(null);
   const [justRestored, setJustRestored] = useState(false);
   const [pauseCheckDone, setPauseCheckDone] = useState(false);
+  const [startFreshConfirmOpen, setStartFreshConfirmOpen] = useState(false);
 
   const initGame = useGameStore((s) => s.initGame);
   const restoreGame = useGameStore((s) => s.restoreGame);
@@ -184,7 +185,8 @@ export function GamePage() {
     }
   };
 
-  const handleStartFresh = async () => {
+  const handleStartFreshConfirm = async () => {
+    setStartFreshConfirmOpen(false);
     if (resumeKey) {
       if (user?.uid) {
         if (yagnaId) await resetMahaYagnaContribution(yagnaId, user);
@@ -287,27 +289,56 @@ export function GamePage() {
     return (
       <div className="fixed inset-0 bg-black/80 flex flex-col items-center justify-center z-30 p-4">
         <div className="bg-[#C2185B]/90 rounded-2xl p-6 max-w-sm w-full text-center">
-          <h2 className="text-xl font-bold text-amber-400 mb-2">{t('game.resumeJapa')}</h2>
-          <p className="text-amber-200/80 mb-4 text-sm">
-            {t('game.resumeJapaMessage')}
-          </p>
-          <p className="text-amber-300/70 text-xs mb-6 italic">
-            {t('game.saveProgressTip')}
-          </p>
-          <div className="flex flex-col gap-2">
-            <button
-              onClick={handleResume}
-              className="w-full py-3 rounded-xl bg-amber-500 text-white font-semibold"
-            >
-              {t('game.resume')}
-            </button>
-            <button
-              onClick={handleStartFresh}
-              className="w-full py-3 rounded-xl border border-amber-500/50 text-amber-400"
-            >
-              {t('game.startFresh')}
-            </button>
-          </div>
+          {startFreshConfirmOpen ? (
+            <>
+              <h2 className="text-xl font-bold text-amber-400 mb-2">{t('game.startFreshConfirmTitle')}</h2>
+              <p className="text-amber-200/80 mb-6 text-sm text-left break-words">
+                {t('game.startFreshConfirmMessage')}
+              </p>
+              <div className="flex flex-col gap-2">
+                <button
+                  type="button"
+                  onClick={handleStartFreshConfirm}
+                  className="w-full py-3 rounded-xl bg-red-600/90 text-white font-semibold"
+                >
+                  {t('game.startFreshConfirmYes')}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setStartFreshConfirmOpen(false)}
+                  className="w-full py-3 rounded-xl bg-amber-500 text-white font-semibold"
+                >
+                  {t('game.startFreshConfirmNo')}
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <h2 className="text-xl font-bold text-amber-400 mb-2">{t('game.resumeJapa')}</h2>
+              <p className="text-amber-200/80 mb-4 text-sm">
+                {t('game.resumeJapaMessage')}
+              </p>
+              <p className="text-amber-300/70 text-xs mb-6 italic">
+                {t('game.saveProgressTip')}
+              </p>
+              <div className="flex flex-col gap-2">
+                <button
+                  type="button"
+                  onClick={handleResume}
+                  className="w-full py-3 rounded-xl bg-amber-500 text-white font-semibold"
+                >
+                  {t('game.resume')}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setStartFreshConfirmOpen(true)}
+                  className="w-full py-3 rounded-xl border border-amber-500/50 text-amber-400"
+                >
+                  {t('game.startFresh')}
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     );

@@ -89,9 +89,9 @@ The old pixel sheet [`docs/assets/power-offerings-reference.png`](assets/power-o
 ## Phase 1 — Game logic (next)
 
 - Booster charges + persistence hooks (per plan).
-- Namaskaram + per-deity offering: single-cell remove, japa/move rules.
+- Namaskaram + per-deity offering: single-cell remove, **−1 move**; **japa only from normal match resolution** after gravity/refill (same rules as a swap—no extra +1 for tapping the power, so a line formed by the clear does not double-count with cascades).
 - Free swap: **any adjacent swap** is allowed (including setup moves that do **not** match yet). Not for blessing activation. **Consumes one charge** and **does not spend a level move**; if the swap creates a match, japa/cascade behaves like a normal match.
-- Bomb: 5-match spawn; swap clears all of deity; −1 move, +1 japa.
+- Bomb: 5-match spawn; clears all gems of that deity; **−1 move**; japa from line matches that appear after the clear (normal first-batch japa rules, not a separate flat +1 on use).
 - `resolutionSource` / japa gating for cascades.
 
 ## Phase 3 — Animations (after logic)

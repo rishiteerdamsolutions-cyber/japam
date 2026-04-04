@@ -7,6 +7,27 @@ import type { RewardType } from '../../lib/rewardVideoAnalytics';
 
 const WATCH_SECONDS = 30;
 
+/** Coalesce concurrent fetches (e.g. React Strict Mode remount) into one POST so the global cursor advances once. */
+let nextRewardVideoInFlight: Promise<RewardVideoItem | null> | null = null;
+
+async function fetchNextRewardVideoItem(apiBase: string): Promise<RewardVideoItem | null> {
+  if (!nextRewardVideoInFlight) {
+    const url = apiBase ? `${apiBase}/api/config/reward-videos/next` : '/api/config/reward-videos/next';
+    nextRewardVideoInFlight = fetch(url, { method: 'POST' })
+      .then(async (r) => {
+        if (!r.ok) return null;
+        const data = (await r.json()) as { item?: RewardVideoItem };
+        const item = data?.item;
+        if (!item?.youtubeId) return null;
+        return item;
+      })
+      .finally(() => {
+        nextRewardVideoInFlight = null;
+      });
+  }
+  return nextRewardVideoInFlight;
+}
+
 export interface RewardVideoItem {
   id: string;
   type: 'adyathmika' | 'advertisement';
@@ -39,7 +60,7 @@ function extractYoutubeId(urlOrId: string): string {
 
 export function RewardVideoModal({ onComplete, onClose, rewardLabel, rewardType, getIdToken }: RewardVideoModalProps) {
   const { t } = useTranslation();
-  const [items, setItems] = useState<RewardVideoItem[]>([]);
+  const [video, setVideo] = useState<RewardVideoItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [secondsLeft, setSecondsLeft] = useState(WATCH_SECONDS);
   const [canContinue, setCanContinue] = useState(false);
@@ -48,23 +69,25 @@ export function RewardVideoModal({ onComplete, onClose, rewardLabel, rewardType,
   const trackedCompleted = useRef(false);
 
   useEffect(() => {
+    let cancelled = false;
     const base = getApiBase();
-    const url = base ? `${base}/api/config/reward-videos` : '/api/config/reward-videos';
-    fetch(url)
-      .then((r) => r.json())
-      .then((data: { items?: RewardVideoItem[] }) => {
-        const list = Array.isArray(data?.items) ? data.items : [];
-        setItems(list.filter((i) => i?.youtubeId));
+    fetchNextRewardVideoItem(base)
+      .then((item) => {
+        if (cancelled) return;
+        setVideo(item);
         setLoading(false);
-        if (list.length === 0) setError(t('game.noVideosAvailable') || 'No videos available');
+        if (!item) setError(t('game.noVideosAvailable') || 'No videos available');
       })
       .catch(() => {
+        if (cancelled) return;
         setLoading(false);
         setError(t('game.noVideosAvailable') || 'No videos available');
       });
+    return () => {
+      cancelled = true;
+    };
   }, [t]);
 
-  const video = items.length > 0 ? items[Math.floor(Math.random() * items.length)]! : null;
   const youtubeId = video ? extractYoutubeId(video.youtubeId) : null;
   const videoType = video?.type ?? 'adyathmika';
 
@@ -165,10 +188,15 @@ export function RewardVideoModal({ onComplete, onClose, rewardLabel, rewardType,
         transition={{ type: 'spring', damping: 20, stiffness: 300 }}
         className="w-full max-w-sm rounded-2xl border-2 border-[#5D4037] bg-[#C2185B]/90 p-4 overflow-hidden"
       >
+        {video?.title?.trim() ? (
+          <p className="text-amber-100/95 text-sm font-medium text-center mb-3 line-clamp-2 px-1">
+            {video.title.trim()}
+          </p>
+        ) : null}
         <div className="aspect-[9/16] max-h-[60vh] w-full rounded-xl overflow-hidden bg-black">
           <iframe
             src={embedUrl}
-            title="Reward video"
+            title={video?.title?.trim() || 'Reward video'}
             className="w-full h-full"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen

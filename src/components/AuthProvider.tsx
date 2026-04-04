@@ -26,6 +26,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const loadUnlock = useUnlockStore((s) => s.load);
   const loadSettings = useSettingsStore((s) => s.load);
   const loadPowersInventory = usePowersInventoryStore((s) => s.load);
+  const ensureStarterPackOnce = usePowersInventoryStore((s) => s.ensureStarterPackOnce);
   const loadProfile = useProfileStore((s) => s.load);
   useDailyReminder();
 
@@ -34,11 +35,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return unsubscribe;
   }, [init]);
 
-  // Global app bootstrap: ensure stores load on *every* route refresh.
+  // Global app bootstrap: settings on every route refresh.
   useEffect(() => {
     loadSettings();
-    loadPowersInventory();
-  }, [loadSettings, loadPowersInventory]);
+  }, [loadSettings]);
+
+  // Powers inventory from idb, then one-time starter pack after Google sign-in (per uid, per browser).
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      await loadPowersInventory();
+      if (cancelled || authLoading) return;
+      if (user?.uid) await ensureStarterPackOnce(user.uid);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.uid, authLoading, loadPowersInventory, ensureStarterPackOnce]);
 
   useEffect(() => {
     if (!authLoading) {

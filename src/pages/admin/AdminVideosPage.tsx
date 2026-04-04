@@ -22,6 +22,7 @@ export function AdminVideosPage() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [newUrl, setNewUrl] = useState('');
+  const [newTitle, setNewTitle] = useState('');
   const [newType, setNewType] = useState<'adyathmika' | 'advertisement'>('adyathmika');
 
   useEffect(() => {
@@ -54,11 +55,18 @@ export function AdminVideosPage() {
       id: `v${Date.now()}-${items.length}`,
       type: newType,
       youtubeId: id,
-      title: '',
+      title: newTitle.trim().slice(0, 200),
       order: items.length,
     };
     setItems([...items, newItem]);
     setNewUrl('');
+    setNewTitle('');
+    setMessage(null);
+  };
+
+  const setItemTitle = (index: number, title: string) => {
+    const next = items.map((it, i) => (i === index ? { ...it, title: title.slice(0, 200) } : it));
+    setItems(next);
     setMessage(null);
   };
 
@@ -116,55 +124,105 @@ export function AdminVideosPage() {
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-amber-400 mb-6">Reward videos (Adyathmika + Ads)</h1>
-      <p className="text-amber-200/80 text-sm mb-4">
-        Ordered playlist shown when users watch for +5 moves or +1 life. Add YouTube URLs.
+      <h1 className="text-2xl font-bold text-amber-400 mb-2">Reward videos (Adyathmika + Ads)</h1>
+      <p className="text-xs text-amber-300/90 mb-4">
+        Admin → <span className="font-semibold text-amber-200">Videos</span> in the nav above.
+      </p>
+      <p className="text-amber-200/80 text-sm mb-6 max-w-xl">
+        Ordered playlist for +5 moves or +1 life. Add YouTube URLs. Order in the list is the rotation: each play picks
+        the next video globally (1 → 2 → 3 → … → wrap), so clips alternate instead of random repeats.
       </p>
 
-      <div className="flex flex-wrap gap-2 mb-6">
-        <input
-          type="text"
-          value={newUrl}
-          onChange={(e) => setNewUrl(e.target.value)}
-          placeholder="YouTube URL or video ID"
-          className="flex-1 min-w-[200px] px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30"
-        />
-        <select
-          value={newType}
-          onChange={(e) => setNewType(e.target.value as 'adyathmika' | 'advertisement')}
-          className="px-3 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30"
-        >
-          <option value="adyathmika">Adyathmika</option>
-          <option value="advertisement">Advertisement</option>
-        </select>
-        <button
-          type="button"
-          onClick={handleAdd}
-          className="px-4 py-2 rounded-lg bg-amber-500 text-white font-medium"
-        >
-          Add
-        </button>
-      </div>
+      <section
+        className="mb-8 max-w-3xl rounded-xl border-2 border-amber-400/55 bg-zinc-950/90 p-4 sm:p-5 shadow-lg shadow-black/40"
+        aria-labelledby="add-reward-video-heading"
+      >
+        <h2 id="add-reward-video-heading" className="text-lg font-semibold text-amber-300 mb-4">
+          Add a video to the rotation
+        </h2>
+        <div className="space-y-4">
+          <div>
+            <label htmlFor="reward-video-name" className="block text-sm font-semibold text-white mb-1.5">
+              Video display name
+            </label>
+            <input
+              id="reward-video-name"
+              type="text"
+              value={newTitle}
+              onChange={(e) => setNewTitle(e.target.value)}
+              placeholder="e.g. Morning mantra / Sponsor name"
+              maxLength={200}
+              className="w-full px-4 py-2.5 rounded-lg bg-zinc-900 text-white border-2 border-amber-500/40 placeholder:text-zinc-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/50"
+            />
+            <p className="mt-1 text-xs text-amber-200/60">Shown to players above the player (optional).</p>
+          </div>
+          <div>
+            <label htmlFor="reward-video-youtube" className="block text-sm font-semibold text-white mb-1.5">
+              YouTube link or video ID
+            </label>
+            <div className="flex flex-col sm:flex-row gap-2 sm:items-stretch">
+              <input
+                id="reward-video-youtube"
+                type="text"
+                value={newUrl}
+                onChange={(e) => setNewUrl(e.target.value)}
+                placeholder="https://www.youtube.com/watch?v=… or 11-character ID"
+                className="w-full min-h-[44px] px-4 py-2.5 rounded-lg bg-zinc-900 text-white border-2 border-amber-500/40 placeholder:text-zinc-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/50"
+              />
+              <select
+                value={newType}
+                onChange={(e) => setNewType(e.target.value as 'adyathmika' | 'advertisement')}
+                className="min-h-[44px] px-3 py-2 rounded-lg bg-zinc-900 text-white border-2 border-amber-500/40 sm:min-w-[160px]"
+                aria-label="Video category"
+              >
+                <option value="adyathmika">Adyathmika</option>
+                <option value="advertisement">Advertisement</option>
+              </select>
+              <button
+                type="button"
+                onClick={handleAdd}
+                className="min-h-[44px] px-5 py-2 rounded-lg bg-amber-500 text-black font-semibold hover:bg-amber-400"
+              >
+                Add to list
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <ul className="space-y-2 mb-6">
         {items.map((it, i) => (
           <li
             key={it.id}
-            className="flex items-center gap-2 p-3 rounded-lg bg-black/30 border border-amber-500/20"
+            className="flex flex-col sm:flex-row sm:items-center gap-2 p-3 rounded-lg bg-black/30 border border-amber-500/20"
           >
-            <span className="text-amber-200/60 text-sm w-6">{i + 1}.</span>
-            <span className={`px-2 py-0.5 rounded text-xs ${it.type === 'adyathmika' ? 'bg-amber-500/30' : 'bg-cyan-500/30'}`}>
-              {it.type}
-            </span>
-            <a
-              href={`https://www.youtube.com/watch?v=${it.youtubeId}`}
-              target="_blank"
-              rel="noreferrer"
-              className="text-amber-400 hover:underline truncate flex-1"
-            >
-              {it.youtubeId}
-            </a>
-            <div className="flex gap-1">
+            <div className="flex items-center gap-2 min-w-0 flex-1">
+              <span className="text-amber-200/60 text-sm shrink-0">{i + 1}.</span>
+              <span className={`shrink-0 px-2 py-0.5 rounded text-xs ${it.type === 'adyathmika' ? 'bg-amber-500/30' : 'bg-cyan-500/30'}`}>
+                {it.type}
+              </span>
+              <input
+                type="text"
+                value={it.title ?? ''}
+                onChange={(e) => setItemTitle(i, e.target.value)}
+                placeholder="Display name"
+                maxLength={200}
+                className="min-w-0 flex-1 px-3 py-1.5 rounded-lg bg-black/40 text-amber-100 border border-amber-500/25 text-sm"
+                aria-label={`Video name ${i + 1}`}
+              />
+            </div>
+            <div className="flex items-center gap-2 min-w-0 sm:max-w-[45%]">
+              <a
+                href={`https://www.youtube.com/watch?v=${it.youtubeId}`}
+                target="_blank"
+                rel="noreferrer"
+                className="text-amber-400 hover:underline truncate text-sm"
+                title={it.youtubeId}
+              >
+                {it.youtubeId}
+              </a>
+            </div>
+            <div className="flex gap-1 shrink-0 sm:ml-auto">
               <button
                 type="button"
                 onClick={() => handleMove(i, 'up')}

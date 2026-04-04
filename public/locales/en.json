@@ -93,6 +93,9 @@
     "powersScrollEmpty": "Complete an Iṣṭa devatā level to collect that offering here.",
     "powersArm": "Arm — then tap a candy on the board",
     "powersDisarm": "Tap to cancel",
+    "guestPowersSignInTitle": "Sign in to use powers",
+    "guestPowersSignInBody": "You can preview all powers here. Sign in with Google to arm and use them in the game.",
+    "guestPowersTileHint": "Sign in with Google to use this power",
     "powersArmSelectGem": "Choose a candy on the board.",
     "powerEarn": {
       "fromGeneralLevel": "Finish a General Japa level on the normal map (not marathon or yāga): you get one random charge — Namaskaram, Color Bomb, or Free swap. Usable in any mode.",

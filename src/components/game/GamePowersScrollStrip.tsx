@@ -8,8 +8,22 @@ import {
   stripIconSrc,
   type InventoryPowerId,
 } from '../../data/gamePowers';
+import { DEITY_IDS } from '../../data/deities';
 import { usePowersInventoryStore, getPowerCount } from '../../store/powersInventoryStore';
 import { usePowerArmStore } from '../../store/powerArmStore';
+
+function GuestLockBadge() {
+  return (
+    <span
+      className="absolute bottom-0.5 right-0.5 flex h-[1.125rem] w-[1.125rem] items-center justify-center rounded-full bg-black/85 border border-amber-500/50 text-amber-200/95"
+      aria-hidden
+    >
+      <svg className="h-2.5 w-2.5" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M18 10h-1V7c0-2.76-2.24-5-5-5S7 4.24 7 7v3H6c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8c0-1.1-.9-2-2-2zm-6 7c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-7H8.9V7c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v3z" />
+      </svg>
+    </span>
+  );
+}
 
 function RoundPowerTile({
   title,
@@ -18,6 +32,7 @@ function RoundPowerTile({
   isArmed,
   onPress,
   disabled,
+  guestPreview,
 }: {
   title: string;
   iconSrc: string;
@@ -25,6 +40,8 @@ function RoundPowerTile({
   isArmed: boolean;
   onPress: () => void;
   disabled: boolean;
+  /** Guest: show icons as preview only (lock badge, tap handled by parent). */
+  guestPreview?: boolean;
 }) {
   return (
     <button
@@ -38,7 +55,7 @@ function RoundPowerTile({
         border-2 transition-transform shadow-md
         bg-[#2a1f24] border-[color-mix(in_srgb,#2a1f24_88%,#000)]
         ${isArmed ? 'border-amber-300 ring-2 ring-amber-400/50 scale-[1.02]' : 'border-white/22 hover:border-white/35'}
-        ${disabled ? 'opacity-40 cursor-not-allowed' : 'active:scale-95 hover:border-amber-400/45'}
+        ${guestPreview ? 'cursor-pointer opacity-95' : disabled ? 'opacity-40 cursor-not-allowed' : 'active:scale-95 hover:border-amber-400/45'}
         focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400
       `}
     >
@@ -52,7 +69,9 @@ function RoundPowerTile({
         draggable={false}
         className="pointer-events-none absolute inset-0 h-full w-full object-contain p-[5px] sm:p-1.5"
       />
-      {count > 1 ? (
+      {guestPreview ? (
+        <GuestLockBadge />
+      ) : count > 1 ? (
         <span className="absolute bottom-0.5 right-0.5 min-w-[1.125rem] h-[1.125rem] px-1 rounded-full bg-black/85 text-amber-200 text-[10px] font-bold leading-[1.125rem] text-center border border-amber-500/40">
           {count > 99 ? '99+' : count}
         </span>
@@ -61,10 +80,16 @@ function RoundPowerTile({
   );
 }
 
+export interface GamePowersScrollStripProps {
+  isGuest?: boolean;
+  onGuestPowerTap?: () => void;
+}
+
 /**
  * Fixed left: Namaskaram. Center: scrollable per-deity offering PNGs (#2a1f24 plate). Fixed right: free swap + flower bomb.
+ * Guest: show full strip for awareness; tap opens sign-in (via `onGuestPowerTap`).
  */
-export function GamePowersScrollStrip() {
+export function GamePowersScrollStrip({ isGuest = false, onGuestPowerTap }: GamePowersScrollStripProps = {}) {
   const { t } = useTranslation();
   const entries = usePowersInventoryStore((s) => s.entries);
   const armedPowerId = usePowerArmStore((s) => s.armedPowerId);
@@ -72,8 +97,17 @@ export function GamePowersScrollStrip() {
 
   const deityEntries = useMemo(() => entries.filter((e) => isDeityPowerId(e.id)), [entries]);
 
+  const guestDeitySlots = useMemo(
+    () => DEITY_IDS.map((id) => ({ id, count: 1 as number })),
+    [],
+  );
+
   const onPowerTap = useCallback(
     (id: InventoryPowerId) => {
+      if (isGuest) {
+        onGuestPowerTap?.();
+        return;
+      }
       const count = getPowerCount(entries, id);
       if (armedPowerId === id) {
         setArmedPower(null);
@@ -82,12 +116,12 @@ export function GamePowersScrollStrip() {
       if (count < 1) return;
       setArmedPower(id);
     },
-    [armedPowerId, entries, setArmedPower],
+    [isGuest, onGuestPowerTap, armedPowerId, entries, setArmedPower],
   );
 
   const renderFixedTile = (id: InventoryPowerId) => {
     const count = getPowerCount(entries, id);
-    const armed = armedPowerId === id;
+    const armed = !isGuest && armedPowerId === id;
     const name =
       id === 'namaskaram'
         ? t('powers.namaskaram')
@@ -97,7 +131,13 @@ export function GamePowersScrollStrip() {
             ? t('powers.bomb')
             : id;
     const earn = t(powerEarnI18nKey(id));
-    const title = count < 1 ? earn : armed ? `${name} — ${t('game.powersDisarm')}` : `${name} — ${t('game.powersArm')}`;
+    const title = isGuest
+      ? `${name} — ${t('game.guestPowersTileHint')}`
+      : count < 1
+        ? earn
+        : armed
+          ? `${name} — ${t('game.powersDisarm')}`
+          : `${name} — ${t('game.powersArm')}`;
 
     return (
       <RoundPowerTile
@@ -106,7 +146,8 @@ export function GamePowersScrollStrip() {
         count={count}
         isArmed={armed}
         onPress={() => onPowerTap(id)}
-        disabled={count < 1 && !armed}
+        disabled={isGuest ? false : count < 1 && !armed}
+        guestPreview={isGuest}
       />
     );
   };
@@ -124,19 +165,20 @@ export function GamePowersScrollStrip() {
           `}
           style={{ WebkitOverflowScrolling: 'touch' }}
         >
-          {deityEntries.length === 0 ? (
+          {!isGuest && deityEntries.length === 0 ? (
             <div className="min-h-[3.25rem] flex items-center justify-center px-2 rounded-lg bg-black/20 border border-white/5">
               <p className="text-[10px] sm:text-[11px] text-amber-200/50 text-center leading-relaxed">{t('game.powersScrollEmpty')}</p>
             </div>
           ) : (
             <div className="flex gap-2 w-max min-h-[3.25rem] items-center justify-start">
-              {deityEntries.map((slot) => {
+              {(isGuest ? guestDeitySlots : deityEntries).map((slot) => {
                 const id = slot.id;
-                const armed = armedPowerId === id;
+                const armed = !isGuest && armedPowerId === id;
                 const name = t(`deities.${id}`, { defaultValue: id });
                 const earn = t(powerEarnI18nKey(id));
-                const title =
-                  slot.count < 1
+                const title = isGuest
+                  ? `${name} — ${t('game.guestPowersTileHint')}`
+                  : slot.count < 1
                     ? earn
                     : armed
                       ? `${name} — ${t('game.powersDisarm')}`
@@ -150,7 +192,8 @@ export function GamePowersScrollStrip() {
                       count={slot.count}
                       isArmed={armed}
                       onPress={() => onPowerTap(id)}
-                      disabled={slot.count < 1 && !armed}
+                      disabled={isGuest ? false : slot.count < 1 && !armed}
+                      guestPreview={isGuest}
                     />
                   </div>
                 );

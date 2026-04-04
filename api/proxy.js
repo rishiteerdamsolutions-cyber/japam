@@ -70,6 +70,7 @@ import * as verifyDonateHandler from './_handlers/verify-donate.js';
 import * as donorsHandler from './_handlers/donors.js';
 import * as levelsConfigHandler from './_handlers/levels-config.js';
 import * as configRewardVideosHandler from './_handlers/config/reward-videos.js';
+import * as configRewardVideosNextHandler from './_handlers/config/reward-videos-next.js';
 import * as adminRewardVideosHandler from './_handlers/admin/reward-videos.js';
 import * as adminRewardVideoAnalyticsHandler from './_handlers/admin/reward-video-analytics.js';
 import * as adminLevelsHandler from './_handlers/admin/levels.js';
@@ -165,6 +166,7 @@ const HANDLERS = {
   'POST admin/marathon-edit': adminMarathonEditHandler,
   'GET levels-config': levelsConfigHandler,
   'GET config/reward-videos': configRewardVideosHandler,
+  'POST config/reward-videos/next': configRewardVideosNextHandler,
   'POST admin/reward-videos': adminRewardVideosHandler,
   'GET admin/reward-video-analytics': adminRewardVideoAnalyticsHandler,
   'GET priest/marathons': priestMarathonsHandler,

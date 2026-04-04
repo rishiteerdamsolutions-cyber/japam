@@ -56,10 +56,16 @@ export function getPowerCount(entries: PowerInventoryEntry[], id: PowerInventory
   return entries.find((e) => e.id === id)?.count ?? 0;
 }
 
+const STARTER_PACK_IDS: PowerInventoryId[] = ['namaskaram', 'freeSwap', 'bomb', ...DEITY_IDS];
+
+const STARTER_PACK_UIDS_KEY = 'japam-starter-pack-uids';
+
 interface PowersInventoryState {
   entries: PowerInventoryEntry[];
   loaded: boolean;
   load: () => Promise<void>;
+  /** Once per Google account (per browser): ensure at least 1 of each strip power for onboarding awareness. */
+  ensureStarterPackOnce: (uid: string) => Promise<void>;
   /** Normal level wins only (not marathon / yāga). General → one random among namaskaram / bomb / freeSwap; deity path → that offering. */
   grantAfterLevelWin: (mode: GameMode) => Promise<void>;
   tryConsumeOne: (id: PowerInventoryId) => Promise<boolean>;
@@ -79,6 +85,30 @@ export const usePowersInventoryStore = create<PowersInventoryState>((set, get) =
       }
     } catch {
       set({ loaded: true });
+    }
+  },
+
+  ensureStarterPackOnce: async (uid) => {
+    if (!uid) return;
+    try {
+      const grantedMap = (await idbGet(STARTER_PACK_UIDS_KEY)) as Record<string, boolean> | undefined;
+      if (grantedMap?.[uid]) return;
+
+      const prev = get().entries;
+      const counts = new Map<PowerInventoryId, number>();
+      for (const e of prev) counts.set(e.id, e.count);
+      for (const id of STARTER_PACK_IDS) {
+        counts.set(id, Math.max(counts.get(id) ?? 0, 1));
+      }
+      const entries: PowerInventoryEntry[] = STARTER_PACK_IDS.map((id) => ({
+        id,
+        count: counts.get(id) ?? 1,
+      }));
+      set({ entries });
+      await persistEntries(entries);
+      await idbSet(STARTER_PACK_UIDS_KEY, { ...(grantedMap || {}), [uid]: true });
+    } catch {
+      /* ignore */
     }
   },
 

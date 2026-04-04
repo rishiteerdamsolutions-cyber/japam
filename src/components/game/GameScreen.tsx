@@ -22,6 +22,12 @@ import { LivesModal } from '../lives/LivesModal';
 import { GamePowersScrollStrip } from './GamePowersScrollStrip';
 import { usePowersInventoryStore } from '../../store/powersInventoryStore';
 
+/** Shown after ~20 min play; always English regardless of UI language (i18n keys live under `shared.*`). */
+const JAPA_BREAK_REMINDER_MARATHON_EN =
+  'You have been doing japa for 20 minutes, please take a break.';
+const JAPA_BREAK_REMINDER_AFTER_LEVEL_EN =
+  'You have been doing japa for 20 minutes, please take a break after this current level.';
+
 function PauseIcon() {
   return (
     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -151,6 +157,11 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
   const consume = useLivesStore((s) => s.consume);
   const getIdToken = useCallback(async () => (user ? user.getIdToken() : null), [user]);
   const [showOutOfLives, setShowOutOfLives] = useState(false);
+  const [guestPowerSignInOpen, setGuestPowerSignInOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isGuest) setGuestPowerSignInOpen(false);
+  }, [isGuest]);
 
   const clearPendingAudio = () => {
     for (const id of pendingTimersRef.current) clearTimeout(id);
@@ -552,7 +563,10 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
         <>
           {/* Powers strip in all modes; only normal levels add to inventory (not marathon/yāga). */}
           <div className="shrink-0 w-full max-w-md px-2 mt-0.5">
-            <GamePowersScrollStrip />
+            <GamePowersScrollStrip
+              isGuest={!!isGuest}
+              onGuestPowerTap={() => setGuestPowerSignInOpen(true)}
+            />
           </div>
           <div className="shrink-0 h-16" aria-hidden />
           <GameBottomStrip
@@ -608,14 +622,30 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
           getIdToken={useLives ? getIdToken : undefined}
         />
       )}
+      {guestPowerSignInOpen && isGuest && (
+        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center p-4 bg-black/75">
+          <div className="bg-[#C2185B]/95 rounded-2xl p-4 sm:p-6 max-w-sm w-full text-center border-2 border-[#5D4037] shadow-xl">
+            <h2 className="text-lg sm:text-xl font-bold text-amber-400 mb-2">{t('game.guestPowersSignInTitle')}</h2>
+            <p className="text-amber-200/90 text-sm sm:text-base mb-5">{t('game.guestPowersSignInBody')}</p>
+            <div className="mb-3 flex justify-center">
+              <GoogleSignIn />
+            </div>
+            <button
+              type="button"
+              onClick={() => setGuestPowerSignInOpen(false)}
+              className="w-full py-2.5 rounded-xl border border-amber-500/50 text-amber-300 text-sm font-medium"
+            >
+              {t('common.later')}
+            </button>
+          </div>
+        </div>
+      )}
       {showLivesModal && <LivesModal onClose={() => setShowLivesModal(false)} />}
       {showBreakReminder && status === 'playing' && (
         <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center z-20 p-4">
           <div className="bg-[#C2185B]/90 rounded-2xl p-4 sm:p-6 max-w-sm w-full text-center min-w-0">
             <p className="text-amber-200/90 mb-8 text-sm sm:text-base break-words">
-              {isMarathon
-                ? t('you_have_been_doing_japa_for_20_minutes_please_take_a_break')
-                : t('you_have_been_doing_japa_for_20_minutes_please_take_a_break_after_this_current_level')}
+              {isMarathon ? JAPA_BREAK_REMINDER_MARATHON_EN : JAPA_BREAK_REMINDER_AFTER_LEVEL_EN}
             </p>
             <button
               onClick={() => {

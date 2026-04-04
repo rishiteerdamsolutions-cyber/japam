@@ -330,15 +330,6 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const spawnKeys = newGems.map((g) => `${g.row},${g.col}`);
     const nextGen = spawnKeys.length > 0 ? state.refillSpawnGeneration + 1 : state.refillSpawnGeneration;
 
-    const japaDeity = displayDeityId(cell);
-    let nextJapasBy = state.japasByDeity;
-    let nextJapasLevel = state.japasThisLevel;
-    if (japaDeity != null && (mode === 'general' || mode === japaDeity)) {
-      nextJapasBy = { ...state.japasByDeity, [japaDeity]: (state.japasByDeity[japaDeity] ?? 0) + 1 };
-      nextJapasLevel = state.japasThisLevel + 1;
-      if (!state.isGuest) useJapaStore.getState().addJapa(japaDeity, 1);
-    }
-
     set({
       board: filled,
       selectedCell: null,
@@ -346,8 +337,6 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       refillSpawnKeys: spawnKeys,
       refillSpawnGeneration: nextGen,
       hintsSwapCount: state.hintsSwapCount + 1,
-      japasByDeity: nextJapasBy,
-      japasThisLevel: nextJapasLevel,
       powerVfxToken: state.powerVfxToken + 1,
     });
     usePowerArmStore.getState().setArmedPower(null);
@@ -439,14 +428,6 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
         }
       }
       const st = get();
-      let nextJapasBy = st.japasByDeity;
-      let nextJapasLevel = st.japasThisLevel;
-      const gm = st.mode;
-      if (gm === 'general' || gm === targetId) {
-        nextJapasBy = { ...st.japasByDeity, [targetId]: (st.japasByDeity[targetId] ?? 0) + 1 };
-        nextJapasLevel = st.japasThisLevel + 1;
-        if (!st.isGuest) useJapaStore.getState().addJapa(targetId, 1);
-      }
       set({
         board: filled,
         moves: moves - 1,
@@ -455,8 +436,6 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
         lastSwappedTypes: [gemA, gemB],
         intendedDeity: targetGem,
         hintsSwapCount: st.hintsSwapCount + 1,
-        japasByDeity: nextJapasBy,
-        japasThisLevel: nextJapasLevel,
         refillSpawnKeys: spawnKeys,
         refillSpawnGeneration: st.refillSpawnGeneration + (spawnKeys.length > 0 ? 1 : 0),
         powerVfxToken: st.powerVfxToken + 1,

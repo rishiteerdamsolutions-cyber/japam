@@ -8,9 +8,11 @@ import {
   stripIconSrc,
   type InventoryPowerId,
 } from '../../data/gamePowers';
-import { DEITY_IDS } from '../../data/deities';
+import type { DeityId } from '../../data/deities';
 import { usePowersInventoryStore, getPowerCount } from '../../store/powersInventoryStore';
 import { usePowerArmStore } from '../../store/powerArmStore';
+import { useGameStore } from '../../store/gameStore';
+import { pickGeneralBoardDeities } from '../../lib/generalBoardDeities';
 
 function GuestLockBadge() {
   return (
@@ -60,14 +62,13 @@ function RoundPowerTile({
       `}
     >
       {/*
-        HD PNGs are ~512px on #2a1f24; tile is 48px (sm ~52px) for spec readability ~32–48.
-        Slightly tighter padding on narrow side keeps silhouette larger at ~24px effective read.
+        Same outer tile size; icon bitmap is scaled 3× inside (clipped to the circle) so HD offerings read clearly.
       */}
       <img
         src={iconSrc}
         alt=""
         draggable={false}
-        className="pointer-events-none absolute inset-0 h-full w-full object-contain p-[5px] sm:p-1.5"
+        className="pointer-events-none absolute inset-0 h-full w-full origin-center scale-[3] object-contain"
       />
       {guestPreview ? (
         <GuestLockBadge />
@@ -92,15 +93,30 @@ export interface GamePowersScrollStripProps {
 export function GamePowersScrollStrip({ isGuest = false, onGuestPowerTap }: GamePowersScrollStripProps = {}) {
   const { t } = useTranslation();
   const entries = usePowersInventoryStore((s) => s.entries);
+  const mode = useGameStore((s) => s.mode);
+  const levelIndex = useGameStore((s) => s.levelIndex);
+  const generalBoardDeities = useGameStore((s) => s.generalBoardDeities);
   const armedPowerId = usePowerArmStore((s) => s.armedPowerId);
   const setArmedPower = usePowerArmStore((s) => s.setArmedPower);
 
-  const deityEntries = useMemo(() => entries.filter((e) => isDeityPowerId(e.id)), [entries]);
+  /** General Japa: same 6 as the board; īṣṭa: all deity rows in inventory. */
+  const generalAllow = useMemo((): DeityId[] | null => {
+    if (mode !== 'general') return null;
+    return generalBoardDeities?.length ? generalBoardDeities : pickGeneralBoardDeities(levelIndex);
+  }, [mode, generalBoardDeities, levelIndex]);
 
-  const guestDeitySlots = useMemo(
-    () => DEITY_IDS.map((id) => ({ id, count: 1 as number })),
-    [],
-  );
+  const stripDeitySlots = useMemo(() => {
+    const raw = entries.filter((e) => isDeityPowerId(e.id));
+    if (!generalAllow) return raw;
+    const byId = new Map(raw.map((e) => [e.id, e.count]));
+    return generalAllow.map((id) => ({ id, count: byId.get(id) ?? 0 }));
+  }, [entries, generalAllow]);
+
+  const guestDeitySlots = useMemo(() => {
+    if (!isGuest) return [];
+    const allow = generalAllow ?? pickGeneralBoardDeities(levelIndex);
+    return allow.map((id) => ({ id, count: 1 as number }));
+  }, [isGuest, generalAllow, levelIndex]);
 
   const onPowerTap = useCallback(
     (id: InventoryPowerId) => {
@@ -165,13 +181,13 @@ export function GamePowersScrollStrip({ isGuest = false, onGuestPowerTap }: Game
           `}
           style={{ WebkitOverflowScrolling: 'touch' }}
         >
-          {!isGuest && deityEntries.length === 0 ? (
+          {!isGuest && stripDeitySlots.length === 0 ? (
             <div className="min-h-[3.25rem] flex items-center justify-center px-2 rounded-lg bg-black/20 border border-white/5">
               <p className="text-[10px] sm:text-[11px] text-amber-200/50 text-center leading-relaxed">{t('game.powersScrollEmpty')}</p>
             </div>
           ) : (
             <div className="flex gap-2 w-max min-h-[3.25rem] items-center justify-start">
-              {(isGuest ? guestDeitySlots : deityEntries).map((slot) => {
+              {(isGuest ? guestDeitySlots : stripDeitySlots).map((slot) => {
                 const id = slot.id;
                 const armed = !isGuest && armedPowerId === id;
                 const name = t(`deities.${id}`, { defaultValue: id });

@@ -19,9 +19,10 @@ import { expandPowerClears, planSpecialSpawn } from '../engine/powers';
 import { isBlessing } from '../engine/gemKinds';
 import { isDeityPowerId } from '../data/gamePowers';
 import { gameDebug } from '../lib/gameDebug';
+import { pickGeneralBoardDeities } from '../lib/generalBoardDeities';
 
-/** Deities the player has at least one offering charge for — their gems must appear so powers are usable. */
-function powerBackedDeitiesForBoard(): DeityId[] {
+/** Īṣṭa path: deities the player has offering charges for — gems must appear so powers are usable. */
+function inventoryOfferingDeities(): DeityId[] {
   const { entries } = usePowersInventoryStore.getState();
   const out: DeityId[] = [];
   for (const e of entries) {
@@ -48,6 +49,8 @@ export interface PausedGameState {
   /** Present when paused game was guest play (e.g. /game?guest=1). */
   isGuest?: boolean;
   overrideJapaTarget?: number | null;
+  /** General Japa only: which deities are on this board / strip for this session. */
+  generalBoardDeities?: DeityId[];
   savedAt: number;
   version?: number;
 }
@@ -90,6 +93,24 @@ interface GameState {
   lastSwapDestination: Position | null;
   /** Bumped when a strip power or blessing activation clears cells (Board VFX). */
   powerVfxToken: number;
+  /** General mode: fixed deity set for this level’s board and power strip (not all 24). */
+  generalBoardDeities: DeityId[] | null;
+}
+
+function boardGemContext(state: GameState): {
+  deityMode: DeityId | undefined;
+  powerBacked: DeityId[];
+  generalSubset: DeityId[] | null;
+} {
+  const deityMode = state.mode !== 'general' ? (state.mode as DeityId) : undefined;
+  if (state.mode === 'general') {
+    const subset =
+      state.generalBoardDeities != null && state.generalBoardDeities.length > 0
+        ? state.generalBoardDeities
+        : pickGeneralBoardDeities(state.levelIndex);
+    return { deityMode, powerBacked: subset, generalSubset: subset };
+  }
+  return { deityMode, powerBacked: inventoryOfferingDeities(), generalSubset: null };
 }
 
 const getLevel = (index: number) => LEVELS[index] ?? LEVELS[0];
@@ -147,6 +168,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   refillSpawnKeys: [],
   lastSwapDestination: null,
   powerVfxToken: 0,
+  generalBoardDeities: null,
 
   initGame: (mode, levelIndex = 0, options) => {
     gameDebug('initGame', {
@@ -169,10 +191,26 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const overrideJapaTarget = options?.overrideJapaTarget ?? null;
     const isGuest = options?.isGuest === true;
     const moves = marathonTargetJapas != null ? 999999 : level.moves;
-    const powerPool = powerBackedDeitiesForBoard();
-    let board = createBoard(level.rows, level.cols, maxGemTypes, deityMode, powerPool);
+    const generalBoardDeities = mode === 'general' ? pickGeneralBoardDeities(levelIndex) : null;
+    const powerPool =
+      mode === 'general' ? generalBoardDeities! : inventoryOfferingDeities();
+    let board = createBoard(
+      level.rows,
+      level.cols,
+      maxGemTypes,
+      deityMode,
+      powerPool,
+      generalBoardDeities,
+    );
     while (!hasValidMoves(board)) {
-      board = createBoard(level.rows, level.cols, maxGemTypes, deityMode, powerPool);
+      board = createBoard(
+        level.rows,
+        level.cols,
+        maxGemTypes,
+        deityMode,
+        powerPool,
+        generalBoardDeities,
+      );
     }
     set({
       board,
@@ -206,6 +244,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       refillSpawnKeys: [],
       lastSwapDestination: null,
       powerVfxToken: 0,
+      generalBoardDeities,
     });
     usePowerArmStore.getState().reset();
   },
@@ -234,8 +273,9 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       yagnaId: state.yagnaId ?? undefined,
       isGuest: state.isGuest,
       overrideJapaTarget: state.overrideJapaTarget ?? undefined,
+      generalBoardDeities: state.generalBoardDeities ?? undefined,
       savedAt: Date.now(),
-      version: 2
+      version: 3
     };
     return payload;
   },
@@ -247,9 +287,32 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const level = getLevel(saved.levelIndex);
     const maxGemTypes = level.maxGemTypes ?? 8;
     const deityMode = saved.mode !== 'general' ? (saved.mode as DeityId) : undefined;
-    const powerPoolResume = powerBackedDeitiesForBoard();
-    let board = createBoard(level.rows, level.cols, maxGemTypes, deityMode, powerPoolResume);
-    while (!hasValidMoves(board)) board = createBoard(level.rows, level.cols, maxGemTypes, deityMode, powerPoolResume);
+    const generalBoardDeities =
+      saved.mode === 'general'
+        ? saved.generalBoardDeities?.length
+          ? saved.generalBoardDeities
+          : pickGeneralBoardDeities(saved.levelIndex)
+        : null;
+    const powerPoolResume =
+      saved.mode === 'general' ? generalBoardDeities! : inventoryOfferingDeities();
+    let board = createBoard(
+      level.rows,
+      level.cols,
+      maxGemTypes,
+      deityMode,
+      powerPoolResume,
+      generalBoardDeities,
+    );
+    while (!hasValidMoves(board)) {
+      board = createBoard(
+        level.rows,
+        level.cols,
+        maxGemTypes,
+        deityMode,
+        powerPoolResume,
+        generalBoardDeities,
+      );
+    }
     set({
       board,
       moves: saved.moves,
@@ -281,6 +344,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       refillSpawnKeys: [],
       lastSwapDestination: null,
       powerVfxToken: 0,
+      generalBoardDeities,
     });
     usePowerArmStore.getState().reset();
   },
@@ -325,8 +389,14 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
 
     const cleared = removeMatches(board, positions);
     const { board: afterG } = applyGravity(cleared);
-    const deityMode = mode !== 'general' ? (mode as DeityId) : undefined;
-    const { board: filled, newGems } = fillGaps(afterG, maxGemTypes, deityMode, powerBackedDeitiesForBoard());
+    const gemCtx = boardGemContext(state);
+    const { board: filled, newGems } = fillGaps(
+      afterG,
+      maxGemTypes,
+      gemCtx.deityMode,
+      gemCtx.powerBacked,
+      gemCtx.generalSubset,
+    );
     const spawnKeys = newGems.map((g) => `${g.row},${g.col}`);
     const nextGen = spawnKeys.length > 0 ? state.refillSpawnGeneration + 1 : state.refillSpawnGeneration;
 
@@ -417,8 +487,14 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       }
       const cleared = removeMatches(nextBoard, clearPos);
       const { board: afterG } = applyGravity(cleared);
-      const deityModeSwap = get().mode !== 'general' ? (get().mode as DeityId) : undefined;
-      const { board: filled } = fillGaps(afterG, get().maxGemTypes, deityModeSwap, powerBackedDeitiesForBoard());
+      const gemCtxSwap = boardGemContext(get());
+      const { board: filled } = fillGaps(
+        afterG,
+        get().maxGemTypes,
+        gemCtxSwap.deityMode,
+        gemCtxSwap.powerBacked,
+        gemCtxSwap.generalSubset,
+      );
       const gh = afterG.length;
       const gw = afterG[0]?.length ?? 0;
       const spawnKeys: string[] = [];
@@ -589,8 +665,14 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     }
 
     const { board: afterGravity } = applyGravity(boardAfterRemove);
-    const deityMode = get().mode !== 'general' ? (get().mode as DeityId) : undefined;
-    const { board: filled } = fillGaps(afterGravity, get().maxGemTypes, deityMode, powerBackedDeitiesForBoard());
+    const gemCtxMatch = boardGemContext(get());
+    const { board: filled } = fillGaps(
+      afterGravity,
+      get().maxGemTypes,
+      gemCtxMatch.deityMode,
+      gemCtxMatch.powerBacked,
+      gemCtxMatch.generalSubset,
+    );
     const spawnKeys: string[] = [];
     const gh = afterGravity.length;
     const gw = afterGravity[0]?.length ?? 0;
@@ -652,11 +734,24 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     }
 
     if (status === 'playing' && !hasValidMoves(finalBoard)) {
-      const deityMode = state.mode !== 'general' ? (state.mode as DeityId) : undefined;
-      const pp = powerBackedDeitiesForBoard();
-      finalBoard = createBoard(level.rows, level.cols, state.maxGemTypes, deityMode, pp);
+      const gemCtxDead = boardGemContext(state);
+      finalBoard = createBoard(
+        level.rows,
+        level.cols,
+        state.maxGemTypes,
+        gemCtxDead.deityMode,
+        gemCtxDead.powerBacked,
+        gemCtxDead.generalSubset,
+      );
       while (!hasValidMoves(finalBoard)) {
-        finalBoard = createBoard(level.rows, level.cols, state.maxGemTypes, deityMode, pp);
+        finalBoard = createBoard(
+          level.rows,
+          level.cols,
+          state.maxGemTypes,
+          gemCtxDead.deityMode,
+          gemCtxDead.powerBacked,
+          gemCtxDead.generalSubset,
+        );
       }
     }
 
@@ -685,7 +780,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     if (state.status !== 'playing' || state.board.length === 0) return;
     if (state.matchAnimationTimeoutId != null) return;
     if (state.firstMatchMade || state.japasThisLevel > 0 || state.score > 0) return;
-    const backed = powerBackedDeitiesForBoard();
+    if (state.mode === 'general') return;
+    const backed = inventoryOfferingDeities();
     if (backed.length === 0) return;
     const present = new Set<DeityId>();
     for (const row of state.board) {
@@ -702,11 +798,24 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const state = get();
     if (state.status !== 'playing' || state.board.length === 0) return;
     const level = getLevel(state.levelIndex);
-    const deityMode = state.mode !== 'general' ? (state.mode as DeityId) : undefined;
-    const pp = powerBackedDeitiesForBoard();
-    let board = createBoard(level.rows, level.cols, state.maxGemTypes, deityMode, pp);
+    const gemCtxRefresh = boardGemContext(state);
+    let board = createBoard(
+      level.rows,
+      level.cols,
+      state.maxGemTypes,
+      gemCtxRefresh.deityMode,
+      gemCtxRefresh.powerBacked,
+      gemCtxRefresh.generalSubset,
+    );
     while (!hasValidMoves(board)) {
-      board = createBoard(level.rows, level.cols, state.maxGemTypes, deityMode, pp);
+      board = createBoard(
+        level.rows,
+        level.cols,
+        state.maxGemTypes,
+        gemCtxRefresh.deityMode,
+        gemCtxRefresh.powerBacked,
+        gemCtxRefresh.generalSubset,
+      );
     }
     set({
       board,

@@ -4,14 +4,19 @@ import type { DeityId } from '../data/deities';
 import { sameLineGroup } from './gemKinds';
 
 /**
- * Gem pool for a level: always includes `deityMode` (if any) and every deity the player has
- * offering charges for, then fills up to `cap` from `DEITY_IDS` order so powers stay usable.
+ * Gem pool for a level.
+ * - General + `generalGemSubset`: exactly those types (compact board).
+ * - Īṣṭa mode: always includes `deityMode` and offering-backed inventory deities, then fills to cap.
  */
 export function buildGemTypesPool(
   maxGemTypes: number,
   deityMode: DeityId | undefined,
   powerBackedDeities: DeityId[],
+  generalGemSubset: DeityId[] | null = null,
 ): GemType[] {
+  if (!deityMode && generalGemSubset != null && generalGemSubset.length > 0) {
+    return [...new Set(generalGemSubset)] as GemType[];
+  }
   const req = [...new Set(powerBackedDeities)];
   const must: DeityId[] = deityMode ? [...new Set([deityMode, ...req])] : [...new Set(req)];
   const fill = DEITY_IDS.filter((id) => !must.includes(id));
@@ -29,8 +34,9 @@ export function createBoard(
   maxGemTypes = 8,
   deityMode?: DeityId,
   powerBackedDeities: DeityId[] = [],
+  generalGemSubset: DeityId[] | null = null,
 ): Board {
-  const types = buildGemTypesPool(maxGemTypes, deityMode, powerBackedDeities);
+  const types = buildGemTypesPool(maxGemTypes, deityMode, powerBackedDeities, generalGemSubset);
   const board: Board = [];
   for (let r = 0; r < rows; r++) {
     const rowData: (GemType | null)[] = [];
@@ -114,8 +120,9 @@ export function fillGaps(
   maxGemTypes = 8,
   deityMode?: DeityId,
   powerBackedDeities: DeityId[] = [],
+  generalGemSubset: DeityId[] | null = null,
 ): { board: Board; newGems: { row: number; col: number; gem: GemType }[] } {
-  const types = buildGemTypesPool(maxGemTypes, deityMode, powerBackedDeities);
+  const types = buildGemTypesPool(maxGemTypes, deityMode, powerBackedDeities, generalGemSubset);
   const rows = board.length;
   const cols = board[0]?.length ?? 0;
   const next = board.map(r => [...r]);

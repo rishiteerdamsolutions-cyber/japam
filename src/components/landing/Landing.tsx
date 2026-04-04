@@ -14,6 +14,15 @@ interface LandingProps {
   onAnniversary?: () => void;
 }
 
+/** Shared frame so primary CTA and occasion tiles read as one family (radius + border + glow). */
+const LANDING_PRIMARY_FRAME =
+  'rounded-2xl border-2 border-amber-400/55 shadow-[0_0_30px_rgba(245,158,11,0.35)] transition-all duration-200';
+
+/** Bump this string when you replace `public/birthday.png` or `public/wedding.png` so browsers fetch the new file (cache bust). */
+const LANDING_OCCASION_PNG_VER = '2026-04-05';
+const BIRTHDAY_PNG = `/birthday.png?v=${LANDING_OCCASION_PNG_VER}`;
+const WEDDING_PNG = `/wedding.png?v=${LANDING_OCCASION_PNG_VER}`;
+
 export function Landing({ onEnterApp, onGuestPlay, onBirthday, onAnniversary }: LandingProps) {
   const { t } = useTranslation();
   const user = useAuthStore((s) => s.user);
@@ -77,27 +86,32 @@ export function Landing({ onEnterApp, onGuestPlay, onBirthday, onAnniversary }: 
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.98 }}
               onClick={onEnterApp}
-              className="w-full max-w-xs py-4 sm:py-5 rounded-2xl bg-amber-500 text-white font-bold text-base sm:text-lg md:text-xl shadow-[0_0_30px_rgba(245,158,11,0.4)] hover:shadow-[0_0_40px_rgba(245,158,11,0.5)] hover:bg-amber-400 transition-all duration-200 break-words"
+              className={`w-full max-w-xs py-4 sm:py-5 ${LANDING_PRIMARY_FRAME} bg-amber-500 text-white font-bold text-base sm:text-lg md:text-xl hover:shadow-[0_0_40px_rgba(245,158,11,0.5)] hover:bg-amber-400 hover:border-amber-300/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/80 break-words`}
             >
               {t('landing.beginJapa')}
             </motion.button>
 
             {(onBirthday || onAnniversary) && (
-              <div className="w-full max-w-sm flex justify-center gap-5 sm:gap-6 mt-6">
+              <>
+                <h2 className="w-full max-w-xs mt-8 mb-1 text-center text-amber-200/95 text-xs font-semibold uppercase tracking-[0.2em]">
+                  {t('landing.specials')}
+                </h2>
+                <div className="w-full max-w-sm flex justify-center gap-5 sm:gap-6 mt-3">
                 {onBirthday && (
-                  <div className="flex flex-col items-center flex-1 min-w-0 max-w-[150px]">
+                  <div className="flex flex-col items-center flex-1 min-w-0 max-w-[170px]">
                     <motion.button
                       type="button"
                       aria-label={t('landing.birthdayJapaTitle')}
-                      whileHover={{ scale: 1.03 }}
+                      whileHover={{ scale: 1.04 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={onBirthday}
-                      className="w-full aspect-square max-h-[140px] rounded-2xl overflow-hidden border-2 border-amber-400/55 bg-black/25 shadow-[0_0_24px_rgba(251,191,36,0.2)] hover:border-amber-300/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/80"
+                      className="w-full p-0 bg-transparent border-0 shadow-none rounded-none overflow-visible focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/90 focus-visible:ring-offset-0 touch-manipulation"
                     >
                       <img
-                        src="/birthday.png"
+                        src={BIRTHDAY_PNG}
                         alt=""
-                        className="w-full h-full object-cover"
+                        draggable={false}
+                        className="w-full h-auto max-h-[168px] object-contain object-center bg-transparent pointer-events-none select-none drop-shadow-[0_6px_28px_rgba(0,0,0,0.25)] [image-rendering:auto]"
                       />
                     </motion.button>
                     <p className="mt-2 text-center text-amber-100/95 text-xs sm:text-sm font-semibold leading-snug px-1">
@@ -106,19 +120,20 @@ export function Landing({ onEnterApp, onGuestPlay, onBirthday, onAnniversary }: 
                   </div>
                 )}
                 {onAnniversary && (
-                  <div className="flex flex-col items-center flex-1 min-w-0 max-w-[150px]">
+                  <div className="flex flex-col items-center flex-1 min-w-0 max-w-[170px]">
                     <motion.button
                       type="button"
                       aria-label={t('landing.weddingAnniversaryJapaTitle')}
-                      whileHover={{ scale: 1.03 }}
+                      whileHover={{ scale: 1.04 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={onAnniversary}
-                      className="w-full aspect-square max-h-[140px] rounded-2xl overflow-hidden border-2 border-amber-400/55 bg-black/25 shadow-[0_0_24px_rgba(251,191,36,0.2)] hover:border-amber-300/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/80"
+                      className="w-full p-0 bg-transparent border-0 shadow-none rounded-none overflow-visible focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/90 focus-visible:ring-offset-0 touch-manipulation"
                     >
                       <img
-                        src="/wedding.png"
+                        src={WEDDING_PNG}
                         alt=""
-                        className="w-full h-full object-cover"
+                        draggable={false}
+                        className="w-full h-auto max-h-[168px] object-contain object-center bg-transparent pointer-events-none select-none drop-shadow-[0_6px_28px_rgba(0,0,0,0.25)] [image-rendering:auto]"
                       />
                     </motion.button>
                     <p className="mt-2 text-center text-amber-100/95 text-xs sm:text-sm font-semibold leading-snug px-1">
@@ -126,7 +141,8 @@ export function Landing({ onEnterApp, onGuestPlay, onBirthday, onAnniversary }: 
                     </p>
                   </div>
                 )}
-              </div>
+                </div>
+              </>
             )}
 
             {!user && (

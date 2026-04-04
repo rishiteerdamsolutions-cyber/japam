@@ -93,9 +93,10 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
   };
 
   const total = counts.total;
-  const maxDeity = Math.max(...DEITIES.map(d => counts[d.id]), 1);
   const birthdayJapa = counts.birthdayJapa ?? 0;
   const anniversaryJapa = counts.anniversaryJapa ?? 0;
+  /** Scale all bars together; occasion rows always follow `DEITIES` so new deities stay above them. */
+  const maxRow = Math.max(...DEITIES.map((d) => counts[d.id] ?? 0), birthdayJapa, anniversaryJapa, 1);
 
   const openDownloadModal = (mantra: string, count: number, deityName: string) => {
     setDownloadModal({ mantra, count, deityName });
@@ -221,35 +222,9 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
       </h2>
 
       <div className="space-y-4">
-        <div className="bg-black/20 rounded-xl p-3">
-          <div className="flex justify-between items-center mb-1 gap-2">
-            <span className="font-medium text-amber-400 shrink-0">{t('japaDashboard.birthdayJapa')}</span>
-            <span className="text-amber-200 shrink-0">{birthdayJapa.toLocaleString()}</span>
-            <span className="shrink-0 w-[72px]" aria-hidden />
-          </div>
-          <div className="h-2 bg-black/30 rounded-full overflow-hidden">
-            <div
-              className="h-full rounded-full transition-all bg-pink-400/90"
-              style={{ width: `${maxDeity > 0 ? Math.min(100, (birthdayJapa / maxDeity) * 100) : 0}%` }}
-            />
-          </div>
-        </div>
-        <div className="bg-black/20 rounded-xl p-3">
-          <div className="flex justify-between items-center mb-1 gap-2">
-            <span className="font-medium text-amber-400 shrink-0">{t('japaDashboard.weddingAnniversaryJapa')}</span>
-            <span className="text-amber-200 shrink-0">{anniversaryJapa.toLocaleString()}</span>
-            <span className="shrink-0 w-[72px]" aria-hidden />
-          </div>
-          <div className="h-2 bg-black/30 rounded-full overflow-hidden">
-            <div
-              className="h-full rounded-full transition-all bg-rose-400/90"
-              style={{ width: `${maxDeity > 0 ? Math.min(100, (anniversaryJapa / maxDeity) * 100) : 0}%` }}
-            />
-          </div>
-        </div>
-        {DEITIES.map(deity => {
+        {DEITIES.map((deity) => {
           const count = counts[deity.id];
-          const pct = maxDeity > 0 ? (count / maxDeity) * 100 : 0;
+          const pct = maxRow > 0 ? (count / maxRow) * 100 : 0;
           return (
             <div key={deity.id} className="bg-black/20 rounded-xl p-3">
               <div className="flex justify-between items-center mb-1 gap-2">
@@ -274,6 +249,32 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
             </div>
           );
         })}
+        <div className="bg-black/20 rounded-xl p-3">
+          <div className="flex justify-between items-center mb-1 gap-2">
+            <span className="font-medium text-amber-400 shrink-0">{t('japaDashboard.birthdayJapa')}</span>
+            <span className="text-amber-200 shrink-0">{birthdayJapa.toLocaleString()}</span>
+            <span className="shrink-0 w-[72px]" aria-hidden />
+          </div>
+          <div className="h-2 bg-black/30 rounded-full overflow-hidden">
+            <div
+              className="h-full rounded-full transition-all bg-pink-400/90"
+              style={{ width: `${maxRow > 0 ? Math.min(100, (birthdayJapa / maxRow) * 100) : 0}%` }}
+            />
+          </div>
+        </div>
+        <div className="bg-black/20 rounded-xl p-3">
+          <div className="flex justify-between items-center mb-1 gap-2">
+            <span className="font-medium text-amber-400 shrink-0">{t('japaDashboard.weddingAnniversaryJapa')}</span>
+            <span className="text-amber-200 shrink-0">{anniversaryJapa.toLocaleString()}</span>
+            <span className="shrink-0 w-[72px]" aria-hidden />
+          </div>
+          <div className="h-2 bg-black/30 rounded-full overflow-hidden">
+            <div
+              className="h-full rounded-full transition-all bg-rose-400/90"
+              style={{ width: `${maxRow > 0 ? Math.min(100, (anniversaryJapa / maxRow) * 100) : 0}%` }}
+            />
+          </div>
+        </div>
       </div>
 
       {downloadModal && (

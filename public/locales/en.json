@@ -3,9 +3,10 @@
     "title": "JAPAM",
     "tagline": "Match & Chant",
     "description": "Match divine candies. Hear mantras. Build your japa.",
-    "beginJapa": "Begin Japa",
-    "birthdayJapaTitle": "Birthday Japa",
-    "weddingAnniversaryJapaTitle": "Wedding Anniversary Japa",
+    "beginJapa": "Regular Japa",
+    "specials": "Specials",
+    "birthdayJapaTitle": "Birthday japa",
+    "weddingAnniversaryJapaTitle": "Wedding Anniversary japa",
     "tryAsGuest": "Continue as guest",
     "builtBy": "Built by",
     "copyright": "All rights reserved.",
@@ -15,10 +16,6 @@
     "refund": "Refund & Cancellation",
     "shipping": "Shipping & Delivery",
     "apiDocs": "API Docs"
-  },
-  "japaDashboard": {
-    "birthdayJapa": "Birthday Japa",
-    "weddingAnniversaryJapa": "Wedding Anniversary Japa"
   },
   "videoModal": {
     "title1": "JAPAM",
@@ -217,6 +214,8 @@
   },
   "japaDashboard": {
     "title": "Japa Dashboard",
+    "birthdayJapa": "Birthday japa",
+    "weddingAnniversaryJapa": "Wedding Anniversary japa",
     "lifetimeMantraCount": "Lifetime mantra count",
     "totalJapas": "{{count}} total japas",
     "dailyGoal": "Daily goal: {n} japas (Levels 1–5)",
@@ -342,7 +341,7 @@
     "back_to_japam": "← Back to Japam",
     "background_music": "Background Music",
     "base_url_api": "Base URL: /api",
-    "begin_japa": "Begin Japa",
+    "begin_japa": "Regular Japa",
     "browser_tabs_can_be_closed_installing_japam_to_your_home_screen_ensures_reminders_always_fire_on_time": "Browser tabs can be closed. Installing Japam to your home screen ensures reminders always fire on time.",
     "built_by": "Built by",
     "cancel": "Cancel",

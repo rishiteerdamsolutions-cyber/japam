@@ -3,7 +3,8 @@
     "title": "జపం",
     "tagline": "సరిపోల్చండి, జపించండి",
     "description": "దివ్య మిఠాయిలు సరిపోల్చండి. మంత్రాలు వినండి. మీ జపాన్ని పెంపొందించండి.",
-    "beginJapa": "జపం ప్రారంభించండి",
+    "beginJapa": "సాధారణ జపం",
+    "specials": "ప్రత్యేకం",
     "birthdayJapaTitle": "పుట్టినరోజు జపం",
     "weddingAnniversaryJapaTitle": "వివాహ వార్షికోత్సవ జపం",
     "tryAsGuest": "అతిథిగా ప్రయత్నించండి",
@@ -15,10 +16,6 @@
     "refund": "వాపసు మరియు రద్దు",
     "shipping": "రవాణా మరియు డెలివరీ",
     "apiDocs": "API పత్రాలు"
-  },
-  "japaDashboard": {
-    "birthdayJapa": "పుట్టినరోజు జపం",
-    "weddingAnniversaryJapa": "వివాహ వార్షికోత్సవ జపం"
   },
   "videoModal": {
     "title1": "జపం",
@@ -153,6 +150,8 @@
   },
   "japaDashboard": {
     "title": "నియంత్రణ పటం",
+    "birthdayJapa": "పుట్టినరోజు జపం",
+    "weddingAnniversaryJapa": "వివాహ వార్షికోత్సవ జపం",
     "lifetimeMantraCount": "lifetime_mantra_count",
     "totalJapas": "{{count}} మొత్తం జపాలు",
     "dailyGoal": "daily_goal_n_japas_levels_15",

@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { getDeity } from '../../data/deities';
 import type { GemType } from '../../engine/types';
-import { displayDeityId, isBlessing, isStriped, isWrapped } from '../../engine/gemKinds';
+import { displayDeityId, isBlessing, isWrapped } from '../../engine/gemKinds';
 import { BOMB_OVERLAY_ICON } from '../../data/offeringPowers';
 
 interface GemProps {
@@ -36,9 +36,7 @@ export const Gem = memo(function Gem({
   borderSpinActive,
 }: GemProps) {
   const blessing = isBlessing(gem);
-  const striped = isStriped(gem);
   const wrapped = isWrapped(gem);
-  const stripedInfo = striped ? gem : null;
 
   const deityId = displayDeityId(gem);
   const d = deityId != null ? getDeity(deityId) : null;
@@ -51,13 +49,6 @@ export const Gem = memo(function Gem({
 
   const accent = d?.color ?? '#fbbf24';
   const deityName = d?.name ?? 'Blessing';
-
-  const stripeOverlay =
-    stripedInfo?.along === 'row'
-      ? 'repeating-linear-gradient(180deg, rgba(255,255,255,0.45) 0px, rgba(255,255,255,0.45) 4px, transparent 4px, transparent 11px)'
-      : stripedInfo?.along === 'col'
-        ? 'repeating-linear-gradient(90deg, rgba(255,255,255,0.45) 0px, rgba(255,255,255,0.45) 4px, transparent 4px, transparent 11px)'
-        : undefined;
 
   return (
     <div
@@ -134,16 +125,9 @@ export const Gem = memo(function Gem({
             />
           </span>
         )}
-        {striped && stripeOverlay && (
-          <div
-            className="absolute inset-0 rounded-[0.5rem] pointer-events-none z-[2] mix-blend-overlay"
-            style={{ background: stripeOverlay }}
-            aria-hidden
-          />
-        )}
         {wrapped && (
           <div
-            className="absolute inset-[7%] rounded-[0.45rem] border-[3px] border-white/90 pointer-events-none z-[2] shadow-[inset_0_0_12px_rgba(255,255,255,0.35)]"
+            className="absolute inset-[8%] rounded-[0.5rem] border-2 border-amber-100/45 pointer-events-none z-[2] shadow-[inset_0_0_10px_rgba(251,191,36,0.12)]"
             aria-hidden
           />
         )}

@@ -3,16 +3,34 @@ import { DEITY_IDS } from '../data/deities';
 import type { DeityId } from '../data/deities';
 import { sameLineGroup } from './gemKinds';
 
-/** When deityMode is set, that deity's gem is always included (required for deity-specific games). */
-export function createBoard(rows: number, cols: number, maxGemTypes = 8, deityMode?: DeityId): Board {
-  let types: GemType[];
-  if (deityMode) {
-    const others = DEITY_IDS.filter(id => id !== deityMode);
-    const pool = [deityMode, ...others.slice(0, Math.min(maxGemTypes - 1, others.length))];
-    types = [...new Set(pool)] as GemType[];
-  } else {
-    types = DEITY_IDS.slice(0, Math.min(maxGemTypes, DEITY_IDS.length));
+/**
+ * Gem pool for a level: always includes `deityMode` (if any) and every deity the player has
+ * offering charges for, then fills up to `cap` from `DEITY_IDS` order so powers stay usable.
+ */
+export function buildGemTypesPool(
+  maxGemTypes: number,
+  deityMode: DeityId | undefined,
+  powerBackedDeities: DeityId[],
+): GemType[] {
+  const req = [...new Set(powerBackedDeities)];
+  const must: DeityId[] = deityMode ? [...new Set([deityMode, ...req])] : [...new Set(req)];
+  const fill = DEITY_IDS.filter((id) => !must.includes(id));
+  if (must.length === 0) {
+    return DEITY_IDS.slice(0, Math.min(maxGemTypes, DEITY_IDS.length)) as GemType[];
   }
+  const cap = Math.min(DEITY_IDS.length, Math.max(maxGemTypes, must.length));
+  return [...must, ...fill].slice(0, cap) as GemType[];
+}
+
+/** When deityMode is set, that deity's gem is always included (required for deity-specific games). */
+export function createBoard(
+  rows: number,
+  cols: number,
+  maxGemTypes = 8,
+  deityMode?: DeityId,
+  powerBackedDeities: DeityId[] = [],
+): Board {
+  const types = buildGemTypesPool(maxGemTypes, deityMode, powerBackedDeities);
   const board: Board = [];
   for (let r = 0; r < rows; r++) {
     const rowData: (GemType | null)[] = [];
@@ -91,14 +109,13 @@ export function removeMatches(board: Board, positions: { row: number; col: numbe
   return next;
 }
 
-export function fillGaps(board: Board, maxGemTypes = 8, deityMode?: DeityId): { board: Board; newGems: { row: number; col: number; gem: GemType }[] } {
-  let types: GemType[];
-  if (deityMode) {
-    const others = DEITY_IDS.filter(id => id !== deityMode);
-    types = [deityMode, ...others.slice(0, Math.min(maxGemTypes - 1, others.length))] as GemType[];
-  } else {
-    types = DEITY_IDS.slice(0, Math.min(maxGemTypes, DEITY_IDS.length));
-  }
+export function fillGaps(
+  board: Board,
+  maxGemTypes = 8,
+  deityMode?: DeityId,
+  powerBackedDeities: DeityId[] = [],
+): { board: Board; newGems: { row: number; col: number; gem: GemType }[] } {
+  const types = buildGemTypesPool(maxGemTypes, deityMode, powerBackedDeities);
   const rows = board.length;
   const cols = board[0]?.length ?? 0;
   const next = board.map(r => [...r]);

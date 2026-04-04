@@ -1,13 +1,13 @@
 import type { Board, Match, Position } from './types';
 import type { GemType } from './gemKinds';
-import { isBlessing, isStriped, isWrapped } from './gemKinds';
+import { isBlessing, isWrapped } from './gemKinds';
 import { hasLOrTShape } from './matcher';
 
 const posKey = (p: Position) => `${p.row},${p.col}`;
 
 /**
- * Repeatedly expand the clear set: matched specials detonate row/column (striped),
- * 3×3 (wrapped), in one cascade step.
+ * Repeatedly expand the clear set: matched wrapped detonates 3×3 in one cascade step.
+ * (Striped specials are removed — legacy striped gems on board clear as normal tiles.)
  */
 export function expandPowerClears(board: Board, seed: Position[]): Position[] {
   const rows = board.length;
@@ -37,13 +37,6 @@ export function expandPowerClears(board: Board, seed: Position[]): Position[] {
           }
         }
         continue;
-      }
-      if (isStriped(gem)) {
-        if (gem.along === 'row') {
-          for (let cc = 0; cc < cols; cc++) add({ row: r, col: cc });
-        } else {
-          for (let rr = 0; rr < rows; rr++) add({ row: rr, col: c });
-        }
       }
     }
   }
@@ -100,7 +93,7 @@ export interface PlannedSpecial {
 }
 
 /**
- * Candy Crush–style: 5+ line → blessing; L/T → wrapped; line of 4 → striped.
+ * 5+ line → blessing; L/T → wrapped. (No striped / 4-match special.)
  * At most one special per resolution step; strongest shape wins.
  */
 export function planSpecialSpawn(
@@ -124,15 +117,6 @@ export function planSpecialSpawn(
       const d = host?.deity ?? matches[0]!.deity;
       return { gem: { _t: 'wrapped', d }, at };
     }
-  }
-
-  const tier4 = matches.filter((m) => m.positions.length === 4);
-  if (tier4.length > 0) {
-    const m = pickMatchPreferringSwap(tier4, lastSwapTo);
-    const horizontal = m.positions.length > 1 && m.positions[0]!.row === m.positions[1]!.row;
-    const along: 'row' | 'col' = horizontal ? 'row' : 'col';
-    const at = centerOfLine(m.positions, horizontal, lastSwapTo);
-    return { gem: { _t: 'striped', d: m.deity, along }, at };
   }
 
   return null;

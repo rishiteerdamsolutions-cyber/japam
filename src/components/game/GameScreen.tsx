@@ -20,6 +20,7 @@ import { GoogleSignIn } from '../auth/GoogleSignIn';
 import { LivesDisplay } from '../lives/LivesDisplay';
 import { LivesModal } from '../lives/LivesModal';
 import { GamePowersScrollStrip } from './GamePowersScrollStrip';
+import { usePowersInventoryStore } from '../../store/powersInventoryStore';
 
 function PauseIcon() {
   return (
@@ -196,6 +197,15 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
 
     doInit();
   }, [mode, levelIndex, isMarathon, marathonTargetJapas, marathonId, yagnaId, isGuest, justRestored, onJustRestoredCleared, initGame]);
+
+  const powersInventoryLoaded = usePowersInventoryStore((s) => s.loaded);
+  const syncBoardForOfferingPowers = useGameStore((s) => s.syncBoardForOfferingPowers);
+
+  /** If inventory loaded after the first board build, refresh once so offering-backed deities (e.g. Hanuman) appear. */
+  useEffect(() => {
+    if (!powersInventoryLoaded || isGuest) return;
+    syncBoardForOfferingPowers();
+  }, [powersInventoryLoaded, isGuest, syncBoardForOfferingPowers]);
 
   /**
    * Swipe-back / browser back often unmounts this screen without clicking Pause.
@@ -524,9 +534,9 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
             onClick={handleRefreshBoard}
             aria-label={t('game.refreshBoard')}
             title={t('game.refreshBoard')}
-            className="px-2.5 py-1 rounded-lg bg-amber-500/75 text-black font-medium text-[11px] leading-tight border border-amber-400/50 shadow-sm hover:bg-amber-400/90 active:scale-[0.98] transition-transform max-w-[min(100%,11rem)] whitespace-nowrap"
+            className="px-3 py-1.5 rounded-lg bg-amber-500/75 text-black font-semibold text-[10px] sm:text-xs leading-snug border border-amber-400/50 shadow-sm hover:bg-amber-400/90 active:scale-[0.98] transition-transform max-w-full text-center whitespace-nowrap"
           >
-            {t('game.refreshBoardShort')}
+            {t('game.refreshBoard')}
           </button>
         </div>
       )}

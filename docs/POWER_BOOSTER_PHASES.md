@@ -90,7 +90,7 @@ The old pixel sheet [`docs/assets/power-offerings-reference.png`](assets/power-o
 
 - Booster charges + persistence hooks (per plan).
 - Namaskaram + per-deity offering: single-cell remove, japa/move rules.
-- Free swap: valid **3+ match** only (not blessing activation). **Consumes one charge** and **does not spend a level move**; japa still follows normal match rules on success.
+- Free swap: **any adjacent swap** is allowed (including setup moves that do **not** match yet). Not for blessing activation. **Consumes one charge** and **does not spend a level move**; if the swap creates a match, japa/cascade behaves like a normal match.
 - Bomb: 5-match spawn; swap clears all of deity; −1 move, +1 japa.
 - `resolutionSource` / japa gating for cascades.
 

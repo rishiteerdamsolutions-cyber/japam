@@ -20,6 +20,16 @@ import { isBlessing } from '../engine/gemKinds';
 import { isDeityPowerId } from '../data/gamePowers';
 import { gameDebug } from '../lib/gameDebug';
 
+/** Deities the player has at least one offering charge for — their gems must appear so powers are usable. */
+function powerBackedDeitiesForBoard(): DeityId[] {
+  const { entries } = usePowersInventoryStore.getState();
+  const out: DeityId[] = [];
+  for (const e of entries) {
+    if (isDeityPowerId(e.id) && e.count >= 1) out.push(e.id);
+  }
+  return out;
+}
+
 export type { GameMode };
 export type GameStatus = 'playing' | 'won' | 'lost';
 
@@ -97,6 +107,8 @@ interface GameActions {
   finalizeMatchChain: (accumulated: { deity: DeityId; count: number; combo: number }[]) => void;
   addMoves: (n: number) => void;
   refreshBoard: () => void;
+  /** After powers inventory loads, rebuild board if offering-backed deities are missing (only before first score/japa). */
+  syncBoardForOfferingPowers: () => void;
   reset: () => void;
 }
 
@@ -157,9 +169,10 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const overrideJapaTarget = options?.overrideJapaTarget ?? null;
     const isGuest = options?.isGuest === true;
     const moves = marathonTargetJapas != null ? 999999 : level.moves;
-    let board = createBoard(level.rows, level.cols, maxGemTypes, deityMode);
+    const powerPool = powerBackedDeitiesForBoard();
+    let board = createBoard(level.rows, level.cols, maxGemTypes, deityMode, powerPool);
     while (!hasValidMoves(board)) {
-      board = createBoard(level.rows, level.cols, maxGemTypes, deityMode);
+      board = createBoard(level.rows, level.cols, maxGemTypes, deityMode, powerPool);
     }
     set({
       board,
@@ -234,8 +247,9 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const level = getLevel(saved.levelIndex);
     const maxGemTypes = level.maxGemTypes ?? 8;
     const deityMode = saved.mode !== 'general' ? (saved.mode as DeityId) : undefined;
-    let board = createBoard(level.rows, level.cols, maxGemTypes, deityMode);
-    while (!hasValidMoves(board)) board = createBoard(level.rows, level.cols, maxGemTypes, deityMode);
+    const powerPoolResume = powerBackedDeitiesForBoard();
+    let board = createBoard(level.rows, level.cols, maxGemTypes, deityMode, powerPoolResume);
+    while (!hasValidMoves(board)) board = createBoard(level.rows, level.cols, maxGemTypes, deityMode, powerPoolResume);
     set({
       board,
       moves: saved.moves,
@@ -312,7 +326,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const cleared = removeMatches(board, positions);
     const { board: afterG } = applyGravity(cleared);
     const deityMode = mode !== 'general' ? (mode as DeityId) : undefined;
-    const { board: filled, newGems } = fillGaps(afterG, maxGemTypes, deityMode);
+    const { board: filled, newGems } = fillGaps(afterG, maxGemTypes, deityMode, powerBackedDeitiesForBoard());
     const spawnKeys = newGems.map((g) => `${g.row},${g.col}`);
     const nextGen = spawnKeys.length > 0 ? state.refillSpawnGeneration + 1 : state.refillSpawnGeneration;
 
@@ -389,7 +403,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       (isBlessing(gemA) && !isBlessing(gemB)) || (isBlessing(gemB) && !isBlessing(gemA));
 
     if (blessingPair) {
-      // Free swap is only for swaps that create a normal 3+ match (see Phase doc), not blessing activation.
+      // Free swap: any adjacent swap except blessing activation (see Phase doc).
       if (useFreeSwap) {
         set({ selectedCell: null });
         return false;
@@ -415,7 +429,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       const cleared = removeMatches(nextBoard, clearPos);
       const { board: afterG } = applyGravity(cleared);
       const deityModeSwap = get().mode !== 'general' ? (get().mode as DeityId) : undefined;
-      const { board: filled } = fillGaps(afterG, get().maxGemTypes, deityModeSwap);
+      const { board: filled } = fillGaps(afterG, get().maxGemTypes, deityModeSwap, powerBackedDeitiesForBoard());
       const gh = afterG.length;
       const gw = afterG[0]?.length ?? 0;
       const spawnKeys: string[] = [];
@@ -455,6 +469,21 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const matches = findMatches(nextBoard);
 
     if (matches.length === 0) {
+      // Free swap: allow setup moves (swap need not create a match yet); consumes one charge, no move spent.
+      if (useFreeSwap) {
+        set({
+          board: nextBoard,
+          moves,
+          selectedCell: null,
+          lastSwapDestination: null,
+          lastSwappedTypes: gemA && gemB ? [gemA, gemB] : null,
+          intendedDeity: gemA || null,
+          hintsSwapCount: get().hintsSwapCount + 1,
+        });
+        usePowerArmStore.getState().setArmedPower(null);
+        void usePowersInventoryStore.getState().tryConsumeOne('freeSwap');
+        return true;
+      }
       set({ selectedCell: null });
       return false;
     }
@@ -582,7 +611,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
 
     const { board: afterGravity } = applyGravity(boardAfterRemove);
     const deityMode = get().mode !== 'general' ? (get().mode as DeityId) : undefined;
-    const { board: filled } = fillGaps(afterGravity, get().maxGemTypes, deityMode);
+    const { board: filled } = fillGaps(afterGravity, get().maxGemTypes, deityMode, powerBackedDeitiesForBoard());
     const spawnKeys: string[] = [];
     const gh = afterGravity.length;
     const gw = afterGravity[0]?.length ?? 0;
@@ -645,9 +674,10 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
 
     if (status === 'playing' && !hasValidMoves(finalBoard)) {
       const deityMode = state.mode !== 'general' ? (state.mode as DeityId) : undefined;
-      finalBoard = createBoard(level.rows, level.cols, state.maxGemTypes, deityMode);
+      const pp = powerBackedDeitiesForBoard();
+      finalBoard = createBoard(level.rows, level.cols, state.maxGemTypes, deityMode, pp);
       while (!hasValidMoves(finalBoard)) {
-        finalBoard = createBoard(level.rows, level.cols, state.maxGemTypes, deityMode);
+        finalBoard = createBoard(level.rows, level.cols, state.maxGemTypes, deityMode, pp);
       }
     }
 
@@ -671,14 +701,33 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     set({ moves: moves + add, status: 'playing' });
   },
 
+  syncBoardForOfferingPowers: () => {
+    const state = get();
+    if (state.status !== 'playing' || state.board.length === 0) return;
+    if (state.matchAnimationTimeoutId != null) return;
+    if (state.firstMatchMade || state.japasThisLevel > 0 || state.score > 0) return;
+    const backed = powerBackedDeitiesForBoard();
+    if (backed.length === 0) return;
+    const present = new Set<DeityId>();
+    for (const row of state.board) {
+      for (const g of row) {
+        const id = displayDeityId(g);
+        if (id) present.add(id);
+      }
+    }
+    if (!backed.some((d) => !present.has(d))) return;
+    get().refreshBoard();
+  },
+
   refreshBoard: () => {
     const state = get();
     if (state.status !== 'playing' || state.board.length === 0) return;
     const level = getLevel(state.levelIndex);
     const deityMode = state.mode !== 'general' ? (state.mode as DeityId) : undefined;
-    let board = createBoard(level.rows, level.cols, state.maxGemTypes, deityMode);
+    const pp = powerBackedDeitiesForBoard();
+    let board = createBoard(level.rows, level.cols, state.maxGemTypes, deityMode, pp);
     while (!hasValidMoves(board)) {
-      board = createBoard(level.rows, level.cols, state.maxGemTypes, deityMode);
+      board = createBoard(level.rows, level.cols, state.maxGemTypes, deityMode, pp);
     }
     set({
       board,

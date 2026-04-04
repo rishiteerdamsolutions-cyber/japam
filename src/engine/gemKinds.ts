@@ -1,6 +1,6 @@
 import type { DeityId } from '../data/deities';
 
-/** Striped: when matched, clears an entire row (`along: 'row'`) or column (`along: 'col'`). */
+/** Legacy type only — no longer spawned; old boards may still contain until cleared. Renders as a normal deity tile. */
 export type StripedGem = { _t: 'striped'; d: DeityId; along: 'row' | 'col' };
 
 /** Wrapped: when matched, clears a 3×3 burst. */

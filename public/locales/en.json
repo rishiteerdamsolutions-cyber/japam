@@ -150,7 +150,15 @@
     "savedToAccount": "Saved to your Japam account",
     "occasionHistory": "Occasion history",
     "noOccasions": "No saved occasions yet.",
-    "coupleJapasHud": "Couple japas"
+    "coupleJapasHud": "Couple japas",
+    "sessionPausedCouple": "This couple session is paused for both of you. Japa counts and moves are saved.",
+    "resumeCoupleHint": "When you are both ready, tap Resume for a fresh board — both phones will show the same layout.",
+    "resumeCoupleGame": "Resume game",
+    "leavePausedSession": "Leave (session stays paused)",
+    "activeAnniversarySessions": "Anniversary couple game",
+    "continueCoupleJapa": "Continue",
+    "coupleJapasShort": "{{h}}H · {{w}}W japas",
+    "pausedBadge": "Paused"
   },
   "common": {
     "loading": "Loading…",

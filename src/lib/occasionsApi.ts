@@ -113,3 +113,35 @@ export async function fetchOccasionsList(token: string): Promise<OccasionListIte
   if (!res.ok) return [];
   return Array.isArray(data.items) ? data.items : [];
 }
+
+export type AnniversaryActiveSession = {
+  sessionId: string;
+  status: string;
+  sessionPaused: boolean;
+  gameMode: string;
+  levelIndex: number;
+  myRole: 'husband' | 'wife';
+  isHost: boolean;
+  japasHusband: number;
+  japasWife: number;
+  partnerJoined: boolean;
+};
+
+export async function fetchAnniversaryActiveSessions(token: string): Promise<AnniversaryActiveSession[]> {
+  const res = await occasionsFetch('/api/occasions/anniversary/active', { method: 'GET', token });
+  const data = (await res.json().catch(() => ({}))) as { items?: AnniversaryActiveSession[] };
+  if (!res.ok) return [];
+  if (!Array.isArray(data.items)) return [];
+  return data.items.map((row) => ({
+    sessionId: String(row.sessionId ?? ''),
+    status: String(row.status ?? 'playing'),
+    sessionPaused: row.sessionPaused === true,
+    gameMode: String(row.gameMode ?? 'general'),
+    levelIndex: Number(row.levelIndex ?? 0),
+    myRole: row.myRole === 'wife' ? 'wife' : 'husband',
+    isHost: row.isHost === true,
+    japasHusband: Number(row.japasHusband ?? 0),
+    japasWife: Number(row.japasWife ?? 0),
+    partnerJoined: row.partnerJoined === true,
+  }));
+}

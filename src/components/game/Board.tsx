@@ -33,6 +33,10 @@ export function Board() {
   const selectedCell = useGameStore(s => s.selectedCell);
   const status = useGameStore(s => s.status);
   const mode = useGameStore(s => s.mode);
+  const occasionKind = useGameStore((s) => s.occasionKind);
+  const anniversaryTurn = useGameStore((s) => s.anniversaryTurn);
+  const anniversaryMyRole = useGameStore((s) => s.anniversaryMyRole);
+  const anniversarySessionPaused = useGameStore((s) => s.anniversarySessionPaused);
   const firstMatchMade = useGameStore(s => s.firstMatchMade);
   const matchHighlightPositions = useGameStore(s => s.matchHighlightPositions);
   const isAnimatingMatch = matchHighlightPositions != null;
@@ -139,6 +143,14 @@ export function Board() {
 
   const rows = board.length;
   const cols = board[0]?.length ?? 0;
+  const anniversarySpinActive =
+    occasionKind === 'anniversary' &&
+    !anniversarySessionPaused &&
+    anniversaryMyRole != null &&
+    anniversaryMyRole === anniversaryTurn;
+  const borderSpinActive =
+    candyBorderSpinEnabled &&
+    (occasionKind !== 'anniversary' || anniversarySpinActive);
   const showSparkle = mode !== 'general' && !firstMatchMade;
   const shakeBig = isAnimatingMatch && (matchHighlightPositions?.length ?? 0) >= 5;
   const cellKey = (r: number, c: number) => `${r},${c}`;
@@ -184,7 +196,7 @@ export function Board() {
                   row={r}
                   col={c}
                   borderSpin={c < cols / 2 ? 'left' : 'right'}
-                  borderSpinActive={candyBorderSpinEnabled}
+                  borderSpinActive={borderSpinActive}
                   selected={selectedCell?.row === r && selectedCell?.col === c}
                   sparkle={showSparkle && cellShowsDeity(cell, mode as DeityId)}
                   matched={matchSet.has(cellKey(r, c))}

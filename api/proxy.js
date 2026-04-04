@@ -122,6 +122,7 @@ import * as occasionsAnniversaryJoinHandler from './_handlers/occasions/annivers
 import * as occasionsAnniversaryCompleteHandler from './_handlers/occasions/anniversary-complete.js';
 import * as occasionsBirthdayCompleteHandler from './_handlers/occasions/birthday-complete.js';
 import * as occasionsListHandler from './_handlers/occasions/list.js';
+import * as occasionsAnniversaryActiveHandler from './_handlers/occasions/anniversary-active.js';
 
 function getPathSegments(request) {
   const url = new URL(request.url);
@@ -255,6 +256,7 @@ const HANDLERS = {
   'POST occasions/anniversary/complete': occasionsAnniversaryCompleteHandler,
   'POST occasions/birthday/complete': occasionsBirthdayCompleteHandler,
   'GET occasions/list': occasionsListHandler,
+  'GET occasions/anniversary/active': occasionsAnniversaryActiveHandler,
 };
 
 async function route(request, method, pathSegments) {

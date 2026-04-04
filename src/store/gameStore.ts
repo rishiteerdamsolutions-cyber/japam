@@ -112,6 +112,8 @@ interface GameState {
   anniversaryJapasWife: number;
   anniversaryMovePending: boolean;
   anniversaryFirestoreVersion: number;
+  /** Couple session paused in Firestore (both partners). */
+  anniversarySessionPaused: boolean;
 }
 
 function boardGemContext(state: GameState): {
@@ -222,6 +224,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   anniversaryJapasWife: 0,
   anniversaryMovePending: false,
   anniversaryFirestoreVersion: 0,
+  anniversarySessionPaused: false,
 
   initGame: (mode, levelIndex = 0, options) => {
     gameDebug('initGame', {
@@ -322,6 +325,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       anniversaryJapasWife,
       anniversaryMovePending: false,
       anniversaryFirestoreVersion,
+      anniversarySessionPaused: false,
     });
     usePowerArmStore.getState().reset();
   },
@@ -448,6 +452,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       anniversaryJapasWife: saved.anniversaryJapasWife ?? 0,
       anniversaryMovePending: false,
       anniversaryFirestoreVersion: saved.anniversaryFirestoreVersion ?? 0,
+      anniversarySessionPaused: false,
     });
     usePowerArmStore.getState().reset();
   },
@@ -520,6 +525,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
 
   selectCell: (row, col) => {
     const pre = get();
+    if (pre.occasionKind === 'anniversary' && pre.anniversarySessionPaused) return;
     if (
       pre.occasionKind === 'anniversary' &&
       pre.anniversaryMyRole &&
@@ -560,6 +566,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     if (!from || status !== 'playing') return false;
     const useFreeSwap = usePowerArmStore.getState().armedPowerId === 'freeSwap';
     if (occasionKind === 'anniversary') {
+      if (get().anniversarySessionPaused) return false;
       if (anniversaryMyRole && anniversaryTurn !== anniversaryMyRole) return false;
       if (useFreeSwap) {
         set({ selectedCell: null });
@@ -1072,6 +1079,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
         : prev.anniversaryMyRole;
     const annHost =
       typeof payload.anniversaryIsHost === 'boolean' ? payload.anniversaryIsHost : prev.anniversaryIsHost;
+    const sessionPaused = payload.sessionPaused === true;
     stopAllMantras();
     set({
       board,
@@ -1106,6 +1114,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       refillSpawnGeneration: 0,
       lastSwapDestination: null,
       anniversaryMovePending: false,
+      anniversarySessionPaused: sessionPaused,
     });
   },
 

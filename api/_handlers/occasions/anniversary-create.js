@@ -40,6 +40,7 @@ export async function POST(request) {
     levelIndex,
     status: 'waiting',
     version: 0,
+    sessionPaused: false,
     completionWritten: false,
     createdAt: admin.firestore.FieldValue.serverTimestamp(),
   });

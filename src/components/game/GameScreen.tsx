@@ -22,6 +22,8 @@ import { LivesModal } from '../lives/LivesModal';
 import { GamePowersScrollStrip } from './GamePowersScrollStrip';
 import { usePowersInventoryStore } from '../../store/powersInventoryStore';
 import { useAnniversaryFirestore } from '../../hooks/useAnniversaryFirestore';
+import { firestore, isFirebaseConfigured } from '../../lib/firebase';
+import { pauseAnniversarySession, resumeAnniversarySession } from '../../lib/anniversarySessionFirestore';
 import { completeBirthdayOccasion, completeAnniversarySession } from '../../lib/occasionsApi';
 import { downloadOccasionSummaryPdf } from '../../utils/occasionPdf';
 
@@ -213,6 +215,8 @@ export function GameScreen({
   const anniversaryTurn = useGameStore((s) => s.anniversaryTurn);
   const anniversaryJH = useGameStore((s) => s.anniversaryJapasHusband);
   const anniversaryJW = useGameStore((s) => s.anniversaryJapasWife);
+  const anniversarySessionPaused = useGameStore((s) => s.anniversarySessionPaused);
+  const anniversaryInitKeyRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (!isGuest) setGuestPowerSignInOpen(false);
@@ -241,6 +245,10 @@ export function GameScreen({
     }
     prevRestoredRef.current = false;
 
+    if (occasionKind !== 'anniversary' || !anniversarySessionId) {
+      anniversaryInitKeyRef.current = null;
+    }
+
     const doInit = () => {
       gameDebug('GameScreen re-init effect → initGame', {
         mode,
@@ -261,6 +269,9 @@ export function GameScreen({
           occasionKind: 'birthday',
         });
       } else if (occasionKind === 'anniversary' && anniversarySessionId) {
+        const annKey = `${anniversarySessionId}|${anniversaryMyRole}|${anniversaryIsHost ? '1' : '0'}|${mode}|${levelIndex}|${occasionJapaTarget}`;
+        if (anniversaryInitKeyRef.current === annKey) return;
+        anniversaryInitKeyRef.current = annKey;
         initGame(mode as 'general', levelIndex, {
           overrideJapaTarget: occasionJapaTarget,
           occasionKind: 'anniversary',
@@ -479,6 +490,22 @@ export function GameScreen({
   }, [status, occasionKind, user, occasionRecordSaved, anniversarySessionId]);
 
   const saveAndExit = useCallback(async () => {
+    const gs = useGameStore.getState();
+    if (gs.occasionKind === 'anniversary' && gs.anniversarySessionId && user?.uid) {
+      setPauseError(null);
+      if (isFirebaseConfigured && firestore && !gs.anniversarySessionPaused) {
+        setPauseSaving(true);
+        const r = await pauseAnniversarySession(firestore, gs.anniversarySessionId, user.uid);
+        setPauseSaving(false);
+        if (!r.ok) {
+          setPauseError(r.error);
+          return;
+        }
+      }
+      onBack();
+      return;
+    }
+
     const payload = savePausedState();
     if (payload) {
       if (user?.uid) {
@@ -509,6 +536,15 @@ export function GameScreen({
       onBack();
     }
   }, [savePausedState, user?.uid, user, onBack, flushJapas, yagnaId, marathonId]);
+
+  const handleResumeCouple = useCallback(async () => {
+    if (!anniversarySessionId || !user?.uid || !isFirebaseConfigured || !firestore) return;
+    setPauseError(null);
+    setPauseSaving(true);
+    const r = await resumeAnniversarySession(firestore, anniversarySessionId);
+    setPauseSaving(false);
+    if (!r.ok) setPauseError(r.error);
+  }, [anniversarySessionId, user?.uid, firestore]);
 
   // Both Back and Pause save then exit — retain japa count and allow resume.
   const handleBack = useCallback(() => {
@@ -671,13 +707,36 @@ export function GameScreen({
       {anniversarySyncError && (
         <div className="w-full max-w-md mt-2 text-red-300 text-xs px-2">{anniversarySyncError}</div>
       )}
-      {occasionKind === 'anniversary' && status === 'playing' && (
+      {occasionKind === 'anniversary' && status === 'playing' && !anniversarySessionPaused && (
         <div className="w-full max-w-md mt-2 text-center text-amber-200/90 text-xs font-medium">
           {anniversaryMyRole === anniversaryTurn ? t('occasions.yourTurn') : t('occasions.partnerTurn')}
         </div>
       )}
 
+      {occasionKind === 'anniversary' && status === 'playing' && anniversarySessionPaused && (
+        <div className="fixed inset-0 z-[38] flex flex-col items-center justify-center bg-black/88 p-6 text-center">
+          <p className="text-amber-100 text-sm max-w-xs mb-4">{t('occasions.sessionPausedCouple')}</p>
+          <p className="text-amber-200/70 text-xs max-w-xs mb-6">{t('occasions.resumeCoupleHint')}</p>
+          <button
+            type="button"
+            disabled={pauseSaving || !isFirebaseConfigured || !firestore}
+            onClick={() => void handleResumeCouple()}
+            className="w-full max-w-xs py-3 rounded-2xl bg-amber-500 text-black font-semibold disabled:opacity-50 mb-3"
+          >
+            {pauseSaving ? '…' : t('occasions.resumeCoupleGame')}
+          </button>
+          <button
+            type="button"
+            onClick={() => onBack()}
+            className="w-full max-w-xs py-2.5 rounded-xl border border-amber-500/50 text-amber-200 text-sm"
+          >
+            {t('occasions.leavePausedSession')}
+          </button>
+        </div>
+      )}
+
       {occasionKind === 'anniversary' &&
+        !anniversarySessionPaused &&
         !anniversaryIsHost &&
         status === 'playing' &&
         (!syncReady || boardLen === 0) && (

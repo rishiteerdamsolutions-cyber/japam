@@ -101,7 +101,15 @@
     "savedToAccount": "మీ జపం ఖాతాలో సేవ్",
     "occasionHistory": "విశేష చరిత్ర",
     "noOccasions": "ఇంకా ఏమీ లేదు.",
-    "coupleJapasHud": "జంట జపాలు"
+    "coupleJapasHud": "జంట జపాలు",
+    "sessionPausedCouple": "ఈ జంట సెషన్ ఇద్దరికీ పాజ్ చేయబడింది. జపా లెక్కలు, మూవ్స్ సేవ్.",
+    "resumeCoupleHint": "ఇద్దరూ సిద్ధంగా ఉన్నాక రిజ్యూమ్ నొక్కండి — కొత్త బోర్డు ఇద్దరి ఫోన్లలో ఒకేలా కనిపిస్తుంది.",
+    "resumeCoupleGame": "ఆట కొనసాగించు",
+    "leavePausedSession": "వెళ్ళిపో (పాజ్ ఉంటుంది)",
+    "activeAnniversarySessions": "వివాహ వార్షికోత్సవ జంట ఆట",
+    "continueCoupleJapa": "కొనసాగించు",
+    "coupleJapasShort": "{{h}}భర్త · {{w}}భార్య జపాలు",
+    "pausedBadge": "పాజ్"
   },
   "common": {
     "loading": "లోడ్ అవుతోంది…",

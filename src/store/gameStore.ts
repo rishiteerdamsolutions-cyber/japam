@@ -19,7 +19,7 @@ import { expandPowerClears, planSpecialSpawn } from '../engine/powers';
 import { isBlessing } from '../engine/gemKinds';
 import { isDeityPowerId } from '../data/gamePowers';
 import { gameDebug } from '../lib/gameDebug';
-import { pickGeneralBoardDeities } from '../lib/generalBoardDeities';
+import { filterPowerBackedForIstaPath, pickGeneralBoardDeities } from '../lib/generalBoardDeities';
 
 /** Īṣṭa path: deities the player has offering charges for — gems must appear so powers are usable. */
 function inventoryOfferingDeities(): DeityId[] {
@@ -127,7 +127,14 @@ function boardGemContext(state: GameState): {
         : pickGeneralBoardDeities(state.levelIndex);
     return { deityMode, powerBacked: subset, generalSubset: subset };
   }
-  return { deityMode, powerBacked: inventoryOfferingDeities(), generalSubset: null };
+  return {
+    deityMode,
+    powerBacked:
+      deityMode != null
+        ? filterPowerBackedForIstaPath(deityMode, inventoryOfferingDeities())
+        : inventoryOfferingDeities(),
+    generalSubset: null,
+  };
 }
 
 const getLevel = (index: number) => LEVELS[index] ?? LEVELS[0];
@@ -252,7 +259,9 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const moves = unlimitedMoves ? 999999 : level.moves;
     const generalBoardDeities = mode === 'general' ? pickGeneralBoardDeities(levelIndex) : null;
     const powerPool =
-      mode === 'general' ? generalBoardDeities! : inventoryOfferingDeities();
+      mode === 'general'
+        ? generalBoardDeities!
+        : filterPowerBackedForIstaPath(mode as DeityId, inventoryOfferingDeities());
     let board = createBoard(
       level.rows,
       level.cols,
@@ -377,7 +386,9 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
           : pickGeneralBoardDeities(saved.levelIndex)
         : null;
     const powerPoolResume =
-      saved.mode === 'general' ? generalBoardDeities! : inventoryOfferingDeities();
+      saved.mode === 'general'
+        ? generalBoardDeities!
+        : filterPowerBackedForIstaPath(saved.mode as DeityId, inventoryOfferingDeities());
     let board = createBoard(
       level.rows,
       level.cols,
@@ -922,7 +933,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     if (state.matchAnimationTimeoutId != null) return;
     if (state.firstMatchMade || state.japasThisLevel > 0 || state.score > 0) return;
     if (state.mode === 'general') return;
-    const backed = inventoryOfferingDeities();
+    const backed = filterPowerBackedForIstaPath(state.mode as DeityId, inventoryOfferingDeities());
     if (backed.length === 0) return;
     const present = new Set<DeityId>();
     for (const row of state.board) {
@@ -1050,6 +1061,17 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       Array.isArray(gd) && gd.length > 0 ? (gd as DeityId[]) : null;
     const version = typeof payload.version === 'number' ? payload.version : 0;
     const turn = payload.turn === 'wife' ? 'wife' : 'husband';
+    const prev = get();
+    const annSession =
+      typeof payload.anniversarySessionId === 'string'
+        ? payload.anniversarySessionId
+        : prev.anniversarySessionId;
+    const annRole =
+      payload.anniversaryMyRole === 'wife' || payload.anniversaryMyRole === 'husband'
+        ? payload.anniversaryMyRole
+        : prev.anniversaryMyRole;
+    const annHost =
+      typeof payload.anniversaryIsHost === 'boolean' ? payload.anniversaryIsHost : prev.anniversaryIsHost;
     stopAllMantras();
     set({
       board,
@@ -1061,6 +1083,10 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       japasByDeity,
       maxGemTypes: typeof payload.maxGemTypes === 'number' ? payload.maxGemTypes : getLevel(levelIndex).maxGemTypes ?? 8,
       generalBoardDeities,
+      occasionKind: 'anniversary',
+      anniversarySessionId: annSession,
+      anniversaryMyRole: annRole,
+      anniversaryIsHost: annHost,
       anniversaryTurn: turn,
       anniversaryJapasHusband: typeof payload.japasHusband === 'number' ? payload.japasHusband : 0,
       anniversaryJapasWife: typeof payload.japasWife === 'number' ? payload.japasWife : 0,

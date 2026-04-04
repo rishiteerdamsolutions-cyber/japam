@@ -89,6 +89,7 @@
     "exit": "Exit",
     "refreshBoard": "No matches? Refresh board",
     "powersStripRegion": "Collected powers",
+    "powersInteractionHint": "Hover a power, or on touch hold it briefly, to see the deity or power name and how to use it.",
     "powersStripLayoutHint": "Namaskaram stays on the left; deity offerings scroll in the middle; free swap and flower bomb stay on the right.",
     "powersScrollEmpty": "Complete an Iṣṭa devatā level to collect that offering here.",
     "powersArm": "Arm — then tap a candy on the board",

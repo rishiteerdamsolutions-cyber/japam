@@ -82,7 +82,8 @@ export const DEITIES: Deity[] = [
   {
     id: 'shakthi',
     name: 'Shakthi',
-    color: '#E91E9B',
+    /** Gem rim / plate: vivid magenta-pink (distinct from Lakṣmī gold, Durgā red, Sarasvatī teal). */
+    color: '#C51162',
     mantraAudio: '/sounds/shakthi.m4a',
     mantra: 'Sri Maatre namaha',
     image: '/images/deities/shakthi.png',
@@ -136,7 +137,8 @@ export const DEITIES: Deity[] = [
   {
     id: 'lakshmi',
     name: 'Lakshmi',
-    color: '#F9A825',
+    /** Amber / golden yellow — reads clearly vs Durgā’s red and Śakti’s pink. */
+    color: '#FF8F00',
     mantraAudio: '/sounds/lakshmi.m4a',
     mantra: 'Om Sri Mahalakshmyai Namaha',
     image: '/images/deities/lakshmi.png',
@@ -145,7 +147,8 @@ export const DEITIES: Deity[] = [
   {
     id: 'durga',
     name: 'Durga',
-    color: '#C62828',
+    /** Deep warrior red — separated from Śakti pink and Lakṣmī amber. */
+    color: '#B71C1C',
     mantraAudio: '/sounds/durga.m4a',
     mantra: 'Om Sri Durgaya Namaha',
     image: '/images/deities/durga.png',
@@ -154,7 +157,8 @@ export const DEITIES: Deity[] = [
   {
     id: 'saraswati',
     name: 'Saraswati',
-    color: '#5C6BC0',
+    /** Teal — stands apart from blues (Kṛṣṇa, Śiva sky) and the red/pink/gold goddess set. */
+    color: '#00897B',
     mantraAudio: '/sounds/saraswati.m4a',
     mantra: 'Om Saraswatyai Namaha',
     image: '/images/deities/saraswati.png',

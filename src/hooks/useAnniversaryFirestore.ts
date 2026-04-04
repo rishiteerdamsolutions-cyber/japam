@@ -3,12 +3,21 @@ import { doc, onSnapshot, runTransaction, serverTimestamp } from 'firebase/fires
 import { firestore, isFirebaseConfigured } from '../lib/firebase';
 import { useGameStore } from '../store/gameStore';
 
+function stripUndefinedFields(o: Record<string, unknown>): Record<string, unknown> {
+  const out: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(o)) {
+    if (v !== undefined) out[k] = v;
+  }
+  return out;
+}
+
 /** Real-time sync for wedding anniversary couple play (Firestore document `anniversarySessions/{sessionId}`). */
 export function useAnniversaryFirestore(
   enabled: boolean,
   sessionId: string | null,
   uid: string | null,
   isHost: boolean,
+  myRole: 'husband' | 'wife',
 ): { partnerJoined: boolean; error: string | null; syncReady: boolean } {
   const [partnerJoined, setPartnerJoined] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -50,16 +59,27 @@ export function useAnniversaryFirestore(
             japasHusband: d.japasHusband,
             japasWife: d.japasWife,
             version: remoteVersion,
+            anniversarySessionId: sessionId,
+            anniversaryMyRole: myRole,
+            anniversaryIsHost: isHost,
           });
         }
       },
       (err) => {
         console.error('anniversary snapshot', err);
-        setError(err.message || 'Sync error');
+        const code = (err as { code?: string }).code;
+        const msg = err.message || 'Sync error';
+        if (code === 'permission-denied' || /permission/i.test(msg)) {
+          setError(
+            'Partner sync: open the invite link and sign in first, then try again. If this persists, the host may need to redeploy Firestore rules.',
+          );
+        } else {
+          setError(msg);
+        }
       },
     );
     return () => unsub();
-  }, [enabled, sessionId, uid, isHost]);
+  }, [enabled, sessionId, uid, isHost, myRole]);
 
   useEffect(() => {
     if (!enabled || !sessionId || !uid || !isFirebaseConfigured || !firestore) {
@@ -71,6 +91,8 @@ export function useAnniversaryFirestore(
       pushTimer.current = setTimeout(async () => {
         const gs = useGameStore.getState();
         if (gs.occasionKind !== 'anniversary' || gs.status !== 'playing') return;
+        // Partner must not push a locally seeded board before the first Firestore snapshot (version ≥ 1).
+        if (!gs.anniversaryIsHost && gs.anniversaryFirestoreVersion < 1) return;
         const payload = gs.serializeAnniversaryFirestorePayload();
         if (!payload) return;
         if (payload.boardJson === lastRemoteBoardJson.current) return;
@@ -86,16 +108,23 @@ export function useAnniversaryFirestore(
             if (v !== localV) return;
             const nextV = v + 1;
             const { version: _omit, updatedAt: _u, ...rest } = payload as Record<string, unknown>;
-            transaction.update(ref, {
+            const updatePayload = stripUndefinedFields({
               ...rest,
               version: nextV,
               updatedAt: serverTimestamp(),
-            });
+            }) as Record<string, unknown>;
+            transaction.update(ref, updatePayload);
             useGameStore.setState({ anniversaryFirestoreVersion: nextV });
             lastRemoteBoardJson.current = String(payload.boardJson);
           });
         } catch (e) {
           console.error('anniversary push', e);
+          const err = e as { code?: string; message?: string };
+          if (err.code === 'permission-denied' || /permission|insufficient/i.test(String(err.message))) {
+            setError(
+              'Could not save the shared board (permission denied). Ask your partner to open the invite link once, then try again.',
+            );
+          }
         }
       }, 280);
     };

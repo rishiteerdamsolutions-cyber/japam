@@ -1,6 +1,7 @@
 import type { Board, GemType } from './types';
 import { DEITY_IDS } from '../data/deities';
 import type { DeityId } from '../data/deities';
+import { deityGemAllowedOnIstaPath } from '../lib/generalBoardDeities';
 import { sameLineGroup } from './gemKinds';
 
 /**
@@ -19,7 +20,10 @@ export function buildGemTypesPool(
   }
   const req = [...new Set(powerBackedDeities)];
   const must: DeityId[] = deityMode ? [...new Set([deityMode, ...req])] : [...new Set(req)];
-  const fill = DEITY_IDS.filter((id) => !must.includes(id));
+  let fill = DEITY_IDS.filter((id) => !must.includes(id));
+  if (deityMode) {
+    fill = fill.filter((id) => deityGemAllowedOnIstaPath(deityMode, id));
+  }
   if (must.length === 0) {
     return DEITY_IDS.slice(0, Math.min(maxGemTypes, DEITY_IDS.length)) as GemType[];
   }

@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   STRIP_LEFT_POWER,
@@ -12,7 +12,7 @@ import type { DeityId } from '../../data/deities';
 import { usePowersInventoryStore, getPowerCount } from '../../store/powersInventoryStore';
 import { usePowerArmStore } from '../../store/powerArmStore';
 import { useGameStore } from '../../store/gameStore';
-import { pickGeneralBoardDeities } from '../../lib/generalBoardDeities';
+import { deityGemAllowedOnIstaPath, pickGeneralBoardDeities } from '../../lib/generalBoardDeities';
 
 function GuestLockBadge() {
   return (
@@ -26,6 +26,8 @@ function GuestLockBadge() {
     </span>
   );
 }
+
+const ICON_INNER_SCALE = 2.7; /** ~10% zoom-out vs 3× so more of each offering fits in the circle. */
 
 function RoundPowerTile({
   title,
@@ -45,14 +47,86 @@ function RoundPowerTile({
   /** Guest: show icons as preview only (lock badge, tap handled by parent). */
   guestPreview?: boolean;
 }) {
+  const [hoverOpen, setHoverOpen] = useState(false);
+  const [focusOpen, setFocusOpen] = useState(false);
+  const [touchHoldOpen, setTouchHoldOpen] = useState(false);
+  const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const touchHoldHideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const suppressNextClickRef = useRef(false);
+
+  useEffect(() => {
+    return () => {
+      if (longPressTimerRef.current) clearTimeout(longPressTimerRef.current);
+      if (touchHoldHideTimerRef.current) clearTimeout(touchHoldHideTimerRef.current);
+    };
+  }, []);
+
+  const clearLongPressTimer = () => {
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
+    }
+  };
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    if (e.pointerType === 'mouse') return;
+    clearLongPressTimer();
+    suppressNextClickRef.current = false;
+    longPressTimerRef.current = window.setTimeout(() => {
+      longPressTimerRef.current = null;
+      suppressNextClickRef.current = true;
+      setTouchHoldOpen(true);
+      if (touchHoldHideTimerRef.current) clearTimeout(touchHoldHideTimerRef.current);
+      touchHoldHideTimerRef.current = window.setTimeout(() => {
+        touchHoldHideTimerRef.current = null;
+        setTouchHoldOpen(false);
+        suppressNextClickRef.current = false;
+      }, 2400);
+    }, 520);
+  };
+
+  const handlePointerEnd = () => {
+    clearLongPressTimer();
+  };
+
+  const handleTileClick = (e: React.MouseEvent) => {
+    if (suppressNextClickRef.current) {
+      e.preventDefault();
+      e.stopPropagation();
+      suppressNextClickRef.current = false;
+      return;
+    }
+    onPress();
+  };
+
+  const showFloatingLabel = hoverOpen || focusOpen || touchHoldOpen;
+
   return (
-    <button
-      type="button"
-      onClick={onPress}
-      disabled={disabled}
-      title={title}
-      aria-label={title}
-      className={`
+    <div
+      className="relative flex flex-col items-center touch-manipulation"
+      onMouseEnter={() => setHoverOpen(true)}
+      onMouseLeave={() => setHoverOpen(false)}
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerEnd}
+      onPointerCancel={handlePointerEnd}
+    >
+      {showFloatingLabel && (
+        <span
+          role="tooltip"
+          className="pointer-events-none absolute bottom-full left-1/2 z-[60] mb-1 max-w-[11rem] -translate-x-1/2 rounded-lg border border-amber-500/45 bg-black/92 px-2 py-1.5 text-center text-[10px] font-medium leading-snug text-amber-100 shadow-lg sm:max-w-[13rem] sm:text-xs"
+        >
+          {title}
+        </span>
+      )}
+      <button
+        type="button"
+        onClick={handleTileClick}
+        disabled={disabled}
+        title={title}
+        aria-label={title}
+        onFocus={() => setFocusOpen(true)}
+        onBlur={() => setFocusOpen(false)}
+        className={`
         relative h-12 w-12 min-h-12 min-w-12 sm:h-[3.25rem] sm:w-[3.25rem] sm:min-h-[3.25rem] sm:min-w-[3.25rem] rounded-full overflow-hidden flex-shrink-0
         border-2 transition-transform shadow-md
         bg-[#2a1f24] border-[color-mix(in_srgb,#2a1f24_88%,#000)]
@@ -60,24 +134,26 @@ function RoundPowerTile({
         ${guestPreview ? 'cursor-pointer opacity-95' : disabled ? 'opacity-40 cursor-not-allowed' : 'active:scale-95 hover:border-amber-400/45'}
         focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400
       `}
-    >
-      {/*
-        Same outer tile size; icon bitmap is scaled 3× inside (clipped to the circle) so HD offerings read clearly.
+      >
+        {/*
+        Same outer tile size; icon bitmap is scaled inside (clipped to the circle) so HD offerings read clearly.
       */}
-      <img
-        src={iconSrc}
-        alt=""
-        draggable={false}
-        className="pointer-events-none absolute inset-0 h-full w-full origin-center scale-[3] object-contain"
-      />
-      {guestPreview ? (
-        <GuestLockBadge />
-      ) : count > 1 ? (
-        <span className="absolute bottom-0.5 right-0.5 min-w-[1.125rem] h-[1.125rem] px-1 rounded-full bg-black/85 text-amber-200 text-[10px] font-bold leading-[1.125rem] text-center border border-amber-500/40">
-          {count > 99 ? '99+' : count}
-        </span>
-      ) : null}
-    </button>
+        <img
+          src={iconSrc}
+          alt=""
+          draggable={false}
+          className="pointer-events-none absolute inset-0 h-full w-full origin-center object-contain"
+          style={{ transform: `scale(${ICON_INNER_SCALE})` }}
+        />
+        {guestPreview ? (
+          <GuestLockBadge />
+        ) : count > 1 ? (
+          <span className="absolute bottom-0.5 right-0.5 min-w-[1.125rem] h-[1.125rem] px-1 rounded-full bg-black/85 text-amber-200 text-[10px] font-bold leading-[1.125rem] text-center border border-amber-500/40">
+            {count > 99 ? '99+' : count}
+          </span>
+        ) : null}
+      </button>
+    </div>
   );
 }
 
@@ -107,7 +183,13 @@ export function GamePowersScrollStrip({ isGuest = false, onGuestPowerTap }: Game
 
   const stripDeitySlots = useMemo(() => {
     const raw = entries.filter((e) => isDeityPowerId(e.id));
-    if (!generalAllow) return raw;
+    if (!generalAllow) {
+      if (mode !== 'general') {
+        const path = mode as DeityId;
+        return raw.filter((e) => deityGemAllowedOnIstaPath(path, e.id as DeityId));
+      }
+      return raw;
+    }
     const byId = new Map(raw.map((e) => [e.id, e.count]));
     return generalAllow.map((id) => ({ id, count: byId.get(id) ?? 0 }));
   }, [entries, generalAllow]);
@@ -169,7 +251,14 @@ export function GamePowersScrollStrip({ isGuest = false, onGuestPowerTap }: Game
   };
 
   return (
-    <div className="w-full" aria-label={t('game.powersStripRegion')}>
+    <div
+      className="w-full"
+      aria-label={t('game.powersStripRegion')}
+      aria-describedby="powers-strip-interaction-hint"
+    >
+      <span id="powers-strip-interaction-hint" className="sr-only">
+        {t('game.powersInteractionHint')}
+      </span>
       <div className="flex items-end justify-center gap-2 w-full">
         <div className="flex flex-col items-center gap-0.5 shrink-0 pt-0.5">{renderFixedTile(STRIP_LEFT_POWER)}</div>
 

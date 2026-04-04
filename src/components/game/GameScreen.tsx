@@ -206,6 +206,7 @@ export function GameScreen({
     anniversarySessionId,
     user?.uid ?? null,
     anniversaryIsHost,
+    anniversaryMyRole,
   );
 
   const boardLen = useGameStore((s) => s.board.length);
@@ -252,9 +253,6 @@ export function GameScreen({
         justRestored,
         occasionKind,
       });
-      if (occasionKind === 'anniversary' && !anniversaryIsHost) {
-        return;
-      }
       if (isMarathon && marathonTargetJapas != null && (marathonId || yagnaId)) {
         initGame(mode as 'general', 0, { marathonId: marathonId ?? undefined, marathonTargetJapas, yagnaId: yagnaId ?? undefined });
       } else if (occasionKind === 'birthday') {

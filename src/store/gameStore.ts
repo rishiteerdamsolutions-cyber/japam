@@ -11,8 +11,12 @@ import { calculateScore, getStars } from '../engine/scorer';
 import { LEVELS } from '../data/levels';
 import { useJapaStore } from './japaStore';
 import { useProgressStore } from './progressStore';
+import { usePowersInventoryStore, getPowerCount } from './powersInventoryStore';
+import { usePowerArmStore } from './powerArmStore';
 import { stopAllMantras } from '../hooks/useSound';
 import { getMatchClearDelayMs } from '../game/matchVfx';
+import { expandPowerClears, planSpecialSpawn } from '../engine/powers';
+import { isBlessing } from '../engine/gemKinds';
 import { gameDebug } from '../lib/gameDebug';
 
 export type { GameMode };
@@ -71,6 +75,10 @@ interface GameState {
   /** Cells that received a new gem after gravity+fill (for fall-in animation). */
   refillSpawnGeneration: number;
   refillSpawnKeys: string[];
+  /** Swap `to` cell when the player makes a match (for special spawn placement). */
+  lastSwapDestination: Position | null;
+  /** Bumped when a strip power or blessing activation clears cells (Board VFX). */
+  powerVfxToken: number;
 }
 
 const getLevel = (index: number) => LEVELS[index] ?? LEVELS[0];
@@ -80,6 +88,7 @@ interface GameActions {
   restoreGame: (state: PausedGameState) => void;
   savePausedState: () => PausedGameState | null;
   getPausedKey: () => string;
+  applyArmedPowerAtCell: (row: number, col: number) => void;
   selectCell: (row: number, col: number) => void;
   swap: (toRow: number, toCol: number, fromRow?: number, fromCol?: number) => boolean;
   processMatches: (accumulated?: { deity: DeityId; count: number; combo: number }[]) => void;
@@ -123,6 +132,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   hintsSwapCount: 0,
   refillSpawnGeneration: 0,
   refillSpawnKeys: [],
+  lastSwapDestination: null,
+  powerVfxToken: 0,
 
   initGame: (mode, levelIndex = 0, options) => {
     gameDebug('initGame', {
@@ -179,7 +190,10 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       hintsSwapCount: 0,
       refillSpawnGeneration: 0,
       refillSpawnKeys: [],
+      lastSwapDestination: null,
+      powerVfxToken: 0,
     });
+    usePowerArmStore.getState().reset();
   },
 
   getPausedKey: () => {
@@ -250,10 +264,83 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       hintsSwapCount: 0,
       refillSpawnGeneration: 0,
       refillSpawnKeys: [],
+      lastSwapDestination: null,
+      powerVfxToken: 0,
     });
+    usePowerArmStore.getState().reset();
+  },
+
+  applyArmedPowerAtCell: (row, col) => {
+    const armed = usePowerArmStore.getState().armedPowerId;
+    if (!armed || armed === 'freeSwap') return;
+    const state = get();
+    if (state.status !== 'playing' || state.moves <= 0) return;
+    if (state.matchAnimationTimeoutId != null) return;
+    const inv = usePowersInventoryStore.getState().entries;
+    if (getPowerCount(inv, armed) < 1) return;
+
+    const { board, mode, maxGemTypes } = state;
+    const cell = board[row]?.[col];
+    if (!cell) return;
+
+    let positions: { row: number; col: number }[];
+    if (armed === 'bomb') {
+      const id = displayDeityId(cell);
+      positions = [];
+      if (!id) {
+        positions = [{ row, col }];
+      } else {
+        for (let r = 0; r < board.length; r++) {
+          const rowLen = board[r]?.length ?? 0;
+          for (let c = 0; c < rowLen; c++) {
+            const g = board[r][c];
+            if (g && displayDeityId(g) === id) positions.push({ row: r, col: c });
+          }
+        }
+      }
+    } else {
+      positions = [{ row, col }];
+    }
+
+    const cleared = removeMatches(board, positions);
+    const { board: afterG } = applyGravity(cleared);
+    const deityMode = mode !== 'general' ? (mode as DeityId) : undefined;
+    const { board: filled, newGems } = fillGaps(afterG, maxGemTypes, deityMode);
+    const spawnKeys = newGems.map((g) => `${g.row},${g.col}`);
+    const nextGen = spawnKeys.length > 0 ? state.refillSpawnGeneration + 1 : state.refillSpawnGeneration;
+
+    const japaDeity = displayDeityId(cell);
+    let nextJapasBy = state.japasByDeity;
+    let nextJapasLevel = state.japasThisLevel;
+    if (japaDeity != null && (mode === 'general' || mode === japaDeity)) {
+      nextJapasBy = { ...state.japasByDeity, [japaDeity]: (state.japasByDeity[japaDeity] ?? 0) + 1 };
+      nextJapasLevel = state.japasThisLevel + 1;
+      if (!state.isGuest) useJapaStore.getState().addJapa(japaDeity, 1);
+    }
+
+    set({
+      board: filled,
+      selectedCell: null,
+      moves: state.moves - 1,
+      refillSpawnKeys: spawnKeys,
+      refillSpawnGeneration: nextGen,
+      hintsSwapCount: state.hintsSwapCount + 1,
+      japasByDeity: nextJapasBy,
+      japasThisLevel: nextJapasLevel,
+      powerVfxToken: state.powerVfxToken + 1,
+    });
+    usePowerArmStore.getState().setArmedPower(null);
+    void usePowersInventoryStore.getState().tryConsumeOne(armed);
+    get().processMatches([]);
   },
 
   selectCell: (row, col) => {
+    const armed = usePowerArmStore.getState().armedPowerId;
+    if (armed && armed !== 'freeSwap') {
+      get().applyArmedPowerAtCell(row, col);
+      return;
+    }
+
     const { selectedCell, board } = get();
     const cell = board[row]?.[col];
     if (!cell) return;
@@ -277,9 +364,86 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const from = fromRow !== undefined && fromCol !== undefined
       ? { row: fromRow, col: fromCol }
       : selectedCell;
-    if (!from || status !== 'playing' || moves <= 0) return false;
+    if (!from || status !== 'playing') return false;
+    const useFreeSwap = usePowerArmStore.getState().armedPowerId === 'freeSwap';
+    if (useFreeSwap) {
+      if (getPowerCount(usePowersInventoryStore.getState().entries, 'freeSwap') < 1) {
+        usePowerArmStore.getState().setArmedPower(null);
+        return false;
+      }
+    } else if (moves <= 0) {
+      return false;
+    }
     const gemA = board[from.row]?.[from.col];
     const gemB = board[toRow]?.[toCol];
+    if (!gemA || !gemB) return false;
+
+    const blessingPair =
+      (isBlessing(gemA) && !isBlessing(gemB)) || (isBlessing(gemB) && !isBlessing(gemA));
+
+    if (blessingPair) {
+      // Free swap is only for swaps that create a normal 3+ match (see Phase doc), not blessing activation.
+      if (useFreeSwap) {
+        set({ selectedCell: null });
+        return false;
+      }
+      const targetGem = isBlessing(gemA) ? gemB : gemA;
+      const targetId = displayDeityId(targetGem);
+      if (!targetId) {
+        set({ selectedCell: null });
+        return false;
+      }
+      const nextBoard = swapGems(board, from, { row: toRow, col: toCol });
+      const clearPos: Position[] = [];
+      for (let r = 0; r < nextBoard.length; r++) {
+        const rowg = nextBoard[r];
+        if (!rowg) continue;
+        for (let c = 0; c < rowg.length; c++) {
+          const g = rowg[c];
+          if (!g) continue;
+          if (isBlessing(g)) clearPos.push({ row: r, col: c });
+          else if (displayDeityId(g) === targetId) clearPos.push({ row: r, col: c });
+        }
+      }
+      const cleared = removeMatches(nextBoard, clearPos);
+      const { board: afterG } = applyGravity(cleared);
+      const deityModeSwap = get().mode !== 'general' ? (get().mode as DeityId) : undefined;
+      const { board: filled } = fillGaps(afterG, get().maxGemTypes, deityModeSwap);
+      const gh = afterG.length;
+      const gw = afterG[0]?.length ?? 0;
+      const spawnKeys: string[] = [];
+      for (let r = 0; r < gh; r++) {
+        for (let c = 0; c < gw; c++) {
+          if (!afterG[r]?.[c] && filled[r]?.[c]) spawnKeys.push(`${r},${c}`);
+        }
+      }
+      const st = get();
+      let nextJapasBy = st.japasByDeity;
+      let nextJapasLevel = st.japasThisLevel;
+      const gm = st.mode;
+      if (gm === 'general' || gm === targetId) {
+        nextJapasBy = { ...st.japasByDeity, [targetId]: (st.japasByDeity[targetId] ?? 0) + 1 };
+        nextJapasLevel = st.japasThisLevel + 1;
+        if (!st.isGuest) useJapaStore.getState().addJapa(targetId, 1);
+      }
+      set({
+        board: filled,
+        moves: moves - 1,
+        selectedCell: null,
+        lastSwapDestination: null,
+        lastSwappedTypes: [gemA, gemB],
+        intendedDeity: targetGem,
+        hintsSwapCount: st.hintsSwapCount + 1,
+        japasByDeity: nextJapasBy,
+        japasThisLevel: nextJapasLevel,
+        refillSpawnKeys: spawnKeys,
+        refillSpawnGeneration: st.refillSpawnGeneration + (spawnKeys.length > 0 ? 1 : 0),
+        powerVfxToken: st.powerVfxToken + 1,
+      });
+      get().processMatches([]);
+      return true;
+    }
+
     const nextBoard = swapGems(board, from, { row: toRow, col: toCol });
     const matches = findMatches(nextBoard);
 
@@ -288,14 +452,20 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       return false;
     }
 
+    const spendMoveOnMatch = !useFreeSwap;
     set({
       board: nextBoard,
-      moves: moves - 1,
+      moves: spendMoveOnMatch ? moves - 1 : moves,
       selectedCell: null,
+      lastSwapDestination: { row: toRow, col: toCol },
       lastSwappedTypes: gemA && gemB ? [gemA, gemB] : null,
       intendedDeity: gemA || null,
       hintsSwapCount: get().hintsSwapCount + 1,
     });
+    if (useFreeSwap) {
+      usePowerArmStore.getState().setArmedPower(null);
+      void usePowersInventoryStore.getState().tryConsumeOne('freeSwap');
+    }
 
     get().processMatches([]);
     return true;
@@ -358,7 +528,6 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const gameMode = get().mode;
     const japaStore = useJapaStore.getState();
     const japasByDeity = { ...get().japasByDeity };
-    let board = get().board;
     const comboLevel = accumulated[accumulated.length - 1]?.combo ?? 1;
     const deityMatches = new Map<DeityId, number>();
     for (const m of pendingMatchBatch) {
@@ -389,9 +558,22 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     }
     const totalScore = get().score + calculateScore(pendingMatchBatch, comboLevel);
     const japasThisLevel = get().japasThisLevel + japaDelta;
-    const positions = getAllMatchPositions(pendingMatchBatch);
-    board = removeMatches(board, positions);
-    const { board: afterGravity } = applyGravity(board);
+    const boardBeforeClear = get().board;
+    const matchOnly = getAllMatchPositions(pendingMatchBatch);
+    const expandedPositions = expandPowerClears(boardBeforeClear, matchOnly);
+    const planned = planSpecialSpawn(pendingMatchBatch, get().lastSwapDestination);
+
+    let boardAfterRemove = removeMatches(boardBeforeClear, expandedPositions);
+    if (planned != null) {
+      const { at, gem } = planned;
+      if (boardAfterRemove[at.row]?.[at.col] == null) {
+        const nb = boardAfterRemove.map((row) => [...row]);
+        nb[at.row][at.col] = gem;
+        boardAfterRemove = nb;
+      }
+    }
+
+    const { board: afterGravity } = applyGravity(boardAfterRemove);
     const deityMode = get().mode !== 'general' ? (get().mode as DeityId) : undefined;
     const { board: filled } = fillGaps(afterGravity, get().maxGemTypes, deityMode);
     const spawnKeys: string[] = [];
@@ -415,6 +597,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       pendingMatchBatch: null,
       refillSpawnKeys: spawnKeys,
       refillSpawnGeneration: nextRefillGen,
+      lastSwapDestination: null,
     });
     get().processMatches(accumulated);
   },
@@ -434,6 +617,10 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
 
     if (japasNeeded >= japaTarget) {
       status = 'won';
+      // Marathons / yāgās: no new powers; inventory still usable there in UI.
+      if (!isMarathon) {
+        void usePowersInventoryStore.getState().grantAfterLevelWin(state.mode);
+      }
       if (!isMarathon && !state.isGuest) {
         const totalScore = state.score;
         const stars = getStars(japasNeeded, japaTarget, moves);
@@ -466,6 +653,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       matchGeneration: accumulated.length > 0 ? state.matchGeneration + 1 : state.matchGeneration,
       refillSpawnKeys: [],
       refillSpawnGeneration: 0,
+      lastSwapDestination: null,
     });
   },
 
@@ -495,10 +683,12 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       refillSpawnGeneration: 0,
       matchSfx: null,
       matchSfxPlayToken: 0,
+      lastSwapDestination: null,
     });
   },
 
   reset: () => {
+    usePowerArmStore.getState().reset();
     const { mode, levelIndex, marathonId, marathonTargetJapas, yagnaId, overrideJapaTarget, isGuest } = get();
     const opts = yagnaId
       ? { yagnaId, marathonTargetJapas: marathonTargetJapas ?? undefined, overrideJapaTarget: overrideJapaTarget ?? undefined, isGuest }

@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "dev:community": "npm run dev --prefix community",
-    "build:community": "npm run build --prefix community"
+    "build:community": "npm run build --prefix community",
+    "icons:powers": "node scripts/generate-power-icons.mjs"
   },
   "dependencies": {
     "@bunnio/rembg-web": "^1.0.2",

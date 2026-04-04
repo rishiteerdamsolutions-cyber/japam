@@ -1,7 +1,8 @@
 import { memo } from 'react';
-import { DEITY_IDS, getDeity } from '../../data/deities';
+import { getDeity } from '../../data/deities';
 import type { GemType } from '../../engine/types';
-import { displayDeityId } from '../../engine/gemKinds';
+import { displayDeityId, isBlessing, isStriped, isWrapped } from '../../engine/gemKinds';
+import { BOMB_OVERLAY_ICON } from '../../data/offeringPowers';
 
 interface GemProps {
   gem: GemType;
@@ -34,12 +35,29 @@ export const Gem = memo(function Gem({
   borderSpin,
   borderSpinActive,
 }: GemProps) {
-  const d = getDeity(displayDeityId(gem) ?? DEITY_IDS[0]);
-  const tileSrc = d.imageGame ?? d.image;
-  const useFaceTile = Boolean(d.imageGame);
-  const gameImgCentered = d.imageGameObjectPosition === 'center';
+  const blessing = isBlessing(gem);
+  const striped = isStriped(gem);
+  const wrapped = isWrapped(gem);
+  const stripedInfo = striped ? gem : null;
+
+  const deityId = displayDeityId(gem);
+  const d = deityId != null ? getDeity(deityId) : null;
+
+  const tileSrc = d ? (d.imageGame ?? d.image) : '';
+  const useFaceTile = Boolean(d?.imageGame);
+  const gameImgCentered = d?.imageGameObjectPosition === 'center';
   const spinClass = borderSpin === 'left' ? 'gem-candy-frame--spin-left' : '';
   const pausedClass = !borderSpinActive ? 'gem-candy-frame--spin-paused' : '';
+
+  const accent = d?.color ?? '#fbbf24';
+  const deityName = d?.name ?? 'Blessing';
+
+  const stripeOverlay =
+    stripedInfo?.along === 'row'
+      ? 'repeating-linear-gradient(180deg, rgba(255,255,255,0.45) 0px, rgba(255,255,255,0.45) 4px, transparent 4px, transparent 11px)'
+      : stripedInfo?.along === 'col'
+        ? 'repeating-linear-gradient(90deg, rgba(255,255,255,0.45) 0px, rgba(255,255,255,0.45) 4px, transparent 4px, transparent 11px)'
+        : undefined;
 
   return (
     <div
@@ -60,6 +78,7 @@ export const Gem = memo(function Gem({
         <button
         type="button"
         onClick={onClick}
+        aria-label={deityName}
         className={`
           relative z-[1] w-full h-full min-h-0 aspect-square rounded-[0.65rem] flex items-center justify-center
           overflow-hidden shadow-inner touch-none
@@ -67,21 +86,31 @@ export const Gem = memo(function Gem({
           ${matched ? 'gem-match gem-match-highlight pointer-events-none' : ''}
         `}
         style={{
-          backgroundColor: d.color,
-          border: `3px solid color-mix(in srgb, ${d.color} 55%, #0a0a0a)`,
+          ...(blessing
+            ? {
+                background:
+                  'radial-gradient(ellipse at 35% 25%, #fef3c7 0%, #c4b5fd 42%, #5b21b6 88%)',
+              }
+            : { backgroundColor: accent }),
+          border: blessing
+            ? '3px solid rgba(251, 191, 36, 0.88)'
+            : `3px solid color-mix(in srgb, ${accent} 55%, #0a0a0a)`,
           animationDelay: matched && matchStaggerDelayMs > 0 ? `${matchStaggerDelayMs}ms` : undefined,
           boxShadow: matched
-            ? `0 0 16px ${d.color}, 0 0 24px rgba(255,255,255,0.8), inset 0 0 8px rgba(255,255,255,0.5)`
+            ? `0 0 16px ${accent}, 0 0 24px rgba(255,255,255,0.8), inset 0 0 8px rgba(255,255,255,0.5)`
             : selected
-              ? `0 0 12px ${d.color}, inset 0 0 0 1px rgba(255,255,255,0.35)`
+              ? `0 0 12px ${accent}, inset 0 0 0 1px rgba(255,255,255,0.35)`
               : sparkle
-                ? `0 0 16px ${d.color}, inset 0 0 0 1px rgba(255,255,255,0.45), inset 0 0 8px rgba(255,255,255,0.25)`
-                : `inset 0 0 0 1px rgba(255,255,255,0.2), 0 0 0 2px rgba(0,0,0,0.45), 0 2px 8px rgba(0,0,0,0.35), inset 0 2px 5px rgba(0,0,0,0.25)`,
+                ? `0 0 16px ${accent}, inset 0 0 0 1px rgba(255,255,255,0.45), inset 0 0 8px rgba(255,255,255,0.25)`
+                : wrapped
+                  ? `inset 0 0 0 1px rgba(255,255,255,0.2), 0 0 0 2px rgba(0,0,0,0.45), 0 2px 8px rgba(0,0,0,0.35), inset 0 2px 5px rgba(0,0,0,0.25), 0 0 14px ${accent}`
+                  : `inset 0 0 0 1px rgba(255,255,255,0.2), 0 0 0 2px rgba(0,0,0,0.45), 0 2px 8px rgba(0,0,0,0.35), inset 0 2px 5px rgba(0,0,0,0.25)`,
         }}
       >
+        {!blessing && d && (
         <img
           src={tileSrc}
-          alt={d.name}
+          alt=""
           draggable={false}
           className={`absolute inset-0 w-full h-full object-cover rounded-[0.5rem] pointer-events-none ${
             !useFaceTile ? 'object-center' : gameImgCentered ? 'object-center' : 'object-[center_28%]'
@@ -90,6 +119,28 @@ export const Gem = memo(function Gem({
             transform: useFaceTile ? (gameImgCentered ? 'scale(1.05)' : 'scale(1.12)') : 'scale(1.25)',
           }}
         />
+        )}
+        {blessing && (
+          <img
+            src={BOMB_OVERLAY_ICON}
+            alt=""
+            draggable={false}
+            className="relative z-[2] w-[58%] h-[58%] object-contain pointer-events-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
+          />
+        )}
+        {striped && stripeOverlay && (
+          <div
+            className="absolute inset-0 rounded-[0.5rem] pointer-events-none z-[2] mix-blend-overlay"
+            style={{ background: stripeOverlay }}
+            aria-hidden
+          />
+        )}
+        {wrapped && (
+          <div
+            className="absolute inset-[7%] rounded-[0.45rem] border-[3px] border-white/90 pointer-events-none z-[2] shadow-[inset_0_0_12px_rgba(255,255,255,0.35)]"
+            aria-hidden
+          />
+        )}
       </button>
       </div>
     </div>

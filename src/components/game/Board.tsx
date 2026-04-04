@@ -2,14 +2,31 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Gem } from './Gem';
 import { MatchParticles } from './MatchParticles';
 import { useGameStore } from '../../store/gameStore';
+import { usePowerArmStore } from '../../store/powerArmStore';
 import { useSettingsStore } from '../../store/settingsStore';
 import { primeAudio } from '../../hooks/useSound';
 import { MATCH_STAGGER_MS } from '../../game/matchVfx';
+import { powerVfxDurationMs } from '../../game/powerVfx';
 import { cellShowsDeity } from '../../engine/gemKinds';
 import type { DeityId } from '../../data/deities';
 
+/** Resolves which board cell is under the pointer (handles stacked gem UI vs grid gaps). */
+function readCellKeyFromPoint(clientX: number, clientY: number): string | null {
+  if (typeof document === 'undefined') return null;
+  const stack = document.elementsFromPoint(clientX, clientY);
+  for (const node of stack) {
+    if (!(node instanceof Element)) continue;
+    const wrap = node.closest('[data-cell]');
+    const key = wrap?.getAttribute('data-cell');
+    if (key) return key;
+  }
+  return null;
+}
+
 export function Board() {
   const candyBorderSpinEnabled = useSettingsStore((s) => s.candyBorderSpinEnabled);
+  const armedPowerId = usePowerArmStore((s) => s.armedPowerId);
+  const blockDragForTargetPower = armedPowerId != null && armedPowerId !== 'freeSwap';
   const board = useGameStore(s => s.board);
   const swap = useGameStore(s => s.swap);
   const selectCell = useGameStore(s => s.selectCell);
@@ -37,12 +54,32 @@ export function Board() {
   const [fallingKeys, setFallingKeys] = useState<Set<string>>(() => new Set());
   const refillSpawnGeneration = useGameStore((s) => s.refillSpawnGeneration);
   const refillSpawnKeys = useGameStore((s) => s.refillSpawnKeys);
+  const powerVfxToken = useGameStore((s) => s.powerVfxToken);
+  const [powerPulse, setPowerPulse] = useState(false);
+
+  useEffect(() => {
+    if (powerVfxToken === 0) return;
+    const ms = powerVfxDurationMs();
+    if (ms <= 0) return;
+    let endTimer: ReturnType<typeof setTimeout> | undefined;
+    const startTimer = window.setTimeout(() => {
+      setPowerPulse(true);
+      endTimer = window.setTimeout(() => setPowerPulse(false), ms);
+    }, 0);
+    return () => {
+      window.clearTimeout(startTimer);
+      if (endTimer !== undefined) window.clearTimeout(endTimer);
+    };
+  }, [powerVfxToken]);
 
   useEffect(() => {
     if (!refillSpawnKeys.length) return;
     const keys = [...refillSpawnKeys];
-    setFallingKeys((prevKeys) => new Set([...prevKeys, ...keys]));
-    useGameStore.setState({ refillSpawnKeys: [] });
+    const id = window.setTimeout(() => {
+      setFallingKeys((prevKeys) => new Set([...prevKeys, ...keys]));
+      useGameStore.setState({ refillSpawnKeys: [] });
+    }, 0);
+    return () => window.clearTimeout(id);
   }, [refillSpawnGeneration, refillSpawnKeys]);
 
   const clearFall = useCallback((key: string) => {
@@ -55,18 +92,18 @@ export function Board() {
 
   const dragStartRef = useRef<{ row: number; col: number } | null>(null);
   const handlePointerDown = useCallback((e: React.PointerEvent, row: number, col: number) => {
-    if (status !== 'playing' || isAnimatingMatch) return;
+    if (status !== 'playing' || isAnimatingMatch || blockDragForTargetPower) return;
     primeAudio();
     dragStartRef.current = { row, col };
-    (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
-  }, [status, isAnimatingMatch]);
+    const host = e.currentTarget as HTMLElement;
+    host.setPointerCapture?.(e.pointerId);
+  }, [status, isAnimatingMatch, blockDragForTargetPower]);
 
   const handlePointerMove = useCallback((e: React.PointerEvent) => {
     const start = dragStartRef.current;
-    if (!start || status !== 'playing' || isAnimatingMatch) return;
+    if (!start || status !== 'playing' || isAnimatingMatch || blockDragForTargetPower) return;
     if (e.pointerType === 'mouse' && e.buttons !== 1) return;
-    const el = document.elementFromPoint(e.clientX, e.clientY);
-    const key = el?.closest('[data-cell]')?.getAttribute('data-cell');
+    const key = readCellKeyFromPoint(e.clientX, e.clientY);
     if (key) {
       const [r, c] = key.split(',').map(Number);
       const dr = Math.abs(start.row - r);
@@ -76,14 +113,13 @@ export function Board() {
         dragStartRef.current = null;
       }
     }
-  }, [status, swap, isAnimatingMatch]);
+  }, [status, swap, isAnimatingMatch, blockDragForTargetPower]);
 
   const handlePointerUp = useCallback((e: React.PointerEvent) => {
     const start = dragStartRef.current;
     dragStartRef.current = null;
-    if (!start || status !== 'playing' || isAnimatingMatch) return;
-    const el = document.elementFromPoint(e.clientX, e.clientY);
-    const key = el?.closest('[data-cell]')?.getAttribute('data-cell');
+    if (!start || status !== 'playing' || isAnimatingMatch || blockDragForTargetPower) return;
+    const key = readCellKeyFromPoint(e.clientX, e.clientY);
     if (key) {
       const [r, c] = key.split(',').map(Number);
       const dr = Math.abs(start.row - r);
@@ -92,7 +128,7 @@ export function Board() {
         swap(r, c, start.row, start.col);
       }
     }
-  }, [status, swap, isAnimatingMatch]);
+  }, [status, swap, isAnimatingMatch, blockDragForTargetPower]);
 
   const handleClick = useCallback((row: number, col: number) => {
     if (status !== 'playing' || isAnimatingMatch) return;
@@ -119,7 +155,9 @@ export function Board() {
         <MatchParticles positions={matchHighlightPositions} board={board} rows={rows} cols={cols} />
       )}
       <div
-        className={`relative z-[1] grid gap-[2px] p-1 rounded-2xl bg-black/20 w-full h-full ${shakeBig ? 'board-match-shake' : ''}`}
+        className={`relative z-[1] grid gap-[2px] p-1 rounded-2xl bg-black/20 w-full h-full ${shakeBig ? 'board-match-shake' : ''} ${
+          powerPulse ? 'board-power-pulse' : ''
+        } ${armedPowerId ? 'ring-2 ring-amber-400/55 ring-offset-2 ring-offset-black/30' : ''}`}
         style={{
           gridTemplateColumns: `repeat(${cols}, 1fr)`,
           gridTemplateRows: `repeat(${rows}, 1fr)`,

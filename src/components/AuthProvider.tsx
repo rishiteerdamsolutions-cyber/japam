@@ -4,6 +4,7 @@ import { useProgressStore } from '../store/progressStore';
 import { useJapaStore } from '../store/japaStore';
 import { useUnlockStore } from '../store/unlockStore';
 import { useSettingsStore } from '../store/settingsStore';
+import { usePowersInventoryStore } from '../store/powersInventoryStore';
 import { useProfileStore } from '../store/profileStore';
 import { useDailyReminder } from '../hooks/useDailyReminder';
 import { RefAttribution } from './RefAttribution';
@@ -24,6 +25,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const loadJapa = useJapaStore((s) => s.load);
   const loadUnlock = useUnlockStore((s) => s.load);
   const loadSettings = useSettingsStore((s) => s.load);
+  const loadPowersInventory = usePowersInventoryStore((s) => s.load);
   const loadProfile = useProfileStore((s) => s.load);
   useDailyReminder();
 
@@ -35,7 +37,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Global app bootstrap: ensure stores load on *every* route refresh.
   useEffect(() => {
     loadSettings();
-  }, [loadSettings]);
+    loadPowersInventory();
+  }, [loadSettings, loadPowersInventory]);
 
   useEffect(() => {
     if (!authLoading) {

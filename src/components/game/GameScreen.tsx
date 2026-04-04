@@ -19,6 +19,7 @@ import type { DeityId } from '../../data/deities';
 import { GoogleSignIn } from '../auth/GoogleSignIn';
 import { LivesDisplay } from '../lives/LivesDisplay';
 import { LivesModal } from '../lives/LivesModal';
+import { GamePowersScrollStrip } from './GamePowersScrollStrip';
 
 function PauseIcon() {
   return (
@@ -534,7 +535,11 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
 
       {status === 'playing' && (
         <>
-          <div className="shrink-0 h-20" aria-hidden />
+          {/* Powers strip in all modes; only normal levels add to inventory (not marathon/yāga). */}
+          <div className="shrink-0 w-full max-w-md px-3 mt-1">
+            <GamePowersScrollStrip />
+          </div>
+          <div className="shrink-0 h-24" aria-hidden />
           <GameBottomStrip
             isGuest={!!isGuest}
             pauseSaving={pauseSaving}

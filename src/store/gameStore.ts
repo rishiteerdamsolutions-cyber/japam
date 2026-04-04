@@ -358,7 +358,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const inv = usePowersInventoryStore.getState().entries;
     if (getPowerCount(inv, armed) < 1) return;
 
-    const { board, mode, maxGemTypes } = state;
+    const { board, maxGemTypes } = state;
     const cell = board[row]?.[col];
     if (!cell) return;
 

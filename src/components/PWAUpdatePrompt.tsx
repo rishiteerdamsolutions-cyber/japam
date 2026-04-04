@@ -1,8 +1,40 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { registerSW } from 'virtual:pwa-register';
 
 export const JAPAM_CHECK_UPDATES_EVENT = 'japam-check-updates';
 export const JAPAM_CHECK_RESULT_EVENT = 'japam-check-updates-result';
+/** Same as tapping "Update Now" on the bottom bar — Settings can dispatch this. */
+export const JAPAM_PWA_APPLY_UPDATE_EVENT = 'japam-pwa-apply-update';
+
+export type PwaCheckUpdateStatus = 'available' | 'current' | 'no-sw' | 'error';
+
+export interface PwaCheckUpdateResultDetail {
+  status: PwaCheckUpdateStatus;
+}
+
+function waitForServiceWorkerInstalled(sw: ServiceWorker, timeoutMs: number): Promise<void> {
+  if (sw.state === 'installed' || sw.state === 'redundant') return Promise.resolve();
+  return new Promise((resolve) => {
+    const t = setTimeout(resolve, timeoutMs);
+    sw.addEventListener('statechange', () => {
+      if (sw.state === 'installed' || sw.state === 'redundant') {
+        clearTimeout(t);
+        resolve();
+      }
+    });
+  });
+}
+
+/** After `update()`, see if a new worker is waiting (new build available). */
+async function resolveUpdateStatusAfterCheck(reg: ServiceWorkerRegistration): Promise<'available' | 'current'> {
+  await new Promise<void>((r) => requestAnimationFrame(() => setTimeout(r, 150)));
+  if (reg.waiting) return 'available';
+  if (reg.installing) {
+    await waitForServiceWorkerInstalled(reg.installing, 15000);
+  }
+  if (reg.waiting) return 'available';
+  return 'current';
+}
 
 export function PWAUpdatePrompt() {
   const [needRefresh, setNeedRefresh] = useState(false);
@@ -11,6 +43,20 @@ export function PWAUpdatePrompt() {
   const [offlineReady, setOfflineReady] = useState(false);
   const [updateSW, setUpdateSW] = useState<(() => void) | null>(null);
   const registrationRef = useRef<ServiceWorkerRegistration | null | undefined>(null);
+  const updateSWRef = useRef<(() => void) | null>(null);
+  updateSWRef.current = updateSW;
+
+  const applyPwaUpdate = useCallback(() => {
+    setUpdating(true);
+    setUpdated(false);
+    setTimeout(() => {
+      setUpdating(false);
+      setUpdated(true);
+      setTimeout(() => {
+        updateSWRef.current?.();
+      }, 800);
+    }, 600);
+  }, []);
 
   useEffect(() => {
     const update = registerSW({
@@ -25,38 +71,45 @@ export function PWAUpdatePrompt() {
       },
     });
     setUpdateSW(() => update);
+
+    const dispatchResult = (status: PwaCheckUpdateStatus) => {
+      window.dispatchEvent(
+        new CustomEvent<PwaCheckUpdateResultDetail>(JAPAM_CHECK_RESULT_EVENT, { detail: { status } }),
+      );
+    };
+
     const handleManualCheck = async () => {
       let reg = registrationRef.current;
       if (!reg && 'serviceWorker' in navigator) {
         reg = await navigator.serviceWorker.getRegistration();
       }
       if (!reg) {
-        window.dispatchEvent(new CustomEvent(JAPAM_CHECK_RESULT_EVENT, { detail: { ok: false, reason: 'no-sw' } }));
+        dispatchResult('no-sw');
         return;
       }
       try {
         await reg.update();
-        window.dispatchEvent(new CustomEvent(JAPAM_CHECK_RESULT_EVENT, { detail: { ok: true } }));
+        const outcome = await resolveUpdateStatusAfterCheck(reg);
+        if (outcome === 'available') {
+          setNeedRefresh(true);
+          dispatchResult('available');
+        } else {
+          dispatchResult('current');
+        }
       } catch {
-        window.dispatchEvent(new CustomEvent(JAPAM_CHECK_RESULT_EVENT, { detail: { ok: false, reason: 'error' } }));
+        dispatchResult('error');
       }
     };
-    window.addEventListener(JAPAM_CHECK_UPDATES_EVENT, handleManualCheck);
-    return () => window.removeEventListener(JAPAM_CHECK_UPDATES_EVENT, handleManualCheck);
-  }, []);
 
-  const handleUpdate = () => {
-    setUpdating(true);
-    setUpdated(false);
-    // Give the SW a moment to activate, then show "Updated!" briefly before reload
-    setTimeout(() => {
-      setUpdating(false);
-      setUpdated(true);
-      setTimeout(() => {
-        updateSW?.();
-      }, 800);
-    }, 600);
-  };
+    const handleApplyFromSettings = () => applyPwaUpdate();
+
+    window.addEventListener(JAPAM_CHECK_UPDATES_EVENT, handleManualCheck);
+    window.addEventListener(JAPAM_PWA_APPLY_UPDATE_EVENT, handleApplyFromSettings);
+    return () => {
+      window.removeEventListener(JAPAM_CHECK_UPDATES_EVENT, handleManualCheck);
+      window.removeEventListener(JAPAM_PWA_APPLY_UPDATE_EVENT, handleApplyFromSettings);
+    };
+  }, [applyPwaUpdate]);
 
   const closeOffline = () => setOfflineReady(false);
   const closeRefresh = () => setNeedRefresh(false);
@@ -82,7 +135,7 @@ export function PWAUpdatePrompt() {
             )}
             <button
               type="button"
-              onClick={handleUpdate}
+              onClick={applyPwaUpdate}
               disabled={updating || updated}
               className={`min-w-[7rem] px-4 py-1.5 rounded-lg text-sm font-bold transition-colors whitespace-nowrap ${
                 updated

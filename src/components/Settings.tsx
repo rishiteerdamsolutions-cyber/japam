@@ -12,7 +12,12 @@ import { DonateThankYouBox } from './donation/DonateThankYouBox';
 import { AppHeader } from './layout/AppHeader';
 import { loadMyAppreciations, type MyAppreciations } from '../lib/firestore';
 import { useReminderStore } from '../store/reminderStore';
-import { JAPAM_CHECK_UPDATES_EVENT, JAPAM_CHECK_RESULT_EVENT } from './PWAUpdatePrompt';
+import {
+  JAPAM_CHECK_UPDATES_EVENT,
+  JAPAM_CHECK_RESULT_EVENT,
+  JAPAM_PWA_APPLY_UPDATE_EVENT,
+  type PwaCheckUpdateResultDetail,
+} from './PWAUpdatePrompt';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -157,6 +162,7 @@ export function Settings({ onBack }: SettingsProps) {
   const [testingNotif, setTestingNotif] = useState(false);
   const [checkingUpdate, setCheckingUpdate] = useState(false);
   const [checkUpdateMessage, setCheckUpdateMessage] = useState<string | null>(null);
+  const [updateDownloaded, setUpdateDownloaded] = useState(false);
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState(false);
   const [expanded, setExpanded] = useState<string | null>(null);
@@ -164,17 +170,27 @@ export function Settings({ onBack }: SettingsProps) {
   useEffect(() => {
     const onCheckResult = (e: Event) => {
       setCheckingUpdate(false);
-      const detail = (e as CustomEvent<{ ok: boolean; reason?: string }>).detail;
-      if (detail.ok) {
-        setCheckUpdateMessage("Update check complete.");
+      const detail = (e as CustomEvent<PwaCheckUpdateResultDetail>).detail;
+      if (!detail?.status) return;
+
+      if (detail.status === 'available') {
+        setUpdateDownloaded(true);
+        setCheckUpdateMessage(t('shared.update_check_new_version'));
+      } else if (detail.status === 'current') {
+        setUpdateDownloaded(false);
+        setCheckUpdateMessage(t('shared.update_check_up_to_date'));
+      } else if (detail.status === 'no-sw') {
+        setUpdateDownloaded(false);
+        setCheckUpdateMessage(t('shared.update_check_no_sw'));
       } else {
-        setCheckUpdateMessage("Couldn't check. Try refreshing.");
+        setUpdateDownloaded(false);
+        setCheckUpdateMessage(t('shared.update_check_failed'));
       }
-      setTimeout(() => setCheckUpdateMessage(null), 4000);
+      setTimeout(() => setCheckUpdateMessage(null), 12000);
     };
     window.addEventListener(JAPAM_CHECK_RESULT_EVENT, onCheckResult);
     return () => window.removeEventListener(JAPAM_CHECK_RESULT_EVENT, onCheckResult);
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     if (window.matchMedia('(display-mode: standalone)').matches) setIsInstalled(true);
@@ -501,24 +517,51 @@ export function Settings({ onBack }: SettingsProps) {
           <SettingsCard
             icon={Icons.update}
             label="Updates"
-            badge={checkingUpdate ? '…' : (checkUpdateMessage ? '✓' : 'Check')}
+            badge={
+              checkingUpdate
+                ? '…'
+                : updateDownloaded
+                  ? t('shared.update_available')
+                  : checkUpdateMessage
+                    ? '✓'
+                    : t('shared.update_check_badge')
+            }
             expanded={expanded === 'update'}
             onToggle={() => toggle('update')}
           >
             <div className="space-y-3">
+              <p className="text-amber-200/70 text-xs leading-relaxed">{t('shared.update_check_hint')}</p>
               <button
                 type="button"
                 disabled={checkingUpdate}
                 onClick={() => {
                   setCheckingUpdate(true);
                   setCheckUpdateMessage(null);
+                  setUpdateDownloaded(false);
                   window.dispatchEvent(new CustomEvent(JAPAM_CHECK_UPDATES_EVENT));
                 }}
                 className="w-full py-2.5 rounded-xl bg-amber-500/80 text-white text-sm font-medium disabled:opacity-70"
               >
-                {checkingUpdate ? 'Checking…' : 'Check for updates'}
+                {checkingUpdate ? t('shared.updating') : t('shared.update_check_button')}
               </button>
-              {checkUpdateMessage && <p className="text-amber-200/80 text-xs">{checkUpdateMessage}</p>}
+              {checkUpdateMessage && (
+                <p
+                  className={`text-sm leading-relaxed ${
+                    updateDownloaded ? 'text-amber-300 font-medium' : 'text-amber-200/85'
+                  }`}
+                >
+                  {checkUpdateMessage}
+                </p>
+              )}
+              {updateDownloaded && (
+                <button
+                  type="button"
+                  onClick={() => window.dispatchEvent(new CustomEvent(JAPAM_PWA_APPLY_UPDATE_EVENT))}
+                  className="w-full py-2.5 rounded-xl bg-amber-500 text-white text-sm font-semibold"
+                >
+                  {t('shared.update_now')}
+                </button>
+              )}
             </div>
           </SettingsCard>
         </div>

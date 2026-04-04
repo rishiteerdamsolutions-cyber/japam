@@ -13,8 +13,7 @@ import { RefCapture } from './components/RefCapture'
 import { BlockedOverlay } from './components/BlockedOverlay'
 import { PWAUpdatePrompt } from './components/PWAUpdatePrompt'
 import { OfflineBanner } from './components/OfflineBanner'
-import { SpeedInsights } from '@vercel/speed-insights/react'
-import { WhatsAppFab } from './components/ui/WhatsAppFab'
+import { RouterChrome } from './components/RouterChrome'
 import App from './App.tsx'
 import { MenuPage } from './pages/MenuPage'
 
@@ -99,8 +98,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/contact" element={<ContactPage />} />
       </Routes>
       </Suspense>
-      <WhatsAppFab />
-      <SpeedInsights />
+      <RouterChrome />
       </AuthProvider>
     </BrowserRouter>
     </ErrorBoundary>

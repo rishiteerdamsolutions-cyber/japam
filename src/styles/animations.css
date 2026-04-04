@@ -167,11 +167,26 @@
   box-sizing: border-box;
 }
 
+/* Blessing (5-match flower): circular cell, no rotating rim — flower reads clearly */
+.gem-candy-frame--blessing,
+.gem-candy-frame--blessing .gem-candy-frame__clip {
+  border-radius: 50%;
+}
+
+.gem-candy-frame--blessing .gem-candy-frame__clip {
+  padding: 3px;
+}
+
+.gem-candy-frame--blessing .gem-candy-frame__glow {
+  opacity: 0;
+  animation: none !important;
+}
+
 /* Clips the rotating conic layer to the candy rim only */
 .gem-candy-frame__clip {
   position: relative;
   border-radius: 0.85rem;
-  padding: 4px;
+  padding: 3px;
   overflow: hidden;
   width: 100%;
   height: 100%;
@@ -188,14 +203,15 @@
   margin-top: -100%;
   z-index: 0;
   pointer-events: none;
+  /* Softer rim — less harsh “white border” around candies */
   background: conic-gradient(
     from 0deg,
-    rgba(255, 255, 255, 0.2),
-    rgba(255, 251, 235, 0.95),
-    rgba(251, 191, 36, 0.9),
-    rgba(255, 255, 255, 0.75),
-    rgba(255, 251, 235, 0.95),
-    rgba(255, 255, 255, 0.2)
+    rgba(255, 255, 255, 0.12),
+    rgba(255, 251, 235, 0.42),
+    rgba(251, 191, 36, 0.55),
+    rgba(255, 255, 255, 0.32),
+    rgba(255, 251, 235, 0.42),
+    rgba(255, 255, 255, 0.12)
   );
   animation: gem-candy-spin-cw 5.5s linear infinite;
 }

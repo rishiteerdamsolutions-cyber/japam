@@ -113,12 +113,6 @@ export function GamePowersScrollStrip() {
 
   return (
     <div className="w-full" aria-label={t('game.powersStripRegion')}>
-      <p className="text-[10px] text-amber-200/55 text-center mb-1 px-1 leading-tight">{t('game.powersStripLayoutHint')}</p>
-      {armedPowerId ? (
-        <p className="text-[11px] text-amber-300/90 text-center mb-1 font-medium" role="status">
-          {t('game.powersArmSelectGem')}
-        </p>
-      ) : null}
       <div className="flex items-end justify-center gap-2 w-full">
         <div className="flex flex-col items-center gap-0.5 shrink-0 pt-0.5">{renderFixedTile(STRIP_LEFT_POWER)}</div>
 

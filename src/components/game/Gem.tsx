@@ -63,8 +63,9 @@ export const Gem = memo(function Gem({
     <div
       className={`
         gem-candy-frame w-full aspect-square touch-none transition-transform duration-150
+        ${blessing ? 'gem-candy-frame--blessing' : ''}
         ${falling ? 'gem-fall isolate' : ''}
-        ${selected ? 'ring-[3px] ring-amber-100 ring-offset-2 ring-offset-black/30 rounded-[0.85rem] scale-105 z-[2]' : ''}
+        ${selected ? `ring-[3px] ring-amber-100 ring-offset-2 ring-offset-black/30 scale-105 z-[2] ${blessing ? 'rounded-full' : 'rounded-[0.85rem]'}` : ''}
         ${matched ? '' : 'active:scale-[0.97]'}
       `}
       onAnimationEnd={(e) => {
@@ -80,8 +81,9 @@ export const Gem = memo(function Gem({
         onClick={onClick}
         aria-label={deityName}
         className={`
-          relative z-[1] w-full h-full min-h-0 aspect-square rounded-[0.65rem] flex items-center justify-center
+          relative z-[1] w-full h-full min-h-0 aspect-square flex items-center justify-center
           overflow-hidden shadow-inner touch-none
+          ${blessing ? 'rounded-full' : 'rounded-[0.65rem]'}
           ${sparkle ? 'animate-sparkle' : ''}
           ${matched ? 'gem-match gem-match-highlight pointer-events-none' : ''}
         `}
@@ -89,22 +91,24 @@ export const Gem = memo(function Gem({
           ...(blessing
             ? {
                 background:
-                  'radial-gradient(ellipse at 35% 25%, #fef3c7 0%, #c4b5fd 42%, #5b21b6 88%)',
+                  'radial-gradient(circle at 50% 45%, #fde68a 0%, #a78bfa 38%, #4c1d95 92%)',
               }
             : { backgroundColor: accent }),
           border: blessing
-            ? '3px solid rgba(251, 191, 36, 0.88)'
+            ? '3px solid rgba(251, 191, 36, 0.85)'
             : `3px solid color-mix(in srgb, ${accent} 55%, #0a0a0a)`,
           animationDelay: matched && matchStaggerDelayMs > 0 ? `${matchStaggerDelayMs}ms` : undefined,
           boxShadow: matched
             ? `0 0 16px ${accent}, 0 0 24px rgba(255,255,255,0.8), inset 0 0 8px rgba(255,255,255,0.5)`
             : selected
-              ? `0 0 12px ${accent}, inset 0 0 0 1px rgba(255,255,255,0.35)`
+              ? `0 0 12px ${accent}, inset 0 0 0 1px rgba(255,255,255,0.28)`
               : sparkle
-                ? `0 0 16px ${accent}, inset 0 0 0 1px rgba(255,255,255,0.45), inset 0 0 8px rgba(255,255,255,0.25)`
+                ? `0 0 16px ${accent}, inset 0 0 0 1px rgba(255,255,255,0.35), inset 0 0 8px rgba(255,255,255,0.2)`
                 : wrapped
-                  ? `inset 0 0 0 1px rgba(255,255,255,0.2), 0 0 0 2px rgba(0,0,0,0.45), 0 2px 8px rgba(0,0,0,0.35), inset 0 2px 5px rgba(0,0,0,0.25), 0 0 14px ${accent}`
-                  : `inset 0 0 0 1px rgba(255,255,255,0.2), 0 0 0 2px rgba(0,0,0,0.45), 0 2px 8px rgba(0,0,0,0.35), inset 0 2px 5px rgba(0,0,0,0.25)`,
+                  ? `inset 0 0 0 1px rgba(255,255,255,0.18), 0 0 0 2px rgba(0,0,0,0.45), 0 2px 8px rgba(0,0,0,0.35), inset 0 2px 5px rgba(0,0,0,0.25), 0 0 14px ${accent}`
+                  : blessing
+                    ? `0 0 10px rgba(251, 191, 36, 0.45), inset 0 0 0 1px rgba(0,0,0,0.35)`
+                    : `inset 0 0 0 1px rgba(255,255,255,0.1), 0 0 0 2px rgba(0,0,0,0.45), 0 2px 8px rgba(0,0,0,0.35), inset 0 2px 5px rgba(0,0,0,0.25)`,
         }}
       >
         {!blessing && d && (
@@ -121,12 +125,14 @@ export const Gem = memo(function Gem({
         />
         )}
         {blessing && (
-          <img
-            src={BOMB_OVERLAY_ICON}
-            alt=""
-            draggable={false}
-            className="relative z-[2] w-[58%] h-[58%] object-contain pointer-events-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
-          />
+          <span className="pointer-events-none absolute inset-0 z-[2] flex items-center justify-center overflow-hidden rounded-full">
+            <img
+              src={BOMB_OVERLAY_ICON}
+              alt=""
+              draggable={false}
+              className="h-[200%] w-[200%] max-w-none shrink-0 object-contain object-center [image-rendering:auto] drop-shadow-[0_2px_10px_rgba(0,0,0,0.55)]"
+            />
+          </span>
         )}
         {striped && stripeOverlay && (
           <div

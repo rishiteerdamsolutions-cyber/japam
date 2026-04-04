@@ -45,11 +45,15 @@ function MusicIcon() {
   );
 }
 
+/** Rounded curved arrows (cycle / rim spin) — clear at toolbar size. */
 function CandySpinIcon() {
   return (
     <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M4 12a8 8 0 018-8M20 12a8 8 0 01-8 8" />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M15 3h4v4M5 21H1v-4" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+      />
     </svg>
   );
 }
@@ -509,25 +513,26 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
         </div>
       )}
 
-      <div className="relative z-20 shrink-0 w-full max-w-md mt-1 -mx-1 px-1 py-1 rounded-lg bg-black/20">
+      <div className="relative z-20 shrink-0 w-full max-w-md mt-0.5 -mx-1 px-1 py-0.5 rounded-lg bg-black/15">
         <ActiveUsersStrip />
       </div>
 
       {status === 'playing' && (
-        <div className="shrink-0 w-full max-w-md mt-2 flex justify-center">
+        <div className="shrink-0 w-full max-w-md mt-1 flex justify-center">
           <button
             type="button"
             onClick={handleRefreshBoard}
             aria-label={t('game.refreshBoard')}
-            className="px-4 py-2 rounded-xl bg-amber-500/80 text-black font-medium text-sm border-2 border-amber-400/60 shadow-md hover:bg-amber-400 active:scale-95 transition-transform"
+            title={t('game.refreshBoard')}
+            className="px-2.5 py-1 rounded-lg bg-amber-500/75 text-black font-medium text-[11px] leading-tight border border-amber-400/50 shadow-sm hover:bg-amber-400/90 active:scale-[0.98] transition-transform max-w-[min(100%,11rem)] whitespace-nowrap"
           >
-            {t('game.refreshBoard')}
+            {t('game.refreshBoardShort')}
           </button>
         </div>
       )}
 
       <div className="flex-1 w-full max-w-md min-h-0 flex items-center justify-center">
-        <div className="relative w-full">
+        <div className="relative w-full pt-5 sm:pt-6">
           <BoardDeityHints />
           <Board />
         </div>
@@ -536,10 +541,10 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
       {status === 'playing' && (
         <>
           {/* Powers strip in all modes; only normal levels add to inventory (not marathon/yāga). */}
-          <div className="shrink-0 w-full max-w-md px-3 mt-1">
+          <div className="shrink-0 w-full max-w-md px-2 mt-0.5">
             <GamePowersScrollStrip />
           </div>
-          <div className="shrink-0 h-24" aria-hidden />
+          <div className="shrink-0 h-16" aria-hidden />
           <GameBottomStrip
             isGuest={!!isGuest}
             pauseSaving={pauseSaving}

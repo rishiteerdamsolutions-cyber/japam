@@ -17,6 +17,7 @@ import { stopAllMantras } from '../hooks/useSound';
 import { getMatchClearDelayMs } from '../game/matchVfx';
 import { expandPowerClears, planSpecialSpawn } from '../engine/powers';
 import { isBlessing } from '../engine/gemKinds';
+import { isDeityPowerId } from '../data/gamePowers';
 import { gameDebug } from '../lib/gameDebug';
 
 export type { GameMode };
@@ -282,6 +283,12 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const { board, mode, maxGemTypes } = state;
     const cell = board[row]?.[col];
     if (!cell) return;
+
+    // Per-deity offering (e.g. Sindoor) only works on that deity’s gems — wrong tap ignores, no charge spent.
+    if (isDeityPowerId(armed)) {
+      const onCell = displayDeityId(cell);
+      if (onCell !== armed) return;
+    }
 
     let positions: { row: number; col: number }[];
     if (armed === 'bomb') {

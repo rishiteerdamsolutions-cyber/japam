@@ -3,7 +3,7 @@ import type { Board, GemType, Match, Position } from '../engine/types';
 import { displayDeityId } from '../engine/gemKinds';
 import { DEITY_IDS, type DeityId } from '../data/deities';
 import type { GameMode } from '../types';
-import { createBoard, swapGems, removeMatches, fillGaps } from '../engine/board';
+import { createBoard, createBoardSeeded, swapGems, removeMatches, fillGaps } from '../engine/board';
 import { findMatches, getAllMatchPositions, hasValidMoves } from '../engine/matcher';
 import { computeMatchSfxSelection, type MatchSfxSelection } from '../lib/matchSfx';
 import { applyGravity } from '../engine/gravity';
@@ -265,15 +265,23 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       mode === 'general'
         ? generalBoardDeities!
         : filterPowerBackedForIstaPath(mode as DeityId, inventoryOfferingDeities());
-    let board = createBoard(
-      level.rows,
-      level.cols,
-      maxGemTypes,
-      deityMode,
-      powerPool,
-      generalBoardDeities,
-    );
-    while (!hasValidMoves(board)) {
+    let board: Board;
+    let salt = 0;
+    if (occasionKind === 'anniversary' && anniversarySessionId) {
+      do {
+        const seed = `${anniversarySessionId}|${anniversaryFirestoreVersion}|init|${salt}`;
+        board = createBoardSeeded(
+          level.rows,
+          level.cols,
+          maxGemTypes,
+          deityMode,
+          powerPool,
+          generalBoardDeities,
+          seed,
+        );
+        salt++;
+      } while (!hasValidMoves(board) && salt < 100);
+    } else {
       board = createBoard(
         level.rows,
         level.cols,
@@ -282,6 +290,16 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
         powerPool,
         generalBoardDeities,
       );
+      while (!hasValidMoves(board)) {
+        board = createBoard(
+          level.rows,
+          level.cols,
+          maxGemTypes,
+          deityMode,
+          powerPool,
+          generalBoardDeities,
+        );
+      }
     }
     set({
       board,
@@ -780,6 +798,11 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
         japaDelta += shouldCountJapa ? japaCount : 0;
       }
       if (useIntendedOnly && japaDelta > 1) japaDelta = 1; // multi-match: cap at 1 (intended deity only)
+      const ok = get().occasionKind;
+      if (!isGuest && japaDelta > 0) {
+        if (ok === 'birthday') japaStore.addOccasionJapa('birthday', japaDelta);
+        else if (ok === 'anniversary') japaStore.addOccasionJapa('anniversary', japaDelta);
+      }
     }
     const totalScore = get().score + calculateScore(pendingMatchBatch, comboLevel);
     const japasThisLevel = get().japasThisLevel + japaDelta;
@@ -958,15 +981,23 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     if (state.status !== 'playing' || state.board.length === 0) return;
     const level = getLevel(state.levelIndex);
     const gemCtxRefresh = boardGemContext(state);
-    let board = createBoard(
-      level.rows,
-      level.cols,
-      state.maxGemTypes,
-      gemCtxRefresh.deityMode,
-      gemCtxRefresh.powerBacked,
-      gemCtxRefresh.generalSubset,
-    );
-    while (!hasValidMoves(board)) {
+    let board: Board;
+    if (state.occasionKind === 'anniversary' && state.anniversarySessionId) {
+      let salt = 0;
+      do {
+        const seed = `${state.anniversarySessionId}|${state.anniversaryFirestoreVersion}|refresh|${salt}`;
+        board = createBoardSeeded(
+          level.rows,
+          level.cols,
+          state.maxGemTypes,
+          gemCtxRefresh.deityMode,
+          gemCtxRefresh.powerBacked,
+          gemCtxRefresh.generalSubset,
+          seed,
+        );
+        salt++;
+      } while (!hasValidMoves(board) && salt < 100);
+    } else {
       board = createBoard(
         level.rows,
         level.cols,
@@ -975,6 +1006,16 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
         gemCtxRefresh.powerBacked,
         gemCtxRefresh.generalSubset,
       );
+      while (!hasValidMoves(board)) {
+        board = createBoard(
+          level.rows,
+          level.cols,
+          state.maxGemTypes,
+          gemCtxRefresh.deityMode,
+          gemCtxRefresh.powerBacked,
+          gemCtxRefresh.generalSubset,
+        );
+      }
     }
     set({
       board,

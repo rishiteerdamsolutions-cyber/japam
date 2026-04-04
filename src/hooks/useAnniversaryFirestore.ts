@@ -16,13 +16,62 @@ function shouldDeferAnniversaryHydrate(): boolean {
   return gs.matchAnimationTimeoutId != null || gs.anniversaryMovePending;
 }
 
+/** Prefer Firestore host/guest roles so URL mistakes cannot make both players "husband". */
+function resolveAnniversaryMyRole(
+  d: Record<string, unknown>,
+  uid: string,
+  urlFallback: 'husband' | 'wife',
+): 'husband' | 'wife' {
+  const hostUid = typeof d.hostUid === 'string' ? d.hostUid : '';
+  const guestUid = typeof d.guestUid === 'string' ? d.guestUid : '';
+  if (uid && hostUid && uid === hostUid) {
+    return d.hostRole === 'wife' ? 'wife' : 'husband';
+  }
+  if (uid && guestUid && uid === guestUid) {
+    return d.guestRole === 'wife' ? 'wife' : 'husband';
+  }
+  return urlFallback;
+}
+
+/** Every snapshot: keep turn, japa counts, version, pause, and role aligned with server (fixes “both see partner’s turn”). */
+function reconcileAnniversaryAuthoritativeFields(
+  d: Record<string, unknown>,
+  sessionId: string,
+  uid: string,
+  urlFallbackRole: 'husband' | 'wife',
+): void {
+  const gs = useGameStore.getState();
+  if (gs.occasionKind !== 'anniversary' || gs.anniversarySessionId !== sessionId) return;
+
+  const hostUid = typeof d.hostUid === 'string' ? d.hostUid : '';
+  const myRole = resolveAnniversaryMyRole(d, uid, urlFallbackRole);
+  const isHostResolved = Boolean(uid && hostUid && uid === hostUid);
+  const turn = d.turn === 'wife' ? 'wife' : 'husband';
+  const jh = typeof d.japasHusband === 'number' ? d.japasHusband : 0;
+  const jw = typeof d.japasWife === 'number' ? d.japasWife : 0;
+  const v = typeof d.version === 'number' ? d.version : 0;
+
+  useGameStore.setState({
+    anniversaryMyRole: myRole,
+    anniversaryIsHost: isHostResolved,
+    anniversaryTurn: turn,
+    anniversaryJapasHusband: jh,
+    anniversaryJapasWife: jw,
+    anniversaryFirestoreVersion: v,
+    anniversarySessionPaused: d.sessionPaused === true,
+  });
+}
+
 function buildHydratePayload(
   d: Record<string, unknown>,
   sessionId: string,
-  myRole: 'husband' | 'wife',
-  isHost: boolean,
+  uid: string,
+  urlFallbackRole: 'husband' | 'wife',
 ): Record<string, unknown> {
   const remoteVersion = typeof d.version === 'number' ? d.version : 0;
+  const hostUid = typeof d.hostUid === 'string' ? d.hostUid : '';
+  const myRole = resolveAnniversaryMyRole(d, uid, urlFallbackRole);
+  const isHostResolved = Boolean(uid && hostUid && uid === hostUid);
   return {
     boardJson: d.boardJson,
     gameMode: d.gameMode,
@@ -39,7 +88,7 @@ function buildHydratePayload(
     version: remoteVersion,
     anniversarySessionId: sessionId,
     anniversaryMyRole: myRole,
-    anniversaryIsHost: isHost,
+    anniversaryIsHost: isHostResolved,
     sessionPaused: d.sessionPaused === true,
   };
 }
@@ -56,6 +105,7 @@ export function useAnniversaryFirestore(
   const [error, setError] = useState<string | null>(null);
   const [syncReady, setSyncReady] = useState(isHost);
   const lastRemoteBoardJson = useRef<string>('');
+  const lastAppliedBoardJson = useRef<string>('');
   const pushTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const queuedHydrateRef = useRef<Record<string, unknown> | null>(null);
   const flushFallbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -70,7 +120,10 @@ export function useAnniversaryFirestore(
       flushFallbackTimerRef.current = null;
     }
     const bj = typeof q.boardJson === 'string' ? q.boardJson : '';
-    if (bj.length > 2) lastRemoteBoardJson.current = bj;
+    if (bj.length > 2) {
+      lastRemoteBoardJson.current = bj;
+      lastAppliedBoardJson.current = bj;
+    }
     useGameStore.getState().hydrateAnniversaryFromFirestore(q);
   };
 
@@ -89,6 +142,7 @@ export function useAnniversaryFirestore(
       return;
     }
     setSyncReady(isHost);
+    lastAppliedBoardJson.current = '';
     const ref = doc(firestore, 'anniversarySessions', sessionId);
     const unsub = onSnapshot(
       ref,
@@ -98,28 +152,28 @@ export function useAnniversaryFirestore(
         const guestUid = typeof d.guestUid === 'string' ? d.guestUid : null;
         setPartnerJoined(!!guestUid);
         const bj = typeof d.boardJson === 'string' ? d.boardJson : '';
-        if (bj.length > 2) lastRemoteBoardJson.current = bj;
 
         const remoteVersion = typeof d.version === 'number' ? d.version : 0;
-        const localVersion = useGameStore.getState().anniversaryFirestoreVersion;
         if (remoteVersion >= 1) setSyncReady(true);
 
-        const payload = buildHydratePayload(d, sessionId, myRole, isHost);
+        reconcileAnniversaryAuthoritativeFields(d, sessionId, uid, myRole);
+
+        if (bj.length > 2) {
+          lastRemoteBoardJson.current = bj;
+        }
+
+        const payload = buildHydratePayload(d, sessionId, uid, myRole);
 
         if (bj.length <= 2 && d.sessionPaused !== true) {
           return;
         }
 
-        if (remoteVersion <= localVersion && bj.length > 2) {
-          useGameStore.setState({ anniversarySessionPaused: d.sessionPaused === true });
+        if (bj.length <= 2) {
           return;
         }
 
-        if (bj.length <= 2) {
-          useGameStore.setState({
-            anniversarySessionPaused: d.sessionPaused === true,
-            anniversaryFirestoreVersion: Math.max(localVersion, remoteVersion),
-          });
+        const boardChangedOnServer = bj !== lastAppliedBoardJson.current;
+        if (!boardChangedOnServer) {
           return;
         }
 
@@ -151,6 +205,7 @@ export function useAnniversaryFirestore(
           clearTimeout(flushFallbackTimerRef.current);
           flushFallbackTimerRef.current = null;
         }
+        lastAppliedBoardJson.current = bj;
         useGameStore.getState().hydrateAnniversaryFromFirestore(payload);
       },
       (err) => {
@@ -169,6 +224,7 @@ export function useAnniversaryFirestore(
     return () => {
       unsub();
       queuedHydrateRef.current = null;
+      lastAppliedBoardJson.current = '';
       if (flushFallbackTimerRef.current) {
         clearTimeout(flushFallbackTimerRef.current);
         flushFallbackTimerRef.current = null;

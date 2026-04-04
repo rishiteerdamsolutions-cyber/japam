@@ -1,14 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useJapaStore } from '../../store/japaStore';
 import { useAuthStore } from '../../store/authStore';
-import {
-  fetchOccasionsList,
-  fetchAnniversaryActiveSessions,
-  type OccasionListItem,
-  type AnniversaryActiveSession,
-} from '../../lib/occasionsApi';
+import { fetchOccasionsList, type OccasionListItem } from '../../lib/occasionsApi';
 import { downloadOccasionSummaryPdf } from '../../utils/occasionPdf';
 import { DEITIES } from '../../data/deities';
 import { DAILY_GOAL_JAPAS } from '../../data/levels';
@@ -28,13 +22,10 @@ interface JapaDashboardProps {
 
 export function JapaDashboard({ onBack }: JapaDashboardProps) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const { counts, loaded } = useJapaStore();
   const user = useAuthStore((s) => s.user);
   const [occasions, setOccasions] = useState<OccasionListItem[]>([]);
   const [occasionsLoaded, setOccasionsLoaded] = useState(false);
-  const [activeAnniversary, setActiveAnniversary] = useState<AnniversaryActiveSession[]>([]);
-  const [activeAnniversaryLoaded, setActiveAnniversaryLoaded] = useState(false);
   const [downloadModal, setDownloadModal] = useState<{
     mantra: string;
     count: number;
@@ -65,29 +56,6 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
         if (!cancelled) setOccasions([]);
       } finally {
         if (!cancelled) setOccasionsLoaded(true);
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [user?.uid]);
-
-  useEffect(() => {
-    if (!user) {
-      setActiveAnniversary([]);
-      setActiveAnniversaryLoaded(true);
-      return;
-    }
-    let cancelled = false;
-    (async () => {
-      try {
-        const token = await user.getIdToken();
-        const items = await fetchAnniversaryActiveSessions(token);
-        if (!cancelled) setActiveAnniversary(items);
-      } catch {
-        if (!cancelled) setActiveAnniversary([]);
-      } finally {
-        if (!cancelled) setActiveAnniversaryLoaded(true);
       }
     })();
     return () => {
@@ -126,6 +94,8 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
 
   const total = counts.total;
   const maxDeity = Math.max(...DEITIES.map(d => counts[d.id]), 1);
+  const birthdayJapa = counts.birthdayJapa ?? 0;
+  const anniversaryJapa = counts.anniversaryJapa ?? 0;
 
   const openDownloadModal = (mantra: string, count: number, deityName: string) => {
     setDownloadModal({ mantra, count, deityName });
@@ -208,47 +178,6 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
 
       <DonateThankYouBox />
 
-      {user && activeAnniversaryLoaded && activeAnniversary.length > 0 && (
-        <div className="mt-4 mb-4">
-          <h2 className="text-amber-300 font-semibold text-sm mb-2">
-            {t('occasions.activeAnniversarySessions')}
-          </h2>
-          <div className="space-y-2">
-            {activeAnniversary.map((row) => (
-              <div
-                key={row.sessionId}
-                className="bg-amber-500/15 rounded-xl p-3 border border-amber-500/35 flex flex-col gap-2"
-              >
-                <div className="text-amber-100 text-xs flex flex-wrap items-center gap-2">
-                  <span>
-                    {t('occasions.coupleJapasShort', { h: row.japasHusband, w: row.japasWife })}
-                  </span>
-                  {row.sessionPaused && (
-                    <span className="px-2 py-0.5 rounded bg-black/30 text-amber-300 text-[10px] font-medium">
-                      {t('occasions.pausedBadge')}
-                    </span>
-                  )}
-                  {!row.partnerJoined && row.isHost && (
-                    <span className="text-amber-200/60 text-[10px]">{t('occasions.waitPartner')}</span>
-                  )}
-                </div>
-                <button
-                  type="button"
-                  onClick={() =>
-                    navigate(
-                      `/game?anniversary=${encodeURIComponent(row.sessionId)}&role=${row.myRole}&host=${row.isHost ? '1' : '0'}&mode=${encodeURIComponent(row.gameMode)}&level=${row.levelIndex}&target=108`,
-                    )
-                  }
-                  className="w-full py-2.5 rounded-xl bg-amber-500 text-black text-sm font-semibold"
-                >
-                  {t('occasions.continueCoupleJapa')}
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
       {user && occasionsLoaded && occasions.length > 0 && (
         <div className="mt-4 mb-6">
           <h2 className="text-amber-300 font-semibold text-sm mb-2">{t('occasions.occasionHistory')}</h2>
@@ -292,6 +221,32 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
       </h2>
 
       <div className="space-y-4">
+        <div className="bg-black/20 rounded-xl p-3">
+          <div className="flex justify-between items-center mb-1 gap-2">
+            <span className="font-medium text-amber-400 shrink-0">{t('japaDashboard.birthdayJapa')}</span>
+            <span className="text-amber-200 shrink-0">{birthdayJapa.toLocaleString()}</span>
+            <span className="shrink-0 w-[72px]" aria-hidden />
+          </div>
+          <div className="h-2 bg-black/30 rounded-full overflow-hidden">
+            <div
+              className="h-full rounded-full transition-all bg-pink-400/90"
+              style={{ width: `${maxDeity > 0 ? Math.min(100, (birthdayJapa / maxDeity) * 100) : 0}%` }}
+            />
+          </div>
+        </div>
+        <div className="bg-black/20 rounded-xl p-3">
+          <div className="flex justify-between items-center mb-1 gap-2">
+            <span className="font-medium text-amber-400 shrink-0">{t('japaDashboard.weddingAnniversaryJapa')}</span>
+            <span className="text-amber-200 shrink-0">{anniversaryJapa.toLocaleString()}</span>
+            <span className="shrink-0 w-[72px]" aria-hidden />
+          </div>
+          <div className="h-2 bg-black/30 rounded-full overflow-hidden">
+            <div
+              className="h-full rounded-full transition-all bg-rose-400/90"
+              style={{ width: `${maxDeity > 0 ? Math.min(100, (anniversaryJapa / maxDeity) * 100) : 0}%` }}
+            />
+          </div>
+        </div>
         {DEITIES.map(deity => {
           const count = counts[deity.id];
           const pct = maxDeity > 0 ? (count / maxDeity) * 100 : 0;

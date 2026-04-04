@@ -14,6 +14,7 @@ import { useProfileStore } from '../store/profileStore';
 import { FIRST_LOCKED_LEVEL_INDEX } from '../store/unlockStore';
 import { LEVELS } from '../data/levels';
 import type { GameMode } from '../types';
+import { getOccasionEntryGate } from '../lib/occasionEntryGate';
 
 export function GamePage() {
   const { t } = useTranslation();
@@ -37,6 +38,18 @@ export function GamePage() {
   const anniversaryHost = searchParams.get('host') === '1';
   const occasionTarget = Math.min(500, Math.max(1, parseInt(searchParams.get('target') || '108', 10) || 108));
   const occasionKind = anniversarySession ? ('anniversary' as const) : occasionBirthday ? ('birthday' as const) : null;
+
+  useEffect(() => {
+    if (!occasionKind) return;
+    const allow = getOccasionEntryGate();
+    if (occasionKind === 'birthday' && allow !== 'birthday') {
+      navigate('/occasion/birthday', { replace: true });
+      return;
+    }
+    if (occasionKind === 'anniversary' && allow !== 'anniversary') {
+      navigate('/occasion/anniversary', { replace: true });
+    }
+  }, [occasionKind, navigate]);
 
   const maxRevealedLevelIndex = useLevelsConfigStore((s) => s.maxRevealedLevelIndex);
   const loadLevelsConfig = useLevelsConfigStore((s) => s.load);

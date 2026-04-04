@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { AppHeader } from '../components/layout/AppHeader';
 import { useAuthStore } from '../store/authStore';
 import { joinAnniversarySession } from '../lib/occasionsApi';
+import { setOccasionEntryGate } from '../lib/occasionEntryGate';
 
 export function AnniversaryJoinPage() {
   const { t } = useTranslation();
@@ -33,6 +34,7 @@ export function AnniversaryJoinPage() {
         const res = await joinAnniversarySession(token, sid, tok);
         if (cancelled) return;
         const myRole = res.guestRole === 'husband' ? 'husband' : 'wife';
+        setOccasionEntryGate('anniversary');
         navigate(
           `/game?anniversary=${encodeURIComponent(sid)}&role=${myRole}&host=0&mode=${encodeURIComponent(res.gameMode)}&level=${res.levelIndex}&target=108`,
           { replace: true },

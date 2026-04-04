@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { JapamBrand } from '../ui/JapamBrand';
 
 function ContactIcon() {
   return (
@@ -118,7 +117,7 @@ export function AppFooter() {
         <FooterIcon href="/shipping-delivery" label={t('landing.shipping')} icon={ShippingIcon} />
       </div>
       <p className="text-white/30 text-center w-full">
-        © {new Date().getFullYear()} <JapamBrand className="inline text-xs align-baseline">Japam</JapamBrand>. {t('landing.copyright')}
+        © {new Date().getFullYear()} Japam. {t('landing.copyright')}
       </p>
     </footer>
   );

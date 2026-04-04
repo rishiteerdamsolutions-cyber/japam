@@ -5,11 +5,17 @@ import { useAuthStore } from './authStore';
 
 export interface JapaCounts extends Record<DeityId, number> {
   total: number;
+  /** Lifetime japas earned in birthday occasion play (also counted per deity). */
+  birthdayJapa: number;
+  /** Lifetime japas earned in wedding anniversary couple play (also counted per deity). */
+  anniversaryJapa: number;
 }
 
 const initial: JapaCounts = {
   ...DEITY_IDS.reduce((acc, id) => ({ ...acc, [id]: 0 }), {} as Record<DeityId, number>),
   total: 0,
+  birthdayJapa: 0,
+  anniversaryJapa: 0,
 };
 
 interface JapaStore {
@@ -17,6 +23,7 @@ interface JapaStore {
   loaded: boolean;
   load: (userId?: string) => Promise<void>;
   addJapa: (deity: DeityId, count?: number) => void;
+  addOccasionJapa: (kind: 'birthday' | 'anniversary', count?: number) => void;
   /** Force-save current counts to backend. Call before leaving Maha Yagna game. */
   flushJapas: () => Promise<void>;
 }
@@ -47,6 +54,18 @@ export const useJapaStore = create<JapaStore>((setState, getState) => ({
         typeof current.total === 'number' ? current.total : 0,
         stored && typeof stored.total === 'number' ? stored.total : 0
       );
+      const fromStoredB =
+        stored && typeof (stored as JapaCounts).birthdayJapa === 'number'
+          ? (stored as JapaCounts).birthdayJapa
+          : 0;
+      const fromCurrentB = typeof current.birthdayJapa === 'number' ? current.birthdayJapa : 0;
+      merged.birthdayJapa = Math.max(fromStoredB, fromCurrentB);
+      const fromStoredA =
+        stored && typeof (stored as JapaCounts).anniversaryJapa === 'number'
+          ? (stored as JapaCounts).anniversaryJapa
+          : 0;
+      const fromCurrentA = typeof current.anniversaryJapa === 'number' ? current.anniversaryJapa : 0;
+      merged.anniversaryJapa = Math.max(fromStoredA, fromCurrentA);
       setState({ counts: merged, loaded: true });
     } catch (e: unknown) {
       const err = e as { status?: number };
@@ -65,6 +84,19 @@ export const useJapaStore = create<JapaStore>((setState, getState) => ({
       ...counts,
       [deity]: (counts[deity] ?? 0) + count,
       total: counts.total + count
+    };
+    setState({ counts: next });
+    const uid = useAuthStore.getState().user?.uid;
+    if (uid) saveUserJapa(uid, next).catch(() => {});
+  },
+
+  addOccasionJapa: (kind, count = 1) => {
+    if (count <= 0) return;
+    const { counts } = getState();
+    const key = kind === 'birthday' ? 'birthdayJapa' : 'anniversaryJapa';
+    const next = {
+      ...counts,
+      [key]: (counts[key] ?? 0) + count,
     };
     setState({ counts: next });
     const uid = useAuthStore.getState().user?.uid;

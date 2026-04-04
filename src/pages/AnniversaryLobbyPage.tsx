@@ -1,10 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AppHeader } from '../components/layout/AppHeader';
 import { useAuthStore } from '../store/authStore';
-import { createAnniversarySession } from '../lib/occasionsApi';
+import {
+  createAnniversarySession,
+  fetchAnniversaryActiveSessions,
+  type AnniversaryActiveSession,
+} from '../lib/occasionsApi';
 import type { GameMode } from '../types';
+import { setOccasionEntryGate } from '../lib/occasionEntryGate';
 
 export function AnniversaryLobbyPage() {
   const { t } = useTranslation();
@@ -18,6 +23,31 @@ export function AnniversaryLobbyPage() {
     sessionId: string;
     joinToken: string;
   } | null>(null);
+  const [activeAnniversary, setActiveAnniversary] = useState<AnniversaryActiveSession[]>([]);
+  const [activeAnniversaryLoaded, setActiveAnniversaryLoaded] = useState(false);
+
+  useEffect(() => {
+    if (!user) {
+      setActiveAnniversary([]);
+      setActiveAnniversaryLoaded(true);
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      try {
+        const token = await user.getIdToken();
+        const items = await fetchAnniversaryActiveSessions(token);
+        if (!cancelled) setActiveAnniversary(items);
+      } catch {
+        if (!cancelled) setActiveAnniversary([]);
+      } finally {
+        if (!cancelled) setActiveAnniversaryLoaded(true);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.uid]);
 
   const joinUrl =
     typeof window !== 'undefined' && session
@@ -53,6 +83,7 @@ export function AnniversaryLobbyPage() {
 
   const enterGame = () => {
     if (!session) return;
+    setOccasionEntryGate('anniversary');
     navigate(
       `/game?anniversary=${encodeURIComponent(session.sessionId)}&role=${hostRole}&host=1&mode=${encodeURIComponent(gameMode)}&level=0&target=108`,
     );
@@ -64,6 +95,48 @@ export function AnniversaryLobbyPage() {
       <div className="relative z-10">
         <AppHeader title={t('occasions.anniversaryTitle')} showBack onBack={() => navigate('/')} />
         <p className="text-amber-200/85 text-sm mb-4">{t('occasions.anniversaryLobbyIntro', { count: 108 })}</p>
+
+        {user && activeAnniversaryLoaded && activeAnniversary.length > 0 && (
+          <div className="mb-4">
+            <h2 className="text-amber-300 font-semibold text-sm mb-2">
+              {t('occasions.activeAnniversarySessions')}
+            </h2>
+            <div className="space-y-2">
+              {activeAnniversary.map((row) => (
+                <div
+                  key={row.sessionId}
+                  className="bg-amber-500/15 rounded-xl p-3 border border-amber-500/35 flex flex-col gap-2"
+                >
+                  <div className="text-amber-100 text-xs flex flex-wrap items-center gap-2">
+                    <span>
+                      {t('occasions.coupleJapasShort', { h: row.japasHusband, w: row.japasWife })}
+                    </span>
+                    {row.sessionPaused && (
+                      <span className="px-2 py-0.5 rounded bg-black/30 text-amber-300 text-[10px] font-medium">
+                        {t('occasions.pausedBadge')}
+                      </span>
+                    )}
+                    {!row.partnerJoined && row.isHost && (
+                      <span className="text-amber-200/60 text-[10px]">{t('occasions.waitPartner')}</span>
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setOccasionEntryGate('anniversary');
+                      navigate(
+                        `/game?anniversary=${encodeURIComponent(row.sessionId)}&role=${row.myRole}&host=${row.isHost ? '1' : '0'}&mode=${encodeURIComponent(row.gameMode)}&level=${row.levelIndex}&target=108`,
+                      );
+                    }}
+                    className="w-full py-2.5 rounded-xl bg-amber-500 text-black text-sm font-semibold"
+                  >
+                    {t('occasions.continueCoupleJapa')}
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {!session ? (
           <>

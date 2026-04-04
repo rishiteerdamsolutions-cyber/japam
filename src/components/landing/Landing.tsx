@@ -83,28 +83,48 @@ export function Landing({ onEnterApp, onGuestPlay, onBirthday, onAnniversary }: 
             </motion.button>
 
             {(onBirthday || onAnniversary) && (
-              <div className="w-full max-w-xs flex justify-center gap-4 mt-5">
+              <div className="w-full max-w-sm flex justify-center gap-5 sm:gap-6 mt-6">
                 {onBirthday && (
-                  <motion.button
-                    type="button"
-                    whileHover={{ scale: 1.04 }}
-                    whileTap={{ scale: 0.97 }}
-                    onClick={onBirthday}
-                    className="w-[108px] h-[108px] sm:w-[118px] sm:h-[118px] rounded-full bg-white/12 border-2 border-amber-400/50 text-amber-100 text-xs sm:text-sm font-semibold leading-tight px-2 shadow-[0_0_20px_rgba(251,191,36,0.25)] hover:bg-white/18"
-                  >
-                    {t('occasions.landingBirthday')}
-                  </motion.button>
+                  <div className="flex flex-col items-center flex-1 min-w-0 max-w-[150px]">
+                    <motion.button
+                      type="button"
+                      aria-label={t('landing.birthdayJapaTitle')}
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={onBirthday}
+                      className="w-full aspect-square max-h-[140px] rounded-2xl overflow-hidden border-2 border-amber-400/55 bg-black/25 shadow-[0_0_24px_rgba(251,191,36,0.2)] hover:border-amber-300/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/80"
+                    >
+                      <img
+                        src="/birthday.png"
+                        alt=""
+                        className="w-full h-full object-cover"
+                      />
+                    </motion.button>
+                    <p className="mt-2 text-center text-amber-100/95 text-xs sm:text-sm font-semibold leading-snug px-1">
+                      {t('landing.birthdayJapaTitle')}
+                    </p>
+                  </div>
                 )}
                 {onAnniversary && (
-                  <motion.button
-                    type="button"
-                    whileHover={{ scale: 1.04 }}
-                    whileTap={{ scale: 0.97 }}
-                    onClick={onAnniversary}
-                    className="w-[108px] h-[108px] sm:w-[118px] sm:h-[118px] rounded-full bg-white/12 border-2 border-amber-400/50 text-amber-100 text-xs sm:text-sm font-semibold leading-tight px-2 shadow-[0_0_20px_rgba(251,191,36,0.25)] hover:bg-white/18"
-                  >
-                    {t('occasions.landingAnniversary')}
-                  </motion.button>
+                  <div className="flex flex-col items-center flex-1 min-w-0 max-w-[150px]">
+                    <motion.button
+                      type="button"
+                      aria-label={t('landing.weddingAnniversaryJapaTitle')}
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={onAnniversary}
+                      className="w-full aspect-square max-h-[140px] rounded-2xl overflow-hidden border-2 border-amber-400/55 bg-black/25 shadow-[0_0_24px_rgba(251,191,36,0.2)] hover:border-amber-300/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/80"
+                    >
+                      <img
+                        src="/wedding.png"
+                        alt=""
+                        className="w-full h-full object-cover"
+                      />
+                    </motion.button>
+                    <p className="mt-2 text-center text-amber-100/95 text-xs sm:text-sm font-semibold leading-snug px-1">
+                      {t('landing.weddingAnniversaryJapaTitle')}
+                    </p>
+                  </div>
                 )}
               </div>
             )}

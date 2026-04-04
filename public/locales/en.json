@@ -4,6 +4,8 @@
     "tagline": "Match & Chant",
     "description": "Match divine candies. Hear mantras. Build your japa.",
     "beginJapa": "Begin Japa",
+    "birthdayJapaTitle": "Birthday Japa",
+    "weddingAnniversaryJapaTitle": "Wedding Anniversary Japa",
     "tryAsGuest": "Continue as guest",
     "builtBy": "Built by",
     "copyright": "All rights reserved.",
@@ -13,6 +15,10 @@
     "refund": "Refund & Cancellation",
     "shipping": "Shipping & Delivery",
     "apiDocs": "API Docs"
+  },
+  "japaDashboard": {
+    "birthdayJapa": "Birthday Japa",
+    "weddingAnniversaryJapa": "Wedding Anniversary Japa"
   },
   "videoModal": {
     "title1": "JAPAM",
@@ -70,6 +76,7 @@
     "menu": "Menu",
     "japas": "Japas",
     "moves": "Moves",
+    "movesInfinity": "Unlimited moves",
     "lives": "Lives",
     "outOfLives": "Out of lives",
     "outOfLivesMessage": "Watch an Adyathmika video for 1 life, or buy 5 lives to continue.",

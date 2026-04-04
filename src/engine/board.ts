@@ -31,6 +31,70 @@ export function buildGemTypesPool(
   return [...must, ...fill].slice(0, cap) as GemType[];
 }
 
+function hashStringToUint32(str: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+/** Deterministic PRNG for seeded boards (couple play / resume — same seed ⇒ same layout on all devices). */
+function mulberry32(seed: number): () => number {
+  let s = seed;
+  return () => {
+    s = (s + 0x6d2b79f5) >>> 0;
+    let t = s;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function pickRandomGemSeeded(
+  board: Board,
+  currentRow: (GemType | null)[],
+  row: number,
+  col: number,
+  numRows: number,
+  numCols: number,
+  types: GemType[],
+  random: () => number,
+): GemType {
+  let gem: GemType;
+  let attempts = 0;
+  do {
+    gem = types[Math.floor(random() * types.length)];
+    attempts++;
+    if (attempts > 20) break;
+  } while (wouldCreateMatch(board, currentRow, row, col, numRows, numCols, gem, types));
+  return gem;
+}
+
+/** Same rules as `createBoard`, but layout depends only on `seed` (and pool args). */
+export function createBoardSeeded(
+  rows: number,
+  cols: number,
+  maxGemTypes = 8,
+  deityMode: DeityId | undefined,
+  powerBackedDeities: DeityId[],
+  generalGemSubset: DeityId[] | null,
+  seed: string,
+): Board {
+  const types = buildGemTypesPool(maxGemTypes, deityMode, powerBackedDeities, generalGemSubset);
+  const random = mulberry32(hashStringToUint32(seed));
+  const board: Board = [];
+  for (let r = 0; r < rows; r++) {
+    const rowData: (GemType | null)[] = [];
+    for (let c = 0; c < cols; c++) {
+      rowData.push(pickRandomGemSeeded(board, rowData, r, c, rows, cols, types, random));
+    }
+    board.push(rowData);
+  }
+  return board;
+}
+
 /** When deityMode is set, that deity's gem is always included (required for deity-specific games). */
 export function createBoard(
   rows: number,

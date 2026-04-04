@@ -78,9 +78,9 @@ export async function resumeAnniversarySession(
       const cur = snap.data() as Record<string, unknown>;
       if (cur.sessionPaused !== true) throw new Error('NOT_PAUSED');
       const v = typeof cur.version === 'number' ? cur.version : 0;
-      const board = buildAnniversaryResumeBoardFromSessionDoc(cur);
-      const boardJson = JSON.stringify(board);
       const nextV = v + 1;
+      const board = buildAnniversaryResumeBoardFromSessionDoc(cur, sessionId, nextV);
+      const boardJson = JSON.stringify(board);
       transaction.update(
         ref,
         stripUndefinedFields({

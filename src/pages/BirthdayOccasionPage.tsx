@@ -5,6 +5,7 @@ import { AppHeader } from '../components/layout/AppHeader';
 import { DEITIES } from '../data/deities';
 import { useAuthStore } from '../store/authStore';
 import type { GameMode } from '../types';
+import { setOccasionEntryGate } from '../lib/occasionEntryGate';
 
 const TARGET = 108;
 
@@ -18,6 +19,7 @@ export function BirthdayOccasionPage() {
       navigate('/signin');
       return;
     }
+    setOccasionEntryGate('birthday');
     navigate(
       `/game?occasion=birthday&mode=${encodeURIComponent(mode)}&level=${levelIndex}&target=${TARGET}`,
     );

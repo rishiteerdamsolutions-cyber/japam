@@ -1,5 +1,5 @@
 import type { Board } from '../engine/types';
-import { createBoard } from '../engine/board';
+import { createBoardSeeded } from '../engine/board';
 import { hasValidMoves } from '../engine/matcher';
 import { LEVELS } from '../data/levels';
 import type { GameMode } from '../types';
@@ -17,8 +17,15 @@ function inventoryOfferingDeities(): DeityId[] {
   return out;
 }
 
-/** New valid play board for anniversary resume; matches initGame gem rules for mode/level. */
-export function buildAnniversaryResumeBoardFromSessionDoc(d: Record<string, unknown>): Board {
+/**
+ * New board after couple resume — deterministic from session + Firestore `version` after write
+ * so any client that runs the same transaction gets the same layout (partner receives same `boardJson`).
+ */
+export function buildAnniversaryResumeBoardFromSessionDoc(
+  d: Record<string, unknown>,
+  sessionId: string,
+  boardEpochVersion: number,
+): Board {
   const levelIndex = typeof d.levelIndex === 'number' ? d.levelIndex : 0;
   const level = LEVELS[levelIndex] ?? LEVELS[0];
   const mode = (typeof d.gameMode === 'string' ? d.gameMode : 'general') as GameMode;
@@ -36,23 +43,22 @@ export function buildAnniversaryResumeBoardFromSessionDoc(d: Record<string, unkn
     mode === 'general'
       ? generalBoardDeities!
       : filterPowerBackedForIstaPath(mode as DeityId, inventoryOfferingDeities());
-  let board = createBoard(
-    level.rows,
-    level.cols,
-    maxGemTypes,
-    deityMode,
-    powerPool,
-    generalBoardDeities,
-  );
-  while (!hasValidMoves(board)) {
-    board = createBoard(
+
+  let salt = 0;
+  let board: Board;
+  do {
+    const seed = `${sessionId}|${boardEpochVersion}|resume|${salt}`;
+    board = createBoardSeeded(
       level.rows,
       level.cols,
       maxGemTypes,
       deityMode,
       powerPool,
       generalBoardDeities,
+      seed,
     );
-  }
+    salt++;
+  } while (!hasValidMoves(board) && salt < 100);
+
   return board;
 }

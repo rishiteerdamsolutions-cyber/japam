@@ -26,6 +26,7 @@ import { firestore, isFirebaseConfigured } from '../../lib/firebase';
 import { pauseAnniversarySession, resumeAnniversarySession } from '../../lib/anniversarySessionFirestore';
 import { completeBirthdayOccasion, completeAnniversarySession } from '../../lib/occasionsApi';
 import { downloadOccasionSummaryPdf } from '../../utils/occasionPdf';
+import { formatMovesForDisplay, MOVES_INFINITY_CHAR } from '../../lib/formatMovesForDisplay';
 
 /** Shown after ~20 min play; always English regardless of UI language (i18n keys live under `shared.*`). */
 const JAPA_BREAK_REMINDER_MARATHON_EN =
@@ -85,6 +86,11 @@ function GameBottomStrip({
 }) {
   const { t } = useTranslation();
   const moves = useGameStore((s) => s.moves);
+  const movesShown = formatMovesForDisplay(occasionKind, moves);
+  const movesTitle =
+    movesShown === MOVES_INFINITY_CHAR
+      ? `${t('game.moves')}: ${t('game.movesInfinity')}`
+      : `${t('game.moves')}: ${moves}`;
   const mode = useGameStore((s) => s.mode);
   const levelIndex = useGameStore((s) => s.levelIndex);
   const japasThisLevel = useGameStore((s) => s.japasThisLevel);
@@ -133,8 +139,11 @@ function GameBottomStrip({
           <ExitIcon />
         </button>
       )}
-      <div className="flex-1 min-w-0 text-amber-200 text-xs sm:text-sm font-medium text-right">
-        {t('game.moves')}: {moves}
+      <div
+        className="flex-1 min-w-0 text-amber-200 text-xs sm:text-sm font-medium text-right"
+        title={movesTitle}
+      >
+        {t('game.moves')}: {movesShown}
       </div>
     </div>
   );
@@ -216,6 +225,10 @@ export function GameScreen({
   const anniversaryJH = useGameStore((s) => s.anniversaryJapasHusband);
   const anniversaryJW = useGameStore((s) => s.anniversaryJapasWife);
   const anniversarySessionPaused = useGameStore((s) => s.anniversarySessionPaused);
+  const anniversaryMyRoleFromStore = useGameStore((s) => s.anniversaryMyRole);
+  /** Firestore-derived role fixes URL mistakes; store updates every snapshot. */
+  const anniversaryRoleForUi =
+    occasionKind === 'anniversary' ? (anniversaryMyRoleFromStore ?? anniversaryMyRole) : anniversaryMyRole;
   const anniversaryInitKeyRef = useRef<string | null>(null);
 
   useEffect(() => {
@@ -709,7 +722,7 @@ export function GameScreen({
       )}
       {occasionKind === 'anniversary' && status === 'playing' && !anniversarySessionPaused && (
         <div className="w-full max-w-md mt-2 text-center text-amber-200/90 text-xs font-medium">
-          {anniversaryMyRole === anniversaryTurn ? t('occasions.yourTurn') : t('occasions.partnerTurn')}
+          {anniversaryRoleForUi === anniversaryTurn ? t('occasions.yourTurn') : t('occasions.partnerTurn')}
         </div>
       )}
 
@@ -815,7 +828,7 @@ export function GameScreen({
                 </p>
                 <p className="text-amber-400/90">
                   {t('occasions.yourJapas')}:{' '}
-                  {anniversaryMyRole === 'husband' ? anniversaryJH : anniversaryJW}
+                  {anniversaryRoleForUi === 'husband' ? anniversaryJH : anniversaryJW}
                 </p>
               </div>
             )}
@@ -845,7 +858,7 @@ export function GameScreen({
                       `${t('occasions.wifeJapas')}: ${s.anniversaryJapasWife}`,
                       `${t('occasions.sharedToWife')}: ${shared}`,
                       `${t('occasions.wifeTotal')}: ${wt}`,
-                      `${t('occasions.yourJapas')}: ${anniversaryMyRole === 'husband' ? s.anniversaryJapasHusband : s.anniversaryJapasWife} (${anniversaryMyRole})`,
+                      `${t('occasions.yourJapas')}: ${anniversaryRoleForUi === 'husband' ? s.anniversaryJapasHusband : s.anniversaryJapasWife} (${anniversaryRoleForUi})`,
                     ],
                     footer: t('occasions.savedToAccount'),
                   });

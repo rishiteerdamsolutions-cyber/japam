@@ -25,7 +25,7 @@ import { useAnniversaryFirestore } from '../../hooks/useAnniversaryFirestore';
 import { firestore, isFirebaseConfigured } from '../../lib/firebase';
 import { pauseAnniversarySession, resumeAnniversarySession } from '../../lib/anniversarySessionFirestore';
 import { completeBirthdayOccasion, completeAnniversarySession } from '../../lib/occasionsApi';
-import { downloadOccasionSummaryPdf } from '../../utils/occasionPdf';
+import { downloadAnniversaryReportPdf, downloadOccasionSummaryPdf } from '../../utils/occasionPdf';
 import { formatMovesForDisplay, MOVES_INFINITY_CHAR } from '../../lib/formatMovesForDisplay';
 
 /** Shown after ~20 min play; always English regardless of UI language (i18n keys live under `shared.*`). */
@@ -225,11 +225,28 @@ export function GameScreen({
   const anniversaryJH = useGameStore((s) => s.anniversaryJapasHusband);
   const anniversaryJW = useGameStore((s) => s.anniversaryJapasWife);
   const anniversarySessionPaused = useGameStore((s) => s.anniversarySessionPaused);
+  const anniversaryAutoRefreshToken = useGameStore((s) => s.anniversaryAutoRefreshToken);
   const anniversaryMyRoleFromStore = useGameStore((s) => s.anniversaryMyRole);
   /** Firestore-derived role fixes URL mistakes; store updates every snapshot. */
   const anniversaryRoleForUi =
     occasionKind === 'anniversary' ? (anniversaryMyRoleFromStore ?? anniversaryMyRole) : anniversaryMyRole;
   const anniversaryInitKeyRef = useRef<string | null>(null);
+  const [autoRefreshToast, setAutoRefreshToast] = useState(false);
+  const autoRefreshToastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (occasionKind !== 'anniversary') return;
+    if (anniversaryAutoRefreshToken <= 0) return;
+    setAutoRefreshToast(true);
+    if (autoRefreshToastTimerRef.current) clearTimeout(autoRefreshToastTimerRef.current);
+    autoRefreshToastTimerRef.current = setTimeout(() => setAutoRefreshToast(false), 2200);
+    return () => {
+      if (autoRefreshToastTimerRef.current) {
+        clearTimeout(autoRefreshToastTimerRef.current);
+        autoRefreshToastTimerRef.current = null;
+      }
+    };
+  }, [anniversaryAutoRefreshToken, occasionKind]);
 
   useEffect(() => {
     if (!isGuest) setGuestPowerSignInOpen(false);
@@ -717,6 +734,13 @@ export function GameScreen({
           {t('occasions.waitPartner')}
         </div>
       )}
+      {occasionKind === 'anniversary' && autoRefreshToast && status === 'playing' && !anniversarySessionPaused && (
+        <div className="w-full max-w-md mt-2 px-2">
+          <div className="rounded-xl bg-black/40 border border-amber-400/35 text-amber-200 text-xs px-3 py-2 text-center">
+            {t('occasions.boardAutoRefreshed')}
+          </div>
+        </div>
+      )}
       {anniversarySyncError && (
         <div className="w-full max-w-md mt-2 text-red-300 text-xs px-2">{anniversarySyncError}</div>
       )}
@@ -849,17 +873,12 @@ export function GameScreen({
                     footer: t('occasions.savedToAccount'),
                   });
                 } else {
-                  const shared = Math.ceil(s.anniversaryJapasHusband / 2);
-                  const wt = s.anniversaryJapasWife + shared;
-                  downloadOccasionSummaryPdf({
+                  downloadAnniversaryReportPdf({
                     title: t('occasions.anniversaryTitle'),
-                    lines: [
-                      `${t('occasions.husbandJapas')}: ${s.anniversaryJapasHusband}`,
-                      `${t('occasions.wifeJapas')}: ${s.anniversaryJapasWife}`,
-                      `${t('occasions.sharedToWife')}: ${shared}`,
-                      `${t('occasions.wifeTotal')}: ${wt}`,
-                      `${t('occasions.yourJapas')}: ${anniversaryRoleForUi === 'husband' ? s.anniversaryJapasHusband : s.anniversaryJapasWife} (${anniversaryRoleForUi})`,
-                    ],
+                    husbandJapas: s.anniversaryJapasHusband,
+                    wifeJapas: s.anniversaryJapasWife,
+                    yourRoleLabel: anniversaryRoleForUi,
+                    yourJapas: anniversaryRoleForUi === 'husband' ? s.anniversaryJapasHusband : s.anniversaryJapasWife,
                     footer: t('occasions.savedToAccount'),
                   });
                 }

@@ -23,7 +23,7 @@ export async function GET(request) {
 const DEITY_IDS = [
   'rama', 'shiva', 'ganesh', 'surya', 'shakthi', 'krishna', 'shanmukha', 'venkateswara',
   'hanuman', 'narasimha', 'lakshmi', 'durga', 'saraswati', 'ayyappan', 'jagannath', 'dattatreya',
-  'saiBaba', 'narayana', 'iskcon', 'guru', 'shani', 'rahu', 'ketu'
+  'saiBaba', 'narayana', 'iskcon', 'guru', 'shani', 'rahu', 'ketu', 'bramhamgaaru'
 ];
 
 /** POST /api/user/japa - Save japa counts for current user (Firebase ID token required). Also attributes deltas to joined marathons by deity. */

@@ -88,6 +88,8 @@ interface GameState {
   matchHighlightPositions: Position[] | null;
   pendingMatchBatch: Match[] | null;
   matchAnimationTimeoutId: ReturnType<typeof setTimeout> | null;
+  /** Arms credit for the next user-initiated match clear (prevents double-credit when clearing pre-existing line matches). */
+  manualCreditArmed: boolean;
   /** Set on first cascade batch of a move; used for one per-deity match SFX. */
   matchSfx: MatchSfxSelection | null;
   /** Bumped when a new match batch starts (first cascade only) so UI plays SFX in sync with pop animation. */
@@ -114,6 +116,8 @@ interface GameState {
   anniversaryFirestoreVersion: number;
   /** Couple session paused in Firestore (both partners). */
   anniversarySessionPaused: boolean;
+  /** Bumped when we auto-refresh an anniversary board due to no valid moves (toast trigger). */
+  anniversaryAutoRefreshToken: number;
 }
 
 function boardGemContext(state: GameState): {
@@ -207,6 +211,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   matchHighlightPositions: null,
   pendingMatchBatch: null,
   matchAnimationTimeoutId: null,
+  manualCreditArmed: false,
   matchSfx: null,
   matchSfxPlayToken: 0,
   hintsSwapCount: 0,
@@ -225,6 +230,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   anniversaryMovePending: false,
   anniversaryFirestoreVersion: 0,
   anniversarySessionPaused: false,
+  anniversaryAutoRefreshToken: 0,
 
   initGame: (mode, levelIndex = 0, options) => {
     gameDebug('initGame', {
@@ -326,6 +332,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       matchHighlightPositions: null,
       pendingMatchBatch: null,
       matchAnimationTimeoutId: null,
+      manualCreditArmed: false,
       matchSfx: null,
       matchSfxPlayToken: 0,
       hintsSwapCount: 0,
@@ -344,6 +351,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       anniversaryMovePending: false,
       anniversaryFirestoreVersion,
       anniversarySessionPaused: false,
+      anniversaryAutoRefreshToken: 0,
     });
     usePowerArmStore.getState().reset();
   },
@@ -453,6 +461,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       matchHighlightPositions: null,
       pendingMatchBatch: null,
       matchAnimationTimeoutId: null,
+      manualCreditArmed: false,
       matchSfx: null,
       matchSfxPlayToken: 0,
       hintsSwapCount: 0,
@@ -471,6 +480,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       anniversaryMovePending: false,
       anniversaryFirestoreVersion: saved.anniversaryFirestoreVersion ?? 0,
       anniversarySessionPaused: false,
+      anniversaryAutoRefreshToken: 0,
     });
     usePowerArmStore.getState().reset();
   },
@@ -535,6 +545,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       refillSpawnGeneration: nextGen,
       hintsSwapCount: state.hintsSwapCount + 1,
       powerVfxToken: state.powerVfxToken + 1,
+      manualCreditArmed: true,
     });
     usePowerArmStore.getState().setArmedPower(null);
     void usePowersInventoryStore.getState().tryConsumeOne(armed);
@@ -582,6 +593,13 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       ? { row: fromRow, col: fromCol }
       : selectedCell;
     if (!from || status !== 'playing') return false;
+    // Safety: never allow the user to interact with a board that already contains a line-match.
+    // Clear it as a cascade-only resolve (no extra japa credit) so the board doesn't "freeze" on a 3-in-line.
+    if (get().matchAnimationTimeoutId == null && findMatches(board).length > 0) {
+      set({ manualCreditArmed: false });
+      get().processMatches([]);
+      return false;
+    }
     const useFreeSwap = usePowerArmStore.getState().armedPowerId === 'freeSwap';
     if (occasionKind === 'anniversary') {
       if (get().anniversarySessionPaused) return false;
@@ -665,6 +683,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
         refillSpawnGeneration: st.refillSpawnGeneration + (spawnKeys.length > 0 ? 1 : 0),
         powerVfxToken: st.powerVfxToken + 1,
         anniversaryMovePending: st.occasionKind === 'anniversary' ? true : st.anniversaryMovePending,
+        manualCreditArmed: true,
       });
       get().processMatches([]);
       return true;
@@ -704,6 +723,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       intendedDeity: gemA || null,
       hintsSwapCount: stMatch.hintsSwapCount + 1,
       anniversaryMovePending: stMatch.occasionKind === 'anniversary' ? true : stMatch.anniversaryMovePending,
+      manualCreditArmed: true,
     });
     if (useFreeSwap) {
       usePowerArmStore.getState().setArmedPower(null);
@@ -751,7 +771,11 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       matchSfx,
       matchSfxPlayToken,
     });
-    const isUserDirectMatch = accumulated.length === 0;
+    const isUserDirectMatch = accumulated.length === 0 && get().manualCreditArmed;
+    if (isUserDirectMatch) {
+      // Disarm immediately so any follow-up/cascade clears cannot double-credit.
+      set({ manualCreditArmed: false });
+    }
     const clearMs = getMatchClearDelayMs(positions.length);
     const id = setTimeout(() => get().commitMatch(nextAccumulated, isUserDirectMatch), clearMs);
     set({ matchAnimationTimeoutId: id });
@@ -913,17 +937,28 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       nextAnniversaryMovePending = false;
     }
 
+    let anniversaryAutoRefreshToken = state.anniversaryAutoRefreshToken;
     if (status === 'playing' && !hasValidMoves(finalBoard)) {
       const gemCtxDead = boardGemContext(state);
-      finalBoard = createBoard(
-        level.rows,
-        level.cols,
-        state.maxGemTypes,
-        gemCtxDead.deityMode,
-        gemCtxDead.powerBacked,
-        gemCtxDead.generalSubset,
-      );
-      while (!hasValidMoves(finalBoard)) {
+      if (state.occasionKind === 'anniversary' && state.anniversarySessionId) {
+        // Couple play has no refresh button — always guarantee valid moves.
+        // Use seeded boards so both partners converge even if they regenerate locally at the same moment.
+        let salt = 0;
+        do {
+          const seed = `${state.anniversarySessionId}|${state.anniversaryFirestoreVersion}|dead|${salt}`;
+          finalBoard = createBoardSeeded(
+            level.rows,
+            level.cols,
+            state.maxGemTypes,
+            gemCtxDead.deityMode,
+            gemCtxDead.powerBacked,
+            gemCtxDead.generalSubset,
+            seed,
+          );
+          salt++;
+        } while (!hasValidMoves(finalBoard) && salt < 100);
+        anniversaryAutoRefreshToken = anniversaryAutoRefreshToken + 1;
+      } else {
         finalBoard = createBoard(
           level.rows,
           level.cols,
@@ -932,6 +967,16 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
           gemCtxDead.powerBacked,
           gemCtxDead.generalSubset,
         );
+        while (!hasValidMoves(finalBoard)) {
+          finalBoard = createBoard(
+            level.rows,
+            level.cols,
+            state.maxGemTypes,
+            gemCtxDead.deityMode,
+            gemCtxDead.powerBacked,
+            gemCtxDead.generalSubset,
+          );
+        }
       }
     }
 
@@ -947,6 +992,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       lastSwapDestination: null,
       anniversaryTurn: nextAnniversaryTurn,
       anniversaryMovePending: nextAnniversaryMovePending,
+      manualCreditArmed: false,
+      anniversaryAutoRefreshToken,
     });
   },
 
@@ -1149,6 +1196,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       matchHighlightPositions: null,
       pendingMatchBatch: null,
       matchAnimationTimeoutId: null,
+      manualCreditArmed: false,
       matchSfx: null,
       matchSfxPlayToken: 0,
       refillSpawnKeys: [],
@@ -1156,6 +1204,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       lastSwapDestination: null,
       anniversaryMovePending: false,
       anniversarySessionPaused: sessionPaused,
+      anniversaryAutoRefreshToken: 0,
     });
   },
 

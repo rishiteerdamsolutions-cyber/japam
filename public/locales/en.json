@@ -162,7 +162,8 @@
     "activeAnniversarySessions": "Anniversary couple game",
     "continueCoupleJapa": "Continue",
     "coupleJapasShort": "{{h}}H · {{w}}W japas",
-    "pausedBadge": "Paused"
+    "pausedBadge": "Paused",
+    "boardAutoRefreshed": "No moves — board refreshed."
   },
   "common": {
     "loading": "Loading…",

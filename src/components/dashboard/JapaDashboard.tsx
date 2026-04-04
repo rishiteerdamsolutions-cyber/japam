@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useJapaStore } from '../../store/japaStore';
 import { useAuthStore } from '../../store/authStore';
 import { fetchOccasionsList, type OccasionListItem } from '../../lib/occasionsApi';
-import { downloadOccasionSummaryPdf } from '../../utils/occasionPdf';
+import { downloadAnniversaryReportPdf, downloadOccasionSummaryPdf } from '../../utils/occasionPdf';
 import { DEITIES } from '../../data/deities';
 import { DAILY_GOAL_JAPAS } from '../../data/levels';
 import { downloadMantraPdf, type PdfDetails } from '../../utils/pdfExport';
@@ -76,17 +76,12 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
       return;
     }
     if (row.type === 'anniversary') {
-      const shared = row.sharedToWife ?? Math.ceil((row.japasHusband ?? 0) / 2);
-      const wt = row.wifeTotalPunya ?? (row.japasWife ?? 0) + shared;
-      downloadOccasionSummaryPdf({
+      downloadAnniversaryReportPdf({
         title: t('occasions.anniversaryTitle'),
-        lines: [
-          `${t('occasions.husbandJapas')}: ${row.japasHusband ?? 0}`,
-          `${t('occasions.wifeJapas')}: ${row.japasWife ?? 0}`,
-          `${t('occasions.sharedToWife')}: ${shared}`,
-          `${t('occasions.wifeTotal')}: ${wt}`,
-          `${t('occasions.yourJapas')} (${row.myRole ?? '?'}): ${row.myRole === 'husband' ? row.japasHusband ?? 0 : row.japasWife ?? 0}`,
-        ],
+        husbandJapas: row.japasHusband ?? 0,
+        wifeJapas: row.japasWife ?? 0,
+        yourRoleLabel: row.myRole ?? undefined,
+        yourJapas: row.myRole === 'husband' ? row.japasHusband ?? 0 : row.japasWife ?? 0,
         footer: t('occasions.savedToAccount'),
       });
     }

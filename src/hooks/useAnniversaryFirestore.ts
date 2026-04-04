@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { doc, onSnapshot, runTransaction, serverTimestamp } from 'firebase/firestore';
 import { firestore, isFirebaseConfigured } from '../lib/firebase';
 import { useGameStore } from '../store/gameStore';
+import { findMatches } from '../engine/matcher';
 
 function stripUndefinedFields(o: Record<string, unknown>): Record<string, unknown> {
   const out: Record<string, unknown> = {};
@@ -14,6 +15,21 @@ function stripUndefinedFields(o: Record<string, unknown>): Record<string, unknow
 function shouldDeferAnniversaryHydrate(): boolean {
   const gs = useGameStore.getState();
   return gs.matchAnimationTimeoutId != null || gs.anniversaryMovePending;
+}
+
+function boardStableForSync(): boolean {
+  const gs = useGameStore.getState();
+  if (gs.matchAnimationTimeoutId != null) return false;
+  if (gs.pendingMatchBatch != null) return false;
+  if (gs.matchHighlightPositions != null) return false;
+  if (gs.anniversaryMovePending) return false;
+  // If host pushes a board mid-cascade, guests can get stuck with an uncleared line-match.
+  // Only sync once the board is in a settled, no-matches state.
+  try {
+    return findMatches(gs.board).length === 0;
+  } catch {
+    return false;
+  }
 }
 
 /** Prefer Firestore host/guest roles so URL mistakes cannot make both players "husband". */
@@ -244,6 +260,7 @@ export function useAnniversaryFirestore(
         if (gs.occasionKind !== 'anniversary' || gs.status !== 'playing') return;
         if (gs.anniversarySessionPaused) return;
         if (queuedHydrateRef.current) return;
+        if (!boardStableForSync()) return;
         if (!gs.anniversaryIsHost && gs.anniversaryFirestoreVersion < 1) return;
         const payload = gs.serializeAnniversaryFirestorePayload();
         if (!payload) return;

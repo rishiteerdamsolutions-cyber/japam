@@ -113,7 +113,8 @@
     "activeAnniversarySessions": "వివాహ వార్షికోత్సవ జంట ఆట",
     "continueCoupleJapa": "కొనసాగించు",
     "coupleJapasShort": "{{h}}భర్త · {{w}}భార్య జపాలు",
-    "pausedBadge": "పాజ్"
+    "pausedBadge": "పాజ్",
+    "boardAutoRefreshed": "మూవులు లేవు — బోర్డు రిఫ్రెష్ అయ్యింది."
   },
   "common": {
     "loading": "లోడ్ అవుతోంది…",

@@ -28,6 +28,20 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    // Wedding anniversary couple play: host + guest sync board state (create via API only).
+    match /anniversarySessions/{sessionId} {
+      allow read: if request.auth != null && (
+        request.auth.uid == resource.data.hostUid ||
+        (resource.data.guestUid != null && request.auth.uid == resource.data.guestUid)
+      );
+      allow create: if false;
+      allow update: if request.auth != null && (
+        request.auth.uid == resource.data.hostUid ||
+        (resource.data.guestUid != null && request.auth.uid == resource.data.guestUid)
+      );
+      allow delete: if false;
+    }
+
     // All other paths: deny direct client access. Data is accessed via API only.
     match /{document=**} {
       allow read, write: if false;

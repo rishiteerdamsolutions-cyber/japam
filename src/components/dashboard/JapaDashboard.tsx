@@ -1,5 +1,9 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useJapaStore } from '../../store/japaStore';
+import { useAuthStore } from '../../store/authStore';
+import { fetchOccasionsList, type OccasionListItem } from '../../lib/occasionsApi';
+import { downloadOccasionSummaryPdf } from '../../utils/occasionPdf';
 import { DEITIES } from '../../data/deities';
 import { DAILY_GOAL_JAPAS } from '../../data/levels';
 import { downloadMantraPdf, type PdfDetails } from '../../utils/pdfExport';
@@ -17,7 +21,11 @@ interface JapaDashboardProps {
 }
 
 export function JapaDashboard({ onBack }: JapaDashboardProps) {
+  const { t } = useTranslation();
   const { counts, loaded } = useJapaStore();
+  const user = useAuthStore((s) => s.user);
+  const [occasions, setOccasions] = useState<OccasionListItem[]>([]);
+  const [occasionsLoaded, setOccasionsLoaded] = useState(false);
   const [downloadModal, setDownloadModal] = useState<{
     mantra: string;
     count: number;
@@ -31,6 +39,58 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [processingImage, setProcessingImage] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!user) {
+      setOccasions([]);
+      setOccasionsLoaded(true);
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      try {
+        const token = await user.getIdToken();
+        const items = await fetchOccasionsList(token);
+        if (!cancelled) setOccasions(items);
+      } catch {
+        if (!cancelled) setOccasions([]);
+      } finally {
+        if (!cancelled) setOccasionsLoaded(true);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.uid]);
+
+  const downloadOccasionRow = (row: OccasionListItem) => {
+    if (row.type === 'birthday') {
+      downloadOccasionSummaryPdf({
+        title: t('occasions.birthdayTitle'),
+        lines: [
+          `Mode: ${row.mode ?? 'general'}`,
+          `${t('game.japas')}: ${row.japasTotal ?? 0}`,
+        ],
+        footer: t('occasions.savedToAccount'),
+      });
+      return;
+    }
+    if (row.type === 'anniversary') {
+      const shared = row.sharedToWife ?? Math.ceil((row.japasHusband ?? 0) / 2);
+      const wt = row.wifeTotalPunya ?? (row.japasWife ?? 0) + shared;
+      downloadOccasionSummaryPdf({
+        title: t('occasions.anniversaryTitle'),
+        lines: [
+          `${t('occasions.husbandJapas')}: ${row.japasHusband ?? 0}`,
+          `${t('occasions.wifeJapas')}: ${row.japasWife ?? 0}`,
+          `${t('occasions.sharedToWife')}: ${shared}`,
+          `${t('occasions.wifeTotal')}: ${wt}`,
+          `${t('occasions.yourJapas')} (${row.myRole ?? '?'}): ${row.myRole === 'husband' ? row.japasHusband ?? 0 : row.japasWife ?? 0}`,
+        ],
+        footer: t('occasions.savedToAccount'),
+      });
+    }
+  };
 
   const total = counts.total;
   const maxDeity = Math.max(...DEITIES.map(d => counts[d.id]), 1);
@@ -115,6 +175,41 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
       </p>
 
       <DonateThankYouBox />
+
+      {user && occasionsLoaded && occasions.length > 0 && (
+        <div className="mt-4 mb-6">
+          <h2 className="text-amber-300 font-semibold text-sm mb-2">{t('occasions.occasionHistory')}</h2>
+          <div className="space-y-2">
+            {occasions.map((row) => (
+              <div
+                key={row.id}
+                className="bg-black/25 rounded-xl p-3 flex flex-wrap items-center justify-between gap-2"
+              >
+                <div className="text-amber-200/90 text-xs min-w-0">
+                  <span className="font-medium text-amber-400">
+                    {row.type === 'birthday' ? t('occasions.birthdayTitle') : t('occasions.anniversaryTitle')}
+                  </span>
+                  {row.type === 'anniversary' && row.myRole && (
+                    <span className="text-amber-200/60"> · {row.myRole}</span>
+                  )}
+                  {row.completedAt && (
+                    <span className="block text-amber-200/50 text-[10px] mt-0.5">
+                      {new Date(row.completedAt).toLocaleString()}
+                    </span>
+                  )}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => downloadOccasionRow(row)}
+                  className="shrink-0 px-2 py-1 rounded bg-amber-500/80 text-white text-xs"
+                >
+                  {t('occasions.downloadPdf')}
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="text-3xl font-bold text-amber-300 mb-2 mt-4">
         {loaded ? total.toLocaleString() : '...'} total japas

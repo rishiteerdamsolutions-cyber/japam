@@ -117,6 +117,11 @@ import * as healthHandler from './_handlers/health.js';
 import * as adminAnalyticsOverviewHandler from './_handlers/admin/analytics-overview.js';
 import * as adminAnalyticsUsersHandler from './_handlers/admin/analytics-users.js';
 import * as adminAnalyticsTimeseriesHandler from './_handlers/admin/analytics-timeseries.js';
+import * as occasionsAnniversaryCreateHandler from './_handlers/occasions/anniversary-create.js';
+import * as occasionsAnniversaryJoinHandler from './_handlers/occasions/anniversary-join.js';
+import * as occasionsAnniversaryCompleteHandler from './_handlers/occasions/anniversary-complete.js';
+import * as occasionsBirthdayCompleteHandler from './_handlers/occasions/birthday-complete.js';
+import * as occasionsListHandler from './_handlers/occasions/list.js';
 
 function getPathSegments(request) {
   const url = new URL(request.url);
@@ -245,6 +250,11 @@ const HANDLERS = {
   'POST priest/marathon-edit': priestMarathonEditHandler,
   'POST priest/maha-yagnas-edit': priestMahaYagnasEditHandler,
   'GET health': healthHandler,
+  'POST occasions/anniversary/create': occasionsAnniversaryCreateHandler,
+  'POST occasions/anniversary/join': occasionsAnniversaryJoinHandler,
+  'POST occasions/anniversary/complete': occasionsAnniversaryCompleteHandler,
+  'POST occasions/birthday/complete': occasionsBirthdayCompleteHandler,
+  'GET occasions/list': occasionsListHandler,
 };
 
 async function route(request, method, pathSegments) {

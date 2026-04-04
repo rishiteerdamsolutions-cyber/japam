@@ -26,9 +26,17 @@ export function GamePage() {
   const marathonId = searchParams.get('marathon');
   const yagnaId = searchParams.get('yagna');
   const targetParam = searchParams.get('target');
-  const marathonTargetJapas = targetParam ? parseInt(targetParam, 10) : null;
+  const marathonTargetJapas =
+    (marathonId || yagnaId) && targetParam ? parseInt(targetParam, 10) : null;
   const gameContextId = yagnaId || marathonId;
   const isMarathon = !!(marathonId || yagnaId) && marathonTargetJapas != null;
+
+  const occasionBirthday = searchParams.get('occasion') === 'birthday';
+  const anniversarySession = searchParams.get('anniversary');
+  const anniversaryRole = searchParams.get('role') === 'wife' ? 'wife' : 'husband';
+  const anniversaryHost = searchParams.get('host') === '1';
+  const occasionTarget = Math.min(500, Math.max(1, parseInt(searchParams.get('target') || '108', 10) || 108));
+  const occasionKind = anniversarySession ? ('anniversary' as const) : occasionBirthday ? ('birthday' as const) : null;
 
   const maxRevealedLevelIndex = useLevelsConfigStore((s) => s.maxRevealedLevelIndex);
   const loadLevelsConfig = useLevelsConfigStore((s) => s.load);
@@ -107,6 +115,13 @@ export function GamePage() {
 
   useEffect(() => {
     if (paywallPending) return;
+    if (occasionKind) {
+      setResumePending(null);
+      setResumeKey(null);
+      setPauseCheckDone(true);
+      if (isLocked) setPaywallPending({ mode, levelIndex });
+      return;
+    }
     if (isGuest) {
       setResumePending(null);
       setResumeKey(null);
@@ -170,7 +185,7 @@ export function GamePage() {
     };
     load();
     return () => { cancelled = true; };
-  }, [mode, levelIndex, isMarathon, marathonId, yagnaId, expectedKey, isLocked, paywallPending, user?.uid, authLoading]);
+  }, [mode, levelIndex, isMarathon, marathonId, yagnaId, expectedKey, isLocked, paywallPending, user?.uid, authLoading, occasionKind]);
 
   const handleResume = () => {
     if (resumePending) {
@@ -215,6 +230,14 @@ export function GamePage() {
 
   const onJustRestoredCleared = useCallback(() => setJustRestored(false), []);
   const onBack = useCallback(() => {
+    if (occasionKind === 'birthday') {
+      navigate('/occasion/birthday');
+      return;
+    }
+    if (occasionKind === 'anniversary') {
+      navigate('/occasion/anniversary');
+      return;
+    }
     if (isMarathon) {
       navigate(yagnaId ? '/maha-yagnas' : '/marathons');
     } else if (isGuest) {
@@ -222,7 +245,7 @@ export function GamePage() {
     } else {
       navigate('/levels');
     }
-  }, [navigate, isMarathon, yagnaId, isGuest]);
+  }, [navigate, isMarathon, yagnaId, isGuest, occasionKind]);
 
   const handlePlayNameSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -372,6 +395,11 @@ export function GamePage() {
       onJustRestoredCleared={onJustRestoredCleared}
       onBack={onBack}
       onNextLevel={isMarathon ? undefined : (m, idx) => handleNextLevel(m as GameMode, idx)}
+      occasionKind={occasionKind}
+      occasionJapaTarget={occasionKind ? occasionTarget : undefined}
+      anniversarySessionId={anniversarySession}
+      anniversaryMyRole={occasionKind === 'anniversary' ? anniversaryRole : undefined}
+      anniversaryIsHost={occasionKind === 'anniversary' ? anniversaryHost : undefined}
     />
   );
 }

@@ -21,6 +21,9 @@ import { LivesDisplay } from '../lives/LivesDisplay';
 import { LivesModal } from '../lives/LivesModal';
 import { GamePowersScrollStrip } from './GamePowersScrollStrip';
 import { usePowersInventoryStore } from '../../store/powersInventoryStore';
+import { useAnniversaryFirestore } from '../../hooks/useAnniversaryFirestore';
+import { completeBirthdayOccasion, completeAnniversarySession } from '../../lib/occasionsApi';
+import { downloadOccasionSummaryPdf } from '../../utils/occasionPdf';
 
 /** Shown after ~20 min play; always English regardless of UI language (i18n keys live under `shared.*`). */
 const JAPA_BREAK_REMINDER_MARATHON_EN =
@@ -65,11 +68,18 @@ function CandySpinIcon() {
   );
 }
 
-function GameBottomStrip({ isGuest, pauseSaving, onPause, onBack }: {
+function GameBottomStrip({
+  isGuest,
+  pauseSaving,
+  onPause,
+  onBack,
+  occasionKind,
+}: {
   isGuest: boolean;
   pauseSaving: boolean;
   onPause: () => void;
   onBack: () => void;
+  occasionKind: null | 'birthday' | 'anniversary';
 }) {
   const { t } = useTranslation();
   const moves = useGameStore((s) => s.moves);
@@ -79,10 +89,17 @@ function GameBottomStrip({ isGuest, pauseSaving, onPause, onBack }: {
   const japasByDeity = useGameStore((s) => s.japasByDeity);
   const marathonTargetJapas = useGameStore((s) => s.marathonTargetJapas);
   const overrideJapaTarget = useGameStore((s) => s.overrideJapaTarget);
+  const anniversaryJapasHusband = useGameStore((s) => s.anniversaryJapasHusband);
+  const anniversaryJapasWife = useGameStore((s) => s.anniversaryJapasWife);
   const level = LEVELS[levelIndex];
   const deityTarget: DeityId | undefined = mode !== 'general' ? (mode as DeityId) : undefined;
   const japasNeeded = deityTarget ? (japasByDeity[deityTarget] ?? 0) : japasThisLevel;
   const japaTarget = overrideJapaTarget ?? marathonTargetJapas ?? level?.japaTarget ?? 15;
+  const coupleTotal = anniversaryJapasHusband + anniversaryJapasWife;
+  const leftLabel =
+    occasionKind === 'anniversary'
+      ? `${t('occasions.coupleJapasHud')}: ${coupleTotal} / ${japaTarget}`
+      : `${t('game.japas')}: ${japasNeeded} / ${japaTarget}`;
 
   return (
     <div
@@ -91,8 +108,8 @@ function GameBottomStrip({ isGuest, pauseSaving, onPause, onBack }: {
       role="group"
       aria-label="Game controls"
     >
-      <div className="flex-1 min-w-0 text-amber-200 text-xs sm:text-sm truncate" title={`${t('game.japas')}: ${japasNeeded} / ${japaTarget}`}>
-        {t('game.japas')}: {japasNeeded} / {japaTarget}
+      <div className="flex-1 min-w-0 text-amber-200 text-xs sm:text-sm truncate" title={leftLabel}>
+        {leftLabel}
       </div>
       {!isGuest ? (
         <button
@@ -133,9 +150,31 @@ interface GameScreenProps {
   onJustRestoredCleared?: () => void;
   onBack: () => void;
   onNextLevel?: (mode: 'general' | string, levelIndex: number) => void;
+  occasionKind?: null | 'birthday' | 'anniversary';
+  occasionJapaTarget?: number;
+  anniversarySessionId?: string | null;
+  anniversaryMyRole?: 'husband' | 'wife';
+  anniversaryIsHost?: boolean;
 }
 
-export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonTargetJapas, yagnaId, isGuest, justRestored, onJustRestoredCleared, onBack, onNextLevel }: GameScreenProps) {
+export function GameScreen({
+  mode,
+  levelIndex,
+  isMarathon,
+  marathonId,
+  marathonTargetJapas,
+  yagnaId,
+  isGuest,
+  justRestored,
+  onJustRestoredCleared,
+  onBack,
+  onNextLevel,
+  occasionKind = null,
+  occasionJapaTarget = 108,
+  anniversarySessionId = null,
+  anniversaryMyRole = 'husband',
+  anniversaryIsHost = false,
+}: GameScreenProps) {
   const { t } = useTranslation();
   const user = useAuthStore(s => s.user);
   const initGame = useGameStore(s => s.initGame);
@@ -152,12 +191,27 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
   const setCandyBorderSpin = useSettingsStore((s) => s.setCandyBorderSpin);
   const { playMatchSfx } = useSound(bgMusicEnabled, bgMusicVolume);
 
-  const useLives = !!user && !isGuest && !isMarathon;
+  const useLives = !!user && !isGuest && !isMarathon && !occasionKind;
   const load = useLivesStore((s) => s.load);
   const consume = useLivesStore((s) => s.consume);
   const getIdToken = useCallback(async () => (user ? user.getIdToken() : null), [user]);
   const [showOutOfLives, setShowOutOfLives] = useState(false);
   const [guestPowerSignInOpen, setGuestPowerSignInOpen] = useState(false);
+  const [occasionRecordSaved, setOccasionRecordSaved] = useState(false);
+
+  const annSyncEnabled =
+    occasionKind === 'anniversary' && !!anniversarySessionId && !!user?.uid;
+  const { partnerJoined, error: anniversarySyncError, syncReady } = useAnniversaryFirestore(
+    annSyncEnabled,
+    anniversarySessionId,
+    user?.uid ?? null,
+    anniversaryIsHost,
+  );
+
+  const boardLen = useGameStore((s) => s.board.length);
+  const anniversaryTurn = useGameStore((s) => s.anniversaryTurn);
+  const anniversaryJH = useGameStore((s) => s.anniversaryJapasHusband);
+  const anniversaryJW = useGameStore((s) => s.anniversaryJapasWife);
 
   useEffect(() => {
     if (!isGuest) setGuestPowerSignInOpen(false);
@@ -196,9 +250,27 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
         yagnaId,
         isGuest,
         justRestored,
+        occasionKind,
       });
+      if (occasionKind === 'anniversary' && !anniversaryIsHost) {
+        return;
+      }
       if (isMarathon && marathonTargetJapas != null && (marathonId || yagnaId)) {
         initGame(mode as 'general', 0, { marathonId: marathonId ?? undefined, marathonTargetJapas, yagnaId: yagnaId ?? undefined });
+      } else if (occasionKind === 'birthday') {
+        initGame(mode as 'general', levelIndex, {
+          overrideJapaTarget: occasionJapaTarget,
+          occasionKind: 'birthday',
+        });
+      } else if (occasionKind === 'anniversary' && anniversarySessionId) {
+        initGame(mode as 'general', levelIndex, {
+          overrideJapaTarget: occasionJapaTarget,
+          occasionKind: 'anniversary',
+          anniversarySessionId,
+          anniversaryMyRole,
+          anniversaryIsHost,
+          anniversaryTurn: 'husband',
+        });
       } else if (isGuest) {
         initGame('general', 0, { overrideJapaTarget: 11, isGuest: true });
       } else {
@@ -207,7 +279,23 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
     };
 
     doInit();
-  }, [mode, levelIndex, isMarathon, marathonTargetJapas, marathonId, yagnaId, isGuest, justRestored, onJustRestoredCleared, initGame]);
+  }, [
+    mode,
+    levelIndex,
+    isMarathon,
+    marathonTargetJapas,
+    marathonId,
+    yagnaId,
+    isGuest,
+    justRestored,
+    onJustRestoredCleared,
+    initGame,
+    occasionKind,
+    occasionJapaTarget,
+    anniversarySessionId,
+    anniversaryMyRole,
+    anniversaryIsHost,
+  ]);
 
   const powersInventoryLoaded = usePowersInventoryStore((s) => s.loaded);
   const syncBoardForOfferingPowers = useGameStore((s) => s.syncBoardForOfferingPowers);
@@ -225,6 +313,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
   useEffect(() => {
     const persistQuiet = (reason: 'pagehide' | 'unmount') => {
       const gs = useGameStore.getState();
+      if (gs.occasionKind === 'anniversary') return;
       if (gs.status !== 'playing' || !gs.board.length) {
         gameDebug('persistQuiet skip', { reason, status: gs.status, boardLen: gs.board.length });
         return;
@@ -341,17 +430,55 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
   useEffect(() => {
     if (status === 'won') {
       if (user?.uid && (yagnaId || marathonId)) flushJapas().catch(() => {});
-      const key = getPausedKey();
-      if (user?.uid) {
-        saveUserPausedGame(user.uid, null, user, key);
-      } else {
-        try {
-          localStorage.removeItem(key);
-        } catch {}
+      if (!occasionKind) {
+        const key = getPausedKey();
+        if (user?.uid) {
+          saveUserPausedGame(user.uid, null, user, key);
+        } else {
+          try {
+            localStorage.removeItem(key);
+          } catch {}
+        }
+        setLastPausedGame(null);
       }
-      setLastPausedGame(null);
     }
-  }, [status, user?.uid, getPausedKey, yagnaId, marathonId, flushJapas]);
+  }, [status, user?.uid, getPausedKey, yagnaId, marathonId, flushJapas, occasionKind]);
+
+  useEffect(() => {
+    if (status !== 'won' || !occasionKind || !user?.uid || occasionRecordSaved) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const token = await user.getIdToken();
+        if (occasionKind === 'birthday') {
+          const s = useGameStore.getState();
+          const deityTarget = s.mode !== 'general' ? (s.mode as DeityId) : undefined;
+          const japasTotal = deityTarget
+            ? (s.japasByDeity[deityTarget] ?? 0)
+            : s.japasThisLevel;
+          await completeBirthdayOccasion(token, {
+            mode: s.mode,
+            japasTotal,
+            japasByDeity: { ...s.japasByDeity },
+          });
+        } else if (occasionKind === 'anniversary' && anniversarySessionId) {
+          const s = useGameStore.getState();
+          await completeAnniversarySession(
+            token,
+            anniversarySessionId,
+            s.anniversaryJapasHusband,
+            s.anniversaryJapasWife,
+          );
+        }
+        if (!cancelled) setOccasionRecordSaved(true);
+      } catch (e) {
+        console.error('occasion record', e);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [status, occasionKind, user, occasionRecordSaved, anniversarySessionId]);
 
   const saveAndExit = useCallback(async () => {
     const payload = savePausedState();
@@ -538,7 +665,32 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
         <ActiveUsersStrip />
       </div>
 
-      {status === 'playing' && (
+      {occasionKind === 'anniversary' && anniversaryIsHost && !partnerJoined && status === 'playing' && (
+        <div className="w-full max-w-md mt-2 rounded-xl bg-amber-500/15 border border-amber-500/40 px-3 py-2 text-amber-100 text-xs text-center">
+          {t('occasions.waitPartner')}
+        </div>
+      )}
+      {anniversarySyncError && (
+        <div className="w-full max-w-md mt-2 text-red-300 text-xs px-2">{anniversarySyncError}</div>
+      )}
+      {occasionKind === 'anniversary' && status === 'playing' && (
+        <div className="w-full max-w-md mt-2 text-center text-amber-200/90 text-xs font-medium">
+          {anniversaryMyRole === anniversaryTurn ? t('occasions.yourTurn') : t('occasions.partnerTurn')}
+        </div>
+      )}
+
+      {occasionKind === 'anniversary' &&
+        !anniversaryIsHost &&
+        status === 'playing' &&
+        (!syncReady || boardLen === 0) && (
+          <div className="absolute inset-0 z-[25] flex flex-col items-center justify-center bg-black/75 p-6">
+            <p className="text-amber-200 text-center text-sm max-w-xs">
+              {!syncReady ? t('occasions.waitHostBoard') : t('occasions.waitHostBoard')}
+            </p>
+          </div>
+        )}
+
+      {status === 'playing' && occasionKind !== 'anniversary' && (
         <div className="shrink-0 w-full max-w-md mt-1 flex justify-center">
           <button
             type="button"
@@ -561,24 +713,110 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
 
       {status === 'playing' && (
         <>
-          {/* Powers strip in all modes; only normal levels add to inventory (not marathon/yāga). */}
-          <div className="shrink-0 w-full max-w-md px-2 mt-0.5">
-            <GamePowersScrollStrip
-              isGuest={!!isGuest}
-              onGuestPowerTap={() => setGuestPowerSignInOpen(true)}
-            />
-          </div>
+          {!occasionKind && (
+            <div className="shrink-0 w-full max-w-md px-2 mt-0.5">
+              <GamePowersScrollStrip
+                isGuest={!!isGuest}
+                onGuestPowerTap={() => setGuestPowerSignInOpen(true)}
+              />
+            </div>
+          )}
           <div className="shrink-0 h-16" aria-hidden />
           <GameBottomStrip
             isGuest={!!isGuest}
             pauseSaving={pauseSaving}
             onPause={handlePause}
             onBack={onBack}
+            occasionKind={occasionKind}
           />
         </>
       )}
 
-      {status === 'won' && (
+      {status === 'won' && occasionKind && !isGuest && user && (
+        <div className="absolute inset-0 bg-black/75 flex flex-col items-center justify-center z-30 p-4 overflow-y-auto">
+          <div className="bg-[#C2185B]/95 rounded-2xl p-5 max-w-sm w-full text-center border border-amber-500/30">
+            <h2 className="text-xl font-bold text-amber-400 mb-2">
+              {occasionKind === 'birthday'
+                ? t('occasions.birthdayComplete')
+                : t('occasions.anniversaryComplete')}
+            </h2>
+            {occasionKind === 'birthday' && (
+              <p className="text-amber-200/85 text-sm mb-3">
+                {t('game.japas')}: {useGameStore.getState().mode !== 'general' ? (useGameStore.getState().japasByDeity[useGameStore.getState().mode as DeityId] ?? 0) : useGameStore.getState().japasThisLevel} / {occasionJapaTarget}
+              </p>
+            )}
+            {occasionKind === 'anniversary' && (
+              <div className="text-left text-amber-200/90 text-xs space-y-2 mb-4">
+                <p>
+                  {t('occasions.husbandJapas')}: {anniversaryJH} · {t('occasions.wifeJapas')}: {anniversaryJW}
+                </p>
+                <p>
+                  {t('occasions.sharedToWife')}: {Math.ceil(anniversaryJH / 2)}
+                </p>
+                <p>
+                  {t('occasions.wifeTotal')}: {anniversaryJW + Math.ceil(anniversaryJH / 2)}
+                </p>
+                <p className="text-amber-400/90">
+                  {t('occasions.yourJapas')}:{' '}
+                  {anniversaryMyRole === 'husband' ? anniversaryJH : anniversaryJW}
+                </p>
+              </div>
+            )}
+            <p className="text-emerald-300/90 text-xs mb-3">{t('occasions.savedToAccount')}</p>
+            <button
+              type="button"
+              onClick={() => {
+                const s = useGameStore.getState();
+                if (occasionKind === 'birthday') {
+                  const dt = s.mode !== 'general' ? (s.mode as DeityId) : undefined;
+                  const jt = dt ? (s.japasByDeity[dt] ?? 0) : s.japasThisLevel;
+                  downloadOccasionSummaryPdf({
+                    title: t('occasions.birthdayTitle'),
+                    lines: [
+                      `${t('game.japas')}: ${jt} / ${occasionJapaTarget}`,
+                      `Mode: ${s.mode}`,
+                    ],
+                    footer: t('occasions.savedToAccount'),
+                  });
+                } else {
+                  const shared = Math.ceil(s.anniversaryJapasHusband / 2);
+                  const wt = s.anniversaryJapasWife + shared;
+                  downloadOccasionSummaryPdf({
+                    title: t('occasions.anniversaryTitle'),
+                    lines: [
+                      `${t('occasions.husbandJapas')}: ${s.anniversaryJapasHusband}`,
+                      `${t('occasions.wifeJapas')}: ${s.anniversaryJapasWife}`,
+                      `${t('occasions.sharedToWife')}: ${shared}`,
+                      `${t('occasions.wifeTotal')}: ${wt}`,
+                      `${t('occasions.yourJapas')}: ${anniversaryMyRole === 'husband' ? s.anniversaryJapasHusband : s.anniversaryJapasWife} (${anniversaryMyRole})`,
+                    ],
+                    footer: t('occasions.savedToAccount'),
+                  });
+                }
+              }}
+              className="w-full py-2.5 rounded-xl bg-amber-500 text-white font-semibold text-sm mb-2"
+            >
+              {t('occasions.downloadPdf')}
+            </button>
+            <button
+              type="button"
+              onClick={handleRetry}
+              className="w-full py-2.5 rounded-xl bg-amber-500/80 text-white font-semibold text-sm mb-2"
+            >
+              {t('game.retry')}
+            </button>
+            <button
+              type="button"
+              onClick={() => void handleMenuBack()}
+              className="w-full py-2.5 rounded-xl border border-amber-500/50 text-amber-300 text-sm"
+            >
+              {t('game.menu')}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {status === 'won' && (!occasionKind || isGuest || !user) && (
         isGuest ? (
           <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center z-20 p-4">
             <div className="bg-[#C2185B]/90 rounded-2xl p-4 sm:p-6 max-w-sm w-full text-center min-w-0">
@@ -603,7 +841,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
               </button>
             </div>
           </div>
-        ) : (
+        ) : !occasionKind ? (
           <GameOverlay
             status="won"
             isMarathon={isMarathon}
@@ -611,7 +849,7 @@ export function GameScreen({ mode, levelIndex, isMarathon, marathonId, marathonT
             onMenu={handleMenuBack}
             onNext={isMarathon ? undefined : handleNext}
           />
-        )
+        ) : null
       )}
       {status === 'lost' && (
         <GameOverlay

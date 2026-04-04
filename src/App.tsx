@@ -20,6 +20,8 @@ function App() {
         <Landing
           onEnterApp={() => navigate('/menu')}
           onGuestPlay={() => navigate('/game?guest=1')}
+          onBirthday={() => navigate('/occasion/birthday')}
+          onAnniversary={() => navigate('/occasion/anniversary')}
         />
       )}
       <InstallPrompt />

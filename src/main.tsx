@@ -42,6 +42,15 @@ const TermsPage = lazy(() => import('./pages/TermsPage').then(m => ({ default: m
 const RefundCancellationPage = lazy(() => import('./pages/RefundCancellationPage').then(m => ({ default: m.RefundCancellationPage })))
 const ShippingDeliveryPage = lazy(() => import('./pages/ShippingDeliveryPage').then(m => ({ default: m.ShippingDeliveryPage })))
 const ContactPage = lazy(() => import('./pages/ContactPage').then(m => ({ default: m.ContactPage })))
+const BirthdayOccasionPage = lazy(() =>
+  import('./pages/BirthdayOccasionPage').then((m) => ({ default: m.BirthdayOccasionPage })),
+);
+const AnniversaryLobbyPage = lazy(() =>
+  import('./pages/AnniversaryLobbyPage').then((m) => ({ default: m.AnniversaryLobbyPage })),
+);
+const AnniversaryJoinPage = lazy(() =>
+  import('./pages/AnniversaryJoinPage').then((m) => ({ default: m.AnniversaryJoinPage })),
+);
 function PageFallback() {
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center gap-3">
@@ -71,6 +80,9 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/game" element={<GamePage />} />
         <Route path="/levels" element={<LevelsPage />} />
         <Route path="/japa" element={<JapaPage />} />
+        <Route path="/occasion/birthday" element={<BirthdayOccasionPage />} />
+        <Route path="/occasion/anniversary" element={<AnniversaryLobbyPage />} />
+        <Route path="/occasion/anniversary/join" element={<AnniversaryJoinPage />} />
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/admin">
           <Route index element={<AdminPage />} />

@@ -53,6 +53,14 @@ export interface PausedGameState {
   generalBoardDeities?: DeityId[];
   savedAt: number;
   version?: number;
+  occasionKind?: 'birthday' | 'anniversary';
+  anniversarySessionId?: string;
+  anniversaryMyRole?: 'husband' | 'wife';
+  anniversaryIsHost?: boolean;
+  anniversaryTurn?: 'husband' | 'wife';
+  anniversaryJapasHusband?: number;
+  anniversaryJapasWife?: number;
+  anniversaryFirestoreVersion?: number;
 }
 
 interface GameState {
@@ -95,6 +103,15 @@ interface GameState {
   powerVfxToken: number;
   /** General mode: fixed deity set for this level’s board and power strip (not all 24). */
   generalBoardDeities: DeityId[] | null;
+  occasionKind: null | 'birthday' | 'anniversary';
+  anniversarySessionId: string | null;
+  anniversaryMyRole: 'husband' | 'wife' | null;
+  anniversaryIsHost: boolean;
+  anniversaryTurn: 'husband' | 'wife';
+  anniversaryJapasHusband: number;
+  anniversaryJapasWife: number;
+  anniversaryMovePending: boolean;
+  anniversaryFirestoreVersion: number;
 }
 
 function boardGemContext(state: GameState): {
@@ -116,7 +133,25 @@ function boardGemContext(state: GameState): {
 const getLevel = (index: number) => LEVELS[index] ?? LEVELS[0];
 
 interface GameActions {
-  initGame: (mode: GameMode, levelIndex?: number, options?: { marathonId?: string; marathonTargetJapas?: number; yagnaId?: string; overrideJapaTarget?: number; isGuest?: boolean }) => void;
+  initGame: (
+    mode: GameMode,
+    levelIndex?: number,
+    options?: {
+      marathonId?: string;
+      marathonTargetJapas?: number;
+      yagnaId?: string;
+      overrideJapaTarget?: number;
+      isGuest?: boolean;
+      occasionKind?: 'birthday' | 'anniversary';
+      anniversarySessionId?: string | null;
+      anniversaryMyRole?: 'husband' | 'wife' | null;
+      anniversaryIsHost?: boolean;
+      anniversaryTurn?: 'husband' | 'wife' | null;
+      anniversaryJapasHusband?: number;
+      anniversaryJapasWife?: number;
+      anniversaryFirestoreVersion?: number;
+    },
+  ) => void;
   restoreGame: (state: PausedGameState) => void;
   savePausedState: () => PausedGameState | null;
   getPausedKey: () => string;
@@ -131,6 +166,8 @@ interface GameActions {
   /** After powers inventory loads, rebuild board if offering-backed deities are missing (only before first score/japa). */
   syncBoardForOfferingPowers: () => void;
   reset: () => void;
+  hydrateAnniversaryFromFirestore: (payload: Record<string, unknown>) => void;
+  serializeAnniversaryFirestorePayload: () => Record<string, unknown> | null;
 }
 
 const emptyJapas = (): Record<DeityId, number> =>
@@ -169,6 +206,15 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   lastSwapDestination: null,
   powerVfxToken: 0,
   generalBoardDeities: null,
+  occasionKind: null,
+  anniversarySessionId: null,
+  anniversaryMyRole: null,
+  anniversaryIsHost: false,
+  anniversaryTurn: 'husband',
+  anniversaryJapasHusband: 0,
+  anniversaryJapasWife: 0,
+  anniversaryMovePending: false,
+  anniversaryFirestoreVersion: 0,
 
   initGame: (mode, levelIndex = 0, options) => {
     gameDebug('initGame', {
@@ -190,7 +236,20 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const yagnaId = options?.yagnaId ?? null;
     const overrideJapaTarget = options?.overrideJapaTarget ?? null;
     const isGuest = options?.isGuest === true;
-    const moves = marathonTargetJapas != null ? 999999 : level.moves;
+    const occasionKind = options?.occasionKind ?? null;
+    const anniversarySessionId = options?.anniversarySessionId ?? null;
+    const anniversaryMyRole = options?.anniversaryMyRole ?? null;
+    const anniversaryIsHost = options?.anniversaryIsHost === true;
+    const anniversaryTurnInit = options?.anniversaryTurn ?? 'husband';
+    const anniversaryJapasHusband = options?.anniversaryJapasHusband ?? 0;
+    const anniversaryJapasWife = options?.anniversaryJapasWife ?? 0;
+    const anniversaryFirestoreVersion = options?.anniversaryFirestoreVersion ?? 0;
+    const unlimitedMoves =
+      marathonTargetJapas != null ||
+      (overrideJapaTarget != null && overrideJapaTarget >= 50) ||
+      occasionKind === 'birthday' ||
+      occasionKind === 'anniversary';
+    const moves = unlimitedMoves ? 999999 : level.moves;
     const generalBoardDeities = mode === 'general' ? pickGeneralBoardDeities(levelIndex) : null;
     const powerPool =
       mode === 'general' ? generalBoardDeities! : inventoryOfferingDeities();
@@ -245,12 +304,27 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       lastSwapDestination: null,
       powerVfxToken: 0,
       generalBoardDeities,
+      occasionKind,
+      anniversarySessionId,
+      anniversaryMyRole,
+      anniversaryIsHost,
+      anniversaryTurn: anniversaryTurnInit,
+      anniversaryJapasHusband,
+      anniversaryJapasWife,
+      anniversaryMovePending: false,
+      anniversaryFirestoreVersion,
     });
     usePowerArmStore.getState().reset();
   },
 
   getPausedKey: () => {
-    const { mode, levelIndex, marathonId, yagnaId } = get();
+    const { mode, levelIndex, marathonId, yagnaId, occasionKind, anniversarySessionId } = get();
+    if (occasionKind === 'anniversary' && anniversarySessionId) {
+      return `${PAUSED_KEY_PREFIX}anniversary-${anniversarySessionId}`;
+    }
+    if (occasionKind === 'birthday') {
+      return `${PAUSED_KEY_PREFIX}occasion-birthday-${mode}-${levelIndex}`;
+    }
     if (yagnaId) return `${PAUSED_KEY_PREFIX}yagna-${yagnaId}`;
     if (marathonId) return `${PAUSED_KEY_PREFIX}marathon-${marathonId}`;
     return `${PAUSED_KEY_PREFIX}${mode}-${levelIndex}`;
@@ -259,6 +333,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
 
   savePausedState: (): PausedGameState | null => {
     const state = get();
+    if (state.occasionKind === 'anniversary') return null;
     if (state.status !== 'playing' || state.board.length === 0) return null;
     const key = get().getPausedKey();
     const payload: PausedGameState = {
@@ -275,7 +350,15 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       overrideJapaTarget: state.overrideJapaTarget ?? undefined,
       generalBoardDeities: state.generalBoardDeities ?? undefined,
       savedAt: Date.now(),
-      version: 3
+      version: 4,
+      occasionKind: state.occasionKind ?? undefined,
+      anniversarySessionId: state.anniversarySessionId ?? undefined,
+      anniversaryMyRole: state.anniversaryMyRole ?? undefined,
+      anniversaryIsHost: state.anniversaryIsHost,
+      anniversaryTurn: state.anniversaryTurn,
+      anniversaryJapasHusband: state.anniversaryJapasHusband,
+      anniversaryJapasWife: state.anniversaryJapasWife,
+      anniversaryFirestoreVersion: state.anniversaryFirestoreVersion,
     };
     return payload;
   },
@@ -345,6 +428,15 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       lastSwapDestination: null,
       powerVfxToken: 0,
       generalBoardDeities,
+      occasionKind: saved.occasionKind ?? null,
+      anniversarySessionId: saved.anniversarySessionId ?? null,
+      anniversaryMyRole: saved.anniversaryMyRole ?? null,
+      anniversaryIsHost: saved.anniversaryIsHost ?? false,
+      anniversaryTurn: saved.anniversaryTurn ?? 'husband',
+      anniversaryJapasHusband: saved.anniversaryJapasHusband ?? 0,
+      anniversaryJapasWife: saved.anniversaryJapasWife ?? 0,
+      anniversaryMovePending: false,
+      anniversaryFirestoreVersion: saved.anniversaryFirestoreVersion ?? 0,
     });
     usePowerArmStore.getState().reset();
   },
@@ -353,6 +445,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const armed = usePowerArmStore.getState().armedPowerId;
     if (!armed || armed === 'freeSwap') return;
     const state = get();
+    if (state.occasionKind === 'anniversary') return;
     if (state.status !== 'playing' || state.moves <= 0) return;
     if (state.matchAnimationTimeoutId != null) return;
     const inv = usePowersInventoryStore.getState().entries;
@@ -415,6 +508,15 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   },
 
   selectCell: (row, col) => {
+    const pre = get();
+    if (
+      pre.occasionKind === 'anniversary' &&
+      pre.anniversaryMyRole &&
+      pre.anniversaryTurn !== pre.anniversaryMyRole
+    ) {
+      return;
+    }
+
     const armed = usePowerArmStore.getState().armedPowerId;
     if (armed && armed !== 'freeSwap') {
       get().applyArmedPowerAtCell(row, col);
@@ -440,12 +542,19 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   },
 
   swap: (toRow: number, toCol: number, fromRow?: number, fromCol?: number) => {
-    const { selectedCell, board, moves, status } = get();
+    const { selectedCell, board, moves, status, occasionKind, anniversaryMyRole, anniversaryTurn } = get();
     const from = fromRow !== undefined && fromCol !== undefined
       ? { row: fromRow, col: fromCol }
       : selectedCell;
     if (!from || status !== 'playing') return false;
     const useFreeSwap = usePowerArmStore.getState().armedPowerId === 'freeSwap';
+    if (occasionKind === 'anniversary') {
+      if (anniversaryMyRole && anniversaryTurn !== anniversaryMyRole) return false;
+      if (useFreeSwap) {
+        set({ selectedCell: null });
+        return false;
+      }
+    }
     if (useFreeSwap) {
       if (getPowerCount(usePowersInventoryStore.getState().entries, 'freeSwap') < 1) {
         usePowerArmStore.getState().setArmedPower(null);
@@ -462,6 +571,10 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       (isBlessing(gemA) && !isBlessing(gemB)) || (isBlessing(gemB) && !isBlessing(gemA));
 
     if (blessingPair) {
+      if (get().occasionKind === 'anniversary') {
+        set({ selectedCell: null });
+        return false;
+      }
       // Free swap: any adjacent swap except blessing activation (see Phase doc).
       if (useFreeSwap) {
         set({ selectedCell: null });
@@ -515,6 +628,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
         refillSpawnKeys: spawnKeys,
         refillSpawnGeneration: st.refillSpawnGeneration + (spawnKeys.length > 0 ? 1 : 0),
         powerVfxToken: st.powerVfxToken + 1,
+        anniversaryMovePending: st.occasionKind === 'anniversary' ? true : st.anniversaryMovePending,
       });
       get().processMatches([]);
       return true;
@@ -544,6 +658,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     }
 
     const spendMoveOnMatch = !useFreeSwap;
+    const stMatch = get();
     set({
       board: nextBoard,
       moves: spendMoveOnMatch ? moves - 1 : moves,
@@ -551,7 +666,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       lastSwapDestination: { row: toRow, col: toCol },
       lastSwappedTypes: gemA && gemB ? [gemA, gemB] : null,
       intendedDeity: gemA || null,
-      hintsSwapCount: get().hintsSwapCount + 1,
+      hintsSwapCount: stMatch.hintsSwapCount + 1,
+      anniversaryMovePending: stMatch.occasionKind === 'anniversary' ? true : stMatch.anniversaryMovePending,
     });
     if (useFreeSwap) {
       usePowerArmStore.getState().setArmedPower(null);
@@ -684,6 +800,12 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const stateBefore = get();
     const nextRefillGen =
       spawnKeys.length > 0 ? stateBefore.refillSpawnGeneration + 1 : stateBefore.refillSpawnGeneration;
+    let nextAH = stateBefore.anniversaryJapasHusband;
+    let nextAW = stateBefore.anniversaryJapasWife;
+    if (stateBefore.occasionKind === 'anniversary' && japaDelta > 0) {
+      if (stateBefore.anniversaryTurn === 'husband') nextAH += japaDelta;
+      else nextAW += japaDelta;
+    }
     set({
       board: filled,
       score: totalScore,
@@ -695,6 +817,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       refillSpawnKeys: spawnKeys,
       refillSpawnGeneration: nextRefillGen,
       lastSwapDestination: null,
+      anniversaryJapasHusband: nextAH,
+      anniversaryJapasWife: nextAW,
     });
     get().processMatches(accumulated);
   },
@@ -708,17 +832,21 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const japaTarget = state.overrideJapaTarget ?? state.marathonTargetJapas ?? level.japaTarget;
     const moves = state.moves;
     const isMarathon = state.marathonTargetJapas != null;
+    const coupleJapas = state.anniversaryJapasHusband + state.anniversaryJapasWife;
+    const japasForTarget =
+      state.occasionKind === 'anniversary' ? coupleJapas : japasNeeded;
+    const occasionBlocksProgress = state.occasionKind != null;
 
     let status: GameStatus = 'playing';
     let finalBoard = state.board;
 
-    if (japasNeeded >= japaTarget) {
+    if (japasForTarget >= japaTarget) {
       status = 'won';
       // Marathons / yāgās: no new powers; inventory still usable there in UI.
-      if (!isMarathon) {
+      if (!isMarathon && !occasionBlocksProgress) {
         void usePowersInventoryStore.getState().grantAfterLevelWin(state.mode);
       }
-      if (!isMarathon && !state.isGuest) {
+      if (!isMarathon && !state.isGuest && !occasionBlocksProgress) {
         const totalScore = state.score;
         const stars = getStars(japasNeeded, japaTarget, moves);
         useProgressStore.getState().saveLevel(state.mode, level.id, {
@@ -731,6 +859,17 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       }
     } else if (moves <= 0) {
       status = 'lost';
+    }
+
+    let nextAnniversaryTurn = state.anniversaryTurn;
+    let nextAnniversaryMovePending = state.anniversaryMovePending;
+    if (
+      state.occasionKind === 'anniversary' &&
+      status === 'playing' &&
+      state.anniversaryMovePending
+    ) {
+      nextAnniversaryTurn = state.anniversaryTurn === 'husband' ? 'wife' : 'husband';
+      nextAnniversaryMovePending = false;
     }
 
     if (status === 'playing' && !hasValidMoves(finalBoard)) {
@@ -765,6 +904,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       refillSpawnKeys: [],
       refillSpawnGeneration: 0,
       lastSwapDestination: null,
+      anniversaryTurn: nextAnniversaryTurn,
+      anniversaryMovePending: nextAnniversaryMovePending,
     });
   },
 
@@ -833,12 +974,134 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
 
   reset: () => {
     usePowerArmStore.getState().reset();
-    const { mode, levelIndex, marathonId, marathonTargetJapas, yagnaId, overrideJapaTarget, isGuest } = get();
+    const s = get();
+    const {
+      mode,
+      levelIndex,
+      marathonId,
+      marathonTargetJapas,
+      yagnaId,
+      overrideJapaTarget,
+      isGuest,
+      occasionKind,
+      anniversarySessionId,
+      anniversaryMyRole,
+      anniversaryIsHost,
+      anniversaryTurn,
+      anniversaryJapasHusband,
+      anniversaryJapasWife,
+      anniversaryFirestoreVersion,
+    } = s;
+    const occasionOpts =
+      occasionKind != null
+        ? {
+            occasionKind,
+            anniversarySessionId,
+            anniversaryMyRole,
+            anniversaryIsHost,
+            anniversaryTurn,
+            anniversaryJapasHusband,
+            anniversaryJapasWife,
+            anniversaryFirestoreVersion,
+          }
+        : {};
     const opts = yagnaId
-      ? { yagnaId, marathonTargetJapas: marathonTargetJapas ?? undefined, overrideJapaTarget: overrideJapaTarget ?? undefined, isGuest }
+      ? {
+          yagnaId,
+          marathonTargetJapas: marathonTargetJapas ?? undefined,
+          overrideJapaTarget: overrideJapaTarget ?? undefined,
+          isGuest,
+          ...occasionOpts,
+        }
       : marathonId
-      ? { marathonId, marathonTargetJapas: marathonTargetJapas ?? undefined, overrideJapaTarget: overrideJapaTarget ?? undefined, isGuest }
-      : { overrideJapaTarget: overrideJapaTarget ?? undefined, isGuest };
+        ? {
+            marathonId,
+            marathonTargetJapas: marathonTargetJapas ?? undefined,
+            overrideJapaTarget: overrideJapaTarget ?? undefined,
+            isGuest,
+            ...occasionOpts,
+          }
+        : { overrideJapaTarget: overrideJapaTarget ?? undefined, isGuest, ...occasionOpts };
     get().initGame(mode, levelIndex, opts);
-  }
+  },
+
+  hydrateAnniversaryFromFirestore: (payload) => {
+    const { matchAnimationTimeoutId } = get();
+    if (matchAnimationTimeoutId != null) {
+      clearTimeout(matchAnimationTimeoutId);
+    }
+    let board: Board;
+    try {
+      const raw = payload.boardJson;
+      board = typeof raw === 'string' ? (JSON.parse(raw) as Board) : [];
+      if (!Array.isArray(board) || board.length === 0) return;
+    } catch {
+      return;
+    }
+    const levelIndex = typeof payload.levelIndex === 'number' ? payload.levelIndex : 0;
+    const resolvedMode = (typeof payload.gameMode === 'string' ? payload.gameMode : 'general') as GameMode;
+    const japasByRaw = payload.japasByDeity;
+    const japasByDeity =
+      japasByRaw && typeof japasByRaw === 'object'
+        ? ({ ...emptyJapas(), ...(japasByRaw as Record<string, number>) } as Record<DeityId, number>)
+        : emptyJapas();
+    const gd = payload.generalBoardDeities;
+    const generalBoardDeities =
+      Array.isArray(gd) && gd.length > 0 ? (gd as DeityId[]) : null;
+    const version = typeof payload.version === 'number' ? payload.version : 0;
+    const turn = payload.turn === 'wife' ? 'wife' : 'husband';
+    stopAllMantras();
+    set({
+      board,
+      mode: resolvedMode,
+      levelIndex,
+      moves: typeof payload.moves === 'number' ? payload.moves : 999999,
+      score: typeof payload.score === 'number' ? payload.score : 0,
+      japasThisLevel: typeof payload.japasThisLevel === 'number' ? payload.japasThisLevel : 0,
+      japasByDeity,
+      maxGemTypes: typeof payload.maxGemTypes === 'number' ? payload.maxGemTypes : getLevel(levelIndex).maxGemTypes ?? 8,
+      generalBoardDeities,
+      anniversaryTurn: turn,
+      anniversaryJapasHusband: typeof payload.japasHusband === 'number' ? payload.japasHusband : 0,
+      anniversaryJapasWife: typeof payload.japasWife === 'number' ? payload.japasWife : 0,
+      anniversaryFirestoreVersion: version,
+      status: 'playing',
+      comboLevel: 0,
+      selectedCell: null,
+      lastMatches: [],
+      lastSwappedTypes: null,
+      intendedDeity: null,
+      matchHighlightPositions: null,
+      pendingMatchBatch: null,
+      matchAnimationTimeoutId: null,
+      matchSfx: null,
+      matchSfxPlayToken: 0,
+      refillSpawnKeys: [],
+      refillSpawnGeneration: 0,
+      lastSwapDestination: null,
+      anniversaryMovePending: false,
+    });
+  },
+
+  serializeAnniversaryFirestorePayload: () => {
+    const state = get();
+    if (state.occasionKind !== 'anniversary' || !state.anniversarySessionId || state.board.length === 0) {
+      return null;
+    }
+    return {
+      boardJson: JSON.stringify(state.board),
+      gameMode: state.mode,
+      levelIndex: state.levelIndex,
+      moves: state.moves,
+      score: state.score,
+      japasThisLevel: state.japasThisLevel,
+      japasByDeity: { ...state.japasByDeity },
+      generalBoardDeities: state.generalBoardDeities ?? [],
+      maxGemTypes: state.maxGemTypes,
+      turn: state.anniversaryTurn,
+      japasHusband: state.anniversaryJapasHusband,
+      japasWife: state.anniversaryJapasWife,
+      version: state.anniversaryFirestoreVersion,
+    };
+  },
 }));

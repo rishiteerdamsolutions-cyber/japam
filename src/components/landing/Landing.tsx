@@ -10,9 +10,11 @@ import { useAuthStore } from '../../store/authStore';
 interface LandingProps {
   onEnterApp: () => void;
   onGuestPlay: () => void;
+  onBirthday?: () => void;
+  onAnniversary?: () => void;
 }
 
-export function Landing({ onEnterApp, onGuestPlay }: LandingProps) {
+export function Landing({ onEnterApp, onGuestPlay, onBirthday, onAnniversary }: LandingProps) {
   const { t } = useTranslation();
   const user = useAuthStore((s) => s.user);
   const [showVideo, setShowVideo] = useState(true);
@@ -79,6 +81,33 @@ export function Landing({ onEnterApp, onGuestPlay }: LandingProps) {
             >
               {t('landing.beginJapa')}
             </motion.button>
+
+            {(onBirthday || onAnniversary) && (
+              <div className="w-full max-w-xs flex justify-center gap-4 mt-5">
+                {onBirthday && (
+                  <motion.button
+                    type="button"
+                    whileHover={{ scale: 1.04 }}
+                    whileTap={{ scale: 0.97 }}
+                    onClick={onBirthday}
+                    className="w-[108px] h-[108px] sm:w-[118px] sm:h-[118px] rounded-full bg-white/12 border-2 border-amber-400/50 text-amber-100 text-xs sm:text-sm font-semibold leading-tight px-2 shadow-[0_0_20px_rgba(251,191,36,0.25)] hover:bg-white/18"
+                  >
+                    {t('occasions.landingBirthday')}
+                  </motion.button>
+                )}
+                {onAnniversary && (
+                  <motion.button
+                    type="button"
+                    whileHover={{ scale: 1.04 }}
+                    whileTap={{ scale: 0.97 }}
+                    onClick={onAnniversary}
+                    className="w-[108px] h-[108px] sm:w-[118px] sm:h-[118px] rounded-full bg-white/12 border-2 border-amber-400/50 text-amber-100 text-xs sm:text-sm font-semibold leading-tight px-2 shadow-[0_0_20px_rgba(251,191,36,0.25)] hover:bg-white/18"
+                  >
+                    {t('occasions.landingAnniversary')}
+                  </motion.button>
+                )}
+              </div>
+            )}
 
             {!user && (
               <motion.button

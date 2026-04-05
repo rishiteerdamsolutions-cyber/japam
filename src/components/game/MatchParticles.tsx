@@ -11,6 +11,8 @@ interface MatchParticlesProps {
   board: Board;
   rows: number;
   cols: number;
+  /** Delay between cells (default `MATCH_STAGGER_MS`); couple mode uses smaller steps. */
+  staggerStepMs?: number;
 }
 
 function usePrefersReducedMotion(): boolean {
@@ -26,7 +28,13 @@ function usePrefersReducedMotion(): boolean {
   return reduced;
 }
 
-export function MatchParticles({ positions, board, rows, cols }: MatchParticlesProps) {
+export function MatchParticles({
+  positions,
+  board,
+  rows,
+  cols,
+  staggerStepMs = MATCH_STAGGER_MS,
+}: MatchParticlesProps) {
   const reducedMotion = usePrefersReducedMotion();
 
   const sortedWithIndex = useMemo(() => {
@@ -45,7 +53,7 @@ export function MatchParticles({ positions, board, rows, cols }: MatchParticlesP
         const color = getDeity(deityId).color;
         const leftPct = ((c + 0.5) / cols) * 100;
         const topPct = ((r + 0.5) / rows) * 100;
-        const baseDelay = cellIndex * MATCH_STAGGER_MS;
+        const baseDelay = cellIndex * staggerStepMs;
 
         return (
           <div

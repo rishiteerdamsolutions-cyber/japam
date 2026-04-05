@@ -64,6 +64,11 @@
   animation: match-magic 0.56s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
+/* Anniversary couple play: shorter pop; keep in sync with matchVfx.MATCH_POP_DURATION_MS_COUPLE */
+.gem-match.gem-match--couple {
+  animation: match-magic 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
 .match-spark {
   position: absolute;
   width: 7px;
@@ -95,6 +100,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .gem-match.gem-match--couple {
+    animation: match-pop 0.22s ease-out forwards !important;
+    animation-delay: 0ms !important;
+  }
+
   .gem-match {
     animation: match-pop 0.22s ease-out forwards !important;
     animation-delay: 0ms !important;

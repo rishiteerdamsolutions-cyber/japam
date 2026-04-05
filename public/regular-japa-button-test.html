@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Test — Regular Japa button + video</title>
+    <style>
+      :root {
+        --amber-500: #f59e0b;
+        --amber-400: #fbbf24;
+        --amber-300-70: rgba(252, 211, 77, 0.7);
+        --border-amber: rgba(251, 191, 36, 0.55);
+        --glow: rgba(245, 158, 11, 0.35);
+        --hover-glow: rgba(245, 158, 11, 0.5);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+        padding: 1.5rem;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        background: linear-gradient(160deg, #1a0a2e 0%, #2d1b4e 45%, #1e1033 100%);
+        color: #fff;
+      }
+      h1 {
+        font-size: 1rem;
+        font-weight: 600;
+        opacity: 0.85;
+        text-align: center;
+        max-width: 22rem;
+        line-height: 1.5;
+      }
+      /*
+       * Video is authored to match the button frame: no padding — width caps at landing max-w-xs (20rem),
+       * height follows the file’s aspect ratio.
+       */
+      .japa-button {
+        position: relative;
+        display: block;
+        width: 100%;
+        max-width: 20rem;
+        padding: 0;
+        margin: 0;
+        line-height: 0;
+        cursor: pointer;
+        border-radius: 1rem;
+        border: 2px solid var(--border-amber);
+        box-shadow: 0 0 30px var(--glow);
+        overflow: hidden;
+        background: var(--amber-500);
+        transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s;
+      }
+      .japa-button:hover {
+        box-shadow: 0 0 40px var(--hover-glow);
+        border-color: var(--amber-300-70);
+      }
+      .japa-button:active {
+        transform: scale(0.98);
+      }
+      .japa-button:focus-visible {
+        outline: 2px solid var(--amber-400);
+        outline-offset: 3px;
+      }
+      .japa-button__video {
+        display: block;
+        width: 100%;
+        height: auto;
+        vertical-align: top;
+        pointer-events: none;
+      }
+      /* Light veil so centered label stays readable on busy video */
+      .japa-button__overlay {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        background: radial-gradient(
+          ellipse 85% 75% at 50% 50%,
+          rgba(0, 0, 0, 0.18) 0%,
+          rgba(0, 0, 0, 0.06) 55%,
+          transparent 72%
+        );
+        pointer-events: none;
+      }
+      .japa-button__label {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 0 0.75rem;
+        font-weight: 700;
+        font-size: clamp(0.9rem, 3.8vw, 1.15rem);
+        line-height: 1.2;
+        color: #fff;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55), 0 0 12px rgba(0, 0, 0, 0.35);
+        pointer-events: none;
+      }
+      .note {
+        font-size: 0.8rem;
+        opacity: 0.65;
+        max-width: 22rem;
+        text-align: center;
+        line-height: 1.45;
+      }
+      code {
+        font-size: 0.85em;
+        background: rgba(255, 255, 255, 0.08);
+        padding: 0.1em 0.35em;
+        border-radius: 0.25rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Isolated test · video sized to match the button (max 20rem wide)</h1>
+
+    <button type="button" class="japa-button" id="btn" aria-label="Regular Japa (test)">
+      <video
+        class="japa-button__video"
+        src="/regular-japa-vid.mp4?v=2026-04-06-2"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"
+      ></video>
+      <span class="japa-button__overlay" aria-hidden="true"></span>
+      <span class="japa-button__label">Regular Japa</span>
+    </button>
+
+    <p class="note">
+      Open while <code>npm run dev</code> is running:<br />
+      <code>/regular-japa-button-test.html</code><br /><br />
+      Bump <code>?v=</code> when you replace the MP4 — match <code>REGULAR_JAPA_VID_VER</code> in <code>src/components/landing/Landing.tsx</code>.<br />
+      If your MP4 already includes the title, delete the overlay + label in this file.
+    </p>
+
+    <script>
+      document.getElementById('btn').addEventListener('click', function () {
+        console.log('[test] Regular Japa button clicked');
+      });
+    </script>
+  </body>
+</html>

@@ -304,7 +304,7 @@ export function useAnniversaryFirestore(
           setError('Syncing with partner… your last change may apply after a moment.');
           window.setTimeout(() => setError(null), 5000);
         }
-      }, 280);
+      }, 100);
     };
 
     const unsub = useGameStore.subscribe((state, prev) => {

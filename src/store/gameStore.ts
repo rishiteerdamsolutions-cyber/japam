@@ -14,7 +14,7 @@ import { useProgressStore } from './progressStore';
 import { usePowersInventoryStore, getPowerCount } from './powersInventoryStore';
 import { usePowerArmStore } from './powerArmStore';
 import { stopAllMantras } from '../hooks/useSound';
-import { getMatchClearDelayMs } from '../game/matchVfx';
+import { getCoupleMatchClearDelayMs, getMatchClearDelayMs } from '../game/matchVfx';
 import { expandPowerClears, planSpecialSpawn } from '../engine/powers';
 import { isBlessing } from '../engine/gemKinds';
 import { isDeityPowerId } from '../data/gamePowers';
@@ -776,7 +776,10 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       // Disarm immediately so any follow-up/cascade clears cannot double-credit.
       set({ manualCreditArmed: false });
     }
-    const clearMs = getMatchClearDelayMs(positions.length);
+    const clearMs =
+      get().occasionKind === 'anniversary'
+        ? getCoupleMatchClearDelayMs(positions.length)
+        : getMatchClearDelayMs(positions.length);
     const id = setTimeout(() => get().commitMatch(nextAccumulated, isUserDirectMatch), clearMs);
     set({ matchAnimationTimeoutId: id });
   },

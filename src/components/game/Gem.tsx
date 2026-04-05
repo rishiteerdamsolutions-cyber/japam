@@ -17,6 +17,8 @@ interface GemProps {
   matched?: boolean;
   /** Stagger for candy-style match clear (ms). */
   matchStaggerDelayMs?: number;
+  /** Anniversary couple mode: shorter match-magic (see `.gem-match--couple`). */
+  coupleSnappyMatch?: boolean;
   /** New gem dropped into an empty cell (gravity refill). */
   falling?: boolean;
   onFallAnimationEnd?: () => void;
@@ -30,6 +32,7 @@ export const Gem = memo(function Gem({
   sparkle,
   matched,
   matchStaggerDelayMs = 0,
+  coupleSnappyMatch,
   falling,
   onFallAnimationEnd,
   borderSpin,
@@ -76,7 +79,7 @@ export const Gem = memo(function Gem({
           overflow-hidden shadow-inner touch-none
           ${blessing ? 'rounded-full' : 'rounded-[0.65rem]'}
           ${sparkle ? 'animate-sparkle' : ''}
-          ${matched ? 'gem-match gem-match-highlight pointer-events-none' : ''}
+          ${matched ? `gem-match gem-match-highlight pointer-events-none${coupleSnappyMatch ? ' gem-match--couple' : ''}` : ''}
         `}
         style={{
           ...(blessing

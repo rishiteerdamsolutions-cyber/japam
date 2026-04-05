@@ -5,7 +5,7 @@ import { useGameStore } from '../../store/gameStore';
 import { usePowerArmStore } from '../../store/powerArmStore';
 import { useSettingsStore } from '../../store/settingsStore';
 import { primeAudio } from '../../hooks/useSound';
-import { MATCH_STAGGER_MS } from '../../game/matchVfx';
+import { MATCH_STAGGER_MS, MATCH_STAGGER_MS_COUPLE } from '../../game/matchVfx';
 import { powerVfxDurationMs } from '../../game/powerVfx';
 import { cellShowsDeity } from '../../engine/gemKinds';
 import type { DeityId } from '../../data/deities';
@@ -154,6 +154,8 @@ export function Board() {
   const showSparkle = mode !== 'general' && !firstMatchMade;
   const shakeBig = isAnimatingMatch && (matchHighlightPositions?.length ?? 0) >= 5;
   const cellKey = (r: number, c: number) => `${r},${c}`;
+  const coupleSnappy = occasionKind === 'anniversary';
+  const matchStaggerStepMs = coupleSnappy ? MATCH_STAGGER_MS_COUPLE : MATCH_STAGGER_MS;
 
   return (
     <div
@@ -164,7 +166,13 @@ export function Board() {
       }}
     >
       {matchHighlightPositions && matchHighlightPositions.length > 0 && (
-        <MatchParticles positions={matchHighlightPositions} board={board} rows={rows} cols={cols} />
+        <MatchParticles
+          positions={matchHighlightPositions}
+          board={board}
+          rows={rows}
+          cols={cols}
+          staggerStepMs={matchStaggerStepMs}
+        />
       )}
       <div
         className={`relative z-[1] grid gap-[2px] p-1 rounded-2xl bg-black/20 w-full h-full ${shakeBig ? 'board-match-shake' : ''} ${
@@ -200,7 +208,8 @@ export function Board() {
                   selected={selectedCell?.row === r && selectedCell?.col === c}
                   sparkle={showSparkle && cellShowsDeity(cell, mode as DeityId)}
                   matched={matchSet.has(cellKey(r, c))}
-                  matchStaggerDelayMs={(staggerIndexByCell.get(cellKey(r, c)) ?? 0) * MATCH_STAGGER_MS}
+                  matchStaggerDelayMs={(staggerIndexByCell.get(cellKey(r, c)) ?? 0) * matchStaggerStepMs}
+                  coupleSnappyMatch={coupleSnappy}
                   falling={fallingKeys.has(cellKey(r, c))}
                   onFallAnimationEnd={() => clearFall(cellKey(r, c))}
                   onClick={() => handleClick(r, c)}

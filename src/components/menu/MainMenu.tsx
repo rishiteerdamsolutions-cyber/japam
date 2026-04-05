@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AppFooter } from '../layout/AppFooter';
@@ -44,8 +44,18 @@ interface MainMenuProps {
   onOpenSettings: () => void;
 }
 
+/** Bump when replacing `public/general-japa.mp4`. */
+const GENERAL_JAPA_VID_VER = '2026-04-05-1';
+const GENERAL_JAPA_VID = `/general-japa.mp4?v=${GENERAL_JAPA_VID_VER}`;
+
+const GENERAL_JAPA_VIDEO_OVERLAY_CLASS =
+  'pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(ellipse_85%_75%_at_50%_50%,rgba(0,0,0,0.18)_0%,rgba(0,0,0,0.06)_55%,transparent_72%)]';
+const GENERAL_JAPA_VIDEO_LABEL_CLASS =
+  'pointer-events-none absolute inset-0 z-[2] flex items-center justify-center text-center px-4 font-semibold text-sm text-amber-400 leading-tight [text-shadow:0_1px_3px_rgba(0,0,0,0.9),0_0_14px_rgba(0,0,0,0.65)] break-words';
+
 export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
   const { t } = useTranslation();
+  const reduceMotion = useReducedMotion();
   const navigate = useNavigate();
   const { user, loading, signOut } = useAuthStore();
   const tier = useUnlockStore((s) => s.tier);
@@ -157,18 +167,45 @@ export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
           </div>
         )}
 
-        <motion.button
-          type="button"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          initial={{ opacity: 0, y: 4 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.05 }}
-          onClick={() => onSelect('general')}
-          className="w-full mb-4 py-3 px-4 rounded-2xl bg-amber-500/20 border-2 border-amber-500/50 hover:border-amber-400/70 hover:bg-amber-500/30 transition-colors flex items-center justify-center gap-2"
-        >
-          <span className="text-amber-400 font-semibold text-sm">{t('menu.generalJapa')}</span>
-        </motion.button>
+        {reduceMotion ? (
+          <motion.button
+            type="button"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05 }}
+            onClick={() => onSelect('general')}
+            className="w-full mb-4 py-3 px-4 rounded-2xl bg-amber-500/20 border-2 border-amber-500/50 hover:border-amber-400/70 hover:bg-amber-500/30 transition-colors flex items-center justify-center gap-2"
+          >
+            <span className="text-amber-400 font-semibold text-sm">{t('menu.generalJapa')}</span>
+          </motion.button>
+        ) : (
+          <motion.button
+            type="button"
+            aria-label={t('menu.generalJapa')}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05 }}
+            onClick={() => onSelect('general')}
+            className="relative mb-4 block w-full cursor-pointer overflow-hidden rounded-2xl border-2 border-amber-500/50 bg-amber-500/20 p-0 leading-[0] transition-colors hover:border-amber-400/70"
+          >
+            <video
+              className="pointer-events-none block h-auto w-full select-none align-top"
+              src={GENERAL_JAPA_VID}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              aria-hidden
+            />
+            <span className={GENERAL_JAPA_VIDEO_OVERLAY_CLASS} aria-hidden />
+            <span className={GENERAL_JAPA_VIDEO_LABEL_CLASS}>{t('menu.generalJapa')}</span>
+          </motion.button>
+        )}
 
         <p className="text-amber-200/80 text-xs uppercase tracking-wider mb-2 mt-2">{t('menu.istaDevata')}</p>
         <div className="grid grid-cols-2 gap-3 w-full mb-6">

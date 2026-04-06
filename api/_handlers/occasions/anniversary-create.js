@@ -25,6 +25,7 @@ export async function POST(request) {
   const guestRole = hostRole === 'husband' ? 'wife' : 'husband';
   const gameMode = typeof body.gameMode === 'string' && body.gameMode.length <= 40 ? body.gameMode : 'general';
   const levelIndex = Number.isFinite(body.levelIndex) ? Math.max(0, Math.min(99, Math.floor(body.levelIndex))) : 0;
+  const sessionFlavor = body.sessionFlavor === 'couple_daily' ? 'couple_daily' : 'occasion';
 
   const sessionId = randomId();
   const joinToken = randomToken();
@@ -42,6 +43,7 @@ export async function POST(request) {
     version: 0,
     sessionPaused: false,
     completionWritten: false,
+    sessionFlavor,
     createdAt: admin.firestore.FieldValue.serverTimestamp(),
   });
 
@@ -52,5 +54,6 @@ export async function POST(request) {
     hostRole,
     gameMode,
     levelIndex,
+    sessionFlavor,
   });
 }

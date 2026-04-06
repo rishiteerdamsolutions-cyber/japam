@@ -42,6 +42,8 @@ export async function POST(request) {
     { merge: true },
   );
 
+  const sessionFlavor = data.sessionFlavor === 'couple_daily' ? 'couple_daily' : 'occasion';
+
   return jsonResponse({
     ok: true,
     sessionId,
@@ -49,5 +51,6 @@ export async function POST(request) {
     guestRole: data.guestRole,
     gameMode: data.gameMode || 'general',
     levelIndex: typeof data.levelIndex === 'number' ? data.levelIndex : 0,
+    sessionFlavor,
   });
 }

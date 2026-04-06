@@ -20,6 +20,8 @@ export interface LevelConfig {
 
 export const LEVELS: LevelConfig[] = [];
 export const DAILY_GOAL_JAPAS = 108; // Levels 1-5 combined (3+11+21+33+40)
+/** Couple (anniversary) mode uses LEVELS[0]..[this] — six levels; last in-game target is 108 (standard level 6). */
+export const ANNIVERSARY_COUPLE_LAST_LEVEL_INDEX = 5;
 export const TOTAL_LEVELS = 1000;
 
 const INCREMENTS = [3, 11, 21, 33, 40]; // Levels 1-5, then cycles for 6+

@@ -1,14 +1,15 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { Board } from './Board';
 import { BoardDeityHints } from './BoardDeityHints';
 import { GameOverlay } from './GameOverlay';
 import { OutOfLivesOverlay } from './OutOfLivesOverlay';
 import { ActiveUsersStrip } from './ActiveUsersStrip';
-import { useGameStore } from '../../store/gameStore';
+import { useGameStore, type AnniversarySessionFlavor } from '../../store/gameStore';
 import { useJapaStore } from '../../store/japaStore';
 import { useLivesStore } from '../../store/livesStore';
-import { LEVELS } from '../../data/levels';
+import { LEVELS, ANNIVERSARY_COUPLE_LAST_LEVEL_INDEX } from '../../data/levels';
 import { useAuthStore } from '../../store/authStore';
 import { saveUserPausedGame } from '../../lib/firestore';
 import { gameDebug } from '../../lib/gameDebug';
@@ -24,7 +25,7 @@ import { usePowersInventoryStore } from '../../store/powersInventoryStore';
 import { useAnniversaryFirestore } from '../../hooks/useAnniversaryFirestore';
 import { firestore, isFirebaseConfigured } from '../../lib/firebase';
 import { pauseAnniversarySession, resumeAnniversarySession } from '../../lib/anniversarySessionFirestore';
-import { completeBirthdayOccasion, completeAnniversarySession } from '../../lib/occasionsApi';
+import { completeBirthdayOccasion } from '../../lib/occasionsApi';
 import { downloadAnniversaryReportPdf, downloadOccasionSummaryPdf } from '../../utils/occasionPdf';
 import { formatMovesForDisplay, MOVES_INFINITY_CHAR } from '../../lib/formatMovesForDisplay';
 
@@ -106,7 +107,7 @@ function GameBottomStrip({
   const coupleTotal = anniversaryJapasHusband + anniversaryJapasWife;
   const leftLabel =
     occasionKind === 'anniversary'
-      ? `${t('occasions.coupleJapasHud')}: ${coupleTotal} / ${japaTarget}`
+      ? `${t('game.japas')}: ${japasThisLevel} / ${japaTarget} · ${t('occasions.coupleJapasHud')}: ${coupleTotal}`
       : `${t('game.japas')}: ${japasNeeded} / ${japaTarget}`;
 
   return (
@@ -166,6 +167,7 @@ interface GameScreenProps {
   anniversarySessionId?: string | null;
   anniversaryMyRole?: 'husband' | 'wife';
   anniversaryIsHost?: boolean;
+  anniversarySessionFlavor?: AnniversarySessionFlavor;
 }
 
 export function GameScreen({
@@ -185,8 +187,10 @@ export function GameScreen({
   anniversarySessionId = null,
   anniversaryMyRole = 'husband',
   anniversaryIsHost = false,
+  anniversarySessionFlavor = 'occasion',
 }: GameScreenProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const user = useAuthStore(s => s.user);
   const initGame = useGameStore(s => s.initGame);
   const status = useGameStore(s => s.status);
@@ -224,9 +228,11 @@ export function GameScreen({
   const anniversaryTurn = useGameStore((s) => s.anniversaryTurn);
   const anniversaryJH = useGameStore((s) => s.anniversaryJapasHusband);
   const anniversaryJW = useGameStore((s) => s.anniversaryJapasWife);
+  const anniversaryHostFromStore = useGameStore((s) => s.anniversaryIsHost);
   const anniversarySessionPaused = useGameStore((s) => s.anniversarySessionPaused);
   const anniversaryAutoRefreshToken = useGameStore((s) => s.anniversaryAutoRefreshToken);
   const anniversaryMyRoleFromStore = useGameStore((s) => s.anniversaryMyRole);
+  const anniversaryFlavorFromStore = useGameStore((s) => s.anniversarySessionFlavor);
   /** Firestore-derived role fixes URL mistakes; store updates every snapshot. */
   const anniversaryRoleForUi =
     occasionKind === 'anniversary' ? (anniversaryMyRoleFromStore ?? anniversaryMyRole) : anniversaryMyRole;
@@ -247,6 +253,29 @@ export function GameScreen({
       }
     };
   }, [anniversaryAutoRefreshToken, occasionKind]);
+
+  const handleAnniversaryNextLevel = useCallback(() => {
+    const s = useGameStore.getState();
+    if (s.occasionKind !== 'anniversary' || !s.anniversaryIsHost || !s.anniversarySessionId) return;
+    const next = s.levelIndex + 1;
+    if (next > ANNIVERSARY_COUPLE_LAST_LEVEL_INDEX) return;
+    const role = s.anniversaryMyRole === 'wife' ? 'wife' : 'husband';
+    const qs = new URLSearchParams();
+    qs.set('anniversary', s.anniversarySessionId);
+    qs.set('role', role);
+    qs.set('host', '1');
+    qs.set('mode', String(s.mode));
+    qs.set('level', String(next));
+    if (s.anniversarySessionFlavor === 'couple_daily') qs.set('coupleDaily', '1');
+    navigate(`/game?${qs.toString()}`);
+  }, [navigate]);
+
+  const anniversaryIsFinalWin =
+    occasionKind === 'anniversary' &&
+    status === 'won' &&
+    currentLevelIndex >= ANNIVERSARY_COUPLE_LAST_LEVEL_INDEX;
+  const anniversaryMidWin =
+    occasionKind === 'anniversary' && status === 'won' && !anniversaryIsFinalWin;
 
   useEffect(() => {
     if (!isGuest) setGuestPowerSignInOpen(false);
@@ -299,16 +328,32 @@ export function GameScreen({
           occasionKind: 'birthday',
         });
       } else if (occasionKind === 'anniversary' && anniversarySessionId) {
-        const annKey = `${anniversarySessionId}|${anniversaryMyRole}|${anniversaryIsHost ? '1' : '0'}|${mode}|${levelIndex}|${occasionJapaTarget}`;
+        const gs = useGameStore.getState();
+        const sameSession =
+          gs.anniversarySessionId === anniversarySessionId &&
+          gs.occasionKind === 'anniversary' &&
+          gs.anniversarySessionFlavor === anniversarySessionFlavor;
+        let ah = 0;
+        let aw = 0;
+        let av = 0;
+        if (sameSession && (levelIndex === gs.levelIndex || levelIndex === gs.levelIndex + 1)) {
+          ah = gs.anniversaryJapasHusband;
+          aw = gs.anniversaryJapasWife;
+          av = gs.anniversaryFirestoreVersion;
+        }
+        const annKey = `${anniversarySessionId}|${anniversaryMyRole}|${anniversaryIsHost ? '1' : '0'}|${mode}|${levelIndex}|${anniversarySessionFlavor}`;
         if (anniversaryInitKeyRef.current === annKey) return;
         anniversaryInitKeyRef.current = annKey;
         initGame(mode as 'general', levelIndex, {
-          overrideJapaTarget: occasionJapaTarget,
           occasionKind: 'anniversary',
           anniversarySessionId,
           anniversaryMyRole,
           anniversaryIsHost,
           anniversaryTurn: 'husband',
+          anniversaryJapasHusband: ah,
+          anniversaryJapasWife: aw,
+          anniversaryFirestoreVersion: av,
+          anniversarySessionFlavor,
         });
       } else if (isGuest) {
         initGame('general', 0, { overrideJapaTarget: 11, isGuest: true });
@@ -334,6 +379,7 @@ export function GameScreen({
     anniversarySessionId,
     anniversaryMyRole,
     anniversaryIsHost,
+    anniversarySessionFlavor,
   ]);
 
   const powersInventoryLoaded = usePowersInventoryStore((s) => s.loaded);
@@ -484,31 +530,21 @@ export function GameScreen({
   }, [status, user?.uid, getPausedKey, yagnaId, marathonId, flushJapas, occasionKind]);
 
   useEffect(() => {
-    if (status !== 'won' || !occasionKind || !user?.uid || occasionRecordSaved) return;
+    if (status !== 'won' || occasionKind !== 'birthday' || !user?.uid || occasionRecordSaved) return;
     let cancelled = false;
     (async () => {
       try {
         const token = await user.getIdToken();
-        if (occasionKind === 'birthday') {
-          const s = useGameStore.getState();
-          const deityTarget = s.mode !== 'general' ? (s.mode as DeityId) : undefined;
-          const japasTotal = deityTarget
-            ? (s.japasByDeity[deityTarget] ?? 0)
-            : s.japasThisLevel;
-          await completeBirthdayOccasion(token, {
-            mode: s.mode,
-            japasTotal,
-            japasByDeity: { ...s.japasByDeity },
-          });
-        } else if (occasionKind === 'anniversary' && anniversarySessionId) {
-          const s = useGameStore.getState();
-          await completeAnniversarySession(
-            token,
-            anniversarySessionId,
-            s.anniversaryJapasHusband,
-            s.anniversaryJapasWife,
-          );
-        }
+        const s = useGameStore.getState();
+        const deityTarget = s.mode !== 'general' ? (s.mode as DeityId) : undefined;
+        const japasTotal = deityTarget
+          ? (s.japasByDeity[deityTarget] ?? 0)
+          : s.japasThisLevel;
+        await completeBirthdayOccasion(token, {
+          mode: s.mode,
+          japasTotal,
+          japasByDeity: { ...s.japasByDeity },
+        });
         if (!cancelled) setOccasionRecordSaved(true);
       } catch (e) {
         console.error('occasion record', e);
@@ -517,7 +553,7 @@ export function GameScreen({
     return () => {
       cancelled = true;
     };
-  }, [status, occasionKind, user, occasionRecordSaved, anniversarySessionId]);
+  }, [status, occasionKind, user, occasionRecordSaved]);
 
   const saveAndExit = useCallback(async () => {
     const gs = useGameStore.getState();
@@ -832,11 +868,21 @@ export function GameScreen({
             <h2 className="text-xl font-bold text-amber-400 mb-2">
               {occasionKind === 'birthday'
                 ? t('occasions.birthdayComplete')
-                : t('occasions.anniversaryComplete')}
+                : anniversaryMidWin
+                  ? t('occasions.coupleLevelComplete')
+                  : t('occasions.anniversaryComplete')}
             </h2>
             {occasionKind === 'birthday' && (
               <p className="text-amber-200/85 text-sm mb-3">
                 {t('game.japas')}: {useGameStore.getState().mode !== 'general' ? (useGameStore.getState().japasByDeity[useGameStore.getState().mode as DeityId] ?? 0) : useGameStore.getState().japasThisLevel} / {occasionJapaTarget}
+              </p>
+            )}
+            {occasionKind === 'anniversary' && anniversaryMidWin && (
+              <p className="text-amber-200/85 text-sm mb-3">
+                {t('occasions.coupleLevelProgress', {
+                  current: currentLevelIndex + 1,
+                  total: ANNIVERSARY_COUPLE_LAST_LEVEL_INDEX + 1,
+                })}
               </p>
             )}
             {occasionKind === 'anniversary' && (
@@ -844,49 +890,76 @@ export function GameScreen({
                 <p>
                   {t('occasions.husbandJapas')}: {anniversaryJH} · {t('occasions.wifeJapas')}: {anniversaryJW}
                 </p>
-                <p>
-                  {t('occasions.sharedToWife')}: {Math.ceil(anniversaryJH / 2)}
-                </p>
-                <p>
-                  {t('occasions.wifeTotal')}: {anniversaryJW + Math.ceil(anniversaryJH / 2)}
-                </p>
+                {anniversaryFlavorFromStore !== 'couple_daily' && (
+                  <>
+                    <p>
+                      {t('occasions.sharedToWife')}: {Math.ceil(anniversaryJH / 2)}
+                    </p>
+                    <p>
+                      {t('occasions.wifeTotal')}: {anniversaryJW + Math.ceil(anniversaryJH / 2)}
+                    </p>
+                  </>
+                )}
                 <p className="text-amber-400/90">
                   {t('occasions.yourJapas')}:{' '}
                   {anniversaryRoleForUi === 'husband' ? anniversaryJH : anniversaryJW}
                 </p>
               </div>
             )}
-            <p className="text-emerald-300/90 text-xs mb-3">{t('occasions.savedToAccount')}</p>
-            <button
-              type="button"
-              onClick={() => {
-                const s = useGameStore.getState();
-                if (occasionKind === 'birthday') {
-                  const dt = s.mode !== 'general' ? (s.mode as DeityId) : undefined;
-                  const jt = dt ? (s.japasByDeity[dt] ?? 0) : s.japasThisLevel;
-                  downloadOccasionSummaryPdf({
-                    title: t('occasions.birthdayTitle'),
-                    lines: [
-                      `${t('game.japas')}: ${jt} / ${occasionJapaTarget}`,
-                      `Mode: ${s.mode}`,
-                    ],
-                    footer: t('occasions.savedToAccount'),
-                  });
-                } else {
-                  downloadAnniversaryReportPdf({
-                    title: t('occasions.anniversaryTitle'),
-                    husbandJapas: s.anniversaryJapasHusband,
-                    wifeJapas: s.anniversaryJapasWife,
-                    yourRoleLabel: anniversaryRoleForUi,
-                    yourJapas: anniversaryRoleForUi === 'husband' ? s.anniversaryJapasHusband : s.anniversaryJapasWife,
-                    footer: t('occasions.savedToAccount'),
-                  });
-                }
-              }}
-              className="w-full py-2.5 rounded-xl bg-amber-500 text-white font-semibold text-sm mb-2"
-            >
-              {t('occasions.downloadPdf')}
-            </button>
+            {occasionKind === 'birthday' && (
+              <p className="text-emerald-300/90 text-xs mb-3">{t('occasions.savedToAccount')}</p>
+            )}
+            {occasionKind === 'anniversary' && anniversaryIsFinalWin && (
+              <p className="text-emerald-300/90 text-xs mb-3">
+                {anniversaryFlavorFromStore === 'couple_daily'
+                  ? t('occasions.coupleGameCountedOnDashboard')
+                  : t('occasions.coupleJapaCountedOnDashboard')}
+              </p>
+            )}
+            {occasionKind === 'anniversary' && anniversaryMidWin && anniversaryHostFromStore && (
+              <button
+                type="button"
+                onClick={handleAnniversaryNextLevel}
+                className="w-full py-2.5 rounded-xl bg-amber-500 text-white font-semibold text-sm mb-2"
+              >
+                {t('occasions.coupleNextLevel')}
+              </button>
+            )}
+            {occasionKind === 'anniversary' && anniversaryMidWin && !anniversaryHostFromStore && (
+              <p className="text-amber-200/75 text-xs mb-3">{t('occasions.coupleWaitHostNext')}</p>
+            )}
+            {(occasionKind === 'birthday' || anniversaryIsFinalWin) && (
+              <button
+                type="button"
+                onClick={() => {
+                  const s = useGameStore.getState();
+                  if (occasionKind === 'birthday') {
+                    const dt = s.mode !== 'general' ? (s.mode as DeityId) : undefined;
+                    const jt = dt ? (s.japasByDeity[dt] ?? 0) : s.japasThisLevel;
+                    downloadOccasionSummaryPdf({
+                      title: t('occasions.birthdayTitle'),
+                      lines: [
+                        `${t('game.japas')}: ${jt} / ${occasionJapaTarget}`,
+                        `Mode: ${s.mode}`,
+                      ],
+                      footer: t('occasions.savedToAccount'),
+                    });
+                  } else {
+                    downloadAnniversaryReportPdf({
+                      title: t('occasions.anniversaryTitle'),
+                      husbandJapas: s.anniversaryJapasHusband,
+                      wifeJapas: s.anniversaryJapasWife,
+                      yourRoleLabel: anniversaryRoleForUi,
+                      yourJapas: anniversaryRoleForUi === 'husband' ? s.anniversaryJapasHusband : s.anniversaryJapasWife,
+                      footer: t('occasions.coupleJapaCountedOnDashboard'),
+                    });
+                  }
+                }}
+                className="w-full py-2.5 rounded-xl bg-amber-500 text-white font-semibold text-sm mb-2"
+              >
+                {t('occasions.downloadPdf')}
+              </button>
+            )}
             <button
               type="button"
               onClick={handleRetry}
@@ -911,7 +984,7 @@ export function GameScreen({
             <div className="bg-[#C2185B]/90 rounded-2xl p-4 sm:p-6 max-w-sm w-full text-center min-w-0">
               <h2 className="text-xl sm:text-2xl font-bold text-amber-400 mb-3 break-words">Jai!</h2>
               <p className="text-amber-200/90 mb-6 text-sm sm:text-base break-words">
-                Do your ista devata japa? Sign in with Google
+                {t('shared.do_your_ista_devata_japa_sign_in_with_google')}
               </p>
               <div className="mb-4">
                 <GoogleSignIn />

@@ -2,7 +2,7 @@ import { DEITY_IDS, type DeityId } from '../data/deities';
 
 /**
  * These īṣṭa paths only: gems may appear on their own map — never as filler or inventory-backed
- * extras on another deity’s game (general Japa already excludes them too).
+ * extras on another deity’s game (All Deity Japa already excludes them too).
  */
 export const EXCLUSIVE_ISTA_PATH_DEITIES: DeityId[] = ['saiBaba', 'bramhamgaaru'];
 
@@ -20,7 +20,7 @@ export function filterPowerBackedForIstaPath(pathDeity: DeityId, fromInventory: 
   return fromInventory.filter((id) => deityGemAllowedOnIstaPath(pathDeity, id));
 }
 
-/** How many distinct deity gem types appear on the general Japa board per level. */
+/** How many distinct deity gem types appear on the All Deity Japa board per level. */
 export const GENERAL_BOARD_DEITY_COUNT = 6;
 
 export function generalBoardEligibleDeities(): DeityId[] {

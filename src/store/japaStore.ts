@@ -9,6 +9,8 @@ export interface JapaCounts extends Record<DeityId, number> {
   birthdayJapa: number;
   /** Lifetime japas earned in wedding anniversary couple play (also counted per deity). */
   anniversaryJapa: number;
+  /** Lifetime japas from daily couple game (same mechanics; separate dashboard row; also per deity + total). */
+  coupleGameJapa: number;
 }
 
 const initial: JapaCounts = {
@@ -16,6 +18,7 @@ const initial: JapaCounts = {
   total: 0,
   birthdayJapa: 0,
   anniversaryJapa: 0,
+  coupleGameJapa: 0,
 };
 
 interface JapaStore {
@@ -23,7 +26,7 @@ interface JapaStore {
   loaded: boolean;
   load: (userId?: string) => Promise<void>;
   addJapa: (deity: DeityId, count?: number) => void;
-  addOccasionJapa: (kind: 'birthday' | 'anniversary', count?: number) => void;
+  addOccasionJapa: (kind: 'birthday' | 'anniversary' | 'coupleGame', count?: number) => void;
   /** Force-save current counts to backend. Call before leaving Maha Yagna game. */
   flushJapas: () => Promise<void>;
 }
@@ -66,6 +69,12 @@ export const useJapaStore = create<JapaStore>((setState, getState) => ({
           : 0;
       const fromCurrentA = typeof current.anniversaryJapa === 'number' ? current.anniversaryJapa : 0;
       merged.anniversaryJapa = Math.max(fromStoredA, fromCurrentA);
+      const fromStoredCg =
+        stored && typeof (stored as JapaCounts).coupleGameJapa === 'number'
+          ? (stored as JapaCounts).coupleGameJapa
+          : 0;
+      const fromCurrentCg = typeof current.coupleGameJapa === 'number' ? current.coupleGameJapa : 0;
+      merged.coupleGameJapa = Math.max(fromStoredCg, fromCurrentCg);
       setState({ counts: merged, loaded: true });
     } catch (e: unknown) {
       const err = e as { status?: number };
@@ -93,7 +102,12 @@ export const useJapaStore = create<JapaStore>((setState, getState) => ({
   addOccasionJapa: (kind, count = 1) => {
     if (count <= 0) return;
     const { counts } = getState();
-    const key = kind === 'birthday' ? 'birthdayJapa' : 'anniversaryJapa';
+    const key =
+      kind === 'birthday'
+        ? 'birthdayJapa'
+        : kind === 'coupleGame'
+          ? 'coupleGameJapa'
+          : 'anniversaryJapa';
     const next = {
       ...counts,
       [key]: (counts[key] ?? 0) + count,

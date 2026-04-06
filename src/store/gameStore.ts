@@ -36,6 +36,9 @@ export type GameStatus = 'playing' | 'won' | 'lost';
 
 const PAUSED_KEY_PREFIX = 'japam-paused-';
 
+/** Wedding-anniversary occasion path vs daily couple game (same sync + levels; different japa bucket). */
+export type AnniversarySessionFlavor = 'occasion' | 'couple_daily';
+
 export interface PausedGameState {
   key: string;
   moves: number;
@@ -49,7 +52,7 @@ export interface PausedGameState {
   /** Present when paused game was guest play (e.g. /game?guest=1). */
   isGuest?: boolean;
   overrideJapaTarget?: number | null;
-  /** General Japa only: which deities are on this board / strip for this session. */
+  /** All Deity Japa only: which deities are on this board / strip for this session. */
   generalBoardDeities?: DeityId[];
   savedAt: number;
   version?: number;
@@ -118,6 +121,7 @@ interface GameState {
   anniversarySessionPaused: boolean;
   /** Bumped when we auto-refresh an anniversary board due to no valid moves (toast trigger). */
   anniversaryAutoRefreshToken: number;
+  anniversarySessionFlavor: AnniversarySessionFlavor;
 }
 
 function boardGemContext(state: GameState): {
@@ -163,6 +167,7 @@ interface GameActions {
       anniversaryJapasHusband?: number;
       anniversaryJapasWife?: number;
       anniversaryFirestoreVersion?: number;
+      anniversarySessionFlavor?: AnniversarySessionFlavor;
     },
   ) => void;
   restoreGame: (state: PausedGameState) => void;
@@ -231,6 +236,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   anniversaryFirestoreVersion: 0,
   anniversarySessionPaused: false,
   anniversaryAutoRefreshToken: 0,
+  anniversarySessionFlavor: 'occasion',
 
   initGame: (mode, levelIndex = 0, options) => {
     gameDebug('initGame', {
@@ -260,6 +266,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const anniversaryJapasHusband = options?.anniversaryJapasHusband ?? 0;
     const anniversaryJapasWife = options?.anniversaryJapasWife ?? 0;
     const anniversaryFirestoreVersion = options?.anniversaryFirestoreVersion ?? 0;
+    const anniversarySessionFlavor: AnniversarySessionFlavor =
+      options?.anniversarySessionFlavor === 'couple_daily' ? 'couple_daily' : 'occasion';
     const unlimitedMoves =
       marathonTargetJapas != null ||
       (overrideJapaTarget != null && overrideJapaTarget >= 50) ||
@@ -275,7 +283,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     let salt = 0;
     if (occasionKind === 'anniversary' && anniversarySessionId) {
       do {
-        const seed = `${anniversarySessionId}|${anniversaryFirestoreVersion}|init|${salt}`;
+        const seed = `${anniversarySessionId}|${anniversaryFirestoreVersion}|L${levelIndex}|init|${salt}`;
         board = createBoardSeeded(
           level.rows,
           level.cols,
@@ -352,6 +360,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       anniversaryFirestoreVersion,
       anniversarySessionPaused: false,
       anniversaryAutoRefreshToken: 0,
+      anniversarySessionFlavor: occasionKind === 'anniversary' ? anniversarySessionFlavor : 'occasion',
     });
     usePowerArmStore.getState().reset();
   },
@@ -828,7 +837,10 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       const ok = get().occasionKind;
       if (!isGuest && japaDelta > 0) {
         if (ok === 'birthday') japaStore.addOccasionJapa('birthday', japaDelta);
-        else if (ok === 'anniversary') japaStore.addOccasionJapa('anniversary', japaDelta);
+        else if (ok === 'anniversary') {
+          const flavor = get().anniversarySessionFlavor;
+          japaStore.addOccasionJapa(flavor === 'couple_daily' ? 'coupleGame' : 'anniversary', japaDelta);
+        }
       }
     }
     const totalScore = get().score + calculateScore(pendingMatchBatch, comboLevel);
@@ -900,9 +912,9 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const japaTarget = state.overrideJapaTarget ?? state.marathonTargetJapas ?? level.japaTarget;
     const moves = state.moves;
     const isMarathon = state.marathonTargetJapas != null;
-    const coupleJapas = state.anniversaryJapasHusband + state.anniversaryJapasWife;
+    // Anniversary: per-level target (same as general) using japasThisLevel; couple H/W are session tallies for HUD / PDF only.
     const japasForTarget =
-      state.occasionKind === 'anniversary' ? coupleJapas : japasNeeded;
+      state.occasionKind === 'anniversary' ? state.japasThisLevel : japasNeeded;
     const occasionBlocksProgress = state.occasionKind != null;
 
     let status: GameStatus = 'playing';
@@ -948,7 +960,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
         // Use seeded boards so both partners converge even if they regenerate locally at the same moment.
         let salt = 0;
         do {
-          const seed = `${state.anniversarySessionId}|${state.anniversaryFirestoreVersion}|dead|${salt}`;
+          const seed = `${state.anniversarySessionId}|${state.anniversaryFirestoreVersion}|L${state.levelIndex}|dead|${salt}`;
           finalBoard = createBoardSeeded(
             level.rows,
             level.cols,
@@ -1035,7 +1047,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     if (state.occasionKind === 'anniversary' && state.anniversarySessionId) {
       let salt = 0;
       do {
-        const seed = `${state.anniversarySessionId}|${state.anniversaryFirestoreVersion}|refresh|${salt}`;
+        const seed = `${state.anniversarySessionId}|${state.anniversaryFirestoreVersion}|L${state.levelIndex}|refresh|${salt}`;
         board = createBoardSeeded(
           level.rows,
           level.cols,
@@ -1100,6 +1112,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       anniversaryJapasHusband,
       anniversaryJapasWife,
       anniversaryFirestoreVersion,
+      anniversarySessionFlavor,
     } = s;
     const occasionOpts =
       occasionKind != null
@@ -1112,6 +1125,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
             anniversaryJapasHusband,
             anniversaryJapasWife,
             anniversaryFirestoreVersion,
+            anniversarySessionFlavor,
           }
         : {};
     const opts = yagnaId
@@ -1170,6 +1184,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
         : prev.anniversaryMyRole;
     const annHost =
       typeof payload.anniversaryIsHost === 'boolean' ? payload.anniversaryIsHost : prev.anniversaryIsHost;
+    const sessionFlavor: AnniversarySessionFlavor =
+      payload.sessionFlavor === 'couple_daily' ? 'couple_daily' : 'occasion';
     const sessionPaused = payload.sessionPaused === true;
     stopAllMantras();
     set({
@@ -1208,6 +1224,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       anniversaryMovePending: false,
       anniversarySessionPaused: sessionPaused,
       anniversaryAutoRefreshToken: 0,
+      anniversarySessionFlavor: sessionFlavor,
     });
   },
 
@@ -1230,6 +1247,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       japasHusband: state.anniversaryJapasHusband,
       japasWife: state.anniversaryJapasWife,
       version: state.anniversaryFirestoreVersion,
+      sessionFlavor: state.anniversarySessionFlavor,
     };
   },
 }));

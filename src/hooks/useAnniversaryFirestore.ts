@@ -66,6 +66,7 @@ function reconcileAnniversaryAuthoritativeFields(
   const jh = typeof d.japasHusband === 'number' ? d.japasHusband : 0;
   const jw = typeof d.japasWife === 'number' ? d.japasWife : 0;
   const v = typeof d.version === 'number' ? d.version : 0;
+  const sessionFlavor = d.sessionFlavor === 'couple_daily' ? 'couple_daily' : 'occasion';
 
   useGameStore.setState({
     anniversaryMyRole: myRole,
@@ -75,6 +76,7 @@ function reconcileAnniversaryAuthoritativeFields(
     anniversaryJapasWife: jw,
     anniversaryFirestoreVersion: v,
     anniversarySessionPaused: d.sessionPaused === true,
+    anniversarySessionFlavor: sessionFlavor,
   });
 }
 
@@ -88,6 +90,7 @@ function buildHydratePayload(
   const hostUid = typeof d.hostUid === 'string' ? d.hostUid : '';
   const myRole = resolveAnniversaryMyRole(d, uid, urlFallbackRole);
   const isHostResolved = Boolean(uid && hostUid && uid === hostUid);
+  const sessionFlavor = d.sessionFlavor === 'couple_daily' ? 'couple_daily' : 'occasion';
   return {
     boardJson: d.boardJson,
     gameMode: d.gameMode,
@@ -106,6 +109,7 @@ function buildHydratePayload(
     anniversaryMyRole: myRole,
     anniversaryIsHost: isHostResolved,
     sessionPaused: d.sessionPaused === true,
+    sessionFlavor,
   };
 }
 

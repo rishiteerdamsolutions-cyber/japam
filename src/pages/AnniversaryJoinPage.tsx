@@ -35,10 +35,14 @@ export function AnniversaryJoinPage() {
         if (cancelled) return;
         const myRole = res.guestRole === 'husband' ? 'husband' : 'wife';
         setOccasionEntryGate('anniversary');
-        navigate(
-          `/game?anniversary=${encodeURIComponent(sid)}&role=${myRole}&host=0&mode=${encodeURIComponent(res.gameMode)}&level=${res.levelIndex}&target=108`,
-          { replace: true },
-        );
+        const q = new URLSearchParams();
+        q.set('anniversary', sid);
+        q.set('role', myRole);
+        q.set('host', '0');
+        q.set('mode', res.gameMode);
+        q.set('level', String(res.levelIndex));
+        if (res.sessionFlavor === 'couple_daily') q.set('coupleDaily', '1');
+        navigate(`/game?${q.toString()}`, { replace: true });
       } catch (e) {
         if (!cancelled) setErr(e instanceof Error ? e.message : 'Join failed');
       } finally {

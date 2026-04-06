@@ -175,7 +175,7 @@ export function GamePowersScrollStrip({ isGuest = false, onGuestPowerTap }: Game
   const armedPowerId = usePowerArmStore((s) => s.armedPowerId);
   const setArmedPower = usePowerArmStore((s) => s.setArmedPower);
 
-  /** General Japa: same 6 as the board; īṣṭa: all deity rows in inventory. */
+  /** All Deity Japa: same 6 as the board; īṣṭa: all deity rows in inventory. */
   const generalAllow = useMemo((): DeityId[] | null => {
     if (mode !== 'general') return null;
     return generalBoardDeities?.length ? generalBoardDeities : pickGeneralBoardDeities(levelIndex);

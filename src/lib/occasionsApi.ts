@@ -17,6 +17,8 @@ export async function occasionsFetch(
   return fetchWithRetry(apiUrl(path), { ...init, headers });
 }
 
+export type AnniversarySessionFlavor = 'occasion' | 'couple_daily';
+
 export type AnniversaryCreateResponse = {
   sessionId: string;
   joinToken: string;
@@ -24,11 +26,17 @@ export type AnniversaryCreateResponse = {
   hostRole: string;
   gameMode: string;
   levelIndex: number;
+  sessionFlavor: AnniversarySessionFlavor;
 };
 
 export async function createAnniversarySession(
   token: string,
-  body: { hostRole: 'husband' | 'wife'; gameMode?: string; levelIndex?: number },
+  body: {
+    hostRole: 'husband' | 'wife';
+    gameMode?: string;
+    levelIndex?: number;
+    sessionFlavor?: AnniversarySessionFlavor;
+  },
 ): Promise<AnniversaryCreateResponse> {
   const res = await occasionsFetch('/api/occasions/anniversary/create', {
     method: 'POST',
@@ -44,7 +52,13 @@ export async function joinAnniversarySession(
   token: string,
   sessionId: string,
   joinToken: string,
-): Promise<{ gameMode: string; levelIndex: number; hostRole: string; guestRole: string }> {
+): Promise<{
+  gameMode: string;
+  levelIndex: number;
+  hostRole: string;
+  guestRole: string;
+  sessionFlavor: AnniversarySessionFlavor;
+}> {
   const res = await occasionsFetch('/api/occasions/anniversary/join', {
     method: 'POST',
     body: JSON.stringify({ sessionId, joinToken }),
@@ -52,11 +66,14 @@ export async function joinAnniversarySession(
   });
   const data = (await res.json().catch(() => ({}))) as Record<string, unknown>;
   if (!res.ok) throw new Error(typeof data.error === 'string' ? data.error : 'Failed to join');
+  const sessionFlavor: AnniversarySessionFlavor =
+    data.sessionFlavor === 'couple_daily' ? 'couple_daily' : 'occasion';
   return {
     gameMode: String(data.gameMode ?? 'general'),
     levelIndex: Number(data.levelIndex ?? 0),
     hostRole: String(data.hostRole ?? 'husband'),
     guestRole: String(data.guestRole ?? 'wife'),
+    sessionFlavor,
   };
 }
 

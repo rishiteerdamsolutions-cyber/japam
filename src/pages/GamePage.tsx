@@ -12,7 +12,7 @@ import { useLivesStore } from '../store/livesStore';
 import { useLevelsConfigStore } from '../store/levelsConfigStore';
 import { useProfileStore } from '../store/profileStore';
 import { FIRST_LOCKED_LEVEL_INDEX } from '../store/unlockStore';
-import { LEVELS } from '../data/levels';
+import { LEVELS, ANNIVERSARY_COUPLE_LAST_LEVEL_INDEX } from '../data/levels';
 import type { GameMode } from '../types';
 import { getOccasionEntryGate } from '../lib/occasionEntryGate';
 
@@ -34,6 +34,8 @@ export function GamePage() {
 
   const occasionBirthday = searchParams.get('occasion') === 'birthday';
   const anniversarySession = searchParams.get('anniversary');
+  const coupleDaily = searchParams.get('coupleDaily') === '1';
+  const anniversarySessionFlavor = coupleDaily ? ('couple_daily' as const) : ('occasion' as const);
   const anniversaryRole = searchParams.get('role') === 'wife' ? 'wife' : 'husband';
   const anniversaryHost = searchParams.get('host') === '1';
   const occasionTarget = Math.min(500, Math.max(1, parseInt(searchParams.get('target') || '108', 10) || 108));
@@ -54,11 +56,30 @@ export function GamePage() {
   const maxRevealedLevelIndex = useLevelsConfigStore((s) => s.maxRevealedLevelIndex);
   const loadLevelsConfig = useLevelsConfigStore((s) => s.load);
   const revealedMax = maxRevealedLevelIndex ?? 999;
+  const parsedLevel = Math.max(0, Math.min(LEVELS.length - 1, parseInt(levelParam || '0', 10) || 0));
+  const anniversaryLevelFromUrl = anniversarySession
+    ? Math.min(ANNIVERSARY_COUPLE_LAST_LEVEL_INDEX, parsedLevel)
+    : parsedLevel;
+  const storeAnniversaryLevel = useGameStore((s) =>
+    anniversarySession &&
+    s.anniversarySessionId === anniversarySession &&
+    s.occasionKind === 'anniversary'
+      ? s.levelIndex
+      : -1,
+  );
   const levelIndex = isGuest
     ? 0
     : gameContextId
     ? 0
-    : Math.max(0, Math.min(LEVELS.length - 1, revealedMax, parseInt(levelParam || '0', 10) || 0));
+    : anniversarySession
+    ? Math.max(
+        0,
+        Math.min(
+          ANNIVERSARY_COUPLE_LAST_LEVEL_INDEX,
+          Math.max(anniversaryLevelFromUrl, storeAnniversaryLevel >= 0 ? storeAnniversaryLevel : 0),
+        ),
+      )
+    : Math.max(0, Math.min(LEVELS.length - 1, revealedMax, parsedLevel));
 
   const [paywallPending, setPaywallPending] = useState<{ mode: GameMode; levelIndex: number } | null>(null);
   const [resumePending, setResumePending] = useState<PausedGameState | null>(null);
@@ -409,10 +430,11 @@ export function GamePage() {
       onBack={onBack}
       onNextLevel={isMarathon ? undefined : (m, idx) => handleNextLevel(m as GameMode, idx)}
       occasionKind={occasionKind}
-      occasionJapaTarget={occasionKind ? occasionTarget : undefined}
+      occasionJapaTarget={occasionKind === 'birthday' ? occasionTarget : undefined}
       anniversarySessionId={anniversarySession}
       anniversaryMyRole={occasionKind === 'anniversary' ? anniversaryRole : undefined}
       anniversaryIsHost={occasionKind === 'anniversary' ? anniversaryHost : undefined}
+      anniversarySessionFlavor={occasionKind === 'anniversary' ? anniversarySessionFlavor : undefined}
     />
   );
 }

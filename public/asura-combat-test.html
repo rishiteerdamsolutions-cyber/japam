@@ -16,39 +16,89 @@
       * {
         box-sizing: border-box;
       }
+      html {
+        height: 100%;
+        overflow-x: hidden;
+      }
       body {
         margin: 0;
-        width: 100vw;
-        height: 100dvh;
+        width: 100%;
+        max-width: 100%;
+        min-height: 100vh;
+        min-height: 100dvh;
+        min-height: 100svh;
+        height: auto;
         font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
         background: linear-gradient(165deg, var(--bg1) 0%, var(--bg2) 50%, #1e1033 100%);
         color: #fff;
-        padding: 0.4rem 0.5rem calc(0.4rem + env(safe-area-inset-bottom));
+        padding: max(0.35rem, env(safe-area-inset-top, 0px)) max(0.5rem, env(safe-area-inset-right, 0px))
+          max(0.35rem, env(safe-area-inset-bottom, 0px)) max(0.5rem, env(safe-area-inset-left, 0px));
         display: flex;
         flex-direction: column;
         align-items: stretch;
-        gap: 0.5rem;
+        gap: clamp(0.28rem, 1.5vmin, 0.55rem);
         touch-action: manipulation;
-        overflow: auto;
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-tap-highlight-color: transparent;
+      }
+      @media (max-width: 900px) {
+        body {
+          /* One-screen play: avoid double-scroll when possible */
+          min-height: 100svh;
+        }
+      }
+      .game-header {
+        flex: 0 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.12rem;
+        text-align: center;
+        padding-inline: 0.25rem;
       }
       h1 {
-        font-size: 0.75rem;
+        font-size: clamp(0.58rem, 1.45vmin + 0.32rem, 0.88rem);
         font-weight: 600;
         opacity: 0.85;
         text-align: center;
         margin: 0;
         letter-spacing: 0.06em;
         text-transform: uppercase;
+        line-height: 1.2;
       }
       .layout {
         display: flex;
         flex-direction: column;
-        gap: 0.4rem;
+        gap: clamp(0.22rem, 1.1vmin, 0.45rem);
         width: 100%;
-        max-width: none;
+        max-width: 100%;
+        margin-inline: auto;
         align-items: stretch;
         flex: 1 1 auto;
         min-height: 0;
+      }
+      @media (min-width: 600px) {
+        .layout {
+          max-width: min(30rem, 100%);
+        }
+      }
+      /* Bottom deck: weapons + fire holes (never under the tilted canvas) */
+      .player-deck {
+        flex: 0 0 auto;
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        gap: clamp(0.35rem, 1.8vmin, 0.65rem);
+        width: 100%;
+        margin-top: clamp(0.5rem, 2.2vmin, 0.95rem);
+        padding-top: clamp(0.35rem, 1.5vmin, 0.55rem);
+        border-top: 1px solid rgba(251, 191, 36, 0.22);
+        position: relative;
+        z-index: 4;
+        isolation: isolate;
+        background: linear-gradient(180deg, rgba(10, 6, 22, 0.35) 0%, transparent 100%);
       }
       .weapons {
         flex: 0 0 auto;
@@ -59,11 +109,11 @@
         scrollbar-width: thin;
         gap: 0.35rem;
         width: 100%;
-        padding-bottom: 0.1rem;
+        padding-bottom: 0.05rem;
       }
       .weapons h2 {
-        font-size: 0.65rem;
-        margin: 0 0.15rem 0 0;
+        font-size: clamp(0.55rem, 2vmin, 0.68rem);
+        margin: 0 0.12rem 0 0;
         color: var(--amber-dim);
         text-transform: uppercase;
         letter-spacing: 0.08em;
@@ -71,10 +121,10 @@
       }
       .weapon-btn {
         flex: 0 0 auto;
-        width: 2.6rem;
-        height: 2.6rem;
+        width: clamp(2.35rem, 11vmin, 2.85rem);
+        height: clamp(2.35rem, 11vmin, 2.85rem);
         padding: 0;
-        font-size: 1.2rem;
+        font-size: clamp(1rem, 4.2vmin, 1.35rem);
         line-height: 1;
         border-radius: 0.65rem;
         border: 1px solid rgba(251, 191, 36, 0.35);
@@ -120,19 +170,35 @@
       }
       .weapon-btn:hover::after,
       .weapon-btn:focus-visible::after,
-      .weapon-btn.active::after {
+      .weapon-btn.active::after,
+      .weapon-btn.tip-touch::after {
         opacity: 1;
       }
+      @media (hover: none) and (pointer: coarse) {
+        .weapon-btn::after {
+          font-size: clamp(0.5rem, 2.8vmin, 0.62rem);
+          max-width: min(14rem, 92vw);
+          white-space: normal;
+          text-align: center;
+          line-height: 1.2;
+        }
+      }
+      /* Weapons sit above fire row — tooltips open downward */
+      .player-deck .weapon-btn::after {
+        bottom: auto;
+        top: calc(100% + 0.35rem);
+      }
       .stage-wrap {
-        flex: 1;
+        flex: 1 1 0;
         min-width: 0;
         display: flex;
         flex-direction: column;
-        gap: 0.2rem;
+        gap: clamp(0.12rem, 0.9vmin, 0.28rem);
         min-height: 0;
       }
       /* Matches canvas holeXs(): margin = 10% of width */
       .holes {
+        flex-shrink: 0;
         display: flex;
         justify-content: space-between;
         align-items: stretch;
@@ -140,8 +206,7 @@
         width: 100%;
         padding: 0 10%;
         margin: 0;
-        margin-top: 0.35rem;
-        gap: 0.12rem;
+        gap: clamp(0.18rem, 1.2vmin, 0.35rem);
         box-sizing: border-box;
         position: relative;
         z-index: 1;
@@ -149,16 +214,15 @@
       .hole-btn {
         flex: 1 1 0;
         min-width: 0;
-        min-height: 1.35rem;
-        max-height: 1.6rem;
-        padding: 0.12rem 0.08rem;
-        border-radius: 0.3rem;
+        min-height: max(48px, 2.85rem);
+        padding: 0.2rem 0.06rem;
+        border-radius: clamp(0.35rem, 1.5vmin, 0.5rem);
         border: 1px solid rgba(251, 191, 36, 0.5);
         background: rgba(0, 0, 0, 0.45);
         color: #fef3c7;
-        font-size: 0.52rem;
+        font-size: clamp(0.58rem, 2.6vmin, 0.72rem);
         font-weight: 700;
-        line-height: 1.1;
+        line-height: 1.15;
         cursor: pointer;
         transition: transform 0.1s, background 0.15s, border-color 0.15s;
       }
@@ -174,15 +238,16 @@
         display: flex;
         align-items: center;
         gap: 0.35rem;
-        font-size: 0.65rem;
+        font-size: clamp(0.55rem, 2.4vmin, 0.72rem);
+        flex-shrink: 0;
       }
       .hp-row span.label {
-        flex: 0 0 2.6rem;
+        flex: 0 0 clamp(2.35rem, 18vw, 2.85rem);
         color: #fcd34d;
       }
       .hp-bar {
         flex: 1;
-        height: 0.55rem;
+        height: clamp(0.45rem, 2vmin, 0.62rem);
         background: var(--blood-track);
         border-radius: 999px;
         overflow: hidden;
@@ -199,29 +264,57 @@
         background: linear-gradient(90deg, #14532d, #22c55e);
       }
       .arena-outer {
-        perspective: 520px;
-        perspective-origin: 50% 45%;
-        /* rotateX tilts the board past its layout box; keep reserve modest so it fits short screens. */
-        margin-bottom: clamp(0.45rem, 2.6vmin, 1rem);
+        perspective: min(520px, 140vw);
+        perspective-origin: 50% 88%;
+        margin-bottom: 0;
         flex: 1 1 0;
         min-height: 0;
         display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        position: relative;
+        z-index: 1;
+        /* Clip 3D paint so tilted board cannot draw over the player deck below */
+        overflow: hidden;
+        border-radius: clamp(0.55rem, 2.2vmin, 0.95rem);
       }
+      /*
+       * Playfield grows with flex so the board uses space between HUD and fire row
+       * (avoids empty “dead zone” on tall phones).
+       */
       .arena {
         position: relative;
+        flex: 1 1 0;
+        min-height: clamp(10.5rem, 32svmin, 14rem);
         width: 100%;
-        height: min(
-          100%,
-          calc(100dvh - 15rem)
-        );
-        min-height: 180px;
-        border-radius: 0.75rem;
+        height: auto;
+        max-height: none;
+        border-radius: clamp(0.5rem, 2vmin, 0.85rem);
         border: 2px solid rgba(251, 191, 36, 0.4);
         box-shadow: 0 0 24px rgba(245, 158, 11, 0.2), inset 0 0 40px rgba(0, 0, 0, 0.35);
         background: linear-gradient(180deg, rgba(40, 20, 60, 0.95) 0%, rgba(20, 12, 40, 0.98) 100%);
-        transform: rotateX(12deg);
+        /* Pivot at bottom (player side): tilt recedes upward, not over the fire buttons */
+        transform-origin: 50% 100%;
+        transform: rotateX(10deg);
         transform-style: preserve-3d;
         overflow: hidden;
+      }
+      @media (min-width: 900px) {
+        .arena {
+          max-height: min(82dvh, 38rem);
+        }
+      }
+      @media (max-width: 520px) {
+        .arena {
+          transform: rotateX(6deg);
+          min-height: clamp(9.5rem, 36svmin, 13rem);
+        }
+      }
+      @media (max-height: 640px) {
+        .arena {
+          transform: rotateX(4deg);
+          min-height: clamp(8.5rem, 28svmin, 11rem);
+        }
       }
       canvas {
         display: block;
@@ -229,33 +322,45 @@
         height: 100%;
       }
       .asura-name {
-        font-size: 0.7rem;
+        font-size: clamp(0.68rem, 2.8vmin, 0.92rem);
         text-align: center;
         color: #fde68a;
-        opacity: 0.9;
+        opacity: 0.95;
         margin: 0;
+        font-weight: 600;
+        line-height: 1.2;
       }
       .controls {
-        display: flex;
-        gap: 0.5rem;
-        flex-wrap: wrap;
-        justify-content: center;
+        flex: 0 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: clamp(0.4rem, 2vmin, 0.65rem);
         width: 100%;
+        max-width: 100%;
+        margin-inline: auto;
+        padding-top: 0.1rem;
+      }
+      @media (min-width: 600px) {
+        .controls {
+          max-width: min(30rem, 100%);
+        }
       }
       .ctrl {
-        padding: 0.4rem 0.75rem;
-        font-size: 0.7rem;
-        border-radius: 0.5rem;
+        padding: clamp(0.42rem, 2vmin, 0.55rem) clamp(0.5rem, 2.5vmin, 0.9rem);
+        font-size: clamp(0.65rem, 2.7vmin, 0.82rem);
+        min-height: max(48px, 2.75rem);
+        border-radius: clamp(0.45rem, 2vmin, 0.6rem);
         border: 1px solid rgba(255, 255, 255, 0.2);
         background: rgba(255, 255, 255, 0.08);
         color: #fff;
         cursor: pointer;
+        font-weight: 600;
       }
       @media (max-width: 860px) {
         .weapons {
           flex: 0 0 auto;
           display: flex;
-          gap: 0.28rem;
+          gap: clamp(0.22rem, 1.2vmin, 0.35rem);
           width: 100%;
         }
         .weapons h2 {
@@ -263,57 +368,50 @@
           margin-bottom: 0;
         }
         .weapon-btn {
-          width: 2.35rem;
-          height: 2.35rem;
-          font-size: 1.08rem;
-        }
-        .arena {
-          height: min(100%, calc(100dvh - 18rem));
-          min-height: 170px;
+          width: clamp(2.4rem, 12vmin, 2.75rem);
+          height: clamp(2.4rem, 12vmin, 2.75rem);
+          font-size: clamp(1.02rem, 4.5vmin, 1.22rem);
         }
       }
       @media (max-height: 760px) {
         body {
-          gap: 0.35rem;
-          padding-top: 0.25rem;
+          gap: 0.28rem;
+          padding-top: max(0.2rem, env(safe-area-inset-top, 0px));
         }
         h1 {
-          font-size: 0.68rem;
+          font-size: clamp(0.55rem, 1.4vmin, 0.68rem);
         }
         .asura-name {
-          font-size: 0.62rem;
+          font-size: clamp(0.58rem, 2.2vmin, 0.72rem);
         }
         .hp-row {
-          font-size: 0.58rem;
+          font-size: clamp(0.52rem, 2vmin, 0.62rem);
         }
         .hp-bar {
-          height: 0.48rem;
+          height: clamp(0.42rem, 1.8vmin, 0.52rem);
         }
         .hole-btn {
-          min-height: 1.1rem;
-          max-height: 1.25rem;
-          font-size: 0.48rem;
+          min-height: max(44px, 2.4rem);
+          font-size: clamp(0.52rem, 2.2vmin, 0.65rem);
         }
         .ctrl {
-          padding: 0.3rem 0.55rem;
-          font-size: 0.62rem;
+          min-height: 44px;
+          padding: 0.32rem 0.5rem;
+          font-size: clamp(0.58rem, 2.4vmin, 0.68rem);
+        }
+        .arena {
+          min-height: clamp(7.5rem, 26svmin, 10rem);
         }
       }
     </style>
   </head>
   <body>
-    <h1>Prototype · arrows vs asuras (test only)</h1>
-    <p class="asura-name" id="asuraTitle">—</p>
+    <header class="game-header">
+      <h1>Prototype · arrows vs asuras (test only)</h1>
+      <p class="asura-name" id="asuraTitle">—</p>
+    </header>
 
     <div class="layout">
-      <aside class="weapons" aria-label="Weapons from japa (mock)">
-        <h2>Weapons</h2>
-        <button type="button" class="weapon-btn active" data-w="0" data-name="Brahmastra" data-dmg="40" title="Brahmastra · 40 dmg">🜂</button>
-        <button type="button" class="weapon-btn" data-w="1" data-name="Āgneyāstra" data-dmg="19" title="Āgneyāstra · 19 dmg">🔥</button>
-        <button type="button" class="weapon-btn" data-w="2" data-name="Vel" data-dmg="28" title="Vel · 28 dmg">🗡️</button>
-        <button type="button" class="weapon-btn" data-w="3" data-name="Gadā" data-dmg="14" title="Gadā · 14 dmg">🔨</button>
-        <button type="button" class="weapon-btn" data-w="4" data-name="Radiance" data-dmg="10" title="Radiance · 10 dmg">✨</button>
-      </aside>
       <div class="stage-wrap">
         <div class="hp-row">
           <span class="label">Asura</span>
@@ -324,7 +422,17 @@
             <canvas id="cv" width="360" height="480" aria-label="Combat field"></canvas>
           </div>
         </div>
-        <div class="holes" id="holes" aria-label="Fire holes"></div>
+        <div class="player-deck" aria-label="Your weapons and firing holes">
+          <aside class="weapons" aria-label="Weapons from japa (mock)">
+            <h2>Your weapons</h2>
+            <button type="button" class="weapon-btn active" data-w="0" data-name="Brahmastra" data-dmg="40" title="Brahmastra · 40 dmg">🜂</button>
+            <button type="button" class="weapon-btn" data-w="1" data-name="Āgneyāstra" data-dmg="19" title="Āgneyāstra · 19 dmg">🔥</button>
+            <button type="button" class="weapon-btn" data-w="2" data-name="Vel" data-dmg="28" title="Vel · 28 dmg">🗡️</button>
+            <button type="button" class="weapon-btn" data-w="3" data-name="Gadā" data-dmg="14" title="Gadā · 14 dmg">🔨</button>
+            <button type="button" class="weapon-btn" data-w="4" data-name="Radiance" data-dmg="10" title="Radiance · 10 dmg">✨</button>
+          </aside>
+          <div class="holes" id="holes" aria-label="Fire holes"></div>
+        </div>
         <div class="hp-row">
           <span class="label">You</span>
           <div class="hp-bar"><div class="hp-fill player" id="hpPlayer"></div></div>
@@ -508,13 +616,12 @@
           var baseCy = headTop + imgH / 2;
           var cy = baseCy + asuraDrop;
           var footY = cy + imgH / 2;
-          var enemyHoleY = baseCy + imgH / 2 + gapBelowFeet;
+          /* Enemy fire ports: fixed Y from resting stance only — do not follow charge/rush */
+          var baseFootY = baseCy + imgH / 2;
+          var enemyHoleY = baseFootY + gapBelowFeet;
           var maxEnemyHole = h * HOLE_BOTTOM_FRAC - h * 0.28;
           if (enemyHoleY > maxEnemyHole) {
             enemyHoleY = maxEnemyHole;
-          }
-          if (enemyHoleY <= footY) {
-            enemyHoleY = footY + gapBelowFeet;
           }
           return {
             cx: cx,
@@ -531,12 +638,41 @@
           return proj.y > cv.height * 0.84;
         }
 
+        /** Ally vs enemy arrows that touch cancel both; avoids double-splice index bugs on mobile. */
+        function resolveProjectileCollisions() {
+          var n = projectiles.length;
+          if (n < 2) return;
+          var dead = new Array(n);
+          for (var z = 0; z < n; z++) dead[z] = false;
+          var rr = 10 * dpr;
+          var rr2 = rr * rr;
+          for (var i = 0; i < n; i++) {
+            if (dead[i]) continue;
+            var pi = projectiles[i];
+            for (var j = i + 1; j < n; j++) {
+              if (dead[j]) continue;
+              var pj = projectiles[j];
+              if (pi.ally === pj.ally) continue;
+              var dx = pi.x - pj.x;
+              var dy = pi.y - pj.y;
+              if (dx * dx + dy * dy <= rr2) {
+                dead[i] = true;
+                dead[j] = true;
+              }
+            }
+          }
+          var out = [];
+          for (var k = 0; k < n; k++) {
+            if (!dead[k]) out.push(projectiles[k]);
+          }
+          projectiles = out;
+        }
+
         function loop(now) {
           var dt = Math.min(0.05, (now - lastT) / 1000);
           lastT = now;
           wobbleT += dt;
 
-          resize();
           var w = cv.width;
           var h = cv.height;
 
@@ -568,21 +704,7 @@
           /*
            * Arrow cancellation: when enemy and ally arrows meet, both vanish.
            */
-          for (var a = projectiles.length - 1; a >= 0; a--) {
-            var pa = projectiles[a];
-            for (var b = a - 1; b >= 0; b--) {
-              var pb = projectiles[b];
-              if (pa.ally === pb.ally) continue;
-              var dx = pa.x - pb.x;
-              var dy = pa.y - pb.y;
-              var rr = 10 * dpr;
-              if (dx * dx + dy * dy <= rr * rr) {
-                projectiles.splice(a, 1);
-                projectiles.splice(b, 1);
-                break;
-              }
-            }
-          }
+          resolveProjectileCollisions();
 
           for (var i = projectiles.length - 1; i >= 0; i--) {
             var p = projectiles[i];
@@ -717,7 +839,7 @@
           requestAnimationFrame(loop);
         }
 
-        for (var h = 0; h < HOLE_COUNT; h++) {
+        for (var holeInit = 0; holeInit < HOLE_COUNT; holeInit++) {
           (function (hi) {
             var b = document.createElement('button');
             b.type = 'button';
@@ -729,10 +851,16 @@
               spawnPlayerShot(hi);
             });
             holesEl.appendChild(b);
-          })(h);
+          })(holeInit);
         }
 
         document.querySelectorAll('.weapon-btn').forEach(function (btn) {
+          btn.addEventListener('touchstart', function () {
+            document.querySelectorAll('.weapon-btn').forEach(function (b) {
+              b.classList.remove('tip-touch');
+            });
+            btn.classList.add('tip-touch');
+          }, { passive: true });
           btn.addEventListener('click', function () {
             document.querySelectorAll('.weapon-btn').forEach(function (b) {
               b.classList.remove('active');

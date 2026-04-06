@@ -5,6 +5,12 @@ import { Landing } from './components/landing/Landing';
 import { InstallPrompt } from './components/ui/InstallPrompt';
 import { useAuthStore } from './store/authStore';
 
+function multiplayerAsuraHref(): string {
+  let base = import.meta.env.BASE_URL || '/';
+  if (!base.endsWith('/')) base += '/';
+  return `${base}asura-combat-test.html`;
+}
+
 function App() {
   const navigate = useNavigate();
   const [screen, setScreen] = useState<'splash' | 'landing'>('splash');
@@ -22,7 +28,9 @@ function App() {
           onGuestPlay={() => navigate('/game?guest=1')}
           onBirthday={() => navigate('/occasion/birthday')}
           onAnniversary={() => navigate('/occasion/anniversary')}
-          onMultiplayer={() => navigate('/menu')}
+          onMultiplayer={() => {
+            window.location.assign(multiplayerAsuraHref());
+          }}
         />
       )}
       <InstallPrompt />

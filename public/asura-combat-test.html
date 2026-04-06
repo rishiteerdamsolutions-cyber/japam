@@ -29,7 +29,7 @@
         align-items: stretch;
         gap: 0.5rem;
         touch-action: manipulation;
-        overflow: hidden;
+        overflow: auto;
       }
       h1 {
         font-size: 0.75rem;
@@ -42,8 +42,8 @@
       }
       .layout {
         display: flex;
-        flex-direction: row;
-        gap: 0.5rem;
+        flex-direction: column;
+        gap: 0.4rem;
         width: 100%;
         max-width: none;
         align-items: stretch;
@@ -51,28 +51,41 @@
         min-height: 0;
       }
       .weapons {
-        flex: 0 0 5.5rem;
+        flex: 0 0 auto;
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
+        align-items: center;
+        overflow-x: auto;
+        scrollbar-width: thin;
         gap: 0.35rem;
+        width: 100%;
+        padding-bottom: 0.1rem;
       }
       .weapons h2 {
         font-size: 0.65rem;
-        margin: 0 0 0.25rem;
+        margin: 0 0.15rem 0 0;
         color: var(--amber-dim);
         text-transform: uppercase;
         letter-spacing: 0.08em;
+        white-space: nowrap;
       }
       .weapon-btn {
-        padding: 0.35rem 0.25rem;
-        font-size: 0.62rem;
-        line-height: 1.2;
-        border-radius: 0.5rem;
+        flex: 0 0 auto;
+        width: 2.6rem;
+        height: 2.6rem;
+        padding: 0;
+        font-size: 1.2rem;
+        line-height: 1;
+        border-radius: 0.65rem;
         border: 1px solid rgba(251, 191, 36, 0.35);
         background: rgba(0, 0, 0, 0.35);
         color: #fde68a;
         cursor: pointer;
         text-align: center;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
         transition: background 0.15s, border-color 0.15s;
       }
       .weapon-btn:hover,
@@ -86,12 +99,36 @@
         border-color: var(--amber);
         font-weight: 700;
       }
+      .weapon-btn::after {
+        content: attr(data-name) ' · ' attr(data-dmg) ' dmg';
+        position: absolute;
+        left: 50%;
+        bottom: calc(100% + 0.3rem);
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.78);
+        border: 1px solid rgba(251, 191, 36, 0.45);
+        color: #fde68a;
+        padding: 0.18rem 0.35rem;
+        border-radius: 0.35rem;
+        font-size: 0.56rem;
+        font-weight: 600;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.12s ease;
+        z-index: 20;
+      }
+      .weapon-btn:hover::after,
+      .weapon-btn:focus-visible::after,
+      .weapon-btn.active::after {
+        opacity: 1;
+      }
       .stage-wrap {
         flex: 1;
         min-width: 0;
         display: flex;
         flex-direction: column;
-        gap: 0.25rem;
+        gap: 0.2rem;
         min-height: 0;
       }
       /* Matches canvas holeXs(): margin = 10% of width */
@@ -164,16 +201,20 @@
       .arena-outer {
         perspective: 520px;
         perspective-origin: 50% 45%;
-        /* rotateX tilts the board past its layout box; reserve space so holes sit clearly below */
-        margin-bottom: clamp(1rem, 6vmin, 2.25rem);
-        flex: 1 1 auto;
+        /* rotateX tilts the board past its layout box; keep reserve modest so it fits short screens. */
+        margin-bottom: clamp(0.45rem, 2.6vmin, 1rem);
+        flex: 1 1 0;
         min-height: 0;
+        display: flex;
       }
       .arena {
         position: relative;
         width: 100%;
-        height: 100%;
-        min-height: 260px;
+        height: min(
+          100%,
+          calc(100dvh - 15rem)
+        );
+        min-height: 180px;
         border-radius: 0.75rem;
         border: 2px solid rgba(251, 191, 36, 0.4);
         box-shadow: 0 0 24px rgba(245, 158, 11, 0.2), inset 0 0 40px rgba(0, 0, 0, 0.35);
@@ -211,22 +252,51 @@
         cursor: pointer;
       }
       @media (max-width: 860px) {
-        .layout {
-          flex-direction: column;
-        }
         .weapons {
           flex: 0 0 auto;
-          display: grid;
-          grid-template-columns: repeat(5, minmax(0, 1fr));
-          gap: 0.35rem;
+          display: flex;
+          gap: 0.28rem;
           width: 100%;
         }
         .weapons h2 {
-          grid-column: 1 / -1;
+          flex: 0 0 auto;
           margin-bottom: 0;
         }
         .weapon-btn {
-          min-height: 2.2rem;
+          width: 2.35rem;
+          height: 2.35rem;
+          font-size: 1.08rem;
+        }
+        .arena {
+          height: min(100%, calc(100dvh - 18rem));
+          min-height: 170px;
+        }
+      }
+      @media (max-height: 760px) {
+        body {
+          gap: 0.35rem;
+          padding-top: 0.25rem;
+        }
+        h1 {
+          font-size: 0.68rem;
+        }
+        .asura-name {
+          font-size: 0.62rem;
+        }
+        .hp-row {
+          font-size: 0.58rem;
+        }
+        .hp-bar {
+          height: 0.48rem;
+        }
+        .hole-btn {
+          min-height: 1.1rem;
+          max-height: 1.25rem;
+          font-size: 0.48rem;
+        }
+        .ctrl {
+          padding: 0.3rem 0.55rem;
+          font-size: 0.62rem;
         }
       }
     </style>
@@ -238,11 +308,11 @@
     <div class="layout">
       <aside class="weapons" aria-label="Weapons from japa (mock)">
         <h2>Weapons</h2>
-        <button type="button" class="weapon-btn active" data-w="0">Brahmastra<br /><small>34 dmg</small></button>
-        <button type="button" class="weapon-btn" data-w="1">Āgneyāstra<br /><small>18 dmg</small></button>
-        <button type="button" class="weapon-btn" data-w="2">Vel<br /><small>24 dmg</small></button>
-        <button type="button" class="weapon-btn" data-w="3">Gadā<br /><small>13 dmg</small></button>
-        <button type="button" class="weapon-btn" data-w="4">Radiance<br /><small>9 dmg</small></button>
+        <button type="button" class="weapon-btn active" data-w="0" data-name="Brahmastra" data-dmg="40" title="Brahmastra · 40 dmg">🜂</button>
+        <button type="button" class="weapon-btn" data-w="1" data-name="Āgneyāstra" data-dmg="19" title="Āgneyāstra · 19 dmg">🔥</button>
+        <button type="button" class="weapon-btn" data-w="2" data-name="Vel" data-dmg="28" title="Vel · 28 dmg">🗡️</button>
+        <button type="button" class="weapon-btn" data-w="3" data-name="Gadā" data-dmg="14" title="Gadā · 14 dmg">🔨</button>
+        <button type="button" class="weapon-btn" data-w="4" data-name="Radiance" data-dmg="10" title="Radiance · 10 dmg">✨</button>
       </aside>
       <div class="stage-wrap">
         <div class="hp-row">
@@ -280,7 +350,7 @@
          * Explicit weapon hierarchy (higher = stronger):
          * Brahmastra > Vel > Agneyastra > Gada > Radiance.
          */
-        var WEAPONS = [{ dmg: 34 }, { dmg: 18 }, { dmg: 24 }, { dmg: 13 }, { dmg: 9 }];
+        var WEAPONS = [{ dmg: 40 }, { dmg: 19 }, { dmg: 28 }, { dmg: 14 }, { dmg: 10 }];
         var HOLE_COUNT = 5;
         /** Player-side holes: near bottom edge; asura-side Y comes from asuraLayout() */
         var HOLE_BOTTOM_FRAC = 0.93;
@@ -453,7 +523,7 @@
             ih: imgH,
             footY: footY,
             enemyHoleY: enemyHoleY,
-            hit: { w: imgW * 0.52, h: imgH * 0.48 },
+            hit: { w: imgW * 0.7, h: imgH * 0.65 },
           };
         }
 
@@ -505,7 +575,7 @@
               if (pa.ally === pb.ally) continue;
               var dx = pa.x - pb.x;
               var dy = pa.y - pb.y;
-              var rr = 16 * dpr;
+              var rr = 10 * dpr;
               if (dx * dx + dy * dy <= rr * rr) {
                 projectiles.splice(a, 1);
                 projectiles.splice(b, 1);

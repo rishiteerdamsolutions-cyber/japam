@@ -18,16 +18,18 @@
       }
       body {
         margin: 0;
-        min-height: 100vh;
+        width: 100vw;
+        height: 100dvh;
         font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
         background: linear-gradient(165deg, var(--bg1) 0%, var(--bg2) 50%, #1e1033 100%);
         color: #fff;
-        padding: 0.5rem;
+        padding: 0.4rem 0.5rem calc(0.4rem + env(safe-area-inset-bottom));
         display: flex;
         flex-direction: column;
-        align-items: center;
+        align-items: stretch;
         gap: 0.5rem;
         touch-action: manipulation;
+        overflow: hidden;
       }
       h1 {
         font-size: 0.75rem;
@@ -43,8 +45,10 @@
         flex-direction: row;
         gap: 0.5rem;
         width: 100%;
-        max-width: 28rem;
+        max-width: none;
         align-items: stretch;
+        flex: 1 1 auto;
+        min-height: 0;
       }
       .weapons {
         flex: 0 0 5.5rem;
@@ -88,6 +92,7 @@
         display: flex;
         flex-direction: column;
         gap: 0.25rem;
+        min-height: 0;
       }
       /* Matches canvas holeXs(): margin = 10% of width */
       .holes {
@@ -161,12 +166,14 @@
         perspective-origin: 50% 45%;
         /* rotateX tilts the board past its layout box; reserve space so holes sit clearly below */
         margin-bottom: clamp(1rem, 6vmin, 2.25rem);
+        flex: 1 1 auto;
+        min-height: 0;
       }
       .arena {
         position: relative;
         width: 100%;
-        aspect-ratio: 3 / 4;
-        max-height: min(58vh, 420px);
+        height: 100%;
+        min-height: 260px;
         border-radius: 0.75rem;
         border: 2px solid rgba(251, 191, 36, 0.4);
         box-shadow: 0 0 24px rgba(245, 158, 11, 0.2), inset 0 0 40px rgba(0, 0, 0, 0.35);
@@ -192,7 +199,7 @@
         gap: 0.5rem;
         flex-wrap: wrap;
         justify-content: center;
-        max-width: 28rem;
+        width: 100%;
       }
       .ctrl {
         padding: 0.4rem 0.75rem;
@@ -203,6 +210,25 @@
         color: #fff;
         cursor: pointer;
       }
+      @media (max-width: 860px) {
+        .layout {
+          flex-direction: column;
+        }
+        .weapons {
+          flex: 0 0 auto;
+          display: grid;
+          grid-template-columns: repeat(5, minmax(0, 1fr));
+          gap: 0.35rem;
+          width: 100%;
+        }
+        .weapons h2 {
+          grid-column: 1 / -1;
+          margin-bottom: 0;
+        }
+        .weapon-btn {
+          min-height: 2.2rem;
+        }
+      }
     </style>
   </head>
   <body>
@@ -212,11 +238,11 @@
     <div class="layout">
       <aside class="weapons" aria-label="Weapons from japa (mock)">
         <h2>Weapons</h2>
-        <button type="button" class="weapon-btn active" data-w="0">Brahmastra<br /><small>18 dmg</small></button>
-        <button type="button" class="weapon-btn" data-w="1">Āgneyāstra<br /><small>12 dmg</small></button>
-        <button type="button" class="weapon-btn" data-w="2">Vel<br /><small>14 dmg</small></button>
-        <button type="button" class="weapon-btn" data-w="3">Gadā<br /><small>10 dmg</small></button>
-        <button type="button" class="weapon-btn" data-w="4">Radiance<br /><small>8 dmg</small></button>
+        <button type="button" class="weapon-btn active" data-w="0">Brahmastra<br /><small>34 dmg</small></button>
+        <button type="button" class="weapon-btn" data-w="1">Āgneyāstra<br /><small>18 dmg</small></button>
+        <button type="button" class="weapon-btn" data-w="2">Vel<br /><small>24 dmg</small></button>
+        <button type="button" class="weapon-btn" data-w="3">Gadā<br /><small>13 dmg</small></button>
+        <button type="button" class="weapon-btn" data-w="4">Radiance<br /><small>9 dmg</small></button>
       </aside>
       <div class="stage-wrap">
         <div class="hp-row">
@@ -250,13 +276,17 @@
           { name: 'Kaaliya', file: 'kaaliya-krishna.png', hp: 100 },
           { name: 'Hiranyakashipu', file: 'hiranyakasipa-narasimha.png', hp: 110 },
         ];
-        var WEAPONS = [{ dmg: 18 }, { dmg: 12 }, { dmg: 14 }, { dmg: 10 }, { dmg: 8 }];
+        /*
+         * Explicit weapon hierarchy (higher = stronger):
+         * Brahmastra > Vel > Agneyastra > Gada > Radiance.
+         */
+        var WEAPONS = [{ dmg: 34 }, { dmg: 18 }, { dmg: 24 }, { dmg: 13 }, { dmg: 9 }];
         var HOLE_COUNT = 5;
         /** Player-side holes: near bottom edge; asura-side Y comes from asuraLayout() */
         var HOLE_BOTTOM_FRAC = 0.93;
         /** Bump when replacing PNGs under public/asura or public/weapons */
-        var ASURA_ASSET_VER = '5';
-        var ARROW_ASSET_VER = '5';
+        var ASURA_ASSET_VER = '6';
+        var ARROW_ASSET_VER = '6';
         /** Extra rotation so arrow.png aligns with flight (π/2 = 90°) */
         var ARROW_ROT_EXTRA = Math.PI / 2;
 
@@ -308,7 +338,8 @@
         var defeatByCharge = false;
 
         function scheduleNextCharge(now) {
-          nextChargeAt = now + 3200 + Math.random() * 5200;
+          /* Delay rush so it doesn't happen immediately on wave start. */
+          nextChargeAt = now + 6200 + Math.random() * 3600;
         }
 
         function loadAsura(i) {
@@ -323,7 +354,7 @@
           };
           asuraImg.src = '/asura/' + a.file + '?v=' + ASURA_ASSET_VER;
           projectiles = [];
-          nextEnemyFireAt = performance.now() + 800 + Math.random() * 1200;
+          nextEnemyFireAt = performance.now() + 1300 + Math.random() * 1800;
           asuraPanPhase = Math.random() * Math.PI * 2;
           asuraCharging = false;
           asuraDrop = 0;
@@ -407,7 +438,7 @@
           var baseCy = headTop + imgH / 2;
           var cy = baseCy + asuraDrop;
           var footY = cy + imgH / 2;
-          var enemyHoleY = footY + gapBelowFeet;
+          var enemyHoleY = baseCy + imgH / 2 + gapBelowFeet;
           var maxEnemyHole = h * HOLE_BOTTOM_FRAC - h * 0.28;
           if (enemyHoleY > maxEnemyHole) {
             enemyHoleY = maxEnemyHole;
@@ -444,7 +475,7 @@
             nextEnemyFireAt = now + 900 + Math.random() * 1400;
           }
 
-          var chargeSpeed = 340 * dpr;
+          var chargeSpeed = 760 * dpr;
           if (asuraHp > 0 && playerHp > 0) {
             if (asuraCharging) {
               asuraDrop += chargeSpeed * dt;
@@ -461,6 +492,25 @@
               defeatByCharge = true;
               playerHp = 0;
               updateHpBars();
+            }
+          }
+
+          /*
+           * Arrow cancellation: when enemy and ally arrows meet, both vanish.
+           */
+          for (var a = projectiles.length - 1; a >= 0; a--) {
+            var pa = projectiles[a];
+            for (var b = a - 1; b >= 0; b--) {
+              var pb = projectiles[b];
+              if (pa.ally === pb.ally) continue;
+              var dx = pa.x - pb.x;
+              var dy = pa.y - pb.y;
+              var rr = 16 * dpr;
+              if (dx * dx + dy * dy <= rr * rr) {
+                projectiles.splice(a, 1);
+                projectiles.splice(b, 1);
+                break;
+              }
             }
           }
 

@@ -79,6 +79,10 @@ jobs:
     timeout-minutes: 15
     environment: production
 
+    env:
+      VERCEL_ORG_ID: team_tm6Lzkej8AnTCzmMZYWiV4iL
+      VERCEL_PROJECT_ID: prj_ROwI8gKRD3D8Bl9Zv5CPcfgWax8c
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -106,7 +110,7 @@ jobs:
 
       - name: Smoke test — health check
         run: |
-          sleep 10
+          sleep 15
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${{ steps.deploy.outputs.url }}/api/health")
           if [ "$STATUS" != "200" ]; then
             echo "Health check failed with status $STATUS"

@@ -10,20 +10,21 @@ export async function GET(_request) {
     const donors = await withCache('donors:list', TTL.PUBLIC_LIST, async () => {
       const snap = await db
         .collection('donors')
-        .where('displayName', '!=', '[deleted]')
         .orderBy('donatedAt', 'desc')
         .limit(200)
         .get();
-      return snap.docs.map((d) => {
-        const data = d.data();
-        const amount = typeof data.amount === 'number' ? data.amount : 0;
-        const label = data.lifetimeDonor === true || amount >= 5000000 ? 'Lifetime Donor' : 'Donor';
-        return {
-          displayName: data.displayName || 'Anonymous',
-          donatedAt: data.donatedAt || null,
-          label,
-        };
-      });
+      return snap.docs
+        .map((d) => {
+          const data = d.data();
+          const amount = typeof data.amount === 'number' ? data.amount : 0;
+          const label = data.lifetimeDonor === true || amount >= 5000000 ? 'Lifetime Donor' : 'Donor';
+          return {
+            displayName: data.displayName || 'Anonymous',
+            donatedAt: data.donatedAt || null,
+            label,
+          };
+        })
+        .filter((d) => d.displayName !== '[deleted]');
     });
 
     return jsonResponse({ donors });

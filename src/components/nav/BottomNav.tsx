@@ -90,17 +90,20 @@ export function BottomNav() {
 
   const NavItem = ({ path, icon: Icon, labelKey }: { path: string; icon: () => React.ReactNode; labelKey: string }) => {
     const isActive = pathname === path;
+    const label = t(labelKey);
     return (
       <button
         type="button"
         onClick={() => navigate(path)}
+        aria-label={label}
+        title={label}
         className={`flex flex-col items-center justify-center flex-1 min-w-0 py-2 px-1 gap-0.5 transition-colors ${
           isActive ? 'text-amber-400' : 'text-amber-200/70 hover:text-amber-300'
         }`}
         aria-current={isActive ? 'page' : undefined}
       >
         <Icon />
-        <span className="text-[10px] sm:text-xs truncate max-w-full">{t(labelKey)}</span>
+        <span className="text-[10px] sm:text-xs truncate max-w-full md:sr-only">{label}</span>
       </button>
     );
   };
@@ -120,6 +123,7 @@ export function BottomNav() {
         type="button"
         onClick={handlePlay}
         aria-label={t('menu.generalJapa')}
+        title={t('menu.generalJapa')}
         className="flex-shrink-0 w-14 h-14 -mt-5 rounded-full bg-amber-500 shadow-lg shadow-amber-500/40 flex items-center justify-center text-white border-4 border-black/80 hover:bg-amber-400 active:scale-95 transition-transform mx-1"
       >
         <PlayIcon />

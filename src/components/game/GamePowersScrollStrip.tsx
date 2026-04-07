@@ -31,39 +31,84 @@ function GuestLockBadge() {
   );
 }
 
-const ICON_INNER_SCALE = 2.7; /** ~10% zoom-out vs 3× so more of each offering fits in the circle. */
+const ICON_INNER_SCALE = 2.7;
+
+const DOUBLE_TAP_MS = 340;
+const LONG_PRESS_MS = 560;
 
 function RoundPowerTile({
-  title,
   iconSrc,
   count,
   isArmed,
-  onPress,
+  onArmCycle,
   disabled,
   guestPreview,
+  revealTitle,
+  revealDescription,
+  earnDescription,
+  ariaLabel,
+  disarmHint,
 }: {
-  title: string;
   iconSrc: string;
   count: number;
   isArmed: boolean;
-  onPress: () => void;
+  onArmCycle: () => void;
   disabled: boolean;
-  /** Guest: show icons as preview only (lock badge, tap handled by parent). */
   guestPreview?: boolean;
+  revealTitle: string;
+  revealDescription: string;
+  earnDescription: string;
+  ariaLabel: string;
+  disarmHint: string;
 }) {
+  const { t } = useTranslation();
   const [hoverOpen, setHoverOpen] = useState(false);
   const [focusOpen, setFocusOpen] = useState(false);
-  const [touchHoldOpen, setTouchHoldOpen] = useState(false);
+  const [touchRevealOpen, setTouchRevealOpen] = useState(false);
+  const touchRevealTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const singleTapTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastPointerUpRef = useRef(0);
+  const lastTouchGestureRef = useRef(0);
   const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const touchHoldHideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const suppressNextClickRef = useRef(false);
+  const longPressFiredRef = useRef(false);
+
+  const canArm = guestPreview || isArmed || (!disabled && count >= 1);
 
   useEffect(() => {
     return () => {
+      if (touchRevealTimerRef.current) clearTimeout(touchRevealTimerRef.current);
+      if (singleTapTimerRef.current) clearTimeout(singleTapTimerRef.current);
       if (longPressTimerRef.current) clearTimeout(longPressTimerRef.current);
-      if (touchHoldHideTimerRef.current) clearTimeout(touchHoldHideTimerRef.current);
     };
   }, []);
+
+  const clearSingleTapTimer = () => {
+    if (singleTapTimerRef.current) {
+      clearTimeout(singleTapTimerRef.current);
+      singleTapTimerRef.current = null;
+    }
+  };
+
+  const runArmCycle = useCallback(() => {
+    onArmCycle();
+  }, [onArmCycle]);
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    if (guestPreview) return;
+    if (e.pointerType !== 'touch') return;
+    longPressFiredRef.current = false;
+    clearSingleTapTimer();
+    longPressTimerRef.current = window.setTimeout(() => {
+      longPressTimerRef.current = null;
+      if (!canArm) return;
+      longPressFiredRef.current = true;
+      lastTouchGestureRef.current = Date.now();
+      lastPointerUpRef.current = 0;
+      clearSingleTapTimer();
+      runArmCycle();
+      setTouchRevealOpen(false);
+    }, LONG_PRESS_MS);
+  };
 
   const clearLongPressTimer = () => {
     if (longPressTimerRef.current) {
@@ -72,38 +117,64 @@ function RoundPowerTile({
     }
   };
 
-  const handlePointerDown = (e: React.PointerEvent) => {
-    if (e.pointerType === 'mouse') return;
+  const handlePointerUp = (e: React.PointerEvent) => {
     clearLongPressTimer();
-    suppressNextClickRef.current = false;
-    longPressTimerRef.current = window.setTimeout(() => {
-      longPressTimerRef.current = null;
-      suppressNextClickRef.current = true;
-      setTouchHoldOpen(true);
-      if (touchHoldHideTimerRef.current) clearTimeout(touchHoldHideTimerRef.current);
-      touchHoldHideTimerRef.current = window.setTimeout(() => {
-        touchHoldHideTimerRef.current = null;
-        setTouchHoldOpen(false);
-        suppressNextClickRef.current = false;
-      }, 2400);
-    }, 520);
-  };
-
-  const handlePointerEnd = () => {
-    clearLongPressTimer();
-  };
-
-  const handleTileClick = (e: React.MouseEvent) => {
-    if (suppressNextClickRef.current) {
-      e.preventDefault();
-      e.stopPropagation();
-      suppressNextClickRef.current = false;
+    if (guestPreview) return;
+    if (longPressFiredRef.current) {
+      longPressFiredRef.current = false;
       return;
     }
-    onPress();
+    if (e.pointerType !== 'touch') return;
+
+    const now = Date.now();
+    lastTouchGestureRef.current = now;
+    if (lastPointerUpRef.current > 0 && now - lastPointerUpRef.current < DOUBLE_TAP_MS) {
+      clearSingleTapTimer();
+      lastPointerUpRef.current = 0;
+      if (canArm) runArmCycle();
+      setTouchRevealOpen(false);
+      return;
+    }
+
+    lastPointerUpRef.current = now;
+    clearSingleTapTimer();
+    singleTapTimerRef.current = window.setTimeout(() => {
+      singleTapTimerRef.current = null;
+      lastPointerUpRef.current = 0;
+      setTouchRevealOpen((o) => !o);
+      if (touchRevealTimerRef.current) clearTimeout(touchRevealTimerRef.current);
+      touchRevealTimerRef.current = window.setTimeout(() => {
+        touchRevealTimerRef.current = null;
+        setTouchRevealOpen(false);
+      }, 3200);
+    }, DOUBLE_TAP_MS);
   };
 
-  const showFloatingLabel = hoverOpen || focusOpen || touchHoldOpen;
+  const handlePointerCancel = () => {
+    clearLongPressTimer();
+    clearSingleTapTimer();
+  };
+
+  const handleDoubleClick = (e: React.MouseEvent) => {
+    if (guestPreview) return;
+    e.preventDefault();
+    if (!canArm) return;
+    runArmCycle();
+    setTouchRevealOpen(false);
+  };
+
+  const handleClick = (e: React.MouseEvent) => {
+    if (guestPreview) {
+      runArmCycle();
+      return;
+    }
+    if (Date.now() - lastTouchGestureRef.current < 500) {
+      e.preventDefault();
+    }
+  };
+
+  const showFloatingPanel = hoverOpen || focusOpen || touchRevealOpen;
+  const panelBody = isArmed ? disarmHint : disabled && !isArmed ? earnDescription : revealDescription;
 
   return (
     <div
@@ -111,23 +182,33 @@ function RoundPowerTile({
       onMouseEnter={() => setHoverOpen(true)}
       onMouseLeave={() => setHoverOpen(false)}
       onPointerDown={handlePointerDown}
-      onPointerUp={handlePointerEnd}
-      onPointerCancel={handlePointerEnd}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerCancel}
     >
-      {showFloatingLabel && (
+      {showFloatingPanel && (
         <span
           role="tooltip"
-          className="pointer-events-none absolute bottom-full left-1/2 z-[60] mb-1 max-w-[11rem] -translate-x-1/2 rounded-lg border border-amber-500/45 bg-black/92 px-2 py-1.5 text-center text-[10px] font-medium leading-snug text-amber-100 shadow-lg sm:max-w-[13rem] sm:text-xs"
+          className="pointer-events-none absolute bottom-full left-1/2 z-[60] mb-1 max-w-[12.5rem] -translate-x-1/2 rounded-lg border border-amber-500/45 bg-black/92 px-2 py-1.5 text-left text-[10px] font-medium leading-snug text-amber-100 shadow-lg sm:max-w-[14rem] sm:text-xs"
         >
-          {title}
+          <span className="block text-amber-300/95">{revealTitle}</span>
+          <span className="mt-0.5 block font-normal text-amber-100/90">{panelBody}</span>
+          {!guestPreview && canArm && (
+            <span className="mt-1 block border-t border-white/10 pt-1 text-[9px] text-amber-200/75 sm:text-[10px]">
+              {t('powers.doubleClickArm')} · {t('powers.doubleTapArm')} · {t('powers.longPressArm')}
+            </span>
+          )}
+          {guestPreview && (
+            <span className="mt-1 block text-[9px] text-amber-200/70">{t('game.guestPowersTileHint')}</span>
+          )}
         </span>
       )}
       <button
         type="button"
-        onClick={handleTileClick}
-        disabled={disabled}
-        title={title}
-        aria-label={title}
+        onClick={handleClick}
+        onDoubleClick={handleDoubleClick}
+        disabled={false}
+        aria-label={ariaLabel}
+        aria-expanded={showFloatingPanel}
         onFocus={() => setFocusOpen(true)}
         onBlur={() => setFocusOpen(false)}
         className={`
@@ -135,13 +216,10 @@ function RoundPowerTile({
         border-2 transition-transform shadow-md
         bg-[#2a1f24] border-[color-mix(in_srgb,#2a1f24_88%,#000)]
         ${isArmed ? 'border-amber-300 ring-2 ring-amber-400/50 scale-[1.02]' : 'border-white/22 hover:border-white/35'}
-        ${guestPreview ? 'cursor-pointer opacity-95' : disabled ? 'opacity-40 cursor-not-allowed' : 'active:scale-95 hover:border-amber-400/45'}
+        ${guestPreview ? 'cursor-pointer opacity-95' : disabled && !isArmed ? 'opacity-40 cursor-not-allowed' : 'active:scale-95 hover:border-amber-400/45'}
         focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400
       `}
       >
-        {/*
-        Same outer tile size; icon bitmap is scaled inside (clipped to the circle) so HD offerings read clearly.
-      */}
         <img
           src={iconSrc}
           alt=""
@@ -166,10 +244,6 @@ export interface GamePowersScrollStripProps {
   onGuestPowerTap?: () => void;
 }
 
-/**
- * Fixed left: Namaskaram. Center: scrollable per-deity offering PNGs (#2a1f24 plate). Fixed right: free swap + flower bomb.
- * Guest: show full strip for awareness; tap opens sign-in (via `onGuestPowerTap`).
- */
 export function GamePowersScrollStrip({ isGuest = false, onGuestPowerTap }: GamePowersScrollStripProps = {}) {
   const { t } = useTranslation();
   const entries = usePowersInventoryStore((s) => s.entries);
@@ -179,7 +253,6 @@ export function GamePowersScrollStrip({ isGuest = false, onGuestPowerTap }: Game
   const armedPowerId = usePowerArmStore((s) => s.armedPowerId);
   const setArmedPower = usePowerArmStore((s) => s.setArmedPower);
 
-  /** All Deity Japa: same 6 as the board; īṣṭa: all deity rows in inventory. */
   const generalAllow = useMemo((): DeityId[] | null => {
     if (mode !== 'general') return null;
     return generalBoardDeities?.length
@@ -206,7 +279,7 @@ export function GamePowersScrollStrip({ isGuest = false, onGuestPowerTap }: Game
     return allow.map((id) => ({ id, count: 1 as number }));
   }, [isGuest, generalAllow, levelIndex]);
 
-  const onPowerTap = useCallback(
+  const onPowerArmCycle = useCallback(
     (id: InventoryPowerId) => {
       if (isGuest) {
         onGuestPowerTap?.();
@@ -235,21 +308,35 @@ export function GamePowersScrollStrip({ isGuest = false, onGuestPowerTap }: Game
             ? t('powers.bomb')
             : id;
     const earn = t(powerEarnI18nKey(id));
-    const title = isGuest
-      ? `${name} — ${t('game.guestPowersTileHint')}`
-      : count < 1
-        ? earn
-        : armed
-          ? `${name} — ${t('game.powersDisarm')}`
-          : `${name} — ${t('game.powersArm')}`;
+    const descKey =
+      id === 'namaskaram'
+        ? 'powers.desc.namaskaram'
+        : id === 'freeSwap'
+          ? 'powers.desc.freeSwap'
+          : id === 'bomb'
+            ? 'powers.desc.bomb'
+            : 'powers.desc.deityOffering';
+    const revealDescription = t(descKey);
+    const disarmHint = t('game.powersDisarm');
+    const ariaLabel = isGuest
+      ? `${name}. ${t('game.guestPowersTileHint')}`
+      : armed
+        ? `${name}. ${disarmHint} ${t('powers.doubleClickArm')}.`
+        : count < 1
+          ? `${name}. ${earn}`
+          : `${name}. ${revealDescription} ${t('game.powersArm')}`;
 
     return (
       <RoundPowerTile
-        title={title}
+        revealTitle={name}
+        revealDescription={revealDescription}
+        earnDescription={earn}
+        disarmHint={disarmHint}
+        ariaLabel={ariaLabel}
         iconSrc={stripIconSrc(id)}
         count={count}
         isArmed={armed}
-        onPress={() => onPowerTap(id)}
+        onArmCycle={() => onPowerArmCycle(id)}
         disabled={isGuest ? false : count < 1 && !armed}
         guestPreview={isGuest}
       />
@@ -287,22 +374,28 @@ export function GamePowersScrollStrip({ isGuest = false, onGuestPowerTap }: Game
                 const armed = !isGuest && armedPowerId === id;
                 const name = t(`deities.${id}`, { defaultValue: id });
                 const earn = t(powerEarnI18nKey(id));
-                const title = isGuest
-                  ? `${name} — ${t('game.guestPowersTileHint')}`
-                  : slot.count < 1
-                    ? earn
-                    : armed
-                      ? `${name} — ${t('game.powersDisarm')}`
-                      : `${name} — ${t('game.powersArm')}`;
+                const revealDescription = t('powers.desc.deityOffering');
+                const disarmHint = t('game.powersDisarm');
+                const ariaLabel = isGuest
+                  ? `${name}. ${t('game.guestPowersTileHint')}`
+                  : armed
+                    ? `${name}. ${disarmHint} ${t('powers.doubleClickArm')}.`
+                    : slot.count < 1
+                      ? `${name}. ${earn}`
+                      : `${name}. ${revealDescription} ${t('game.powersArm')}`;
 
                 return (
                   <div key={id} className="flex-none snap-start flex flex-col items-center">
                     <RoundPowerTile
-                      title={title}
+                      revealTitle={name}
+                      revealDescription={revealDescription}
+                      earnDescription={earn}
+                      disarmHint={disarmHint}
+                      ariaLabel={ariaLabel}
                       iconSrc={stripIconSrc(id)}
                       count={slot.count}
                       isArmed={armed}
-                      onPress={() => onPowerTap(id)}
+                      onArmCycle={() => onPowerArmCycle(id)}
                       disabled={isGuest ? false : slot.count < 1 && !armed}
                       guestPreview={isGuest}
                     />

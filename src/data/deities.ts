@@ -31,6 +31,10 @@ export interface Deity {
   color: string;
   mantraAudio: string;
   mantra: string;
+  /** Optional PDF / attribution text by match length; each defaults to `mantra` when omitted. */
+  mantra3?: string;
+  mantra4?: string;
+  mantra5?: string;
   /** Full artwork for menu, level select, etc. */
   image: string;
   /** Optional face-focused asset for match-3 gems (falls back to `image` if omitted). */
@@ -269,4 +273,10 @@ export const DEITY_IDS: DeityId[] = DEITIES.map((d) => d.id);
 
 export function getDeity(id: DeityId): Deity {
   return DEITIES.find((d) => d.id === id)!;
+}
+
+export function mantraForMatchTier(d: Deity, tier: 3 | 4 | 5): string {
+  if (tier === 3) return d.mantra3 ?? d.mantra;
+  if (tier === 4) return d.mantra4 ?? d.mantra;
+  return d.mantra5 ?? d.mantra;
 }

@@ -117,12 +117,24 @@ async function addHandwrittenJapasToPdf(
   }
 }
 
+export interface MantraPdfOptions {
+  /** e.g. "3-gem line" — included in the summary line and suggested filename. */
+  matchTierNote?: string;
+  /** Base filename without `.pdf` (ASCII-safe recommended). */
+  fileStem?: string;
+}
+
+function safePdfFileStem(stem: string): string {
+  return stem.replace(/[^\w\-.]+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '') || 'japam-japa';
+}
+
 export async function downloadMantraPdf(
   mantra: string,
   count: number,
   deityName: string,
   details?: PdfDetails,
-  handwritingImageDataUrl?: string | null
+  handwritingImageDataUrl?: string | null,
+  options?: MantraPdfOptions
 ) {
   if (count <= 0) return;
   const doc = new jsPDF({ unit: 'pt', format: 'a4' });
@@ -162,9 +174,12 @@ export async function downloadMantraPdf(
     y += lineHeight;
   }
 
-  // Deity and count
+  // Deity, count, optional match-tier note
   doc.setFontSize(fontSize);
-  doc.text(`${deityName} - ${count} Japas`, margin, y);
+  const summaryLine = options?.matchTierNote
+    ? `${deityName} - ${count} Japas (${options.matchTierNote})`
+    : `${deityName} - ${count} Japas`;
+  doc.text(summaryLine, margin, y);
   y += lineHeight * 2;
 
   if (handwritingImageDataUrl) {
@@ -198,5 +213,7 @@ export async function downloadMantraPdf(
     if (line) doc.text(line, x, y);
   }
 
-  doc.save(`${deityName}-${count}-japas.pdf`);
+  const defaultStem = `${deityName}-${count}-japas`;
+  const stem = options?.fileStem ?? defaultStem;
+  doc.save(`${safePdfFileStem(stem)}.pdf`);
 }

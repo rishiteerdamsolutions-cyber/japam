@@ -19,6 +19,7 @@ import { expandPowerClears, planSpecialSpawn } from '../engine/powers';
 import { isBlessing } from '../engine/gemKinds';
 import { isDeityPowerId } from '../data/gamePowers';
 import { gameDebug } from '../lib/gameDebug';
+import { matchStrengthTierForDeity } from '../lib/japaMatchTier';
 import {
   filterPowerBackedForIstaPath,
   normalizeGeneralBoardDeities,
@@ -846,7 +847,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
         if (useIntendedOnly && deity !== intendedDeityId) continue;
         const japaCount = 1; // 1 japa per manual match (e.g. 3 candies matched = 1 japa)
         japasByDeity[deity] = (japasByDeity[deity] ?? 0) + japaCount;
-        if (!isGuest) japaStore.addJapa(deity, japaCount);
+        const matchTier = matchStrengthTierForDeity(pendingMatchBatch, deity);
+        if (!isGuest) japaStore.addJapa(deity, japaCount, { matchTier });
         japaDelta += shouldCountJapa ? japaCount : 0;
       }
       if (useIntendedOnly && japaDelta > 1) japaDelta = 1; // multi-match: cap at 1 (intended deity only)

@@ -96,7 +96,7 @@
     "exit": "Exit",
     "refreshBoard": "No matches? Refresh board",
     "powersStripRegion": "Collected powers",
-    "powersInteractionHint": "Hover a power, or on touch hold it briefly, to see the deity or power name and how to use it.",
+    "powersInteractionHint": "Hover a power to see its name and effect. Double-click to arm, then tap the board. On touch: tap once for details, double-tap to arm. Long-press also arms when you have a charge.",
     "powersStripLayoutHint": "Namaskaram stays on the left; deity offerings scroll in the middle; free swap and flower bomb stay on the right.",
     "powersScrollEmpty": "Complete an Iṣṭa devatā level to collect that offering here.",
     "powersArm": "Arm — then tap a candy on the board",
@@ -250,7 +250,15 @@
     "generating": "Generating…",
     "close": "Close",
     "uploadImageError": "Please upload an image file (PNG, JPG, etc.)",
-    "couldNotReadFile": "Could not read file"
+    "couldNotReadFile": "Could not read file",
+    "matchRows3": "3-gem line clears",
+    "matchRows4": "4-gem line clears",
+    "matchRows5": "5+ gem line clears",
+    "tierCountsHint": "Japas from match size (tracked from now on; older play may show 0 here).",
+    "uploadHandwritingRequired": "Upload your handwritten image of this nama to generate the PDF.",
+    "handwritingRequiredTitle": "Handwriting required",
+    "pdfModalSubtitle": "{{deity}} · {{tier}} · {{count}} japas",
+    "downloadPdfTierAria": "Download PDF, {{tier}} matches, {{deity}}"
   },
   "deities": {
     "rama": "Rama",
@@ -282,6 +290,15 @@
     "namaskaram": "Namaskaram — clear 1 tile",
     "bomb": "Flower — clear all of one gem",
     "freeSwap": "Free swap",
+    "desc": {
+      "namaskaram": "Removes a single candy you tap. Uses one move.",
+      "bomb": "Tap any candy of a deity after arming: every candy of that deity on the board clears. Uses one move.",
+      "freeSwap": "Swap two adjacent candies once without using a move. Cannot activate a blessing gem.",
+      "deityOffering": "Clears one candy of this deity (must tap that deity’s gem). Uses one move."
+    },
+    "doubleClickArm": "Double-click to arm",
+    "doubleTapArm": "Double-tap to arm",
+    "longPressArm": "Long-press to arm",
     "offering": {
       "rama": "Paanakam + Tulasi",
       "shiva": "Kalash on lingam",

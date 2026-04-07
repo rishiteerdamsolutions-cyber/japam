@@ -105,20 +105,17 @@ jobs:
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Deploy to production
-        id: deploy
-        run: |
-          URL=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})
-          echo "url=$URL" >> $GITHUB_OUTPUT
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
 
-      - name: Smoke test — health check
+      - name: Smoke test — health check (production domain)
         run: |
           sleep 15
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${{ steps.deploy.outputs.url }}/api/health")
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" "https://japam.digital/api/health")
           if [ "$STATUS" != "200" ]; then
-            echo "Health check failed with status $STATUS"
+            echo "Health check returned $STATUS (may still be propagating)"
             exit 1
           fi
-          echo "Health check passed (HTTP 200)"
+          echo "Health check passed — japam.digital/api/health returned 200"
 
 # ────────────────────────────────────────────────────────────────────────────
 # REQUIRED SECRETS (set in GitHub repo → Settings → Secrets → Actions):

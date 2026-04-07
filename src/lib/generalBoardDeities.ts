@@ -27,17 +27,108 @@ export function generalBoardEligibleDeities(): DeityId[] {
   return DEITY_IDS.filter((id) => !GENERAL_BOARD_EXCLUDED_DEITIES.includes(id));
 }
 
+function uniquePreserveOrder(deities: DeityId[]): DeityId[] {
+  const seen = new Set<DeityId>();
+  const out: DeityId[] = [];
+  for (const id of deities) {
+    if (!seen.has(id)) {
+      seen.add(id);
+      out.push(id);
+    }
+  }
+  return out;
+}
+
+/** Rāma / Nārāyaṇa / ISKCON read similarly on gems — at most one per All Deity Japa level. */
+export const EXCLUSIVE_VISNU_FORM_TRIO: DeityId[] = ['rama', 'narayana', 'iskcon'];
+
+function isValidGeneralBoardSubset(ids: DeityId[]): boolean {
+  const set = new Set(ids);
+  if (set.has('shakthi') && set.has('durga')) return false;
+  let trio = 0;
+  for (const id of EXCLUSIVE_VISNU_FORM_TRIO) {
+    if (set.has(id)) trio++;
+  }
+  return trio <= 1;
+}
+
+function pickFirstValidAddition(base: DeityId[], replacementCandidates: DeityId[] | undefined): DeityId | null {
+  const tryOrder = [...(replacementCandidates ?? []), ...generalBoardEligibleDeities()];
+  const seenTry = new Set<DeityId>();
+  for (const id of tryOrder) {
+    if (seenTry.has(id)) continue;
+    seenTry.add(id);
+    const set = new Set(base);
+    if (set.has(id)) continue;
+    if (isValidGeneralBoardSubset([...base, id])) {
+      return id;
+    }
+  }
+  return null;
+}
+
+/**
+ * All Deity Japa board subset rules:
+ * - Śakti and Durgā: never both (Lakṣmī + Sarasvatī may appear together).
+ * - Rāma, Nārāyaṇa, ISKCON: at most one of the three (similar visuals).
+ * Replacements prefer `replacementCandidates` (shuffle tail), then any eligible deity.
+ */
+export function normalizeGeneralBoardDeities(
+  deities: DeityId[],
+  levelIndex = 0,
+  replacementCandidates?: DeityId[],
+): DeityId[] {
+  let out = uniquePreserveOrder(deities);
+
+  const fixShakthiDurga = (): void => {
+    if (!out.includes('shakthi') || !out.includes('durga')) return;
+    const dropDurga = (levelIndex & 1) === 0;
+    const toRemove = dropDurga ? 'durga' : 'shakthi';
+    out = out.filter((id) => id !== toRemove);
+    const add = pickFirstValidAddition(out, replacementCandidates);
+    if (add) out.push(add);
+  };
+
+  const fixVisnuTrio = (): void => {
+    const present = EXCLUSIVE_VISNU_FORM_TRIO.filter((t) => out.includes(t));
+    if (present.length <= 1) return;
+    const keep = present[levelIndex % present.length]!;
+    const beforeLen = out.length;
+    out = out.filter((id) => !EXCLUSIVE_VISNU_FORM_TRIO.includes(id) || id === keep);
+    let needed = beforeLen - out.length;
+    while (needed > 0) {
+      const add = pickFirstValidAddition(out, replacementCandidates);
+      if (!add) break;
+      out.push(add);
+      needed--;
+    }
+  };
+
+  // Either fix can make the other necessary (e.g. replacement); settle in a few passes.
+  for (let i = 0; i < 6; i++) {
+    fixShakthiDurga();
+    fixVisnuTrio();
+    if (isValidGeneralBoardSubset(out)) break;
+  }
+
+  return out;
+}
+
 /**
  * Deterministic subset per level index so boards rotate variety without stuffing all deities into 6×6.
  */
 export function pickGeneralBoardDeities(levelIndex: number): DeityId[] {
   const pool = [...generalBoardEligibleDeities()];
-  if (pool.length <= GENERAL_BOARD_DEITY_COUNT) return pool;
+  if (pool.length <= GENERAL_BOARD_DEITY_COUNT) {
+    return normalizeGeneralBoardDeities(pool, levelIndex);
+  }
   let seed = ((levelIndex + 1) * 1103515245 + 12345) >>> 0;
   for (let i = pool.length - 1; i > 0; i--) {
     seed = (seed * 1664525 + 1013904223) >>> 0;
     const j = seed % (i + 1);
     [pool[i], pool[j]] = [pool[j]!, pool[i]!];
   }
-  return pool.slice(0, GENERAL_BOARD_DEITY_COUNT);
+  const picked = pool.slice(0, GENERAL_BOARD_DEITY_COUNT);
+  const tail = pool.slice(GENERAL_BOARD_DEITY_COUNT);
+  return normalizeGeneralBoardDeities(picked, levelIndex, tail);
 }

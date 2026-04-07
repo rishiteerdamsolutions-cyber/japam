@@ -433,7 +433,7 @@ export function GamePage() {
       justRestored={justRestored}
       onJustRestoredCleared={onJustRestoredCleared}
       onBack={onBack}
-      onNextLevel={isMarathon ? undefined : (m, idx) => handleNextLevel(m as GameMode, idx)}
+      onNextLevel={isMarathon ? undefined : (m, idx) => handleNextLevel(m, idx)}
       occasionKind={occasionKind}
       occasionJapaTarget={occasionKind === 'birthday' ? occasionTarget : undefined}
       anniversarySessionId={anniversarySession}

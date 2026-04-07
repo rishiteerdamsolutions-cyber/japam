@@ -26,6 +26,9 @@ dist-ssr
 *.sln
 *.sw?
 
+# Personal / separate game (not part of this repo)
+family game/
+
 # Local secrets (never commit)
 .github-token
 .vercel

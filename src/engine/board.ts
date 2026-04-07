@@ -5,6 +5,33 @@ import { deityGemAllowedOnIstaPath } from '../lib/generalBoardDeities';
 import { sameLineGroup } from './gemKinds';
 
 /**
+ * Īṣṭa (specific-deity) mode: favor the path deity on spawns so japa matches stay doable, but keep other
+ * types common enough that the board still feels like match‑3 (planning, mixed clears), not a free win.
+ * Used whenever `deityMode` is set — normal level play, marathons, maha yagnas, birthday path, anniversary
+ * when `mode` is a deity, etc. (~36% path deity with 8 pool types vs ~12.5% uniform). Tune up if too grindy.
+ */
+const ISTA_DEITY_GEM_WEIGHT = 4;
+
+function weightedPickGemType(
+  types: GemType[],
+  deityMode: DeityId | undefined,
+  random: () => number,
+): GemType {
+  if (!deityMode || !types.includes(deityMode)) {
+    return types[Math.floor(random() * types.length)]!;
+  }
+  let total = 0;
+  const weights = types.map((t) => (t === deityMode ? ISTA_DEITY_GEM_WEIGHT : 1));
+  for (const w of weights) total += w;
+  let r = random() * total;
+  for (let i = 0; i < types.length; i++) {
+    r -= weights[i]!;
+    if (r <= 0) return types[i]!;
+  }
+  return types[types.length - 1]!;
+}
+
+/**
  * Gem pool for a level.
  * - General + `generalGemSubset`: exactly those types (compact board).
  * - Īṣṭa mode: always includes `deityMode` and offering-backed inventory deities, then fills to cap.
@@ -60,12 +87,13 @@ function pickRandomGemSeeded(
   numRows: number,
   numCols: number,
   types: GemType[],
+  deityMode: DeityId | undefined,
   random: () => number,
 ): GemType {
   let gem: GemType;
   let attempts = 0;
   do {
-    gem = types[Math.floor(random() * types.length)];
+    gem = weightedPickGemType(types, deityMode, random);
     attempts++;
     if (attempts > 20) break;
   } while (wouldCreateMatch(board, currentRow, row, col, numRows, numCols, gem, types));
@@ -88,7 +116,7 @@ export function createBoardSeeded(
   for (let r = 0; r < rows; r++) {
     const rowData: (GemType | null)[] = [];
     for (let c = 0; c < cols; c++) {
-      rowData.push(pickRandomGemSeeded(board, rowData, r, c, rows, cols, types, random));
+      rowData.push(pickRandomGemSeeded(board, rowData, r, c, rows, cols, types, deityMode, random));
     }
     board.push(rowData);
   }
@@ -109,7 +137,7 @@ export function createBoard(
   for (let r = 0; r < rows; r++) {
     const rowData: (GemType | null)[] = [];
     for (let c = 0; c < cols; c++) {
-      rowData.push(pickRandomGem(board, rowData, r, c, rows, cols, types));
+      rowData.push(pickRandomGem(board, rowData, r, c, rows, cols, types, deityMode));
     }
     board.push(rowData);
   }
@@ -123,12 +151,14 @@ function pickRandomGem(
   col: number,
   numRows: number,
   numCols: number,
-  types: GemType[] = DEITY_IDS
+  types: GemType[] = DEITY_IDS,
+  deityMode?: DeityId,
 ): GemType {
+  const rng = () => Math.random();
   let gem: GemType;
   let attempts = 0;
   do {
-    gem = types[Math.floor(Math.random() * types.length)];
+    gem = weightedPickGemType(types, deityMode, rng);
     attempts++;
     if (attempts > 20) break;
   } while (wouldCreateMatch(board, currentRow, row, col, numRows, numCols, gem, types));
@@ -207,8 +237,9 @@ export function fillGaps(
         writeRow--;
       }
     }
+    const rng = () => Math.random();
     for (let r = writeRow; r >= 0; r--) {
-      const gem = types[Math.floor(Math.random() * types.length)];
+      const gem = weightedPickGemType(types, deityMode, rng);
       next[r][c] = gem;
       newGems.push({ row: r, col: c, gem });
     }

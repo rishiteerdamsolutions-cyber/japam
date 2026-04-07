@@ -12,7 +12,11 @@ import type { DeityId } from '../../data/deities';
 import { usePowersInventoryStore, getPowerCount } from '../../store/powersInventoryStore';
 import { usePowerArmStore } from '../../store/powerArmStore';
 import { useGameStore } from '../../store/gameStore';
-import { deityGemAllowedOnIstaPath, pickGeneralBoardDeities } from '../../lib/generalBoardDeities';
+import {
+  deityGemAllowedOnIstaPath,
+  normalizeGeneralBoardDeities,
+  pickGeneralBoardDeities,
+} from '../../lib/generalBoardDeities';
 
 function GuestLockBadge() {
   return (
@@ -178,7 +182,9 @@ export function GamePowersScrollStrip({ isGuest = false, onGuestPowerTap }: Game
   /** All Deity Japa: same 6 as the board; īṣṭa: all deity rows in inventory. */
   const generalAllow = useMemo((): DeityId[] | null => {
     if (mode !== 'general') return null;
-    return generalBoardDeities?.length ? generalBoardDeities : pickGeneralBoardDeities(levelIndex);
+    return generalBoardDeities?.length
+      ? normalizeGeneralBoardDeities(generalBoardDeities, levelIndex)
+      : pickGeneralBoardDeities(levelIndex);
   }, [mode, generalBoardDeities, levelIndex]);
 
   const stripDeitySlots = useMemo(() => {

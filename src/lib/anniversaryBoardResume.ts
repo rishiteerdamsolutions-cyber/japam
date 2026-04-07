@@ -4,7 +4,11 @@ import { hasValidMoves } from '../engine/matcher';
 import { LEVELS } from '../data/levels';
 import type { GameMode } from '../types';
 import type { DeityId } from '../data/deities';
-import { pickGeneralBoardDeities, filterPowerBackedForIstaPath } from './generalBoardDeities';
+import {
+  normalizeGeneralBoardDeities,
+  pickGeneralBoardDeities,
+  filterPowerBackedForIstaPath,
+} from './generalBoardDeities';
 import { usePowersInventoryStore } from '../store/powersInventoryStore';
 import { isDeityPowerId } from '../data/gamePowers';
 
@@ -35,7 +39,9 @@ export function buildAnniversaryResumeBoardFromSessionDoc(
   const gd = d.generalBoardDeities;
   const generalBoardDeities =
     Array.isArray(gd) && gd.length > 0
-      ? (gd as DeityId[])
+      ? mode === 'general'
+        ? normalizeGeneralBoardDeities(gd as DeityId[], levelIndex)
+        : (gd as DeityId[])
       : mode === 'general'
         ? pickGeneralBoardDeities(levelIndex)
         : null;

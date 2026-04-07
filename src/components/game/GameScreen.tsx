@@ -17,6 +17,7 @@ import { setLastPausedGame } from '../../lib/pausedGame';
 import { useSound, stopAllMantras, stopMatchBonusAudio } from '../../hooks/useSound';
 import { useSettingsStore } from '../../store/settingsStore';
 import type { DeityId } from '../../data/deities';
+import type { GameMode } from '../../types';
 import { GoogleSignIn } from '../auth/GoogleSignIn';
 import { LivesDisplay } from '../lives/LivesDisplay';
 import { LivesModal } from '../lives/LivesModal';
@@ -151,7 +152,7 @@ function GameBottomStrip({
 }
 
 interface GameScreenProps {
-  mode: 'general' | string;
+  mode: GameMode;
   levelIndex: number;
   isMarathon?: boolean;
   marathonId?: string | null;
@@ -161,7 +162,7 @@ interface GameScreenProps {
   justRestored?: boolean;
   onJustRestoredCleared?: () => void;
   onBack: () => void;
-  onNextLevel?: (mode: 'general' | string, levelIndex: number) => void;
+  onNextLevel?: (mode: GameMode, levelIndex: number) => void;
   occasionKind?: null | 'birthday' | 'anniversary';
   occasionJapaTarget?: number;
   anniversarySessionId?: string | null;
@@ -321,9 +322,9 @@ export function GameScreen({
         occasionKind,
       });
       if (isMarathon && marathonTargetJapas != null && (marathonId || yagnaId)) {
-        initGame(mode as 'general', 0, { marathonId: marathonId ?? undefined, marathonTargetJapas, yagnaId: yagnaId ?? undefined });
+        initGame(mode, 0, { marathonId: marathonId ?? undefined, marathonTargetJapas, yagnaId: yagnaId ?? undefined });
       } else if (occasionKind === 'birthday') {
-        initGame(mode as 'general', levelIndex, {
+        initGame(mode, levelIndex, {
           overrideJapaTarget: occasionJapaTarget,
           occasionKind: 'birthday',
         });
@@ -344,7 +345,7 @@ export function GameScreen({
         const annKey = `${anniversarySessionId}|${anniversaryMyRole}|${anniversaryIsHost ? '1' : '0'}|${mode}|${levelIndex}|${anniversarySessionFlavor}`;
         if (anniversaryInitKeyRef.current === annKey) return;
         anniversaryInitKeyRef.current = annKey;
-        initGame(mode as 'general', levelIndex, {
+        initGame(mode, levelIndex, {
           occasionKind: 'anniversary',
           anniversarySessionId,
           anniversaryMyRole,
@@ -358,7 +359,7 @@ export function GameScreen({
       } else if (isGuest) {
         initGame('general', 0, { overrideJapaTarget: 11, isGuest: true });
       } else {
-        initGame(mode as 'general', levelIndex);
+        initGame(mode, levelIndex);
       }
     };
 
@@ -656,7 +657,7 @@ export function GameScreen({
     if (onNextLevel) {
       onNextLevel(mode, nextIndex);
     } else {
-      initGame(mode as 'general', nextIndex);
+      initGame(mode, nextIndex);
     }
   };
 

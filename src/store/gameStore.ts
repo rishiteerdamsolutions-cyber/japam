@@ -19,7 +19,11 @@ import { expandPowerClears, planSpecialSpawn } from '../engine/powers';
 import { isBlessing } from '../engine/gemKinds';
 import { isDeityPowerId } from '../data/gamePowers';
 import { gameDebug } from '../lib/gameDebug';
-import { filterPowerBackedForIstaPath, pickGeneralBoardDeities } from '../lib/generalBoardDeities';
+import {
+  filterPowerBackedForIstaPath,
+  normalizeGeneralBoardDeities,
+  pickGeneralBoardDeities,
+} from '../lib/generalBoardDeities';
 
 /** Īṣṭa path: deities the player has offering charges for — gems must appear so powers are usable. */
 function inventoryOfferingDeities(): DeityId[] {
@@ -133,7 +137,7 @@ function boardGemContext(state: GameState): {
   if (state.mode === 'general') {
     const subset =
       state.generalBoardDeities != null && state.generalBoardDeities.length > 0
-        ? state.generalBoardDeities
+        ? normalizeGeneralBoardDeities(state.generalBoardDeities, state.levelIndex)
         : pickGeneralBoardDeities(state.levelIndex);
     return { deityMode, powerBacked: subset, generalSubset: subset };
   }
@@ -239,6 +243,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   anniversarySessionFlavor: 'occasion',
 
   initGame: (mode, levelIndex = 0, options) => {
+    // Path-deity gem weighting in engine/board.ts applies for any non-general mode (levels, marathons, yāgās, …).
     gameDebug('initGame', {
       mode,
       levelIndex,
@@ -421,7 +426,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const generalBoardDeities =
       saved.mode === 'general'
         ? saved.generalBoardDeities?.length
-          ? saved.generalBoardDeities
+          ? normalizeGeneralBoardDeities(saved.generalBoardDeities, saved.levelIndex)
           : pickGeneralBoardDeities(saved.levelIndex)
         : null;
     const powerPoolResume =
@@ -1170,7 +1175,11 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
         : emptyJapas();
     const gd = payload.generalBoardDeities;
     const generalBoardDeities =
-      Array.isArray(gd) && gd.length > 0 ? (gd as DeityId[]) : null;
+      Array.isArray(gd) && gd.length > 0
+        ? resolvedMode === 'general'
+          ? normalizeGeneralBoardDeities(gd as DeityId[], levelIndex)
+          : (gd as DeityId[])
+        : null;
     const version = typeof payload.version === 'number' ? payload.version : 0;
     const turn = payload.turn === 'wife' ? 'wife' : 'husband';
     const prev = get();

@@ -39,17 +39,17 @@ function uniquePreserveOrder(deities: DeityId[]): DeityId[] {
   return out;
 }
 
-/** Rāma / Nārāyaṇa / ISKCON read similarly on gems — at most one per All Deity Japa level. */
-export const EXCLUSIVE_VISNU_FORM_TRIO: DeityId[] = ['rama', 'narayana', 'iskcon'];
+/** Rāma / Nārāyaṇa / ISKCON read similarly on gems — keep only one on a general board. */
+export const MUTUALLY_EXCLUSIVE_VISNU_FORMS: DeityId[] = ['rama', 'narayana', 'iskcon'];
 
 function isValidGeneralBoardSubset(ids: DeityId[]): boolean {
   const set = new Set(ids);
   if (set.has('shakthi') && set.has('durga')) return false;
-  let trio = 0;
-  for (const id of EXCLUSIVE_VISNU_FORM_TRIO) {
-    if (set.has(id)) trio++;
+  let visnuForms = 0;
+  for (const id of MUTUALLY_EXCLUSIVE_VISNU_FORMS) {
+    if (set.has(id)) visnuForms++;
   }
-  return trio <= 1;
+  return visnuForms <= 1;
 }
 
 function pickFirstValidAddition(base: DeityId[], replacementCandidates: DeityId[] | undefined): DeityId | null {
@@ -70,7 +70,7 @@ function pickFirstValidAddition(base: DeityId[], replacementCandidates: DeityId[
 /**
  * All Deity Japa board subset rules:
  * - Śakti and Durgā: never both (Lakṣmī + Sarasvatī may appear together).
- * - Rāma, Nārāyaṇa, ISKCON: at most one of the three (similar visuals).
+ * - Rāma, Nārāyaṇa, ISKCON: keep only one (similar visuals).
  * Replacements prefer `replacementCandidates` (shuffle tail), then any eligible deity.
  */
 export function normalizeGeneralBoardDeities(
@@ -89,12 +89,13 @@ export function normalizeGeneralBoardDeities(
     if (add) out.push(add);
   };
 
-  const fixVisnuTrio = (): void => {
-    const present = EXCLUSIVE_VISNU_FORM_TRIO.filter((t) => out.includes(t));
+  const fixVisnuForms = (): void => {
+    const present = MUTUALLY_EXCLUSIVE_VISNU_FORMS.filter((t) => out.includes(t));
     if (present.length <= 1) return;
-    const keep = present[levelIndex % present.length]!;
+    // Keep the first one in board order and replace the rest.
+    const keep = present[0]!;
     const beforeLen = out.length;
-    out = out.filter((id) => !EXCLUSIVE_VISNU_FORM_TRIO.includes(id) || id === keep);
+    out = out.filter((id) => !MUTUALLY_EXCLUSIVE_VISNU_FORMS.includes(id) || id === keep);
     let needed = beforeLen - out.length;
     while (needed > 0) {
       const add = pickFirstValidAddition(out, replacementCandidates);
@@ -107,7 +108,7 @@ export function normalizeGeneralBoardDeities(
   // Either fix can make the other necessary (e.g. replacement); settle in a few passes.
   for (let i = 0; i < 6; i++) {
     fixShakthiDurga();
-    fixVisnuTrio();
+    fixVisnuForms();
     if (isValidGeneralBoardSubset(out)) break;
   }
 

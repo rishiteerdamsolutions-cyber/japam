@@ -9,6 +9,7 @@ import { displayDeityId } from '../../engine/gemKinds';
 const VISIBLE_UNTIL_SUCCESSFUL_SWAPS = 1;
 
 type Side = 'top' | 'right' | 'bottom' | 'left';
+type HintEntry = { id: DeityId; anchor: { side: Side; row: number; col: number } };
 
 /**
  * Pick an edge that matches a real cell of this deity so a TOP label is never above a column
@@ -71,7 +72,8 @@ export function BoardDeityHints() {
         }
       }
     }
-    return ids.map((id) => ({ id, anchor: hintAnchor(board, id, rows, cols) }));
+    const raw: HintEntry[] = ids.map((id) => ({ id, anchor: hintAnchor(board, id, rows, cols) }));
+    return compactHintEntries(raw, rows, cols);
   }, [board]);
 
   if (
@@ -178,4 +180,32 @@ export function BoardDeityHints() {
       })}
     </div>
   );
+}
+
+/**
+ * Prevent edge-label collisions on dense boards:
+ * keep one label when two anchors on the same side are too close.
+ */
+function compactHintEntries(entries: HintEntry[], rows: number, cols: number): HintEntry[] {
+  const bySide: Record<Side, HintEntry[]> = { top: [], right: [], bottom: [], left: [] };
+  for (const e of entries) bySide[e.anchor.side].push(e);
+
+  const out: HintEntry[] = [];
+  (['top', 'right', 'bottom', 'left'] as Side[]).forEach((side) => {
+    const list = bySide[side];
+    if (!list.length) return;
+    const sorted = [...list].sort((a, b) =>
+      side === 'top' || side === 'bottom' ? a.anchor.col - b.anchor.col : a.anchor.row - b.anchor.row,
+    );
+    const minGap = side === 'top' || side === 'bottom' ? Math.max(1.1, cols * 0.14) : Math.max(1.1, rows * 0.14);
+    let last = -999;
+    for (const e of sorted) {
+      const pos = side === 'top' || side === 'bottom' ? e.anchor.col : e.anchor.row;
+      if (pos - last >= minGap) {
+        out.push(e);
+        last = pos;
+      }
+    }
+  });
+  return out;
 }

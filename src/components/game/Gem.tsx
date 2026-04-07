@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { getDeity } from '../../data/deities';
 import type { GemType } from '../../engine/types';
 import { displayDeityId, isBlessing, isWrapped } from '../../engine/gemKinds';
@@ -38,6 +38,7 @@ export const Gem = memo(function Gem({
   borderSpin,
   borderSpinActive,
 }: GemProps) {
+  const TAP_TOOLTIP_MS = 1200;
   const blessing = isBlessing(gem);
   const wrapped = isWrapped(gem);
 
@@ -52,6 +53,33 @@ export const Gem = memo(function Gem({
 
   const accent = d?.color ?? '#fbbf24';
   const deityName = d?.name ?? 'Blessing';
+  const [tooltipOpen, setTooltipOpen] = useState(false);
+  const tooltipHideTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (tooltipHideTimerRef.current != null) {
+        window.clearTimeout(tooltipHideTimerRef.current);
+        tooltipHideTimerRef.current = null;
+      }
+    };
+  }, []);
+
+  const clearTooltipHideTimer = () => {
+    if (tooltipHideTimerRef.current != null) {
+      window.clearTimeout(tooltipHideTimerRef.current);
+      tooltipHideTimerRef.current = null;
+    }
+  };
+
+  const showTooltipBriefly = () => {
+    setTooltipOpen(true);
+    clearTooltipHideTimer();
+    tooltipHideTimerRef.current = window.setTimeout(() => {
+      setTooltipOpen(false);
+      tooltipHideTimerRef.current = null;
+    }, TAP_TOOLTIP_MS);
+  };
 
   return (
     <div
@@ -72,8 +100,17 @@ export const Gem = memo(function Gem({
         <div className={`gem-candy-frame__glow ${matched ? 'gem-candy-frame__glow--matched' : ''}`} aria-hidden />
         <button
         type="button"
-        onClick={onClick}
         aria-label={deityName}
+        title={deityName}
+        onMouseEnter={() => setTooltipOpen(true)}
+        onMouseLeave={() => {
+          clearTooltipHideTimer();
+          setTooltipOpen(false);
+        }}
+        onClick={() => {
+          showTooltipBriefly();
+          onClick();
+        }}
         className={`
           relative z-[1] w-full h-full min-h-0 aspect-square flex items-center justify-center
           overflow-hidden shadow-inner touch-none
@@ -105,6 +142,14 @@ export const Gem = memo(function Gem({
                     : `inset 0 0 0 1px rgba(255,255,255,0.1), 0 0 0 2px rgba(0,0,0,0.45), 0 2px 8px rgba(0,0,0,0.35), inset 0 2px 5px rgba(0,0,0,0.25)`,
         }}
       >
+        {tooltipOpen && (
+          <span
+            role="tooltip"
+            className="pointer-events-none absolute bottom-full left-1/2 z-[6] mb-1 w-max max-w-[7.25rem] -translate-x-1/2 rounded-md border border-amber-400/60 bg-black/90 px-1.5 py-0.5 text-[10px] font-semibold leading-tight text-amber-100 shadow-[0_6px_16px_rgba(0,0,0,0.45)] sm:text-xs"
+          >
+            {deityName}
+          </span>
+        )}
         {!blessing && d && (
         <img
           src={tileSrc}

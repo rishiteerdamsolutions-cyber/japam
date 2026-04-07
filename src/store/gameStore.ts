@@ -40,6 +40,15 @@ export type GameStatus = 'playing' | 'won' | 'lost';
 
 const PAUSED_KEY_PREFIX = 'japam-paused-';
 
+function normalizeGameMode(mode: string): GameMode {
+  const raw = (mode || '').trim();
+  if (!raw) return 'general';
+  if (raw.toLowerCase() === 'general') return 'general';
+  const normalized = raw.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const canonical = normalized === 'iskon' ? 'iskcon' : normalized;
+  return (DEITY_IDS as readonly string[]).includes(canonical) ? (canonical as GameMode) : 'general';
+}
+
 /** Wedding-anniversary occasion path vs daily couple game (same sync + levels; different japa bucket). */
 export type AnniversarySessionFlavor = 'occasion' | 'couple_daily';
 
@@ -243,9 +252,10 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   anniversarySessionFlavor: 'occasion',
 
   initGame: (mode, levelIndex = 0, options) => {
+    const resolvedMode = normalizeGameMode(mode);
     // Path-deity gem weighting in engine/board.ts applies for any non-general mode (levels, marathons, yāgās, …).
     gameDebug('initGame', {
-      mode,
+      mode: resolvedMode,
       levelIndex,
       marathonId: options?.marathonId ?? null,
       yagnaId: options?.yagnaId ?? null,
@@ -257,7 +267,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     if (matchAnimationTimeoutId != null) clearTimeout(matchAnimationTimeoutId);
     const level = getLevel(levelIndex);
     const maxGemTypes = level.maxGemTypes ?? 8;
-    const deityMode = mode !== 'general' ? (mode as DeityId) : undefined;
+    const deityMode = resolvedMode !== 'general' ? (resolvedMode as DeityId) : undefined;
     const marathonId = options?.marathonId ?? null;
     const marathonTargetJapas = options?.marathonTargetJapas ?? null;
     const yagnaId = options?.yagnaId ?? null;
@@ -279,11 +289,11 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       occasionKind === 'birthday' ||
       occasionKind === 'anniversary';
     const moves = unlimitedMoves ? 999999 : level.moves;
-    const generalBoardDeities = mode === 'general' ? pickGeneralBoardDeities(levelIndex) : null;
+    const generalBoardDeities = resolvedMode === 'general' ? pickGeneralBoardDeities(levelIndex) : null;
     const powerPool =
-      mode === 'general'
+      resolvedMode === 'general'
         ? generalBoardDeities!
-        : filterPowerBackedForIstaPath(mode as DeityId, inventoryOfferingDeities());
+        : filterPowerBackedForIstaPath(resolvedMode as DeityId, inventoryOfferingDeities());
     let board: Board;
     let salt = 0;
     if (occasionKind === 'anniversary' && anniversarySessionId) {
@@ -328,7 +338,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       japasByDeity: emptyJapas(),
       comboLevel: 0,
       status: 'playing',
-      mode,
+      mode: resolvedMode,
       levelIndex,
       marathonId,
       marathonTargetJapas,
@@ -420,19 +430,20 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   restoreGame: (saved: PausedGameState) => {
     stopAllMantras();
     // For resume we only restore progress (moves + japa counts). We start with a fresh board.
+    const resolvedMode = normalizeGameMode(saved.mode);
     const level = getLevel(saved.levelIndex);
     const maxGemTypes = level.maxGemTypes ?? 8;
-    const deityMode = saved.mode !== 'general' ? (saved.mode as DeityId) : undefined;
+    const deityMode = resolvedMode !== 'general' ? (resolvedMode as DeityId) : undefined;
     const generalBoardDeities =
-      saved.mode === 'general'
+      resolvedMode === 'general'
         ? saved.generalBoardDeities?.length
           ? normalizeGeneralBoardDeities(saved.generalBoardDeities, saved.levelIndex)
           : pickGeneralBoardDeities(saved.levelIndex)
         : null;
     const powerPoolResume =
-      saved.mode === 'general'
+      resolvedMode === 'general'
         ? generalBoardDeities!
-        : filterPowerBackedForIstaPath(saved.mode as DeityId, inventoryOfferingDeities());
+        : filterPowerBackedForIstaPath(resolvedMode as DeityId, inventoryOfferingDeities());
     let board = createBoard(
       level.rows,
       level.cols,
@@ -458,7 +469,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       japasByDeity: { ...emptyJapas(), ...saved.japasByDeity } as Record<DeityId, number>,
       comboLevel: 0,
       status: 'playing',
-      mode: saved.mode as GameMode,
+      mode: resolvedMode,
       levelIndex: saved.levelIndex,
       marathonId: saved.marathonId ?? null,
       marathonTargetJapas: saved.marathonTargetJapas ?? null,
@@ -1167,7 +1178,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       return;
     }
     const levelIndex = typeof payload.levelIndex === 'number' ? payload.levelIndex : 0;
-    const resolvedMode = (typeof payload.gameMode === 'string' ? payload.gameMode : 'general') as GameMode;
+    const resolvedMode = normalizeGameMode(typeof payload.gameMode === 'string' ? payload.gameMode : 'general');
     const japasByRaw = payload.japasByDeity;
     const japasByDeity =
       japasByRaw && typeof japasByRaw === 'object'

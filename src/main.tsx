@@ -52,6 +52,7 @@ const AnniversaryLobbyPage = lazy(() =>
 const AnniversaryJoinPage = lazy(() =>
   import('./pages/AnniversaryJoinPage').then((m) => ({ default: m.AnniversaryJoinPage })),
 );
+// eslint-disable-next-line react-refresh/only-export-components
 function PageFallback() {
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center gap-3">

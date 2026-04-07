@@ -64,12 +64,10 @@ export function downloadAnniversaryReportPdf(opts: {
   const cardW = W - pad * 2;
   const cardH = H - cardY - 92;
   doc.setFillColor(0, 0, 0);
-  // @ts-ignore - jsPDF typing for roundedRect varies by version
   doc.roundedRect(cardX, cardY, cardW, cardH, 18, 18, 'F');
 
   doc.setDrawColor(251, 191, 36);
   doc.setLineWidth(2);
-  // @ts-ignore - jsPDF typing for roundedRect varies by version
   doc.roundedRect(cardX, cardY, cardW, cardH, 18, 18, 'S');
 
   let y = cardY + 46;
@@ -108,7 +106,6 @@ export function downloadAnniversaryReportPdf(opts: {
   const rowW = cardW - 56;
   for (const [label, value] of lines) {
     doc.setFillColor(0, 0, 0);
-    // @ts-ignore - jsPDF typing for roundedRect varies by version
     doc.roundedRect(rowX, y, rowW, 44, 12, 12, 'F');
 
     doc.setFont('helvetica', 'bold');

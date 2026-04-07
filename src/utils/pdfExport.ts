@@ -176,7 +176,7 @@ export async function downloadMantraPdf(
     const mantraRepeated = Array(count).fill(mantra).join(' ');
     const words = mantraRepeated.split(' ');
     const pageWidth = doc.internal.pageSize.getWidth() - margin * 2;
-    let x = margin;
+    const x = margin;
     const maxY = doc.internal.pageSize.getHeight() - margin;
 
     let line = '';

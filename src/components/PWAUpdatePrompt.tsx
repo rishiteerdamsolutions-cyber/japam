@@ -44,7 +44,7 @@ export function PWAUpdatePrompt() {
   const [updateSW, setUpdateSW] = useState<(() => void) | null>(null);
   const registrationRef = useRef<ServiceWorkerRegistration | null | undefined>(null);
   const updateSWRef = useRef<(() => void) | null>(null);
-  updateSWRef.current = updateSW;
+  useEffect(() => { updateSWRef.current = updateSW; }, [updateSW]);
 
   const applyPwaUpdate = useCallback(() => {
     setUpdating(true);

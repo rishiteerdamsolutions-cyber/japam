@@ -131,7 +131,7 @@ export function MarathonsPage() {
     marathon: Marathon,
     participated: boolean,
   ): { rank: number; uid: string; name: string; japasCount: number }[] => {
-    let lb = marathon.leaderboard ? marathon.leaderboard.map((e) => ({ ...e })) : [];
+    const lb = marathon.leaderboard ? marathon.leaderboard.map((e) => ({ ...e })) : [];
     if (!user?.uid || !participated) return lb;
     if (!lb.some((p) => p.uid === user.uid)) {
       const myM = myMarathons.find((x) => x.marathonId === marathon.id);

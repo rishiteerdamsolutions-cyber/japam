@@ -34,7 +34,7 @@ export function PaymentReturnHandler() {
         const idToken = await (auth?.currentUser ?? user).getIdToken();
         const base = getApiBase();
         let verifyUrl: string;
-        let body: Record<string, unknown> = { order_id: orderId };
+        const body: Record<string, unknown> = { order_id: orderId };
         if (isDonate) {
           verifyUrl = base ? `${base}/api/verify-donate` : '/api/verify-donate';
           body.displayName = user.displayName || user.email || '';
@@ -64,24 +64,25 @@ export function PaymentReturnHandler() {
         // Ignore
       } finally {
         window.history.replaceState({}, '', location.pathname || '/');
-        if (isLives) {
-          try {
-            const raw = sessionStorage.getItem('japam_lives_return');
-            if (raw) {
-              const { mode, levelIndex } = JSON.parse(raw) as { mode?: string; levelIndex?: number };
-              sessionStorage.removeItem('japam_lives_return');
-              if (mode != null && levelIndex != null) {
-                navigate(`/game?mode=${encodeURIComponent(mode)}&level=${levelIndex}`, { replace: true });
-                return;
-              }
+      }
+      if (isLives) {
+        let navigatedToGame = false;
+        try {
+          const raw = sessionStorage.getItem('japam_lives_return');
+          if (raw) {
+            const { mode, levelIndex } = JSON.parse(raw) as { mode?: string; levelIndex?: number };
+            sessionStorage.removeItem('japam_lives_return');
+            if (mode != null && levelIndex != null) {
+              navigate(`/game?mode=${encodeURIComponent(mode)}&level=${levelIndex}`, { replace: true });
+              navigatedToGame = true;
             }
-          } catch {
-            // fall through to default
           }
-          navigate('/game', { replace: true });
-        } else {
-          navigate('/menu', { replace: true });
+        } catch {
+          // fall through to default
         }
+        if (!navigatedToGame) navigate('/game', { replace: true });
+      } else {
+        navigate('/menu', { replace: true });
       }
     })();
   }, [location.search, location.pathname, user?.uid, user?.displayName, user?.email, navigate, loadUnlock, loadLives]);

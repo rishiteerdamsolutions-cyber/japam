@@ -20,6 +20,7 @@ export function RefCapture() {
   return null;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function getStoredRefCode(): string | null {
   try {
     return sessionStorage.getItem(REF_STORAGE_KEY);
@@ -28,6 +29,7 @@ export function getStoredRefCode(): string | null {
   }
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function clearStoredRefCode(): void {
   try {
     sessionStorage.removeItem(REF_STORAGE_KEY);

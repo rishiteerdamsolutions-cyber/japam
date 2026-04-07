@@ -42,12 +42,14 @@ export default defineConfig({
 
             const request = new Request(url, {
               method,
-              headers: req.headers as any,
+              headers: req.headers as Record<string, string>,
               body: method === 'POST' ? bodyText : undefined,
             });
 
+            type ApiProxyModule = { POST?: (r: Request) => Promise<Response>; GET?: (r: Request) => Promise<Response> };
+            const proxy = apiProxy as ApiProxyModule;
             const response: Response =
-              method === 'POST' ? await (apiProxy as any).POST(request) : await (apiProxy as any).GET(request);
+              method === 'POST' ? await proxy.POST!(request) : await proxy.GET!(request);
 
             res.statusCode = response.status;
             response.headers.forEach((value, key) => {

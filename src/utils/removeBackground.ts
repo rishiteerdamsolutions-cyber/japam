@@ -110,7 +110,7 @@ export async function removeBackgroundFromImage(dataUrl: string): Promise<string
     const blob = await remove(img, { session });
     const withBgRemoved = await blobToDataUrl(blob);
     return cropToContentBounds(withBgRemoved);
-  } catch (err) {
+  } catch {
     throw new Error(REMBG_NETWORK_ERROR);
   }
 }

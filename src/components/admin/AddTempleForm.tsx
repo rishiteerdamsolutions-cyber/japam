@@ -76,7 +76,7 @@ export function AddTempleForm({ adminToken, onSuccess, onLogout }: AddTempleForm
       setArea('');
       setTempleName('');
       onSuccess();
-    } catch (e) {
+    } catch {
       setMessage('Failed (check API)');
     } finally {
       setSaving(false);

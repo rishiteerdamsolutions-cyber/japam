@@ -93,7 +93,7 @@ export function AdminPanel({ onBack, passwordAuth, adminToken, onLogout }: Admin
         await savePricingConfig(paise, displayPaise);
         setMessage('Saved. Paywall: ~~₹' + displayRupees.toFixed(0) + '~~ ₹' + rupees.toFixed(0));
       }
-    } catch (e) {
+    } catch {
       setMessage('Failed to save (check Firestore rules or API)');
     } finally {
       setSaving(false);

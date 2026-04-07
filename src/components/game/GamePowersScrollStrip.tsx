@@ -198,7 +198,7 @@ export function GamePowersScrollStrip({ isGuest = false, onGuestPowerTap }: Game
     }
     const byId = new Map(raw.map((e) => [e.id, e.count]));
     return generalAllow.map((id) => ({ id, count: byId.get(id) ?? 0 }));
-  }, [entries, generalAllow]);
+  }, [entries, generalAllow, mode]);
 
   const guestDeitySlots = useMemo(() => {
     if (!isGuest) return [];

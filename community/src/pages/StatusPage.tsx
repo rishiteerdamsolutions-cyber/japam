@@ -6,7 +6,7 @@ import { fetchStatusFeed, createStatus, markStatusViewed } from '../lib/apavarga
 import { useAuthStore } from '../store/authStore';
 import { usePriestStore } from '../store/priestStore';
 
-interface Status extends StatusItem {}
+type Status = StatusItem;
 
 type AuthorGroup = { authorKey: string; authorLabel: string; statuses: Status[] };
 

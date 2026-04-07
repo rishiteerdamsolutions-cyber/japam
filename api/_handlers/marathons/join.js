@@ -1,4 +1,5 @@
 import { getDb, jsonResponse, verifyFirebaseUser, isUserUnlocked, isValidFirestoreDocId } from '../_lib.js';
+import { isMarathonPublicActive } from '../_lifecycle.js';
 
 /** POST /api/marathons/join - User joins a marathon. Requires Firebase auth; only paid (unlocked) users can join. Body: { marathonId } */
 export async function POST(request) {
@@ -18,6 +19,14 @@ export async function POST(request) {
         { error: 'Only users who have unlocked the game can join marathons. Unlock in the app first.' },
         403
       );
+    }
+
+    const marathonRef = db.doc(`marathons/${marathonId}`);
+    const marathonSnap = await marathonRef.get();
+    if (!marathonSnap.exists) return jsonResponse({ error: 'Marathon not found' }, 404);
+    const mData = marathonSnap.data() || {};
+    if (!isMarathonPublicActive(mData)) {
+      return jsonResponse({ error: 'This marathon is not accepting new participants right now' }, 400);
     }
 
     const participationRef = db.doc(`marathonParticipations/${marathonId}_${uid}`);
@@ -48,8 +57,6 @@ export async function POST(request) {
     // Mark user as marathon joiner so japa POST can skip participation query for non-joiners
     await db.doc(`users/${uid}/data/profile`).set({ hasJoinedMarathon: true }, { merge: true });
 
-    const marathonRef = db.doc(`marathons/${marathonId}`);
-    const marathonSnap = await marathonRef.get();
     if (marathonSnap.exists) {
       const data = marathonSnap.data();
       const joinedCount = (data.joinedCount ?? 0) + 1;

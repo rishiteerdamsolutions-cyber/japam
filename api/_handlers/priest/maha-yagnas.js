@@ -1,7 +1,10 @@
 import { getDb, verifyPriestForApi, jsonResponse } from '../_lib.js';
 import admin from 'firebase-admin';
+import { yagnaLifecycleStatus } from '../_lifecycle.js';
 
 const DEITY_NAMES = { rama: 'Rama', shiva: 'Shiva', ganesh: 'Ganesh', surya: 'Surya', shakthi: 'Shakthi', krishna: 'Krishna', shanmukha: 'Shanmukha', venkateswara: 'Venkateswara' };
+
+const MAX_YAGNA_PARTICIPANTS = 800;
 
 function getPriestToken(request, body) {
   const auth = request?.headers?.get?.('authorization');
@@ -23,6 +26,24 @@ export async function GET(request) {
     for (const d of snap.docs) {
       const data = d.data();
       const usersSnap = await db.collection('mahaJapaYagnaUsers').where('yagnaId', '==', d.id).get();
+      function joinedAtIso(ud) {
+        const j = ud.joinedAt;
+        if (j && typeof j.toDate === 'function') return j.toDate().toISOString();
+        if (typeof j === 'string') return j;
+        return null;
+      }
+      const rows = usersSnap.docs.map((u) => {
+        const ud = u.data() || {};
+        const uid = ud.userId || '';
+        return {
+          uid,
+          name: uid ? uid.slice(0, 12) : '—',
+          userJapas: typeof ud.userJapas === 'number' ? ud.userJapas : 0,
+          joinedAt: joinedAtIso(ud),
+        };
+      });
+      rows.sort((a, b) => (b.userJapas || 0) - (a.userJapas || 0));
+      const participants = rows.slice(0, MAX_YAGNA_PARTICIPANTS);
       yagnas.push({
         id: d.id,
         name: data.name || 'Maha Japa Yagna',
@@ -32,9 +53,12 @@ export async function GET(request) {
         goalJapas: data.goalJapas ?? 0,
         currentJapas: data.currentJapas ?? 0,
         participantCount: usersSnap.size,
+        participantTotal: usersSnap.size,
+        participants,
         startDate: data.startDate || '',
         endDate: data.endDate || '',
         status: data.status || 'active',
+        lifecycleStatus: yagnaLifecycleStatus(data),
       });
     }
     yagnas.sort((a, b) => (b.startDate || '').localeCompare(a.startDate || ''));
@@ -76,6 +100,7 @@ export async function POST(request) {
       createdBy: priest.templeId,
       templeId: priest.templeId,
       status: 'active',
+      lifecycleStatus: 'active',
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
     };
 

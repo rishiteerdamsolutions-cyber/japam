@@ -1,4 +1,5 @@
 import { getDb, jsonResponse, verifyFirebaseUser } from '../_lib.js';
+import { yagnaLifecycleStatus } from '../_lifecycle.js';
 
 /** GET /api/maha-yagnas/leaderboard?yagnaId= - Leaderboard for a Maha Japa Yagna (public).
  * Optional Authorization: when signed in, includes your row if you rank below the top 5 (rank card).
@@ -15,6 +16,10 @@ export async function GET(request) {
 
     const yagnaSnap = await db.doc(`mahaJapaYagnas/${yagnaId}`).get();
     if (!yagnaSnap.exists) return jsonResponse({ error: 'Yagna not found' }, 404);
+    const yMeta = yagnaSnap.data() || {};
+    if (yagnaLifecycleStatus(yMeta) === 'archived') {
+      return jsonResponse({ error: 'Yagna not found' }, 404);
+    }
 
     const usersSnap = await db.collection('mahaJapaYagnaUsers').where('yagnaId', '==', yagnaId).get();
     const participants = [];

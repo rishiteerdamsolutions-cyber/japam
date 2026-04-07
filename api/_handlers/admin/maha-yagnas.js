@@ -87,6 +87,7 @@ export async function POST(request) {
       createdBy: 'admin',
       templeId: templeId && String(templeId).trim() ? String(templeId).trim() : null,
       status: 'active',
+      lifecycleStatus: 'active',
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
     };
 

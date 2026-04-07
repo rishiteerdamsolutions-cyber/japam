@@ -60,6 +60,7 @@ export async function POST(request) {
       joinedCount: 0,
       japasToday: 0,
       totalJapas: 0,
+      lifecycleStatus: 'active',
       createdAt: new Date().toISOString(),
     };
 

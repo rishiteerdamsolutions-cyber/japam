@@ -1,4 +1,5 @@
 import { getDb, jsonResponse } from '../_lib.js';
+import { isYagnaPublicListable } from '../_lifecycle.js';
 
 /** GET /api/maha-yagnas/list - List active Maha Japa Yagnas (public, no auth) */
 export async function GET() {
@@ -12,6 +13,7 @@ export async function GET() {
 
     for (const d of snap.docs) {
       const data = d.data();
+      if (!isYagnaPublicListable(data)) continue;
       const endDate = data.endDate || '';
       if (endDate < today) continue;
       const startDate = data.startDate || '';

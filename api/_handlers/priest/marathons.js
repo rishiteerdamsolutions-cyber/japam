@@ -1,4 +1,7 @@
 import { getDb, verifyPriestForApi, jsonResponse } from '../_lib.js';
+import { marathonLifecycleStatus } from '../_lifecycle.js';
+
+const MAX_PARTICIPANT_ROWS = 800;
 
 function getPriestToken(request, body) {
   const auth = request.headers.get('authorization');
@@ -20,16 +23,28 @@ export async function GET(request) {
     for (const d of snap.docs) {
       const data = d.data();
       let topParticipants = [];
+      let parts = [];
       try {
         const partsSnap = await db.collection('marathonParticipations').where('marathonId', '==', d.id).get();
-        const parts = partsSnap.docs.map((p) => {
+        function joinedAtIso(pData) {
+          const j = pData.joinedAt;
+          if (j && typeof j.toDate === 'function') return j.toDate().toISOString();
+          if (typeof j === 'string') return j;
+          return null;
+        }
+        parts = partsSnap.docs.map((p) => {
           const pData = p.data() || {};
           const uid = pData.userId || '';
           const displayName =
             (typeof pData.displayName === 'string' && pData.displayName.trim())
               ? pData.displayName.trim()
               : (uid ? uid.slice(0, 12) : '—');
-          return { uid, name: displayName, japasCount: pData.japasCount ?? 0 };
+          return {
+            uid,
+            name: displayName,
+            japasCount: pData.japasCount ?? 0,
+            joinedAt: joinedAtIso(pData),
+          };
         });
         parts.sort((a, b) => (b.japasCount || 0) - (a.japasCount || 0));
         const top = parts.slice(0, 5);
@@ -59,6 +74,9 @@ export async function GET(request) {
         topParticipants = [];
       }
 
+      const participants = parts.slice(0, MAX_PARTICIPANT_ROWS);
+      const participantTotal = parts.length;
+
       marathons.push({
         id: d.id,
         templeId: data.templeId,
@@ -68,6 +86,9 @@ export async function GET(request) {
         joinedCount: data.joinedCount ?? 0,
         japasToday: data.japasToday ?? 0,
         totalJapas: data.totalJapas ?? 0,
+        lifecycleStatus: marathonLifecycleStatus(data),
+        participantTotal,
+        participants,
         topParticipants,
       });
     }
@@ -105,6 +126,7 @@ export async function POST(request) {
       joinedCount: 0,
       japasToday: 0,
       totalJapas: 0,
+      lifecycleStatus: 'active',
       createdAt: new Date().toISOString(),
     };
     const docRef = await db.collection('marathons').add(marathon);

@@ -7,6 +7,29 @@ import type { RewardType } from '../../lib/rewardVideoAnalytics';
 
 const WATCH_SECONDS = 30;
 
+/** Full-screen spiritual / premium backdrop for reward video flow */
+function RewardVideoStage({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="fixed inset-0 z-50 overflow-y-auto overflow-x-hidden">
+      <div className="absolute inset-0 bg-[#07030f]" aria-hidden />
+      <div
+        className="absolute inset-0 bg-gradient-to-br from-indigo-950 via-[#1a0a2e] to-[#2d0a14] opacity-[0.97]"
+        aria-hidden
+      />
+      <div
+        className="absolute inset-0 bg-[radial-gradient(ellipse_120%_80%_at_50%_-20%,rgba(251,191,36,0.22),transparent_50%),radial-gradient(ellipse_80%_60%_at_100%_50%,rgba(139,92,246,0.18),transparent_45%),radial-gradient(ellipse_70%_50%_at_0%_80%,rgba(244,63,94,0.12),transparent_50%)]"
+        aria-hidden
+      />
+      <div
+        className="absolute inset-0 opacity-[0.35] mix-blend-overlay bg-[url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Ccircle%20cx%3D%221%22%20cy%3D%221%22%20r%3D%221%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E')] bg-[length:24px_24px]"
+        aria-hidden
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30 pointer-events-none" aria-hidden />
+      <div className="relative z-10 flex min-h-full flex-col items-center justify-center p-4 sm:p-6">{children}</div>
+    </div>
+  );
+}
+
 /** Coalesce concurrent fetches (e.g. React Strict Mode remount) into one POST so the global cursor advances once. */
 let nextRewardVideoInFlight: Promise<RewardVideoItem | null> | null = null;
 
@@ -142,80 +165,129 @@ export function RewardVideoModal({ onComplete, onClose, rewardLabel, rewardType,
     onComplete();
   }, [canContinue, onComplete, getIdToken, youtubeId, videoType, rewardType]);
 
+  const isAdhyathmika = videoType === 'adyathmika';
+
+  const frame = isAdhyathmika
+    ? {
+        shell:
+          'bg-gradient-to-br from-amber-200 via-amber-400 to-orange-600 p-[3px] shadow-[0_0_0_1px_rgba(251,191,36,0.55),0_0_56px_rgba(245,158,11,0.38),0_28px_70px_rgba(0,0,0,0.6)]',
+        inner: 'rounded-[1.4rem] bg-gradient-to-b from-[#1a1008] via-[#100a06] to-[#080503] p-4 sm:p-5',
+        label:
+          'rounded-xl border border-amber-400/50 bg-gradient-to-r from-amber-950/95 via-[#2a1810]/95 to-amber-950/95 px-4 py-2.5 text-center text-sm font-semibold leading-snug tracking-wide text-amber-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.14),0_4px_20px_rgba(0,0,0,0.35)]',
+        videoWrap:
+          'aspect-[9/16] max-h-[min(60vh,520px)] w-full overflow-hidden rounded-2xl bg-black ring-2 ring-amber-400/45 ring-offset-2 ring-offset-[#100a06] shadow-[inset_0_0_0_1px_rgba(251,191,36,0.25),0_12px_40px_rgba(0,0,0,0.65)]',
+        btnActive: 'bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-400 hover:to-orange-400 shadow-[0_4px_24px_rgba(245,158,11,0.45)]',
+        btnWait: 'bg-white/[0.08] text-amber-200/45',
+      }
+    : {
+        shell:
+          'bg-gradient-to-br from-slate-300 via-sky-500 to-indigo-700 p-[3px] shadow-[0_0_0_1px_rgba(56,189,248,0.5),0_0_48px_rgba(14,165,233,0.32),0_28px_70px_rgba(0,0,0,0.6)]',
+        inner: 'rounded-[1.4rem] bg-gradient-to-b from-slate-950 via-slate-900 to-[#0a0f1c] p-4 sm:p-5',
+        label:
+          'rounded-xl border border-sky-400/50 bg-gradient-to-r from-slate-950 via-sky-950/90 to-slate-950 px-4 py-2.5 text-center text-sm font-semibold leading-snug tracking-wide text-sky-50 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_4px_20px_rgba(0,0,0,0.4)]',
+        videoWrap:
+          'aspect-[9/16] max-h-[min(60vh,520px)] w-full overflow-hidden rounded-2xl bg-black ring-2 ring-sky-400/50 ring-offset-2 ring-offset-slate-950 shadow-[inset_0_0_0_1px_rgba(56,189,248,0.2),0_12px_40px_rgba(0,0,0,0.65)]',
+        btnActive: 'bg-gradient-to-r from-sky-500 to-indigo-600 text-white hover:from-sky-400 hover:to-indigo-500 shadow-[0_4px_24px_rgba(14,165,233,0.4)]',
+        btnWait: 'bg-white/[0.08] text-sky-200/45',
+      };
+
   if (loading) {
     return (
-      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center p-4 bg-gloss-bubblegum">
+      <RewardVideoStage>
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="rounded-2xl border-2 border-[#5D4037] bg-[#C2185B]/90 p-6 text-center"
+          initial={{ opacity: 0, scale: 0.92, y: 12 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ type: 'spring', damping: 22, stiffness: 280 }}
+          className="w-full max-w-sm rounded-[1.4rem] bg-gradient-to-br from-violet-600/90 via-fuchsia-700/80 to-amber-700/90 p-[3px] shadow-[0_0_60px_rgba(139,92,246,0.35),0_24px_64px_rgba(0,0,0,0.55)]"
         >
-          <p className="text-amber-200">{t('common.loading')}</p>
+          <div className="rounded-[1.35rem] bg-gradient-to-b from-[#14081f]/98 to-[#0a0510]/98 px-8 py-10 text-center">
+            <div className="mx-auto mb-4 h-12 w-12 rounded-full border-2 border-amber-400/40 border-t-amber-300 animate-spin" />
+            <p className="text-amber-100/95 text-sm font-medium">{t('common.loading')}</p>
+          </div>
         </motion.div>
-      </div>
+      </RewardVideoStage>
     );
   }
 
   if (error || !youtubeId) {
     return (
-      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center p-4 bg-gloss-bubblegum">
+      <RewardVideoStage>
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
+          initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="rounded-2xl border-2 border-[#5D4037] bg-[#C2185B]/90 p-6 max-w-sm text-center"
+          className="w-full max-w-sm rounded-[1.4rem] bg-gradient-to-br from-rose-500/80 via-amber-600/80 to-violet-700/80 p-[3px] shadow-[0_0_48px_rgba(244,63,94,0.25)]"
         >
-          <p className="text-amber-200 mb-4">{error || t('game.noVideosAvailable')}</p>
-          {onClose && (
-            <button
-              onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-amber-500 text-white font-medium"
-            >
-              {t('common.ok')}
-            </button>
-          )}
+          <div className="rounded-[1.35rem] bg-gradient-to-b from-[#1a0a12]/98 to-[#0d0608]/98 p-6 text-center border border-white/5">
+            <p className="text-amber-100/90 mb-4 text-sm">{error || t('game.noVideosAvailable')}</p>
+            {onClose && (
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-white font-semibold text-sm shadow-lg"
+              >
+                {t('common.ok')}
+              </button>
+            )}
+          </div>
         </motion.div>
-      </div>
+      </RewardVideoStage>
     );
   }
 
   const embedUrl = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0`;
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center p-4 bg-gloss-bubblegum">
+    <RewardVideoStage>
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-        className="w-full max-w-sm rounded-2xl border-2 border-[#5D4037] bg-[#C2185B]/90 p-4 overflow-hidden"
+        initial={{ opacity: 0, scale: 0.92, y: 16 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ type: 'spring', damping: 22, stiffness: 280 }}
+        className={`w-full max-w-md rounded-[1.45rem] ${frame.shell}`}
       >
-        {video?.title?.trim() ? (
-          <p className="text-amber-100/95 text-sm font-medium text-center mb-3 line-clamp-2 px-1">
-            {video.title.trim()}
-          </p>
-        ) : null}
-        <div className="aspect-[9/16] max-h-[60vh] w-full rounded-xl overflow-hidden bg-black">
-          <iframe
-            src={embedUrl}
-            title={video?.title?.trim() || 'Reward video'}
-            className="w-full h-full"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
-        </div>
-        <div className="mt-4">
-          <button
-            onClick={handleContinue}
-            disabled={!canContinue}
-            className={`w-full py-3 rounded-xl font-semibold transition-all ${
-              canContinue
-                ? 'bg-amber-500 text-white hover:bg-amber-400'
-                : 'bg-black/30 text-amber-200/50 cursor-not-allowed'
-            }`}
+        <div className={frame.inner}>
+          <p
+            className={frame.label}
+            role="status"
           >
-            {canContinue ? (rewardLabel || t('game.continue')) : `${secondsLeft}s`}
-          </button>
+            {isAdhyathmika ? t('game.rewardVideoLabelAdhyathmika') : t('game.rewardVideoLabelAdvertisement')}
+          </p>
+
+          {video?.title?.trim() ? (
+            <p
+              className={`text-xs font-medium text-center mt-3 mb-2 line-clamp-2 px-1 ${
+                isAdhyathmika ? 'text-amber-100/85' : 'text-sky-100/85'
+              }`}
+            >
+              {video.title.trim()}
+            </p>
+          ) : (
+            <div className="h-2" />
+          )}
+
+          <div className={`mt-1 ${frame.videoWrap}`}>
+            <iframe
+              src={embedUrl}
+              title={video?.title?.trim() || 'Reward video'}
+              className="w-full h-full"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+
+          <div className="mt-5">
+            <button
+              type="button"
+              onClick={handleContinue}
+              disabled={!canContinue}
+              className={`w-full py-3.5 rounded-xl font-semibold text-sm sm:text-base transition-all ${
+                canContinue ? frame.btnActive : `${frame.btnWait} cursor-not-allowed`
+              }`}
+            >
+              {canContinue ? (rewardLabel || t('game.continue')) : `${secondsLeft}s`}
+            </button>
+          </div>
         </div>
       </motion.div>
-    </div>
+    </RewardVideoStage>
   );
 }

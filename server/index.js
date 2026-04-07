@@ -420,7 +420,7 @@ app.post('/api/priest/marathons', async (req, res) => {
     if (!deityId || !targetJapas || !startDate) return res.status(400).json({ error: 'deityId, targetJapas, startDate required' });
     const target = Math.round(Number(targetJapas));
     if (!Number.isFinite(target) || target < 1) return res.status(400).json({ error: 'targetJapas must be positive' });
-    const marathon = { templeId: priest.templeId, deityId, targetJapas: target, startDate, joinedCount: 0, japasToday: 0, totalJapas: 0, createdAt: new Date().toISOString() };
+    const marathon = { templeId: priest.templeId, deityId, targetJapas: target, startDate, joinedCount: 0, japasToday: 0, totalJapas: 0, lifecycleStatus: 'active', createdAt: new Date().toISOString() };
     const docRef = await db.collection('marathons').add(marathon);
     res.json({ ok: true, marathonId: docRef.id });
   } catch (e) {
@@ -466,6 +466,13 @@ function normalize(s) {
   return (s || '').trim().toLowerCase();
 }
 
+/** Match api/_handlers/_lifecycle.js — marathons visible when lifecycle is active or unset */
+function marathonDiscoverable(data) {
+  const s = data?.lifecycleStatus;
+  if (s === 'paused' || s === 'archived') return false;
+  return true;
+}
+
 app.get('/api/marathons/discover', async (req, res) => {
   try {
     const { state, district, cityTownVillage, area } = req.query;
@@ -492,7 +499,8 @@ app.get('/api/marathons/discover', async (req, res) => {
     const marathonsByTemple = {};
     for (const t of temples) {
       const mSnap = await db.collection('marathons').where('templeId', '==', t.id).get();
-      marathonsByTemple[t.id] = await Promise.all(mSnap.docs.map(async (d) => {
+      marathonsByTemple[t.id] = await Promise.all(
+        mSnap.docs.filter((d) => marathonDiscoverable(d.data())).map(async (d) => {
         const data = d.data();
         const partsSnap = await db.collection('marathonParticipations').where('marathonId', '==', d.id).get();
         const participants = partsSnap.docs.map((p) => ({ userId: p.data().userId, japasCount: p.data().japasCount ?? 0 }));
@@ -506,7 +514,8 @@ app.get('/api/marathons/discover', async (req, res) => {
           joinedCount: data.joinedCount ?? 0,
           leaderboard: participants.slice(0, 10).map((p, i) => ({ rank: i + 1, userId: (p.userId || '').slice(0, 8), japasCount: p.japasCount })),
         };
-      }));
+      }),
+      );
     }
     res.json({ temples, marathonsByTemple });
   } catch (e) {
@@ -520,12 +529,16 @@ app.post('/api/marathons/join', async (req, res) => {
     const { marathonId, userId } = req.body || {};
     if (!marathonId || !userId) return res.status(400).json({ error: 'marathonId and userId required' });
     if (!db) return res.status(503).json({ error: 'Database not configured' });
+    const marathonSnap = await db.doc(`marathons/${marathonId}`).get();
+    if (!marathonSnap.exists) return res.status(404).json({ error: 'Marathon not found' });
+    if (!marathonDiscoverable(marathonSnap.data())) {
+      return res.status(400).json({ error: 'This marathon is not accepting new participants right now' });
+    }
     const participationRef = db.doc(`marathonParticipations/${marathonId}_${userId}`);
     const existing = await participationRef.get();
     if (existing.exists) return res.json({ ok: true, alreadyJoined: true });
     await participationRef.set({ marathonId, userId, joinedAt: new Date().toISOString(), japasCount: 0 });
     const marathonRef = db.doc(`marathons/${marathonId}`);
-    const marathonSnap = await marathonRef.get();
     if (marathonSnap.exists) {
       const data = marathonSnap.data();
       await marathonRef.update({ joinedCount: (data.joinedCount ?? 0) + 1 });

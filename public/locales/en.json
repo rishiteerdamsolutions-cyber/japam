@@ -85,6 +85,8 @@
     "watchComplete": "Watch complete",
     "continue": "Continue",
     "noVideosAvailable": "No videos available",
+    "rewardVideoLabelAdhyathmika": "This is an Adhyathmika, Not Ad",
+    "rewardVideoLabelAdvertisement": "This is an Ad",
     "refillIn": "Refill in {{hours}}h",
     "paymentFailed": "Payment verification failed",
     "paymentCancelled": "Payment was cancelled",

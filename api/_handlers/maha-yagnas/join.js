@@ -1,5 +1,6 @@
 import { getDb, jsonResponse, verifyFirebaseUser, isUserUnlocked, isValidFirestoreDocId } from '../_lib.js';
 import admin from 'firebase-admin';
+import { isYagnaPublicListable } from '../_lifecycle.js';
 
 /** POST /api/maha-yagnas/join - User joins a Maha Japa Yagna. Requires Firebase auth; only Pro (unlocked) users can join. Body: { yagnaId } */
 export async function POST(request) {
@@ -28,6 +29,9 @@ export async function POST(request) {
 
     const yData = yagnaSnap.data() || {};
     if (yData.status !== 'active') return jsonResponse({ error: 'Yagna is not active' }, 400);
+    if (!isYagnaPublicListable(yData)) {
+      return jsonResponse({ error: 'This Maha Japa Yagna is not open for new participants right now' }, 400);
+    }
 
     const today = new Date().toISOString().slice(0, 10);
     const startDate = yData.startDate || '';

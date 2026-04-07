@@ -1,5 +1,6 @@
 import { getDb, jsonResponse, verifyFirebaseUser } from '../_lib.js';
 import { buildMarathonLeaderboard } from './_marathonLeaderboard.js';
+import { isMarathonPublicActive } from '../_lifecycle.js';
 
 function normalize(s) {
   return (s || '').trim().toLowerCase();
@@ -81,7 +82,8 @@ export async function GET(request) {
     const marathonsByTemple = {};
     for (const tid of templeIds) {
       const mSnap = await db.collection('marathons').where('templeId', '==', tid).get();
-      marathonsByTemple[tid] = await Promise.all(mSnap.docs.map(async (d) => {
+      const visible = mSnap.docs.filter((d) => isMarathonPublicActive(d.data()));
+      marathonsByTemple[tid] = await Promise.all(visible.map(async (d) => {
         const data = d.data();
         const leaderboard = await buildMarathonLeaderboard(db, d.id, { topN: 5, viewerUid });
         return {
@@ -100,7 +102,9 @@ export async function GET(request) {
     if (state) {
       let communityQuery = db.collection('marathons').where('isCommunity', '==', true).where('state', '==', state);
       const communitySnap = await communityQuery.get();
-      let communityMarathons = communitySnap.docs.map((d) => {
+      let communityMarathons = communitySnap.docs
+        .filter((d) => isMarathonPublicActive(d.data()))
+        .map((d) => {
         const data = d.data();
         return {
           id: d.id,

@@ -4,7 +4,7 @@ import { AppFooter } from '../components/layout/AppFooter';
 import INDIA_REGIONS from '../data/indiaRegions.json';
 import { DEITIES } from '../data/deities';
 import { useAuthStore } from '../store/authStore';
-import { useUnlockStore } from '../store/unlockStore';
+import { FIRST_LOCKED_LEVEL_INDEX, useUnlockStore } from '../store/unlockStore';
 import { auth } from '../lib/firebase';
 import { DonateThankYouBox } from '../components/donation/DonateThankYouBox';
 import { AppHeader } from '../components/layout/AppHeader';
@@ -341,6 +341,18 @@ export function MarathonsPage() {
       />
 
       <p className="text-amber-200/80 text-sm mb-4">Discover marathons by location and join to contribute your japas.</p>
+      {!isPro && (
+        <div className="mb-4 p-3 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-100 text-sm">
+          Pro is required to join marathons.
+          <button
+            type="button"
+            onClick={() => navigate(`/game?mode=general&level=${FIRST_LOCKED_LEVEL_INDEX}`)}
+            className="ml-2 underline text-amber-300"
+          >
+            Unlock Pro
+          </button>
+        </div>
+      )}
 
       {joinError && (
         <div className="mb-4 p-3 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-200 text-sm">

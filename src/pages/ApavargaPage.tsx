@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppHeader } from '../components/layout/AppHeader';
 import { AppFooter } from '../components/layout/AppFooter';
-import { useUnlockStore } from '../store/unlockStore';
+import { FIRST_LOCKED_LEVEL_INDEX, useUnlockStore } from '../store/unlockStore';
 import { auth } from '../lib/firebase';
 
 const APAVARGA_URL = import.meta.env.VITE_APAVARGA_URL || '';
@@ -81,7 +81,14 @@ export function ApavargaPage() {
             ) : (
               <div className="rounded-2xl bg-black/40 border border-amber-500/30 p-5 text-center">
                 <p className="text-amber-200 text-sm mb-2">Apavarga is for Pro and Premium members.</p>
-                <p className="text-amber-200/70 text-xs">Unlock Pro from the game to enter.</p>
+                <p className="text-amber-200/70 text-xs mb-3">Unlock Pro to enter.</p>
+                <button
+                  type="button"
+                  onClick={() => navigate(`/game?mode=general&level=${FIRST_LOCKED_LEVEL_INDEX}`)}
+                  className="px-4 py-2 rounded-lg bg-amber-500 text-white text-sm font-semibold"
+                >
+                  Unlock Pro
+                </button>
               </div>
             )}
           </div>

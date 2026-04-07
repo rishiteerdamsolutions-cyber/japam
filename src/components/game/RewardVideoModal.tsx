@@ -11,20 +11,20 @@ const WATCH_SECONDS = 30;
 function RewardVideoStage({ children }: { children: React.ReactNode }) {
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto overflow-x-hidden">
-      <div className="absolute inset-0 bg-[#07030f]" aria-hidden />
+      <div className="absolute inset-0 bg-[#07030f]/55 backdrop-blur-[1px]" aria-hidden />
       <div
-        className="absolute inset-0 bg-gradient-to-br from-indigo-950 via-[#1a0a2e] to-[#2d0a14] opacity-[0.97]"
+        className="absolute inset-0 bg-gradient-to-br from-indigo-950 via-[#1a0a2e] to-[#2d0a14] opacity-[0.55]"
         aria-hidden
       />
       <div
-        className="absolute inset-0 bg-[radial-gradient(ellipse_120%_80%_at_50%_-20%,rgba(251,191,36,0.22),transparent_50%),radial-gradient(ellipse_80%_60%_at_100%_50%,rgba(139,92,246,0.18),transparent_45%),radial-gradient(ellipse_70%_50%_at_0%_80%,rgba(244,63,94,0.12),transparent_50%)]"
+        className="absolute inset-0 bg-[radial-gradient(ellipse_120%_80%_at_50%_-20%,rgba(251,191,36,0.14),transparent_50%),radial-gradient(ellipse_80%_60%_at_100%_50%,rgba(139,92,246,0.12),transparent_45%),radial-gradient(ellipse_70%_50%_at_0%_80%,rgba(244,63,94,0.08),transparent_50%)]"
         aria-hidden
       />
       <div
-        className="absolute inset-0 opacity-[0.35] mix-blend-overlay bg-[url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Ccircle%20cx%3D%221%22%20cy%3D%221%22%20r%3D%221%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E')] bg-[length:24px_24px]"
+        className="absolute inset-0 opacity-[0.18] mix-blend-overlay bg-[url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Ccircle%20cx%3D%221%22%20cy%3D%221%22%20r%3D%221%22%20fill%3D%22%23fff%22%2F%3E%3C%2Fsvg%3E')] bg-[length:24px_24px]"
         aria-hidden
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30 pointer-events-none" aria-hidden />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-black/20 pointer-events-none" aria-hidden />
       <div className="relative z-10 flex min-h-full flex-col items-center justify-center p-4 sm:p-6">{children}</div>
     </div>
   );

@@ -11,6 +11,8 @@ export const GENERAL_BOARD_EXCLUDED_DEITIES: DeityId[] = [...EXCLUSIVE_ISTA_PATH
 
 /** Rāma / Nārāyaṇa / ISKCON read similarly on gems — keep only one per board family. */
 export const MUTUALLY_EXCLUSIVE_VISNU_FORMS: DeityId[] = ['rama', 'narayana', 'iskcon'];
+/** Śakthi / Durgā should not mix on one board family. */
+export const MUTUALLY_EXCLUSIVE_SHAKTHI_DURGA: DeityId[] = ['shakthi', 'durga'];
 
 /** Whether `gemDeity` may appear on the board / strip for this īṣṭa path (`pathDeity`). */
 export function deityGemAllowedOnIstaPath(pathDeity: DeityId, gemDeity: DeityId): boolean {
@@ -21,6 +23,11 @@ export function deityGemAllowedOnIstaPath(pathDeity: DeityId, gemDeity: DeityId)
   const pathInVisnuFamily = MUTUALLY_EXCLUSIVE_VISNU_FORMS.includes(pathDeity);
   const gemInVisnuFamily = MUTUALLY_EXCLUSIVE_VISNU_FORMS.includes(gemDeity);
   if (pathInVisnuFamily && gemInVisnuFamily && gemDeity !== pathDeity) return false;
+
+  // Shakthi/Durga paths must stay exclusive to the selected one.
+  const pathInShakthiDurgaFamily = MUTUALLY_EXCLUSIVE_SHAKTHI_DURGA.includes(pathDeity);
+  const gemInShakthiDurgaFamily = MUTUALLY_EXCLUSIVE_SHAKTHI_DURGA.includes(gemDeity);
+  if (pathInShakthiDurgaFamily && gemInShakthiDurgaFamily && gemDeity !== pathDeity) return false;
 
   return true;
 }

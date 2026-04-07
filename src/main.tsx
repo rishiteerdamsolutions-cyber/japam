@@ -1,6 +1,6 @@
 import { StrictMode, lazy, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import './index.css'
 import './i18n'
 import { initSentry } from './lib/sentry'
@@ -16,6 +16,7 @@ import { OfflineBanner } from './components/OfflineBanner'
 import { RouterChrome } from './components/RouterChrome'
 import App from './App.tsx'
 import { MenuPage } from './pages/MenuPage'
+import { LAUNCH_FEATURE_OCCASION_GAMES } from './config/launchFeatures'
 
 const GamePage = lazy(() => import('./pages/GamePage').then(m => ({ default: m.GamePage })))
 const LevelsPage = lazy(() => import('./pages/LevelsPage').then(m => ({ default: m.LevelsPage })))
@@ -80,9 +81,24 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/game" element={<GamePage />} />
         <Route path="/levels" element={<LevelsPage />} />
         <Route path="/japa" element={<JapaPage />} />
-        <Route path="/occasion/birthday" element={<BirthdayOccasionPage />} />
-        <Route path="/occasion/anniversary" element={<AnniversaryLobbyPage />} />
-        <Route path="/occasion/anniversary/join" element={<AnniversaryJoinPage />} />
+        <Route
+          path="/occasion/birthday"
+          element={
+            LAUNCH_FEATURE_OCCASION_GAMES ? <BirthdayOccasionPage /> : <Navigate to="/" replace />
+          }
+        />
+        <Route
+          path="/occasion/anniversary"
+          element={
+            LAUNCH_FEATURE_OCCASION_GAMES ? <AnniversaryLobbyPage /> : <Navigate to="/" replace />
+          }
+        />
+        <Route
+          path="/occasion/anniversary/join"
+          element={
+            LAUNCH_FEATURE_OCCASION_GAMES ? <AnniversaryJoinPage /> : <Navigate to="/" replace />
+          }
+        />
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/admin">
           <Route index element={<AdminPage />} />

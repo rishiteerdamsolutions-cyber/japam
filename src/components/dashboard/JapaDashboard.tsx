@@ -12,6 +12,7 @@ import { removeBackgroundFromImage } from '../../utils/removeBackground';
 import { DonateThankYouBox } from '../donation/DonateThankYouBox';
 import { AppHeader } from '../layout/AppHeader';
 import { BottomNav } from '../nav/BottomNav';
+import { LAUNCH_FEATURE_OCCASION_GAMES } from '../../config/launchFeatures';
 
 /** Single sample image used across all deities and site-wide */
 const HANDWRITING_SAMPLE_SRC = '/SAMPLE%20NAMA%20IMAGE.png';
@@ -41,7 +42,7 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (!user) {
+    if (!LAUNCH_FEATURE_OCCASION_GAMES || !user) {
       setOccasions([]);
       setOccasionsLoaded(true);
       return;
@@ -93,12 +94,10 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
   const birthdayJapa = counts.birthdayJapa ?? 0;
   const anniversaryJapa = counts.anniversaryJapa ?? 0;
   const coupleGameJapa = counts.coupleGameJapa ?? 0;
-  /** Scale all bars together; occasion rows always follow `DEITIES` so new deities stay above them. */
+  /** Scale all bars together; occasion rows follow `DEITIES` when those features ship. */
   const maxRow = Math.max(
     ...DEITIES.map((d) => counts[d.id] ?? 0),
-    birthdayJapa,
-    anniversaryJapa,
-    coupleGameJapa,
+    ...(LAUNCH_FEATURE_OCCASION_GAMES ? [birthdayJapa, anniversaryJapa, coupleGameJapa] : []),
     1,
   );
 
@@ -183,7 +182,7 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
 
       <DonateThankYouBox />
 
-      {user && occasionsLoaded && historyOccasions.length > 0 && (
+      {LAUNCH_FEATURE_OCCASION_GAMES && user && occasionsLoaded && historyOccasions.length > 0 && (
         <div className="mt-4 mb-6">
           <h2 className="text-amber-300 font-semibold text-sm mb-2">{t('occasions.occasionHistory')}</h2>
           <div className="space-y-2">
@@ -253,45 +252,49 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
             </div>
           );
         })}
-        <div className="bg-black/20 rounded-xl p-3">
-          <div className="flex justify-between items-center mb-1 gap-2">
-            <span className="font-medium text-amber-400 shrink-0">{t('japaDashboard.birthdayJapa')}</span>
-            <span className="text-amber-200 shrink-0">{birthdayJapa.toLocaleString()}</span>
-            <span className="shrink-0 w-[72px]" aria-hidden />
-          </div>
-          <div className="h-2 bg-black/30 rounded-full overflow-hidden">
-            <div
-              className="h-full rounded-full transition-all bg-pink-400/90"
-              style={{ width: `${maxRow > 0 ? Math.min(100, (birthdayJapa / maxRow) * 100) : 0}%` }}
-            />
-          </div>
-        </div>
-        <div className="bg-black/20 rounded-xl p-3">
-          <div className="flex justify-between items-center mb-1 gap-2">
-            <span className="font-medium text-amber-400 shrink-0">{t('japaDashboard.weddingAnniversaryJapa')}</span>
-            <span className="text-amber-200 shrink-0">{anniversaryJapa.toLocaleString()}</span>
-            <span className="shrink-0 w-[72px]" aria-hidden />
-          </div>
-          <div className="h-2 bg-black/30 rounded-full overflow-hidden">
-            <div
-              className="h-full rounded-full transition-all bg-rose-400/90"
-              style={{ width: `${maxRow > 0 ? Math.min(100, (anniversaryJapa / maxRow) * 100) : 0}%` }}
-            />
-          </div>
-        </div>
-        <div className="bg-black/20 rounded-xl p-3">
-          <div className="flex justify-between items-center mb-1 gap-2">
-            <span className="font-medium text-amber-400 shrink-0">{t('japaDashboard.coupleGameJapa')}</span>
-            <span className="text-amber-200 shrink-0">{coupleGameJapa.toLocaleString()}</span>
-            <span className="shrink-0 w-[72px]" aria-hidden />
-          </div>
-          <div className="h-2 bg-black/30 rounded-full overflow-hidden">
-            <div
-              className="h-full rounded-full transition-all bg-violet-400/85"
-              style={{ width: `${maxRow > 0 ? Math.min(100, (coupleGameJapa / maxRow) * 100) : 0}%` }}
-            />
-          </div>
-        </div>
+        {LAUNCH_FEATURE_OCCASION_GAMES && (
+          <>
+            <div className="bg-black/20 rounded-xl p-3">
+              <div className="flex justify-between items-center mb-1 gap-2">
+                <span className="font-medium text-amber-400 shrink-0">{t('japaDashboard.birthdayJapa')}</span>
+                <span className="text-amber-200 shrink-0">{birthdayJapa.toLocaleString()}</span>
+                <span className="shrink-0 w-[72px]" aria-hidden />
+              </div>
+              <div className="h-2 bg-black/30 rounded-full overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all bg-pink-400/90"
+                  style={{ width: `${maxRow > 0 ? Math.min(100, (birthdayJapa / maxRow) * 100) : 0}%` }}
+                />
+              </div>
+            </div>
+            <div className="bg-black/20 rounded-xl p-3">
+              <div className="flex justify-between items-center mb-1 gap-2">
+                <span className="font-medium text-amber-400 shrink-0">{t('japaDashboard.weddingAnniversaryJapa')}</span>
+                <span className="text-amber-200 shrink-0">{anniversaryJapa.toLocaleString()}</span>
+                <span className="shrink-0 w-[72px]" aria-hidden />
+              </div>
+              <div className="h-2 bg-black/30 rounded-full overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all bg-rose-400/90"
+                  style={{ width: `${maxRow > 0 ? Math.min(100, (anniversaryJapa / maxRow) * 100) : 0}%` }}
+                />
+              </div>
+            </div>
+            <div className="bg-black/20 rounded-xl p-3">
+              <div className="flex justify-between items-center mb-1 gap-2">
+                <span className="font-medium text-amber-400 shrink-0">{t('japaDashboard.coupleGameJapa')}</span>
+                <span className="text-amber-200 shrink-0">{coupleGameJapa.toLocaleString()}</span>
+                <span className="shrink-0 w-[72px]" aria-hidden />
+              </div>
+              <div className="h-2 bg-black/30 rounded-full overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all bg-violet-400/85"
+                  style={{ width: `${maxRow > 0 ? Math.min(100, (coupleGameJapa / maxRow) * 100) : 0}%` }}
+                />
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       {downloadModal && (

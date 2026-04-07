@@ -4,6 +4,7 @@ import { Splash } from './components/Splash';
 import { Landing } from './components/landing/Landing';
 import { InstallPrompt } from './components/ui/InstallPrompt';
 import { useAuthStore } from './store/authStore';
+import { LAUNCH_FEATURE_MULTIPLAYER_ASURA, LAUNCH_FEATURE_OCCASION_GAMES } from './config/launchFeatures';
 
 function multiplayerAsuraHref(): string {
   let base = import.meta.env.BASE_URL || '/';
@@ -26,11 +27,19 @@ function App() {
         <Landing
           onEnterApp={() => navigate('/menu')}
           onGuestPlay={() => navigate('/game?guest=1')}
-          onBirthday={() => navigate('/occasion/birthday')}
-          onAnniversary={() => navigate('/occasion/anniversary')}
-          onMultiplayer={() => {
-            window.location.assign(multiplayerAsuraHref());
-          }}
+          onBirthday={
+            LAUNCH_FEATURE_OCCASION_GAMES ? () => navigate('/occasion/birthday') : undefined
+          }
+          onAnniversary={
+            LAUNCH_FEATURE_OCCASION_GAMES ? () => navigate('/occasion/anniversary') : undefined
+          }
+          onMultiplayer={
+            LAUNCH_FEATURE_MULTIPLAYER_ASURA
+              ? () => {
+                  window.location.assign(multiplayerAsuraHref());
+                }
+              : undefined
+          }
         />
       )}
       <InstallPrompt />

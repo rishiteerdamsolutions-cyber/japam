@@ -15,6 +15,7 @@ import { FIRST_LOCKED_LEVEL_INDEX } from '../store/unlockStore';
 import { LEVELS, ANNIVERSARY_COUPLE_LAST_LEVEL_INDEX } from '../data/levels';
 import type { GameMode } from '../types';
 import { getOccasionEntryGate } from '../lib/occasionEntryGate';
+import { LAUNCH_FEATURE_OCCASION_GAMES } from '../config/launchFeatures';
 
 export function GamePage() {
   const { t } = useTranslation();
@@ -43,6 +44,10 @@ export function GamePage() {
 
   useEffect(() => {
     if (!occasionKind) return;
+    if (!LAUNCH_FEATURE_OCCASION_GAMES) {
+      navigate('/', { replace: true });
+      return;
+    }
     const allow = getOccasionEntryGate();
     if (occasionKind === 'birthday' && allow !== 'birthday') {
       navigate('/occasion/birthday', { replace: true });
@@ -265,11 +270,11 @@ export function GamePage() {
   const onJustRestoredCleared = useCallback(() => setJustRestored(false), []);
   const onBack = useCallback(() => {
     if (occasionKind === 'birthday') {
-      navigate('/occasion/birthday');
+      navigate(LAUNCH_FEATURE_OCCASION_GAMES ? '/occasion/birthday' : '/');
       return;
     }
     if (occasionKind === 'anniversary') {
-      navigate('/occasion/anniversary');
+      navigate(LAUNCH_FEATURE_OCCASION_GAMES ? '/occasion/anniversary' : '/');
       return;
     }
     if (isMarathon) {

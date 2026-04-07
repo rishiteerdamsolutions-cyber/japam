@@ -1,0 +1,129 @@
+name: CI / Deploy
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ────────────────────────────────────────────────────────────────────────────
+  # Quality gate — runs on every PR and push to main
+  # ────────────────────────────────────────────────────────────────────────────
+  quality:
+    name: Lint & Type-check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: ESLint
+        run: npm run lint
+        continue-on-error: false
+
+      - name: TypeScript type-check (main app)
+        run: npx tsc --noEmit --project tsconfig.app.json
+        continue-on-error: false
+
+      - name: Install community dependencies
+        run: npm ci
+        working-directory: community
+
+      - name: TypeScript type-check (community app)
+        run: npx tsc --noEmit
+        working-directory: community
+        continue-on-error: false
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # Security audit — check for known vulnerabilities
+  # ────────────────────────────────────────────────────────────────────────────
+  security:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: npm audit (high/critical only)
+        run: npm audit --audit-level=high
+        continue-on-error: true  # warn but don't block deploys for now; tighten to false when all advisories resolved
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # Deploy to Vercel — only runs on merge to main after quality gate passes
+  # ────────────────────────────────────────────────────────────────────────────
+  deploy:
+    name: Deploy to Vercel (Production)
+    runs-on: ubuntu-latest
+    needs: [quality]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    timeout-minutes: 15
+    environment: production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+
+      - name: Pull Vercel environment info
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build project
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy to production
+        id: deploy
+        run: |
+          URL=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})
+          echo "url=$URL" >> $GITHUB_OUTPUT
+
+      - name: Smoke test — health check
+        run: |
+          sleep 10
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${{ steps.deploy.outputs.url }}/api/health")
+          if [ "$STATUS" != "200" ]; then
+            echo "Health check failed with status $STATUS"
+            exit 1
+          fi
+          echo "Health check passed (HTTP 200)"
+
+# ────────────────────────────────────────────────────────────────────────────
+# REQUIRED SECRETS (set in GitHub repo → Settings → Secrets → Actions):
+#
+#   VERCEL_TOKEN    — from Vercel Dashboard → Account Settings → Tokens
+#
+# OPTIONAL (add when you have them):
+#   FIREBASE_TOKEN  — for deploying Cloud Functions: `firebase login:ci`
+#
+# HOW TO ROLLBACK A BAD VERCEL DEPLOY:
+#   1. Go to Vercel Dashboard → Deployments
+#   2. Click the previous good deployment
+#   3. Click "Promote to Production"
+# ────────────────────────────────────────────────────────────────────────────

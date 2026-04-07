@@ -16,7 +16,9 @@ let db = null;
 if (process.env.FIREBASE_SERVICE_ACCOUNT_JSON) {
   try {
     const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
-    admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
+    if (!admin.apps.length) {
+      admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
+    }
     db = admin.firestore();
   } catch (e) {
     console.error('Firebase init failed:', e.message);

@@ -7,33 +7,57 @@ async function fetchMarathons(token) {
   const db = getDb();
   if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
   const marathonsSnap = await db.collection('marathons').get();
-  const marathons = [];
-  for (const d of marathonsSnap.docs) {
-    const data = d.data();
-    const templeSnap = await db.doc(`temples/${data.templeId}`).get();
-    const temple = templeSnap.exists ? templeSnap.data() : null;
-    const participationsSnap = await db.collection('marathonParticipations').where('marathonId', '==', d.id).get();
-    const participants = participationsSnap.docs.map((p) => {
-      const pData = p.data();
-      const name = typeof pData.displayName === 'string' && pData.displayName.trim()
-        ? pData.displayName.trim().slice(0, 80)
-        : pData.userId?.slice(0, 12) || '—';
-      return { userId: pData.userId, displayName: name, japasCount: pData.japasCount ?? 0 };
-    });
-    participants.sort((a, b) => (b.japasCount || 0) - (a.japasCount || 0));
-    marathons.push({
-      id: d.id,
-      templeId: data.templeId,
-      templeName: temple?.name || '—',
-      priestUsername: temple?.priestUsername || '—',
-      deityId: data.deityId,
-      deityName: DEITY_NAMES[data.deityId] || data.deityId,
-      targetJapas: data.targetJapas,
-      startDate: data.startDate,
-      joinedCount: data.joinedCount ?? 0,
-      topParticipants: participants.slice(0, 5),
-    });
+  if (marathonsSnap.empty) return jsonResponse({ marathons: [] });
+
+  // Batch-fetch all referenced temples in a single round-trip (eliminates N+1 temple reads).
+  const templeIds = [...new Set(marathonsSnap.docs.map((d) => d.data().templeId).filter(Boolean))];
+  const templeMap = {};
+  if (templeIds.length > 0) {
+    const templeRefs = templeIds.map((id) => db.collection('temples').doc(id));
+    const templeSnaps = await db.getAll(...templeRefs);
+    for (const snap of templeSnaps) {
+      if (snap.exists) templeMap[snap.id] = snap.data();
+    }
   }
+
+  // Fetch top-5 participants per marathon using a server-side orderBy+limit query
+  // instead of fetching all participations and sorting in-memory.
+  const marathons = await Promise.all(
+    marathonsSnap.docs.map(async (d) => {
+      const data = d.data();
+      const temple = data.templeId ? (templeMap[data.templeId] || null) : null;
+
+      const participationsSnap = await db
+        .collection('marathonParticipations')
+        .where('marathonId', '==', d.id)
+        .orderBy('japasCount', 'desc')
+        .limit(5)
+        .get();
+
+      const topParticipants = participationsSnap.docs.map((p) => {
+        const pData = p.data();
+        const name =
+          typeof pData.displayName === 'string' && pData.displayName.trim()
+            ? pData.displayName.trim().slice(0, 80)
+            : pData.userId?.slice(0, 12) || '—';
+        return { userId: pData.userId, displayName: name, japasCount: pData.japasCount ?? 0 };
+      });
+
+      return {
+        id: d.id,
+        templeId: data.templeId,
+        templeName: temple?.name || '—',
+        priestUsername: temple?.priestUsername || '—',
+        deityId: data.deityId,
+        deityName: DEITY_NAMES[data.deityId] || data.deityId,
+        targetJapas: data.targetJapas,
+        startDate: data.startDate,
+        joinedCount: data.joinedCount ?? 0,
+        topParticipants,
+      };
+    }),
+  );
+
   marathons.sort((a, b) => (b.startDate || '').localeCompare(a.startDate || ''));
   return jsonResponse({ marathons });
 }

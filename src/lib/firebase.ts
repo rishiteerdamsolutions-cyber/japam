@@ -1,6 +1,11 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, type Auth } from 'firebase/auth';
 import { getFirestore, type Firestore } from 'firebase/firestore';
+import {
+  initializeAppCheck,
+  ReCaptchaV3Provider,
+  CustomProvider,
+} from 'firebase/app-check';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY ?? '',
@@ -18,10 +23,46 @@ export const isFirebaseConfigured = Boolean(
 let auth: Auth;
 let app: ReturnType<typeof initializeApp> | null = null;
 let firestore: Firestore | null = null;
+
 if (isFirebaseConfigured) {
   app = initializeApp(firebaseConfig);
   auth = getAuth(app);
   firestore = getFirestore(app);
+
+  /**
+   * Firebase App Check — blocks non-app traffic from hitting your Firestore quota.
+   *
+   * SETUP:
+   * 1. Firebase Console → App Check → Register your app with reCAPTCHA v3
+   * 2. Get your reCAPTCHA v3 site key from https://www.google.com/recaptcha/admin
+   * 3. Add VITE_RECAPTCHA_SITE_KEY to your .env and Vercel environment variables
+   * 4. For local dev: set VITE_APP_CHECK_DEBUG_TOKEN in your .env.local
+   *    (get the token from the browser console on first run with App Check active)
+   * 5. In Firebase Console → App Check → Manage debug tokens → add your debug token
+   */
+  const recaptchaSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+  const debugToken = import.meta.env.VITE_APP_CHECK_DEBUG_TOKEN;
+
+  if (recaptchaSiteKey || debugToken) {
+    try {
+      if (import.meta.env.DEV && debugToken) {
+        // In development, inject the debug token so App Check passes without reCAPTCHA.
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (self as any).FIREBASE_APPCHECK_DEBUG_TOKEN = debugToken;
+      }
+
+      const provider = recaptchaSiteKey
+        ? new ReCaptchaV3Provider(recaptchaSiteKey)
+        : new CustomProvider({ getToken: async () => ({ token: debugToken!, expireTimeMillis: Date.now() + 3600000 }) });
+
+      initializeAppCheck(app, {
+        provider,
+        isTokenAutoRefreshEnabled: true,
+      });
+    } catch (e) {
+      console.warn('[AppCheck] Failed to initialise:', e);
+    }
+  }
 } else {
   auth = null as unknown as Auth;
 }

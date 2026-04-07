@@ -34,3 +34,7 @@ family game/
 .vercel
 api/APIKey.csv
 api/**/APIKey*.csv
+sentry-dsn.txt
+*.pem
+serviceAccount*.json
+*-service-account.json

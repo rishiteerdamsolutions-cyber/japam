@@ -22,6 +22,7 @@ export function getNextNoonISTMs(now) {
   return (todayIstDay + 1) * MS_PER_DAY + IST_NOON_UTC_MS;
 }
 import admin from 'firebase-admin';
+import { withCache, cacheDelete, TTL } from './_cache.js';
 
 let db = null;
 
@@ -138,24 +139,33 @@ export async function getAppointmentFeePaise() {
   return appointmentFeePaise;
 }
 
-/** Returns both unlock (actual) and display (strikethrough) price in paise, plus lives and appointment fee. */
+/** Returns both unlock (actual) and display (strikethrough) price in paise, plus lives and appointment fee. Cached for 5 min. */
 export async function getPricing() {
   const database = getDb();
   if (database) {
-    try {
-      const snap = await database.doc('config/pricing').get();
-      const data = snap?.data();
-      const unlock = data?.unlockPricePaise;
-      const display = data?.displayPricePaise;
-      const lives = data?.livesPricePaise;
-      const appointmentFee = data?.appointmentFeePaise;
-      return {
-        unlockPricePaise: typeof unlock === 'number' && unlock >= 100 ? Math.round(unlock) : UNLOCK_PRICE_PAISE,
-        displayPricePaise: typeof display === 'number' && display >= 100 ? Math.round(display) : DEFAULT_DISPLAY_PRICE_PAISE,
-        livesPricePaise: typeof lives === 'number' && lives >= 100 ? Math.round(lives) : LIVES_PRICE_PAISE,
-        appointmentFeePaise: typeof appointmentFee === 'number' && appointmentFee >= 100 ? Math.round(appointmentFee) : DEFAULT_APPOINTMENT_FEE_PAISE,
-      };
-    } catch {}
+    return withCache('pricing:config', TTL.CONFIG, async () => {
+      try {
+        const snap = await database.doc('config/pricing').get();
+        const data = snap?.data();
+        const unlock = data?.unlockPricePaise;
+        const display = data?.displayPricePaise;
+        const lives = data?.livesPricePaise;
+        const appointmentFee = data?.appointmentFeePaise;
+        return {
+          unlockPricePaise: typeof unlock === 'number' && unlock >= 100 ? Math.round(unlock) : UNLOCK_PRICE_PAISE,
+          displayPricePaise: typeof display === 'number' && display >= 100 ? Math.round(display) : DEFAULT_DISPLAY_PRICE_PAISE,
+          livesPricePaise: typeof lives === 'number' && lives >= 100 ? Math.round(lives) : LIVES_PRICE_PAISE,
+          appointmentFeePaise: typeof appointmentFee === 'number' && appointmentFee >= 100 ? Math.round(appointmentFee) : DEFAULT_APPOINTMENT_FEE_PAISE,
+        };
+      } catch {
+        return {
+          unlockPricePaise: UNLOCK_PRICE_PAISE,
+          displayPricePaise: DEFAULT_DISPLAY_PRICE_PAISE,
+          livesPricePaise: LIVES_PRICE_PAISE,
+          appointmentFeePaise: DEFAULT_APPOINTMENT_FEE_PAISE,
+        };
+      }
+    });
   }
   return {
     unlockPricePaise: UNLOCK_PRICE_PAISE,
@@ -163,6 +173,11 @@ export async function getPricing() {
     livesPricePaise: LIVES_PRICE_PAISE,
     appointmentFeePaise: DEFAULT_APPOINTMENT_FEE_PAISE,
   };
+}
+
+/** Call after admin updates pricing to ensure cache is fresh immediately. */
+export function invalidatePricingCache() {
+  cacheDelete('pricing:config');
 }
 
 /** Lives pack price in paise (5 lives). */

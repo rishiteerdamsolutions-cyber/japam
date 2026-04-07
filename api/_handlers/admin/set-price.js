@@ -1,4 +1,4 @@
-import { getDb, verifyAdminToken, jsonResponse, logAudit } from '../_lib.js';
+import { getDb, verifyAdminToken, jsonResponse, logAudit, invalidatePricingCache } from '../_lib.js';
 
 function getAdminToken(request, body) {
   const auth = request.headers.get('authorization');
@@ -26,6 +26,7 @@ export async function POST(request) {
     const update = { unlockPricePaise, displayPricePaise: safeDisplay };
     if (safeAppointmentFee != null) update.appointmentFeePaise = safeAppointmentFee;
     await db.doc('config/pricing').set(update, { merge: true });
+    invalidatePricingCache();
     await logAudit('admin_set_price', { unlockPricePaise, displayPricePaise: safeDisplay, appointmentFeePaise: safeAppointmentFee });
     return jsonResponse({ ok: true });
   } catch (e) {

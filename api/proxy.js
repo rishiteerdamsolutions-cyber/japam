@@ -4,6 +4,7 @@
  */
 
 import { checkRateLimit } from './_handlers/rateLimit.js';
+import { captureException } from './_handlers/_sentry.js';
 
 function getCorsHeaders(request) {
   const origin = request.headers.get('origin') || '';
@@ -11,7 +12,7 @@ function getCorsHeaders(request) {
   const allowOrigin = allowed.includes(origin) || origin.endsWith('.vercel.app') ? origin : allowed[0] || '*';
   return {
     'Access-Control-Allow-Origin': allowOrigin,
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Max-Age': '86400',
   };
@@ -21,6 +22,10 @@ const SECURITY_HEADERS = {
   'X-Content-Type-Options': 'nosniff',
   'X-Frame-Options': 'DENY',
   'Referrer-Policy': 'strict-origin-when-cross-origin',
+  // HSTS: force HTTPS for 1 year on API subdomain (do not include subdomains here — frontend handles that via vercel.json)
+  'Strict-Transport-Security': 'max-age=31536000',
+  // Permissions: disable unused browser features to reduce attack surface
+  'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), payment=(self), usb=()',
 };
 
 function withCors(response, request) {
@@ -123,6 +128,8 @@ import * as occasionsAnniversaryCompleteHandler from './_handlers/occasions/anni
 import * as occasionsBirthdayCompleteHandler from './_handlers/occasions/birthday-complete.js';
 import * as occasionsListHandler from './_handlers/occasions/list.js';
 import * as occasionsAnniversaryActiveHandler from './_handlers/occasions/anniversary-active.js';
+import * as userDeleteAccountHandler from './_handlers/user/delete-account.js';
+import * as userExportDataHandler from './_handlers/user/export-data.js';
 
 function getPathSegments(request) {
   const url = new URL(request.url);
@@ -257,6 +264,8 @@ const HANDLERS = {
   'POST occasions/birthday/complete': occasionsBirthdayCompleteHandler,
   'GET occasions/list': occasionsListHandler,
   'GET occasions/anniversary/active': occasionsAnniversaryActiveHandler,
+  'DELETE user/account': userDeleteAccountHandler,
+  'GET user/export': userExportDataHandler,
 };
 
 async function route(request, method, pathSegments) {
@@ -270,7 +279,8 @@ async function route(request, method, pathSegments) {
     return await handler(request);
   } catch (e) {
     console.error('api router', routeKey, e);
-    return jsonResponse({ error: e.message || 'Internal error' }, 500);
+    captureException(e, { route: routeKey }).catch(() => {});
+    return jsonResponse({ error: 'Internal server error' }, 500);
   }
 }
 
@@ -279,7 +289,7 @@ export async function OPTIONS() {
     status: 204,
     headers: {
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, Authorization',
       'Access-Control-Max-Age': '86400',
     },
@@ -293,12 +303,22 @@ function applyRateLimit(request, pathKey) {
   const hasCronAuth = cronSecret && (auth === `Bearer ${cronSecret}` || auth === cronSecret);
   const isCronRoute = pathKey.startsWith('cron/') || pathKey === 'apavarga/cleanup';
   if (isCronRoute && hasCronAuth) return null;
-  const result = checkRateLimit(request);
+  const result = checkRateLimit(request, pathKey);
   if (!result.allowed) {
-    const res = new Response(JSON.stringify({ error: 'Too many requests. Please try again later.' }), {
-      status: 429,
-      headers: { 'Content-Type': 'application/json', 'Retry-After': String(result.retryAfter || 60) },
-    });
+    const res = new Response(
+      JSON.stringify({
+        error: 'Too many requests. Please try again later.',
+        retryAfter: result.retryAfter || 60,
+      }),
+      {
+        status: 429,
+        headers: {
+          'Content-Type': 'application/json',
+          'Retry-After': String(result.retryAfter || 60),
+          'X-RateLimit-Limit': String(result.limit || 100),
+        },
+      },
+    );
     return res;
   }
   return null;
@@ -325,5 +345,17 @@ export async function POST(request) {
   const rateLimitRes = applyRateLimit(request, pathKey);
   if (rateLimitRes) return withCors(rateLimitRes, request);
   const res = await route(request, 'POST', pathSegments);
+  return withCors(res, request);
+}
+
+export async function DELETE(request) {
+  const pathSegments = getPathSegments(request);
+  if (!Array.isArray(pathSegments) || pathSegments.length === 0) {
+    return withCors(jsonResponse({ error: 'Not found' }, 404), request);
+  }
+  const pathKey = pathSegments.join('/');
+  const rateLimitRes = applyRateLimit(request, pathKey);
+  if (rateLimitRes) return withCors(rateLimitRes, request);
+  const res = await route(request, 'DELETE', pathSegments);
   return withCors(res, request);
 }

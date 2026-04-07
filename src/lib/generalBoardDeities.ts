@@ -9,10 +9,20 @@ export const EXCLUSIVE_ISTA_PATH_DEITIES: DeityId[] = ['saiBaba', 'bramhamgaaru'
 /** Not used on the general map board or general-mode power strip. */
 export const GENERAL_BOARD_EXCLUDED_DEITIES: DeityId[] = [...EXCLUSIVE_ISTA_PATH_DEITIES];
 
+/** Rāma / Nārāyaṇa / ISKCON read similarly on gems — keep only one per board family. */
+export const MUTUALLY_EXCLUSIVE_VISNU_FORMS: DeityId[] = ['rama', 'narayana', 'iskcon'];
+
 /** Whether `gemDeity` may appear on the board / strip for this īṣṭa path (`pathDeity`). */
 export function deityGemAllowedOnIstaPath(pathDeity: DeityId, gemDeity: DeityId): boolean {
   const exclusive = new Set<DeityId>(EXCLUSIVE_ISTA_PATH_DEITIES);
-  return !exclusive.has(gemDeity) || gemDeity === pathDeity;
+  if (exclusive.has(gemDeity) && gemDeity !== pathDeity) return false;
+
+  // Rama/Narayana/ISKCON paths must stay strictly exclusive to their selected form.
+  const pathInVisnuFamily = MUTUALLY_EXCLUSIVE_VISNU_FORMS.includes(pathDeity);
+  const gemInVisnuFamily = MUTUALLY_EXCLUSIVE_VISNU_FORMS.includes(gemDeity);
+  if (pathInVisnuFamily && gemInVisnuFamily && gemDeity !== pathDeity) return false;
+
+  return true;
 }
 
 /** Inventory offering ids that may seed this īṣṭa path’s board. */
@@ -38,9 +48,6 @@ function uniquePreserveOrder(deities: DeityId[]): DeityId[] {
   }
   return out;
 }
-
-/** Rāma / Nārāyaṇa / ISKCON read similarly on gems — keep only one on a general board. */
-export const MUTUALLY_EXCLUSIVE_VISNU_FORMS: DeityId[] = ['rama', 'narayana', 'iskcon'];
 
 function isValidGeneralBoardSubset(ids: DeityId[]): boolean {
   const set = new Set(ids);

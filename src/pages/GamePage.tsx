@@ -13,9 +13,26 @@ import { useLevelsConfigStore } from '../store/levelsConfigStore';
 import { useProfileStore } from '../store/profileStore';
 import { FIRST_LOCKED_LEVEL_INDEX } from '../store/unlockStore';
 import { LEVELS, ANNIVERSARY_COUPLE_LAST_LEVEL_INDEX } from '../data/levels';
+import { DEITY_IDS } from '../data/deities';
 import type { GameMode } from '../types';
 import { getOccasionEntryGate } from '../lib/occasionEntryGate';
 import { LAUNCH_FEATURE_OCCASION_GAMES } from '../config/launchFeatures';
+
+function parseGameMode(rawMode: string | null): GameMode {
+  if (!rawMode) return 'general';
+  const trimmed = rawMode.trim();
+  if (!trimmed) return 'general';
+  if (trimmed.toLowerCase() === 'general') return 'general';
+
+  // Accept common URL spellings/casing (e.g. Rama, NARAYANA, iskcon).
+  const normalized = trimmed.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const canonical =
+    normalized === 'iskon'
+      ? 'iskcon'
+      : normalized;
+
+  return (DEITY_IDS as readonly string[]).includes(canonical) ? (canonical as GameMode) : 'general';
+}
 
 export function GamePage() {
   const { t } = useTranslation();
@@ -23,7 +40,7 @@ export function GamePage() {
   const [searchParams] = useSearchParams();
   const guestParam = searchParams.get('guest');
   const isGuest = guestParam === '1' || guestParam === 'true' || guestParam === 'yes';
-  const mode = (isGuest ? 'general' : (searchParams.get('mode') || 'general')) as GameMode;
+  const mode = isGuest ? 'general' : parseGameMode(searchParams.get('mode'));
   const levelParam = searchParams.get('level');
   const marathonId = searchParams.get('marathon');
   const yagnaId = searchParams.get('yagna');

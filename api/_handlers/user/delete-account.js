@@ -17,7 +17,7 @@
  * Firestore data is cleaned before the account is gone.
  */
 
-import { getDb, verifyFirebaseUser, jsonResponse } from '../_lib.js';
+import { getDb, verifyFirebaseUser, jsonResponse, jsonInternalServerError } from '../_lib.js';
 import admin from 'firebase-admin';
 import logger from '../_log.js';
 
@@ -58,8 +58,8 @@ export async function DELETE(request) {
       try {
         deleted[label] = await fn();
       } catch (e) {
-        errors.push({ collection: label, error: e.message });
-        logger.error(`[GDPR delete] ${label} failed`, { uid, error: e.message });
+        errors.push({ collection: label, error: 'Deletion step failed' });
+        logger.error(`[GDPR delete] ${label} failed`, { uid, error: e?.message });
       }
     }
 
@@ -159,8 +159,8 @@ export async function DELETE(request) {
       await admin.auth().deleteUser(uid);
       authDeleted = true;
     } catch (e) {
-      errors.push({ collection: 'firebase_auth', error: e.message });
-      logger.error('[GDPR delete] Auth user delete failed', { uid, error: e.message });
+      errors.push({ collection: 'firebase_auth', error: 'Auth deletion failed' });
+      logger.error('[GDPR delete] Auth user delete failed', { uid, error: e?.message });
     }
 
     logger.audit('user_account_deleted', {
@@ -178,6 +178,6 @@ export async function DELETE(request) {
     });
   } catch (e) {
     logger.error('user/delete-account', { error: e?.message });
-    return jsonResponse({ error: e?.message || 'Failed to delete account' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/user/delete-account.js');
   }
 }

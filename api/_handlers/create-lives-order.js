@@ -1,4 +1,4 @@
-import { getDb, getLivesPricePaise, jsonResponse, verifyFirebaseUser } from './_lib.js';
+import { getDb, getLivesPricePaise, jsonResponse, verifyFirebaseUser, jsonInternalServerError } from './_lib.js';
 import admin from 'firebase-admin';
 
 const LIVES_PRICE_PAISE = 1900;
@@ -71,7 +71,14 @@ export async function POST(request) {
 
     const data = await res.json();
     if (!res.ok) {
-      return jsonResponse({ error: data?.message || 'Cashfree error' }, res.status >= 500 ? 500 : 400);
+      console.error('create-lives-order Cashfree', res.status, data);
+      if (res.status >= 500) {
+        return jsonInternalServerError(new Error(`Cashfree ${res.status}`), 'create-lives-order-cf');
+      }
+      return jsonResponse(
+        { error: data?.message || 'Payment provider rejected the request' },
+        400,
+      );
     }
 
     const paymentSessionId = data?.payment_session_id;
@@ -80,6 +87,6 @@ export async function POST(request) {
     return jsonResponse({ orderId, paymentSessionId, amount: amountPaise });
   } catch (e) {
     console.error('create-lives-order', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/create-lives-order.js');
   }
 }

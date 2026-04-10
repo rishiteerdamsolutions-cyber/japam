@@ -1,8 +1,4 @@
-import { getDb, verifyAdminToken, jsonResponse, getAdminTokenFromRequest } from '../_lib.js';
-
-function getToken(request, body) {
-  return body?.token || getAdminTokenFromRequest(request);
-}
+import { getDb, verifyAdminToken, jsonResponse, getAdminTokenFromRequest, jsonInternalServerError } from '../_lib.js';
 
 function mapTemple(d) {
   const data = d.data();
@@ -17,8 +13,8 @@ function mapTemple(d) {
   };
 }
 
-async function listTemplesResponse(request, body) {
-  const token = getToken(request, body);
+async function listTemplesCore(request) {
+  const token = getAdminTokenFromRequest(request);
   if (!verifyAdminToken(token)) return jsonResponse({ error: 'Invalid or expired session' }, 401);
   const db = getDb();
   if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
@@ -28,24 +24,19 @@ async function listTemplesResponse(request, body) {
 
 export async function GET(request) {
   try {
-    const token = getAdminTokenFromRequest(request);
-    if (!verifyAdminToken(token)) return jsonResponse({ error: 'Invalid or expired session' }, 401);
-    const db = getDb();
-    if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
-    const snap = await db.collection('temples').orderBy('createdAt', 'desc').limit(500).get();
-    return jsonResponse({ temples: snap.docs.map(mapTemple) });
+    return await listTemplesCore(request);
   } catch (e) {
     console.error('admin list-temples GET', e);
-    return jsonResponse({ error: e.message || 'Failed to list temples' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/admin/list-temples.js');
   }
 }
 
 export async function POST(request) {
   try {
-    const body = await request.json().catch(() => ({}));
-    return await listTemplesResponse(request, body);
+    await request.json().catch(() => ({}));
+    return await listTemplesCore(request);
   } catch (e) {
     console.error('admin list-temples POST', e);
-    return jsonResponse({ error: e?.message || 'Failed to list temples' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/admin/list-temples.js');
   }
 }

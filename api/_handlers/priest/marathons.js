@@ -1,4 +1,4 @@
-import { getDb, verifyPriestForApi, jsonResponse } from '../_lib.js';
+import { getDb, verifyPriestForApi, jsonResponse, jsonInternalServerError } from '../_lib.js';
 import { marathonLifecycleStatus } from '../_lifecycle.js';
 
 const MAX_PARTICIPANT_ROWS = 800;
@@ -96,7 +96,7 @@ export async function GET(request) {
     return jsonResponse({ marathons });
   } catch (e) {
     console.error('priest marathons', e);
-    return jsonResponse({ error: e.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/priest/marathons.js');
   }
 }
 
@@ -133,6 +133,6 @@ export async function POST(request) {
     return jsonResponse({ ok: true, marathonId: docRef.id });
   } catch (e) {
     console.error('priest create marathon', e);
-    return jsonResponse({ error: e.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/priest/marathons.js');
   }
 }

@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser, isUserUnlocked, isValidFirestoreDocId, getAppointmentFeePaise } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, isUserUnlocked, isValidFirestoreDocId, getAppointmentFeePaise, jsonInternalServerError } from '../_lib.js';
 import admin from 'firebase-admin';
 const CASHFREE_APP_ID = process.env.CASHFREE_APP_ID || process.env.CASHFREE_CLIENT_ID;
 const CASHFREE_SECRET = process.env.CASHFREE_SECRET || process.env.CASHFREE_CLIENT_SECRET;
@@ -85,7 +85,14 @@ export async function POST(request) {
 
     const cfData = await res.json();
     if (!res.ok) {
-      return jsonResponse({ error: cfData?.message || 'Cashfree error' }, res.status >= 500 ? 500 : 400);
+      console.error('appointments-pay-order Cashfree', res.status, cfData);
+      if (res.status >= 500) {
+        return jsonInternalServerError(new Error(`Cashfree ${res.status}`), 'appt-pay-order-cf');
+      }
+      return jsonResponse(
+        { error: cfData?.message || 'Payment provider rejected the request' },
+        400,
+      );
     }
 
     const paymentSessionId = cfData?.payment_session_id;
@@ -100,6 +107,6 @@ export async function POST(request) {
     return jsonResponse({ orderId, paymentSessionId, amount: amountPaise }, 200);
   } catch (e) {
     console.error('appointments-pay-order', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/apavarga/appointments-pay-order.js');
   }
 }

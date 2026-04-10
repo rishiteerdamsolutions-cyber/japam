@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser } from './_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, jsonInternalServerError } from './_lib.js';
 import admin from 'firebase-admin';
 
 const CASHFREE_APP_ID = process.env.CASHFREE_APP_ID || process.env.CASHFREE_CLIENT_ID;
@@ -68,9 +68,13 @@ export async function POST(request) {
 
     const data = await res.json();
     if (!res.ok) {
-      const msg = data?.message || data?.error?.message || `Cashfree error: ${res.status}`;
       console.error('donate-order Cashfree', res.status, data);
-      return jsonResponse({ error: msg }, res.status >= 500 ? 500 : 400);
+      if (res.status >= 500) {
+        return jsonInternalServerError(new Error(`Cashfree ${res.status}`), 'donate-order-cashfree');
+      }
+      const msg =
+        data?.message || data?.error?.message || 'Payment provider rejected the request';
+      return jsonResponse({ error: msg }, 400);
     }
 
     const paymentSessionId = data?.payment_session_id;
@@ -82,6 +86,6 @@ export async function POST(request) {
     return jsonResponse({ orderId, paymentSessionId, amount });
   } catch (e) {
     console.error('donate-order', e);
-    return jsonResponse({ error: e?.message || 'Failed to create order' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/donate-order.js');
   }
 }

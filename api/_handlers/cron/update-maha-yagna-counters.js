@@ -1,4 +1,4 @@
-import { getDb, jsonResponse } from '../_lib.js';
+import { getDb, jsonResponse, jsonInternalServerError } from '../_lib.js';
 
 /** GET /api/cron/update-maha-yagna-counters - Aggregate userJapas into currentJapas. Run daily via Vercel cron. */
 export async function GET(request) {
@@ -36,6 +36,6 @@ export async function GET(request) {
     return jsonResponse({ ok: true, updated }, 200);
   } catch (e) {
     console.error('cron update-maha-yagna-counters', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/cron/update-maha-yagna-counters.js');
   }
 }

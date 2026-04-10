@@ -317,6 +317,14 @@ export function jsonResponse(data, status = 200) {
   });
 }
 
+/** Never expose stack or internal exception text to API clients (production-safe 500). */
+export const INTERNAL_SERVER_ERROR_MESSAGE = 'Something went wrong. Please try again later.';
+
+export function jsonInternalServerError(error, logTag) {
+  if (error) console.error(logTag || 'api-handler', error?.message || error);
+  return jsonResponse({ error: INTERNAL_SERVER_ERROR_MESSAGE }, 500);
+}
+
 /** Audit log for sensitive actions. Logs to console; optionally to Firestore auditLogs collection. */
 export async function logAudit(action, details = {}) {
   const entry = {

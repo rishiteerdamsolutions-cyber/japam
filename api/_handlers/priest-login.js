@@ -1,4 +1,11 @@
-import { getDb, verifyPassword, createPriestToken, jsonResponse, logAudit } from './_lib.js';
+import {
+  getDb,
+  verifyPassword,
+  createPriestToken,
+  jsonResponse,
+  jsonInternalServerError,
+  logAudit,
+} from './_lib.js';
 
 export async function POST(request) {
   try {
@@ -44,6 +51,6 @@ export async function POST(request) {
     if (e?.message?.includes('not configured')) {
       return jsonResponse({ error: 'Priest login not configured (set ADMIN_SECRET or PRIEST_SECRET)' }, 503);
     }
-    return jsonResponse({ error: e.message || 'Login failed' }, 500);
+    return jsonInternalServerError(e, 'priest-login');
   }
 }

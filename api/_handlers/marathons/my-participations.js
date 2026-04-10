@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, jsonInternalServerError } from '../_lib.js';
 import { buildMarathonLeaderboard } from './_marathonLeaderboard.js';
 
 /** GET /api/marathons/my-participations - List marathons the current user has joined. Requires Firebase auth. */
@@ -59,6 +59,6 @@ export async function GET(request) {
     return jsonResponse({ marathonIds, marathons });
   } catch (e) {
     console.error('marathons my-participations', e);
-    return jsonResponse({ error: e.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/marathons/my-participations.js');
   }
 }

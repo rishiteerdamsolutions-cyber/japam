@@ -8,7 +8,7 @@
  * Returns:  application/json download with Content-Disposition: attachment
  */
 
-import { getDb, verifyFirebaseUser, jsonResponse } from '../_lib.js';
+import { getDb, verifyFirebaseUser, jsonResponse, jsonInternalServerError } from '../_lib.js';
 import admin from 'firebase-admin';
 import logger from '../_log.js';
 
@@ -33,7 +33,7 @@ export async function GET(request) {
         if (snap.empty) return;
         exportData.data[label] = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
       } catch (e) {
-        exportData.data[`${label}_error`] = e.message;
+        exportData.data[`${label}_error`] = 'Temporarily unavailable';
       }
     }
 
@@ -42,7 +42,7 @@ export async function GET(request) {
         const snap = await ref.get();
         if (snap.exists) exportData.data[label] = { id: snap.id, ...snap.data() };
       } catch (e) {
-        exportData.data[`${label}_error`] = e.message;
+        exportData.data[`${label}_error`] = 'Temporarily unavailable';
       }
     }
 
@@ -59,7 +59,7 @@ export async function GET(request) {
         lastSignInTime: user.metadata.lastSignInTime,
       };
     } catch (e) {
-      exportData.data.authProfile_error = e.message;
+      exportData.data.authProfile_error = 'Temporarily unavailable';
     }
 
     // Firestore data
@@ -97,6 +97,6 @@ export async function GET(request) {
     });
   } catch (e) {
     logger.error('user/export-data', { error: e?.message });
-    return jsonResponse({ error: e?.message || 'Failed to export data' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/user/export-data.js');
   }
 }

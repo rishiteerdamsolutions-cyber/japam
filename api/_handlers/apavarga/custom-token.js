@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser, isUserUnlocked } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, isUserUnlocked, jsonInternalServerError } from '../_lib.js';
 import admin from 'firebase-admin';
 
 /** POST /api/apavarga/custom-token - Exchange Firebase ID token for a custom token so Apavarga app can sign in without asking again. Pro only. */
@@ -16,6 +16,6 @@ export async function POST(request) {
     return jsonResponse({ customToken }, 200);
   } catch (e) {
     console.error('apavarga custom-token', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/apavarga/custom-token.js');
   }
 }

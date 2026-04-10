@@ -52,8 +52,11 @@ Client-side Firebase:
 | `CASHFREE_ENV` | ✅ | `production` or `sandbox` |
 | `ADMIN_ID` | ✅ | Admin login username |
 | `ADMIN_PASSWORD` | ✅ | Admin login password |
-| `CORS_ORIGINS` | ✅ | Comma-separated allowed origins |
+| `CORS_ORIGINS` | ✅ | Comma-separated allowed browser origins (no spaces). Default includes localhost + japam.digital |
+| `CORS_ALLOW_VERCEL_PREVIEWS` | optional | Set `true` or `1` to allow `https://*.vercel.app` origins (omit in production if you do not use preview URLs) |
 | `CRON_SECRET` | ✅ | Shared secret for Vercel cron auth |
+| `UPSTASH_REDIS_REST_URL` | ⚠️ | Upstash Redis REST URL — **enables distributed rate limits** across all Vercel instances |
+| `UPSTASH_REDIS_REST_TOKEN` | ⚠️ | Upstash Redis REST token (pair with URL above) |
 | `SENTRY_DSN` | ⚠️ | Sentry DSN for API error tracking |
 | `AUDIT_TO_FIRESTORE` | optional | Set `true` to persist audit logs to Firestore |
 
@@ -70,6 +73,7 @@ Client-side Firebase:
 | `VITE_SENTRY_DSN` | ⚠️ | Sentry DSN for frontend errors |
 | `VITE_RECAPTCHA_SITE_KEY` | ⚠️ | reCAPTCHA v3 key for App Check |
 | `VITE_APP_CHECK_DEBUG_TOKEN` | dev only | App Check debug token (local only) |
+| `VITE_ENABLE_GAME_DEBUG` | optional | Set `true` only if you need `localStorage` game debug logs in production builds |
 | `VITE_API_URL` | optional | API base URL override |
 
 ---
@@ -281,14 +285,18 @@ All responses from Vercel include (set in `vercel.json`):
 
 | Endpoint type | Limit | Store |
 |---|---|---|
-| `/api/admin-login` | 5 req/min per IP | In-memory (per instance) |
-| `/api/priest-login` | 5 req/min per IP | In-memory (per instance) |
-| `/api/apavarga/custom-token` | 5 req/min per IP | In-memory (per instance) |
-| All other `/api/*` | 100 req/min per IP | In-memory (per instance) |
+| `/api/admin-login` | 5 req/min per IP | Upstash Redis if `UPSTASH_*` set; else in-memory (per instance) |
+| `/api/priest-login` | 5 req/min per IP | Same |
+| `/api/apavarga/custom-token` | 5 req/min per IP | Same |
+| All other `/api/*` | 100 req/min per IP | Same |
 | `/api/health` | Unlimited | N/A |
 | Cron routes (with secret) | Unlimited | N/A |
 
-> **Upgrade path:** Replace in-memory store with Upstash Redis for distributed rate limiting across all Vercel instances (Phase 4.1).
+**Production:** Set `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` in Vercel so limits apply globally (recommended before high traffic).
+
+## API middleware (`api/proxy.js`)
+
+All `/api/*` traffic goes through one router that applies, in order: **CORS + security headers**, **rate limiting**, **admin route gate** (Bearer / `X-Admin-Token` for `admin/*` except login), then the handler. Admin APIs no longer accept the session token in the JSON body — use headers only.
 
 ---
 

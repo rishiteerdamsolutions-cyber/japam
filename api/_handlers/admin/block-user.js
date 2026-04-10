@@ -1,10 +1,10 @@
 import admin from 'firebase-admin';
-import { getDb, jsonResponse, verifyAdminToken, getAdminTokenFromRequest, logAudit } from '../_lib.js';
+import { getDb, jsonResponse, verifyAdminToken, getAdminTokenFromRequest, logAudit, jsonInternalServerError } from '../_lib.js';
 
-/** POST /api/admin/block-user - Block a user via custom claims (no Firestore read per request). Body: { token, uid } */
+/** POST /api/admin/block-user - Block a user via custom claims. Body: { uid }. Token: Authorization or X-Admin-Token. */
 export async function POST(request) {
   const body = await request.json().catch(() => ({}));
-  const token = (body?.token && typeof body.token === 'string') ? body.token : getAdminTokenFromRequest(request);
+  const token = getAdminTokenFromRequest(request);
   if (!token || !verifyAdminToken(token)) return jsonResponse({ error: 'Unauthorized' }, 401);
 
   const uid = body?.uid && typeof body.uid === 'string' ? body.uid.trim() : null;
@@ -20,6 +20,6 @@ export async function POST(request) {
     return jsonResponse({ ok: true, message: 'User blocked' }, 200);
   } catch (e) {
     console.error('admin block-user', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/admin/block-user.js');
   }
 }

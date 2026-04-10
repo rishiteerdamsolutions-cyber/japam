@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, jsonInternalServerError } from '../_lib.js';
 import { trackReferral } from '../_analytics.js';
 
 /** POST /api/user/referral-event - Track successful referrals for growth analytics. */
@@ -14,6 +14,6 @@ export async function POST(request) {
     return jsonResponse({ ok: true }, 200);
   } catch (e) {
     console.error('user referral-event POST', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/user/referral-event.js');
   }
 }

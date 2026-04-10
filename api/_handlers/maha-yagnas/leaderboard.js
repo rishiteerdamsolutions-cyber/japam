@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, jsonInternalServerError } from '../_lib.js';
 import { yagnaLifecycleStatus } from '../_lifecycle.js';
 
 /** GET /api/maha-yagnas/leaderboard?yagnaId= - Leaderboard for a Maha Japa Yagna (public).
@@ -66,6 +66,6 @@ export async function GET(request) {
     return jsonResponse({ leaderboard: top }, 200);
   } catch (e) {
     console.error('maha-yagnas leaderboard', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/maha-yagnas/leaderboard.js');
   }
 }

@@ -1,4 +1,4 @@
-import { getDb, verifyAdminToken, jsonResponse, getAdminTokenFromRequest } from '../_lib.js';
+import { getDb, verifyAdminToken, jsonResponse, getAdminTokenFromRequest, jsonInternalServerError } from '../_lib.js';
 
 function toIso(ts) {
   if (!ts) return null;
@@ -43,6 +43,6 @@ export async function GET(request) {
     return jsonResponse({ users, total: users.length }, 200);
   } catch (e) {
     console.error('admin analytics-users GET', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/admin/analytics-users.js');
   }
 }

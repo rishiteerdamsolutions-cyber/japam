@@ -1,4 +1,4 @@
-import { getDb, verifyPassword, createPriestToken, jsonResponse } from '../_lib.js';
+import { getDb, verifyPassword, createPriestToken, jsonResponse, jsonInternalServerError } from '../_lib.js';
 
 /** POST /api/priest/link - Link Google user to priest account. Body: { userId, priestUsername, priestPassword } */
 export async function POST(request) {
@@ -39,6 +39,6 @@ export async function POST(request) {
     if (e?.message?.includes('not configured')) {
       return jsonResponse({ error: 'Priest link not configured (set ADMIN_SECRET or PRIEST_SECRET)' }, 503);
     }
-    return jsonResponse({ error: e.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/priest/link.js');
   }
 }

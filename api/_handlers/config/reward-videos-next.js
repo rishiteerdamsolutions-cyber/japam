@@ -1,4 +1,4 @@
-import { getDb, jsonResponse } from '../_lib.js';
+import { getDb, jsonResponse, jsonInternalServerError } from '../_lib.js';
 
 const DOC = 'config/rewardVideos';
 
@@ -35,6 +35,6 @@ export async function POST() {
     return jsonResponse({ item });
   } catch (e) {
     console.error('config reward-videos/next', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/config/reward-videos-next.js');
   }
 }

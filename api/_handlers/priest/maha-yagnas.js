@@ -1,4 +1,4 @@
-import { getDb, verifyPriestForApi, jsonResponse } from '../_lib.js';
+import { getDb, verifyPriestForApi, jsonResponse, jsonInternalServerError } from '../_lib.js';
 import admin from 'firebase-admin';
 import { yagnaLifecycleStatus } from '../_lifecycle.js';
 
@@ -65,7 +65,7 @@ export async function GET(request) {
     return jsonResponse({ yagnas });
   } catch (e) {
     console.error('priest maha-yagnas GET', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/priest/maha-yagnas.js');
   }
 }
 
@@ -108,6 +108,6 @@ export async function POST(request) {
     return jsonResponse({ ok: true, yagnaId: docRef.id });
   } catch (e) {
     console.error('priest maha-yagnas POST', e);
-    return jsonResponse({ error: e?.message || 'Failed to create yagna' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/priest/maha-yagnas.js');
   }
 }

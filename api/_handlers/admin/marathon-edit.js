@@ -1,16 +1,10 @@
-import { getDb, verifyAdminToken, jsonResponse, getAdminTokenFromRequest, logAudit } from '../_lib.js';
-
-function getToken(request, body) {
-  const auth = request?.headers?.get?.('authorization');
-  if (auth && auth.startsWith('Bearer ')) return auth.slice(7);
-  return body?.token || getAdminTokenFromRequest(request);
-}
+import { getDb, verifyAdminToken, jsonResponse, getAdminTokenFromRequest, logAudit, jsonInternalServerError } from '../_lib.js';
 
 /** POST /api/admin/marathon-edit - Edit marathon (admin: any marathon). Body: { marathonId, deityId?, targetJapas?, startDate?, communityName?, state?, district?, cityTownVillage?, area? } */
 export async function POST(request) {
   try {
     const body = await request.json().catch(() => ({}));
-    const token = getToken(request, body);
+    const token = getAdminTokenFromRequest(request);
     if (!verifyAdminToken(token)) return jsonResponse({ error: 'Invalid or expired session' }, 401);
 
     const marathonId = body?.marathonId && typeof body.marathonId === 'string' ? body.marathonId.trim() : null;
@@ -45,6 +39,6 @@ export async function POST(request) {
     return jsonResponse({ ok: true }, 200);
   } catch (e) {
     console.error('admin marathon-edit', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/admin/marathon-edit.js');
   }
 }

@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, jsonInternalServerError } from '../_lib.js';
 import admin from 'firebase-admin';
 import { touchUserLogin } from '../_analytics.js';
 
@@ -32,7 +32,7 @@ export async function GET(request) {
     return jsonResponse({ displayName, appreciations }, 200);
   } catch (e) {
     console.error('user profile GET', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/user/profile.js');
   }
 }
 
@@ -95,7 +95,7 @@ export async function POST(request) {
     return jsonResponse({ ok: true, displayName }, 200);
   } catch (e) {
     console.error('user profile POST', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/user/profile.js');
   }
 }
 

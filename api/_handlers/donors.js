@@ -1,4 +1,4 @@
-import { getDb, jsonResponse } from './_lib.js';
+import { getDb, jsonResponse, jsonInternalServerError } from './_lib.js';
 import { withCache, TTL } from './_cache.js';
 
 /** GET /api/donors - Public list of donors for thank-you box. No auth required. Capped at 200, cached 60s. */
@@ -30,6 +30,6 @@ export async function GET(_request) {
     return jsonResponse({ donors });
   } catch (e) {
     console.error('donors GET', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/donors.js');
   }
 }

@@ -1,9 +1,9 @@
-import { getDb, jsonResponse, verifyAdminToken, getAdminTokenFromRequest, logAudit } from '../_lib.js';
+import { getDb, jsonResponse, verifyAdminToken, getAdminTokenFromRequest, logAudit, jsonInternalServerError } from '../_lib.js';
 
-/** POST /api/admin/delete-temple - Delete a temple and its marathons + participations. Body: { token, templeId } */
+/** POST /api/admin/delete-temple - Delete a temple and its marathons + participations. Body: { templeId } */
 export async function POST(request) {
   const body = await request.json().catch(() => ({}));
-  const token = (body?.token && typeof body.token === 'string') ? body.token : getAdminTokenFromRequest(request);
+  const token = getAdminTokenFromRequest(request);
   if (!token || !verifyAdminToken(token)) return jsonResponse({ error: 'Unauthorized' }, 401);
 
   const templeId = body?.templeId && typeof body.templeId === 'string' ? body.templeId.trim() : null;
@@ -27,6 +27,6 @@ export async function POST(request) {
     return jsonResponse({ ok: true, message: 'Temple deleted' }, 200);
   } catch (e) {
     console.error('admin delete-temple', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/admin/delete-temple.js');
   }
 }

@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser, isUserUnlocked } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, isUserUnlocked, jsonInternalServerError } from '../_lib.js';
 
 /** POST /api/apavarga/join - Register pro/premium user as Apavarga member */
 export async function POST(request) {
@@ -29,6 +29,6 @@ export async function POST(request) {
     return jsonResponse({ ok: true, member: data }, 200);
   } catch (e) {
     console.error('apavarga join', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/apavarga/join.js');
   }
 }

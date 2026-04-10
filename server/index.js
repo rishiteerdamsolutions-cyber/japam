@@ -4,8 +4,26 @@ import cors from 'cors';
 import crypto from 'crypto';
 import admin from 'firebase-admin';
 
+const INTERNAL_ERR = 'Something went wrong. Please try again later.';
+
+const CORS_ALLOWLIST = (process.env.CORS_ORIGINS ||
+  'http://localhost:5173,http://localhost:5174,https://japam.digital,https://www.japam.digital')
+  .split(',')
+  .map((s) => s.trim())
+  .filter(Boolean);
+
+function corsOrigin(origin, callback) {
+  if (!origin) return callback(null, true);
+  if (CORS_ALLOWLIST.includes(origin)) return callback(null, true);
+  const previews =
+    process.env.CORS_ALLOW_VERCEL_PREVIEWS === '1' ||
+    process.env.CORS_ALLOW_VERCEL_PREVIEWS === 'true';
+  if (previews && /^https:\/\/[^/]+\.vercel\.app$/.test(origin)) return callback(null, true);
+  callback(null, false);
+}
+
 const app = express();
-app.use(cors({ origin: true }));
+app.use(cors({ origin: corsOrigin }));
 app.use(express.json());
 
 const CASHFREE_APP_ID = process.env.CASHFREE_APP_ID || process.env.CASHFREE_CLIENT_ID;
@@ -163,13 +181,17 @@ app.post('/api/create-order', async (req, res) => {
       }),
     });
     const data = await cfRes.json();
-    if (!cfRes.ok) return res.status(cfRes.status >= 500 ? 500 : 400).json({ error: data?.message || 'Cashfree error' });
+    if (!cfRes.ok) {
+      console.error('create-order Cashfree', cfRes.status, data);
+      if (cfRes.status >= 500) return res.status(500).json({ error: INTERNAL_ERR });
+      return res.status(400).json({ error: data?.message || 'Payment provider rejected the request' });
+    }
     const paymentSessionId = data?.payment_session_id;
     if (!paymentSessionId) return res.status(500).json({ error: 'Invalid Cashfree response' });
     res.json({ orderId, paymentSessionId, amount: amountPaise });
   } catch (e) {
     console.error('create-order', e);
-    res.status(500).json({ error: e.message || 'Failed to create order' });
+    res.status(500).json({ error: INTERNAL_ERR });
   }
 });
 
@@ -191,7 +213,8 @@ app.post('/api/admin-login', (req, res) => {
 function getAdminToken(req) {
   const auth = req.headers.authorization;
   if (auth && auth.startsWith('Bearer ')) return auth.slice(7);
-  return (req.body && req.body.token) || null;
+  const x = req.headers['x-admin-token'];
+  return typeof x === 'string' ? x : null;
 }
 
 app.post('/api/admin/set-price', async (req, res) => {
@@ -213,7 +236,7 @@ app.post('/api/admin/set-price', async (req, res) => {
     res.json({ ok: true });
   } catch (e) {
     console.error('admin set-price', e);
-    res.status(500).json({ error: e.message || 'Failed to save' });
+    res.status(500).json({ error: INTERNAL_ERR });
   }
 });
 
@@ -243,7 +266,7 @@ app.post('/api/priest/link', async (req, res) => {
     res.json({ ok: true, token, templeId, templeName });
   } catch (e) {
     console.error('priest link', e);
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: INTERNAL_ERR });
   }
 });
 
@@ -274,7 +297,7 @@ app.post('/api/priest-login', async (req, res) => {
     res.json({ token, templeId, templeName });
   } catch (e) {
     console.error('priest-login', e);
-    res.status(500).json({ error: e.message || 'Login failed' });
+    res.status(500).json({ error: INTERNAL_ERR });
   }
 });
 
@@ -329,7 +352,7 @@ app.post('/api/admin/create-temple', async (req, res) => {
     res.json({ ok: true, templeId: docRef.id, priestUsername, priestPassword });
   } catch (e) {
     console.error('admin create-temple', e);
-    res.status(500).json({ error: e.message || 'Failed to create temple' });
+    res.status(500).json({ error: INTERNAL_ERR });
   }
 });
 
@@ -368,7 +391,7 @@ app.get('/api/admin/marathons', async (req, res) => {
     res.json({ marathons });
   } catch (e) {
     console.error('admin marathons', e);
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: INTERNAL_ERR });
   }
 });
 
@@ -390,7 +413,7 @@ app.get('/api/admin/list-temples', async (req, res) => {
     res.json({ temples });
   } catch (e) {
     console.error('admin list-temples', e);
-    res.status(500).json({ error: e.message || 'Failed to list temples' });
+    res.status(500).json({ error: INTERNAL_ERR });
   }
 });
 
@@ -408,7 +431,7 @@ app.get('/api/priest/marathons', async (req, res) => {
     res.json({ marathons });
   } catch (e) {
     console.error('priest marathons', e);
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: INTERNAL_ERR });
   }
 });
 
@@ -427,7 +450,7 @@ app.post('/api/priest/marathons', async (req, res) => {
     res.json({ ok: true, marathonId: docRef.id });
   } catch (e) {
     console.error('priest create marathon', e);
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: INTERNAL_ERR });
   }
 });
 
@@ -522,7 +545,7 @@ app.get('/api/marathons/discover', async (req, res) => {
     res.json({ temples, marathonsByTemple });
   } catch (e) {
     console.error('marathons discover', e);
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: INTERNAL_ERR });
   }
 });
 
@@ -548,7 +571,7 @@ app.post('/api/marathons/join', async (req, res) => {
     res.json({ ok: true });
   } catch (e) {
     console.error('marathons join', e);
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: INTERNAL_ERR });
   }
 });
 
@@ -584,7 +607,7 @@ app.post('/api/verify-unlock', async (req, res) => {
     res.json({ ok: true });
   } catch (e) {
     console.error('verify-unlock', e);
-    res.status(500).json({ error: e.message || 'Verification failed' });
+    res.status(500).json({ error: INTERNAL_ERR });
   }
 });
 
@@ -620,13 +643,17 @@ app.post('/api/donate-order', async (req, res) => {
       }),
     });
     const data = await cfRes.json();
-    if (!cfRes.ok) return res.status(cfRes.status >= 500 ? 500 : 400).json({ error: data?.message || 'Cashfree error' });
+    if (!cfRes.ok) {
+      console.error('donate-order Cashfree', cfRes.status, data);
+      if (cfRes.status >= 500) return res.status(500).json({ error: INTERNAL_ERR });
+      return res.status(400).json({ error: data?.message || 'Payment provider rejected the request' });
+    }
     const paymentSessionId = data?.payment_session_id;
     if (!paymentSessionId) return res.status(500).json({ error: 'Invalid Cashfree response' });
     res.json({ orderId, paymentSessionId, amount });
   } catch (e) {
     console.error('donate-order', e);
-    res.status(500).json({ error: e.message || 'Failed to create order' });
+    res.status(500).json({ error: INTERNAL_ERR });
   }
 });
 
@@ -655,7 +682,7 @@ app.post('/api/verify-donate', async (req, res) => {
     res.json({ ok: true });
   } catch (e) {
     console.error('verify-donate', e);
-    res.status(500).json({ error: e.message || 'Verification failed' });
+    res.status(500).json({ error: INTERNAL_ERR });
   }
 });
 

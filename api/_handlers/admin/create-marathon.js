@@ -3,18 +3,19 @@
  * Body: { communityName, state, district, cityTownVillage, area, deityId, targetJapas, startDate }
  * Same fields as priest-created marathons but uses community/society name instead of temple.
  */
-import { getDb, verifyAdminToken, jsonResponse, logAudit } from '../_lib.js';
-
-function getAdminToken(request, body) {
-  const auth = request.headers?.get?.('authorization');
-  if (auth && auth.startsWith('Bearer ')) return auth.slice(7);
-  return body?.token || null;
-}
+import {
+  getDb,
+  verifyAdminToken,
+  getAdminTokenFromRequest,
+  jsonResponse,
+  logAudit,
+  jsonInternalServerError,
+} from '../_lib.js';
 
 export async function POST(request) {
   try {
     const body = await request.json().catch(() => ({}));
-    const token = getAdminToken(request, body);
+    const token = getAdminTokenFromRequest(request);
     if (!verifyAdminToken(token)) {
       return jsonResponse({ error: 'Invalid or expired session' }, 401);
     }
@@ -69,6 +70,6 @@ export async function POST(request) {
     return jsonResponse({ ok: true, marathonId: docRef.id });
   } catch (e) {
     console.error('admin create-marathon', e);
-    return jsonResponse({ error: e?.message || 'Failed to create marathon' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/admin/create-marathon.js');
   }
 }

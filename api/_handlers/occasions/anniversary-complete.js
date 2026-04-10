@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser, isValidFirestoreDocId } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, isValidFirestoreDocId, jsonInternalServerError } from '../_lib.js';
 import admin from 'firebase-admin';
 
 function sharedToWifeCeil(husbandJapas) {
@@ -56,7 +56,7 @@ export async function POST(request) {
     if (msg === 'NOT_READY') return jsonResponse({ error: 'Partner has not joined yet' }, 400);
     if (msg === 'FORBIDDEN') return jsonResponse({ error: 'Forbidden' }, 403);
     console.error('anniversary-complete', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/occasions/anniversary-complete.js');
   }
 
   if (wrote && hostUid && guestUid) {

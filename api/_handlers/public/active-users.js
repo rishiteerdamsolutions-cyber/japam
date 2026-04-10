@@ -92,6 +92,6 @@ export async function GET() {
     });
   } catch (e) {
     console.error('public active-users GET', e);
-    return jsonResponse({ users: [], error: e?.message || 'Failed' }, 200);
+    return jsonResponse({ users: [], error: 'Unable to load active users' }, 200);
   }
 }

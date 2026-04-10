@@ -1,4 +1,4 @@
-import { getDb, verifyAdminToken, jsonResponse, getAdminTokenFromRequest, logAudit } from '../_lib.js';
+import { getDb, verifyAdminToken, jsonResponse, getAdminTokenFromRequest, logAudit, jsonInternalServerError } from '../_lib.js';
 
 /** POST /api/admin/reward-videos - Save ordered list of Adyathmika + Advertisement videos */
 export async function POST(request) {
@@ -27,6 +27,6 @@ export async function POST(request) {
     return jsonResponse({ ok: true, items: validItems });
   } catch (e) {
     console.error('admin reward-videos', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/admin/reward-videos.js');
   }
 }

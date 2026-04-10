@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, jsonInternalServerError } from '../_lib.js';
 
 /** GET /api/user/reminder - Load daily reminder for current user. */
 export async function GET(request) {
@@ -15,7 +15,7 @@ export async function GET(request) {
     return jsonResponse({ reminder: { enabled, time } }, 200);
   } catch (e) {
     console.error('user reminder GET', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/user/reminder.js');
   }
 }
 
@@ -43,7 +43,7 @@ export async function POST(request) {
     return jsonResponse({ ok: true }, 200);
   } catch (e) {
     console.error('user reminder POST', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/user/reminder.js');
   }
 }
 

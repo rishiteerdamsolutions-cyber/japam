@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, getAdminTokenFromRequest, verifyAdminToken } from '../_lib.js';
+import { getDb, jsonResponse, getAdminTokenFromRequest, verifyAdminToken, jsonInternalServerError } from '../_lib.js';
 
 /** GET /api/admin/reward-video-analytics - Aggregated analytics for Adyathmika & Advertisement reward videos. */
 export async function GET(request) {
@@ -121,6 +121,6 @@ export async function GET(request) {
     });
   } catch (e) {
     console.error('admin reward-video-analytics', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/admin/reward-video-analytics.js');
   }
 }

@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser, isUserUnlocked, isValidFirestoreDocId } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, isUserUnlocked, isValidFirestoreDocId, jsonInternalServerError } from '../_lib.js';
 import admin from 'firebase-admin';
 import { isYagnaPublicListable } from '../_lifecycle.js';
 
@@ -57,6 +57,6 @@ export async function POST(request) {
     return jsonResponse({ ok: true });
   } catch (e) {
     console.error('maha-yagnas join', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/maha-yagnas/join.js');
   }
 }

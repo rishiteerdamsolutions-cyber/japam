@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyAdminToken, getAdminTokenFromRequest } from '../_lib.js';
+import { getDb, jsonResponse, verifyAdminToken, getAdminTokenFromRequest, jsonInternalServerError } from '../_lib.js';
 
 const DEFAULT_MAX_REVEALED = 49;
 
@@ -18,7 +18,7 @@ export async function GET(request) {
     return jsonResponse({ maxRevealedLevelIndex, revealedCount: maxRevealedLevelIndex + 1 });
   } catch (e) {
     console.error('admin levels GET', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/admin/levels.js');
   }
 }
 
@@ -26,7 +26,7 @@ export async function GET(request) {
 export async function POST(request) {
   try {
     const body = await request.json().catch(() => ({}));
-    const token = (body?.token && typeof body.token === 'string') ? body.token : getAdminTokenFromRequest(request);
+    const token = getAdminTokenFromRequest(request);
     if (!token || !verifyAdminToken(token)) return jsonResponse({ error: 'Unauthorized' }, 401);
     const db = getDb();
     if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
@@ -43,6 +43,6 @@ export async function POST(request) {
     return jsonResponse({ ok: true, maxRevealedLevelIndex: value, revealedCount: value + 1 });
   } catch (e) {
     console.error('admin levels POST', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/admin/levels.js');
   }
 }

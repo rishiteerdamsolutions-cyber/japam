@@ -5,15 +5,48 @@
 
 import { checkRateLimit } from './_handlers/rateLimit.js';
 import { captureException } from './_handlers/_sentry.js';
+import { getAdminTokenFromRequest, verifyAdminToken } from './_handlers/_lib.js';
+
+function parseAllowedOrigins() {
+  const raw =
+    process.env.CORS_ORIGINS ||
+    'http://localhost:5173,http://localhost:5174,https://japam.digital,https://www.japam.digital';
+  return raw
+    .split(',')
+    .map((o) => o.trim())
+    .filter(Boolean);
+}
+
+function isOriginAllowed(origin, allowedList) {
+  if (!origin) return false;
+  if (allowedList.includes(origin)) return true;
+  const previews =
+    process.env.CORS_ALLOW_VERCEL_PREVIEWS === '1' ||
+    process.env.CORS_ALLOW_VERCEL_PREVIEWS === 'true';
+  if (!previews) return false;
+  try {
+    const u = new URL(origin);
+    return u.protocol === 'https:' && u.hostname.endsWith('.vercel.app');
+  } catch {
+    return false;
+  }
+}
 
 function getCorsHeaders(request) {
   const origin = request.headers.get('origin') || '';
-  const allowed = (process.env.CORS_ORIGINS || 'http://localhost:5173,http://localhost:5174,https://japam.digital,https://www.japam.digital').split(',').map((o) => o.trim());
-  const allowOrigin = allowed.includes(origin) || origin.endsWith('.vercel.app') ? origin : allowed[0] || '*';
+  const allowed = parseAllowedOrigins();
+  let allowOrigin = '';
+  if (origin && isOriginAllowed(origin, allowed)) {
+    allowOrigin = origin;
+  } else if (!origin && allowed.length) {
+    allowOrigin = allowed[0];
+  } else if (allowed.length) {
+    allowOrigin = allowed[0];
+  }
   return {
-    'Access-Control-Allow-Origin': allowOrigin,
+    'Access-Control-Allow-Origin': allowOrigin || 'null',
     'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Admin-Token, X-Cron-Secret',
     'Access-Control-Max-Age': '86400',
   };
 }
@@ -284,26 +317,27 @@ async function route(request, method, pathSegments) {
   }
 }
 
-export async function OPTIONS() {
-  return new Response(null, {
-    status: 204,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-      'Access-Control-Max-Age': '86400',
-    },
-  });
+export async function OPTIONS(request) {
+  return withCors(new Response(null, { status: 204 }), request);
 }
 
-function applyRateLimit(request, pathKey) {
+function enforceAdminRouteGate(request, pathKey) {
+  if (!pathKey.startsWith('admin/')) return null;
+  const token = getAdminTokenFromRequest(request);
+  if (!verifyAdminToken(token)) {
+    return jsonResponse({ error: 'Unauthorized' }, 401);
+  }
+  return null;
+}
+
+async function applyRateLimit(request, pathKey) {
   if (pathKey === 'health') return null;
   const cronSecret = process.env.CRON_SECRET || process.env.ADMIN_SECRET;
   const auth = request?.headers?.get?.('authorization') || request?.headers?.get?.('x-cron-secret');
   const hasCronAuth = cronSecret && (auth === `Bearer ${cronSecret}` || auth === cronSecret);
   const isCronRoute = pathKey.startsWith('cron/') || pathKey === 'apavarga/cleanup';
   if (isCronRoute && hasCronAuth) return null;
-  const result = checkRateLimit(request, pathKey);
+  const result = await checkRateLimit(request, pathKey);
   if (!result.allowed) {
     const res = new Response(
       JSON.stringify({
@@ -330,8 +364,10 @@ export async function GET(request) {
     return withCors(jsonResponse({ error: 'Not found' }, 404), request);
   }
   const pathKey = pathSegments.join('/');
-  const rateLimitRes = applyRateLimit(request, pathKey);
+  const rateLimitRes = await applyRateLimit(request, pathKey);
   if (rateLimitRes) return withCors(rateLimitRes, request);
+  const adminGate = enforceAdminRouteGate(request, pathKey);
+  if (adminGate) return withCors(adminGate, request);
   const res = await route(request, 'GET', pathSegments);
   return withCors(res, request);
 }
@@ -342,8 +378,10 @@ export async function POST(request) {
     return withCors(jsonResponse({ error: 'Not found' }, 404), request);
   }
   const pathKey = pathSegments.join('/');
-  const rateLimitRes = applyRateLimit(request, pathKey);
+  const rateLimitRes = await applyRateLimit(request, pathKey);
   if (rateLimitRes) return withCors(rateLimitRes, request);
+  const adminGate = enforceAdminRouteGate(request, pathKey);
+  if (adminGate) return withCors(adminGate, request);
   const res = await route(request, 'POST', pathSegments);
   return withCors(res, request);
 }
@@ -354,8 +392,10 @@ export async function DELETE(request) {
     return withCors(jsonResponse({ error: 'Not found' }, 404), request);
   }
   const pathKey = pathSegments.join('/');
-  const rateLimitRes = applyRateLimit(request, pathKey);
+  const rateLimitRes = await applyRateLimit(request, pathKey);
   if (rateLimitRes) return withCors(rateLimitRes, request);
+  const adminGate = enforceAdminRouteGate(request, pathKey);
+  if (adminGate) return withCors(adminGate, request);
   const res = await route(request, 'DELETE', pathSegments);
   return withCors(res, request);
 }

@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser, isValidFirestoreDocId } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, isValidFirestoreDocId, jsonInternalServerError } from '../_lib.js';
 import admin from 'firebase-admin';
 
 /** POST /api/maha-yagnas/reset-contribution - Reset user's japa count for a yagna to 0 (Start fresh). Auth required. */
@@ -34,6 +34,6 @@ export async function POST(request) {
     return jsonResponse({ ok: true });
   } catch (e) {
     console.error('maha-yagnas reset-contribution', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/maha-yagnas/reset-contribution.js');
   }
 }

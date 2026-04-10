@@ -1,15 +1,19 @@
-import { getDb, verifyAdminToken, jsonResponse, hashPassword, generatePriestUsername, generatePriestPassword, logAudit } from '../_lib.js';
-
-function getAdminToken(request, body) {
-  const auth = request.headers.get('authorization');
-  if (auth && auth.startsWith('Bearer ')) return auth.slice(7);
-  return body?.token || null;
-}
+import {
+  getDb,
+  verifyAdminToken,
+  getAdminTokenFromRequest,
+  jsonResponse,
+  hashPassword,
+  generatePriestUsername,
+  generatePriestPassword,
+  logAudit,
+  jsonInternalServerError,
+} from '../_lib.js';
 
 export async function POST(request) {
   try {
     const body = await request.json().catch(() => ({}));
-    const token = getAdminToken(request, body);
+    const token = getAdminTokenFromRequest(request);
     if (!verifyAdminToken(token)) {
       return jsonResponse({ error: 'Invalid or expired session' }, 401);
     }
@@ -48,6 +52,6 @@ export async function POST(request) {
     return jsonResponse({ ok: true, templeId: docRef.id, priestUsername, priestPassword });
   } catch (e) {
     console.error('admin create-temple', e);
-    return jsonResponse({ error: e.message || 'Failed to create temple' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/admin/create-temple.js');
   }
 }

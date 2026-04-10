@@ -1,4 +1,4 @@
-import { getDb, verifyAdminToken, jsonResponse, getAdminTokenFromRequest } from '../_lib.js';
+import { getDb, verifyAdminToken, jsonResponse, getAdminTokenFromRequest, jsonInternalServerError } from '../_lib.js';
 import { computeDailyRetention, getDayKeyFromOffset } from '../_analytics.js';
 import { runDailyAnalyticsAggregation } from '../cron/analytics-daily.js';
 
@@ -141,6 +141,6 @@ export async function GET(request) {
     );
   } catch (e) {
     console.error('admin analytics-overview GET', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/admin/analytics-overview.js');
   }
 }

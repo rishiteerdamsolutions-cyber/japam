@@ -1,23 +1,37 @@
 /**
- * In-memory per-IP rate limiter with tiered limits.
- *   - AUTH routes (login endpoints): 5 req/min per IP  — brute-force protection
- *   - GENERAL routes: 100 req/min per IP
- *   - CRON/health routes: bypassed upstream in proxy.js
+ * Tiered IP rate limiting for /api/* (used by api/proxy.js).
+ * - AUTH routes: 5 req/min per IP
+ * - GENERAL routes: 100 req/min per IP
  *
- * Note: in-memory store is per serverless instance. For distributed DDoS
- * protection across all instances, upgrade to Upstash Redis (Phase 4.1).
+ * When UPSTASH_REDIS_REST_URL + UPSTASH_REDIS_REST_TOKEN are set, limits are
+ * enforced globally across all Vercel instances. Otherwise falls back to
+ * in-memory (per-instance only).
  */
 
-const WINDOW_MS = 60 * 1000; // 1 minute
+import { Redis } from '@upstash/redis';
 
-/** Auth endpoints that must be strictly rate-limited to block brute-force. */
+const WINDOW_SEC = 60;
+
 const AUTH_ROUTES = new Set(['admin-login', 'priest-login', 'apavarga/custom-token']);
-const AUTH_MAX = 5;    // 5 req/min per IP on auth routes
-const GENERAL_MAX = 100; // 100 req/min per IP on all other routes
+const AUTH_MAX = 5;
+const GENERAL_MAX = 100;
 
-/** Separate stores per limit tier to avoid cross-contamination. */
 const authStore = new Map();
 const generalStore = new Map();
+
+let _redis = undefined;
+
+function getRedis() {
+  if (_redis !== undefined) return _redis;
+  const url = process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (url && token) {
+    _redis = new Redis({ url, token });
+  } else {
+    _redis = null;
+  }
+  return _redis;
+}
 
 function getIp(request) {
   return (
@@ -27,7 +41,8 @@ function getIp(request) {
   );
 }
 
-function check(store, ip, maxRequests) {
+function checkMemory(store, ip, maxRequests) {
+  const WINDOW_MS = WINDOW_SEC * 1000;
   const key = `rl:${ip}`;
   const now = Date.now();
 
@@ -55,15 +70,42 @@ function check(store, ip, maxRequests) {
   return { allowed: true, limit: maxRequests, remaining: maxRequests - data.count };
 }
 
+async function checkRedis(redis, ip, pathKey) {
+  const isAuth = AUTH_ROUTES.has(pathKey);
+  const max = isAuth ? AUTH_MAX : GENERAL_MAX;
+  const bucket = isAuth ? 'auth' : 'gen';
+  const key = `ratelimit:${bucket}:${ip}`;
+
+  const n = await redis.incr(key);
+  if (n === 1) {
+    await redis.expire(key, WINDOW_SEC);
+  }
+
+  const ttl = await redis.ttl(key);
+  const retryAfter = ttl > 0 ? ttl : WINDOW_SEC;
+
+  if (n > max) {
+    return { allowed: false, retryAfter, limit: max, tier: isAuth ? 'auth' : 'general' };
+  }
+  return { allowed: true, limit: max, remaining: Math.max(0, max - n) };
+}
+
 /**
- * Check rate limit for a given request and route path.
  * @param {Request} request
  * @param {string} pathKey - e.g. 'admin-login', 'user/japa'
  */
-export function checkRateLimit(request, pathKey = '') {
+export async function checkRateLimit(request, pathKey = '') {
   const ip = getIp(request);
   const isAuth = AUTH_ROUTES.has(pathKey);
-  return isAuth
-    ? check(authStore, ip, AUTH_MAX)
-    : check(generalStore, ip, GENERAL_MAX);
+  const max = isAuth ? AUTH_MAX : GENERAL_MAX;
+  const redis = getRedis();
+  if (redis) {
+    try {
+      return await checkRedis(redis, ip, pathKey);
+    } catch (e) {
+      console.error('[rateLimit] Upstash error, falling back to memory', e?.message);
+    }
+  }
+  const store = isAuth ? authStore : generalStore;
+  return checkMemory(store, ip, max);
 }

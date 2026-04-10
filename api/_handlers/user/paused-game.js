@@ -1,7 +1,7 @@
 /** GET /api/user/paused-game - Load paused game for current user (Firebase ID token required).
  *  Query param: key (e.g. japam-paused-general-0, japam-paused-shiva-0, japam-paused-marathon-xyz)
  *  Returns the paused game for that specific key only. Supports multiple paused games per user. */
-import { getDb, jsonResponse, verifyFirebaseUser } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, jsonInternalServerError } from '../_lib.js';
 
 export async function GET(request) {
   const uid = await verifyFirebaseUser(request);
@@ -34,7 +34,7 @@ export async function GET(request) {
     return jsonResponse({ pausedGame: null }, 200);
   } catch (e) {
     console.error('user paused-game GET', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/user/paused-game.js');
   }
 }
 
@@ -104,6 +104,6 @@ export async function POST(request) {
     return jsonResponse({ ok: true }, 200);
   } catch (e) {
     console.error('user paused-game POST', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/user/paused-game.js');
   }
 }

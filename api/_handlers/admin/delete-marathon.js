@@ -1,9 +1,9 @@
-import { getDb, jsonResponse, verifyAdminToken, getAdminTokenFromRequest, logAudit } from '../_lib.js';
+import { getDb, jsonResponse, verifyAdminToken, getAdminTokenFromRequest, logAudit, jsonInternalServerError } from '../_lib.js';
 
 /** POST /api/admin/delete-marathon - Delete a marathon and its participations. Body: { token, marathonId } */
 export async function POST(request) {
   const body = await request.json().catch(() => ({}));
-  const token = (body?.token && typeof body.token === 'string') ? body.token : getAdminTokenFromRequest(request);
+  const token = getAdminTokenFromRequest(request);
   if (!token || !verifyAdminToken(token)) return jsonResponse({ error: 'Unauthorized' }, 401);
 
   const marathonId = body?.marathonId && typeof body.marathonId === 'string' ? body.marathonId.trim() : null;
@@ -22,6 +22,6 @@ export async function POST(request) {
     return jsonResponse({ ok: true, message: 'Marathon deleted' }, 200);
   } catch (e) {
     console.error('admin delete-marathon', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/admin/delete-marathon.js');
   }
 }

@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser, isUserUnlocked } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, isUserUnlocked, jsonInternalServerError } from '../_lib.js';
 import admin from 'firebase-admin';
 import { upsertBehaviorFromJapa } from '../_analytics.js';
 
@@ -15,7 +15,7 @@ export async function GET(request) {
     return jsonResponse({ counts: data }, 200);
   } catch (e) {
     console.error('user japa GET', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/user/japa.js');
   }
 }
 
@@ -147,6 +147,6 @@ export async function POST(request) {
     return jsonResponse({ ok: true }, 200);
   } catch (e) {
     console.error('user japa POST', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/user/japa.js');
   }
 }

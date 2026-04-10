@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, jsonInternalServerError } from '../_lib.js';
 import { buildMarathonLeaderboard } from './_marathonLeaderboard.js';
 import { isMarathonPublicActive } from '../_lifecycle.js';
 
@@ -152,10 +152,14 @@ export async function GET(request) {
     return jsonResponse({ temples, marathonsByTemple });
   } catch (e) {
     console.error('marathons discover', e);
-    const msg = e.message || 'Failed';
+    const msg = e?.message || '';
     const isIndexError = /index|Composite index/i.test(msg);
-    return jsonResponse({
-      error: isIndexError ? 'Firestore index required. Run: firebase deploy --only firestore:indexes' : msg,
-    }, 500);
+    if (isIndexError) {
+      return jsonResponse(
+        { error: 'Firestore index required. Run: firebase deploy --only firestore:indexes' },
+        500,
+      );
+    }
+    return jsonInternalServerError(e, 'marathons/discover');
   }
 }

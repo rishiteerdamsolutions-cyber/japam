@@ -1,4 +1,4 @@
-import { getDb, verifyAdminToken, jsonResponse, getAdminTokenFromRequest } from '../_lib.js';
+import { getDb, verifyAdminToken, jsonResponse, getAdminTokenFromRequest, jsonInternalServerError } from '../_lib.js';
 import { getDayKeyFromOffset } from '../_analytics.js';
 
 function dateRange(days) {
@@ -32,6 +32,6 @@ export async function GET(request) {
     return jsonResponse({ days, series }, 200);
   } catch (e) {
     console.error('admin analytics-timeseries GET', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/admin/analytics-timeseries.js');
   }
 }

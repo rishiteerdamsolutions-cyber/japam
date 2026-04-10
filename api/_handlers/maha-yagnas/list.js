@@ -1,4 +1,4 @@
-import { getDb, jsonResponse } from '../_lib.js';
+import { getDb, jsonResponse, jsonInternalServerError } from '../_lib.js';
 import { isYagnaPublicListable } from '../_lifecycle.js';
 
 /** GET /api/maha-yagnas/list - List active Maha Japa Yagnas (public, no auth) */
@@ -50,6 +50,6 @@ export async function GET() {
     return jsonResponse({ yagnas }, 200);
   } catch (e) {
     console.error('maha-yagnas list', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/maha-yagnas/list.js');
   }
 }

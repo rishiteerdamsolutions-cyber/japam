@@ -1,16 +1,15 @@
 /**
- * POST /api/admin/data - Single admin endpoint: token + type in body (or token in header as fallback).
- * Body: { token, type: "temples" | "marathons" | "users" }
- * Token can also come from Authorization: Bearer <token> or X-Admin-Token (if body is missing).
+ * POST /api/admin/data - Single admin endpoint. Body: { type: "temples" | "marathons" | "users" }
+ * Token: Authorization: Bearer <token> or X-Admin-Token.
  */
-import { getDb, verifyAdminToken, jsonResponse, getAdminTokenFromRequest } from '../_lib.js';
+import { getDb, verifyAdminToken, jsonResponse, getAdminTokenFromRequest, jsonInternalServerError } from '../_lib.js';
 
 const DEITY_NAMES = { rama: 'Rama', shiva: 'Shiva', ganesh: 'Ganesh', surya: 'Surya', shakthi: 'Shakthi', krishna: 'Krishna', shanmukha: 'Shanmukha', venkateswara: 'Venkateswara' };
 
 export async function POST(request) {
   try {
     const body = await request.json().catch(() => ({}));
-    const token = (body?.token && typeof body.token === 'string') ? body.token : getAdminTokenFromRequest(request);
+    const token = getAdminTokenFromRequest(request);
     if (!token) return jsonResponse({ error: 'Missing token' }, 401);
     if (!verifyAdminToken(token)) return jsonResponse({ error: 'Invalid or expired session' }, 401);
 
@@ -159,6 +158,6 @@ export async function POST(request) {
     return jsonResponse({ error: 'Invalid type. Use temples, marathons, or users.' }, 400);
   } catch (e) {
     console.error('admin data', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/admin/data.js');
   }
 }

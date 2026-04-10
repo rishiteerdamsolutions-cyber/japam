@@ -1,4 +1,4 @@
-import { getDb, verifyAdminToken, jsonResponse, getAdminTokenFromRequest } from '../_lib.js';
+import { getDb, verifyAdminToken, jsonResponse, getAdminTokenFromRequest, jsonInternalServerError } from '../_lib.js';
 
 const DEITY_NAMES = { rama: 'Rama', shiva: 'Shiva', ganesh: 'Ganesh', surya: 'Surya', shakthi: 'Shakthi', krishna: 'Krishna', shanmukha: 'Shanmukha', venkateswara: 'Venkateswara' };
 
@@ -69,18 +69,18 @@ export async function GET(request) {
     return await fetchMarathons(token);
   } catch (e) {
     console.error('admin marathons GET', e);
-    return jsonResponse({ error: e.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/admin/marathons.js');
   }
 }
 
-/** POST /api/admin/marathons - Same as GET but token in body (works when rewrite strips headers/query). */
+/** POST /api/admin/marathons - Same as GET (use Authorization or X-Admin-Token header). */
 export async function POST(request) {
   try {
-    const body = await request.json().catch(() => ({}));
-    const token = body?.token || getAdminTokenFromRequest(request);
+    await request.json().catch(() => ({}));
+    const token = getAdminTokenFromRequest(request);
     return await fetchMarathons(token);
   } catch (e) {
     console.error('admin marathons POST', e);
-    return jsonResponse({ error: e.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/admin/marathons.js');
   }
 }

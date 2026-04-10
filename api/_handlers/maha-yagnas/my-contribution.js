@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, jsonInternalServerError } from '../_lib.js';
 
 /** GET /api/maha-yagnas/my-contribution - User's contribution per active yagna (Firebase auth required) */
 export async function GET(request) {
@@ -46,6 +46,6 @@ export async function GET(request) {
     return jsonResponse({ contributions }, 200);
   } catch (e) {
     console.error('maha-yagnas my-contribution', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/maha-yagnas/my-contribution.js');
   }
 }

@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser, shouldRefillLivesAtNoonIST } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, shouldRefillLivesAtNoonIST, jsonInternalServerError } from '../_lib.js';
 
 const MAX_LIVES = 5;
 
@@ -51,6 +51,6 @@ export async function POST(request) {
     return jsonResponse({ lives: newLives, ok: true });
   } catch (e) {
     console.error('user lives grant', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/user/lives-grant.js');
   }
 }

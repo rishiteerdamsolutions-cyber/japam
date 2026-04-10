@@ -1,4 +1,4 @@
-import { getDb, jsonResponse } from '../_lib.js';
+import { getDb, jsonResponse, jsonInternalServerError } from '../_lib.js';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -65,6 +65,6 @@ export async function GET(request) {
     return jsonResponse({ ok: true, count: users.length }, 200);
   } catch (e) {
     console.error('cron refresh-active-users', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/cron/refresh-active-users.js');
   }
 }

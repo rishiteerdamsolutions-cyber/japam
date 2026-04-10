@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser, logAudit } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, logAudit, jsonInternalServerError } from '../_lib.js';
 
 const CASHFREE_APP_ID = process.env.CASHFREE_APP_ID || process.env.CASHFREE_CLIENT_ID;
 const CASHFREE_SECRET = process.env.CASHFREE_SECRET || process.env.CASHFREE_CLIENT_SECRET;
@@ -61,6 +61,6 @@ export async function POST(request) {
     return jsonResponse({ ok: true, status: 'confirmed', appointmentId: aptDoc.id }, 200);
   } catch (e) {
     console.error('appointments-pay-verify', e);
-    return jsonResponse({ error: e?.message || 'Verification failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/apavarga/appointments-pay-verify.js');
   }
 }

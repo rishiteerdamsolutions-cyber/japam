@@ -1,4 +1,4 @@
-import { getDb, verifyPriestForApi, jsonResponse, isValidFirestoreDocId } from '../_lib.js';
+import { getDb, verifyPriestForApi, jsonResponse, isValidFirestoreDocId, jsonInternalServerError } from '../_lib.js';
 import { isValidYagnaLifecycle } from '../_lifecycle.js';
 
 function getPriestToken(request, body) {
@@ -87,7 +87,7 @@ export async function POST(request) {
     return jsonResponse({ ok: true }, 200);
   } catch (e) {
     console.error('priest maha-yagnas-edit', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/priest/maha-yagnas-edit.js');
   }
 }
 

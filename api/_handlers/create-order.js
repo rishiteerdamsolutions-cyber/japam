@@ -1,18 +1,16 @@
-import { getDb, getUnlockPricePaise, jsonResponse, UNLOCK_PRICE_PAISE, verifyFirebaseUser } from './_lib.js';
+import {
+  getDb,
+  getUnlockPricePaise,
+  jsonResponse,
+  jsonInternalServerError,
+  UNLOCK_PRICE_PAISE,
+  verifyFirebaseUser,
+} from './_lib.js';
 import admin from 'firebase-admin';
 
 const CASHFREE_APP_ID = process.env.CASHFREE_APP_ID || process.env.CASHFREE_CLIENT_ID;
 const CASHFREE_SECRET = process.env.CASHFREE_SECRET || process.env.CASHFREE_CLIENT_SECRET;
 const CASHFREE_BASE = process.env.CASHFREE_ENV === 'sandbox' ? 'https://sandbox.cashfree.com/pg' : 'https://api.cashfree.com/pg';
-
-function getErrorMessage(e) {
-  if (!e) return 'Failed to create order';
-  if (typeof e.message === 'string' && e.message) return e.message;
-  if (e.error?.description) return e.error.description;
-  if (e.description) return e.description;
-  if (typeof e.error === 'string') return e.error;
-  return 'Failed to create order';
-}
 
 export async function POST(request) {
   try {
@@ -83,9 +81,13 @@ export async function POST(request) {
 
     const data = await res.json();
     if (!res.ok) {
-      const msg = data?.message || data?.error?.message || `Cashfree error: ${res.status}`;
       console.error('create-order Cashfree', res.status, data);
-      return jsonResponse({ error: msg }, res.status >= 500 ? 500 : 400);
+      if (res.status >= 500) {
+        return jsonInternalServerError(new Error(`Cashfree ${res.status}`), 'create-order-cashfree');
+      }
+      const msg =
+        data?.message || data?.error?.message || 'Payment provider rejected the request';
+      return jsonResponse({ error: msg }, 400);
     }
 
     const paymentSessionId = data?.payment_session_id;
@@ -101,8 +103,7 @@ export async function POST(request) {
       amount: amountPaise,
     });
   } catch (e) {
-    const msg = getErrorMessage(e);
     console.error('create-order', e);
-    return jsonResponse({ error: msg }, 500);
+    return jsonInternalServerError(e, 'create-order');
   }
 }

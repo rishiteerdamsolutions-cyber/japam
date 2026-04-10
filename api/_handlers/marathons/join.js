@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser, isUserUnlocked, isValidFirestoreDocId } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, isUserUnlocked, isValidFirestoreDocId, jsonInternalServerError } from '../_lib.js';
 import { isMarathonPublicActive } from '../_lifecycle.js';
 
 /** POST /api/marathons/join - User joins a marathon. Requires Firebase auth; only paid (unlocked) users can join. Body: { marathonId } */
@@ -66,6 +66,6 @@ export async function POST(request) {
     return jsonResponse({ ok: true });
   } catch (e) {
     console.error('marathons join', e);
-    return jsonResponse({ error: e.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/marathons/join.js');
   }
 }

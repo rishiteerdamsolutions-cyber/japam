@@ -1,16 +1,10 @@
-import { getDb, verifyAdminToken, jsonResponse, getAdminTokenFromRequest, logAudit } from '../_lib.js';
-
-function getToken(request, body) {
-  const auth = request?.headers?.get?.('authorization');
-  if (auth && auth.startsWith('Bearer ')) return auth.slice(7);
-  return body?.token || getAdminTokenFromRequest(request);
-}
+import { getDb, verifyAdminToken, jsonResponse, getAdminTokenFromRequest, logAudit, jsonInternalServerError } from '../_lib.js';
 
 /** POST /api/admin/maha-yagnas-edit - Edit Maha Japa Yagna. Body: { yagnaId, name?, description?, deityId?, mantra?, goalJapas?, startDate?, endDate?, templeId?, status? } */
 export async function POST(request) {
   try {
     const body = await request.json().catch(() => ({}));
-    const token = getToken(request, body);
+    const token = getAdminTokenFromRequest(request);
     if (!verifyAdminToken(token)) return jsonResponse({ error: 'Invalid or expired session' }, 401);
 
     const yagnaId = body?.yagnaId && typeof body.yagnaId === 'string' ? body.yagnaId.trim() : null;
@@ -41,6 +35,6 @@ export async function POST(request) {
     return jsonResponse({ ok: true }, 200);
   } catch (e) {
     console.error('admin maha-yagnas-edit', e);
-    return jsonResponse({ error: e?.message || 'Failed to edit yagna' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/admin/maha-yagnas-edit.js');
   }
 }

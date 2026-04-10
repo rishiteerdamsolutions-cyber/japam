@@ -1,5 +1,5 @@
 import admin from 'firebase-admin';
-import { getDb, jsonResponse } from '../_lib.js';
+import { getDb, jsonResponse, jsonInternalServerError } from '../_lib.js';
 import { applyChampionClassification, computeDailyRetention, getDayKeyFromOffset } from '../_analytics.js';
 
 export async function runDailyAnalyticsAggregation(db) {
@@ -82,6 +82,6 @@ export async function GET(request) {
     return jsonResponse(result, 200);
   } catch (e) {
     console.error('cron analytics-daily GET', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/cron/analytics-daily.js');
   }
 }

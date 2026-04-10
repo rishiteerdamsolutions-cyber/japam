@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, jsonInternalServerError } from '../_lib.js';
 
 /** GET /api/occasions/anniversary/active — in-progress couple sessions for the signed-in user. */
 export async function GET(request) {
@@ -45,6 +45,6 @@ export async function GET(request) {
     return jsonResponse({ items });
   } catch (e) {
     console.error('anniversary-active', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/occasions/anniversary-active.js');
   }
 }

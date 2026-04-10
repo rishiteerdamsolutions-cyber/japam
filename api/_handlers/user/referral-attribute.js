@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, jsonInternalServerError } from '../_lib.js';
 import { trackReferral } from '../_analytics.js';
 
 /** POST /api/user/referral-attribute - Called by user who just became pro. Attributing to referrer from ?ref= code. */
@@ -20,6 +20,6 @@ export async function POST(request) {
     return jsonResponse({ ok: true, attributed: true, referrerUid }, 200);
   } catch (e) {
     console.error('user referral-attribute POST', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/user/referral-attribute.js');
   }
 }

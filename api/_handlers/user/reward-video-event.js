@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, jsonInternalServerError } from '../_lib.js';
 import admin from 'firebase-admin';
 
 const VALID_EVENTS = ['started', 'completed', 'continue_clicked'];
@@ -34,6 +34,6 @@ export async function POST(request) {
     return jsonResponse({ ok: true });
   } catch (e) {
     console.error('reward-video-event', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/user/reward-video-event.js');
   }
 }

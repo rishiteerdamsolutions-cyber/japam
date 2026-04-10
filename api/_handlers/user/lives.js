@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser, shouldRefillLivesAtNoonIST, getNextNoonISTMs } from '../_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, shouldRefillLivesAtNoonIST, getNextNoonISTMs, jsonInternalServerError } from '../_lib.js';
 
 const MAX_LIVES = 5;
 
@@ -34,7 +34,7 @@ export async function GET(request) {
     return jsonResponse({ lives, lastRefillAt, nextRefillAt });
   } catch (e) {
     console.error('user lives GET', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/user/lives.js');
   }
 }
 

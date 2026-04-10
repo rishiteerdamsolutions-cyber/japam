@@ -1,18 +1,12 @@
-import { getDb, verifyAdminToken, jsonResponse, getAdminTokenFromRequest, logAudit } from '../_lib.js';
+import { getDb, verifyAdminToken, jsonResponse, getAdminTokenFromRequest, logAudit, jsonInternalServerError } from '../_lib.js';
 import admin from 'firebase-admin';
 
 const DEITY_NAMES = { rama: 'Rama', shiva: 'Shiva', ganesh: 'Ganesh', surya: 'Surya', shakthi: 'Shakthi', krishna: 'Krishna', shanmukha: 'Shanmukha', venkateswara: 'Venkateswara' };
 
-function getToken(request, body) {
-  const auth = request?.headers?.get?.('authorization');
-  if (auth && auth.startsWith('Bearer ')) return auth.slice(7);
-  return body?.token || getAdminTokenFromRequest(request);
-}
-
 /** GET /api/admin/maha-yagnas - List all Maha Japa Yagnas with totals and participant count */
 export async function GET(request) {
   try {
-    const token = getToken(request, {});
+    const token = getAdminTokenFromRequest(request);
     if (!verifyAdminToken(token)) return jsonResponse({ error: 'Invalid or expired session' }, 401);
     const db = getDb();
     if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
@@ -52,7 +46,7 @@ export async function GET(request) {
     return jsonResponse({ yagnas });
   } catch (e) {
     console.error('admin maha-yagnas GET', e);
-    return jsonResponse({ error: e?.message || 'Failed' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/admin/maha-yagnas.js');
   }
 }
 
@@ -60,7 +54,7 @@ export async function GET(request) {
 export async function POST(request) {
   try {
     const body = await request.json().catch(() => ({}));
-    const token = getToken(request, body);
+    const token = getAdminTokenFromRequest(request);
     if (!verifyAdminToken(token)) return jsonResponse({ error: 'Invalid or expired session' }, 401);
 
     const { name, description, deityId, mantra, goalJapas, startDate, endDate, templeId } = body;
@@ -96,6 +90,6 @@ export async function POST(request) {
     return jsonResponse({ ok: true, yagnaId: docRef.id });
   } catch (e) {
     console.error('admin maha-yagnas POST', e);
-    return jsonResponse({ error: e?.message || 'Failed to create yagna' }, 500);
+    return jsonInternalServerError(e, 'api/_handlers/admin/maha-yagnas.js');
   }
 }

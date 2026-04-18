@@ -96,9 +96,10 @@ export function Board() {
 
   const dragStartRef = useRef<{ row: number; col: number } | null>(null);
   const handlePointerDown = useCallback((e: React.PointerEvent, row: number, col: number) => {
-    if (status !== 'playing' || isAnimatingMatch || blockDragForTargetPower) return;
+    if (status !== 'playing' || isAnimatingMatch) return;
     primeAudio();
     dragStartRef.current = { row, col };
+    if (blockDragForTargetPower) return;
     const host = e.currentTarget as HTMLElement;
     host.setPointerCapture?.(e.pointerId);
   }, [status, isAnimatingMatch, blockDragForTargetPower]);
@@ -122,7 +123,15 @@ export function Board() {
   const handlePointerUp = useCallback((e: React.PointerEvent) => {
     const start = dragStartRef.current;
     dragStartRef.current = null;
-    if (!start || status !== 'playing' || isAnimatingMatch || blockDragForTargetPower) return;
+    if (!start || status !== 'playing' || isAnimatingMatch) return;
+    if (blockDragForTargetPower) {
+      const keyTap = readCellKeyFromPoint(e.clientX, e.clientY);
+      if (keyTap) {
+        const [r, c] = keyTap.split(',').map(Number);
+        if (r === start.row && c === start.col) selectCell(r, c);
+      }
+      return;
+    }
     const key = readCellKeyFromPoint(e.clientX, e.clientY);
     if (key) {
       const [r, c] = key.split(',').map(Number);
@@ -132,10 +141,12 @@ export function Board() {
         swap(r, c, start.row, start.col);
       }
     }
-  }, [status, swap, isAnimatingMatch, blockDragForTargetPower]);
+  }, [status, swap, selectCell, isAnimatingMatch, blockDragForTargetPower]);
 
   const handleClick = useCallback((row: number, col: number) => {
     if (status !== 'playing' || isAnimatingMatch) return;
+    const armed = usePowerArmStore.getState().armedPowerId;
+    if (armed && armed !== 'freeSwap') return;
     selectCell(row, col);
   }, [status, selectCell, isAnimatingMatch]);
 

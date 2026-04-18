@@ -9,8 +9,8 @@ export const EXCLUSIVE_ISTA_PATH_DEITIES: DeityId[] = ['saiBaba', 'bramhamgaaru'
 /** Not used on the general map board or general-mode power strip. */
 export const GENERAL_BOARD_EXCLUDED_DEITIES: DeityId[] = [...EXCLUSIVE_ISTA_PATH_DEITIES];
 
-/** Rāma / Nārāyaṇa / ISKCON read similarly on gems — keep only one per board family. */
-export const MUTUALLY_EXCLUSIVE_VISNU_FORMS: DeityId[] = ['rama', 'narayana', 'iskcon'];
+/** Rāma / Kṛṣṇa / Nārāyaṇa / ISKCON read similarly on gems — keep only one per board family. */
+export const MUTUALLY_EXCLUSIVE_VISNU_FORMS: DeityId[] = ['rama', 'krishna', 'narayana', 'iskcon'];
 /** Śakthi / Durgā should not mix on one board family. */
 export const MUTUALLY_EXCLUSIVE_SHAKTHI_DURGA: DeityId[] = ['shakthi', 'durga'];
 

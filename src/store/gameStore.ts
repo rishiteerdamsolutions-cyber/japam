@@ -3,7 +3,14 @@ import type { Board, GemType, Match, Position } from '../engine/types';
 import { displayDeityId } from '../engine/gemKinds';
 import { DEITY_IDS, type DeityId } from '../data/deities';
 import type { GameMode } from '../types';
-import { createBoard, createBoardSeeded, swapGems, removeMatches, fillGaps } from '../engine/board';
+import {
+  createBoard,
+  createBoardSeeded,
+  swapGems,
+  removeMatches,
+  fillGaps,
+  sanitizeBoardToDeitySubset,
+} from '../engine/board';
 import { findMatches, getAllMatchPositions, hasValidMoves } from '../engine/matcher';
 import { computeMatchSfxSelection, type MatchSfxSelection } from '../lib/matchSfx';
 import { applyGravity } from '../engine/gravity';
@@ -136,6 +143,15 @@ interface GameState {
   /** Bumped when we auto-refresh an anniversary board due to no valid moves (toast trigger). */
   anniversaryAutoRefreshToken: number;
   anniversarySessionFlavor: AnniversarySessionFlavor;
+}
+
+function sessionHasUnlimitedMoves(state: GameState): boolean {
+  return (
+    state.marathonTargetJapas != null ||
+    (state.overrideJapaTarget != null && state.overrideJapaTarget >= 50) ||
+    state.occasionKind === 'birthday' ||
+    state.occasionKind === 'anniversary'
+  );
 }
 
 function boardGemContext(state: GameState): {
@@ -515,8 +531,16 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const armed = usePowerArmStore.getState().armedPowerId;
     if (!armed || armed === 'freeSwap') return;
     const state = get();
-    if (state.occasionKind === 'anniversary') return;
-    if (state.status !== 'playing' || state.moves <= 0) return;
+    if (state.occasionKind === 'anniversary' && state.anniversarySessionPaused) return;
+    if (
+      state.occasionKind === 'anniversary' &&
+      state.anniversaryMyRole &&
+      state.anniversaryTurn !== state.anniversaryMyRole
+    ) {
+      return;
+    }
+    if (state.status !== 'playing') return;
+    if (!sessionHasUnlimitedMoves(state) && state.moves <= 0) return;
     if (state.matchAnimationTimeoutId != null) return;
     const inv = usePowersInventoryStore.getState().entries;
     if (getPowerCount(inv, armed) < 1) return;
@@ -630,10 +654,6 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     if (occasionKind === 'anniversary') {
       if (get().anniversarySessionPaused) return false;
       if (anniversaryMyRole && anniversaryTurn !== anniversaryMyRole) return false;
-      if (useFreeSwap) {
-        set({ selectedCell: null });
-        return false;
-      }
     }
     if (useFreeSwap) {
       if (getPowerCount(usePowersInventoryStore.getState().entries, 'freeSwap') < 1) {
@@ -721,6 +741,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     if (matches.length === 0) {
       // Free swap: allow setup moves (swap need not create a match yet); consumes one charge, no move spent.
       if (useFreeSwap) {
+        const stFree = get();
         set({
           board: nextBoard,
           moves,
@@ -728,7 +749,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
           lastSwapDestination: null,
           lastSwappedTypes: gemA && gemB ? [gemA, gemB] : null,
           intendedDeity: gemA || null,
-          hintsSwapCount: get().hintsSwapCount + 1,
+          hintsSwapCount: stFree.hintsSwapCount + 1,
+          anniversaryMovePending: stFree.occasionKind === 'anniversary' ? true : stFree.anniversaryMovePending,
         });
         usePowerArmStore.getState().setArmedPower(null);
         void usePowersInventoryStore.getState().tryConsumeOne('freeSwap');
@@ -1193,6 +1215,9 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
           ? normalizeGeneralBoardDeities(gd as DeityId[], levelIndex)
           : (gd as DeityId[])
         : null;
+    if (resolvedMode === 'general' && generalBoardDeities != null && generalBoardDeities.length > 0) {
+      board = sanitizeBoardToDeitySubset(board, generalBoardDeities);
+    }
     const version = typeof payload.version === 'number' ? payload.version : 0;
     const turn = payload.turn === 'wife' ? 'wife' : 'husband';
     const prev = get();

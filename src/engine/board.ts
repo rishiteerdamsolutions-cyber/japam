@@ -2,7 +2,7 @@ import type { Board, GemType } from './types';
 import { DEITY_IDS } from '../data/deities';
 import type { DeityId } from '../data/deities';
 import { deityGemAllowedOnIstaPath } from '../lib/generalBoardDeities';
-import { sameLineGroup } from './gemKinds';
+import { displayDeityId, isBlessing, isStriped, isWrapped, sameLineGroup } from './gemKinds';
 
 /**
  * Īṣṭa (specific-deity) mode: favor the path deity on spawns so japa matches stay doable, but keep other
@@ -36,6 +36,25 @@ function weightedPickGemType(
  * - General + `generalGemSubset`: exactly those types (compact board).
  * - Īṣṭa mode: always includes `deityMode` and offering-backed inventory deities, then fills to cap.
  */
+/** Coerce every tile’s base deity into `subset` (All Deity Japa / resumed boards). Preserves blessing tiles. */
+export function sanitizeBoardToDeitySubset(board: Board, subset: DeityId[]): Board {
+  if (subset.length === 0) return board;
+  const allowed = new Set(subset);
+  const pick = (): DeityId => subset[Math.floor(Math.random() * subset.length)]!;
+  return board.map((row) =>
+    row.map((cell) => {
+      if (cell == null) return cell;
+      if (isBlessing(cell)) return cell;
+      const id = displayDeityId(cell);
+      if (id != null && allowed.has(id)) return cell;
+      const d = pick();
+      if (isStriped(cell)) return { ...cell, d };
+      if (isWrapped(cell)) return { ...cell, d };
+      return d as GemType;
+    }),
+  );
+}
+
 export function buildGemTypesPool(
   maxGemTypes: number,
   deityMode: DeityId | undefined,

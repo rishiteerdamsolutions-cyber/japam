@@ -56,27 +56,48 @@ git ls-files | grep -E '(\.env|token|secret|serviceAccount)' || echo "clean"
 ## 2. MUST DO — Cashfree webhook (prevents silent payment failures)
 
 Without this, if a user pays but their phone loses signal before the redirect,
-they are charged but never unlocked.
+they are charged but never unlocked. The handler is already written
+(`api/_handlers/cashfree-webhook.js`) — you just have to point Cashfree at
+it. Cashfree's newer dashboards offer TWO styles; yours shows the second.
 
-I've already written the handler (`api/_handlers/cashfree-webhook.js`). All
-you have to do is register the URL in the Cashfree dashboard:
+### Your dashboard (NOTIFY_URL policy) — do this
 
-1. Open <https://merchant.cashfree.com> → **Developers → Webhooks**.
-2. Click **Add endpoint**:
-   - **URL:** `https://japam.digital/api/cashfree-webhook`
-   - **API version:** `2023-08-01` (match what the code uses)
-   - **Events:** tick `PAYMENT_SUCCESS_WEBHOOK` (required);
-     optionally `PAYMENT_FAILED_WEBHOOK` and `PAYMENT_USER_DROPPED_WEBHOOK`.
-3. Cashfree will show a **signing secret** (sometimes "webhook secret"). Copy
-   it. Set it in Vercel:
+Your dashboard shows `NOTIFY_URL · Policy 1 · DEFAULT · success payment`.
+That means Cashfree will POST to whatever `notify_url` we include when
+creating each order. The code now sends that automatically on every unlock
+and donation order, but you need to tell it which URL to use:
+
+1. In **Vercel → Project → Settings → Environment Variables**, add:
+   - Variable: `CASHFREE_NOTIFY_URL`
+   - Value:    `https://japam.digital/api/cashfree-webhook`
+   - Scope:    Production (and Preview if you test previews).
+2. In **Vercel → Project → Settings → Environment Variables**, add:
    - Variable: `CASHFREE_WEBHOOK_SECRET`
-   - Value: that secret
-   (If Cashfree doesn't show a separate webhook secret, leave
-   `CASHFREE_WEBHOOK_SECRET` unset — the code falls back to `CASHFREE_SECRET`
-   which works for most accounts.)
-4. Click **Send test event** in the Cashfree dashboard — you should see a
-   200 response. Then check **Vercel → Deployments → Functions → Logs** for
-   a line like `cashfree_webhook_*`.
+   - Value:    leave empty unless your Cashfree dashboard shows a separate
+               "signing secret" for webhooks. If it only shows your regular
+               Secret Key, leave `CASHFREE_WEBHOOK_SECRET` unset — the code
+               uses `CASHFREE_SECRET` which is the same thing.
+3. In the Cashfree dashboard, on the `NOTIFY_URL` row, click **Edit** and
+   make sure:
+   - **Policy:** DEFAULT
+   - **Events:** `success payment` is ticked (required). If available, also
+     tick `failed payment` and `user dropped payment`.
+   - **Version:** `2023-08-01`.
+4. Click **Test** on that same row — the dashboard will send a dummy event.
+   **Important:** Cashfree's "Test" button only works if you have already
+   created at least one real order — the dummy event needs an order. If the
+   test fails with "order not found", skip straight to the real ₹1 test in
+   section 6; you'll see the webhook fire there.
+5. After your first real payment, open **Vercel → Deployments → Functions →
+   Logs** and search for `cashfree_webhook`. You should see a line like
+   `cashfree_webhook_unlock_ok {"uid":"...","orderId":"..."}`. That is proof
+   the webhook is wired correctly.
+
+### If your dashboard also has "Add endpoint" (global webhook)
+
+Some Cashfree accounts show BOTH NOTIFY_URL and a separate "Add endpoint"
+section. If yours does, configuring either one is fine — the NOTIFY_URL flow
+is enough. You do not need both.
 
 ---
 
@@ -114,6 +135,7 @@ previews). Copy values from your `.env` locally.
 | `CASHFREE_APP_ID` | Cashfree App ID |
 | `CASHFREE_SECRET` | Cashfree Secret Key |
 | `CASHFREE_ENV` | `production` |
+| `CASHFREE_NOTIFY_URL` | `https://japam.digital/api/cashfree-webhook` |
 | `CASHFREE_WEBHOOK_SECRET` | from Cashfree dashboard (or leave unset to reuse `CASHFREE_SECRET`) |
 | `ADMIN_ID` | e.g. your admin username |
 | `ADMIN_PASSWORD` | strong password |
@@ -263,9 +285,10 @@ Copy/paste and tick off:
 ```
 [ ] GitHub PAT in .github-token revoked and file deleted
 [ ] sentry-dsn.txt deleted; DSN set in Vercel env (VITE_SENTRY_DSN + SENTRY_DSN)
-[ ] Cashfree webhook registered at /api/cashfree-webhook (PAYMENT_SUCCESS_WEBHOOK)
+[ ] Cashfree NOTIFY_URL policy edited: success payment, version 2023-08-01
+[ ] CASHFREE_NOTIFY_URL set in Vercel (= https://japam.digital/api/cashfree-webhook)
 [ ] CASHFREE_WEBHOOK_SECRET set in Vercel (or intentionally left blank)
-[ ] Cashfree dashboard "send test event" got a 200 from /api/cashfree-webhook
+[ ] First real payment log shows cashfree_webhook_unlock_ok in Vercel Functions
 [ ] Google Cloud budget alert created (50/80/100%)
 [ ] All env vars from section 4 set in Vercel (Production scope)
 [ ] Upstash Redis created, UPSTASH_REDIS_REST_URL + UPSTASH_REDIS_REST_TOKEN set

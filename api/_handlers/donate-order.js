@@ -1,4 +1,4 @@
-import { getDb, jsonResponse, verifyFirebaseUser, jsonInternalServerError } from './_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, jsonInternalServerError, getCashfreeNotifyUrl } from './_lib.js';
 import admin from 'firebase-admin';
 
 const CASHFREE_APP_ID = process.env.CASHFREE_APP_ID || process.env.CASHFREE_CLIENT_ID;
@@ -26,7 +26,7 @@ export async function POST(request) {
       return jsonResponse({ error: 'Payment not configured' }, 503);
     }
 
-    getDb();
+    const db = getDb();
     const orderId = `japam-donate-${String(userId).slice(-12)}-${Date.now().toString(36).slice(-6)}`.replace(/[^a-zA-Z0-9_-]/g, '_').slice(0, 45);
     const orderAmount = (amount / 100).toFixed(2);
 
@@ -41,6 +41,10 @@ export async function POST(request) {
     const origin = request.headers.get('origin') || request.headers.get('referer') || 'https://japam.digital';
     const baseUrl = origin.replace(/\/$/, '');
     const returnUrl = `${baseUrl}/?donate_return=1&order_id={order_id}`;
+    const notifyUrl = getCashfreeNotifyUrl(request);
+
+    const orderMeta = { return_url: returnUrl };
+    if (notifyUrl) orderMeta.notify_url = notifyUrl;
 
     const res = await fetch(`${CASHFREE_BASE}/orders`, {
       method: 'POST',
@@ -61,7 +65,7 @@ export async function POST(request) {
           customer_name: customerName,
           customer_phone: '9999999999',
         },
-        order_meta: { return_url: returnUrl },
+        order_meta: orderMeta,
         order_note: 'Japam Donation',
       }),
     });
@@ -80,6 +84,23 @@ export async function POST(request) {
     const paymentSessionId = data?.payment_session_id;
     if (!paymentSessionId) {
       return jsonResponse({ error: 'Invalid Cashfree response' }, 500);
+    }
+
+    // Persist an orders/{orderId} row so the webhook handler can tell this is a
+    // donation (not an unlock). The webhook is idempotent and guards on `status`.
+    if (db) {
+      try {
+        await db.collection('orders').doc(orderId).set({
+          uid: userId,
+          purpose: 'donate',
+          isDonation: true,
+          amountPaise: amount,
+          createdAt: new Date().toISOString(),
+          status: 'created',
+        });
+      } catch (e) {
+        console.error('donate-order: failed to write orders doc (non-fatal)', e?.message || e);
+      }
     }
 
     // Use our order_id - Cashfree GET order API expects merchant order_id, not cf_order_id

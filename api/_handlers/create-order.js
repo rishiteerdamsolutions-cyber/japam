@@ -9,6 +9,7 @@ import {
   loadActiveCoupon,
   assertCouponUsableByUser,
   logAudit,
+  getCashfreeNotifyUrl,
 } from './_lib.js';
 import admin from 'firebase-admin';
 
@@ -83,6 +84,10 @@ export async function POST(request) {
     const origin = request.headers.get('origin') || request.headers.get('referer') || 'https://japam.digital';
     const baseUrl = origin.replace(/\/$/, '');
     const returnUrl = `${baseUrl}/?payment_return=1&order_id={order_id}`;
+    const notifyUrl = getCashfreeNotifyUrl(request);
+
+    const orderMeta = { return_url: returnUrl };
+    if (notifyUrl) orderMeta.notify_url = notifyUrl;
 
     const res = await fetch(`${CASHFREE_BASE}/orders`, {
       method: 'POST',
@@ -103,9 +108,7 @@ export async function POST(request) {
           customer_name: customerName,
           customer_phone: '9999999999',
         },
-        order_meta: {
-          return_url: returnUrl,
-        },
+        order_meta: orderMeta,
         order_note: 'Japam Pro Unlock',
       }),
     });

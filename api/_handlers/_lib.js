@@ -484,6 +484,28 @@ export function jsonInternalServerError(error, logTag) {
   return jsonResponse({ error: INTERNAL_SERVER_ERROR_MESSAGE }, 500);
 }
 
+/**
+ * Compute the absolute URL Cashfree should POST webhooks to for a given order.
+ * Used as `order_meta.notify_url` when creating an order. Prefers the explicit
+ * CASHFREE_NOTIFY_URL env var (recommended in production), otherwise derives
+ * from the request origin if it's https. Returns null if no safe URL is
+ * available (localhost dev etc.) so we omit the field and Cashfree skips the
+ * webhook call for that order.
+ */
+export function getCashfreeNotifyUrl(request) {
+  const fromEnv = process.env.CASHFREE_NOTIFY_URL;
+  if (fromEnv && /^https:\/\//.test(fromEnv)) return fromEnv.replace(/\/$/, '');
+  try {
+    const origin = request?.headers?.get?.('origin') || request?.headers?.get?.('referer') || '';
+    if (!origin) return null;
+    const u = new URL(origin);
+    if (u.protocol !== 'https:') return null;
+    return `${u.protocol}//${u.host}/api/cashfree-webhook`;
+  } catch {
+    return null;
+  }
+}
+
 /** Audit log for sensitive actions. Logs to console; optionally to Firestore auditLogs collection. */
 export async function logAudit(action, details = {}) {
   const entry = {

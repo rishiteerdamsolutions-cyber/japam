@@ -165,6 +165,7 @@ import * as userDeleteAccountHandler from './_handlers/user/delete-account.js';
 import * as userExportDataHandler from './_handlers/user/export-data.js';
 import * as couponsApplyHandler from './_handlers/coupons/apply.js';
 import * as adminCouponsHandler from './_handlers/admin/coupons.js';
+import * as cashfreeWebhookHandler from './_handlers/cashfree-webhook.js';
 
 function getPathSegments(request) {
   const url = new URL(request.url);
@@ -305,6 +306,7 @@ const HANDLERS = {
   'GET admin/coupons': adminCouponsHandler,
   'POST admin/coupons': adminCouponsHandler,
   'DELETE admin/coupons': adminCouponsHandler,
+  'POST cashfree-webhook': cashfreeWebhookHandler,
 };
 
 async function route(request, method, pathSegments) {
@@ -338,6 +340,9 @@ function enforceAdminRouteGate(request, pathKey) {
 
 async function applyRateLimit(request, pathKey) {
   if (pathKey === 'health') return null;
+  // Cashfree webhook: signature is the auth; do not rate-limit or Cashfree retries
+  // from the same IP pool would be dropped. The handler is idempotent anyway.
+  if (pathKey === 'cashfree-webhook') return null;
   const cronSecret = process.env.CRON_SECRET || process.env.ADMIN_SECRET;
   const auth = request?.headers?.get?.('authorization') || request?.headers?.get?.('x-cron-secret');
   const hasCronAuth = cronSecret && (auth === `Bearer ${cronSecret}` || auth === cronSecret);

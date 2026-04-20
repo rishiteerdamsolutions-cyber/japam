@@ -38,6 +38,7 @@ export function AdminLayout() {
       </div>
       <nav className="flex flex-wrap gap-4 mb-6">
         <NavLink to="/admin/pricing">Pricing</NavLink>
+        <NavLink to="/admin/coupons">Coupons</NavLink>
         <NavLink to="/admin/temples">Temples</NavLink>
         <NavLink to="/admin/marathons">Marathons</NavLink>
         <NavLink to="/admin/maha-yagnas">Maha Yagnas</NavLink>

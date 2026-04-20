@@ -163,6 +163,8 @@ import * as occasionsListHandler from './_handlers/occasions/list.js';
 import * as occasionsAnniversaryActiveHandler from './_handlers/occasions/anniversary-active.js';
 import * as userDeleteAccountHandler from './_handlers/user/delete-account.js';
 import * as userExportDataHandler from './_handlers/user/export-data.js';
+import * as couponsApplyHandler from './_handlers/coupons/apply.js';
+import * as adminCouponsHandler from './_handlers/admin/coupons.js';
 
 function getPathSegments(request) {
   const url = new URL(request.url);
@@ -299,6 +301,10 @@ const HANDLERS = {
   'GET occasions/anniversary/active': occasionsAnniversaryActiveHandler,
   'DELETE user/account': userDeleteAccountHandler,
   'GET user/export': userExportDataHandler,
+  'POST coupons/apply': couponsApplyHandler,
+  'GET admin/coupons': adminCouponsHandler,
+  'POST admin/coupons': adminCouponsHandler,
+  'DELETE admin/coupons': adminCouponsHandler,
 };
 
 async function route(request, method, pathSegments) {

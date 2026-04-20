@@ -25,6 +25,7 @@ const SignInPage = lazy(() => import('./pages/SignInPage').then(m => ({ default:
 const AdminPage = lazy(() => import('./pages/AdminPage').then(m => ({ default: m.AdminPage })))
 const AdminLayout = lazy(() => import('./pages/admin/AdminLayout').then(m => ({ default: m.AdminLayout })))
 const AdminPricingPage = lazy(() => import('./pages/admin/AdminPricingPage').then(m => ({ default: m.AdminPricingPage })))
+const AdminCouponsPage = lazy(() => import('./pages/admin/AdminCouponsPage').then(m => ({ default: m.AdminCouponsPage })))
 const AdminTemplesPage = lazy(() => import('./pages/admin/AdminTemplesPage').then(m => ({ default: m.AdminTemplesPage })))
 const AdminMarathonsPage = lazy(() => import('./pages/admin/AdminMarathonsPage').then(m => ({ default: m.AdminMarathonsPage })))
 const AdminMahaYagnasPage = lazy(() => import('./pages/admin/AdminMahaYagnasPage').then(m => ({ default: m.AdminMahaYagnasPage })))
@@ -105,6 +106,7 @@ createRoot(document.getElementById('root')!).render(
           <Route index element={<AdminPage />} />
           <Route element={<AdminLayout />}>
             <Route path="pricing" element={<AdminPricingPage />} />
+            <Route path="coupons" element={<AdminCouponsPage />} />
             <Route path="temples" element={<AdminTemplesPage />} />
             <Route path="marathons" element={<AdminMarathonsPage />} />
             <Route path="maha-yagnas" element={<AdminMahaYagnasPage />} />

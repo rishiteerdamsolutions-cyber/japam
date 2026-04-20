@@ -108,18 +108,177 @@ export async function verifyFirebaseUser(request) {
   }
 }
 
-/** Check if user has paid (unlocked). Uses unlockedUsers and users/{uid}/data/unlock (backwards compatibility). */
-export async function isUserUnlocked(db, uid) {
-  if (!uid) return false;
+/** One month of Pro access. 30 days is close enough to "one month" for billing purposes. */
+export const PRO_ACCESS_DURATION_MS = 30 * 24 * 60 * 60 * 1000;
+
+function toMs(value) {
+  if (value == null) return null;
+  if (typeof value === 'number' && Number.isFinite(value)) return value;
+  if (typeof value === 'string') {
+    const t = Date.parse(value);
+    return Number.isFinite(t) ? t : null;
+  }
+  if (typeof value === 'object' && typeof value.toMillis === 'function') {
+    try { return value.toMillis(); } catch { return null; }
+  }
+  return null;
+}
+
+/** Get unlock info with monthly expiry applied. Returns { hasPaid, isActive, unlockedAt, unlockExpiresAt }. */
+export async function getUserUnlockInfo(db, uid) {
+  if (!uid || !db) return { hasPaid: false, isActive: false, unlockedAt: null, unlockExpiresAt: null };
   try {
     const [unlockSnap, unlockedUsersSnap] = await Promise.all([
       db.doc(`users/${uid}/data/unlock`).get(),
       db.collection('unlockedUsers').doc(uid).get(),
     ]);
-    return Boolean((unlockSnap.exists && unlockSnap.data()?.levelsUnlocked) || unlockedUsersSnap.exists);
+    const unlockData = unlockSnap.exists ? unlockSnap.data() : null;
+    const unlockedUsersData = unlockedUsersSnap.exists ? unlockedUsersSnap.data() : null;
+    const hasPaid = Boolean(unlockData?.levelsUnlocked || unlockedUsersSnap.exists);
+    if (!hasPaid) {
+      return { hasPaid: false, isActive: false, unlockedAt: null, unlockExpiresAt: null };
+    }
+    const unlockedAtMs =
+      toMs(unlockData?.unlockedAt) ??
+      toMs(unlockedUsersData?.unlockedAt) ??
+      null;
+    const explicitExpiryMs =
+      toMs(unlockData?.unlockExpiresAt) ??
+      toMs(unlockedUsersData?.unlockExpiresAt) ??
+      null;
+    const expiryMs = explicitExpiryMs ?? (unlockedAtMs != null ? unlockedAtMs + PRO_ACCESS_DURATION_MS : null);
+    const isActive = expiryMs == null ? false : Date.now() < expiryMs;
+    return {
+      hasPaid,
+      isActive,
+      unlockedAt: unlockedAtMs != null ? new Date(unlockedAtMs).toISOString() : null,
+      unlockExpiresAt: expiryMs != null ? new Date(expiryMs).toISOString() : null,
+    };
   } catch {
-    return false;
+    return { hasPaid: false, isActive: false, unlockedAt: null, unlockExpiresAt: null };
   }
+}
+
+/** Check if user has active paid access (within 30-day window). */
+export async function isUserUnlocked(db, uid) {
+  const info = await getUserUnlockInfo(db, uid);
+  return info.isActive;
+}
+
+const COUPON_CODE_MAX_LEN = 32;
+
+export function normalizeCouponCode(raw) {
+  if (!raw || typeof raw !== 'string') return '';
+  return raw.trim().toUpperCase().replace(/\s+/g, '');
+}
+
+export function isValidCouponCodeFormat(code) {
+  if (!code || typeof code !== 'string') return false;
+  if (code.length < 3 || code.length > COUPON_CODE_MAX_LEN) return false;
+  return /^[A-Z0-9_-]+$/.test(code);
+}
+
+/** Default per-user redemption cap for a coupon. Admin can override (0/null = unlimited per user, but discouraged). */
+export const DEFAULT_COUPON_PER_USER_LIMIT = 1;
+
+/** Doc id for the per-user usage counter. Safe because coupon code is [A-Z0-9_-] and uid is [A-Za-z0-9]. */
+export function couponUserUsageId(code, uid) {
+  return `${code}__${uid}`;
+}
+
+/** Validate a coupon from Firestore. Returns { ok, coupon?, error? } where coupon is the normalized doc data. */
+export async function loadActiveCoupon(db, code) {
+  const normalized = normalizeCouponCode(code);
+  if (!isValidCouponCodeFormat(normalized)) {
+    return { ok: false, error: 'Invalid coupon code' };
+  }
+  try {
+    const snap = await db.collection('coupons').doc(normalized).get();
+    if (!snap.exists) return { ok: false, error: 'Coupon not found' };
+    const data = snap.data() || {};
+    const percent = Number(data.percentOff);
+    if (!Number.isFinite(percent) || percent < 1 || percent > 100) {
+      return { ok: false, error: 'Coupon is misconfigured' };
+    }
+    if (data.active === false) {
+      return { ok: false, error: 'Coupon is disabled' };
+    }
+    const expMs = toMs(data.expiresAt);
+    if (expMs != null && Date.now() > expMs) {
+      return { ok: false, error: 'Coupon has expired' };
+    }
+    const maxUses = typeof data.maxUses === 'number' ? data.maxUses : null;
+    const usedCount = typeof data.usedCount === 'number' ? data.usedCount : 0;
+    if (maxUses != null && usedCount >= maxUses) {
+      return { ok: false, error: 'Coupon usage limit reached' };
+    }
+    // perUserLimit: undefined (legacy docs) -> DEFAULT; 0 or null -> unlimited per user (admin opt-in).
+    let perUserLimit;
+    if (data.perUserLimit === null || data.perUserLimit === 0) {
+      perUserLimit = null; // unlimited per user (must be explicitly set)
+    } else if (typeof data.perUserLimit === 'number' && data.perUserLimit > 0) {
+      perUserLimit = Math.round(data.perUserLimit);
+    } else {
+      perUserLimit = DEFAULT_COUPON_PER_USER_LIMIT;
+    }
+    return {
+      ok: true,
+      coupon: {
+        code: normalized,
+        percentOff: Math.round(percent),
+        active: data.active !== false,
+        expiresAt: expMs != null ? new Date(expMs).toISOString() : null,
+        maxUses,
+        usedCount,
+        perUserLimit,
+        note: typeof data.note === 'string' ? data.note : '',
+      },
+    };
+  } catch (e) {
+    console.error('loadActiveCoupon', e?.message || e);
+    return { ok: false, error: 'Coupon lookup failed' };
+  }
+}
+
+/**
+ * Check if the given uid is allowed to use this coupon right now:
+ *  - Per-user redemption cap not exceeded.
+ *  - User does not already have active (non-expired) Pro access. Stacking coupons on active Pro is blocked
+ *    to prevent users from extending their subscription indefinitely with 100% coupons.
+ *
+ * Returns { ok, error?, userUsedCount }.
+ */
+export async function assertCouponUsableByUser(db, coupon, uid) {
+  if (!db || !coupon || !uid) return { ok: false, error: 'Invalid request' };
+  try {
+    const [usageSnap, unlockInfo] = await Promise.all([
+      db.collection('couponUserUsage').doc(couponUserUsageId(coupon.code, uid)).get(),
+      getUserUnlockInfo(db, uid),
+    ]);
+    if (unlockInfo.isActive) {
+      return { ok: false, error: 'You already have active Pro access — coupons can only be applied after your current access expires' };
+    }
+    const prev = usageSnap.exists ? usageSnap.data() : null;
+    const used = typeof prev?.count === 'number' ? prev.count : 0;
+    if (coupon.perUserLimit != null && used >= coupon.perUserLimit) {
+      return { ok: false, error: 'You have already used this coupon the maximum number of times' };
+    }
+    return { ok: true, userUsedCount: used };
+  } catch (e) {
+    console.error('assertCouponUsableByUser', e?.message || e);
+    return { ok: false, error: 'Coupon check failed' };
+  }
+}
+
+/** Compute discounted amount in paise given a base and a percent (1..100). Always >= 100 paise if non-zero. */
+export function applyCouponPercent(basePaise, percentOff) {
+  const base = Math.round(Number(basePaise));
+  const pct = Math.round(Number(percentOff));
+  if (!Number.isFinite(base) || base < 100) return base;
+  if (!Number.isFinite(pct) || pct < 1) return base;
+  if (pct >= 100) return 0;
+  const discounted = Math.round(base * (1 - pct / 100));
+  return Math.max(100, discounted);
 }
 
 const DEFAULT_DISPLAY_PRICE_PAISE = 9900; // ₹99 strikethrough

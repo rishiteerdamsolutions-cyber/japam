@@ -31,7 +31,7 @@ export function RefundCancellationPage() {
           <section>
             <h2 className="text-lg font-semibold text-amber-300 mb-3">2. Refund Policy</h2>
             <ul className="list-disc pl-5 space-y-2 text-sm">
-              <li><strong>Pro Unlock / Dakshina:</strong> All purchases are generally final. Refunds may be considered on a case-by-case basis if you contact us within 7 days of purchase with a valid reason (e.g., duplicate charge, technical failure preventing access).</li>
+              <li><strong>Pro Unlock / Dakshina:</strong> Each Pro payment grants 30 days of access to the unlocked levels. Payments are generally final. Refunds may be considered on a case-by-case basis if you contact us within 7 days of purchase with a valid reason (e.g., duplicate charge, technical failure preventing access).</li>
               <li><strong>Donations:</strong> Donations are voluntary and non-refundable.</li>
               <li>To request a refund, contact us at the details below. We will review your request and respond within 5–7 business days.</li>
             </ul>
@@ -40,7 +40,7 @@ export function RefundCancellationPage() {
           <section>
             <h2 className="text-lg font-semibold text-amber-300 mb-3">3. Cancellation</h2>
             <p className="text-sm">
-              There are no recurring subscriptions for the Pro unlock — it is a one-time payment. You may cancel or disable your account at any time through the app settings or by contacting us. Account cancellation does not entitle you to a refund for past purchases.
+              The Pro unlock is not auto-renewed. Each payment gives you 30 days of access; after that, you will be asked to pay again the next time you try to play a locked level if you wish to continue. You can stop paying at any time by simply choosing not to renew — no cancellation step is needed. You may also disable or delete your account through the app settings or by contacting us. Account cancellation does not entitle you to a refund for past purchases.
             </p>
           </section>
 

@@ -45,6 +45,8 @@
   },
   "activeUsers": {
     "yesterdaysAchievers": "Yesterday's achievers",
+    "noRecentAchievers": "no recent achievers yet",
+    "emptyMarqueeHint": "Players and their scores will be shown here.",
     "signInToReact": "Sign in to send ❤️ 👍 👏"
   },
   "game": {
@@ -287,6 +289,7 @@
     "bramhamgaaru": "Bramhamgaaru"
   },
   "powers": {
+    "dismissInfo": "Close",
     "namaskaram": "Namaskaram — clear 1 tile",
     "bomb": "Flower — clear all of one gem",
     "freeSwap": "Free swap",

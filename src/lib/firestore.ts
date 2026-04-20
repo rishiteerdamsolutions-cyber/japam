@@ -46,6 +46,9 @@ export interface UserUnlockData {
   tier: UserTier;
   isDonor: boolean;
   blocked?: boolean;
+  unlockedAt?: string | null;
+  unlockExpiresAt?: string | null;
+  hasPaidEver?: boolean;
 }
 
 /** Unlock (paid) status and tier. Logged-in: only backend API — same on all devices. */
@@ -57,11 +60,21 @@ export async function loadUserUnlock(_uid: string): Promise<UserUnlockData> {
     const res = await fetchWithRetry(url, { headers: { Authorization: `Bearer ${token}` } });
     if (res.status === 403) return { levelsUnlocked: false, tier: 'free', isDonor: false, blocked: true };
     if (res.ok) {
-      const data = (await res.json()) as { levelsUnlocked?: boolean; tier?: UserTier; isDonor?: boolean };
+      const data = (await res.json()) as {
+        levelsUnlocked?: boolean;
+        tier?: UserTier;
+        isDonor?: boolean;
+        unlockedAt?: string | null;
+        unlockExpiresAt?: string | null;
+        hasPaidEver?: boolean;
+      };
       return {
         levelsUnlocked: Boolean(data?.levelsUnlocked),
         tier: (data?.tier as UserTier) || (data?.levelsUnlocked ? 'pro' : 'free'),
         isDonor: Boolean(data?.isDonor),
+        unlockedAt: data?.unlockedAt ?? null,
+        unlockExpiresAt: data?.unlockExpiresAt ?? null,
+        hasPaidEver: Boolean(data?.hasPaidEver),
       };
     }
   } catch {

@@ -90,9 +90,28 @@ export function ActiveUsersStrip() {
   }
 
   if (visible.length === 0) {
+    const label = t('activeUsers.yesterdaysAchievers');
+    const emptyHint = t('activeUsers.emptyMarqueeHint', {
+      defaultValue: 'Players and their scores will be shown here.',
+    });
+    const emptyCopy = `${label} — ${t('activeUsers.noRecentAchievers', { defaultValue: 'no recent achievers yet' })}. ${emptyHint}`;
     return (
       <div className="w-full">
-        <div className="text-[10px] text-amber-200/60">{t('activeUsers.yesterdaysAchievers')} — no recent achievers yet</div>
+        <style>{`
+          @keyframes japam-marquee-empty {
+            0%   { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          .japam-marquee-empty-track {
+            animation: japam-marquee-empty 18s linear infinite;
+          }
+        `}</style>
+        <div className="w-full overflow-hidden rounded-md">
+          <div className="flex gap-12 w-max japam-marquee-empty-track text-[10px] text-amber-200/60 whitespace-nowrap py-1">
+            <span>{emptyCopy}</span>
+            <span aria-hidden>{emptyCopy}</span>
+          </div>
+        </div>
       </div>
     );
   }

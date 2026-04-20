@@ -9,6 +9,9 @@ interface UnlockState {
   tier: UserTier | null;
   isDonor: boolean | null;
   userBlocked: boolean;
+  unlockedAt: string | null;
+  unlockExpiresAt: string | null;
+  hasPaidEver: boolean;
   load: (userId?: string) => Promise<void>;
 }
 
@@ -17,10 +20,21 @@ export const useUnlockStore = create<UnlockState>((set) => ({
   tier: null,
   isDonor: null,
   userBlocked: false,
+  unlockedAt: null,
+  unlockExpiresAt: null,
+  hasPaidEver: false,
 
   load: async (userId?: string) => {
     if (!userId) {
-      set({ levelsUnlocked: false, tier: 'free', isDonor: false, userBlocked: false });
+      set({
+        levelsUnlocked: false,
+        tier: 'free',
+        isDonor: false,
+        userBlocked: false,
+        unlockedAt: null,
+        unlockExpiresAt: null,
+        hasPaidEver: false,
+      });
       return;
     }
     try {
@@ -29,9 +43,25 @@ export const useUnlockStore = create<UnlockState>((set) => ({
         set({ userBlocked: true });
         return;
       }
-      set({ levelsUnlocked: data.levelsUnlocked, tier: data.tier, isDonor: data.isDonor, userBlocked: false });
+      set({
+        levelsUnlocked: data.levelsUnlocked,
+        tier: data.tier,
+        isDonor: data.isDonor,
+        userBlocked: false,
+        unlockedAt: data.unlockedAt ?? null,
+        unlockExpiresAt: data.unlockExpiresAt ?? null,
+        hasPaidEver: Boolean(data.hasPaidEver),
+      });
     } catch {
-      set({ levelsUnlocked: false, tier: 'free', isDonor: false, userBlocked: false });
+      set({
+        levelsUnlocked: false,
+        tier: 'free',
+        isDonor: false,
+        userBlocked: false,
+        unlockedAt: null,
+        unlockExpiresAt: null,
+        hasPaidEver: false,
+      });
     }
   }
 }));

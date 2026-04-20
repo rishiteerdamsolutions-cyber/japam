@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import {
   STRIP_LEFT_POWER,
@@ -36,11 +37,74 @@ const ICON_INNER_SCALE = 2.7;
 const DOUBLE_TAP_MS = 340;
 const LONG_PRESS_MS = 560;
 
+export interface PowerInfoModalPayload {
+  title: string;
+  description: string;
+  earnLine?: string;
+  armHints: string;
+}
+
+function PowerInfoModal({ payload, onClose }: { payload: PowerInfoModalPayload; onClose: () => void }) {
+  const { t } = useTranslation();
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
+  const dismissLabel = t('powers.dismissInfo');
+
+  if (typeof document === 'undefined') return null;
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-6"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="japam-power-info-title"
+    >
+      <button
+        type="button"
+        onClick={onClose}
+        className="absolute inset-0 bg-black/50 backdrop-blur-[1px]"
+        aria-label={dismissLabel}
+      />
+      <div className="relative z-[1] w-full max-w-sm rounded-2xl border border-amber-500/50 bg-[#1a0f12]/95 shadow-2xl p-5 sm:p-6 text-left">
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute right-2.5 top-2.5 flex h-10 w-10 items-center justify-center rounded-full border border-amber-500/45 bg-black/50 text-amber-100 hover:bg-black/70 active:scale-95"
+          aria-label={dismissLabel}
+        >
+          <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+            <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" />
+          </svg>
+        </button>
+        <h2 id="japam-power-info-title" className="pr-11 text-lg font-semibold text-amber-300 leading-snug">
+          {payload.title}
+        </h2>
+        <p className="mt-3 text-sm leading-relaxed text-amber-100/95">{payload.description}</p>
+        {payload.earnLine ? (
+          <p className="mt-3 text-xs leading-relaxed text-amber-200/80">{payload.earnLine}</p>
+        ) : null}
+        {payload.armHints ? (
+          <p className="mt-4 border-t border-white/10 pt-3 text-xs leading-relaxed text-amber-200/85">{payload.armHints}</p>
+        ) : null}
+      </div>
+    </div>,
+    document.body,
+  );
+}
+
 function RoundPowerTile({
   iconSrc,
   count,
   isArmed,
   onArmCycle,
+  onOpenInfo,
   disabled,
   guestPreview,
   revealTitle,
@@ -53,6 +117,7 @@ function RoundPowerTile({
   count: number;
   isArmed: boolean;
   onArmCycle: () => void;
+  onOpenInfo: (payload: PowerInfoModalPayload) => void;
   disabled: boolean;
   guestPreview?: boolean;
   revealTitle: string;
@@ -62,13 +127,10 @@ function RoundPowerTile({
   disarmHint: string;
 }) {
   const { t } = useTranslation();
-  const [hoverOpen, setHoverOpen] = useState(false);
-  const [focusOpen, setFocusOpen] = useState(false);
-  const [touchRevealOpen, setTouchRevealOpen] = useState(false);
-  const touchRevealTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const singleTapTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastPointerUpRef = useRef(0);
   const lastTouchGestureRef = useRef(0);
+  const lastMouseClickForModalRef = useRef(0);
   const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const longPressFiredRef = useRef(false);
 
@@ -76,11 +138,42 @@ function RoundPowerTile({
 
   useEffect(() => {
     return () => {
-      if (touchRevealTimerRef.current) clearTimeout(touchRevealTimerRef.current);
       if (singleTapTimerRef.current) clearTimeout(singleTapTimerRef.current);
       if (longPressTimerRef.current) clearTimeout(longPressTimerRef.current);
     };
   }, []);
+
+  const buildInfoPayload = useCallback((): PowerInfoModalPayload => {
+    let description: string;
+    let earnLine: string | undefined;
+    if (isArmed) {
+      description = disarmHint;
+      earnLine = undefined;
+    } else if (disabled) {
+      description = revealDescription;
+      earnLine = earnDescription;
+    } else {
+      description = revealDescription;
+      earnLine = undefined;
+    }
+    const armHints =
+      !guestPreview && canArm
+        ? `${t('powers.doubleClickArm')} · ${t('powers.doubleTapArm')} · ${t('powers.longPressArm')}`
+        : guestPreview
+          ? t('game.guestPowersTileHint')
+          : '';
+    return { title: revealTitle, description, earnLine, armHints };
+  }, [
+    canArm,
+    disabled,
+    disarmHint,
+    earnDescription,
+    guestPreview,
+    isArmed,
+    revealDescription,
+    revealTitle,
+    t,
+  ]);
 
   const clearSingleTapTimer = () => {
     if (singleTapTimerRef.current) {
@@ -106,7 +199,6 @@ function RoundPowerTile({
       lastPointerUpRef.current = 0;
       clearSingleTapTimer();
       runArmCycle();
-      setTouchRevealOpen(false);
     }, LONG_PRESS_MS);
   };
 
@@ -132,7 +224,6 @@ function RoundPowerTile({
       clearSingleTapTimer();
       lastPointerUpRef.current = 0;
       if (canArm) runArmCycle();
-      setTouchRevealOpen(false);
       return;
     }
 
@@ -141,12 +232,7 @@ function RoundPowerTile({
     singleTapTimerRef.current = window.setTimeout(() => {
       singleTapTimerRef.current = null;
       lastPointerUpRef.current = 0;
-      setTouchRevealOpen((o) => !o);
-      if (touchRevealTimerRef.current) clearTimeout(touchRevealTimerRef.current);
-      touchRevealTimerRef.current = window.setTimeout(() => {
-        touchRevealTimerRef.current = null;
-        setTouchRevealOpen(false);
-      }, 3200);
+      onOpenInfo(buildInfoPayload());
     }, DOUBLE_TAP_MS);
   };
 
@@ -158,9 +244,10 @@ function RoundPowerTile({
   const handleDoubleClick = (e: React.MouseEvent) => {
     if (guestPreview) return;
     e.preventDefault();
+    clearSingleTapTimer();
+    lastMouseClickForModalRef.current = 0;
     if (!canArm) return;
     runArmCycle();
-    setTouchRevealOpen(false);
   };
 
   const handleClick = (e: React.MouseEvent) => {
@@ -170,47 +257,44 @@ function RoundPowerTile({
     }
     if (Date.now() - lastTouchGestureRef.current < 500) {
       e.preventDefault();
+      return;
     }
+    const now = Date.now();
+    if (lastMouseClickForModalRef.current > 0 && now - lastMouseClickForModalRef.current < DOUBLE_TAP_MS) {
+      clearSingleTapTimer();
+      lastMouseClickForModalRef.current = 0;
+      return;
+    }
+    lastMouseClickForModalRef.current = now;
+    clearSingleTapTimer();
+    singleTapTimerRef.current = window.setTimeout(() => {
+      singleTapTimerRef.current = null;
+      lastMouseClickForModalRef.current = 0;
+      onOpenInfo(buildInfoPayload());
+    }, DOUBLE_TAP_MS);
   };
 
-  const showFloatingPanel = hoverOpen || focusOpen || touchRevealOpen;
-  const panelBody = isArmed ? disarmHint : disabled && !isArmed ? earnDescription : revealDescription;
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    e.preventDefault();
+    onOpenInfo(buildInfoPayload());
+  };
 
   return (
     <div
       className="relative flex flex-col items-center touch-manipulation"
-      onMouseEnter={() => setHoverOpen(true)}
-      onMouseLeave={() => setHoverOpen(false)}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
       onPointerCancel={handlePointerCancel}
     >
-      {showFloatingPanel && (
-        <span
-          role="tooltip"
-          className="pointer-events-none absolute bottom-full left-1/2 z-[60] mb-1 max-w-[12.5rem] -translate-x-1/2 rounded-lg border border-amber-500/45 bg-black/92 px-2 py-1.5 text-left text-[10px] font-medium leading-snug text-amber-100 shadow-lg sm:max-w-[14rem] sm:text-xs"
-        >
-          <span className="block text-amber-300/95">{revealTitle}</span>
-          <span className="mt-0.5 block font-normal text-amber-100/90">{panelBody}</span>
-          {!guestPreview && canArm && (
-            <span className="mt-1 block border-t border-white/10 pt-1 text-[9px] text-amber-200/75 sm:text-[10px]">
-              {t('powers.doubleClickArm')} · {t('powers.doubleTapArm')} · {t('powers.longPressArm')}
-            </span>
-          )}
-          {guestPreview && (
-            <span className="mt-1 block text-[9px] text-amber-200/70">{t('game.guestPowersTileHint')}</span>
-          )}
-        </span>
-      )}
       <button
         type="button"
         onClick={handleClick}
         onDoubleClick={handleDoubleClick}
+        onKeyDown={handleKeyDown}
         disabled={false}
         aria-label={ariaLabel}
-        aria-expanded={showFloatingPanel}
-        onFocus={() => setFocusOpen(true)}
-        onBlur={() => setFocusOpen(false)}
+        aria-haspopup="dialog"
         className={`
         relative h-12 w-12 min-h-12 min-w-12 sm:h-[3.25rem] sm:w-[3.25rem] sm:min-h-[3.25rem] sm:min-w-[3.25rem] rounded-full overflow-hidden flex-shrink-0
         border-2 transition-transform shadow-md
@@ -246,6 +330,8 @@ export interface GamePowersScrollStripProps {
 
 export function GamePowersScrollStrip({ isGuest = false, onGuestPowerTap }: GamePowersScrollStripProps = {}) {
   const { t } = useTranslation();
+  const [powerInfoModal, setPowerInfoModal] = useState<PowerInfoModalPayload | null>(null);
+  const openPowerInfo = useCallback((payload: PowerInfoModalPayload) => setPowerInfoModal(payload), []);
   const entries = usePowersInventoryStore((s) => s.entries);
   const mode = useGameStore((s) => s.mode);
   const levelIndex = useGameStore((s) => s.levelIndex);
@@ -337,6 +423,7 @@ export function GamePowersScrollStrip({ isGuest = false, onGuestPowerTap }: Game
         count={count}
         isArmed={armed}
         onArmCycle={() => onPowerArmCycle(id)}
+        onOpenInfo={openPowerInfo}
         disabled={isGuest ? false : count < 1 && !armed}
         guestPreview={isGuest}
       />
@@ -344,11 +431,15 @@ export function GamePowersScrollStrip({ isGuest = false, onGuestPowerTap }: Game
   };
 
   return (
-    <div
-      className="w-full"
-      aria-label={t('game.powersStripRegion')}
-      aria-describedby="powers-strip-interaction-hint"
-    >
+    <>
+      {powerInfoModal != null ? (
+        <PowerInfoModal payload={powerInfoModal} onClose={() => setPowerInfoModal(null)} />
+      ) : null}
+      <div
+        className="w-full"
+        aria-label={t('game.powersStripRegion')}
+        aria-describedby="powers-strip-interaction-hint"
+      >
       <span id="powers-strip-interaction-hint" className="sr-only">
         {t('game.powersInteractionHint')}
       </span>
@@ -396,6 +487,7 @@ export function GamePowersScrollStrip({ isGuest = false, onGuestPowerTap }: Game
                       count={slot.count}
                       isArmed={armed}
                       onArmCycle={() => onPowerArmCycle(id)}
+                      onOpenInfo={openPowerInfo}
                       disabled={isGuest ? false : slot.count < 1 && !armed}
                       guestPreview={isGuest}
                     />
@@ -415,5 +507,6 @@ export function GamePowersScrollStrip({ isGuest = false, onGuestPowerTap }: Game
         </div>
       </div>
     </div>
+    </>
   );
 }

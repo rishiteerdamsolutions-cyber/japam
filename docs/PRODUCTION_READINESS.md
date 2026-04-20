@@ -318,3 +318,4 @@ Both require a valid Firebase ID token.
 - [ ] Sentry project set up with `SENTRY_DSN` in Vercel env vars
 - [ ] Firebase Console → Usage and billing alerts enabled
 - [ ] GitHub Actions CI passing on all PRs (Quality gate active)
+- [ ] Optional load tests: install [k6](https://grafana.com/docs/k6/latest/), run `npm run test:k6` (see [`k6/README.md`](../k6/README.md)) or trigger **Actions → k6 load test** manually

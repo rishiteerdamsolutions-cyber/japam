@@ -110,6 +110,8 @@ export async function verifyFirebaseUser(request) {
 
 /** One month of Pro access. 30 days is close enough to "one month" for billing purposes. */
 export const PRO_ACCESS_DURATION_MS = 30 * 24 * 60 * 60 * 1000;
+export const PREMIUM_BASE_AMOUNT_PAISE = 600000; // ₹6000 minimum to start premium window
+export const PREMIUM_ACCESS_DURATION_MS = 365 * 24 * 60 * 60 * 1000; // 1 year (fixed)
 
 function toMs(value) {
   if (value == null) return null;
@@ -159,6 +161,35 @@ export async function getUserUnlockInfo(db, uid) {
   }
 }
 
+export function premiumYearsFromTotalPaise(totalPaise) {
+  const total = typeof totalPaise === 'number' && Number.isFinite(totalPaise) ? totalPaise : 0;
+  if (total < PREMIUM_BASE_AMOUNT_PAISE) return 0;
+  // ₹6000 => 1y, ₹12000 => 2y, ₹24000 => 3y, ... (doubling thresholds)
+  const ratio = total / PREMIUM_BASE_AMOUNT_PAISE;
+  return 1 + Math.floor(Math.log2(ratio));
+}
+
+export function getPremiumExpiryMsFromDonorData(donorData) {
+  if (!donorData) return null;
+  if (donorData.lifetimeDonor === true) return Number.POSITIVE_INFINITY;
+  const explicit = toMs(donorData.premiumExpiresAt);
+  if (explicit != null) return explicit;
+  // Backwards compatibility: older donor docs only stored amount + donatedAt.
+  const total = typeof donorData.totalAmountPaise === 'number' ? donorData.totalAmountPaise : donorData.amount;
+  const years = premiumYearsFromTotalPaise(typeof total === 'number' ? total : 0);
+  if (!years) return null;
+  const startedAt = toMs(donorData.premiumStartedAt) ?? toMs(donorData.donatedAt) ?? null;
+  if (startedAt == null) return null;
+  return startedAt + years * PREMIUM_ACCESS_DURATION_MS;
+}
+
+export function isPremiumActiveFromDonorData(donorData) {
+  const exp = getPremiumExpiryMsFromDonorData(donorData);
+  if (exp == null) return false;
+  if (exp == Number.POSITIVE_INFINITY) return true;
+  return Date.now() < exp;
+}
+
 /** Check if user has active paid access (within 30-day window). */
 export async function isUserUnlocked(db, uid) {
   if (!uid || !db) return false;
@@ -166,8 +197,8 @@ export async function isUserUnlocked(db, uid) {
     getUserUnlockInfo(db, uid),
     db.collection('donors').doc(uid).get(),
   ]);
-  // Premium donors should retain access even after the 30-day Pro window ends.
-  return info.isActive || donorSnap.exists;
+  const donorData = donorSnap.exists ? (donorSnap.data() || {}) : null;
+  return info.isActive || isPremiumActiveFromDonorData(donorData);
 }
 
 const COUPON_CODE_MAX_LEN = 32;

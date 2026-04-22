@@ -1,5 +1,15 @@
 import admin from 'firebase-admin';
-import { getDb, jsonResponse, verifyFirebaseUser, logAudit, jsonInternalServerError, getUserUnlockInfo } from './_lib.js';
+import {
+  getDb,
+  jsonResponse,
+  verifyFirebaseUser,
+  logAudit,
+  jsonInternalServerError,
+  getUserUnlockInfo,
+  PREMIUM_BASE_AMOUNT_PAISE,
+  PREMIUM_ACCESS_DURATION_MS,
+  premiumYearsFromTotalPaise,
+} from './_lib.js';
 
 const CASHFREE_APP_ID = process.env.CASHFREE_APP_ID || process.env.CASHFREE_CLIENT_ID;
 const CASHFREE_SECRET = process.env.CASHFREE_SECRET || process.env.CASHFREE_CLIENT_SECRET;
@@ -62,9 +72,42 @@ export async function POST(request) {
       }
     }
 
+    const donorRef = db.collection('donors').doc(uid);
+    const nowMs = Date.now();
+    const nowIso = new Date(nowMs).toISOString();
     const lifetimeDonor = amountPaise >= LIFETIME_DONOR_PAISE;
-    await db.collection('donors').doc(uid).set(
-      { uid, displayName: String(name).trim() || 'Anonymous', amount: amountPaise, lifetimeDonor, donatedAt: new Date().toISOString(), orderId: order_id, paymentId: order_id },
+
+    // Premium window derives from total donations (₹6000 => 1y, ₹12000 => 2y, ₹24000 => 3y...).
+    const donorSnap = await donorRef.get();
+    const prev = donorSnap.exists ? (donorSnap.data() || {}) : {};
+    const prevTotal = typeof prev.totalAmountPaise === 'number'
+      ? prev.totalAmountPaise
+      : (typeof prev.amount === 'number' ? prev.amount : 0);
+    const newTotal = Math.max(0, Math.round(prevTotal)) + Math.max(0, Math.round(amountPaise));
+
+    const prevStartedAtMs = typeof prev.premiumStartedAt === 'string' ? Date.parse(prev.premiumStartedAt) : NaN;
+    const prevExpiresAtMs = typeof prev.premiumExpiresAt === 'string' ? Date.parse(prev.premiumExpiresAt) : NaN;
+    const hadActivePremium = Number.isFinite(prevExpiresAtMs) && nowMs < prevExpiresAtMs;
+    const premiumStartedAtMs = hadActivePremium && Number.isFinite(prevStartedAtMs) ? prevStartedAtMs : nowMs;
+
+    const premiumYears = premiumYearsFromTotalPaise(newTotal);
+    const premiumExpiresAtMs = premiumYears ? premiumStartedAtMs + premiumYears * PREMIUM_ACCESS_DURATION_MS : null;
+
+    await donorRef.set(
+      {
+        uid,
+        displayName: String(name).trim() || 'Anonymous',
+        totalAmountPaise: newTotal,
+        amount: newTotal, // legacy field used by some admin views
+        lifetimeDonor: lifetimeDonor || prev.lifetimeDonor === true,
+        donatedAt: nowIso,
+        orderId: order_id,
+        paymentId: order_id,
+        premiumStartedAt: premiumYears ? new Date(premiumStartedAtMs).toISOString() : null,
+        premiumExpiresAt: premiumExpiresAtMs ? new Date(premiumExpiresAtMs).toISOString() : null,
+        premiumYears: premiumYears || null,
+        premiumEligible: newTotal >= PREMIUM_BASE_AMOUNT_PAISE,
+      },
       { merge: true }
     );
 

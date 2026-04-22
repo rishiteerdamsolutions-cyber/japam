@@ -1,4 +1,12 @@
-import { getDb, jsonResponse, verifyFirebaseUser, jsonInternalServerError, getUserUnlockInfo } from '../_lib.js';
+import {
+  getDb,
+  jsonResponse,
+  verifyFirebaseUser,
+  jsonInternalServerError,
+  getUserUnlockInfo,
+  isPremiumActiveFromDonorData,
+  getPremiumExpiryMsFromDonorData,
+} from '../_lib.js';
 
 /** GET /api/user/unlock - Unlock status and tier for current user (Firebase ID token required) */
 export async function GET(request) {
@@ -18,16 +26,22 @@ export async function GET(request) {
       await db.doc(`users/${uid}/data/unlock`).set({ levelsUnlocked: true }, { merge: true });
     }
 
-    const isDonor = donorSnap.exists;
-    const levelsUnlocked = info.isActive || isDonor;
-    const tier = isDonor ? 'premium' : levelsUnlocked ? 'pro' : 'free';
+    const donorData = donorSnap.exists ? (donorSnap.data() || {}) : null;
+    const premiumActive = isPremiumActiveFromDonorData(donorData);
+    const levelsUnlocked = info.isActive || premiumActive;
+    const tier = premiumActive ? 'premium' : info.isActive ? 'pro' : 'free';
     return jsonResponse({
       levelsUnlocked,
-      isDonor,
+      isDonor: premiumActive,
       tier,
       unlockedAt: info.unlockedAt,
-      // Premium is lifetime; expiry only applies to monthly Pro.
-      unlockExpiresAt: isDonor ? null : info.unlockExpiresAt,
+      // Client uses unlockExpiresAt to gate UI. For premium: show premium expiry. For pro: monthly expiry.
+      unlockExpiresAt: premiumActive
+        ? (() => {
+            const ms = getPremiumExpiryMsFromDonorData(donorData);
+            return ms && ms !== Number.POSITIVE_INFINITY ? new Date(ms).toISOString() : null;
+          })()
+        : info.unlockExpiresAt,
       hasPaidEver: info.hasPaid,
     }, 200);
   } catch (e) {

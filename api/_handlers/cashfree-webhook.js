@@ -39,6 +39,10 @@ import {
   logAudit,
   PRO_ACCESS_DURATION_MS,
   couponUserUsageId,
+  getUserUnlockInfo,
+  PREMIUM_BASE_AMOUNT_PAISE,
+  PREMIUM_ACCESS_DURATION_MS,
+  premiumYearsFromTotalPaise,
 } from './_lib.js';
 
 const CASHFREE_WEBHOOK_SECRET =
@@ -142,11 +146,10 @@ async function handleUnlockPaid(db, orderId, uid, nowIso, orderData) {
 }
 
 async function handleDonationPaid(db, orderId, uid, nowIso, amountPaise) {
-  // Mirror verify-donate.js. Donations require a Pro unlock already to exist.
-  const unlockedSnap = await db.collection('unlockedUsers').doc(uid).get();
-  if (!unlockedSnap.exists) {
-    // The web flow requires Pro to donate, so this is unexpected. Log and skip.
-    await logAudit('cashfree_webhook_donation_without_pro', { uid, orderId });
+  // Mirror verify-donate.js. Donations require *active monthly Pro* at donation time.
+  const unlockInfo = await getUserUnlockInfo(db, uid);
+  if (!unlockInfo.isActive) {
+    await logAudit('cashfree_webhook_donation_without_active_pro', { uid, orderId });
     return;
   }
   let name = '';
@@ -156,16 +159,38 @@ async function handleDonationPaid(db, orderId, uid, nowIso, amountPaise) {
   } catch {
     name = uid.slice(0, 12);
   }
+  const donorRef = db.collection('donors').doc(uid);
+  const nowMs = Date.now();
   const lifetimeDonor = amountPaise >= LIFETIME_DONOR_PAISE;
-  await db.collection('donors').doc(uid).set(
+  const donorSnap = await donorRef.get();
+  const prev = donorSnap.exists ? (donorSnap.data() || {}) : {};
+  const prevTotal = typeof prev.totalAmountPaise === 'number'
+    ? prev.totalAmountPaise
+    : (typeof prev.amount === 'number' ? prev.amount : 0);
+  const newTotal = Math.max(0, Math.round(prevTotal)) + Math.max(0, Math.round(amountPaise));
+
+  const prevStartedAtMs = typeof prev.premiumStartedAt === 'string' ? Date.parse(prev.premiumStartedAt) : NaN;
+  const prevExpiresAtMs = typeof prev.premiumExpiresAt === 'string' ? Date.parse(prev.premiumExpiresAt) : NaN;
+  const hadActivePremium = Number.isFinite(prevExpiresAtMs) && nowMs < prevExpiresAtMs;
+  const premiumStartedAtMs = hadActivePremium && Number.isFinite(prevStartedAtMs) ? prevStartedAtMs : nowMs;
+
+  const premiumYears = premiumYearsFromTotalPaise(newTotal);
+  const premiumExpiresAtMs = premiumYears ? premiumStartedAtMs + premiumYears * PREMIUM_ACCESS_DURATION_MS : null;
+
+  await donorRef.set(
     {
       uid,
       displayName: String(name).trim() || 'Anonymous',
-      amount: amountPaise,
-      lifetimeDonor,
+      totalAmountPaise: newTotal,
+      amount: newTotal,
+      lifetimeDonor: lifetimeDonor || prev.lifetimeDonor === true,
       donatedAt: nowIso,
       orderId,
       paymentId: orderId,
+      premiumStartedAt: premiumYears ? new Date(premiumStartedAtMs).toISOString() : null,
+      premiumExpiresAt: premiumExpiresAtMs ? new Date(premiumExpiresAtMs).toISOString() : null,
+      premiumYears: premiumYears || null,
+      premiumEligible: newTotal >= PREMIUM_BASE_AMOUNT_PAISE,
     },
     { merge: true },
   );

@@ -122,7 +122,7 @@ export async function POST(request) {
         activityByUid = new Map();
       }
 
-      // Premium = present in donors collection.
+      // Premium = donor with active premium window (or lifetime donor).
       let donorByUid = new Map();
       try {
         const refs = unlocked.map((u) => db.collection('donors').doc(u.uid));
@@ -137,7 +137,9 @@ export async function POST(request) {
           const donor = donorByUid.get(u.uid) || null;
           const donationAmountPaise = donor && typeof donor.amount === 'number' ? donor.amount : null;
           const lifetimeDonor = donor ? donor.lifetimeDonor === true : false;
-          const tier = donor ? 'premium' : 'pro';
+          const premiumExpiresAt = donor && typeof donor.premiumExpiresAt === 'string' ? Date.parse(donor.premiumExpiresAt) : NaN;
+          const premiumActive = lifetimeDonor || (Number.isFinite(premiumExpiresAt) && Date.now() < premiumExpiresAt);
+          const tier = premiumActive ? 'premium' : 'pro';
           return {
             uid: u.uid,
             email: u.email,
@@ -146,6 +148,7 @@ export async function POST(request) {
             isPremium: tier === 'premium',
             donationAmountPaise,
             lifetimeDonor,
+            premiumExpiresAt: premiumActive && Number.isFinite(premiumExpiresAt) ? new Date(premiumExpiresAt).toISOString() : null,
             isBlocked: blockedSet.has(u.uid),
             lastActiveAt: activityByUid.get(u.uid) || null,
           };

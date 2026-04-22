@@ -13,6 +13,7 @@ import { useAuthStore } from '../../store/authStore';
 import { useUnlockStore } from '../../store/unlockStore';
 import type { GameMode } from '../../store/gameStore';
 import { useProfileStore } from '../../store/profileStore';
+import { getProfileRingFlags } from '../../lib/membershipDisplay';
 
 function GearIcon() {
   return (
@@ -49,6 +50,9 @@ export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
   const navigate = useNavigate();
   const { user, loading, signOut } = useAuthStore();
   const tier = useUnlockStore((s) => s.tier);
+  const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
+  const unlockExpiresAt = useUnlockStore((s) => s.unlockExpiresAt);
+  const isDonor = useUnlockStore((s) => s.isDonor);
   const [showDonate, setShowDonate] = useState(false);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
   const [showIstaDevathaGrid, setShowIstaDevathaGrid] = useState(false);
@@ -63,8 +67,12 @@ export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
   const profileName = useProfileStore((s) => s.displayName);
   const fallbackName = user?.displayName || (user?.email ? user.email.split('@')[0] : null);
   const displayName = profileName || fallbackName || t('menu.signedIn');
-  const isPro = tier === 'pro';
-  const isPremium = tier === 'premium';
+  const { showProRing: isPro, showPremiumRing: isPremium } = getProfileRingFlags({
+    tier,
+    levelsUnlocked,
+    unlockExpiresAt,
+    isDonor,
+  });
   const initial = (displayName && displayName.charAt(0).toUpperCase()) || '?';
 
   return (

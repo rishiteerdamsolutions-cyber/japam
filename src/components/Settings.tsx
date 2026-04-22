@@ -7,6 +7,7 @@ import { useSettingsStore } from '../store/settingsStore';
 import { useAuthStore } from '../store/authStore';
 import { useProfileStore } from '../store/profileStore';
 import { useUnlockStore } from '../store/unlockStore';
+import { hasActivePaidAccess } from '../lib/membershipDisplay';
 import { GoogleSignIn } from './auth/GoogleSignIn';
 import { DonateThankYouBox } from './donation/DonateThankYouBox';
 import { AppHeader } from './layout/AppHeader';
@@ -139,6 +140,8 @@ export function Settings({ onBack }: SettingsProps) {
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
   const tier = useUnlockStore((s) => s.tier);
+  const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
+  const unlockExpiresAt = useUnlockStore((s) => s.unlockExpiresAt);
   const { backgroundMusicEnabled, backgroundMusicVolume, load, setBackgroundMusic, setBackgroundMusicVolume } = useSettingsStore();
   const { displayName, setDisplayName } = useProfileStore();
   const [localName, setLocalName] = useState(displayName ?? '');
@@ -455,7 +458,7 @@ export function Settings({ onBack }: SettingsProps) {
             </div>
           </SettingsCard>
 
-          {(tier === 'pro' || tier === 'premium') ? (
+          {(tier === 'pro' || tier === 'premium') && hasActivePaidAccess(levelsUnlocked, unlockExpiresAt) ? (
             <a
               href="/apavarga"
               className="rounded-2xl bg-black/20 border border-white/10 p-4 flex items-center gap-4 hover:bg-white/5 transition-colors no-underline"

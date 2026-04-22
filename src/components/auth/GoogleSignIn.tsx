@@ -3,7 +3,7 @@ import { useAuthStore } from '../../store/authStore';
 import { isFirebaseConfigured } from '../../lib/firebase';
 
 export function GoogleSignIn() {
-  const { user, loading, error, signInWithGoogle, signOut } = useAuthStore();
+  const { user, loading, signInPending, error, signInWithGoogle, signOut } = useAuthStore();
 
   if (!isFirebaseConfigured) return null;
 
@@ -42,8 +42,9 @@ export function GoogleSignIn() {
         type="button"
         aria-label="Sign in with Google"
         whileTap={{ scale: 0.98 }}
+        disabled={signInPending}
         onClick={() => signInWithGoogle()}
-        className="flex items-center justify-center gap-2 w-full max-w-[280px] py-3 px-4 rounded-xl bg-white text-gray-800 font-medium text-sm shadow-md hover:bg-gray-50"
+        className="flex items-center justify-center gap-2 w-full max-w-[280px] py-3 px-4 rounded-xl bg-white text-gray-800 font-medium text-sm shadow-md hover:bg-gray-50 disabled:opacity-70 disabled:cursor-not-allowed"
       >
         <svg className="w-5 h-5" viewBox="0 0 24 24">
           <path
@@ -63,7 +64,7 @@ export function GoogleSignIn() {
             d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
           />
         </svg>
-        Sign in with Google
+        {signInPending ? 'Opening Google…' : 'Sign in with Google'}
       </motion.button>
       {error && (
         <p className="text-red-400 text-xs text-center">{error}</p>

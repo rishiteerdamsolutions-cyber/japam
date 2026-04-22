@@ -13,6 +13,7 @@ import { auth, googleProvider, isFirebaseConfigured } from '../lib/firebase';
 interface AuthState {
   user: User | null;
   loading: boolean;
+  signInPending: boolean;
   error: string | null;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
@@ -22,21 +23,41 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   loading: true,
+  signInPending: false,
   error: null,
 
   signInWithGoogle: async () => {
     if (!isFirebaseConfigured) return;
+    let shouldResetPending = false;
+    let isFallbackRedirect = false;
+    set((state) => {
+      if (state.signInPending) return state;
+      shouldResetPending = true;
+      return { signInPending: true, error: null };
+    });
+    if (!shouldResetPending) return;
     set({ error: null });
     try {
       await signInWithPopup(auth, googleProvider);
     } catch (err) {
       const authErr = err as AuthError;
+      if (authErr?.code === 'auth/cancelled-popup-request') {
+        return;
+      }
+      if (authErr?.code === 'auth/popup-closed-by-user') {
+        return;
+      }
       if (authErr?.code === 'auth/popup-blocked') {
+        isFallbackRedirect = true;
         await signInWithRedirect(auth, googleProvider);
         return;
       }
       const msg = err instanceof Error ? err.message : 'Sign-in failed';
       set({ error: msg });
+    } finally {
+      if (shouldResetPending && !isFallbackRedirect) {
+        set({ signInPending: false });
+      }
     }
   },
 

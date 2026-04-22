@@ -2,7 +2,7 @@
 import { useTranslation } from 'react-i18next';
 import { useLivesStore } from '../../store/livesStore';
 import { useAuthStore } from '../../store/authStore';
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 
 const MAX_LIVES = 5;
 
@@ -67,12 +67,20 @@ export function LivesDisplay({ onClick, compact = true, className = '', unlimite
   const lives = useLivesStore((s) => s.lives);
   const nextRefillAt = useLivesStore((s) => s.nextRefillAt);
   const load = useLivesStore((s) => s.load);
+  const [nowMs, setNowMs] = useState(() => Date.now());
 
   const getIdToken = useCallback(async () => (user ? user.getIdToken() : null), [user]);
 
   useEffect(() => {
     if (!unlimited && user?.uid) load(getIdToken);
   }, [unlimited, user?.uid, load, getIdToken]);
+
+  useEffect(() => {
+    if (!user?.uid || unlimited) return;
+    // Update at most once per minute; used for "next life in Xh" display.
+    const t = setInterval(() => setNowMs(Date.now()), 60_000);
+    return () => clearInterval(t);
+  }, [user?.uid, unlimited]);
 
   if (!user?.uid) return null;
 
@@ -101,7 +109,7 @@ export function LivesDisplay({ onClick, compact = true, className = '', unlimite
   if (lives <= 0) return null;
 
   const isFull = lives >= MAX_LIVES;
-  const refillIn = nextRefillAt ? Math.max(0, Math.ceil((nextRefillAt - Date.now()) / (60 * 60 * 1000))) : 0;
+  const refillIn = nextRefillAt ? Math.max(0, Math.ceil((nextRefillAt - nowMs) / (60 * 60 * 1000))) : 0;
   const statusText = isFull ? t('game.livesFull', 'Full') : (refillIn > 0 ? t('game.nextLifeIn', { hours: refillIn }) : '');
 
   return (

@@ -528,7 +528,7 @@ export function GameScreen({
         setLastPausedGame(null);
       }
     }
-  }, [status, user?.uid, getPausedKey, yagnaId, marathonId, flushJapas, occasionKind]);
+  }, [status, user, getPausedKey, yagnaId, marathonId, flushJapas, occasionKind]);
 
   useEffect(() => {
     if (status !== 'won' || occasionKind !== 'birthday' || !user?.uid || occasionRecordSaved) return;
@@ -602,7 +602,7 @@ export function GameScreen({
       if (user?.uid && (yagnaId || marathonId)) await flushJapas();
       onBack();
     }
-  }, [savePausedState, user?.uid, user, onBack, flushJapas, yagnaId, marathonId]);
+  }, [savePausedState, user, onBack, flushJapas, yagnaId, marathonId]);
 
   const handleResumeCouple = useCallback(async () => {
     if (!anniversarySessionId || !user?.uid || !isFirebaseConfigured || !firestore) return;
@@ -611,7 +611,7 @@ export function GameScreen({
     const r = await resumeAnniversarySession(firestore, anniversarySessionId);
     setPauseSaving(false);
     if (!r.ok) setPauseError(r.error);
-  }, [anniversarySessionId, user?.uid, firestore]);
+  }, [anniversarySessionId, user]);
 
   // Both Back and Pause save then exit — retain japa count and allow resume.
   const handleBack = useCallback(() => {

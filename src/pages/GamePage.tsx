@@ -137,7 +137,7 @@ export function GamePage() {
       if (prev.trim()) return prev;
       return user.displayName ?? (user.email?.split('@')[0] ?? '');
     });
-  }, [needPlayName, user?.uid, user?.displayName, user?.email]);
+  }, [needPlayName, user]);
 
   useEffect(() => {
     loadLevelsConfig();
@@ -151,7 +151,7 @@ export function GamePage() {
     if (userForLives?.uid && !isGuest && !isMarathon) {
       loadLives(() => userForLives.getIdToken());
     }
-  }, [userForLives?.uid, isGuest, isMarathon, loadLives]);
+  }, [userForLives, isGuest, isMarathon, loadLives]);
 
   // Reload lives when user returns to tab (e.g. after midnight refill)
   useEffect(() => {
@@ -163,7 +163,7 @@ export function GamePage() {
     };
     document.addEventListener('visibilitychange', onVisibilityChange);
     return () => document.removeEventListener('visibilitychange', onVisibilityChange);
-  }, [userForLives?.uid, isGuest, isMarathon, loadLives]);
+  }, [userForLives, isGuest, isMarathon, loadLives]);
 
   const expectedKey = isMarathon
     ? (yagnaId ? `japam-paused-yagna-${yagnaId}` : `japam-paused-marathon-${marathonId}`)
@@ -241,7 +241,7 @@ export function GamePage() {
     };
     load();
     return () => { cancelled = true; };
-  }, [mode, levelIndex, isMarathon, marathonId, yagnaId, expectedKey, isLocked, paywallPending, user?.uid, authLoading, occasionKind]);
+  }, [mode, levelIndex, isMarathon, marathonId, yagnaId, expectedKey, isLocked, paywallPending, user, authLoading, occasionKind, isGuest]);
 
   const handleResume = () => {
     if (resumePending) {

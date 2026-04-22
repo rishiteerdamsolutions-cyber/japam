@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { getStoredAdminToken } from '../../lib/adminAuth';
 
 const API_BASE = import.meta.env.VITE_API_URL ?? '';
@@ -52,7 +52,7 @@ export function AdminCouponsPage() {
   const [saving, setSaving] = useState(false);
   const [editingCode, setEditingCode] = useState<string | null>(null);
 
-  const load = async () => {
+  const load = useCallback(async () => {
     if (!token) {
       setLoading(false);
       return;
@@ -74,11 +74,11 @@ export function AdminCouponsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
 
   useEffect(() => {
     load();
-  }, []);
+  }, [load]);
 
   const resetForm = () => {
     setForm({ code: '', percentOff: '10', active: true, expiresAt: '', maxUses: '', perUserLimit: '1', note: '' });

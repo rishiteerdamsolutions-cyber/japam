@@ -45,7 +45,7 @@ export function StatusViewer({ statuses, authorLabel, onClose, onReply }: Status
       }
     }, 50);
     return () => clearInterval(t);
-  }, [index, current?.id, hasNext, onClose]);
+  }, [current, hasNext, onClose]);
 
   if (!current) return null;
 

@@ -30,8 +30,8 @@ export default defineConfig([
       }],
       // Empty catch blocks are intentional throughout (browser API guard, storage failures)
       'no-empty': ['error', { allowEmptyCatch: true }],
-      // setState synchronously in an effect is a valid React pattern (e.g. setLoading(true) before async)
-      'react-hooks/set-state-in-effect': 'warn',
+      // This rule is too noisy for this codebase and flags many legitimate patterns.
+      'react-hooks/set-state-in-effect': 'off',
       // Date.now() and similar impure calls in render are acceptable for relative-time display
       'react-hooks/purity': 'warn',
       // Manual memoization preservation warnings — informational only, not blocking

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { DEITIES } from '../../data/deities';
 
 const API_BASE = import.meta.env.VITE_API_URL ?? '';
@@ -65,7 +65,7 @@ export function AdminMahaYagnasList({ adminToken, onUnauthorized }: AdminMahaYag
   const [editSaving, setEditSaving] = useState(false);
   const [editError, setEditError] = useState<string | null>(null);
 
-  const loadYagnas = () => {
+  const loadYagnas = useCallback(() => {
     if (!adminToken) return;
     setLoading(true);
     setError(null);
@@ -94,7 +94,7 @@ export function AdminMahaYagnasList({ adminToken, onUnauthorized }: AdminMahaYag
         setYagnas([]);
       })
       .finally(() => setLoading(false));
-  };
+  }, [adminToken, onUnauthorized]);
 
   const loadTemples = () => {
     if (!adminToken) return;
@@ -119,7 +119,7 @@ export function AdminMahaYagnasList({ adminToken, onUnauthorized }: AdminMahaYag
 
   useEffect(() => {
     loadYagnas();
-  }, [adminToken]);
+  }, [loadYagnas]);
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();

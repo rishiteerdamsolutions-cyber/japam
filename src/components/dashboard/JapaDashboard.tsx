@@ -71,7 +71,7 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
     return () => {
       cancelled = true;
     };
-  }, [user?.uid]);
+  }, [user]);
 
   const historyOccasions = occasions.filter((o) => o.type !== 'anniversary');
 

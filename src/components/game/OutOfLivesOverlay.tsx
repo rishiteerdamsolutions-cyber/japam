@@ -95,7 +95,7 @@ export function OutOfLivesOverlay({ onClose, onRetryAfterLife, returnMode, retur
     } finally {
       setBuying(false);
     }
-  }, [user?.uid, returnMode, returnLevelIndex]);
+  }, [user, returnMode, returnLevelIndex]);
 
   const [livesPrice, setLivesPrice] = useState<number>(19);
   useEffect(() => {

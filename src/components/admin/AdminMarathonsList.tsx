@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { DEITIES } from '../../data/deities';
 
 const API_BASE = import.meta.env.VITE_API_URL ?? '';
@@ -47,7 +47,7 @@ export function AdminMarathonsList({ adminToken, onUnauthorized, refreshTrigger 
   const [editSaving, setEditSaving] = useState(false);
   const [editError, setEditError] = useState<string | null>(null);
 
-  const loadMarathons = () => {
+  const loadMarathons = useCallback(() => {
     if (!adminToken) return;
     setLoading(true);
     setError(null);
@@ -78,11 +78,11 @@ export function AdminMarathonsList({ adminToken, onUnauthorized, refreshTrigger 
         setMarathons([]);
       })
       .finally(() => setLoading(false));
-  };
+  }, [adminToken, onUnauthorized]);
 
   useEffect(() => {
     loadMarathons();
-  }, [adminToken, refreshTrigger]);
+  }, [loadMarathons, refreshTrigger]);
 
   const handleDelete = async (marathonId: string) => {
     if (!adminToken) return;

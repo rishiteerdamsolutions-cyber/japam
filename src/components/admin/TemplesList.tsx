@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 const API_BASE = import.meta.env.VITE_API_URL ?? '';
 
@@ -23,7 +23,7 @@ export function TemplesList({ adminToken, refreshTrigger, onUnauthorized }: Temp
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const loadTemples = async () => {
+  const loadTemples = useCallback(async () => {
     if (!adminToken) return;
     setLoading(true);
     setError(null);
@@ -52,7 +52,7 @@ export function TemplesList({ adminToken, refreshTrigger, onUnauthorized }: Temp
     } finally {
       setLoading(false);
     }
-  };
+  }, [adminToken, onUnauthorized]);
 
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
@@ -79,7 +79,7 @@ export function TemplesList({ adminToken, refreshTrigger, onUnauthorized }: Temp
 
   useEffect(() => {
     if (adminToken) loadTemples();
-  }, [adminToken, refreshTrigger]);
+  }, [adminToken, refreshTrigger, loadTemples]);
 
   const getLocationLabel = (t: Temple) => {
     const parts = [t.state, t.district, t.cityTownVillage].filter(Boolean);

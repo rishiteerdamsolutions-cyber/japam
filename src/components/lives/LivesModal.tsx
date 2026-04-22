@@ -112,7 +112,7 @@ export function LivesModal({ onClose }: LivesModalProps) {
     } finally {
       setBuying(false);
     }
-  }, [user?.uid]);
+  }, [user]);
 
   const refillIn = nextRefillAt ? Math.max(0, Math.ceil((nextRefillAt - Date.now()) / (60 * 60 * 1000))) : 0;
   const isFull = lives >= MAX_LIVES;

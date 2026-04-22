@@ -85,7 +85,7 @@ export function PaymentReturnHandler() {
         navigate('/menu', { replace: true });
       }
     })();
-  }, [location.search, location.pathname, user?.uid, user?.displayName, user?.email, navigate, loadUnlock, loadLives]);
+  }, [location.search, location.pathname, user, navigate, loadUnlock, loadLives]);
 
   return null;
 }

@@ -14,8 +14,8 @@ import { useProfileStore } from '../../store/profileStore';
 import { getProfileRingFlags } from '../../lib/membershipDisplay';
 import { landingStartJapaButtonClass, landingTryJapaButtonClass } from '../../lib/landingCtaStyles';
 
-/** `public/japamvideo.mp4` — Ista Devata intro until the button is tapped. */
-const ISTA_DEVATA_INTRO_VIDEO_SRC = '/japamvideo.mp4';
+/** `public/japam.gif` — transparent animated GIF until Ista Devata Japa is tapped. */
+const ISTA_DEVATA_INTRO_GIF_SRC = '/japam.gif';
 
 function GearIcon() {
   return (
@@ -164,27 +164,21 @@ export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
                 {t('menu.istaDevata')}
               </span>
             </motion.button>
-            {/* Transparent UI chrome; multiply blends typical white video mattes into bg-gloss-bubblegum (MP4 has no alpha). */}
-            <div className="mt-8 w-full flex justify-center items-center bg-transparent p-0 shadow-none ring-0">
-              {!istaVideoBroken ? (
-                <video
-                  key={ISTA_DEVATA_INTRO_VIDEO_SRC}
-                  className="block w-full max-h-[min(48vh,320px)] h-auto max-w-full object-contain bg-transparent mix-blend-multiply"
-                  style={{ backgroundColor: 'transparent' }}
-                  src={ISTA_DEVATA_INTRO_VIDEO_SRC}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
+            {!istaVideoBroken ? (
+              <div className="mt-8 w-full flex justify-center items-center bg-transparent">
+                <img
+                  src={ISTA_DEVATA_INTRO_GIF_SRC}
+                  alt={t('menu.istaDevataMalaaVideoAria')}
+                  decoding="async"
                   onError={onIstaVideoError}
-                  aria-label={t('menu.istaDevataMalaaVideoAria')}
+                  className="block h-auto w-full max-w-full max-h-[min(48vh,320px)] object-contain bg-transparent"
                 />
-              ) : (
-                <div className="flex min-h-[8rem] w-full items-center justify-center bg-transparent px-4 text-center text-amber-200/80 text-xs sm:text-sm">
-                  {t('menu.istaDevataVideoPlaceholder')}
-                </div>
-              )}
-            </div>
+              </div>
+            ) : (
+              <div className="mt-8 flex min-h-[8rem] w-full items-center justify-center bg-transparent px-4 text-center text-amber-200/80 text-xs sm:text-sm">
+                {t('menu.istaDevataVideoPlaceholder')}
+              </div>
+            )}
           </div>
         ) : (
           <div className="w-full mb-6" role="region" aria-label={t('menu.istaDevata')}>

@@ -15,6 +15,8 @@ const CASHFREE_APP_ID = process.env.CASHFREE_APP_ID || process.env.CASHFREE_CLIE
 const CASHFREE_SECRET = process.env.CASHFREE_SECRET || process.env.CASHFREE_CLIENT_SECRET;
 const CASHFREE_BASE = process.env.CASHFREE_ENV === 'sandbox' ? 'https://sandbox.cashfree.com/pg' : 'https://api.cashfree.com/pg';
 const LIFETIME_DONOR_PAISE = 5000000;
+const MIN_DONATION_PAISE = 600000;
+const DONATION_STEP_PAISE = 600000;
 
 /** POST /api/verify-donate - Verify Cashfree donation and add to donors. Requires pro user. */
 export async function POST(request) {
@@ -61,6 +63,10 @@ export async function POST(request) {
 
     const orderAmount = data?.order_amount;
     const amountPaise = typeof orderAmount === 'number' ? Math.round(orderAmount * 100) : 0;
+
+    if (amountPaise < MIN_DONATION_PAISE || amountPaise % DONATION_STEP_PAISE !== 0) {
+      return jsonResponse({ error: 'Invalid donation amount for this order' }, 400);
+    }
 
     let name = displayName || '';
     if (!name) {

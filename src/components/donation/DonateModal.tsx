@@ -7,7 +7,11 @@ import { useUnlockStore } from '../../store/unlockStore';
 
 const API_BASE = import.meta.env.VITE_API_URL ?? '';
 
-const PRESET_AMOUNTS_PAISE = [100000, 500000, 2000000, 5000000, 10000000]; // ₹1000, ₹5000, ₹20000, ₹50000, ₹100000
+/** ₹6,000 minimum; only multiples of ₹6,000. */
+const MIN_DONATION_PAISE = 600000;
+const DONATION_STEP_PAISE = 600000;
+const MAX_DONATION_PAISE = 10000000;
+const PRESET_AMOUNTS_PAISE = [600000, 1800000, 2400000, 4800000, 9600000]; // ₹6000, ₹18000, ₹24000, ₹48000, ₹96000
 
 interface DonateModalProps {
   onClose: () => void;
@@ -21,7 +25,7 @@ export function DonateModal({ onClose, onDonated }: DonateModalProps) {
   const loadUnlock = useUnlockStore((s) => s.load);
   const isPro = tier === 'pro' && levelsUnlocked === true;
 
-  const [amountPaise, setAmountPaise] = useState(10000);
+  const [amountPaise, setAmountPaise] = useState(MIN_DONATION_PAISE);
   const [customAmount, setCustomAmount] = useState('');
   const [paying, setPaying] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -39,8 +43,16 @@ export function DonateModal({ onClose, onDonated }: DonateModalProps) {
   const handleDonate = async () => {
     if (!user?.uid || !isPro || paying) return;
     const amt = customAmount.trim() ? Math.round(parseFloat(customAmount) * 100) : amountPaise;
-    if (!Number.isFinite(amt) || amt < 100) {
-      setError('Minimum donation is ₹1');
+    if (!Number.isFinite(amt) || amt < MIN_DONATION_PAISE) {
+      setError('Minimum donation is ₹6,000');
+      return;
+    }
+    if (amt % DONATION_STEP_PAISE !== 0) {
+      setError('Amount must be a multiple of ₹6,000 (e.g. ₹6,000, ₹12,000, ₹18,000…)');
+      return;
+    }
+    if (amt > MAX_DONATION_PAISE) {
+      setError('Amount is too large for a single donation');
       return;
     }
     setError(null);
@@ -119,26 +131,30 @@ export function DonateModal({ onClose, onDonated }: DonateModalProps) {
         <p className="text-amber-200/90 text-sm mb-4">
           You can fund this startup through charity for sanathana dharma.
         </p>
+        <p className="text-amber-200/75 text-xs mb-3">
+          Minimum ₹6,000 per donation. Choose an amount or enter a custom value in multiples of ₹6,000 (₹6,000, ₹12,000, ₹18,000…).
+        </p>
         <div className="flex flex-wrap gap-2 mb-3">
           {PRESET_AMOUNTS_PAISE.map((amt) => (
             <button
               key={amt}
               type="button"
               onClick={() => { setAmountPaise(amt); setCustomAmount(''); }}
-              className={`px-4 py-2 rounded-lg text-sm font-medium ${amountPaise === amt ? 'bg-amber-500 text-white' : 'bg-black/30 text-amber-200 border border-amber-500/30'}`}
+              className={`px-4 py-2 rounded-lg text-sm font-medium ${!customAmount.trim() && amountPaise === amt ? 'bg-amber-500 text-white' : 'bg-black/30 text-amber-200 border border-amber-500/30'}`}
             >
-              ₹{amt / 100}
+              ₹{(amt / 100).toLocaleString('en-IN')}
             </button>
           ))}
         </div>
         <div className="mb-4">
           <input
             type="number"
-            min="1"
-            max="100000"
+            min={6000}
+            max={100000}
+            step={6000}
             value={customAmount}
             onChange={(e) => setCustomAmount(e.target.value)}
-            placeholder="Custom amount (₹)"
+            placeholder="Custom (₹6000 min, steps of ₹6000)"
             className="w-full px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30"
           />
         </div>

@@ -14,7 +14,7 @@ import { useProfileStore } from '../../store/profileStore';
 import { getProfileRingFlags } from '../../lib/membershipDisplay';
 import { landingStartJapaButtonClass, landingTryJapaButtonClass } from '../../lib/landingCtaStyles';
 
-/** `public/japam.gif` — transparent animated GIF until Ista Devata Japa is tapped. */
+/** `public/japam.gif` — shown until Ista Devata Japa is tapped. Many GIFs use opaque white or a white “restore to background” index; `mix-blend-multiply` lets that read as see-through against the pink gloss. */
 const ISTA_DEVATA_INTRO_GIF_SRC = '/japam.gif';
 
 function GearIcon() {
@@ -171,7 +171,7 @@ export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
                   alt={t('menu.istaDevataMalaaVideoAria')}
                   decoding="async"
                   onError={onIstaVideoError}
-                  className="block h-auto w-full max-w-full max-h-[min(48vh,320px)] object-contain bg-transparent"
+                  className="block h-auto w-full max-w-full max-h-[min(48vh,320px)] object-contain bg-transparent mix-blend-multiply"
                 />
               </div>
             ) : (

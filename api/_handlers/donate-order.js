@@ -5,7 +5,12 @@ const CASHFREE_APP_ID = process.env.CASHFREE_APP_ID || process.env.CASHFREE_CLIE
 const CASHFREE_SECRET = process.env.CASHFREE_SECRET || process.env.CASHFREE_CLIENT_SECRET;
 const CASHFREE_BASE = process.env.CASHFREE_ENV === 'sandbox' ? 'https://sandbox.cashfree.com/pg' : 'https://api.cashfree.com/pg';
 
-/** POST /api/donate-order - Create Cashfree order for donation. Body: { userId, amountPaise }. Amount min 100 paise. */
+/** Min ₹6000; amounts must be whole multiples of ₹6000 (600000 paise). */
+const MIN_DONATION_PAISE = 600000;
+const DONATION_STEP_PAISE = 600000;
+const MAX_DONATION_PAISE = 10000000; // ₹100,000 cap per order
+
+/** POST /api/donate-order - Create Cashfree order for donation. Body: { userId, amountPaise }. */
 export async function POST(request) {
   try {
     const uid = await verifyFirebaseUser(request);
@@ -17,10 +22,13 @@ export async function POST(request) {
     if (userId !== uid) return jsonResponse({ error: 'userId must match authenticated user' }, 403);
 
     const amount = Math.round(Number(amountPaise));
-    if (!Number.isFinite(amount) || amount < 100) {
-      return jsonResponse({ error: 'Minimum donation is ₹1 (100 paise)' }, 400);
+    if (!Number.isFinite(amount) || amount < MIN_DONATION_PAISE) {
+      return jsonResponse({ error: 'Minimum donation is ₹6,000' }, 400);
     }
-    if (amount > 10000000) return jsonResponse({ error: 'Amount too large' }, 400);
+    if (amount % DONATION_STEP_PAISE !== 0) {
+      return jsonResponse({ error: 'Donation must be a multiple of ₹6,000 (e.g. ₹6,000, ₹12,000, ₹18,000…)' }, 400);
+    }
+    if (amount > MAX_DONATION_PAISE) return jsonResponse({ error: 'Amount too large' }, 400);
 
     if (!CASHFREE_APP_ID || !CASHFREE_SECRET) {
       return jsonResponse({ error: 'Payment not configured' }, 503);

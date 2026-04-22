@@ -14,8 +14,8 @@ import { useProfileStore } from '../../store/profileStore';
 import { getProfileRingFlags } from '../../lib/membershipDisplay';
 import { landingStartJapaButtonClass, landingTryJapaButtonClass } from '../../lib/landingCtaStyles';
 
-/** `public/japamvideo.mp4` — loops until “Ista Devata Japa” is tapped; wrapper is transparent (no panel behind the video). */
-const ISTA_DEVATA_INTRO_VIDEO_SRC = '/japamvideo.mp4';
+/** `public/japavideo.mp4` — loops until “Ista Devata Japa” is tapped; wrapper is transparent (no panel behind the video). */
+const ISTA_DEVATA_INTRO_VIDEO_SRC = '/japavideo.mp4';
 
 function GearIcon() {
   return (

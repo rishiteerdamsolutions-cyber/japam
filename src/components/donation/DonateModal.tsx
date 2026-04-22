@@ -16,9 +16,10 @@ interface DonateModalProps {
 
 export function DonateModal({ onClose, onDonated }: DonateModalProps) {
   const user = useAuthStore((s) => s.user);
+  const tier = useUnlockStore((s) => s.tier);
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
   const loadUnlock = useUnlockStore((s) => s.load);
-  const isPro = levelsUnlocked === true;
+  const isPro = tier === 'pro' && levelsUnlocked === true;
 
   const [amountPaise, setAmountPaise] = useState(10000);
   const [customAmount, setCustomAmount] = useState('');

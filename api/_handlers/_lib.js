@@ -161,8 +161,13 @@ export async function getUserUnlockInfo(db, uid) {
 
 /** Check if user has active paid access (within 30-day window). */
 export async function isUserUnlocked(db, uid) {
-  const info = await getUserUnlockInfo(db, uid);
-  return info.isActive;
+  if (!uid || !db) return false;
+  const [info, donorSnap] = await Promise.all([
+    getUserUnlockInfo(db, uid),
+    db.collection('donors').doc(uid).get(),
+  ]);
+  // Premium donors should retain access even after the 30-day Pro window ends.
+  return info.isActive || donorSnap.exists;
 }
 
 const COUPON_CODE_MAX_LEN = 32;

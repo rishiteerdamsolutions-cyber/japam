@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { AppHeader } from '../components/layout/AppHeader';
 import { AppFooter } from '../components/layout/AppFooter';
 import { FIRST_LOCKED_LEVEL_INDEX, useUnlockStore } from '../store/unlockStore';
+import { hasActivePaidAccess } from '../lib/membershipDisplay';
 import { auth } from '../lib/firebase';
 
 const APAVARGA_URL = import.meta.env.VITE_APAVARGA_URL || '';
@@ -11,7 +12,10 @@ const API_BASE = import.meta.env.VITE_API_URL ?? '';
 export function ApavargaPage() {
   const navigate = useNavigate();
   const tier = useUnlockStore((s) => s.tier);
-  const isProOrPremium = tier === 'pro' || tier === 'premium';
+  const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
+  const unlockExpiresAt = useUnlockStore((s) => s.unlockExpiresAt);
+  const isProOrPremiumActive =
+    (tier === 'pro' || tier === 'premium') && hasActivePaidAccess(levelsUnlocked, unlockExpiresAt);
   const [opening, setOpening] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -69,7 +73,7 @@ export function ApavargaPage() {
             </p>
 
             {error && <p className="text-amber-200/90 text-sm mb-2">{error}</p>}
-            {isProOrPremium ? (
+            {isProOrPremiumActive ? (
               <button
                 type="button"
                 onClick={enterApavarga}

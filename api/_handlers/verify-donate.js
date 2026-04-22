@@ -1,5 +1,5 @@
 import admin from 'firebase-admin';
-import { getDb, jsonResponse, verifyFirebaseUser, logAudit, jsonInternalServerError } from './_lib.js';
+import { getDb, jsonResponse, verifyFirebaseUser, logAudit, jsonInternalServerError, getUserUnlockInfo } from './_lib.js';
 
 const CASHFREE_APP_ID = process.env.CASHFREE_APP_ID || process.env.CASHFREE_CLIENT_ID;
 const CASHFREE_SECRET = process.env.CASHFREE_SECRET || process.env.CASHFREE_CLIENT_SECRET;
@@ -43,8 +43,9 @@ export async function POST(request) {
     const db = getDb();
     if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
 
-    const unlockedSnap = await db.collection('unlockedUsers').doc(uid).get();
-    if (!unlockedSnap.exists) {
+    // Donation is only allowed while monthly Pro is active (not after expiry, and not by premium-only status).
+    const unlockInfo = await getUserUnlockInfo(db, uid);
+    if (!unlockInfo.isActive) {
       return jsonResponse({ error: 'Pro member required to donate. Unlock full access first.' }, 403);
     }
 

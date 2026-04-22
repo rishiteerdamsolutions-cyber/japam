@@ -19,14 +19,15 @@ export async function GET(request) {
     }
 
     const isDonor = donorSnap.exists;
-    const levelsUnlocked = info.isActive;
+    const levelsUnlocked = info.isActive || isDonor;
     const tier = isDonor ? 'premium' : levelsUnlocked ? 'pro' : 'free';
     return jsonResponse({
       levelsUnlocked,
       isDonor,
       tier,
       unlockedAt: info.unlockedAt,
-      unlockExpiresAt: info.unlockExpiresAt,
+      // Premium is lifetime; expiry only applies to monthly Pro.
+      unlockExpiresAt: isDonor ? null : info.unlockExpiresAt,
       hasPaidEver: info.hasPaid,
     }, 200);
   } catch (e) {

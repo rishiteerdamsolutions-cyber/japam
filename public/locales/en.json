@@ -42,7 +42,7 @@
     "istaDevata": "Ista Devata Japa",
     "chooseIstaDevata": "Choose your Iṣṭa Devatā",
     "istaDevataMalaaVideoAria": "Japa mālā loop — tap Ista Devata Japa below to choose a deity",
-    "istaDevataVideoPlaceholder": "Could not load public/japavideo.mp4 — check the file is present.",
+    "istaDevataVideoPlaceholder": "Could not load public/japavideo.mp4 or public/japamvideo.mp4 — add one of these files.",
     "japaMarathons": "Japa Marathons",
     "mahaJapaYagnas": "Maha Japa Yagnas",
     "navStripMarathons": "Marathons",

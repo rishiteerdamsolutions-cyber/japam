@@ -1,6 +1,7 @@
 import { getDb, jsonResponse, verifyFirebaseUser, isUserUnlocked, isValidFirestoreDocId, jsonInternalServerError } from '../_lib.js';
 import admin from 'firebase-admin';
 import { isYagnaPublicListable } from '../_lifecycle.js';
+import { isDefaultFreeYagnaId, ensureDefaultFreeYagnaDoc } from '../_defaultCommunityEvents.js';
 
 /** POST /api/maha-yagnas/join - User joins a Maha Japa Yagna. Requires Firebase auth; only Pro (unlocked) users can join. Body: { yagnaId } */
 export async function POST(request) {
@@ -15,12 +16,16 @@ export async function POST(request) {
     const db = getDb();
     if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
 
-    const unlocked = await isUserUnlocked(db, uid);
-    if (!unlocked) {
-      return jsonResponse(
-        { error: 'Only Pro users can join Maha Japa Yagnas. Unlock in the app first.' },
-        403
-      );
+    if (!isDefaultFreeYagnaId(yagnaId)) {
+      const unlocked = await isUserUnlocked(db, uid);
+      if (!unlocked) {
+        return jsonResponse(
+          { error: 'Only Pro users can join Maha Japa Yagnas. Unlock in the app first.' },
+          403
+        );
+      }
+    } else {
+      await ensureDefaultFreeYagnaDoc(db);
     }
 
     const yagnaRef = db.doc(`mahaJapaYagnas/${yagnaId}`);

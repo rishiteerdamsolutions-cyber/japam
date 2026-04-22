@@ -1,4 +1,5 @@
 import { getDb, jsonResponse, verifyFirebaseUser, jsonInternalServerError } from '../_lib.js';
+import { ensureDefaultFreeYagnaParticipation } from '../_defaultCommunityEvents.js';
 
 /** GET /api/maha-yagnas/my-contribution - User's contribution per active yagna (Firebase auth required) */
 export async function GET(request) {
@@ -9,6 +10,8 @@ export async function GET(request) {
   if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
 
   try {
+    await ensureDefaultFreeYagnaParticipation(db, uid);
+
     const today = new Date().toISOString().slice(0, 10);
     const usersSnap = await db.collection('mahaJapaYagnaUsers').where('userId', '==', uid).get();
     const contributions = [];

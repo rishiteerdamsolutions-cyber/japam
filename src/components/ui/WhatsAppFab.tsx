@@ -17,6 +17,16 @@ function waShareUrl(message: string) {
   return `https://wa.me/?text=${text}`;
 }
 
+/** Share Japam on WhatsApp (same copy as floating FAB). */
+export function buildJapamWhatsAppShareHref(userUid: string | null | undefined): string {
+  const baseUrl = typeof window !== 'undefined' ? window.location?.origin || 'https://www.japam.digital' : 'https://www.japam.digital';
+  const referralLink = userUid
+    ? `${baseUrl}?ref=${encodeURIComponent(userUid.slice(0, 8).toUpperCase())}`
+    : baseUrl;
+  const message = buildShareMessage(referralLink);
+  return waShareUrl(message);
+}
+
 export function WhatsAppFab() {
   const user = useAuthStore((s) => s.user);
   const baseUrl = typeof window !== 'undefined' ? window.location?.origin || 'https://www.japam.digital' : 'https://www.japam.digital';

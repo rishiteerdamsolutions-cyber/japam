@@ -1,7 +1,8 @@
 import { getDb, jsonResponse, verifyFirebaseUser, isUserUnlocked, isValidFirestoreDocId, jsonInternalServerError } from '../_lib.js';
 import { isMarathonPublicActive } from '../_lifecycle.js';
+import { isDefaultFreeMarathonId, ensureDefaultFreeMarathonDoc } from '../_defaultCommunityEvents.js';
 
-/** POST /api/marathons/join - User joins a marathon. Requires Firebase auth; only paid (unlocked) users can join. Body: { marathonId } */
+/** POST /api/marathons/join - User joins a marathon. Pro required except the free Shiva starter marathon. Body: { marathonId } */
 export async function POST(request) {
   try {
     const uid = await verifyFirebaseUser(request);
@@ -13,12 +14,17 @@ export async function POST(request) {
 
     const db = getDb();
     if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
-    const unlocked = await isUserUnlocked(db, uid);
-    if (!unlocked) {
-      return jsonResponse(
-        { error: 'Only users who have unlocked the game can join marathons. Unlock in the app first.' },
-        403
-      );
+    if (isDefaultFreeMarathonId(marathonId)) {
+      await ensureDefaultFreeMarathonDoc(db);
+    }
+    if (!isDefaultFreeMarathonId(marathonId)) {
+      const unlocked = await isUserUnlocked(db, uid);
+      if (!unlocked) {
+        return jsonResponse(
+          { error: 'Only users who have unlocked the game can join marathons. Unlock in the app first.' },
+          403
+        );
+      }
     }
 
     const marathonRef = db.doc(`marathons/${marathonId}`);

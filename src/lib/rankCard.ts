@@ -8,6 +8,8 @@ export type BuildRankCardRowsOptions = {
   currentUserDisplayName?: string;
   /** When false, viewer row shows rank 0 after ellipsis. When true, use leaderboard / fallback rank. When omitted, infer from leaderboard presence. */
   currentUserParticipated?: boolean;
+  /** Free Shiva starter marathon: one row for the viewer only (no community top-5 grid). */
+  soloPersonalMarathon?: boolean;
 };
 
 /**
@@ -24,6 +26,43 @@ export function buildRankCardRows(
   const overrideJp = options?.currentUserJapasOverride;
   const dispName = options?.currentUserDisplayName?.trim() || 'You';
   const explicitParticipated = options?.currentUserParticipated;
+  const solo = !!(options?.soloPersonalMarathon && currentUserUid);
+
+  if (solo) {
+    const participated =
+      explicitParticipated === false
+        ? false
+        : explicitParticipated === true
+          ? true
+          : leaderboard.some((e) => e.uid === currentUserUid);
+    if (!participated) {
+      const jp = typeof overrideJp === 'number' ? overrideJp : 0;
+      return [
+        {
+          kind: 'player',
+          entry: { rank: 1, uid: currentUserUid, name: dispName, japasCount: jp },
+          isCurrent: true,
+        },
+      ];
+    }
+    const userEntry = leaderboard.find((e) => e.uid === currentUserUid);
+    const jp =
+      typeof overrideJp === 'number' && overrideJp > (userEntry?.japasCount ?? 0)
+        ? overrideJp
+        : (userEntry?.japasCount ?? 0);
+    return [
+      {
+        kind: 'player',
+        entry: {
+          rank: 1,
+          uid: currentUserUid,
+          name: userEntry?.name?.trim() || dispName,
+          japasCount: jp,
+        },
+        isCurrent: true,
+      },
+    ];
+  }
 
   const allEntries = leaderboard
     .filter((e) => e.uid)
@@ -132,6 +171,8 @@ export interface RenderRankCardOptions {
   currentUserDisplayName?: string;
   /** Yagna/marathon participation; false forces rank 0 row on the card */
   currentUserParticipated?: boolean;
+  /** Free starter marathon: personal card copy and single-row layout */
+  soloPersonalMarathon?: boolean;
 }
 
 export async function renderRankCardBlob(opts: RenderRankCardOptions): Promise<Blob | null> {
@@ -251,10 +292,11 @@ export async function renderRankCardBlob(opts: RenderRankCardOptions): Promise<B
     const deityH = wrapAndDraw(deityLine, maxW, deityPx, '500', 'rgba(253, 230, 138, 0.95)', y, 4);
     y += (deityH || deityPx + 4) + 36;
 
-    // ——— "Top participants" label ———
+    // ——— Leaderboard section label ———
+    const sectionTitle = opts.soloPersonalMarathon ? 'Your progress' : 'Top participants';
     ctx.font = `600 22px ${fontFamily}`;
     ctx.fillStyle = 'rgba(251, 191, 36, 0.9)';
-    ctx.fillText('Top participants', centerX, y);
+    ctx.fillText(sectionTitle, centerX, y);
     y += 40;
 
     // ——— Leaderboard card: top 5, optional ⋮, then viewer when rank > 5 ———
@@ -265,6 +307,7 @@ export async function renderRankCardBlob(opts: RenderRankCardOptions): Promise<B
       currentUserJapasOverride: opts.currentUserJapasOverride,
       currentUserDisplayName: opts.currentUserDisplayName,
       currentUserParticipated: opts.currentUserParticipated,
+      soloPersonalMarathon: opts.soloPersonalMarathon,
     });
 
     let contentH = 24;
@@ -383,7 +426,10 @@ export async function renderRankCardBlob(opts: RenderRankCardOptions): Promise<B
     ctx.shadowBlur = 0;
     y += 72;
 
-    const ctaH = wrapAndDraw('Match, chant, and climb the leaderboard.', maxW, 38, '600', 'rgba(255,255,255,0.9)', y, 8, footerFont);
+    const ctaLine = opts.soloPersonalMarathon
+      ? 'Your personal japa counts toward your marathon goal.'
+      : 'Match, chant, and climb the leaderboard.';
+    const ctaH = wrapAndDraw(ctaLine, maxW, 38, '600', 'rgba(255,255,255,0.9)', y, 8, footerFont);
     y += (ctaH || 46) + 16;
 
     ctx.font = `700 48px ${footerFont}`;

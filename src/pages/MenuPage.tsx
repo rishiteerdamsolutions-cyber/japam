@@ -10,12 +10,12 @@ export function MenuPage() {
   const getCurrentLevelIndex = useProgressStore((s) => s.getCurrentLevelIndex);
   const user = useAuthStore((s) => s.user);
   const authLoading = useAuthStore((s) => s.loading);
-  const needsSignIn = isFirebaseConfigured && !user && !authLoading;
+  const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle);
 
-  const handleSelect = (mode: GameMode) => {
-    if (needsSignIn) {
-      navigate('/signin');
-      return;
+  const handleSelect = async (mode: GameMode) => {
+    if (isFirebaseConfigured && !user && !authLoading) {
+      await signInWithGoogle();
+      if (!useAuthStore.getState().user) return;
     }
     const level = getCurrentLevelIndex(mode);
     navigate(`/game?mode=${encodeURIComponent(mode)}&level=${level}`);

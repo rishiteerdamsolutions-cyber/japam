@@ -1,10 +1,34 @@
+import { isDefaultFreeMarathonId } from '../_defaultCommunityEvents.js';
+
 /**
  * Build leaderboard entries for display + rank card. Returns top `topN` plus the viewer's row
  * when they participate but rank below topN (so "Download rank card" still works).
+ *
+ * The free Shiva starter marathon is per-user only (not a platform-wide race): when the viewer
+ * is signed in, the list is only their row so rank cards and UI never expose other users.
  */
 export async function buildMarathonLeaderboard(db, marathonId, options = {}) {
   const topN = typeof options.topN === 'number' && options.topN > 0 ? options.topN : 5;
   const viewerUid = typeof options.viewerUid === 'string' && options.viewerUid ? options.viewerUid : null;
+
+  if (isDefaultFreeMarathonId(marathonId)) {
+    if (!viewerUid) return [];
+    const partSnap = await db.doc(`marathonParticipations/${marathonId}_${viewerUid}`).get();
+    if (!partSnap.exists) return [];
+    const pdata = partSnap.data() || {};
+    const uid = pdata.userId || viewerUid;
+    return [
+      {
+        rank: 1,
+        uid,
+        name:
+          typeof pdata.displayName === 'string' && pdata.displayName.trim()
+            ? pdata.displayName.trim()
+            : (uid ? String(uid).slice(0, 8) : '—'),
+        japasCount: pdata.japasCount ?? 0,
+      },
+    ];
+  }
 
   const partsSnap = await db.collection('marathonParticipations').where('marathonId', '==', marathonId).get();
   const participants = partsSnap.docs.map((p) => {

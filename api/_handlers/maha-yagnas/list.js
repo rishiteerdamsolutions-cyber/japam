@@ -1,11 +1,14 @@
 import { getDb, jsonResponse, jsonInternalServerError } from '../_lib.js';
 import { isYagnaPublicListable } from '../_lifecycle.js';
+import { ensureDefaultFreeYagnaDoc, DEFAULT_FREE_YAGNA_ID } from '../_defaultCommunityEvents.js';
 
 /** GET /api/maha-yagnas/list - List active Maha Japa Yagnas (public, no auth) */
 export async function GET() {
   try {
     const db = getDb();
     if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
+
+    await ensureDefaultFreeYagnaDoc(db);
 
     const today = new Date().toISOString().slice(0, 10);
     const snap = await db.collection('mahaJapaYagnas').where('status', '==', 'active').get();
@@ -46,7 +49,11 @@ export async function GET() {
       });
     }
 
-    yagnas.sort((a, b) => (a.startDate || '').localeCompare(b.startDate || ''));
+    yagnas.sort((a, b) => {
+      if (a.id === DEFAULT_FREE_YAGNA_ID) return -1;
+      if (b.id === DEFAULT_FREE_YAGNA_ID) return 1;
+      return (a.startDate || '').localeCompare(b.startDate || '');
+    });
     return jsonResponse({ yagnas }, 200);
   } catch (e) {
     console.error('maha-yagnas list', e);

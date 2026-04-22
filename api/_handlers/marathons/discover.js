@@ -103,7 +103,7 @@ export async function GET(request) {
       let communityQuery = db.collection('marathons').where('isCommunity', '==', true).where('state', '==', state);
       const communitySnap = await communityQuery.get();
       let communityMarathons = communitySnap.docs
-        .filter((d) => isMarathonPublicActive(d.data()))
+        .filter((d) => isMarathonPublicActive(d.data()) && !d.data().isDefaultFreeMarathon)
         .map((d) => {
         const data = d.data();
         return {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppHeader } from '../components/layout/AppHeader';
 import { AppFooter } from '../components/layout/AppFooter';
@@ -18,6 +18,17 @@ export function ApavargaPage() {
     (tier === 'pro' || tier === 'premium') && hasActivePaidAccess(levelsUnlocked, unlockExpiresAt);
   const [opening, setOpening] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [apavargaLaunched, setApavargaLaunched] = useState(false);
+  const [configLoaded, setConfigLoaded] = useState(false);
+
+  useEffect(() => {
+    const url = API_BASE ? `${API_BASE}/api/public/app-config` : '/api/public/app-config';
+    fetch(url)
+      .then((r) => r.json())
+      .then((d) => setApavargaLaunched(d?.apavargaLaunched === true))
+      .catch(() => setApavargaLaunched(false))
+      .finally(() => setConfigLoaded(true));
+  }, []);
 
   const enterApavarga = async () => {
     setOpening(true);
@@ -56,6 +67,10 @@ export function ApavargaPage() {
     }
   };
 
+  const showLaunchingSoon = configLoaded && !apavargaLaunched;
+  const showProGate = configLoaded && apavargaLaunched && !isProOrPremiumActive;
+  const showEnter = configLoaded && apavargaLaunched && isProOrPremiumActive;
+
   return (
     <div className="relative min-h-screen pb-12 bg-gloss-bubblegum">
       <div className="absolute inset-0 bg-black/40" aria-hidden />
@@ -73,7 +88,15 @@ export function ApavargaPage() {
             </p>
 
             {error && <p className="text-amber-200/90 text-sm mb-2">{error}</p>}
-            {isProOrPremiumActive ? (
+            {!configLoaded && <p className="text-amber-200/70 text-sm">Loading…</p>}
+            {showLaunchingSoon && (
+              <div className="rounded-2xl bg-black/40 border border-amber-500/30 p-5 text-center">
+                <p className="text-amber-200 font-medium text-sm mb-1">Apavarga (Spiritual Social Network)</p>
+                <p className="text-amber-300/90 text-lg font-semibold mb-2">Launching soon</p>
+                <p className="text-amber-200/60 text-xs">We will open access when the experience is ready.</p>
+              </div>
+            )}
+            {showEnter && (
               <button
                 type="button"
                 onClick={enterApavarga}
@@ -82,7 +105,8 @@ export function ApavargaPage() {
               >
                 {opening ? 'Opening…' : 'Log into Apavarga spiritual social network'}
               </button>
-            ) : (
+            )}
+            {showProGate && (
               <div className="rounded-2xl bg-black/40 border border-amber-500/30 p-5 text-center">
                 <p className="text-amber-200 text-sm mb-2">Apavarga is for Pro and Premium members.</p>
                 <p className="text-amber-200/70 text-xs mb-3">Unlock Pro to enter.</p>

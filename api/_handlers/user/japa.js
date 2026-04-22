@@ -1,6 +1,11 @@
 import { getDb, jsonResponse, verifyFirebaseUser, isUserUnlocked, jsonInternalServerError } from '../_lib.js';
 import admin from 'firebase-admin';
 import { upsertBehaviorFromJapa } from '../_analytics.js';
+import {
+  DEFAULT_FREE_YAGNA_ID,
+  ensureDefaultFreeMarathonParticipation,
+  ensureDefaultFreeYagnaParticipation,
+} from '../_defaultCommunityEvents.js';
 
 /** GET /api/user/japa - Load japa counts for current user (Firebase ID token required) */
 export async function GET(request) {
@@ -37,6 +42,20 @@ export async function POST(request) {
     const counts = body && typeof body === 'object' ? body : {};
     const prevSnap = await db.doc(`users/${uid}/data/japa`).get();
     const prev = (prevSnap.exists && prevSnap.data()) || {};
+
+    try {
+      let displayName = null;
+      const profileSnap = await db.doc(`users/${uid}/data/profile`).get();
+      const profileData = profileSnap.exists ? profileSnap.data() || {} : {};
+      if (typeof profileData.displayName === 'string' && profileData.displayName.trim()) {
+        displayName = profileData.displayName.trim().slice(0, 80);
+      }
+      await ensureDefaultFreeMarathonParticipation(db, uid, displayName);
+      await ensureDefaultFreeYagnaParticipation(db, uid);
+    } catch {
+      /* non-fatal; user can still save japa counts */
+    }
+
     await db.doc(`users/${uid}/data/japa`).set(counts, { merge: true });
     await upsertBehaviorFromJapa(db, uid, counts, prev);
 
@@ -107,9 +126,9 @@ export async function POST(request) {
       }
     }
 
-    // Maha Japa Yagna: attribute japas for Pro users only
+    // Maha Japa Yagna: Pro for temple yagnas; free starter Rama yagna counts for all joined users
     const proUser = await isUserUnlocked(db, uid);
-    if (proUser && Object.keys(deltas).length > 0) {
+    if (Object.keys(deltas).length > 0) {
       const today = new Date().toISOString().slice(0, 10);
       for (const deityId of DEITY_IDS) {
         const add = deltas[deityId];
@@ -125,6 +144,8 @@ export async function POST(request) {
           const endDate = yData.endDate || '';
           if (startDate > today || endDate < today) continue;
           const yagnaId = yDoc.id;
+          const isStarterYagna = yagnaId === DEFAULT_FREE_YAGNA_ID;
+          if (!proUser && !isStarterYagna) continue;
           const docId = `${yagnaId}_${uid}`;
           const userRef = db.collection('mahaJapaYagnaUsers').doc(docId);
           const userSnap = await userRef.get();

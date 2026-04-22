@@ -1,12 +1,10 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AppFooter } from '../layout/AppFooter';
 import { BottomNav } from '../nav/BottomNav';
 import { ActiveUsersStrip } from '../game/ActiveUsersStrip';
 import { DEITIES } from '../../data/deities';
-import { GoogleSignIn } from '../auth/GoogleSignIn';
 import { JapamBrand } from '../ui/JapamBrand';
 import { DonateModal } from '../donation/DonateModal';
 import { useAuthStore } from '../../store/authStore';
@@ -20,14 +18,6 @@ function GearIcon() {
     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-    </svg>
-  );
-}
-
-function DotsVerticalIcon() {
-  return (
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
     </svg>
   );
 }
@@ -47,23 +37,13 @@ interface MainMenuProps {
 
 export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  const { user, loading, signOut } = useAuthStore();
+  const { user, loading, signInWithGoogle, signInPending } = useAuthStore();
   const tier = useUnlockStore((s) => s.tier);
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
   const unlockExpiresAt = useUnlockStore((s) => s.unlockExpiresAt);
   const isDonor = useUnlockStore((s) => s.isDonor);
   const [showDonate, setShowDonate] = useState(false);
-  const [showMoreMenu, setShowMoreMenu] = useState(false);
-  const [showIstaDevathaGrid, setShowIstaDevathaGrid] = useState(false);
-  const moreMenuRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (moreMenuRef.current && !moreMenuRef.current.contains(e.target as Node)) setShowMoreMenu(false);
-    };
-    document.addEventListener('click', handler);
-    return () => document.removeEventListener('click', handler);
-  }, []);
+  const [showIstaDevataGrid, setShowIstaDevataGrid] = useState(false);
   const profileName = useProfileStore((s) => s.displayName);
   const fallbackName = user?.displayName || (user?.email ? user.email.split('@')[0] : null);
   const displayName = profileName || fallbackName || t('menu.signedIn');
@@ -79,17 +59,17 @@ export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
     <div className="relative min-h-screen flex flex-col items-center p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] overflow-hidden">
       <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10 w-full max-w-sm flex flex-col items-center">
-        {/* Top: back to home (left) and user/sign in (right) */}
+        {/* Top: brand (left) and user / Google sign-in (right) */}
         <div className="w-full flex justify-between items-center gap-2 mt-2 mb-1 min-h-[44px]">
-          <button
-            type="button"
-            aria-label="Back to home"
-            onClick={() => navigate('/')}
-            className="text-amber-400/90 text-sm font-medium hover:text-amber-400 shrink-0"
-          >
-            {t('menu.back')}
-          </button>
-          <div className="flex items-center gap-2 flex-1 min-w-0 justify-end">
+          <div className="min-w-0 flex-1 pr-2 text-left">
+            <JapamBrand as="span" className="block text-lg sm:text-xl leading-tight truncate">
+              {t('menu.title')}
+            </JapamBrand>
+            <p className="text-amber-200/80 text-[10px] sm:text-xs leading-tight truncate mt-0.5">
+              {t('menu.tagline')}
+            </p>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
           {loading && (
             <span className="text-amber-200/60 text-sm">…</span>
           )}
@@ -97,10 +77,11 @@ export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
             <div className="flex items-center gap-2">
               <button
                 type="button"
-                onClick={() => navigate('/signin')}
-                className="text-amber-400/90 text-xs font-medium hover:text-amber-400 whitespace-nowrap"
+                disabled={signInPending}
+                onClick={() => signInWithGoogle()}
+                className="text-amber-400/90 text-xs font-medium hover:text-amber-400 whitespace-nowrap disabled:opacity-60"
               >
-                {t('menu.signIn')}
+                {signInPending ? '…' : t('menu.signIn')}
               </button>
             </div>
           )}
@@ -121,24 +102,14 @@ export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
                 </div>
                 <span className="hidden sm:inline text-amber-200/90 text-xs truncate max-w-[60px]" title={displayName}>{displayName}</span>
               </button>
-              <button type="button" onClick={() => setShowDonate(true)} className="p-2 rounded-lg text-amber-400/90 hover:bg-white/10 hover:text-amber-400 min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label={t('menu.donate')}>
-                <HeartIcon />
-              </button>
+              {isPro && (
+                <button type="button" onClick={() => setShowDonate(true)} className="p-2 rounded-lg text-amber-400/90 hover:bg-white/10 hover:text-amber-400 min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label={t('menu.donate')}>
+                  <HeartIcon />
+                </button>
+              )}
               <button type="button" onClick={() => onOpenSettings()} className="p-2 rounded-lg text-amber-400/90 hover:bg-white/10 hover:text-amber-400 min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label={t('menu.settings')}>
                 <GearIcon />
               </button>
-              <div className="relative" ref={moreMenuRef}>
-                <button type="button" onClick={() => setShowMoreMenu((v) => !v)} className="p-2 rounded-lg text-amber-400/90 hover:bg-white/10 hover:text-amber-400 min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="More" aria-expanded={showMoreMenu}>
-                  <DotsVerticalIcon />
-                </button>
-                {showMoreMenu && (
-                  <div className="absolute right-0 top-full mt-1 py-1 rounded-xl bg-black/90 border border-amber-500/30 shadow-xl z-50 min-w-[120px]">
-                    <button type="button" onClick={() => { signOut(); setShowMoreMenu(false); }} className="w-full px-4 py-2 text-left text-amber-200/90 hover:bg-white/10 text-sm">
-                      {t('menu.signOut')}
-                    </button>
-                  </div>
-                )}
-              </div>
             </div>
           )}
           </div>
@@ -155,50 +126,38 @@ export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
           />
         )}
 
-        <h1 className="text-3xl sm:text-4xl mt-6 mb-1 truncate w-full max-w-full text-center">
-          <JapamBrand as="span" className="block">{t('menu.title')}</JapamBrand>
-        </h1>
-        <p className="text-amber-200/90 text-xs sm:text-sm mb-6 break-words text-center">{t('menu.tagline')}</p>
-
-        {!user && (
-          <div className="mb-6">
-            <GoogleSignIn />
-          </div>
-        )}
-
         <motion.button
           type="button"
-          aria-label={`${t('menu.startJapa')} ${t('menu.allDevatasTag')}`}
+          aria-label={t('menu.allDevatasJapa')}
           whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.99 }}
           initial={{ opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.05 }}
           onClick={() => onSelect('general')}
-          className="w-full mb-2 py-2 px-3 rounded-xl bg-amber-500/20 border border-amber-500/50 hover:border-amber-400/70 hover:bg-amber-500/30 transition-colors flex flex-col items-center justify-center gap-0.5"
+          className="w-fit max-w-full mt-4 mb-2 py-2 px-4 rounded-xl bg-amber-500/20 border border-amber-500/50 hover:border-amber-400/70 hover:bg-amber-500/30 transition-colors inline-flex items-center justify-center shrink-0"
         >
-          <span className="text-amber-300 font-semibold text-sm leading-tight">{t('menu.startJapa')}</span>
-          <span className="text-amber-200/75 text-[11px] leading-tight font-normal">
-            {t('menu.allDevatasTag')}
+          <span className="text-amber-300 font-semibold text-sm leading-tight text-center whitespace-normal">
+            {t('menu.allDevatasJapa')}
           </span>
         </motion.button>
 
         <button
           type="button"
-          id="ista-devatha-toggle"
-          aria-expanded={showIstaDevathaGrid}
-          aria-controls="ista-devatha-grid"
-          onClick={() => setShowIstaDevathaGrid((v) => !v)}
-          className="w-full mb-2 py-2 px-3 rounded-xl bg-black/30 border border-white/15 hover:border-amber-500/40 hover:bg-black/40 transition-colors flex items-center justify-center"
+          id="ista-devata-toggle"
+          aria-expanded={showIstaDevataGrid}
+          aria-controls="ista-devata-grid"
+          onClick={() => setShowIstaDevataGrid((v) => !v)}
+          className="w-fit max-w-full mb-2 py-2 px-4 rounded-xl bg-black/30 border border-white/15 hover:border-amber-500/40 hover:bg-black/40 transition-colors inline-flex items-center justify-center shrink-0"
         >
-          <span className="text-amber-300/95 font-medium text-xs sm:text-sm text-center">
+          <span className="text-amber-300/95 font-medium text-xs sm:text-sm text-center whitespace-normal">
             {t('menu.istaDevata')}
           </span>
         </button>
 
-        {showIstaDevathaGrid && (
+        {showIstaDevataGrid && (
           <div
-            id="ista-devatha-grid"
+            id="ista-devata-grid"
             className="grid grid-cols-2 gap-3 w-full mb-6"
             role="region"
             aria-label={t('menu.istaDevata')}

@@ -11,6 +11,12 @@ export async function POST(request) {
 
   if (!(await isUserUnlocked(db, uid))) return jsonResponse({ error: 'Pro membership required' }, 403);
 
+  const appSnap = await db.doc('config/app').get();
+  const appData = appSnap.exists ? appSnap.data() || {} : {};
+  if (appData.apavargaLaunched !== true) {
+    return jsonResponse({ error: 'Apavarga is not launched yet' }, 403);
+  }
+
   try {
     const customToken = await admin.auth().createCustomToken(uid);
     return jsonResponse({ customToken }, 200);

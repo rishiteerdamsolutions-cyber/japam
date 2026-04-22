@@ -1,5 +1,6 @@
 import { getDb, jsonResponse, verifyFirebaseUser, jsonInternalServerError } from '../_lib.js';
 import { buildMarathonLeaderboard } from './_marathonLeaderboard.js';
+import { ensureDefaultFreeMarathonParticipation } from '../_defaultCommunityEvents.js';
 
 /** GET /api/marathons/my-participations - List marathons the current user has joined. Requires Firebase auth. */
 export async function GET(request) {
@@ -9,6 +10,18 @@ export async function GET(request) {
 
     const db = getDb();
     if (!db) return jsonResponse({ marathonIds: [], marathons: [] }, 200);
+
+    let displayName = null;
+    try {
+      const profileSnap = await db.doc(`users/${uid}/data/profile`).get();
+      const profileData = profileSnap.exists ? profileSnap.data() || {} : {};
+      if (typeof profileData.displayName === 'string' && profileData.displayName.trim()) {
+        displayName = profileData.displayName.trim().slice(0, 80);
+      }
+    } catch {
+      displayName = null;
+    }
+    await ensureDefaultFreeMarathonParticipation(db, uid, displayName);
 
     const partsSnap = await db.collection('marathonParticipations').where('userId', '==', uid).get();
     const marathonIds = partsSnap.docs.map((d) => d.data().marathonId).filter(Boolean);
@@ -26,7 +39,9 @@ export async function GET(request) {
       if (!marathonSnap.exists) continue;
       const mData = marathonSnap.data();
       let templeName = '';
-      if (mData.isCommunity && mData.communityName) {
+      if (mData.isDefaultFreeMarathon && mData.communityName) {
+        templeName = mData.communityName;
+      } else if (mData.isCommunity && mData.communityName) {
         templeName = mData.communityName;
       } else if (mData.templeId) {
         const templeSnap = await db.doc(`temples/${mData.templeId}`).get();

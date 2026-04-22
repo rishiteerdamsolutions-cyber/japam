@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -7,10 +7,11 @@ import { useSettingsStore } from '../store/settingsStore';
 import { useAuthStore } from '../store/authStore';
 import { useProfileStore } from '../store/profileStore';
 import { useUnlockStore } from '../store/unlockStore';
-import { hasActivePaidAccess } from '../lib/membershipDisplay';
+import { hasActivePaidAccess, getProfileRingFlags } from '../lib/membershipDisplay';
 import { GoogleSignIn } from './auth/GoogleSignIn';
 import { DonateThankYouBox } from './donation/DonateThankYouBox';
-import { AppHeader } from './layout/AppHeader';
+import { DonateModal } from './donation/DonateModal';
+import { buildJapamWhatsAppShareHref } from './ui/WhatsAppFab';
 import { loadMyAppreciations, type MyAppreciations } from '../lib/firestore';
 import { useReminderStore } from '../store/reminderStore';
 import {
@@ -26,7 +27,17 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 const WHATSAPP_LINK = 'https://wa.me/919505009699';
+const WHATSAPP_DEITY_SUGGEST =
+  'https://wa.me/919505009699?text=Hi%2C%20I%20would%20like%20to%20suggest%20adding%20a%20new%20deity%2Fgod%2Fjapa%20to%20Japam%20app%3A%20';
 const API_BASE = import.meta.env.VITE_API_URL ?? '';
+
+function HeartIconSm() {
+  return (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+    </svg>
+  );
+}
 const PRIEST_TOKEN_KEY = 'japam_priest_token';
 const PRIEST_TEMPLE_KEY = 'japam_priest_temple';
 
@@ -55,11 +66,6 @@ const Icons = {
   update: () => (
     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-    </svg>
-  ),
-  chat: () => (
-    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
     </svg>
   ),
   apavarga: () => (
@@ -139,9 +145,11 @@ export function Settings({ onBack }: SettingsProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
+  const signOut = useAuthStore((s) => s.signOut);
   const tier = useUnlockStore((s) => s.tier);
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
   const unlockExpiresAt = useUnlockStore((s) => s.unlockExpiresAt);
+  const isDonor = useUnlockStore((s) => s.isDonor);
   const { backgroundMusicEnabled, backgroundMusicVolume, load, setBackgroundMusic, setBackgroundMusicVolume } = useSettingsStore();
   const { displayName, setDisplayName } = useProfileStore();
   const [localName, setLocalName] = useState(displayName ?? '');
@@ -169,6 +177,38 @@ export function Settings({ onBack }: SettingsProps) {
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState(false);
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [showDonate, setShowDonate] = useState(false);
+  const [apavargaLaunched, setApavargaLaunched] = useState(false);
+  const [waMenuOpen, setWaMenuOpen] = useState(false);
+  const waMenuRef = useRef<HTMLDivElement>(null);
+
+  const { showProRing: isPro, showPremiumRing: isPremium } = getProfileRingFlags({
+    tier,
+    levelsUnlocked,
+    unlockExpiresAt,
+    isDonor,
+  });
+  const profileInitial =
+    (displayName && displayName.charAt(0).toUpperCase()) ||
+    (user?.displayName && user.displayName.charAt(0).toUpperCase()) ||
+    (user?.email ? user.email.charAt(0).toUpperCase() : '?');
+
+  useEffect(() => {
+    const url = API_BASE ? `${API_BASE}/api/public/app-config` : '/api/public/app-config';
+    fetch(url)
+      .then((r) => r.json())
+      .then((d) => setApavargaLaunched(d?.apavargaLaunched === true))
+      .catch(() => setApavargaLaunched(false));
+  }, []);
+
+  useEffect(() => {
+    if (!waMenuOpen) return;
+    const close = (e: MouseEvent) => {
+      if (waMenuRef.current && !waMenuRef.current.contains(e.target as Node)) setWaMenuOpen(false);
+    };
+    document.addEventListener('click', close);
+    return () => document.removeEventListener('click', close);
+  }, [waMenuOpen]);
 
   useEffect(() => {
     const onCheckResult = (e: Event) => {
@@ -317,13 +357,61 @@ export function Settings({ onBack }: SettingsProps) {
     <div className="relative min-h-screen p-4 pb-[env(safe-area-inset-bottom)] overflow-hidden">
       <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10 max-w-md mx-auto">
-        <AppHeader title="Settings" showBack onBack={onBack} />
+        <header className="flex items-center gap-2 w-full mb-4 min-h-[44px]">
+          <button
+            type="button"
+            onClick={onBack}
+            className="text-amber-400 text-xs sm:text-sm font-medium hover:text-amber-300 shrink-0"
+          >
+            ← Back
+          </button>
+          <h1 className="text-base sm:text-xl font-bold text-amber-400 truncate flex-1 min-w-0" style={{ fontFamily: 'serif' }}>
+            Settings
+          </h1>
+        </header>
+
+        {user && (
+          <div className="flex items-center gap-3 mb-6 p-3 rounded-xl bg-black/25 border border-white/10">
+            <div
+              className={`relative flex-shrink-0 w-11 h-11 rounded-full border-2 flex items-center justify-center text-amber-200 font-semibold text-sm
+                ${isPremium ? 'border-amber-400 ring-2 ring-amber-400/50 bg-amber-500/20' : isPro ? 'border-green-500 ring-2 ring-green-500/50 bg-green-500/20' : 'border-amber-500/40 bg-black/30'}`}
+            >
+              {user.photoURL ? (
+                <img src={user.photoURL} alt="" className="w-full h-full rounded-full object-cover" />
+              ) : (
+                <span>{profileInitial}</span>
+              )}
+              {isPremium && <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-amber-500 flex items-center justify-center text-white text-[9px] font-bold">★</span>}
+              {isPro && !isPremium && <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-green-500 flex items-center justify-center text-white text-[9px] font-bold">✓</span>}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-amber-200/90 text-sm font-medium truncate" title={displayName || user.displayName || user.email || ''}>
+                {displayName || user.displayName || user.email?.split('@')[0] || 'Signed in'}
+              </p>
+              <p className="text-amber-200/50 text-xs truncate">{user.email}</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowDonate(true)}
+              className="p-2 rounded-lg text-amber-400/90 hover:bg-white/10 hover:text-amber-400 min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0"
+              aria-label={t('menu.donate')}
+            >
+              <HeartIconSm />
+            </button>
+          </div>
+        )}
+
+        {showDonate && (
+          <DonateModal onClose={() => setShowDonate(false)} onDonated={() => setShowDonate(false)} />
+        )}
 
         <DonateThankYouBox />
 
-        <section className="mb-6">
-          <GoogleSignIn />
-        </section>
+        {!user && (
+          <section className="mb-6">
+            <GoogleSignIn />
+          </section>
+        )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {user && (
@@ -458,7 +546,17 @@ export function Settings({ onBack }: SettingsProps) {
             </div>
           </SettingsCard>
 
-          {(tier === 'pro' || tier === 'premium') && hasActivePaidAccess(levelsUnlocked, unlockExpiresAt) ? (
+          {!apavargaLaunched ? (
+            <div className="rounded-2xl bg-black/20 border border-white/10 p-4 flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400">
+                <Icons.apavarga />
+              </div>
+              <div className="flex-1 min-w-0">
+                <span className="font-medium text-amber-200 block">Apavarga (Spiritual Social Network)</span>
+                <span className="text-amber-300/90 text-xs font-semibold">Launching soon</span>
+              </div>
+            </div>
+          ) : (tier === 'pro' || tier === 'premium') && hasActivePaidAccess(levelsUnlocked, unlockExpiresAt) ? (
             <a
               href="/apavarga"
               className="rounded-2xl bg-black/20 border border-white/10 p-4 flex items-center gap-4 hover:bg-white/5 transition-colors no-underline"
@@ -569,28 +667,64 @@ export function Settings({ onBack }: SettingsProps) {
           </SettingsCard>
         </div>
 
-        <div className="mt-6 flex justify-center gap-4">
-          <a
-            href={WHATSAPP_LINK}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 w-12 h-12 rounded-xl bg-[#25D366]/90 text-white hover:bg-[#25D366] transition-colors"
-            aria-label="Contact WhatsApp"
-          >
-            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-            </svg>
-          </a>
-          <a
-            href="https://wa.me/919505009699?text=Hi%2C%20I%20would%20like%20to%20suggest%20adding%20a%20new%20deity%2Fgod%2Fjapa%20to%20Japam%20app%3A%20"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 w-12 h-12 rounded-xl bg-white/10 text-amber-200 hover:bg-white/15 transition-colors"
-            aria-label="Suggest deity"
-          >
-            <Icons.chat />
-          </a>
+        <div className="mt-6 flex justify-center" ref={waMenuRef}>
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setWaMenuOpen((o) => !o)}
+              className="flex items-center justify-center w-12 h-12 rounded-xl bg-[#25D366]/90 text-white hover:bg-[#25D366] transition-colors"
+              aria-label="WhatsApp options"
+              aria-expanded={waMenuOpen}
+            >
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+              </svg>
+            </button>
+            {waMenuOpen && (
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 py-1 rounded-xl bg-black/95 border border-amber-500/30 shadow-xl z-50 min-w-[200px] text-left">
+                <a
+                  href={buildJapamWhatsAppShareHref(user?.uid)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setWaMenuOpen(false)}
+                  className="block px-4 py-2.5 text-sm text-amber-200 hover:bg-white/10"
+                >
+                  Share Japam on WhatsApp
+                </a>
+                <a
+                  href={WHATSAPP_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setWaMenuOpen(false)}
+                  className="block px-4 py-2.5 text-sm text-amber-200 hover:bg-white/10"
+                >
+                  Contact
+                </a>
+                <a
+                  href={WHATSAPP_DEITY_SUGGEST}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setWaMenuOpen(false)}
+                  className="block px-4 py-2.5 text-sm text-amber-200 hover:bg-white/10"
+                >
+                  Request a new deity
+                </a>
+              </div>
+            )}
+          </div>
         </div>
+
+        {user && (
+          <div className="mt-8 mb-4 flex justify-center">
+            <button
+              type="button"
+              onClick={() => signOut()}
+              className="px-6 py-3 rounded-xl border border-amber-500/40 text-amber-200/90 text-sm font-medium hover:bg-white/5"
+            >
+              {t('menu.signOut')}
+            </button>
+          </div>
+        )}
       </div>
       <AppFooter />
     </div>

@@ -75,12 +75,13 @@ export function BottomNav() {
   const pathname = location.pathname;
   const getCurrentLevelIndex = useProgressStore((s) => s.getCurrentLevelIndex);
   const user = useAuthStore((s) => s.user);
-  const needsSignIn = isFirebaseConfigured && !user;
+  const authLoading = useAuthStore((s) => s.loading);
+  const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle);
 
-  const handlePlay = () => {
-    if (needsSignIn) {
-      navigate('/signin');
-      return;
+  const handlePlay = async () => {
+    if (isFirebaseConfigured && !user && !authLoading) {
+      await signInWithGoogle();
+      if (!useAuthStore.getState().user) return;
     }
     const lastPaused = getLastPausedGame();
     if (lastPaused?.mode != null && lastPaused?.levelIndex != null) {

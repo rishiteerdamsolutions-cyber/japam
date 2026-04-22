@@ -34,6 +34,7 @@ const AdminLevelsPage = lazy(() => import('./pages/admin/AdminLevelsPage').then(
 const AdminVideosPage = lazy(() => import('./pages/admin/AdminVideosPage').then(m => ({ default: m.AdminVideosPage })))
 const AdminVideoAnalyticsPage = lazy(() => import('./pages/admin/AdminVideoAnalyticsPage').then(m => ({ default: m.AdminVideoAnalyticsPage })))
 const AdminAnalyticsPage = lazy(() => import('./pages/admin/AdminAnalyticsPage').then(m => ({ default: m.AdminAnalyticsPage })))
+const AdminAppConfigPage = lazy(() => import('./pages/admin/AdminAppConfigPage').then(m => ({ default: m.AdminAppConfigPage })))
 const PriestPage = lazy(() => import('./pages/PriestPage').then(m => ({ default: m.PriestPage })))
 const MarathonsPage = lazy(() => import('./pages/MarathonsPage').then(m => ({ default: m.MarathonsPage })))
 const MahaYagnasPage = lazy(() => import('./pages/MahaYagnasPage').then(m => ({ default: m.MahaYagnasPage })))
@@ -115,6 +116,7 @@ createRoot(document.getElementById('root')!).render(
             <Route path="video-analytics" element={<AdminVideoAnalyticsPage />} />
             <Route path="users" element={<AdminUsersPage />} />
             <Route path="analytics" element={<AdminAnalyticsPage />} />
+            <Route path="app-config" element={<AdminAppConfigPage />} />
           </Route>
         </Route>
         <Route path="/priest" element={<PriestPage />} />

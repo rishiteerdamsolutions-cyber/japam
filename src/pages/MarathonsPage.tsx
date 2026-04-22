@@ -11,6 +11,7 @@ import { AppHeader } from '../components/layout/AppHeader';
 import { BottomNav } from '../components/nav/BottomNav';
 import { paddedLeaderboard, renderRankCardBlob } from '../lib/rankCard';
 import { trackShareEvent } from '../lib/firestore';
+import { DEFAULT_FREE_MARATHON_ID, isDefaultFreeMarathonId } from '../lib/defaultCommunityEvents';
 
 const STATES = [...INDIA_REGIONS.states, ...INDIA_REGIONS.union_territories];
 
@@ -75,7 +76,7 @@ export function MarathonsPage() {
   const state = STATES.find((s) => s.name === stateName) || null;
 
   useEffect(() => {
-    if (!user?.uid || !isPro) {
+    if (!user?.uid) {
       setJoinedMarathonIds(new Set());
       setMyMarathons([]);
       return;
@@ -92,7 +93,7 @@ export function MarathonsPage() {
       }
     };
     load();
-  }, [user?.uid, isPro]);
+  }, [user?.uid]);
   const districts = state?.districts ?? [];
 
   useEffect(() => {
@@ -135,7 +136,11 @@ export function MarathonsPage() {
     if (!user?.uid || !participated) return lb;
     if (!lb.some((p) => p.uid === user.uid)) {
       const myM = myMarathons.find((x) => x.marathonId === marathon.id);
-      const nextRank = lb.length > 0 ? Math.max(...lb.map((e) => e.rank)) + 1 : 1;
+      const nextRank = isDefaultFreeMarathonId(marathon.id)
+        ? 1
+        : lb.length > 0
+          ? Math.max(...lb.map((e) => e.rank)) + 1
+          : 1;
       lb.push({
         rank: nextRank,
         uid: user.uid,
@@ -179,8 +184,8 @@ export function MarathonsPage() {
       navigate('/');
       return;
     }
-    if (!isPro) {
-      setJoinError('Pro member required to join marathons. Unlock full access first.');
+    if (!isPro && !isDefaultFreeMarathonId(marathonId)) {
+      setJoinError('Pro member required to join temple marathons. Unlock full access first.');
       return;
     }
     setJoinError(null);
@@ -247,8 +252,15 @@ export function MarathonsPage() {
       const currentEntry = lb.find((p) => p.uid === user.uid);
       const myM = myMarathons.find((m) => m.marathonId === marathon.id);
       const japasOverride = myM && (myM.japasCount ?? 0) > (currentEntry?.japasCount ?? 0) ? myM.japasCount : undefined;
-      const rankText =
-        !participated ? 'My rank 0 in this Japa Marathon! ' : currentEntry ? `My rank ${currentEntry.rank} in this Japa Marathon! ` : '';
+      const isStarterMarathon = isDefaultFreeMarathonId(marathon.id);
+      const jp = japasOverride ?? currentEntry?.japasCount ?? myM?.japasCount ?? 0;
+      const rankText = isStarterMarathon
+        ? `My Shiva starter marathon: ${jp} / ${marathon.targetJapas} japas. `
+        : !participated
+          ? 'My rank 0 in this Japa Marathon! '
+          : currentEntry
+            ? `My rank ${currentEntry.rank} in this Japa Marathon! `
+            : '';
       const shareText = `${rankText}Join at www.japam.digital`;
 
       const blob = await renderRankCardBlob({
@@ -260,6 +272,7 @@ export function MarathonsPage() {
         currentUserJapasOverride: japasOverride,
         currentUserDisplayName: user.displayName || user.email?.split('@')[0] || undefined,
         currentUserParticipated: participated,
+        soloPersonalMarathon: isStarterMarathon,
       });
       if (!blob) throw new Error('Failed to generate image');
 
@@ -333,17 +346,12 @@ export function MarathonsPage() {
         title="Japa Marathons"
         showBack
         onBack={() => navigate('/menu')}
-        rightElement={
-          <a href="/settings" className="text-amber-200/70 text-xs hover:text-amber-300">
-            Priest
-          </a>
-        }
       />
 
       <p className="text-amber-200/80 text-sm mb-4">Discover marathons by location and join to contribute your japas.</p>
       {!isPro && (
         <div className="mb-4 p-3 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-100 text-sm">
-          Pro is required to join marathons.
+          Pro is required to join <span className="font-medium">temple</span> marathons. Your free Shiva starter marathon (1080 japas) is personal to you — rank cards show only your progress. The free Rama starter Maha Japa Yagna is open to everyone on the app with the usual shared leaderboard.
           <button
             type="button"
             onClick={() => navigate(`/game?mode=general&level=${FIRST_LOCKED_LEVEL_INDEX}`)}
@@ -376,12 +384,12 @@ export function MarathonsPage() {
 
       <DonateThankYouBox />
 
-      {user && isPro && myMarathons.length > 0 && (
+      {user && myMarathons.length > 0 && (
         <div className="mb-6 p-4 rounded-xl bg-black/30 border border-amber-500/30">
           <h2 className="text-amber-400 font-semibold mb-3">Your marathons</h2>
           <p className="text-amber-200/70 text-sm mb-3">Do your japa for these marathons — your japas count toward the marathon.</p>
           <div className="space-y-2">
-            {myMarathons.map((my) => (
+            {[...myMarathons].sort((a, b) => (a.marathonId === DEFAULT_FREE_MARATHON_ID ? -1 : b.marathonId === DEFAULT_FREE_MARATHON_ID ? 1 : 0)).map((my) => (
               <div key={my.marathonId} className="py-2 border-t border-amber-500/10 first:border-t-0 first:pt-0">
                 <div className="flex items-center justify-between gap-2">
                   <div>
@@ -444,9 +452,14 @@ export function MarathonsPage() {
                 {openMyLeaderboard.has(my.marathonId) && my.leaderboard && my.leaderboard.length > 0 && (
                   <div className="mt-2 pl-2 border-l-2 border-amber-500/20">
                     <div className="flex items-center justify-between gap-2">
-                      <p className="text-amber-200/70 text-xs font-medium mb-1">Top participants</p>
+                      <p className="text-amber-200/70 text-xs font-medium mb-1">
+                        {isDefaultFreeMarathonId(my.marathonId) ? 'Your progress' : 'Top participants'}
+                      </p>
                     </div>
-                    {paddedLeaderboard(my.leaderboard).map((p) => (
+                    {(isDefaultFreeMarathonId(my.marathonId)
+                      ? my.leaderboard
+                      : paddedLeaderboard(my.leaderboard)
+                    ).map((p) => (
                       <p key={p.rank} className="text-amber-200/60 text-xs">
                         {p.rank}. {p.uid ? `${p.name} — ${p.japasCount} japas` : 'Vacant'}
                       </p>
@@ -548,10 +561,20 @@ export function MarathonsPage() {
                               <div className="flex flex-col items-end gap-1">
                                 <button
                                   onClick={() => handleJoin(m.id)}
-                                  disabled={!!joining || !isPro || joinedMarathonIds.has(m.id)}
+                                  disabled={
+                                    !!joining ||
+                                    joinedMarathonIds.has(m.id) ||
+                                    (!isPro && !isDefaultFreeMarathonId(m.id))
+                                  }
                                   className="px-4 py-2 rounded-lg bg-amber-500 text-white text-sm font-medium disabled:opacity-50"
                                 >
-                                  {joining === m.id ? '…' : joinedMarathonIds.has(m.id) ? 'Joined' : !isPro ? 'Pro required' : 'Join'}
+                                  {joining === m.id
+                                    ? '…'
+                                    : joinedMarathonIds.has(m.id)
+                                      ? 'Joined'
+                                      : !isPro && !isDefaultFreeMarathonId(m.id)
+                                        ? 'Pro required'
+                                        : 'Join'}
                                 </button>
                                 {canDownload && (
                                   <button

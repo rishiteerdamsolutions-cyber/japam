@@ -102,6 +102,8 @@ import * as userShareEventHandler from './_handlers/user/share-event.js';
 import * as userReferralEventHandler from './_handlers/user/referral-event.js';
 import * as userReferralAttributeHandler from './_handlers/user/referral-attribute.js';
 import * as publicActiveUsersHandler from './_handlers/public/active-users.js';
+import * as publicAppConfigHandler from './_handlers/public/app-config.js';
+import * as adminAppConfigHandler from './_handlers/admin/app-config.js';
 import * as userReminderHandler from './_handlers/user/reminder.js';
 import * as donateOrderHandler from './_handlers/donate-order.js';
 import * as verifyDonateHandler from './_handlers/verify-donate.js';
@@ -242,6 +244,9 @@ const HANDLERS = {
   'POST user/referral-event': userReferralEventHandler,
   'POST user/referral-attribute': userReferralAttributeHandler,
   'GET public/active-users': publicActiveUsersHandler,
+  'GET public/app-config': publicAppConfigHandler,
+  'GET admin/app-config': adminAppConfigHandler,
+  'POST admin/app-config': adminAppConfigHandler,
   'GET user/reminder': userReminderHandler,
   'POST user/reminder': userReminderHandler,
   'POST donate-order': donateOrderHandler,

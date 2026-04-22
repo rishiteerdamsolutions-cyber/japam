@@ -10,6 +10,7 @@ import { FIRST_LOCKED_LEVEL_INDEX, useUnlockStore } from '../store/unlockStore';
 import { auth } from '../lib/firebase';
 import { paddedLeaderboard, renderRankCardBlob } from '../lib/rankCard';
 import { trackShareEvent } from '../lib/firestore';
+import { DEFAULT_FREE_YAGNA_ID, isDefaultFreeYagnaId } from '../lib/defaultCommunityEvents';
 
 const API_BASE = import.meta.env.VITE_API_URL ?? '';
 
@@ -136,7 +137,8 @@ export function MahaYagnasPage() {
   }, [loadContributions]);
 
   const handleJoin = async (yagnaId: string) => {
-    if (!user?.uid || !isPro) return;
+    if (!user?.uid) return;
+    if (!isPro && !isDefaultFreeYagnaId(yagnaId)) return;
     const idToken = await auth?.currentUser?.getIdToken?.().catch(() => null);
     if (!idToken) return;
     setJoiningYagnaId(yagnaId);
@@ -319,12 +321,12 @@ export function MahaYagnasPage() {
           </div>
         )}
 
-        {user && isPro && joinedYagnas.length > 0 && (
+        {user && joinedYagnas.length > 0 && (
           <div className="mb-6 p-4 rounded-xl bg-black/30 border border-amber-500/30">
             <h2 className="text-amber-400 font-semibold mb-3">{t('mahaYagnas.yourYagnas') || 'Your yagnas'}</h2>
             <p className="text-amber-200/70 text-sm mb-3">{t('mahaYagnas.yourYagnasDesc') || 'Do your japa for these yagnas — your japas count toward the collective goal.'}</p>
             <div className="space-y-2">
-              {joinedYagnas.map((y) => {
+              {[...joinedYagnas].sort((a, b) => (a.id === DEFAULT_FREE_YAGNA_ID ? -1 : b.id === DEFAULT_FREE_YAGNA_ID ? 1 : 0)).map((y) => {
                 const contrib = contribByYagna.get(y.id)!;
                 const lb = leaderboards[y.id] ?? [];
                 const showLb = openLeaderboard.has(y.id);
@@ -396,6 +398,7 @@ export function MahaYagnasPage() {
           <div className="mb-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/30">
             <p className="text-amber-200 text-sm font-medium">{t('mahaYagnas.proOnlyTitle')}</p>
             <p className="text-amber-200/80 text-sm mt-1 break-words">
+              The free Rama starter Maha Japa (1 crore goal) is open to everyone on the app: one shared goal and leaderboard for all participants.{' '}
               {t('mahaYagnas.proOnlyMessage')}
             </p>
             <button
@@ -419,7 +422,11 @@ export function MahaYagnasPage() {
           {yagnas.map((y) => {
             const contrib = contribByYagna.get(y.id);
             const hasJoined = !!contrib;
-            const showJoin = isPro && user && !hasJoined && y.currentJapas < y.goalJapas;
+            const showJoin =
+              user &&
+              !hasJoined &&
+              y.currentJapas < y.goalJapas &&
+              (isPro || isDefaultFreeYagnaId(y.id));
             const pct = Math.min(100, y.goalJapas > 0 ? (100 * y.currentJapas) / y.goalJapas : 0);
             const isComplete = y.currentJapas >= y.goalJapas;
 

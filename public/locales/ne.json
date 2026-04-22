@@ -5,6 +5,10 @@
     "description": "दिव्य मिठाई मिलाउनुहोस्। मन्त्र सुन्नुहोस्। आफ्नो जप बढाउनुहोस्।",
     "beginJapa": "जप सुरु गर्नुहोस्",
     "tryAsGuest": "अतिथिको रूपमा प्रयास गर्नुहोस्",
+    "startJapam": "Start Japam",
+    "startJapamLoginHint": "(Gmail Login)",
+    "tryJapam": "Try Japam",
+    "tryJapamNoLoginHint": "(No Login)",
     "builtBy": "निर्माण गर्ने",
     "copyright": "सर्वाधिकार सुरक्षित।",
     "contact": "सम्पर्क",
@@ -28,6 +32,8 @@
     "title": "जपम",
     "tagline": "मिलाउनुहोस्, जप गर्नुहोस्",
     "generalJapa": "सामान्य जप",
+    "startJapa": "Start Japa",
+    "allDevatasTag": "(All Devatas)",
     "istaDevata": "इष्ट देवता जप",
     "japaMarathons": "जप म्याराथन",
     "japaCount": "जप गणना",
@@ -38,7 +44,9 @@
     "pro": "प्रो",
     "general": "general",
     "offerDakshinaToUnlock": "offer_dakshina_to_unlock",
-    "mahaJapaYagnas": "महा जप यज्ञ"
+    "mahaJapaYagnas": "महा जप यज्ञ",
+    "navStripMarathons": "Marathons",
+    "navStripYagnas": "Yagnas"
   },
   "game": {
     "jai": "जय!",

@@ -5,6 +5,10 @@
     "description": "ദിവ്യ മിഠായികൾ ചേർക്കുക. മന്ത്രങ്ങൾ കേൾക്കുക. നിങ്ങളുടെ ജപം വളർത്തുക.",
     "beginJapa": "ജപം ആരംഭിക്കുക",
     "tryAsGuest": "അതിഥിയായി പരീക്ഷിക്കുക",
+    "startJapam": "Start Japam",
+    "startJapamLoginHint": "(Gmail Login)",
+    "tryJapam": "Try Japam",
+    "tryJapamNoLoginHint": "(No Login)",
     "builtBy": "നിർമ്മിച്ചത്",
     "copyright": "എല്ലാ അവകാശങ്ങളും നിക്ഷിപ്തം.",
     "contact": "ബന്ധപ്പെടുക",
@@ -28,6 +32,8 @@
     "title": "ജപം",
     "tagline": "ചേർക്കുക, ജപിക്കുക",
     "generalJapa": "പൊതു ജപം",
+    "startJapa": "Start Japa",
+    "allDevatasTag": "(All Devatas)",
     "istaDevata": "ഇഷ്ട ദേവതാ ജപം",
     "japaMarathons": "ജപ മാരത്തോണുകൾ",
     "japaCount": "ജപ എണ്ണം",
@@ -38,7 +44,9 @@
     "pro": "പ്രോ",
     "general": "general",
     "offerDakshinaToUnlock": "offer_dakshina_to_unlock",
-    "mahaJapaYagnas": "മഹാ ജപ യജ്ഞം"
+    "mahaJapaYagnas": "മഹാ ജപ യജ്ഞം",
+    "navStripMarathons": "Marathons",
+    "navStripYagnas": "Yagnas"
   },
   "game": {
     "jai": "ജയ്!",

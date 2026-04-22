@@ -5,6 +5,10 @@
     "description": "ଦିବ୍ୟ ମିଠାଇ ମିଳାନ୍ତୁ। ମନ୍ତ୍ର ଶୁଣନ୍ତୁ। ଆପଣଙ୍କ ଜପ ବଢାନ୍ତୁ।",
     "beginJapa": "ଜପ ଆରମ୍ଭ କରନ୍ତୁ",
     "tryAsGuest": "ଅତିଥି ଭାବରେ ଚେଷ୍ଟା କରନ୍ତୁ",
+    "startJapam": "Start Japam",
+    "startJapamLoginHint": "(Gmail Login)",
+    "tryJapam": "Try Japam",
+    "tryJapamNoLoginHint": "(No Login)",
     "builtBy": "ନିର୍ମାଣକାରୀ",
     "copyright": "ସମସ୍ତ ଅଧିକାର ସଂରକ୍ଷିତ।",
     "contact": "ଯୋଗାଯୋଗ",
@@ -28,6 +32,8 @@
     "title": "ଜପମ",
     "tagline": "ମିଳାନ୍ତୁ, ଜପ କରନ୍ତୁ",
     "generalJapa": "ସାଧାରଣ ଜପ",
+    "startJapa": "Start Japa",
+    "allDevatasTag": "(All Devatas)",
     "istaDevata": "ଇଷ୍ଟ ଦେବତା ଜପ",
     "japaMarathons": "ଜପ ମାରାଥନ୍",
     "japaCount": "ଜପ ସଂଖ୍ୟା",
@@ -38,7 +44,9 @@
     "pro": "ପ୍ରୋ",
     "general": "general",
     "offerDakshinaToUnlock": "offer_dakshina_to_unlock",
-    "mahaJapaYagnas": "ମହା ଜପ ଯଜ୍ଞ"
+    "mahaJapaYagnas": "ମହା ଜପ ଯଜ୍ଞ",
+    "navStripMarathons": "Marathons",
+    "navStripYagnas": "Yagnas"
   },
   "game": {
     "jai": "ଜୟ!",

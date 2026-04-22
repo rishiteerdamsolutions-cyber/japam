@@ -5,6 +5,10 @@
     "description": "दैवी मिठाई मिलाओ। मन्त्र सुनो। अपणा जप बढाओ।",
     "beginJapa": "जप शुरू करो",
     "tryAsGuest": "मेहमान बन के कोशिश करो",
+    "startJapam": "Start Japam",
+    "startJapamLoginHint": "(Gmail Login)",
+    "tryJapam": "Try Japam",
+    "tryJapamNoLoginHint": "(No Login)",
     "builtBy": "बनावैया",
     "copyright": "सब अधिकार सुरक्षित।",
     "contact": "संपर्क",
@@ -28,6 +32,8 @@
     "title": "जपम",
     "tagline": "मिलाओ, जप करो",
     "generalJapa": "सामान्य जप",
+    "startJapa": "Start Japa",
+    "allDevatasTag": "(All Devatas)",
     "istaDevata": "इष्ट देवता जप",
     "japaMarathons": "जप मैराथन",
     "japaCount": "जप गिनती",
@@ -38,7 +44,9 @@
     "pro": "प्रो",
     "general": "general",
     "offerDakshinaToUnlock": "offer_dakshina_to_unlock",
-    "mahaJapaYagnas": "महा जप यज्ञ"
+    "mahaJapaYagnas": "महा जप यज्ञ",
+    "navStripMarathons": "Marathons",
+    "navStripYagnas": "Yagnas"
   },
   "game": {
     "jai": "जय!",

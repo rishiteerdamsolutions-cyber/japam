@@ -5,6 +5,10 @@
     "description": "ದಿವ್ಯ ಸಿಹಿತಿಂಡಿಗಳನ್ನು ಹೊಂದಿಸಿ. ಮಂತ್ರಗಳನ್ನು ಕೇಳಿ. ನಿಮ್ಮ ಜಪವನ್ನು ಬೆಳೆಸಿ.",
     "beginJapa": "ಜಪ ಪ್ರಾರಂಭಿಸಿ",
     "tryAsGuest": "ಅತಿಥಿಯಾಗಿ ಪ್ರಯತ್ನಿಸಿ",
+    "startJapam": "Start Japam",
+    "startJapamLoginHint": "(Gmail Login)",
+    "tryJapam": "Try Japam",
+    "tryJapamNoLoginHint": "(No Login)",
     "builtBy": "ನಿರ್ಮಿಸಿದವರು",
     "copyright": "ಎಲ್ಲ ಹಕ್ಕುಗಳೂ ಕಾಯ್ದಿರಿಸಿವೆ.",
     "contact": "ಸಂಪರ್ಕಿಸಿ",
@@ -28,6 +32,8 @@
     "title": "ಜಪಂ",
     "tagline": "ಹೊಂದಿಸಿ, ಜಪಿಸಿ",
     "generalJapa": "ಸಾಮಾನ್ಯ ಜಪ",
+    "startJapa": "Start Japa",
+    "allDevatasTag": "(All Devatas)",
     "istaDevata": "ಇಷ್ಟ ದೇವತಾ ಜಪ",
     "japaMarathons": "ಜಪ ಮ್ಯಾರಥಾನ್‌ಗಳು",
     "japaCount": "ಜಪ ಎಣಿಕೆ",
@@ -38,7 +44,9 @@
     "pro": "ಪ್ರೋ",
     "general": "general",
     "offerDakshinaToUnlock": "offer_dakshina_to_unlock",
-    "mahaJapaYagnas": "ಮಹಾ ಜಪ ಯಜ್ಞ"
+    "mahaJapaYagnas": "ಮಹಾ ಜಪ ಯಜ್ಞ",
+    "navStripMarathons": "Marathons",
+    "navStripYagnas": "Yagnas"
   },
   "game": {
     "jai": "ಜೈ!",

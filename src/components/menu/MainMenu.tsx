@@ -51,6 +51,7 @@ export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
   const tier = useUnlockStore((s) => s.tier);
   const [showDonate, setShowDonate] = useState(false);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
+  const [showIstaDevathaGrid, setShowIstaDevathaGrid] = useState(false);
   const moreMenuRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -159,45 +160,67 @@ export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
 
         <motion.button
           type="button"
-          aria-label={t('menu.generalJapa')}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+          aria-label={`${t('menu.startJapa')} ${t('menu.allDevatasTag')}`}
+          whileHover={{ scale: 1.01 }}
+          whileTap={{ scale: 0.99 }}
           initial={{ opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.05 }}
           onClick={() => onSelect('general')}
-          className="w-full mb-4 py-3 px-4 rounded-2xl bg-amber-500/20 border-2 border-amber-500/50 hover:border-amber-400/70 hover:bg-amber-500/30 transition-colors flex items-center justify-center gap-2"
+          className="w-full mb-2 py-2 px-3 rounded-xl bg-amber-500/20 border border-amber-500/50 hover:border-amber-400/70 hover:bg-amber-500/30 transition-colors flex flex-col items-center justify-center gap-0.5"
         >
-          <span className="text-amber-400 font-semibold text-sm">{t('menu.generalJapa')}</span>
+          <span className="text-amber-300 font-semibold text-sm leading-tight">{t('menu.startJapa')}</span>
+          <span className="text-amber-200/75 text-[11px] leading-tight font-normal">
+            {t('menu.allDevatasTag')}
+          </span>
         </motion.button>
 
-        <p className="text-amber-200/80 text-xs uppercase tracking-wider mb-2 mt-2">{t('menu.istaDevata')}</p>
-        <div className="grid grid-cols-2 gap-3 w-full mb-6">
-          {DEITIES.map((deity, i) => (
-            <motion.button
-              key={deity.id}
-              type="button"
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.98 }}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.03 }}
-              className="flex flex-col items-center rounded-2xl overflow-hidden shadow-xl bg-black/40 border-2 border-white/20 hover:border-amber-400/50 transition-colors"
-              onClick={() => onSelect(deity.id)}
-            >
-              <div className="w-full aspect-square relative bg-black/30">
-                <img
-                  src={deity.image}
-                  alt={deity.name}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <span className="py-2 px-1.5 sm:px-2 text-xs sm:text-sm font-semibold text-white w-full text-center truncate min-w-0" title={t(`deities.${deity.id}`)}>
-                {t(`deities.${deity.id}`)}
-              </span>
-            </motion.button>
-          ))}
-        </div>
+        <button
+          type="button"
+          id="ista-devatha-toggle"
+          aria-expanded={showIstaDevathaGrid}
+          aria-controls="ista-devatha-grid"
+          onClick={() => setShowIstaDevathaGrid((v) => !v)}
+          className="w-full mb-2 py-2 px-3 rounded-xl bg-black/30 border border-white/15 hover:border-amber-500/40 hover:bg-black/40 transition-colors flex items-center justify-center"
+        >
+          <span className="text-amber-300/95 font-medium text-xs sm:text-sm text-center">
+            {t('menu.istaDevata')}
+          </span>
+        </button>
+
+        {showIstaDevathaGrid && (
+          <div
+            id="ista-devatha-grid"
+            className="grid grid-cols-2 gap-3 w-full mb-6"
+            role="region"
+            aria-label={t('menu.istaDevata')}
+          >
+            {DEITIES.map((deity, i) => (
+              <motion.button
+                key={deity.id}
+                type="button"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.98 }}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.03 }}
+                className="flex flex-col items-center rounded-2xl overflow-hidden shadow-xl bg-black/40 border-2 border-white/20 hover:border-amber-400/50 transition-colors"
+                onClick={() => onSelect(deity.id)}
+              >
+                <div className="w-full aspect-square relative bg-black/30">
+                  <img
+                    src={deity.image}
+                    alt={deity.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <span className="py-2 px-1.5 sm:px-2 text-xs sm:text-sm font-semibold text-white w-full text-center truncate min-w-0" title={t(`deities.${deity.id}`)}>
+                  {t(`deities.${deity.id}`)}
+                </span>
+              </motion.button>
+            ))}
+          </div>
+        )}
 
         <div className="mb-24" />
         <AppFooter />

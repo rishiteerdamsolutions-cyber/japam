@@ -5,6 +5,10 @@
     "description": "দৈৱিক মিঠাই মিলাওক। মন্ত্ৰ শুনক। আপোনাৰ জপ গঢ়ক।",
     "beginJapa": "জপ আৰম্ভ কৰক",
     "tryAsGuest": "অতিথি হিচাপে চেষ্টা কৰক",
+    "startJapam": "Start Japam",
+    "startJapamLoginHint": "(Gmail Login)",
+    "tryJapam": "Try Japam",
+    "tryJapamNoLoginHint": "(No Login)",
     "builtBy": "নিৰ্মাণকাৰী",
     "copyright": "সকলো অধিকাৰ সংৰক্ষিত।",
     "contact": "যোগাযোগ",
@@ -28,6 +32,8 @@
     "title": "জপম",
     "tagline": "মিলাওক, জপ কৰক",
     "generalJapa": "সাধাৰণ জপ",
+    "startJapa": "Start Japa",
+    "allDevatasTag": "(All Devatas)",
     "istaDevata": "ইষ্ট দেৱতা জপ",
     "japaMarathons": "জপ মেৰাথন",
     "japaCount": "জপ সংখ্যা",
@@ -38,7 +44,9 @@
     "pro": "প্ৰো",
     "general": "general",
     "offerDakshinaToUnlock": "offer_dakshina_to_unlock",
-    "mahaJapaYagnas": "মহা জপ যজ্ঞ"
+    "mahaJapaYagnas": "মহা জপ যজ্ঞ",
+    "navStripMarathons": "Marathons",
+    "navStripYagnas": "Yagnas"
   },
   "game": {
     "jai": "জয়!",

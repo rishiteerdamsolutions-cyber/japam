@@ -5,6 +5,10 @@
     "description": "دیوی مٹھائی ملاؤ۔ منتر سنو۔ خپل جپ بناؤ۔",
     "beginJapa": "جپ شروع کرو",
     "tryAsGuest": "مہمان بنیو کوشش کرو",
+    "startJapam": "Start Japam",
+    "startJapamLoginHint": "(Gmail Login)",
+    "tryJapam": "Try Japam",
+    "tryJapamNoLoginHint": "(No Login)",
     "builtBy": "بنان والے",
     "copyright": "سارے حقوق محفوظ۔",
     "contact": "رابطہ",
@@ -28,6 +32,8 @@
     "title": "جپم",
     "tagline": "ملاؤ، جپ کرو",
     "generalJapa": "عام جپ",
+    "startJapa": "Start Japa",
+    "allDevatasTag": "(All Devatas)",
     "istaDevata": "ایشٹ دیوتا جپ",
     "japaMarathons": "جپ میراتھن",
     "japaCount": "جپ گنتی",
@@ -38,7 +44,9 @@
     "pro": "پرو",
     "general": "general",
     "offerDakshinaToUnlock": "offer_dakshina_to_unlock",
-    "mahaJapaYagnas": "مہا جپ یجنا"
+    "mahaJapaYagnas": "مہا جپ یجنا",
+    "navStripMarathons": "Marathons",
+    "navStripYagnas": "Yagnas"
   },
   "game": {
     "jai": "جے!",

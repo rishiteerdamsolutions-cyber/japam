@@ -5,6 +5,10 @@
     "description": "ꯗꯤꯕꯤꯌꯥ ꯃꯤꯊꯥꯏ ꯃꯤꯂꯥꯎ। ꯃꯟꯇ꯭ꯔ ꯈꯦꯟꯅꯕꯤꯌꯨ। ꯅꯪꯒꯤ ꯖꯄ ꯄꯥꯟꯕꯤꯌꯨ।",
     "beginJapa": "ꯖꯄ ꯁꯨꯔꯨ ꯇꯧꯌꯨ",
     "tryAsGuest": "ꯑꯇꯤꯊꯤ ꯑꯣꯏꯅ ꯇꯨꯡꯕꯤꯌꯨ",
+    "startJapam": "Start Japam",
+    "startJapamLoginHint": "(Gmail Login)",
+    "tryJapam": "Try Japam",
+    "tryJapamNoLoginHint": "(No Login)",
     "builtBy": "ꯁꯦꯝꯕꯤꯕꯥ꯫",
     "copyright": "ꯄꯥꯟꯕ ꯑꯣꯏꯕ ꯑꯁꯤ ꯂꯧꯁꯤꯟꯂꯦ꯫",
     "contact": "ꯁꯝꯄꯔꯀꯧ",
@@ -28,6 +32,8 @@
     "title": "ꯖꯄꯝ",
     "tagline": "ꯃꯤꯂꯥꯎ, ꯖꯄ ꯇꯧ",
     "generalJapa": "ꯁꯥꯃꯥꯅ꯭ꯌꯥ ꯖꯄ",
+    "startJapa": "Start Japa",
+    "allDevatasTag": "(All Devatas)",
     "istaDevata": "ꯏꯁꯇꯥ ꯗꯦꯚꯥꯇꯥ ꯖꯄ",
     "japaMarathons": "ꯖꯄ ꯃꯦꯔꯥꯊꯟ",
     "japaCount": "ꯖꯄ ꯒꯟꯅꯥꯇꯤ",
@@ -38,7 +44,9 @@
     "pro": "ꯄ꯭ꯔꯣ",
     "general": "general",
     "offerDakshinaToUnlock": "offer_dakshina_to_unlock",
-    "mahaJapaYagnas": "ꯃꯍꯥ ꯖꯄ ꯌꯖ꯭ꯪ"
+    "mahaJapaYagnas": "ꯃꯍꯥ ꯖꯄ ꯌꯖ꯭ꯪ",
+    "navStripMarathons": "Marathons",
+    "navStripYagnas": "Yagnas"
   },
   "game": {
     "jai": "ꯖꯥꯏ!",

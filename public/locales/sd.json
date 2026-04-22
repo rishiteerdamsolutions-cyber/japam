@@ -5,6 +5,10 @@
     "description": "ديوي مٺائي ملائيو۔ منتر ٻڌيو۔ پنهنجو جپ وڌائيو۔",
     "beginJapa": "جپ شروع ڪريو",
     "tryAsGuest": "مهمان طور ڪوشش ڪريو",
+    "startJapam": "Start Japam",
+    "startJapamLoginHint": "(Gmail Login)",
+    "tryJapam": "Try Japam",
+    "tryJapamNoLoginHint": "(No Login)",
     "builtBy": "ٺاهيندڙ",
     "copyright": "سمورا حق محفوظ آهن۔",
     "contact": "رابطو",
@@ -28,6 +32,8 @@
     "title": "جپم",
     "tagline": "ملائيو، جپ ڪريو",
     "generalJapa": "عام جپ",
+    "startJapa": "Start Japa",
+    "allDevatasTag": "(All Devatas)",
     "istaDevata": "اشٽ ديوتا جپ",
     "japaMarathons": "جپ ميٿن",
     "japaCount": "جپ ڳڻپ",
@@ -38,7 +44,9 @@
     "pro": "پرو",
     "general": "general",
     "offerDakshinaToUnlock": "offer_dakshina_to_unlock",
-    "mahaJapaYagnas": "مها جپ يجن"
+    "mahaJapaYagnas": "مها جپ يجن",
+    "navStripMarathons": "Marathons",
+    "navStripYagnas": "Yagnas"
   },
   "game": {
     "jai": "جَي!",

@@ -119,10 +119,10 @@ export const useAuthStore = create<AuthState>((set) => ({
           set({ user: cred.user, loading: false, signInPending: false, error: null });
           return;
         }
-        set({ signInPending: false });
+        set({ loading: false, signInPending: false });
       })
       .catch((err) => {
-        set({ error: getAuthErrorMessage(err), signInPending: false });
+        set({ error: getAuthErrorMessage(err), loading: false, signInPending: false });
       });
 
     const unsubscribe = onAuthStateChanged(auth, (user) => {

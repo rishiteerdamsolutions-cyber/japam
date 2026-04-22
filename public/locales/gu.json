@@ -5,6 +5,10 @@
     "description": "દિવ્ય મિઠાઈ જોડો. મંત્ર સાંભળો. તમારો જપ વધારો.",
     "beginJapa": "જપ શરૂ કરો",
     "tryAsGuest": "અતિથિ તરીકે પ્રયાસ કરો",
+    "startJapam": "Start Japam",
+    "startJapamLoginHint": "(Gmail Login)",
+    "tryJapam": "Try Japam",
+    "tryJapamNoLoginHint": "(No Login)",
     "builtBy": "બનાવનાર",
     "copyright": "બધા અધિકારો અનામત.",
     "contact": "સંપર્ક કરો",
@@ -28,6 +32,8 @@
     "title": "જપમ",
     "tagline": "જોડો, જપ કરો",
     "generalJapa": "સામાન્ય જપ",
+    "startJapa": "Start Japa",
+    "allDevatasTag": "(All Devatas)",
     "istaDevata": "ઇષ્ટ દેવતા જપ",
     "japaMarathons": "જપ મેરાથોન",
     "japaCount": "જપ ગણતરી",
@@ -38,7 +44,9 @@
     "pro": "પ્રો",
     "general": "general",
     "offerDakshinaToUnlock": "offer_dakshina_to_unlock",
-    "mahaJapaYagnas": "મહા જપ યજ્ઞ"
+    "mahaJapaYagnas": "મહા જપ યજ્ઞ",
+    "navStripMarathons": "Marathons",
+    "navStripYagnas": "Yagnas"
   },
   "game": {
     "jai": "જય!",

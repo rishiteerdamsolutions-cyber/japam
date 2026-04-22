@@ -100,13 +100,16 @@ export function Landing({
 
             <motion.button
               type="button"
-              aria-label={t('landing.beginJapa')}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.98 }}
+              aria-label={`${t('landing.startJapam')} ${t('landing.startJapamLoginHint')}`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.99 }}
               onClick={onEnterApp}
-              className={`w-full max-w-xs py-4 sm:py-5 ${LANDING_PRIMARY_FRAME} bg-amber-500 text-white font-bold text-base sm:text-lg md:text-xl hover:shadow-[0_0_40px_rgba(245,158,11,0.5)] hover:bg-amber-400 hover:border-amber-300/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/80 break-words`}
+              className={`w-full max-w-xs py-2.5 sm:py-3 px-3 ${LANDING_PRIMARY_FRAME} bg-amber-500 text-white font-bold hover:shadow-[0_0_40px_rgba(245,158,11,0.5)] hover:bg-amber-400 hover:border-amber-300/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/80 break-words flex flex-col items-center justify-center gap-0.5`}
             >
-              {t('landing.beginJapa')}
+              <span className="text-sm sm:text-base leading-tight">{t('landing.startJapam')}</span>
+              <span className="text-[11px] sm:text-xs font-semibold text-white/90 leading-tight">
+                {t('landing.startJapamLoginHint')}
+              </span>
             </motion.button>
 
             {showSpecials && (
@@ -183,13 +186,16 @@ export function Landing({
             {!user && (
               <motion.button
                 type="button"
-                aria-label={t('landing.tryAsGuest')}
+                aria-label={`${t('landing.tryJapam')} ${t('landing.tryJapamNoLoginHint')}`}
                 whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                whileTap={{ scale: 0.99 }}
                 onClick={onGuestPlay}
-                className="w-full max-w-xs mt-3 py-3 sm:py-4 rounded-2xl bg-white/10 text-white font-semibold text-sm sm:text-base border border-white/15 hover:bg-white/15 transition-colors break-words"
+                className="w-full max-w-xs mt-2 py-2.5 sm:py-3 px-3 rounded-2xl bg-white/10 text-white font-semibold border border-white/15 hover:bg-white/15 transition-colors break-words flex flex-col items-center justify-center gap-0.5"
               >
-                {t('landing.tryAsGuest')}
+                <span className="text-sm sm:text-base leading-tight">{t('landing.tryJapam')}</span>
+                <span className="text-[11px] sm:text-xs text-white/85 font-medium leading-tight">
+                  {t('landing.tryJapamNoLoginHint')}
+                </span>
               </motion.button>
             )}
           </motion.section>

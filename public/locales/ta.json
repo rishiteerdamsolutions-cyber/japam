@@ -5,6 +5,10 @@
     "description": "திவ்ய மிட்டாய்களை பொருத்துங்கள். மந்திரங்களை கேளுங்கள். உங்கள் ஜபத்தை வளர்த்தெடுங்கள்.",
     "beginJapa": "ஜபம் தொடங்குங்கள்",
     "tryAsGuest": "விருந்தினராக முயற்சிக்குங்கள்",
+    "startJapam": "Start Japam",
+    "startJapamLoginHint": "(Gmail Login)",
+    "tryJapam": "Try Japam",
+    "tryJapamNoLoginHint": "(No Login)",
     "builtBy": "உருவாக்கியவர்",
     "copyright": "அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.",
     "contact": "தொடர்பு",
@@ -28,6 +32,8 @@
     "title": "ஜபம்",
     "tagline": "பொருத்துங்கள், ஜபியுங்கள்",
     "generalJapa": "பொது ஜபம்",
+    "startJapa": "Start Japa",
+    "allDevatasTag": "(All Devatas)",
     "istaDevata": "இஷ்ட தேவதை ஜபம்",
     "japaMarathons": "ஜப மாரத்தான்",
     "japaCount": "ஜப எண்ணிக்கை",
@@ -38,7 +44,9 @@
     "pro": "ப்ரோ",
     "general": "general",
     "offerDakshinaToUnlock": "offer_dakshina_to_unlock",
-    "mahaJapaYagnas": "மஹா ஜப யஜ்ஞம்"
+    "mahaJapaYagnas": "மஹா ஜப யஜ்ஞம்",
+    "navStripMarathons": "Marathons",
+    "navStripYagnas": "Yagnas"
   },
   "game": {
     "jai": "ஜெய்!",

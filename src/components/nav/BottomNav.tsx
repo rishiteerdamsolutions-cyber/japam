@@ -7,8 +7,20 @@ import { isFirebaseConfigured } from '../../lib/firebase';
 import { getLastPausedGame } from '../../lib/pausedGame';
 
 const NAV_LEFT = [
-  { id: 'marathons', path: '/marathons', icon: TrophyIcon, labelKey: 'menu.japaMarathons' },
-  { id: 'maha-yagnas', path: '/maha-yagnas', icon: FlameIcon, labelKey: 'menu.mahaJapaYagnas' },
+  {
+    id: 'marathons',
+    path: '/marathons',
+    icon: TrophyIcon,
+    labelKey: 'menu.navStripMarathons',
+    fullNameKey: 'menu.japaMarathons',
+  },
+  {
+    id: 'maha-yagnas',
+    path: '/maha-yagnas',
+    icon: FlameIcon,
+    labelKey: 'menu.navStripYagnas',
+    fullNameKey: 'menu.mahaJapaYagnas',
+  },
 ] as const;
 
 const NAV_RIGHT = [
@@ -88,15 +100,26 @@ export function BottomNav() {
     navigate(`/game?mode=general&level=${level}`);
   };
 
-  const NavItem = ({ path, icon: Icon, labelKey }: { path: string; icon: () => React.ReactNode; labelKey: string }) => {
+  const NavItem = ({
+    path,
+    icon: Icon,
+    labelKey,
+    fullNameKey,
+  }: {
+    path: string;
+    icon: () => React.ReactNode;
+    labelKey: string;
+    fullNameKey?: string;
+  }) => {
     const isActive = pathname === path;
     const label = t(labelKey);
+    const fullName = fullNameKey ? t(fullNameKey) : label;
     return (
       <button
         type="button"
         onClick={() => navigate(path)}
-        aria-label={label}
-        title={label}
+        aria-label={fullName}
+        title={fullName}
         className={`flex flex-col items-center justify-center flex-1 min-w-0 py-2 px-1 gap-0.5 transition-colors ${
           isActive ? 'text-amber-400' : 'text-amber-200/70 hover:text-amber-300'
         }`}

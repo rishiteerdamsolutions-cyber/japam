@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { AppFooter } from '../layout/AppFooter';
@@ -12,6 +12,10 @@ import { useUnlockStore } from '../../store/unlockStore';
 import type { GameMode } from '../../store/gameStore';
 import { useProfileStore } from '../../store/profileStore';
 import { getProfileRingFlags } from '../../lib/membershipDisplay';
+import { landingStartJapaButtonClass, landingTryJapaButtonClass } from '../../lib/landingCtaStyles';
+
+/** `public/japamvideo.mp4` — loops until “Ista Devata Japa” is tapped; wrapper is transparent (no panel behind the video). */
+const ISTA_DEVATA_INTRO_VIDEO_SRC = '/japamvideo.mp4';
 
 function GearIcon() {
   return (
@@ -43,7 +47,9 @@ export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
   const unlockExpiresAt = useUnlockStore((s) => s.unlockExpiresAt);
   const isDonor = useUnlockStore((s) => s.isDonor);
   const [showDonate, setShowDonate] = useState(false);
-  const [showIstaDevataGrid, setShowIstaDevataGrid] = useState(false);
+  const [istaDevataRevealed, setIstaDevataRevealed] = useState(false);
+  const [istaVideoBroken, setIstaVideoBroken] = useState(false);
+  const onIstaVideoError = useCallback(() => setIstaVideoBroken(true), []);
   const profileName = useProfileStore((s) => s.displayName);
   const fallbackName = user?.displayName || (user?.email ? user.email.split('@')[0] : null);
   const displayName = profileName || fallbackName || t('menu.signedIn');
@@ -129,63 +135,86 @@ export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
         <motion.button
           type="button"
           aria-label={t('menu.allDevatasJapa')}
-          whileHover={{ scale: 1.01 }}
+          whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.99 }}
           initial={{ opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.05 }}
           onClick={() => onSelect('general')}
-          className="w-fit max-w-full mt-4 mb-2 py-2 px-4 rounded-xl bg-amber-500/20 border border-amber-500/50 hover:border-amber-400/70 hover:bg-amber-500/30 transition-colors inline-flex items-center justify-center shrink-0"
+          className={`${landingStartJapaButtonClass} mt-4 mb-2 inline-flex items-center justify-center`}
         >
-          <span className="text-amber-300 font-semibold text-sm leading-tight text-center whitespace-normal">
+          <span className="text-white font-bold text-sm sm:text-base leading-tight text-center whitespace-normal">
             {t('menu.allDevatasJapa')}
           </span>
         </motion.button>
 
-        <button
-          type="button"
-          id="ista-devata-toggle"
-          aria-expanded={showIstaDevataGrid}
-          aria-controls="ista-devata-grid"
-          onClick={() => setShowIstaDevataGrid((v) => !v)}
-          className="w-fit max-w-full mb-2 py-2 px-4 rounded-xl bg-black/30 border border-white/15 hover:border-amber-500/40 hover:bg-black/40 transition-colors inline-flex items-center justify-center shrink-0"
-        >
-          <span className="text-amber-300/95 font-medium text-xs sm:text-sm text-center whitespace-normal">
-            {t('menu.istaDevata')}
-          </span>
-        </button>
-
-        {showIstaDevataGrid && (
-          <div
-            id="ista-devata-grid"
-            className="grid grid-cols-2 gap-3 w-full mb-6"
-            role="region"
-            aria-label={t('menu.istaDevata')}
-          >
-            {DEITIES.map((deity, i) => (
-              <motion.button
-                key={deity.id}
-                type="button"
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.03 }}
-                className="flex flex-col items-center rounded-2xl overflow-hidden shadow-xl bg-black/40 border-2 border-white/20 hover:border-amber-400/50 transition-colors"
-                onClick={() => onSelect(deity.id)}
-              >
-                <div className="w-full aspect-square relative bg-black/30">
-                  <img
-                    src={deity.image}
-                    alt={deity.name}
-                    className="w-full h-full object-cover"
-                  />
+        {!istaDevataRevealed ? (
+          <div className="w-full mb-4 flex flex-col items-center gap-3">
+            <motion.button
+              type="button"
+              id="ista-devata-reveal"
+              aria-expanded={false}
+              aria-controls="ista-devata-grid"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.99 }}
+              onClick={() => setIstaDevataRevealed(true)}
+              className={landingTryJapaButtonClass}
+            >
+              <span className="text-sm sm:text-base text-white font-semibold leading-tight text-center whitespace-normal">
+                {t('menu.istaDevata')}
+              </span>
+            </motion.button>
+            <div className="w-full min-h-[min(42vh,280px)] max-h-[min(52vh,320px)] flex flex-1 items-center justify-center bg-transparent">
+              {!istaVideoBroken ? (
+                <video
+                  key={ISTA_DEVATA_INTRO_VIDEO_SRC}
+                  className="max-h-full w-full max-w-full object-contain bg-transparent"
+                  src={ISTA_DEVATA_INTRO_VIDEO_SRC}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  onError={onIstaVideoError}
+                  aria-label={t('menu.istaDevataMalaaVideoAria')}
+                />
+              ) : (
+                <div className="flex min-h-[8rem] w-full items-center justify-center px-4 text-center text-amber-200/80 text-xs sm:text-sm bg-transparent">
+                  {t('menu.istaDevataVideoPlaceholder')}
                 </div>
-                <span className="py-2 px-1.5 sm:px-2 text-xs sm:text-sm font-semibold text-white w-full text-center truncate min-w-0" title={t(`deities.${deity.id}`)}>
-                  {t(`deities.${deity.id}`)}
-                </span>
-              </motion.button>
-            ))}
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className="w-full mb-6" role="region" aria-label={t('menu.istaDevata')}>
+            <p className="text-center text-amber-200/90 text-xs sm:text-sm mb-2">
+              {t('menu.chooseIstaDevata')}
+            </p>
+            <div id="ista-devata-grid" className="grid grid-cols-2 gap-3 w-full">
+              {DEITIES.map((deity, i) => (
+                <motion.button
+                  key={deity.id}
+                  type="button"
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.98 }}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.03 }}
+                  className="flex flex-col items-center rounded-2xl overflow-hidden shadow-xl bg-black/40 border-2 border-white/20 hover:border-amber-400/50 transition-colors"
+                  onClick={() => onSelect(deity.id)}
+                >
+                  <div className="w-full aspect-square relative bg-black/30">
+                    <img
+                      src={deity.image}
+                      alt={deity.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <span className="py-2 px-1.5 sm:px-2 text-xs sm:text-sm font-semibold text-white w-full text-center truncate min-w-0" title={t(`deities.${deity.id}`)}>
+                    {t(`deities.${deity.id}`)}
+                  </span>
+                </motion.button>
+              ))}
+            </div>
           </div>
         )}
 

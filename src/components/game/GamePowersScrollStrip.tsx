@@ -157,8 +157,8 @@ function RoundPowerTile({
       earnLine = undefined;
     }
     const armHints =
-      !guestPreview && canArm
-        ? `${t('powers.doubleClickArm')} · ${t('powers.doubleTapArm')} · ${t('powers.longPressArm')}`
+      !guestPreview && canArm && !isArmed
+        ? t('powers.longPressToUse')
         : guestPreview
           ? t('game.guestPowersTileHint')
           : '';
@@ -407,7 +407,7 @@ export function GamePowersScrollStrip({ isGuest = false, onGuestPowerTap }: Game
     const ariaLabel = isGuest
       ? `${name}. ${t('game.guestPowersTileHint')}`
       : armed
-        ? `${name}. ${disarmHint} ${t('powers.doubleClickArm')}.`
+        ? `${name}. ${disarmHint} ${t('powers.longPressToUse')}.`
         : count < 1
           ? `${name}. ${earn}`
           : `${name}. ${revealDescription} ${t('game.powersArm')}`;
@@ -470,7 +470,7 @@ export function GamePowersScrollStrip({ isGuest = false, onGuestPowerTap }: Game
                 const ariaLabel = isGuest
                   ? `${name}. ${t('game.guestPowersTileHint')}`
                   : armed
-                    ? `${name}. ${disarmHint} ${t('powers.doubleClickArm')}.`
+                    ? `${name}. ${disarmHint} ${t('powers.longPressToUse')}.`
                     : slot.count < 1
                       ? `${name}. ${earn}`
                       : `${name}. ${revealDescription} ${t('game.powersArm')}`;

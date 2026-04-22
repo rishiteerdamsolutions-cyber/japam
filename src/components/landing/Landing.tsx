@@ -6,6 +6,7 @@ import { JapamLogo } from '../ui/JapamLogo';
 import { LanguageDropdown } from '../ui/LanguageDropdown';
 import { AppFooter } from '../layout/AppFooter';
 import { useAuthStore } from '../../store/authStore';
+import { landingStartJapaButtonClass, landingTryJapaButtonClass } from '../../lib/landingCtaStyles';
 
 interface LandingProps {
   onEnterApp: () => void;
@@ -14,10 +15,6 @@ interface LandingProps {
   onAnniversary?: () => void;
   onMultiplayer?: () => void;
 }
-
-/** Shared frame so primary CTA and occasion tiles read as one family (radius + border + glow). */
-const LANDING_PRIMARY_FRAME =
-  'rounded-2xl border-2 border-amber-400/55 shadow-[0_0_30px_rgba(245,158,11,0.35)] transition-all duration-200';
 
 /** Bump the matching constant when you replace the PNG under `public/` so browsers fetch the new file (cache bust). */
 const LANDING_BIRTHDAY_PNG_VER = '2026-04-06';
@@ -104,7 +101,7 @@ export function Landing({
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.99 }}
               onClick={onEnterApp}
-              className={`w-fit max-w-full py-2.5 sm:py-2.5 px-4 ${LANDING_PRIMARY_FRAME} bg-amber-500 text-white font-bold text-sm sm:text-base hover:shadow-[0_0_40px_rgba(245,158,11,0.5)] hover:bg-amber-400 hover:border-amber-300/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/80 break-words text-center leading-tight shrink-0`}
+              className={landingStartJapaButtonClass}
             >
               {t('landing.startJapam')}
             </motion.button>
@@ -187,7 +184,7 @@ export function Landing({
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.99 }}
                 onClick={onGuestPlay}
-                className="w-fit max-w-full mt-2 py-2.5 sm:py-3 px-4 rounded-2xl bg-white/10 text-white font-semibold border border-white/15 hover:bg-white/15 transition-colors break-words flex flex-col items-center justify-center gap-0.5 shrink-0"
+                className={`${landingTryJapaButtonClass} mt-2`}
               >
                 <span className="text-sm sm:text-base leading-tight">{t('landing.tryJapam')}</span>
                 <span className="text-[11px] sm:text-xs text-white/85 font-medium leading-tight">

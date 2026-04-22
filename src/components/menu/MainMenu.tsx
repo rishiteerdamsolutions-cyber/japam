@@ -164,11 +164,13 @@ export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
                 {t('menu.istaDevata')}
               </span>
             </motion.button>
-            <div className="w-full min-h-[min(42vh,280px)] max-h-[min(52vh,320px)] flex flex-1 items-center justify-center bg-transparent">
+            {/* Transparent UI chrome; multiply blends typical white video mattes into bg-gloss-bubblegum (MP4 has no alpha). */}
+            <div className="mt-8 w-full flex justify-center items-center bg-transparent p-0 shadow-none ring-0">
               {!istaVideoBroken ? (
                 <video
                   key={ISTA_DEVATA_INTRO_VIDEO_SRC}
-                  className="max-h-full w-full max-w-full object-contain bg-transparent"
+                  className="block w-full max-h-[min(48vh,320px)] h-auto max-w-full object-contain bg-transparent mix-blend-multiply"
+                  style={{ backgroundColor: 'transparent' }}
                   src={ISTA_DEVATA_INTRO_VIDEO_SRC}
                   autoPlay
                   loop
@@ -178,7 +180,7 @@ export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
                   aria-label={t('menu.istaDevataMalaaVideoAria')}
                 />
               ) : (
-                <div className="flex min-h-[8rem] w-full items-center justify-center px-4 text-center text-amber-200/80 text-xs sm:text-sm bg-transparent">
+                <div className="flex min-h-[8rem] w-full items-center justify-center bg-transparent px-4 text-center text-amber-200/80 text-xs sm:text-sm">
                   {t('menu.istaDevataVideoPlaceholder')}
                 </div>
               )}

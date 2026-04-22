@@ -401,6 +401,8 @@ export function Settings({ onBack }: SettingsProps) {
           </div>
         )}
 
+        {user && <div className="h-8 shrink-0" aria-hidden />}
+
         {showDonate && (
           <DonateModal onClose={() => setShowDonate(false)} onDonated={() => setShowDonate(false)} />
         )}

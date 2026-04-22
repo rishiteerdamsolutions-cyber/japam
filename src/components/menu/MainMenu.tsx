@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { AppFooter } from '../layout/AppFooter';
@@ -14,9 +14,8 @@ import { useProfileStore } from '../../store/profileStore';
 import { getProfileRingFlags } from '../../lib/membershipDisplay';
 import { landingStartJapaButtonClass, landingTryJapaButtonClass } from '../../lib/landingCtaStyles';
 
-/** Prefer `public/japavideo.mp4`; fall back to `public/japamvideo.mp4` if missing. */
-const ISTA_DEVATA_INTRO_VIDEO_PRIMARY = '/japavideo.mp4';
-const ISTA_DEVATA_INTRO_VIDEO_FALLBACK = '/japamvideo.mp4';
+/** `public/japamvideo.mp4` — Ista Devata intro until the button is tapped. */
+const ISTA_DEVATA_INTRO_VIDEO_SRC = '/japamvideo.mp4';
 
 function GearIcon() {
   return (
@@ -50,16 +49,7 @@ export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
   const [showDonate, setShowDonate] = useState(false);
   const [istaDevataRevealed, setIstaDevataRevealed] = useState(false);
   const [istaVideoBroken, setIstaVideoBroken] = useState(false);
-  const [istaVideoSrc, setIstaVideoSrc] = useState(ISTA_DEVATA_INTRO_VIDEO_PRIMARY);
-  const istaVideoErrorStageRef = useRef<'primary' | 'fallback'>('primary');
-  const onIstaVideoError = useCallback(() => {
-    if (istaVideoErrorStageRef.current === 'primary') {
-      istaVideoErrorStageRef.current = 'fallback';
-      setIstaVideoSrc(ISTA_DEVATA_INTRO_VIDEO_FALLBACK);
-    } else {
-      setIstaVideoBroken(true);
-    }
-  }, []);
+  const onIstaVideoError = useCallback(() => setIstaVideoBroken(true), []);
   const profileName = useProfileStore((s) => s.displayName);
   const fallbackName = user?.displayName || (user?.email ? user.email.split('@')[0] : null);
   const displayName = profileName || fallbackName || t('menu.signedIn');
@@ -177,9 +167,9 @@ export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
             <div className="w-full min-h-[min(42vh,280px)] max-h-[min(52vh,320px)] flex flex-1 items-center justify-center bg-transparent">
               {!istaVideoBroken ? (
                 <video
-                  key={istaVideoSrc}
+                  key={ISTA_DEVATA_INTRO_VIDEO_SRC}
                   className="max-h-full w-full max-w-full object-contain bg-transparent"
-                  src={istaVideoSrc}
+                  src={ISTA_DEVATA_INTRO_VIDEO_SRC}
                   autoPlay
                   loop
                   muted

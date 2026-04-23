@@ -74,22 +74,36 @@ export function WorldMap({ mode: initialMode, onSelectLevel, onBack }: WorldMapP
                 const idx = (ep.id - 1) * 10 + i;
                 if (idx > revealedMax) return null;
                 const progress = levelProgress[progressKey(mapMode, level.id)];
-                const canPlay = idx <= currentLevelIndex && (idx < FIRST_LOCKED_LEVEL_INDEX || levelsUnlocked === true);
-                const isPaywalled = idx >= FIRST_LOCKED_LEVEL_INDEX && idx <= currentLevelIndex && levelsUnlocked !== true;
+                const unlocked = levelsUnlocked === true;
+                const canPlay =
+                  idx <= currentLevelIndex && (idx < FIRST_LOCKED_LEVEL_INDEX || unlocked);
+                // Only the first paid tier (level 3, index 2) opens the unlock flow. Higher levels stay
+                // disabled until Pro so free users cannot jump past the gate.
+                const isPaywallGate =
+                  !unlocked &&
+                  idx === FIRST_LOCKED_LEVEL_INDEX &&
+                  currentLevelIndex >= FIRST_LOCKED_LEVEL_INDEX;
+                const isProLockedAhead = !unlocked && idx > FIRST_LOCKED_LEVEL_INDEX;
                 return (
                   <button
                     key={level.id}
-                    onClick={() => (canPlay || isPaywalled) && onSelectLevel(idx, mapMode)}
-                    disabled={!canPlay && !isPaywalled}
+                    onClick={() => (canPlay || isPaywallGate) && onSelectLevel(idx, mapMode)}
+                    disabled={!canPlay && !isPaywallGate}
                     className={`
                       aspect-square rounded-xl flex flex-col items-center justify-center
                       font-medium text-sm
-                      ${canPlay ? 'bg-amber-500/30 text-amber-200' : isPaywalled ? 'bg-amber-500/20 text-amber-300' : 'bg-black/20 text-gray-500'}
+                      ${canPlay ? 'bg-amber-500/30 text-amber-200' : isPaywallGate ? 'bg-amber-500/20 text-amber-300' : 'bg-black/20 text-gray-500'}
                     `}
-                    title={isPaywalled ? t('menu.offerDakshinaToUnlock') : undefined}
+                    title={
+                      isPaywallGate
+                        ? t('menu.offerDakshinaToUnlock')
+                        : isProLockedAhead
+                          ? t('menu.proLockedUntilLevel3')
+                          : undefined
+                    }
                   >
                     <span>{idx + 1}</span>
-                    {isPaywalled && <span className="text-xs">🔒</span>}
+                    {isPaywallGate && <span className="text-xs">🔒</span>}
                     {progress && canPlay && (
                       <span className="text-amber-400 text-xs">
                         {'★'.repeat(progress.stars)}

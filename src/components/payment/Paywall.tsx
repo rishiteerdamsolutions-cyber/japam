@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { loadPricingConfig } from '../../lib/firestore';
 import { openCashfreeCheckout } from '../../lib/cashfree';
 import { getApiBase } from '../../lib/apiBase';
@@ -21,10 +22,12 @@ interface CouponPreview {
 }
 
 export function Paywall({ onClose, onUnlocked }: PaywallProps) {
+  const { t } = useTranslation();
   const user = useAuthStore((s) => s.user);
   const loadUnlock = useUnlockStore((s) => s.load);
-  const [pricePaise, setPricePaise] = useState<number>(10800);
-  const [displayPricePaise, setDisplayPricePaise] = useState<number>(9900);
+  /** null until loadPricingConfig finishes — avoids flashing default ₹108 before real admin price. */
+  const [pricePaise, setPricePaise] = useState<number | null>(null);
+  const [displayPricePaise, setDisplayPricePaise] = useState<number | null>(null);
   const [priceLoaded, setPriceLoaded] = useState(false);
   const [paying, setPaying] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -44,7 +47,11 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
       setDisplayPricePaise(typeof d === 'number' && d >= 100 ? d : 9900);
       setPriceLoaded(true);
     }).catch(() => {
-      if (!cancelled) setPriceLoaded(true);
+      if (!cancelled) {
+        setPricePaise(10800);
+        setDisplayPricePaise(9900);
+        setPriceLoaded(true);
+      }
     });
     return () => { cancelled = true; };
   }, []);
@@ -59,11 +66,15 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
     }
   }
 
-  const chargedPaise = coupon ? coupon.discountedPricePaise : pricePaise;
+  const effectivePricePaise = pricePaise ?? 10800;
+  const effectiveDisplayPaise = displayPricePaise ?? 9900;
+  const chargedPaise = coupon ? coupon.discountedPricePaise : effectivePricePaise;
   const chargedRupees = (chargedPaise / 100).toFixed(0);
-  const priceRupees = (pricePaise / 100).toFixed(0);
-  const displayRupees = (displayPricePaise / 100).toFixed(0);
-  const showStrikethrough = displayPricePaise > pricePaise || (coupon != null && coupon.percentOff > 0);
+  const priceRupees = (effectivePricePaise / 100).toFixed(0);
+  const displayRupees = (effectiveDisplayPaise / 100).toFixed(0);
+  const showStrikethrough =
+    priceLoaded &&
+    (effectiveDisplayPaise > effectivePricePaise || (coupon != null && coupon.percentOff > 0));
   const strikeRupees = coupon != null ? priceRupees : displayRupees;
 
   const handleApplyCoupon = async () => {
@@ -231,8 +242,20 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
           You've completed the first 2 levels. Offer Dakshina once to unlock levels 3–50.
         </p>
         <p className="text-amber-200/70 text-xs mb-4">Access is valid for 30 days from the date of payment.</p>
-        {!priceLoaded && <p className="text-amber-200/70 text-xs mb-2">Loading price…</p>}
-        <>
+        {!priceLoaded ? (
+          <div className="space-y-4">
+            <p className="text-amber-200/70 text-sm">{t('menu.loadingPrice')}</p>
+            <button
+              type="button"
+              aria-label="Close and continue later"
+              onClick={onClose}
+              className="w-full py-3 rounded-xl bg-white/10 text-amber-200 font-medium"
+            >
+              Later
+            </button>
+          </div>
+        ) : (
+          <>
           <p className="text-2xl font-bold text-white mb-4">
             {showStrikethrough ? (
               <>
@@ -288,7 +311,7 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
               type="button"
               aria-label={paying ? 'Opening payment' : payButtonLabel}
               onClick={handlePay}
-              disabled={paying}
+              disabled={paying || !priceLoaded}
               className="flex-1 py-3 rounded-xl bg-amber-500 text-white font-semibold disabled:opacity-50 transition-opacity"
             >
               {payButtonLabel}
@@ -302,7 +325,8 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
               Later
             </button>
           </div>
-        </>
+          </>
+        )}
       </div>
     </div>
   );

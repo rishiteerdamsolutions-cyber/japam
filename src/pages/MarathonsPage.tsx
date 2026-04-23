@@ -11,7 +11,11 @@ import { AppHeader } from '../components/layout/AppHeader';
 import { BottomNav } from '../components/nav/BottomNav';
 import { paddedLeaderboard, renderRankCardBlob } from '../lib/rankCard';
 import { trackShareEvent } from '../lib/firestore';
-import { DEFAULT_FREE_MARATHON_ID, isDefaultFreeMarathonId } from '../lib/defaultCommunityEvents';
+import {
+  DEFAULT_FREE_MARATHON_ID,
+  displayMarathonTitle,
+  isDefaultFreeMarathonId,
+} from '../lib/defaultCommunityEvents';
 
 const STATES = [...INDIA_REGIONS.states, ...INDIA_REGIONS.union_territories];
 
@@ -33,6 +37,7 @@ interface Marathon {
   targetJapas: number;
   startDate: string;
   joinedCount: number;
+  communityName?: string | null;
   leaderboard?: { rank: number; uid: string; name: string; japasCount: number }[];
 }
 
@@ -252,10 +257,11 @@ export function MarathonsPage() {
       const currentEntry = lb.find((p) => p.uid === user.uid);
       const myM = myMarathons.find((m) => m.marathonId === marathon.id);
       const japasOverride = myM && (myM.japasCount ?? 0) > (currentEntry?.japasCount ?? 0) ? myM.japasCount : undefined;
-      const isStarterMarathon = isDefaultFreeMarathonId(marathon.id);
+      const isDefaultFreeMarathon = isDefaultFreeMarathonId(marathon.id);
       const jp = japasOverride ?? currentEntry?.japasCount ?? myM?.japasCount ?? 0;
-      const rankText = isStarterMarathon
-        ? `My Shiva starter marathon: ${jp} / ${marathon.targetJapas} japas. `
+      const marathonTitle = displayMarathonTitle(marathon.id, marathon.communityName ?? temple.name);
+      const rankText = isDefaultFreeMarathon
+        ? `My ${marathonTitle}: ${jp} / ${marathon.targetJapas} japas. `
         : !participated
           ? 'My rank 0 in this Japa Marathon! '
           : currentEntry
@@ -265,14 +271,15 @@ export function MarathonsPage() {
 
       const blob = await renderRankCardBlob({
         title: 'JAPA MARATHON',
-        headerName: temple.name,
+        headerName: marathonTitle,
         deityName: deityName(marathon.deityId),
         leaderboard: lb,
         currentUserUid: user.uid,
         currentUserJapasOverride: japasOverride,
         currentUserDisplayName: user.displayName || user.email?.split('@')[0] || undefined,
         currentUserParticipated: participated,
-        soloPersonalMarathon: isStarterMarathon,
+        soloPersonalMarathon: isDefaultFreeMarathon,
+        japaSummaryLine: `Your japas: ${jp.toLocaleString('en-IN')} / ${marathon.targetJapas.toLocaleString('en-IN')} goal`,
       });
       if (!blob) throw new Error('Failed to generate image');
 
@@ -351,7 +358,7 @@ export function MarathonsPage() {
       <p className="text-amber-200/80 text-sm mb-4">Discover marathons by location and join to contribute your japas.</p>
       {!isPro && (
         <div className="mb-4 p-3 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-100 text-sm">
-          Pro is required to join <span className="font-medium">temple</span> marathons. Your free Shiva starter marathon (1080 japas) is personal to you — rank cards show only your progress. The free Rama starter Maha Japa Yagna is open to everyone on the app with the usual shared leaderboard.
+          Pro is required to join <span className="font-medium">temple</span> marathons. Your free Shiva marathon (1080 japas) is personal to you — rank cards show only your progress. The free Rama Maha Japa Yagna is open to everyone on the app with the usual shared leaderboard.
           <button
             type="button"
             onClick={() => navigate(`/game?mode=general&level=${FIRST_LOCKED_LEVEL_INDEX}`)}
@@ -393,7 +400,7 @@ export function MarathonsPage() {
               <div key={my.marathonId} className="py-2 border-t border-amber-500/10 first:border-t-0 first:pt-0">
                 <div className="flex items-center justify-between gap-2">
                   <div>
-                    <p className="text-amber-200 font-medium">{my.templeName || 'Marathon'} • {deityName(my.deityId)}</p>
+                    <p className="text-amber-200 font-medium">{displayMarathonTitle(my.marathonId, my.templeName)} • {deityName(my.deityId)}</p>
                     <p className="text-amber-200/60 text-xs">Target {my.targetJapas} japas • Your japas: {my.japasCount}</p>
                   </div>
                   <div className="flex flex-col items-end gap-1">
@@ -416,6 +423,7 @@ export function MarathonsPage() {
                           targetJapas: my.targetJapas,
                           startDate: my.startDate,
                           joinedCount: 0,
+                          communityName: my.templeName || null,
                           leaderboard: my.leaderboard,
                         };
                         const temple: Temple = {

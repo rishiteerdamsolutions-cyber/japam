@@ -23,7 +23,7 @@ export async function ensureDefaultFreeMarathonDoc(db) {
     templeId: null,
     isCommunity: false,
     isDefaultFreeMarathon: true,
-    communityName: 'Shiva starter marathon (free)',
+    communityName: 'Shiva marathon (free)',
     deityId: 'shiva',
     targetJapas: 1080,
     startDate: '2020-01-01',
@@ -35,7 +35,7 @@ export async function ensureDefaultFreeMarathonDoc(db) {
   });
 }
 
-/** Auto-join the free starter marathon for this user (no Pro required). */
+/** Auto-join the free default marathon for this user (no Pro required). */
 export async function ensureDefaultFreeMarathonParticipation(db, uid, displayName) {
   await ensureDefaultFreeMarathonDoc(db);
   const partId = `${DEFAULT_FREE_MARATHON_ID}_${uid}`;
@@ -68,8 +68,8 @@ export async function ensureDefaultFreeYagnaDoc(db) {
   const snap = await ref.get();
   if (snap.exists) return;
   await ref.set({
-    name: 'Rama starter Maha Japa (free)',
-    description: 'Community starter yagna — your japas count toward this goal. Pro is required for temple yagnas.',
+    name: 'Rama Maha Japa (free)',
+    description: 'Community yagna — your japas count toward this goal. Pro is required for temple yagnas.',
     deityId: 'rama',
     mantra: 'Ram',
     goalJapas: ONE_CRORE,
@@ -84,7 +84,7 @@ export async function ensureDefaultFreeYagnaDoc(db) {
   });
 }
 
-/** Auto-join the free starter yagna for this user (no Pro required). */
+/** Auto-join the free default yagna for this user (no Pro required). */
 export async function ensureDefaultFreeYagnaParticipation(db, uid) {
   await ensureDefaultFreeYagnaDoc(db);
   const docId = `${DEFAULT_FREE_YAGNA_ID}_${uid}`;

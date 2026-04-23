@@ -8,7 +8,7 @@ export type BuildRankCardRowsOptions = {
   currentUserDisplayName?: string;
   /** When false, viewer row shows rank 0 after ellipsis. When true, use leaderboard / fallback rank. When omitted, infer from leaderboard presence. */
   currentUserParticipated?: boolean;
-  /** Free Shiva starter marathon: one row for the viewer only (no community top-5 grid). */
+  /** Free default marathon: one row for the viewer only (no community top-5 grid). */
   soloPersonalMarathon?: boolean;
 };
 
@@ -171,8 +171,10 @@ export interface RenderRankCardOptions {
   currentUserDisplayName?: string;
   /** Yagna/marathon participation; false forces rank 0 row on the card */
   currentUserParticipated?: boolean;
-  /** Free starter marathon: personal card copy and single-row layout */
+  /** Free default marathon: personal card copy and single-row layout */
   soloPersonalMarathon?: boolean;
+  /** Goal / progress (e.g. your count vs target, or collective vs goal) — drawn under the deity line */
+  japaSummaryLine?: string;
 }
 
 export async function renderRankCardBlob(opts: RenderRankCardOptions): Promise<Blob | null> {
@@ -290,7 +292,16 @@ export async function renderRankCardBlob(opts: RenderRankCardOptions): Promise<B
     const deityLine = `${opts.deityName || ''} Japa`.trim();
     const deityPx = 26;
     const deityH = wrapAndDraw(deityLine, maxW, deityPx, '500', 'rgba(253, 230, 138, 0.95)', y, 4);
-    y += (deityH || deityPx + 4) + 36;
+    y += (deityH || deityPx + 4) + 10;
+
+    const summary = String(opts.japaSummaryLine || '').trim();
+    if (summary) {
+      const sumPx = 22;
+      const sumH = wrapAndDraw(summary, maxW, sumPx, '600', 'rgba(255, 255, 255, 0.9)', y, 4);
+      y += (sumH || sumPx + 4) + 20;
+    } else {
+      y += 26;
+    }
 
     // ——— Leaderboard section label ———
     const sectionTitle = opts.soloPersonalMarathon ? 'Your progress' : 'Top participants';
@@ -387,8 +398,7 @@ export async function renderRankCardBlob(opts: RenderRankCardOptions): Promise<B
         opts.currentUserJapasOverride > (p.japasCount || 0)
           ? opts.currentUserJapasOverride
           : (p.japasCount ?? 0);
-      const japasText =
-        isVacant || p.rank === 0 ? '—' : `${japasCount} japas`;
+      const japasText = isVacant ? '—' : `${japasCount} japas`;
       const nameMaxW = cardW - 100;
 
       ctx.textAlign = 'left';

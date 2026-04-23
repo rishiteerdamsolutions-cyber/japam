@@ -10,7 +10,11 @@ import { FIRST_LOCKED_LEVEL_INDEX, useUnlockStore } from '../store/unlockStore';
 import { auth } from '../lib/firebase';
 import { paddedLeaderboard, renderRankCardBlob } from '../lib/rankCard';
 import { trackShareEvent } from '../lib/firestore';
-import { DEFAULT_FREE_YAGNA_ID, isDefaultFreeYagnaId } from '../lib/defaultCommunityEvents';
+import {
+  DEFAULT_FREE_YAGNA_ID,
+  displayYagnaTitle,
+  isDefaultFreeYagnaId,
+} from '../lib/defaultCommunityEvents';
 
 const API_BASE = import.meta.env.VITE_API_URL ?? '';
 
@@ -214,19 +218,22 @@ export function MahaYagnasPage() {
 
       const contrib = contribByYagna.get(y.id);
       const participated = contribByYagna.has(y.id);
+      const yTitle = displayYagnaTitle(y.id, y.name);
+      const myJp = contrib?.userJapas ?? 0;
       const blob = await renderRankCardBlob({
         title: 'MAHA JAPA YAGNA',
-        headerName: y.name,
+        headerName: yTitle,
         deityName: deityName(y.deityId),
         leaderboard: lb,
         currentUserUid: user.uid,
         currentUserJapasOverride: contrib?.userJapas,
         currentUserDisplayName: user.displayName || user.email?.split('@')[0] || undefined,
         currentUserParticipated: participated,
+        japaSummaryLine: `You: ${formatNum(myJp)} japas • Collective: ${formatNum(y.currentJapas)} / ${formatNum(y.goalJapas)}`,
       });
       if (!blob) throw new Error('Failed to generate image');
       const url = URL.createObjectURL(blob);
-      setShareResult({ blob, url, shareText: `My rank in ${y.name}! Join at www.japam.digital` });
+      setShareResult({ blob, url, shareText: `My rank in ${yTitle}! You: ${formatNum(myJp)} japas. Join at www.japam.digital` });
       const a = document.createElement('a');
       a.href = url;
       a.download = 'japam-maha-yagna.png';
@@ -334,7 +341,7 @@ export function MahaYagnasPage() {
                   <div key={y.id} className="py-2 border-t border-amber-500/10 first:border-t-0 first:pt-0">
                     <div className="flex items-center justify-between gap-2">
                       <div className="min-w-0 flex-1">
-                        <p className="text-amber-200 font-medium truncate">{y.name} • {deityName(y.deityId)}</p>
+                        <p className="text-amber-200 font-medium truncate">{displayYagnaTitle(y.id, y.name)} • {deityName(y.deityId)}</p>
                         <p className="text-amber-200/60 text-xs">
                           {t('mahaYagnas.yourJapas')}: {formatNum(contrib.userJapas)} / {formatNum(y.goalJapas)} (
                           {(y.goalJapas > 0 ? (100 * contrib.userJapas) / y.goalJapas : 0).toFixed(2)}%)
@@ -398,7 +405,7 @@ export function MahaYagnasPage() {
           <div className="mb-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/30">
             <p className="text-amber-200 text-sm font-medium">{t('mahaYagnas.proOnlyTitle')}</p>
             <p className="text-amber-200/80 text-sm mt-1 break-words">
-              The free Rama starter Maha Japa (1 crore goal) is open to everyone on the app: one shared goal and leaderboard for all participants.{' '}
+              The free Rama Maha Japa (1 crore goal) is open to everyone on the app: one shared goal and leaderboard for all participants.{' '}
               {t('mahaYagnas.proOnlyMessage')}
             </p>
             <button
@@ -445,7 +452,7 @@ export function MahaYagnasPage() {
                     />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h2 className="font-semibold text-amber-200 truncate">{y.name}</h2>
+                    <h2 className="font-semibold text-amber-200 truncate">{displayYagnaTitle(y.id, y.name)}</h2>
                     <p className="text-amber-200/80 text-sm mt-0.5 break-words">{y.mantra}</p>
                     {y.daysRemaining !== null && (
                       <p className="text-amber-200/60 text-xs mt-1">

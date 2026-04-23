@@ -4,7 +4,7 @@ import { isDefaultFreeMarathonId } from '../_defaultCommunityEvents.js';
  * Build leaderboard entries for display + rank card. Returns top `topN` plus the viewer's row
  * when they participate but rank below topN (so "Download rank card" still works).
  *
- * The free Shiva starter marathon is per-user only (not a platform-wide race): when the viewer
+ * The free default Shiva marathon is per-user only (not a platform-wide race): when the viewer
  * is signed in, the list is only their row so rank cards and UI never expose other users.
  */
 export async function buildMarathonLeaderboard(db, marathonId, options = {}) {

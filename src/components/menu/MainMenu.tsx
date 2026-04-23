@@ -17,15 +17,6 @@ import { landingStartJapaButtonClass, landingTryJapaButtonClass } from '../../li
 /** `public/japam.gif` — keyed transparent intro (640px wide) until Ista Devata Japa is tapped. */
 const ISTA_DEVATA_INTRO_GIF_SRC = '/japam.gif';
 
-function GearIcon() {
-  return (
-    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-    </svg>
-  );
-}
-
 function HeartIcon() {
   return (
     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -90,8 +81,29 @@ export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
             </div>
           )}
           {!loading && user && (
-            <div className="flex items-center gap-1 sm:gap-2 justify-end">
-              <button type="button" onClick={() => {}} className="flex items-center gap-1.5 min-w-0 min-h-[44px] rounded-lg px-1" title={displayName} aria-label={displayName}>
+            <div className="flex items-center gap-1.5 sm:gap-2 justify-end">
+              {isPro && (
+                <button
+                  type="button"
+                  onClick={() => setShowDonate(true)}
+                  className="p-2 rounded-lg text-amber-400/90 hover:bg-white/10 hover:text-amber-400 min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0"
+                  aria-label={t('menu.donate')}
+                >
+                  <HeartIcon />
+                </button>
+              )}
+              {!isPro && (
+                <span className="hidden sm:inline text-amber-200/90 text-xs truncate max-w-[72px] text-right" title={displayName}>
+                  {displayName}
+                </span>
+              )}
+              <button
+                type="button"
+                onClick={() => onOpenSettings()}
+                className="flex items-center justify-center min-h-[44px] min-w-[44px] rounded-lg px-0.5 hover:bg-white/5 transition-colors shrink-0"
+                title={displayName}
+                aria-label={t('menu.settings')}
+              >
                 <div
                   className={`relative flex-shrink-0 w-8 h-8 rounded-full border-2 flex items-center justify-center text-amber-200 font-semibold text-sm
                     ${isPremium ? 'border-amber-400 ring-2 ring-amber-400/50 bg-amber-500/20' : isPro ? 'border-green-500 ring-2 ring-green-500/50 bg-green-500/20' : 'border-amber-500/40 bg-black/30'}`}
@@ -104,15 +116,6 @@ export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
                   {isPremium && <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-amber-500 flex items-center justify-center text-white text-[9px] font-bold">★</span>}
                   {isPro && !isPremium && <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-green-500 flex items-center justify-center text-white text-[9px] font-bold">✓</span>}
                 </div>
-                <span className="hidden sm:inline text-amber-200/90 text-xs truncate max-w-[60px]" title={displayName}>{displayName}</span>
-              </button>
-              {isPro && (
-                <button type="button" onClick={() => setShowDonate(true)} className="p-2 rounded-lg text-amber-400/90 hover:bg-white/10 hover:text-amber-400 min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label={t('menu.donate')}>
-                  <HeartIcon />
-                </button>
-              )}
-              <button type="button" onClick={() => onOpenSettings()} className="p-2 rounded-lg text-amber-400/90 hover:bg-white/10 hover:text-amber-400 min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label={t('menu.settings')}>
-                <GearIcon />
               </button>
             </div>
           )}

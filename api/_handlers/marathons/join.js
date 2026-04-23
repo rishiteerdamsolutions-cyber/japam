@@ -2,7 +2,7 @@ import { getDb, jsonResponse, verifyFirebaseUser, isUserUnlocked, isValidFiresto
 import { isMarathonPublicActive } from '../_lifecycle.js';
 import { isDefaultFreeMarathonId, ensureDefaultFreeMarathonDoc } from '../_defaultCommunityEvents.js';
 
-/** POST /api/marathons/join - User joins a marathon. Pro required except the free Shiva starter marathon. Body: { marathonId } */
+/** POST /api/marathons/join - User joins a marathon. Pro required except the free default Shiva marathon. Body: { marathonId } */
 export async function POST(request) {
   try {
     const uid = await verifyFirebaseUser(request);

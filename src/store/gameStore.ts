@@ -143,6 +143,11 @@ interface GameState {
   /** Bumped when we auto-refresh an anniversary board due to no valid moves (toast trigger). */
   anniversaryAutoRefreshToken: number;
   anniversarySessionFlavor: AnniversarySessionFlavor;
+  /**
+   * After namaskaram / single-deity offering (one cell): skip full-board regen when no swap yields a match,
+   * so a small clear does not replace the entire layout. Cleared in finalizeMatchChain. Bomb clears use normal regen.
+   */
+  suppressDeadBoardRegenOnce: boolean;
 }
 
 function sessionHasUnlimitedMoves(state: GameState): boolean {
@@ -267,6 +272,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   anniversarySessionPaused: false,
   anniversaryAutoRefreshToken: 0,
   anniversarySessionFlavor: 'occasion',
+  suppressDeadBoardRegenOnce: false,
 
   initGame: (mode, levelIndex = 0, options) => {
     const resolvedMode = normalizeGameMode(mode);
@@ -393,6 +399,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       anniversarySessionPaused: false,
       anniversaryAutoRefreshToken: 0,
       anniversarySessionFlavor: occasionKind === 'anniversary' ? anniversarySessionFlavor : 'occasion',
+      suppressDeadBoardRegenOnce: false,
     });
     usePowerArmStore.getState().reset();
   },
@@ -523,6 +530,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       anniversaryFirestoreVersion: saved.anniversaryFirestoreVersion ?? 0,
       anniversarySessionPaused: false,
       anniversaryAutoRefreshToken: 0,
+      suppressDeadBoardRegenOnce: false,
     });
     usePowerArmStore.getState().reset();
   },
@@ -587,6 +595,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const spawnKeys = newGems.map((g) => `${g.row},${g.col}`);
     const nextGen = spawnKeys.length > 0 ? state.refillSpawnGeneration + 1 : state.refillSpawnGeneration;
 
+    const isFlowerBomb = armed === 'bomb';
+
     set({
       board: filled,
       selectedCell: null,
@@ -596,10 +606,16 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       hintsSwapCount: state.hintsSwapCount + 1,
       powerVfxToken: state.powerVfxToken + 1,
       manualCreditArmed: true,
+      /** Single-cell / namaskaram: do not run line-match scan (avoids clearing unrelated tiles). Bomb keeps full cascade. */
+      suppressDeadBoardRegenOnce: !isFlowerBomb,
     });
     usePowerArmStore.getState().setArmedPower(null);
     void usePowersInventoryStore.getState().tryConsumeOne(armed);
-    get().processMatches([]);
+    if (isFlowerBomb) {
+      get().processMatches([]);
+    } else {
+      get().finalizeMatchChain([]);
+    }
   },
 
   selectCell: (row, col) => {
@@ -994,35 +1010,29 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
 
     let anniversaryAutoRefreshToken = state.anniversaryAutoRefreshToken;
     if (status === 'playing' && !hasValidMoves(finalBoard)) {
-      const gemCtxDead = boardGemContext(state);
-      if (state.occasionKind === 'anniversary' && state.anniversarySessionId) {
-        // Couple play has no refresh button — always guarantee valid moves.
-        // Use seeded boards so both partners converge even if they regenerate locally at the same moment.
-        let salt = 0;
-        do {
-          const seed = `${state.anniversarySessionId}|${state.anniversaryFirestoreVersion}|L${state.levelIndex}|dead|${salt}`;
-          finalBoard = createBoardSeeded(
-            level.rows,
-            level.cols,
-            state.maxGemTypes,
-            gemCtxDead.deityMode,
-            gemCtxDead.powerBacked,
-            gemCtxDead.generalSubset,
-            seed,
-          );
-          salt++;
-        } while (!hasValidMoves(finalBoard) && salt < 100);
-        anniversaryAutoRefreshToken = anniversaryAutoRefreshToken + 1;
+      if (state.suppressDeadBoardRegenOnce) {
+        // Single-tile / namaskaram offering: keep layout; full regen would feel like the whole board changed.
       } else {
-        finalBoard = createBoard(
-          level.rows,
-          level.cols,
-          state.maxGemTypes,
-          gemCtxDead.deityMode,
-          gemCtxDead.powerBacked,
-          gemCtxDead.generalSubset,
-        );
-        while (!hasValidMoves(finalBoard)) {
+        const gemCtxDead = boardGemContext(state);
+        if (state.occasionKind === 'anniversary' && state.anniversarySessionId) {
+          // Couple play has no refresh button — always guarantee valid moves.
+          // Use seeded boards so both partners converge even if they regenerate locally at the same moment.
+          let salt = 0;
+          do {
+            const seed = `${state.anniversarySessionId}|${state.anniversaryFirestoreVersion}|L${state.levelIndex}|dead|${salt}`;
+            finalBoard = createBoardSeeded(
+              level.rows,
+              level.cols,
+              state.maxGemTypes,
+              gemCtxDead.deityMode,
+              gemCtxDead.powerBacked,
+              gemCtxDead.generalSubset,
+              seed,
+            );
+            salt++;
+          } while (!hasValidMoves(finalBoard) && salt < 100);
+          anniversaryAutoRefreshToken = anniversaryAutoRefreshToken + 1;
+        } else {
           finalBoard = createBoard(
             level.rows,
             level.cols,
@@ -1031,6 +1041,16 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
             gemCtxDead.powerBacked,
             gemCtxDead.generalSubset,
           );
+          while (!hasValidMoves(finalBoard)) {
+            finalBoard = createBoard(
+              level.rows,
+              level.cols,
+              state.maxGemTypes,
+              gemCtxDead.deityMode,
+              gemCtxDead.powerBacked,
+              gemCtxDead.generalSubset,
+            );
+          }
         }
       }
     }
@@ -1049,6 +1069,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       anniversaryMovePending: nextAnniversaryMovePending,
       manualCreditArmed: false,
       anniversaryAutoRefreshToken,
+      suppressDeadBoardRegenOnce: false,
     });
   },
 
@@ -1272,6 +1293,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       anniversarySessionPaused: sessionPaused,
       anniversaryAutoRefreshToken: 0,
       anniversarySessionFlavor: sessionFlavor,
+      suppressDeadBoardRegenOnce: false,
     });
   },
 

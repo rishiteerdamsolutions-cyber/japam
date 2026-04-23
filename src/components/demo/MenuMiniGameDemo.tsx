@@ -395,6 +395,8 @@ export function MenuMiniGameDemo() {
   const [phase, setPhase] = useState<Phase>('idle');
   const [stepIndex, setStepIndex] = useState(0);
   const [boardOpacity, setBoardOpacity] = useState(1);
+  /** During `score`: japa (+1 mantra) first, then strip power (+1 icon name) for 4+ lines. */
+  const [scoreStage, setScoreStage] = useState<'japa' | 'power' | null>(null);
 
   const step = DEMO_CHAIN[stepIndex % DEMO_CHAIN.length]!;
 
@@ -436,10 +438,20 @@ export function MenuMiniGameDemo() {
         await wait(1100);
         if (cancelled) break;
 
+        const matchLen = st.matchCells.length;
+        setScoreStage('japa');
         setPhase('score');
-        await wait(1000);
+        if (matchLen >= 4) {
+          await wait(reducedMotion ? 420 : 520);
+          if (cancelled) break;
+          setScoreStage('power');
+          await wait(reducedMotion ? 520 : 780);
+        } else {
+          await wait(reducedMotion ? 450 : 1000);
+        }
         if (cancelled) break;
 
+        setScoreStage(null);
         setPhase('clear');
         await wait(850);
         if (cancelled) break;
@@ -529,54 +541,74 @@ export function MenuMiniGameDemo() {
         )}
       </motion.div>
 
-      <AnimatePresence mode="wait">
-        {phase === 'score' && (
-          <motion.div
-            key={`plus-${stepIndex}-${step.matchCells.length}`}
-            className="pointer-events-none absolute left-1/2 top-[40%] z-20 flex w-[min(94%,22rem)] -translate-x-1/2 flex-col items-center gap-1.5 text-center px-1"
-            initial={{ opacity: 0, y: 12, scale: 0.75 }}
-            animate={{
-              opacity: [0, 1, 1, 0],
-              y: [12, -8, -22, -48],
-              scale: [0.75, 1.15, 1.05, 0.9],
-            }}
-            transition={{
-              duration: reducedMotion ? 0.55 : 1.15,
-              times: [0, 0.12, 0.45, 1],
-              ease: 'easeOut',
-            }}
-            exit={{ opacity: 0 }}
-          >
-            {scorePowerLabel && scorePowerIconSrc ? (
-              <div className="flex items-center justify-center gap-2 sm:gap-2.5">
-                <img
-                  src={scorePowerIconSrc}
-                  alt=""
-                  draggable={false}
-                  className="h-[clamp(2rem,8.5vmin,2.85rem)] w-[clamp(2rem,8.5vmin,2.85rem)] shrink-0 object-contain drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]"
-                />
+      {phase === 'score' ? (
+        <div
+          className="pointer-events-none absolute inset-0 z-20 flex items-start justify-center pt-[min(32%,7.5rem)] px-1"
+          aria-hidden
+        >
+          <AnimatePresence mode="wait">
+            {scoreStage === 'japa' ? (
+              <motion.div
+                key={`score-japa-${stepIndex}-${step.matchCells.length}`}
+                className="flex w-[min(94%,22rem)] flex-col items-center gap-1.5 text-center"
+                initial={{ opacity: 0, y: 10, scale: 0.92 }}
+                animate={{
+                  opacity: 1,
+                  y: reducedMotion ? 0 : -6,
+                  scale: reducedMotion ? 1 : 1.06,
+                }}
+                exit={{ opacity: 0, y: reducedMotion ? 0 : -14, scale: 0.96 }}
+                transition={{
+                  opacity: { duration: reducedMotion ? 0.18 : 0.22 },
+                  y: { duration: reducedMotion ? 0.2 : 0.28, ease: 'easeOut' },
+                  scale: { duration: reducedMotion ? 0.2 : 0.28 },
+                }}
+              >
+                <span className="font-black text-amber-200 text-[clamp(2.1rem,8.4vmin,3rem)] drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)] [text-shadow:0_0_12px_rgba(251,191,36,0.7)]">
+                  +1
+                </span>
+                {scoreMantra ? (
+                  <span
+                    className="font-semibold leading-snug text-white/95 text-[clamp(1.3rem,5.6vmin,1.7rem)] drop-shadow-[0_1px_4px_rgba(0,0,0,0.95)]"
+                    style={{ textShadow: '0 0 10px rgba(0,0,0,0.85)' }}
+                  >
+                    {scoreMantra}
+                  </span>
+                ) : null}
+              </motion.div>
+            ) : null}
+            {scoreStage === 'power' && scorePowerLabel && scorePowerIconSrc ? (
+              <motion.div
+                key={`score-power-${stepIndex}-${step.matchCells.length}`}
+                className="flex w-[min(94%,22rem)] flex-col items-center gap-2 text-center"
+                initial={{ opacity: 0, y: 8, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -6, scale: 0.95 }}
+                transition={{ duration: reducedMotion ? 0.2 : 0.26, ease: 'easeOut' }}
+              >
+                <span className="font-black text-amber-200 text-[clamp(1.35rem,5vmin,1.85rem)] drop-shadow-[0_1px_4px_rgba(0,0,0,0.85)] [text-shadow:0_0_10px_rgba(251,191,36,0.55)]">
+                  +1
+                </span>
+                <div className="relative isolate flex items-center justify-center">
+                  <img
+                    src={scorePowerIconSrc}
+                    alt=""
+                    draggable={false}
+                    className="h-[clamp(4.25rem,17vmin,6.25rem)] w-[clamp(4.25rem,17vmin,6.25rem)] max-w-[min(88vw,20rem)] object-contain [filter:drop-shadow(0_0_14px_rgba(255,255,255,0.35))_drop-shadow(0_2px_8px_rgba(0,0,0,0.45))]"
+                    style={{ mixBlendMode: 'screen' }}
+                  />
+                </div>
                 <span
-                  className="font-extrabold uppercase tracking-wide text-amber-100 text-[clamp(0.7rem,2.8vmin,0.95rem)] drop-shadow-[0_1px_3px_rgba(0,0,0,0.95)]"
-                  style={{ textShadow: '0 0 8px rgba(0,0,0,0.9)' }}
+                  className="font-extrabold uppercase tracking-wide text-amber-100 text-[clamp(0.8rem,3.2vmin,1.05rem)] drop-shadow-[0_1px_3px_rgba(0,0,0,0.95)]"
+                  style={{ textShadow: '0 0 10px rgba(0,0,0,0.88)' }}
                 >
                   {scorePowerLabel}
                 </span>
-              </div>
+              </motion.div>
             ) : null}
-            <span className="font-black text-amber-200 text-[clamp(2.1rem,8.4vmin,3rem)] drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)] [text-shadow:0_0_12px_rgba(251,191,36,0.7)]">
-              +1
-            </span>
-            {scoreMantra ? (
-              <span
-                className="font-semibold leading-snug text-white/95 text-[clamp(1.3rem,5.6vmin,1.7rem)] drop-shadow-[0_1px_4px_rgba(0,0,0,0.95)]"
-                style={{ textShadow: '0 0 10px rgba(0,0,0,0.85)' }}
-              >
-                {scoreMantra}
-              </span>
-            ) : null}
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </AnimatePresence>
+        </div>
+      ) : null}
     </div>
   );
 }

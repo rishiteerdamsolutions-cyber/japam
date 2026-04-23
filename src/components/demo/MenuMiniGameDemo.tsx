@@ -513,9 +513,9 @@ export function MenuMiniGameDemo() {
   const scoreMantraTypographyClass =
     'font-semibold leading-snug text-white/95 text-[clamp(1.3rem,5.6vmin,1.7rem)] drop-shadow-[0_1px_4px_rgba(0,0,0,0.95)]';
   const scoreMantraStyle = { textShadow: '0 0 10px rgba(0,0,0,0.85)' } as const;
-  /** 2× prior demo icon size. */
-  const scoreIconClass =
-    'h-[clamp(8.5rem,34vmin,12.5rem)] w-[clamp(8.5rem,34vmin,12.5rem)] max-w-[min(94vw,40rem)] object-contain bg-transparent [filter:drop-shadow(0_0_12px_rgba(251,191,36,0.45))_drop-shadow(0_2px_6px_rgba(0,0,0,0.3))]';
+  /** Power row: large icon but capped so +1 + label fit inside the demo frame. */
+  const scorePowerRowIconClass =
+    'mx-auto h-auto max-h-[min(32vmin,8.5rem)] w-full max-w-[min(100%,10.5rem)] object-contain bg-transparent [filter:drop-shadow(0_0_12px_rgba(251,191,36,0.45))_drop-shadow(0_2px_6px_rgba(0,0,0,0.3))]';
 
   return (
     <div
@@ -588,24 +588,27 @@ export function MenuMiniGameDemo() {
             {scoreStage === 'power' && scorePowerLabel ? (
               <motion.div
                 key={`score-power-${stepIndex}-${step.matchCells.length}`}
-                className="flex w-[min(94%,22rem)] flex-col items-center gap-2 text-center"
+                className="flex w-full max-w-[min(94%,22rem)] flex-row items-center justify-center gap-x-[clamp(0.35rem,2vmin,0.85rem)] px-0.5 text-center"
                 initial={{ opacity: 0, y: 8, scale: 0.9 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -6, scale: 0.95 }}
                 transition={{ duration: reducedMotion ? 0.2 : 0.26, ease: 'easeOut' }}
               >
-                <span className={scorePlusOneClass}>+1</span>
-                <div className="relative flex items-center justify-center bg-transparent">
+                <span className={`${scorePlusOneClass} shrink-0`}>+1</span>
+                <div className="flex min-w-0 max-w-[min(100%,13.5rem)] flex-col items-center justify-center gap-1">
                   <img
                     src={scorePowerPngSrc}
                     alt=""
                     draggable={false}
-                    className={scoreIconClass}
+                    className={scorePowerRowIconClass}
                   />
+                  <span
+                    className={`${scoreMantraTypographyClass} max-w-full text-balance px-0.5`}
+                    style={scoreMantraStyle}
+                  >
+                    {scorePowerLabel}
+                  </span>
                 </div>
-                <span className={scoreMantraTypographyClass} style={scoreMantraStyle}>
-                  {scorePowerLabel}
-                </span>
               </motion.div>
             ) : null}
           </AnimatePresence>

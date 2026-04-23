@@ -13,6 +13,9 @@ import { auth, googleProvider, isFirebaseConfigured } from '../lib/firebase';
 /** Set while Google sign-in is in progress; AuthProvider navigates to `/menu` after success. */
 export const POST_SIGN_IN_NAV_TO_MENU_KEY = 'japam.postSignInToMenu';
 
+/** Set when user calls sign out; AuthProvider navigates to `/` (landing) once auth is cleared. */
+export const POST_SIGN_OUT_NAV_TO_LANDING_KEY = 'japam.postSignOutToLanding';
+
 let popupRequestInFlight = false;
 
 /**
@@ -120,9 +123,11 @@ export const useAuthStore = create<AuthState>((set) => ({
     if (!isFirebaseConfigured) return;
     sessionStorage.removeItem(POST_SIGN_IN_NAV_TO_MENU_KEY);
     set({ error: null });
+    sessionStorage.setItem(POST_SIGN_OUT_NAV_TO_LANDING_KEY, '1');
     try {
       await firebaseSignOut(auth);
     } catch (err) {
+      sessionStorage.removeItem(POST_SIGN_OUT_NAV_TO_LANDING_KEY);
       const msg = err instanceof Error ? err.message : 'Sign-out failed';
       set({ error: msg });
     }

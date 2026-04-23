@@ -1,6 +1,10 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthStore, POST_SIGN_IN_NAV_TO_MENU_KEY } from '../store/authStore';
+import {
+  useAuthStore,
+  POST_SIGN_IN_NAV_TO_MENU_KEY,
+  POST_SIGN_OUT_NAV_TO_LANDING_KEY,
+} from '../store/authStore';
 import { useProgressStore } from '../store/progressStore';
 import { useJapaStore } from '../store/japaStore';
 import { useUnlockStore } from '../store/unlockStore';
@@ -43,6 +47,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (sessionStorage.getItem(POST_SIGN_IN_NAV_TO_MENU_KEY) !== '1') return;
     sessionStorage.removeItem(POST_SIGN_IN_NAV_TO_MENU_KEY);
     navigate('/menu', { replace: true });
+  }, [user, authLoading, navigate]);
+
+  // After sign-out, open landing immediately (replace so back stack does not return to signed-in routes).
+  useEffect(() => {
+    if (authLoading || user) return;
+    if (sessionStorage.getItem(POST_SIGN_OUT_NAV_TO_LANDING_KEY) !== '1') return;
+    sessionStorage.removeItem(POST_SIGN_OUT_NAV_TO_LANDING_KEY);
+    navigate('/', { replace: true });
   }, [user, authLoading, navigate]);
 
   // Global app bootstrap: settings on every route refresh.

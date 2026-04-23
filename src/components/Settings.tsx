@@ -8,7 +8,7 @@ import { useAuthStore } from '../store/authStore';
 import { useProfileStore } from '../store/profileStore';
 import { useUnlockStore } from '../store/unlockStore';
 import { hasActivePaidAccess, getProfileRingFlags } from '../lib/membershipDisplay';
-import { GoogleSignIn } from './auth/GoogleSignIn';
+import { isFirebaseConfigured } from '../lib/firebase';
 import { DonateThankYouBox } from './donation/DonateThankYouBox';
 import { DonateModal } from './donation/DonateModal';
 import { buildJapamWhatsAppShareHref } from './ui/WhatsAppFab';
@@ -145,6 +145,9 @@ export function Settings({ onBack }: SettingsProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
+  const loading = useAuthStore((s) => s.loading);
+  const signInPending = useAuthStore((s) => s.signInPending);
+  const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle);
   const signOut = useAuthStore((s) => s.signOut);
   const tier = useUnlockStore((s) => s.tier);
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
@@ -356,22 +359,45 @@ export function Settings({ onBack }: SettingsProps) {
   return (
     <div className="relative min-h-screen p-4 pb-[env(safe-area-inset-bottom)] overflow-hidden">
       <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
-      <div className="relative z-10 max-w-md mx-auto">
-        <header className="flex items-center gap-2 w-full mb-4 min-h-[44px]">
+      <div className="relative z-10 max-w-md mx-auto flex flex-col gap-4">
+        <header className="grid grid-cols-[auto_1fr_auto] items-center gap-2 w-full min-h-[44px] shrink-0">
           <button
             type="button"
             onClick={onBack}
-            className="text-amber-400 text-xs sm:text-sm font-medium hover:text-amber-300 shrink-0"
+            className="text-amber-400 text-xs sm:text-sm font-medium hover:text-amber-300 shrink-0 justify-self-start"
           >
             ← Back
           </button>
-          <h1 className="text-base sm:text-xl font-bold text-amber-400 truncate flex-1 min-w-0" style={{ fontFamily: 'serif' }}>
+          <h1
+            className="text-base sm:text-xl font-bold text-amber-400 truncate min-w-0 text-center px-1"
+            style={{ fontFamily: 'serif' }}
+          >
             Settings
           </h1>
+          <div className="flex items-center justify-end min-h-[44px] min-w-0 justify-self-end">
+            {!user && isFirebaseConfigured && (
+              loading ? (
+                <span className="text-amber-200/60 text-sm">…</span>
+              ) : (
+                <button
+                  type="button"
+                  disabled={signInPending}
+                  onClick={() => signInWithGoogle()}
+                  className="text-amber-400/90 text-xs font-medium hover:text-amber-400 whitespace-nowrap disabled:opacity-60"
+                >
+                  {signInPending ? '…' : t('menu.signIn')}
+                </button>
+              )
+            )}
+          </div>
         </header>
 
+        {showDonate && (
+          <DonateModal onClose={() => setShowDonate(false)} onDonated={() => setShowDonate(false)} />
+        )}
+
         {user && (
-          <div className="flex items-center gap-3 mb-6 p-3 rounded-xl bg-black/25 border border-white/10">
+          <div className="flex items-center gap-3 p-3 rounded-xl bg-black/25 border border-white/10">
             <div
               className={`relative flex-shrink-0 w-11 h-11 rounded-full border-2 flex items-center justify-center text-amber-200 font-semibold text-sm
                 ${isPremium ? 'border-amber-400 ring-2 ring-amber-400/50 bg-amber-500/20' : isPro ? 'border-green-500 ring-2 ring-green-500/50 bg-green-500/20' : 'border-amber-500/40 bg-black/30'}`}
@@ -401,21 +427,7 @@ export function Settings({ onBack }: SettingsProps) {
           </div>
         )}
 
-        {user && <div className="h-10 shrink-0" aria-hidden />}
-
-        {showDonate && (
-          <DonateModal onClose={() => setShowDonate(false)} onDonated={() => setShowDonate(false)} />
-        )}
-
-        <div className={user ? 'pt-10' : ''}>
-          <DonateThankYouBox />
-        </div>
-
-        {!user && (
-          <section className="mb-6">
-            <GoogleSignIn />
-          </section>
-        )}
+        <DonateThankYouBox />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {user && (
@@ -671,7 +683,7 @@ export function Settings({ onBack }: SettingsProps) {
           </SettingsCard>
         </div>
 
-        <div className="mt-6 flex justify-center" ref={waMenuRef}>
+        <div className="flex justify-center" ref={waMenuRef}>
           <div className="relative">
             <button
               type="button"
@@ -719,7 +731,7 @@ export function Settings({ onBack }: SettingsProps) {
         </div>
 
         {user && (
-          <div className="mt-8 mb-4 flex justify-center">
+          <div className="flex justify-center pb-2">
             <button
               type="button"
               onClick={() => signOut()}

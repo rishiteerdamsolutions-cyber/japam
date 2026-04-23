@@ -63,7 +63,7 @@ export function WorldMap({ mode: initialMode, onSelectLevel, onBack }: WorldMapP
         ))}
       </div>
 
-      <DonateThankYouBox />
+      <DonateThankYouBox className="mt-4" />
 
       <div className="space-y-6 mt-4">
         {episodesToShow.map(ep => (

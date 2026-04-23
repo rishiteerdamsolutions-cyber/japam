@@ -16,7 +16,7 @@ interface Donor {
   label?: string;
 }
 
-export function DonateThankYouBox() {
+export function DonateThankYouBox({ className = '' }: { className?: string }) {
   const [donors, setDonors] = useState<Donor[]>([]);
   const [expanded, setExpanded] = useState(false);
 
@@ -42,7 +42,7 @@ export function DonateThankYouBox() {
   ];
 
   return (
-    <div className="mt-4 p-4 rounded-xl bg-black/30 border border-amber-500/20">
+    <div className={['p-4 rounded-xl bg-black/30 border border-amber-500/20', className].filter(Boolean).join(' ')}>
       <button
         type="button"
         onClick={() => setExpanded(!expanded)}

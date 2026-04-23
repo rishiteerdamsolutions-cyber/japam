@@ -382,7 +382,7 @@ export function MarathonsPage() {
         </div>
       )}
 
-      <DonateThankYouBox />
+      <DonateThankYouBox className="mt-4" />
 
       {user && myMarathons.length > 0 && (
         <div className="mb-6 p-4 rounded-xl bg-black/30 border border-amber-500/30">

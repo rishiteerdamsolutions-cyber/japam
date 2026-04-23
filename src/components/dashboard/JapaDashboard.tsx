@@ -208,7 +208,7 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
       <p className="text-amber-200/80 text-sm mb-1">{t('japaDashboard.lifetimeMantraCount')}</p>
       <p className="text-amber-200/55 text-[11px] mb-4 leading-snug">{t('japaDashboard.tierCountsHint')}</p>
 
-      <DonateThankYouBox />
+      <DonateThankYouBox className="mt-4" />
 
       {LAUNCH_FEATURE_OCCASION_GAMES && user && occasionsLoaded && historyOccasions.length > 0 && (
         <div className="mt-4 mb-6">

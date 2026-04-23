@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { AppFooter } from '../layout/AppFooter';
@@ -14,7 +14,7 @@ import { useProfileStore } from '../../store/profileStore';
 import { getProfileRingFlags } from '../../lib/membershipDisplay';
 import { landingStartJapaButtonClass, landingTryJapaButtonClass } from '../../lib/landingCtaStyles';
 
-/** `public/japam.gif` — shown until Ista Devata Japa is tapped. Many GIFs use opaque white or a white “restore to background” index; `mix-blend-multiply` lets that read as see-through against the pink gloss. */
+/** `public/japam.gif` — keyed transparent intro (640px wide) until Ista Devata Japa is tapped. */
 const ISTA_DEVATA_INTRO_GIF_SRC = '/japam.gif';
 
 function GearIcon() {
@@ -48,8 +48,6 @@ export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
   const isDonor = useUnlockStore((s) => s.isDonor);
   const [showDonate, setShowDonate] = useState(false);
   const [istaDevataRevealed, setIstaDevataRevealed] = useState(false);
-  const [istaVideoBroken, setIstaVideoBroken] = useState(false);
-  const onIstaVideoError = useCallback(() => setIstaVideoBroken(true), []);
   const profileName = useProfileStore((s) => s.displayName);
   const fallbackName = user?.displayName || (user?.email ? user.email.split('@')[0] : null);
   const displayName = profileName || fallbackName || t('menu.signedIn');
@@ -64,7 +62,7 @@ export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
   return (
     <div className="relative min-h-screen flex flex-col items-center p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] overflow-hidden">
       <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
-      <div className="relative z-10 w-full max-w-sm flex flex-col items-center">
+      <div className="relative z-10 w-full max-w-lg flex flex-col items-center">
         {/* Top: brand (left) and user / Google sign-in (right) */}
         <div className="w-full flex justify-between items-center gap-2 mt-2 mb-1 min-h-[44px]">
           <div className="min-w-0 flex-1 pr-2 text-left">
@@ -158,27 +156,20 @@ export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.99 }}
               onClick={() => setIstaDevataRevealed(true)}
-              className={landingTryJapaButtonClass}
+              className={`${landingTryJapaButtonClass} mt-8`}
             >
               <span className="text-sm sm:text-base text-white font-semibold leading-tight text-center whitespace-normal">
                 {t('menu.istaDevata')}
               </span>
             </motion.button>
-            {!istaVideoBroken ? (
-              <div className="mt-8 w-full flex justify-center items-center bg-transparent">
-                <img
-                  src={ISTA_DEVATA_INTRO_GIF_SRC}
-                  alt={t('menu.istaDevataMalaaVideoAria')}
-                  decoding="async"
-                  onError={onIstaVideoError}
-                  className="block h-auto w-full max-w-full max-h-[min(48vh,320px)] object-contain bg-transparent mix-blend-multiply"
-                />
-              </div>
-            ) : (
-              <div className="mt-8 flex min-h-[8rem] w-full items-center justify-center bg-transparent px-4 text-center text-amber-200/80 text-xs sm:text-sm">
-                {t('menu.istaDevataVideoPlaceholder')}
-              </div>
-            )}
+            <div className="mt-5 w-full flex justify-center items-center bg-transparent">
+              <img
+                src={ISTA_DEVATA_INTRO_GIF_SRC}
+                alt={t('menu.istaDevataMalaaVideoAria')}
+                decoding="async"
+                className="block h-auto w-full max-w-full max-h-[min(58vh,440px)] object-contain bg-transparent"
+              />
+            </div>
           </div>
         ) : (
           <div className="w-full mb-6" role="region" aria-label={t('menu.istaDevata')}>
@@ -214,7 +205,7 @@ export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
           </div>
         )}
 
-        <div className="mb-24" />
+        <div className="mb-40" />
         <AppFooter />
         <BottomNav />
       </div>

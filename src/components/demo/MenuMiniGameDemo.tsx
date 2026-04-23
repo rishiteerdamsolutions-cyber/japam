@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getDeity, type DeityId } from '../../data/deities';
+import { DemoCornerRibbon } from './DemoCornerRibbon';
 
 const SIZE = 6;
 
@@ -537,8 +538,9 @@ export function MenuMiniGameDemo() {
         w-[min(100%,26rem,72vmin,56vh,92vmin,calc(100vw-1.25rem-env(safe-area-inset-left)-env(safe-area-inset-right)))]
       `}
     >
+      <DemoCornerRibbon />
       <motion.div
-        className="grid min-h-0 h-full w-full gap-[clamp(2px,1.1vmin,6px)]"
+        className="relative z-0 grid min-h-0 h-full w-full gap-[clamp(2px,1.1vmin,6px)]"
         style={{
           gridTemplateColumns: `repeat(${SIZE}, minmax(0, 1fr))`,
           gridTemplateRows: `repeat(${SIZE}, minmax(0, 1fr))`,

@@ -401,6 +401,8 @@ export function MenuMiniGameDemo() {
   const [boardOpacity, setBoardOpacity] = useState(1);
   /** During `score`: japa (+1 mantra) first, then strip power (+1 icon name) for 4+ lines. */
   const [scoreStage, setScoreStage] = useState<'japa' | 'power' | null>(null);
+  /** Off by default: no timers or phase churn until the user taps Play (saves CPU/battery). */
+  const [demoPlaying, setDemoPlaying] = useState(false);
 
   const step = DEMO_CHAIN[stepIndex % DEMO_CHAIN.length]!;
 
@@ -408,6 +410,7 @@ export function MenuMiniGameDemo() {
     typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
   useEffect(() => {
+    if (!demoPlaying) return;
     let cancelled = false;
     let beat = 0;
     const m = (n: number) => (reducedMotion ? Math.max(150, Math.round(n * 0.42)) : n);
@@ -484,7 +487,7 @@ export function MenuMiniGameDemo() {
     return () => {
       cancelled = true;
     };
-  }, [reducedMotion]);
+  }, [reducedMotion, demoPlaying]);
 
   const matchSet = new Set(step.matchCells.map((p) => cellKey(p.r, p.c)));
 
@@ -523,7 +526,6 @@ export function MenuMiniGameDemo() {
         relative mx-auto aspect-square max-w-full min-h-0 min-w-0 overflow-hidden select-none touch-manipulation
         w-[min(100%,26rem,72vmin,56vh,92vmin,calc(100vw-1.25rem-env(safe-area-inset-left)-env(safe-area-inset-right)))]
       `}
-      aria-hidden
     >
       <motion.div
         className="grid min-h-0 h-full w-full gap-[clamp(2px,1.1vmin,6px)]"
@@ -553,6 +555,26 @@ export function MenuMiniGameDemo() {
           )),
         )}
       </motion.div>
+
+      {!demoPlaying ? (
+        <div className="pointer-events-auto absolute inset-0 z-40 flex items-center justify-center bg-black/25 p-3">
+          <button
+            type="button"
+            onClick={() => setDemoPlaying(true)}
+            className="group flex h-[clamp(3.75rem,15vmin,5rem)] w-[clamp(3.75rem,15vmin,5rem)] shrink-0 items-center justify-center rounded-full border-2 border-amber-400/90 bg-gradient-to-b from-amber-300 to-amber-600 text-amber-950 shadow-[0_6px_28px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.35)] transition-transform active:scale-95 hover:scale-[1.03] hover:shadow-[0_8px_32px_rgba(251,191,36,0.35)] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-200 focus-visible:ring-offset-2 focus-visible:ring-offset-black/40"
+            aria-label="Play demo"
+          >
+            <svg
+              className="ml-0.5 h-[42%] w-[42%] drop-shadow-sm"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden
+            >
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          </button>
+        </div>
+      ) : null}
 
       {phase === 'score' ? (
         <div

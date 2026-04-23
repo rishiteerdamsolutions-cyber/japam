@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import {
-  signInWithPopup,
   signInWithRedirect,
   getRedirectResult,
   signOut as firebaseSignOut,
@@ -71,7 +70,6 @@ export const useAuthStore = create<AuthState>((set) => ({
     if (popupRequestInFlight) return;
 
     let shouldResetPending = false;
-    let isRedirectFlow = false;
     set((state) => {
       if (state.signInPending) return state;
       shouldResetPending = true;
@@ -82,40 +80,18 @@ export const useAuthStore = create<AuthState>((set) => ({
 
     try {
       sessionStorage.setItem(POST_SIGN_IN_NAV_TO_MENU_KEY, '1');
-      await signInWithPopup(auth, googleProvider);
+      /**
+       * Like GitHub: use a same-tab OAuth redirect (more reliable than popups on Safari/iOS/in-app browsers).
+       * This intentionally does NOT attempt popup first.
+       */
+      await signInWithRedirect(auth, googleProvider);
     } catch (err) {
-      const authErr = err as AuthError;
-      if (authErr?.code === 'auth/cancelled-popup-request') {
-        sessionStorage.removeItem(POST_SIGN_IN_NAV_TO_MENU_KEY);
-        return;
-      }
-      if (authErr?.code === 'auth/popup-closed-by-user') {
-        sessionStorage.removeItem(POST_SIGN_IN_NAV_TO_MENU_KEY);
-        return;
-      }
-
-      const shouldFallbackToRedirect =
-        authErr?.code === 'auth/popup-blocked' ||
-        authErr?.code === 'auth/operation-not-supported-in-this-environment';
-
-      if (shouldFallbackToRedirect) {
-        isRedirectFlow = true;
-        try {
-          await signInWithRedirect(auth, googleProvider);
-        } catch (redirectErr) {
-          isRedirectFlow = false;
-          sessionStorage.removeItem(POST_SIGN_IN_NAV_TO_MENU_KEY);
-          set({ error: getAuthErrorMessage(redirectErr) });
-        }
-        return;
-      }
       sessionStorage.removeItem(POST_SIGN_IN_NAV_TO_MENU_KEY);
       set({ error: getAuthErrorMessage(err) });
     } finally {
       popupRequestInFlight = false;
-      if (shouldResetPending && !isRedirectFlow) {
-        set({ signInPending: false });
-      }
+      // Redirect navigates away on success; if it throws, clear pending here.
+      if (shouldResetPending) set({ signInPending: false });
     }
   },
 
@@ -139,10 +115,15 @@ export const useAuthStore = create<AuthState>((set) => ({
       return () => {};
     }
 
-    let unsubscribe: (() => void) | undefined;
     let cancelled = false;
 
-    // Await redirect completion first, then subscribe — avoids racing duplicate getRedirectResult.
+    // Subscribe immediately so popup sign-in reflects in UI fast.
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (cancelled) return;
+      set({ user, loading: false, signInPending: false });
+    });
+
+    // Consume redirect result in parallel (safe via singleton); do not block onAuth subscription.
     void (async () => {
       try {
         const cred = await getRedirectResultOnce();
@@ -154,17 +135,12 @@ export const useAuthStore = create<AuthState>((set) => ({
         if (!cancelled) {
           set({ error: getAuthErrorMessage(err), signInPending: false });
         }
-      } finally {
-        if (cancelled) return;
-        unsubscribe = onAuthStateChanged(auth, (user) => {
-          set({ user, loading: false, signInPending: false });
-        });
       }
     })();
 
     return () => {
       cancelled = true;
-      unsubscribe?.();
+      unsubscribe();
     };
   }
 }));

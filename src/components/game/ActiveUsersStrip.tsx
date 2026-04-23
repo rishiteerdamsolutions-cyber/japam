@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { loadPublicActiveUsers, sendUserReaction, type PublicActiveUser } from '../../lib/firestore';
 import { useAuthStore } from '../../store/authStore';
@@ -37,22 +37,24 @@ export function ActiveUsersStrip() {
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState<{ targetUid: string; type: ReactionType } | null>(null);
   const [paused, setPaused] = useState(false);
+  const hadSuccessfulFetchRef = useRef(false);
 
   const now = Date.now();
   const visible = users.slice(0, 40);
 
   useEffect(() => {
     let cancelled = false;
+    if (!hadSuccessfulFetchRef.current) setLoading(true);
     loadPublicActiveUsers().then((list) => {
-      if (!cancelled) {
-        setUsers(list);
-        setLoading(false);
-      }
+      if (cancelled) return;
+      setUsers(list);
+      setLoading(false);
+      hadSuccessfulFetchRef.current = true;
     });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [uid]);
 
   const send = async (targetUid: string, type: ReactionType) => {
     if (!uid) return;
@@ -190,7 +192,7 @@ export function ActiveUsersStrip() {
                           type="button"
                           disabled={disabled}
                           onClick={() => send(u.uid, type)}
-                          className="w-7 h-7 rounded-md bg-white/5 border border-white/10 text-[13px] leading-none flex items-center justify-center disabled:opacity-35 active:scale-95"
+                          className="flex h-9 min-w-[1.85rem] flex-col items-center justify-center gap-0 rounded-md bg-white/5 border border-white/10 px-0.5 py-0.5 disabled:opacity-35 active:scale-95"
                           title={
                             isSelf
                               ? 'Cannot react to yourself'
@@ -200,7 +202,12 @@ export function ActiveUsersStrip() {
                           }
                           aria-label={`${type} ${count}`}
                         >
-                          <span aria-hidden>{labelForReaction(type)}</span>
+                          <span aria-hidden className="text-[12px] leading-none">
+                            {labelForReaction(type)}
+                          </span>
+                          <span className="tabular-nums text-[9px] font-semibold leading-none text-amber-200/95">
+                            {count}
+                          </span>
                         </button>
                       );
                     })}

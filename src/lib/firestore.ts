@@ -373,9 +373,9 @@ export async function loadPublicActiveUsers(): Promise<PublicActiveUser[]> {
   }
 }
 
-/** Send appreciation. Logged-in only. */
+/** Send appreciation. Logged-in only. Retries ID token so react works right after Google sign-in. */
 export async function sendUserReaction(_uid: string, targetUid: string, type: 'heart' | 'like' | 'clap'): Promise<boolean> {
-  const token = await getFirebaseIdToken();
+  const token = await getIdTokenWithRetry(null, 8, 120);
   if (!token) return false;
   const url = apiUrl('/api/user/react');
   try {

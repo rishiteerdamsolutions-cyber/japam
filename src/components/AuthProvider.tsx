@@ -62,13 +62,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     loadSettings();
   }, [loadSettings]);
 
-  // Powers inventory from idb, then one-time starter pack after Google sign-in (per uid, per browser).
+  // Powers inventory from idb, then one-time starter pack (non-blocking so sign-in stays snappy).
   useEffect(() => {
     let cancelled = false;
     (async () => {
       await loadPowersInventory();
       if (cancelled || authLoading) return;
-      if (user?.uid) await ensureStarterPackOnce(user.uid);
+      if (user?.uid) void ensureStarterPackOnce(user.uid);
     })();
     return () => {
       cancelled = true;

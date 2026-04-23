@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getDeity, type DeityId } from '../../data/deities';
-import { stripIconSrc } from '../../data/gamePowers';
 
 const SIZE = 6;
 
@@ -273,6 +272,11 @@ function verifyDemoChain(): void {
 }
 verifyDemoChain();
 
+/** Demo score overlay only — transparent PNGs in `public/images/powers/demo/`. Bump when replacing art so caches refresh. */
+const DEMO_SCORE_ASSET_VER = '2';
+const DEMO_SCORE_SWAP_PNG = `/images/powers/demo/score-swap.png?v=${DEMO_SCORE_ASSET_VER}`;
+const DEMO_SCORE_NAMASKARAM_PNG = `/images/powers/demo/score-namaskaram.png?v=${DEMO_SCORE_ASSET_VER}`;
+
 type Phase = 'idle' | 'pick' | 'swap' | 'preMatch' | 'match' | 'score' | 'clear';
 
 type SwapNudge = 'right' | 'left' | 'up' | 'down' | null;
@@ -501,8 +505,17 @@ export function MenuMiniGameDemo() {
   const scoreMantra = scoreDeityId ? mantraForMatch(scoreDeityId) : '';
   const matchLineLen = step.matchCells.length;
   const scorePowerLabel = matchLineLen === 4 ? 'Swap Power' : matchLineLen >= 5 ? 'Disappear Power' : null;
-  const scorePowerIconSrc =
-    matchLineLen === 4 ? stripIconSrc('freeSwap') : matchLineLen >= 5 ? stripIconSrc('namaskaram') : null;
+  const scorePowerPngSrc = matchLineLen === 4 ? DEMO_SCORE_SWAP_PNG : DEMO_SCORE_NAMASKARAM_PNG;
+  /** Same +1 as japa stage. */
+  const scorePlusOneClass =
+    'font-black text-amber-200 text-[clamp(2.1rem,8.4vmin,3rem)] drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)] [text-shadow:0_0_12px_rgba(251,191,36,0.7)]';
+  /** Same size/weight as mantra line (power name must match exactly). */
+  const scoreMantraTypographyClass =
+    'font-semibold leading-snug text-white/95 text-[clamp(1.3rem,5.6vmin,1.7rem)] drop-shadow-[0_1px_4px_rgba(0,0,0,0.95)]';
+  const scoreMantraStyle = { textShadow: '0 0 10px rgba(0,0,0,0.85)' } as const;
+  /** 2× prior demo icon size. */
+  const scoreIconClass =
+    'h-[clamp(8.5rem,34vmin,12.5rem)] w-[clamp(8.5rem,34vmin,12.5rem)] max-w-[min(94vw,40rem)] object-contain bg-transparent [filter:drop-shadow(0_0_12px_rgba(251,191,36,0.45))_drop-shadow(0_2px_6px_rgba(0,0,0,0.3))]';
 
   return (
     <div
@@ -564,20 +577,15 @@ export function MenuMiniGameDemo() {
                   scale: { duration: reducedMotion ? 0.2 : 0.28 },
                 }}
               >
-                <span className="font-black text-amber-200 text-[clamp(2.1rem,8.4vmin,3rem)] drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)] [text-shadow:0_0_12px_rgba(251,191,36,0.7)]">
-                  +1
-                </span>
+                <span className={scorePlusOneClass}>+1</span>
                 {scoreMantra ? (
-                  <span
-                    className="font-semibold leading-snug text-white/95 text-[clamp(1.3rem,5.6vmin,1.7rem)] drop-shadow-[0_1px_4px_rgba(0,0,0,0.95)]"
-                    style={{ textShadow: '0 0 10px rgba(0,0,0,0.85)' }}
-                  >
+                  <span className={scoreMantraTypographyClass} style={scoreMantraStyle}>
                     {scoreMantra}
                   </span>
                 ) : null}
               </motion.div>
             ) : null}
-            {scoreStage === 'power' && scorePowerLabel && scorePowerIconSrc ? (
+            {scoreStage === 'power' && scorePowerLabel ? (
               <motion.div
                 key={`score-power-${stepIndex}-${step.matchCells.length}`}
                 className="flex w-[min(94%,22rem)] flex-col items-center gap-2 text-center"
@@ -586,22 +594,16 @@ export function MenuMiniGameDemo() {
                 exit={{ opacity: 0, y: -6, scale: 0.95 }}
                 transition={{ duration: reducedMotion ? 0.2 : 0.26, ease: 'easeOut' }}
               >
-                <span className="font-black text-amber-200 text-[clamp(1.35rem,5vmin,1.85rem)] drop-shadow-[0_1px_4px_rgba(0,0,0,0.85)] [text-shadow:0_0_10px_rgba(251,191,36,0.55)]">
-                  +1
-                </span>
-                <div className="relative isolate flex items-center justify-center">
+                <span className={scorePlusOneClass}>+1</span>
+                <div className="relative flex items-center justify-center bg-transparent">
                   <img
-                    src={scorePowerIconSrc}
+                    src={scorePowerPngSrc}
                     alt=""
                     draggable={false}
-                    className="h-[clamp(4.25rem,17vmin,6.25rem)] w-[clamp(4.25rem,17vmin,6.25rem)] max-w-[min(88vw,20rem)] object-contain [filter:drop-shadow(0_0_14px_rgba(255,255,255,0.35))_drop-shadow(0_2px_8px_rgba(0,0,0,0.45))]"
-                    style={{ mixBlendMode: 'screen' }}
+                    className={scoreIconClass}
                   />
                 </div>
-                <span
-                  className="font-extrabold uppercase tracking-wide text-amber-100 text-[clamp(0.8rem,3.2vmin,1.05rem)] drop-shadow-[0_1px_3px_rgba(0,0,0,0.95)]"
-                  style={{ textShadow: '0 0 10px rgba(0,0,0,0.88)' }}
-                >
+                <span className={scoreMantraTypographyClass} style={scoreMantraStyle}>
                   {scorePowerLabel}
                 </span>
               </motion.div>

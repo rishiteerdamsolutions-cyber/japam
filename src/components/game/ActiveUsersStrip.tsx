@@ -90,11 +90,10 @@ export function ActiveUsersStrip() {
   }
 
   if (visible.length === 0) {
-    const label = t('activeUsers.yesterdaysAchievers');
-    const emptyHint = t('activeUsers.emptyMarqueeHint', {
-      defaultValue: 'Players and their scores will be shown here.',
+    const emptyCopy = t('activeUsers.emptyMarquee', {
+      defaultValue:
+        "No recent achievers yet — yesterday's devotees and their japa scores will scroll here.",
     });
-    const emptyCopy = `${label} — ${t('activeUsers.noRecentAchievers', { defaultValue: 'no recent achievers yet' })}. ${emptyHint}`;
     return (
       <div className="w-full">
         <style>{`

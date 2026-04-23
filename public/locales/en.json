@@ -56,8 +56,7 @@
   },
   "activeUsers": {
     "yesterdaysAchievers": "Yesterday's achievers",
-    "noRecentAchievers": "no recent achievers yet",
-    "emptyMarqueeHint": "Players and their scores will be shown here.",
+    "emptyMarquee": "No recent achievers yet — yesterday's devotees and their japa scores will scroll here.",
     "signInToReact": "Sign in to send ❤️ 👍 👏"
   },
   "game": {

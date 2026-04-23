@@ -5,7 +5,7 @@
 export function DemoCornerRibbon() {
   return (
     <div
-      className="pointer-events-none absolute left-0 top-0 z-[12] h-[clamp(2.9rem,12.5vmin,4.4rem)] w-[clamp(2.9rem,12.5vmin,4.4rem)]"
+      className="pointer-events-none absolute left-0 top-0 z-[12] h-[clamp(2.35rem,min(12.5vmin,13cqi),4.6rem)] w-[clamp(2.35rem,min(12.5vmin,13cqi),4.6rem)]"
       aria-hidden
     >
       <div
@@ -13,7 +13,7 @@ export function DemoCornerRibbon() {
         style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.35))' }}
       />
       <span
-        className="absolute left-[30%] top-[34%] z-[1] block max-w-[4.5rem] -translate-x-1/2 -translate-y-1/2 -rotate-45 text-center font-extrabold uppercase leading-tight tracking-wide text-white text-[clamp(7px,min(2.5vmin,2.6cqi),10px)] [paint-order:stroke_fill] [-webkit-text-stroke:1px_rgba(0,0,0,0.35)]"
+        className="absolute left-[30%] top-[34%] z-[1] block max-w-[4.5rem] -translate-x-1/2 -translate-y-1/2 -rotate-45 text-center font-extrabold uppercase leading-tight tracking-wide text-white text-[clamp(6.5px,min(2.5vmin,2.4cqi),10px)] [paint-order:stroke_fill] [-webkit-text-stroke:1px_rgba(0,0,0,0.35)]"
         style={{ textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}
       >
         Demo

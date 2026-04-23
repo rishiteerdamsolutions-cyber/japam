@@ -197,9 +197,9 @@ export function Landing({
             )}
 
             <div
-              className={`w-full flex justify-center items-center px-1 ${user ? 'mt-8' : 'mt-5'}`}
+              className={`w-full min-w-0 max-w-full flex justify-center items-center pl-[max(0.25rem,env(safe-area-inset-left,0px))] pr-[max(0.25rem,env(safe-area-inset-right,0px))] ${user ? 'mt-8' : 'mt-5'}`}
             >
-              <div className="relative @container max-w-full rounded-2xl border-2 border-amber-400/75 p-1.5 sm:p-2 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.45),0_0_0_1px_rgba(251,191,36,0.2)_inset] bg-black/20 ring-1 ring-amber-300/35 w-full min-w-0 overflow-hidden">
+              <div className="relative @container max-w-full rounded-2xl border-2 border-amber-400/75 p-0 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.45),0_0_0_1px_rgba(251,191,36,0.2)_inset] bg-black/20 ring-1 ring-amber-300/35 w-full min-w-0 max-w-[min(100%,26rem)] overflow-hidden">
                 <MenuMiniGameDemo key={location.key} />
               </div>
             </div>

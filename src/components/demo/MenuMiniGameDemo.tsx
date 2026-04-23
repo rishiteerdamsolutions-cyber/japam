@@ -325,7 +325,7 @@ function DemoGemTile({
     <div
       className={`
         gem-candy-frame w-full aspect-square touch-none transition-opacity duration-300
-        scale-[clamp(0.82,calc(0.74 + 0.22vmin),0.9)] sm:scale-[clamp(0.84,calc(0.76 + 0.16vmin),0.88)]
+        scale-[clamp(0.78,calc(0.68 + 0.26vmin),0.9)] sm:scale-[clamp(0.82,calc(0.74 + 0.18vmin),0.88)]
         ${clearing && matched ? 'opacity-25 scale-[0.82]' : ''}
       `}
     >
@@ -522,20 +522,20 @@ export function MenuMiniGameDemo() {
   const matchLineLen = step.matchCells.length;
   const scorePowerLabel = matchLineLen === 4 ? 'Swap Power' : matchLineLen >= 5 ? 'Disappear Power' : null;
   const scorePowerPngSrc = matchLineLen === 4 ? DEMO_SCORE_SWAP_PNG : DEMO_SCORE_NAMASKARAM_PNG;
-  /** +1 / mantra / power name: dark outline so text reads on busy tiles (paint-order keeps fill crisp). */
+  /** +1 / mantra / power name — scale with demo frame (`cqi`) and viewport (`vmin`) so score UI fits tiny phones and large desktops. */
   const scorePlusOneClass =
-    'font-black text-amber-200 text-[clamp(2.1rem,8.4vmin,3rem)] [paint-order:stroke_fill] [-webkit-text-stroke:clamp(2px,0.45vmin,3.5px)_rgba(0,0,0,0.82)] drop-shadow-[0_2px_0_rgba(0,0,0,0.85)] [text-shadow:0_0.08em_0_rgba(0,0,0,0.55),0_0_14px_rgba(251,191,36,0.45)]';
+    'font-black text-amber-200 text-[clamp(1.65rem,min(8.4vmin,calc(0.82rem+6.2cqi)),3rem)] [paint-order:stroke_fill] [-webkit-text-stroke:clamp(1.5px,min(0.45vmin,0.85cqi),3.5px)_rgba(0,0,0,0.82)] drop-shadow-[0_2px_0_rgba(0,0,0,0.85)] [text-shadow:0_0.08em_0_rgba(0,0,0,0.55),0_0_14px_rgba(251,191,36,0.45)]';
   const scoreMantraTypographyClass =
-    'font-semibold leading-snug text-white text-[clamp(1.3rem,5.6vmin,1.7rem)] [paint-order:stroke_fill] [-webkit-text-stroke:clamp(1.5px,0.35vmin,2.5px)_rgba(0,0,0,0.78)] drop-shadow-[0_2px_0_rgba(0,0,0,0.88)] [text-shadow:0_0.06em_0_rgba(0,0,0,0.5)]';
-  /** Power row: icon sits on a dark plate so PNG edges read on any background. */
+    'font-semibold leading-snug text-white text-[clamp(1.05rem,min(5.6vmin,calc(0.65rem+3.8cqi)),1.7rem)] [paint-order:stroke_fill] [-webkit-text-stroke:clamp(1px,min(0.35vmin,0.65cqi),2.5px)_rgba(0,0,0,0.78)] drop-shadow-[0_2px_0_rgba(0,0,0,0.88)] [text-shadow:0_0.06em_0_rgba(0,0,0,0.5)]';
+  /** Power row: icon scales with frame height/width caps so it never dominates small screens. */
   const scorePowerRowIconClass =
-    'mx-auto h-auto max-h-[min(32vmin,8.5rem)] w-full max-w-[min(100%,10.5rem)] object-contain [filter:drop-shadow(0_0_1px_rgba(0,0,0,0.95))_drop-shadow(0_0_0_rgba(0,0,0,0.6))_drop-shadow(0_2px_8px_rgba(0,0,0,0.55))_drop-shadow(0_0_14px_rgba(251,191,36,0.4))]';
+    'mx-auto h-auto max-h-[min(32vmin,38svh,10.5cqi,8.5rem)] w-full max-w-[min(100%,10.5rem,85cqi)] object-contain [filter:drop-shadow(0_0_1px_rgba(0,0,0,0.95))_drop-shadow(0_0_0_rgba(0,0,0,0.6))_drop-shadow(0_2px_8px_rgba(0,0,0,0.55))_drop-shadow(0_0_14px_rgba(251,191,36,0.4))]';
 
   return (
     <div
       className={`
         relative mx-auto aspect-square max-w-full min-h-0 min-w-0 overflow-hidden select-none touch-manipulation
-        w-[min(100%,26rem,72vmin,56vh,92vmin,calc(100vw-1.25rem-env(safe-area-inset-left)-env(safe-area-inset-right)))]
+        w-[min(100%,26rem,calc(100svw-1.125rem-env(safe-area-inset-left)-env(safe-area-inset-right)),68svh,72vmin)]
       `}
     >
       <DemoCornerRibbon />
@@ -575,11 +575,11 @@ export function MenuMiniGameDemo() {
       </motion.div>
 
       {!demoPlaying ? (
-        <div className="pointer-events-auto absolute inset-0 z-40 flex items-center justify-center bg-black/25 p-3">
+        <div className="pointer-events-auto absolute inset-0 z-40 flex items-center justify-center bg-black/25 p-[clamp(0.5rem,3cqi,1rem)]">
           <button
             type="button"
             onClick={() => setDemoPlaying(true)}
-            className="group flex h-[clamp(3.75rem,15vmin,5rem)] w-[clamp(3.75rem,15vmin,5rem)] shrink-0 items-center justify-center rounded-full border-2 border-amber-400/90 bg-gradient-to-b from-amber-300 to-amber-600 text-amber-950 shadow-[0_6px_28px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.35)] transition-transform active:scale-95 hover:scale-[1.03] hover:shadow-[0_8px_32px_rgba(251,191,36,0.35)] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-200 focus-visible:ring-offset-2 focus-visible:ring-offset-black/40"
+            className="group flex h-[clamp(2.75rem,min(15vmin,14cqi),5rem)] w-[clamp(2.75rem,min(15vmin,14cqi),5rem)] min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-full border-2 border-amber-400/90 bg-gradient-to-b from-amber-300 to-amber-600 text-amber-950 shadow-[0_6px_28px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.35)] transition-transform active:scale-95 hover:scale-[1.03] hover:shadow-[0_8px_32px_rgba(251,191,36,0.35)] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-200 focus-visible:ring-offset-2 focus-visible:ring-offset-black/40"
             aria-label="Play demo"
           >
             <svg
@@ -596,11 +596,11 @@ export function MenuMiniGameDemo() {
 
       {phase === 'score' ? (
         <div
-          className="pointer-events-none absolute inset-0 z-20 flex items-start justify-center bg-black/15 pt-[min(32%,7.5rem)] px-1 backdrop-blur-[0.5px]"
+          className="pointer-events-none absolute inset-0 z-20 flex items-start justify-center bg-black/15 pt-[min(30%,clamp(3.25rem,min(22cqi,26vmin),7.25rem))] px-[clamp(0.125rem,1.5cqi,0.5rem)] backdrop-blur-[0.5px]"
           aria-hidden
         >
           {/* Shared slot + `sync`: japa exit and power enter overlap (no empty frame between stages). */}
-          <div className="relative w-full max-w-[min(94%,22rem)] min-h-[clamp(6.75rem,26vmin,10.5rem)]">
+          <div className="relative w-full max-w-[min(94%,22rem,96cqi)] min-h-[clamp(5.75rem,min(26cqi,26vmin),10.5rem)]">
             <AnimatePresence mode="sync" initial={false}>
               {scoreStage === 'japa' ? (
                 <motion.div
@@ -626,14 +626,14 @@ export function MenuMiniGameDemo() {
               {scoreStage === 'power' && scorePowerLabel ? (
                 <motion.div
                   key={`score-power-${stepIndex}-${step.matchCells.length}`}
-                  className="absolute inset-x-0 top-0 flex flex-row items-center justify-center gap-x-[clamp(0.35rem,2vmin,0.85rem)] text-center"
+                  className="absolute inset-x-0 top-0 flex flex-row flex-wrap items-center justify-center gap-x-[clamp(0.35rem,2vmin,0.85rem)] gap-y-1 text-center"
                   initial={{ opacity: 0, y: 10, scale: 0.92 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -6, scale: 0.96 }}
                   transition={{ duration: reducedMotion ? 0.2 : 0.28, ease: 'easeOut' }}
                 >
                   <span className={`${scorePlusOneClass} shrink-0`}>+1</span>
-                  <div className="flex min-w-0 max-w-[min(100%,13.5rem)] flex-col items-center justify-center gap-1">
+                  <div className="flex min-w-0 max-w-[min(100%,13.5rem,88cqi)] flex-col items-center justify-center gap-1">
                     <div className="rounded-[min(0.55rem,3vmin)] bg-black/55 p-1.5 ring-[clamp(2px,0.35vmin,3px)] ring-black/80 ring-offset-0 shadow-[0_2px_14px_rgba(0,0,0,0.65)]">
                       <img
                         src={scorePowerPngSrc}

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import {
+  signInWithPopup,
   signInWithRedirect,
   getRedirectResult,
   signOut as firebaseSignOut,
@@ -9,26 +10,39 @@ import {
 } from 'firebase/auth';
 import { auth, googleProvider, isFirebaseConfigured } from '../lib/firebase';
 
-/** Set while Google sign-in is in progress; AuthProvider navigates to `/menu` after success. */
-export const POST_SIGN_IN_NAV_TO_MENU_KEY = 'japam.postSignInToMenu';
-
-/** Set when user calls sign out; AuthProvider navigates to `/` (landing) once auth is cleared. */
-export const POST_SIGN_OUT_NAV_TO_LANDING_KEY = 'japam.postSignOutToLanding';
-
-let popupRequestInFlight = false;
-
 /**
- * Firebase only allows consuming the redirect result once per page load. React StrictMode
- * (dev) mounts effects twice; a second `getRedirectResult(auth)` returns null and races
- * `onAuthStateChanged`, so users appear signed out after picking a Google account.
+ * `getRedirectResult` must run at most once per full page load. In React 18 Strict Mode
+ * (dev), the auth bootstrap effect runs twice; without sharing this promise, the second
+ * call returns null and the redirect sign-in is lost (Firebase behavior).
  */
-let redirectResultSingleton: ReturnType<typeof getRedirectResult> | null = null;
+let redirectResultPromise: ReturnType<typeof getRedirectResult> | null = null;
 
 function getRedirectResultOnce() {
-  if (!redirectResultSingleton) {
-    redirectResultSingleton = getRedirectResult(auth);
-  }
-  return redirectResultSingleton;
+  redirectResultPromise ??= getRedirectResult(auth);
+  return redirectResultPromise;
+}
+
+/** One listener per full page load — avoids Strict Mode double-mount races with Firebase. */
+let firebaseAuthListenersAttached = false;
+
+function attachFirebaseAuthListeners() {
+  if (!isFirebaseConfigured || firebaseAuthListenersAttached) return;
+  firebaseAuthListenersAttached = true;
+
+  onAuthStateChanged(auth, (user) => {
+    useAuthStore.setState({ user, loading: false, signInPending: false });
+  });
+
+  void (async () => {
+    try {
+      const cred = await getRedirectResultOnce();
+      if (cred?.user) {
+        useAuthStore.setState({ user: cred.user, signInPending: false, error: null });
+      }
+    } catch (err) {
+      useAuthStore.setState({ error: getAuthErrorMessage(err), signInPending: false });
+    }
+  })();
 }
 
 function getAuthErrorMessage(err: unknown): string {
@@ -67,43 +81,55 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   signInWithGoogle: async () => {
     if (!isFirebaseConfigured) return;
-    if (popupRequestInFlight) return;
 
-    let shouldResetPending = false;
+    let started = false;
+    let redirectStarted = false;
     set((state) => {
       if (state.signInPending) return state;
-      shouldResetPending = true;
+      started = true;
       return { signInPending: true, error: null };
     });
-    if (!shouldResetPending) return;
-    popupRequestInFlight = true;
+    if (!started) return;
 
     try {
-      sessionStorage.setItem(POST_SIGN_IN_NAV_TO_MENU_KEY, '1');
-      /**
-       * Like GitHub: use a same-tab OAuth redirect (more reliable than popups on Safari/iOS/in-app browsers).
-       * This intentionally does NOT attempt popup first.
-       */
-      await signInWithRedirect(auth, googleProvider);
+      await signInWithPopup(auth, googleProvider);
     } catch (err) {
-      sessionStorage.removeItem(POST_SIGN_IN_NAV_TO_MENU_KEY);
+      const authErr = err as AuthError;
+      if (
+        authErr?.code === 'auth/cancelled-popup-request' ||
+        authErr?.code === 'auth/popup-closed-by-user'
+      ) {
+        return;
+      }
+
+      const useRedirect =
+        authErr?.code === 'auth/popup-blocked' ||
+        authErr?.code === 'auth/operation-not-supported-in-this-environment';
+
+      if (useRedirect) {
+        redirectStarted = true;
+        try {
+          await signInWithRedirect(auth, googleProvider);
+        } catch (redirectErr) {
+          redirectStarted = false;
+          set({ error: getAuthErrorMessage(redirectErr) });
+        }
+        return;
+      }
       set({ error: getAuthErrorMessage(err) });
     } finally {
-      popupRequestInFlight = false;
-      // Redirect navigates away on success; if it throws, clear pending here.
-      if (shouldResetPending) set({ signInPending: false });
+      if (!redirectStarted) {
+        set({ signInPending: false });
+      }
     }
   },
 
   signOut: async () => {
     if (!isFirebaseConfigured) return;
-    sessionStorage.removeItem(POST_SIGN_IN_NAV_TO_MENU_KEY);
     set({ error: null });
-    sessionStorage.setItem(POST_SIGN_OUT_NAV_TO_LANDING_KEY, '1');
     try {
       await firebaseSignOut(auth);
     } catch (err) {
-      sessionStorage.removeItem(POST_SIGN_OUT_NAV_TO_LANDING_KEY);
       const msg = err instanceof Error ? err.message : 'Sign-out failed';
       set({ error: msg });
     }
@@ -114,33 +140,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({ loading: false });
       return () => {};
     }
-
-    let cancelled = false;
-
-    // Subscribe immediately so popup sign-in reflects in UI fast.
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (cancelled) return;
-      set({ user, loading: false, signInPending: false });
-    });
-
-    // Consume redirect result in parallel (safe via singleton); do not block onAuth subscription.
-    void (async () => {
-      try {
-        const cred = await getRedirectResultOnce();
-        if (cancelled) return;
-        if (cred?.user) {
-          set({ user: cred.user, signInPending: false, error: null });
-        }
-      } catch (err) {
-        if (!cancelled) {
-          set({ error: getAuthErrorMessage(err), signInPending: false });
-        }
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-      unsubscribe();
-    };
+    attachFirebaseAuthListeners();
+    return () => {};
   }
 }));

@@ -1,10 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  useAuthStore,
-  POST_SIGN_IN_NAV_TO_MENU_KEY,
-  POST_SIGN_OUT_NAV_TO_LANDING_KEY,
-} from '../store/authStore';
+import { useAuthStore } from '../store/authStore';
 import { useProgressStore } from '../store/progressStore';
 import { useJapaStore } from '../store/japaStore';
 import { useUnlockStore } from '../store/unlockStore';
@@ -41,20 +37,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return unsubscribe;
   }, [init]);
 
-  // After Google sign-in (any entry URL), open the menu instead of staying on e.g. /game or /levels.
+  /** After Firebase sign-out only: go home. Same tab opening the app signed-out does nothing. */
+  const hadFirebaseUserRef = useRef(false);
   useEffect(() => {
-    if (authLoading || !user) return;
-    if (sessionStorage.getItem(POST_SIGN_IN_NAV_TO_MENU_KEY) !== '1') return;
-    sessionStorage.removeItem(POST_SIGN_IN_NAV_TO_MENU_KEY);
-    navigate('/menu', { replace: true });
-  }, [user, authLoading, navigate]);
-
-  // After sign-out, open landing immediately (replace so back stack does not return to signed-in routes).
-  useEffect(() => {
-    if (authLoading || user) return;
-    if (sessionStorage.getItem(POST_SIGN_OUT_NAV_TO_LANDING_KEY) !== '1') return;
-    sessionStorage.removeItem(POST_SIGN_OUT_NAV_TO_LANDING_KEY);
-    navigate('/', { replace: true });
+    if (authLoading) return;
+    if (user) {
+      hadFirebaseUserRef.current = true;
+      return;
+    }
+    if (hadFirebaseUserRef.current) {
+      hadFirebaseUserRef.current = false;
+      navigate('/', { replace: true });
+    }
   }, [user, authLoading, navigate]);
 
   // Global app bootstrap: settings on every route refresh.

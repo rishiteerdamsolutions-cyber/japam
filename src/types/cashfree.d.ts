@@ -6,6 +6,7 @@ declare module '@cashfreepayments/cashfree-js' {
     }) => Promise<{
       error?: unknown;
       paymentDetails?: { paymentMessage?: string };
+      /** True when Cashfree sends the user to return_url; client may not get paymentDetails. */
       redirect?: boolean;
     }>;
   } | null>;

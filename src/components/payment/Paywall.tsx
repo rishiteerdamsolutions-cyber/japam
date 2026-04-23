@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { loadPricingConfig } from '../../lib/firestore';
 import { openCashfreeCheckout } from '../../lib/cashfree';
 import { getApiBase } from '../../lib/apiBase';
+import { verifyCashfreeOrderAfterCheckout } from '../../lib/verifyCashfreeOrder';
 import { useAuthStore } from '../../store/authStore';
 import { useUnlockStore } from '../../store/unlockStore';
 import { auth } from '../../lib/firebase';
@@ -192,25 +193,23 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
         throw new Error('Invalid create-order response');
       }
       const result = await openCashfreeCheckout(paymentSessionId, { redirectTarget: '_modal' });
-      const r = result as { error?: unknown; paymentDetails?: unknown };
-      if (r?.paymentDetails) {
-        const uid = auth?.currentUser?.uid ?? currentUser.uid;
-        const idToken2 = await (auth?.currentUser ?? currentUser).getIdToken();
-        const verifyUrl = base ? `${base}/api/verify-unlock` : '/api/verify-unlock';
-        const vRes = await fetch(verifyUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken2}` },
-          body: JSON.stringify({ order_id: orderId }),
-        });
-        if (!vRes.ok) {
-          const msg = await getErrorMessage(vRes, 'Verification failed');
-          throw new Error(msg);
-        }
-        await loadUnlock(uid);
-        onUnlocked?.();
-      } else if (r?.error) {
+      const r = result as { error?: unknown; paymentDetails?: unknown; redirect?: boolean };
+      if (r?.error) {
         setError('Payment was cancelled or failed');
+        return;
       }
+      // GPay / UPI often resolve without `paymentDetails`; still verify (with retries for PAID race).
+      const uid = auth?.currentUser?.uid ?? currentUser.uid;
+      const verified = await verifyCashfreeOrderAfterCheckout({
+        orderId,
+        kind: 'unlock',
+        getIdToken: () => (auth?.currentUser ?? currentUser).getIdToken().catch(() => null),
+      });
+      if (!verified.ok) {
+        throw new Error(verified.error);
+      }
+      await loadUnlock(uid);
+      onUnlocked?.();
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Payment failed');
     } finally {

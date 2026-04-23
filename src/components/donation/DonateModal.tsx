@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { JapamBrand } from '../ui/JapamBrand';
 import { openCashfreeCheckout } from '../../lib/cashfree';
+import { verifyCashfreeOrderAfterCheckout } from '../../lib/verifyCashfreeOrder';
 import { auth } from '../../lib/firebase';
 import { useAuthStore } from '../../store/authStore';
 import { useUnlockStore } from '../../store/unlockStore';
@@ -74,26 +75,23 @@ export function DonateModal({ onClose, onDonated }: DonateModalProps) {
       if (!paymentSessionId || !orderId) throw new Error('Invalid create-order response');
 
       const result = await openCashfreeCheckout(paymentSessionId, { redirectTarget: '_modal' });
-      const r = result as { error?: unknown; paymentDetails?: unknown };
-      if (r?.paymentDetails) {
-        const verifyUrl = API_BASE ? `${API_BASE}/api/verify-donate` : '/api/verify-donate';
-        const idToken = await auth?.currentUser?.getIdToken?.().catch(() => null);
-        if (!idToken) throw new Error('Please sign in again');
-        const vRes = await fetch(verifyUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
-          body: JSON.stringify({ order_id: orderId, displayName: user.displayName || user.email || '' }),
-        });
-        if (!vRes.ok) {
-          const msg = await getErrorMessage(vRes, 'Verification failed');
-          throw new Error(msg);
-        }
-        await loadUnlock(user.uid);
-        onDonated?.();
-        onClose();
-      } else if (r?.error) {
+      const r = result as { error?: unknown; paymentDetails?: unknown; redirect?: boolean };
+      if (r?.error) {
         setError('Payment was cancelled or failed');
+        return;
       }
+      const verified = await verifyCashfreeOrderAfterCheckout({
+        orderId,
+        kind: 'donate',
+        displayName: user.displayName || user.email || '',
+        getIdToken: () => (auth?.currentUser ?? user).getIdToken().catch(() => null),
+      });
+      if (!verified.ok) {
+        throw new Error(verified.error);
+      }
+      await loadUnlock(user.uid);
+      onDonated?.();
+      onClose();
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Donation failed');
     } finally {

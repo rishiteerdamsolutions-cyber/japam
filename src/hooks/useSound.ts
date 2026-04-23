@@ -12,7 +12,7 @@ function getAudioContext() {
   return audioContext;
 }
 
-const DEITY_FREQUENCIES: Record<DeityId, number> = {
+const DEITY_FREQUENCIES: Partial<Record<DeityId, number>> = {
   rama: 392,
   shiva: 440,
   ganesh: 494,
@@ -29,14 +29,12 @@ const DEITY_FREQUENCIES: Record<DeityId, number> = {
   ayyappan: 587,
   jagannath: 622,
   dattatreya: 659,
-  saiBaba: 698,
   narayana: 740,
   iskcon: 784,
   guru: 830,
   shani: 440,
   rahu: 466,
   ketu: 494,
-  bramhamgaaru: 523,
 };
 
 function playDeityTone(ctx: AudioContext, deity: DeityId) {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { AppFooter } from '../layout/AppFooter';
@@ -13,6 +13,7 @@ import type { GameMode } from '../../store/gameStore';
 import { useProfileStore } from '../../store/profileStore';
 import { getProfileRingFlags } from '../../lib/membershipDisplay';
 import { landingStartJapaButtonClass, landingTryJapaButtonClass } from '../../lib/landingCtaStyles';
+import { DemoCornerRibbon } from '../demo/DemoCornerRibbon';
 
 /** `public/japam.gif` — keyed transparent intro (640px wide) until Ista Devata Japa is tapped. */
 const ISTA_DEVATA_INTRO_GIF_SRC = '/japam.gif';
@@ -28,9 +29,13 @@ function HeartIcon() {
 interface MainMenuProps {
   onSelect: (mode: GameMode) => void;
   onOpenSettings: () => void;
+  /** When set (e.g. `/test/menu-demo`), replaces the Iṣṭa intro GIF before the grid is revealed. */
+  introHeroSlot?: ReactNode;
+  /** Optional strip under the active-users row (test pages). */
+  demoNotice?: ReactNode;
 }
 
-export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
+export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }: MainMenuProps) {
   const { t } = useTranslation();
   const { user, loading, signInWithGoogle, signInPending } = useAuthStore();
   const tier = useUnlockStore((s) => s.tier);
@@ -126,6 +131,8 @@ export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
           <ActiveUsersStrip />
         </div>
 
+        {demoNotice}
+
         {showDonate && (
           <DonateModal
             onClose={() => setShowDonate(false)}
@@ -165,13 +172,18 @@ export function MainMenu({ onSelect, onOpenSettings }: MainMenuProps) {
                 {t('menu.istaDevata')}
               </span>
             </motion.button>
-            <div className="mt-5 w-full flex justify-center items-center bg-transparent">
-              <img
-                src={ISTA_DEVATA_INTRO_GIF_SRC}
-                alt={t('menu.istaDevataMalaaVideoAria')}
-                decoding="async"
-                className="block h-auto w-full max-w-full max-h-[min(58vh,440px)] object-contain bg-transparent"
-              />
+            <div className="mt-5 w-full flex justify-center items-center px-1">
+              <div className="relative @container max-w-full rounded-2xl border-2 border-amber-400/75 p-1.5 sm:p-2 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.45),0_0_0_1px_rgba(251,191,36,0.2)_inset] bg-black/20 ring-1 ring-amber-300/35 w-full min-w-0 overflow-visible">
+                {introHeroSlot ? <DemoCornerRibbon /> : null}
+                {introHeroSlot ?? (
+                  <img
+                    src={ISTA_DEVATA_INTRO_GIF_SRC}
+                    alt={t('menu.istaDevataMalaaVideoAria')}
+                    decoding="async"
+                    className="block h-auto w-full max-w-full max-h-[min(58vh,440px)] object-contain bg-transparent rounded-xl"
+                  />
+                )}
+              </div>
             </div>
           </div>
         ) : (

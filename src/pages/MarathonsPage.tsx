@@ -7,7 +7,7 @@ import { useAuthStore } from '../store/authStore';
 import { FIRST_LOCKED_LEVEL_INDEX, useUnlockStore } from '../store/unlockStore';
 import { auth } from '../lib/firebase';
 import { DonateThankYouBox } from '../components/donation/DonateThankYouBox';
-import { AppHeader } from '../components/layout/AppHeader';
+import { MenuMatchChantHeader } from '../components/layout/MenuMatchChantHeader';
 import { BottomNav } from '../components/nav/BottomNav';
 import { paddedLeaderboard, renderRankCardBlob } from '../lib/rankCard';
 import { trackShareEvent } from '../lib/firestore';
@@ -349,12 +349,10 @@ export function MarathonsPage() {
           </div>
         </div>
       )}
-      <AppHeader
-        title="Japa Marathons"
-        showBack
-        onBack={() => navigate('/menu')}
-      />
-
+      <MenuMatchChantHeader />
+      <h2 className="text-base sm:text-xl font-bold text-amber-400 mb-2" style={{ fontFamily: 'serif' }}>
+        Japa Marathons
+      </h2>
       <p className="text-amber-200/80 text-sm mb-4">Discover marathons by location and join to contribute your japas.</p>
       {!isPro && (
         <div className="mb-4 p-3 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-100 text-sm">

@@ -10,7 +10,7 @@ import { downloadMantraPdf, type PdfDetails } from '../../utils/pdfExport';
 import { trackShareEvent } from '../../lib/firestore';
 import { removeBackgroundFromImage } from '../../utils/removeBackground';
 import { DonateThankYouBox } from '../donation/DonateThankYouBox';
-import { AppHeader } from '../layout/AppHeader';
+import { MenuMatchChantHeader } from '../layout/MenuMatchChantHeader';
 import { BottomNav } from '../nav/BottomNav';
 import { LAUNCH_FEATURE_OCCASION_GAMES } from '../../config/launchFeatures';
 
@@ -25,11 +25,7 @@ function DownloadPdfIcon({ className }: { className?: string }) {
   );
 }
 
-interface JapaDashboardProps {
-  onBack: () => void;
-}
-
-export function JapaDashboard({ onBack }: JapaDashboardProps) {
+export function JapaDashboard() {
   const { t } = useTranslation();
   const { counts, loaded } = useJapaStore();
   const user = useAuthStore((s) => s.user);
@@ -203,7 +199,10 @@ export function JapaDashboard({ onBack }: JapaDashboardProps) {
     <div className="relative min-h-screen p-4 pb-[calc(6.5rem+env(safe-area-inset-bottom))] md:pb-[calc(7.5rem+env(safe-area-inset-bottom))] max-w-lg mx-auto overflow-hidden">
       <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10">
-      <AppHeader title="Japa Dashboard" showBack onBack={onBack} />
+      <MenuMatchChantHeader />
+      <h2 className="text-base sm:text-xl font-bold text-amber-400 mb-3" style={{ fontFamily: 'serif' }}>
+        {t('japaDashboard.title')}
+      </h2>
 
       <p className="text-amber-200/80 text-sm mb-1">{t('japaDashboard.lifetimeMantraCount')}</p>
       <p className="text-amber-200/55 text-[11px] mb-4 leading-snug">{t('japaDashboard.tierCountsHint')}</p>

@@ -12,6 +12,20 @@ import { auth, googleProvider, isFirebaseConfigured } from '../lib/firebase';
 
 let popupRequestInFlight = false;
 
+/**
+ * Firebase only allows consuming the redirect result once per page load. React StrictMode
+ * (dev) mounts effects twice; a second `getRedirectResult(auth)` returns null and races
+ * `onAuthStateChanged`, so users appear signed out after picking a Google account.
+ */
+let redirectResultSingleton: ReturnType<typeof getRedirectResult> | null = null;
+
+function getRedirectResultOnce() {
+  if (!redirectResultSingleton) {
+    redirectResultSingleton = getRedirectResult(auth);
+  }
+  return redirectResultSingleton;
+}
+
 function getAuthErrorMessage(err: unknown): string {
   const authErr = err as AuthError | undefined;
   switch (authErr?.code) {
@@ -111,23 +125,32 @@ export const useAuthStore = create<AuthState>((set) => ({
       return () => {};
     }
 
-    // Completes signInWithRedirect when user returns to this origin (standard browsers).
-    // Cursor Simple Browser often fails on firebaseapp.com/__/auth/handler; sign in with Chrome/Safari instead.
-    getRedirectResult(auth)
-      .then((cred) => {
-        if (cred?.user) {
-          set({ user: cred.user, loading: false, signInPending: false, error: null });
-          return;
-        }
-        set({ loading: false, signInPending: false });
-      })
-      .catch((err) => {
-        set({ error: getAuthErrorMessage(err), loading: false, signInPending: false });
-      });
+    let unsubscribe: (() => void) | undefined;
+    let cancelled = false;
 
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      set({ user, loading: false });
-    });
-    return unsubscribe;
+    // Await redirect completion first, then subscribe — avoids racing duplicate getRedirectResult.
+    void (async () => {
+      try {
+        const cred = await getRedirectResultOnce();
+        if (cancelled) return;
+        if (cred?.user) {
+          set({ user: cred.user, signInPending: false, error: null });
+        }
+      } catch (err) {
+        if (!cancelled) {
+          set({ error: getAuthErrorMessage(err), signInPending: false });
+        }
+      } finally {
+        if (cancelled) return;
+        unsubscribe = onAuthStateChanged(auth, (user) => {
+          set({ user, loading: false, signInPending: false });
+        });
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+      unsubscribe?.();
+    };
   }
 }));

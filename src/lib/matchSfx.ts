@@ -87,21 +87,9 @@ const SLUG_TRIES: Partial<Record<DeityId, Partial<Record<MatchStrengthTier, read
     4: ['saraswathi', 'saraswati'],
     5: ['saraswathi', 'saraswati'],
   },
-  saiBaba: {
-    3: ['saibaba'],
-    4: ['saibaba'],
-    5: ['saibaba'],
-  },
-  /** Audio files use `bramhamgaru`; `DeityId` is `bramhamgaaru`. */
-  bramhamgaaru: {
-    3: ['bramhamgaru', 'bramhamgaaru'],
-    4: ['bramhamgaru', 'bramhamgaaru'],
-    5: ['bramhamgaru', 'bramhamgaaru'],
-  },
 };
 
 function defaultSlug(id: DeityId): string {
-  if (id === 'saiBaba') return 'saibaba';
   return id;
 }
 

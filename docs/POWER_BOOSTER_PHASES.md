@@ -37,14 +37,14 @@ This table **overrides** the old pixel reference sheet ([`docs/assets/power-offe
 | `ayyappan` | Whole coconut with **ghee drips from all three eyes** |
 | `jagannath` | **Rice mound (abhada)** on traditional leaf plate |
 | `dattatreya` | **Wooden padukas + falling flower** |
-| `saiBaba` | **Vibhuti / tripundra** (grey-white ash only in icon — no hand) |
 | `narayana` | **Śaṅkha pouring water** — spiral conch as vessel |
 | `iskcon` | **Prasādam bowl + Tulasi** — prepared-meal read |
 | `guru` | **Garland on paduka** |
 | `shani` | **Sesame oil lamp** — dark iron/black base, flame |
 | `rahu` | **One coconut half** (flesh up) — strip icon uses a single half for clarity |
 | `ketu` | **Turmeric root + small clay lamp** (common Ketu / navagraha stylization in art; game read at small size) |
-| `bramhamgaaru` | **Hands offering a garland** — forward “giving” gesture |
+
+**Guru-reserved (hidden from play):** `saiBaba` (vibhuti / tripundra icon brief) and `bramhamgaaru` (hands offering garland) — assets may remain on disk; they are not in `DEITIES` / strip until a future Gurus / Pro path ships. See `HIDDEN_GURU_DEITIES` in [`src/data/deities.ts`](../src/data/deities.ts).
 
 **5-match “bomb” overlay:** not a weapon — a **beautiful flower**; strip asset [`bomb-overlay.png`](../public/images/powers/bomb-overlay.png).
 
@@ -52,7 +52,7 @@ This table **overrides** the old pixel reference sheet ([`docs/assets/power-offe
 
 Same spirit as **deity portraits** ([`public/images/deities/`](../public/images/deities/)) and **game face crops** ([`public/images/deities/game/`](../public/images/deities/game/)): each asset is **authored, checked in, and reviewed** before moving on.
 
-1. **Order:** [`DEITY_IDS`](../src/data/deities.ts) order (`rama` → … → `bramhamgaaru`).
+1. **Order:** [`DEITY_IDS`](../src/data/deities.ts) order (`rama` → … → `ketu` for playable strip).
 2. **One icon per round:** Replace `public/images/powers/offering-{deityId}.png` to match the table above; wait for **explicit approval** before the next deity.
 3. **Metadata:** Keep `symbolSummary` in [`src/data/offeringPowers.ts`](../src/data/offeringPowers.ts) aligned with this table.
 4. **Assets:** Strip icons are **PNG only** in `public/images/powers/` — **no SVG** for the power strip. `npm run icons:powers` is a no-op reminder.

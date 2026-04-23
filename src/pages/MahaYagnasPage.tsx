@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { AppHeader } from '../components/layout/AppHeader';
+import { MenuMatchChantHeader } from '../components/layout/MenuMatchChantHeader';
 import { BottomNav } from '../components/nav/BottomNav';
 import { AppFooter } from '../components/layout/AppFooter';
 import { DEITIES } from '../data/deities';
@@ -309,8 +309,11 @@ export function MahaYagnasPage() {
           </div>
         </div>
       )}
-      <AppHeader title={t('mahaYagnas.title')} showBack onBack={() => navigate('/menu')} />
       <main className="flex-1 p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] max-w-2xl mx-auto w-full min-w-0">
+        <MenuMatchChantHeader />
+        <h2 className="text-base sm:text-xl font-bold text-amber-400 mb-2" style={{ fontFamily: 'serif' }}>
+          {t('mahaYagnas.title')}
+        </h2>
         <p className="text-amber-200/80 text-sm mb-4 break-words">
           {t('mahaYagnas.description')}
         </p>

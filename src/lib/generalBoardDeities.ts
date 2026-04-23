@@ -1,10 +1,10 @@
 import { DEITY_IDS, type DeityId } from '../data/deities';
 
 /**
- * These īṣṭa paths only: gems may appear on their own map — never as filler or inventory-backed
- * extras on another deity’s game (All Deity Japa already excludes them too).
+ * Īṣṭa-only paths that must not appear as filler on another deity’s board. (Previously listed
+ * guru-reserved ids; those are now fully hidden from play — see `HIDDEN_GURU_RESERVED_IDS`.)
  */
-export const EXCLUSIVE_ISTA_PATH_DEITIES: DeityId[] = ['saiBaba', 'bramhamgaaru'];
+export const EXCLUSIVE_ISTA_PATH_DEITIES: DeityId[] = [];
 
 /** Not used on the general map board or general-mode power strip. */
 export const GENERAL_BOARD_EXCLUDED_DEITIES: DeityId[] = [...EXCLUSIVE_ISTA_PATH_DEITIES];

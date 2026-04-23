@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { DEITY_IDS, type DeityId } from '../data/deities';
+import { JAPA_COUNT_DEITY_IDS, type DeityId } from '../data/deities';
 import { loadUserJapa, saveUserJapa } from '../lib/firestore';
 import { useAuthStore } from './authStore';
 
@@ -18,7 +18,7 @@ export interface JapaCounts extends Record<DeityId, number> {
 }
 
 export function emptyJapaByTier(): Record<DeityId, DeityJapaTier> {
-  return DEITY_IDS.reduce(
+  return JAPA_COUNT_DEITY_IDS.reduce(
     (acc, id) => ({ ...acc, [id]: { m3: 0, m4: 0, m5: 0 } }),
     {} as Record<DeityId, DeityJapaTier>,
   );
@@ -28,7 +28,7 @@ function normalizeJapaByTier(raw: unknown): Record<DeityId, DeityJapaTier> {
   const base = emptyJapaByTier();
   if (!raw || typeof raw !== 'object') return base;
   const o = raw as Record<string, unknown>;
-  for (const id of DEITY_IDS) {
+  for (const id of JAPA_COUNT_DEITY_IDS) {
     const row = o[id];
     if (!row || typeof row !== 'object') continue;
     const r = row as Record<string, unknown>;
@@ -42,7 +42,7 @@ function normalizeJapaByTier(raw: unknown): Record<DeityId, DeityJapaTier> {
 }
 
 const initial: JapaCounts = {
-  ...DEITY_IDS.reduce((acc, id) => ({ ...acc, [id]: 0 }), {} as Record<DeityId, number>),
+  ...JAPA_COUNT_DEITY_IDS.reduce((acc, id) => ({ ...acc, [id]: 0 }), {} as Record<DeityId, number>),
   total: 0,
   birthdayJapa: 0,
   anniversaryJapa: 0,
@@ -75,7 +75,7 @@ export const useJapaStore = create<JapaStore>((setState, getState) => ({
       // Merge: never overwrite with lower values (avoids race where load wipes in-game progress)
       const merged: JapaCounts = { ...initial };
       let totalSum = 0;
-      for (const id of DEITY_IDS) {
+      for (const id of JAPA_COUNT_DEITY_IDS) {
         const fromStored = stored && typeof stored[id] === 'number' ? (stored[id] ?? 0) : 0;
         const fromCurrent = typeof current[id] === 'number' ? (current[id] ?? 0) : 0;
         merged[id] = Math.max(fromStored, fromCurrent);
@@ -107,7 +107,7 @@ export const useJapaStore = create<JapaStore>((setState, getState) => ({
       const storedTier = normalizeJapaByTier((stored as JapaCounts | null)?.japaByTier);
       const currentTier = normalizeJapaByTier(current.japaByTier);
       merged.japaByTier = emptyJapaByTier();
-      for (const id of DEITY_IDS) {
+      for (const id of JAPA_COUNT_DEITY_IDS) {
         merged.japaByTier[id] = {
           m3: Math.max(storedTier[id].m3, currentTier[id].m3),
           m4: Math.max(storedTier[id].m4, currentTier[id].m4),

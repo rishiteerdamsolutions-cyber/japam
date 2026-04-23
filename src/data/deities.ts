@@ -24,6 +24,17 @@ export type DeityId =
   | 'ketu'
   | 'bramhamgaaru';
 
+/**
+ * Guru-reserved deities: **not in active play** (menu, boards, powers, world map). Full records live in
+ * `HIDDEN_GURU_DEITIES` for a future “Gurus” path or Pro-only unlock. Kept on `DeityId` and in
+ * `JAPA_COUNT_DEITY_IDS` so saved japa / API history still round-trips.
+ */
+export const HIDDEN_GURU_RESERVED_IDS = ['saiBaba', 'bramhamgaaru'] as const;
+export type HiddenGuruReservedId = (typeof HIDDEN_GURU_RESERVED_IDS)[number];
+
+/** Deities that appear in menus, boards, and the power strip (`DEITY_IDS`). */
+export type PlayableDeityId = Exclude<DeityId, HiddenGuruReservedId>;
+
 export interface Deity {
   id: DeityId;
   /** English short label (e.g. match-3 hints). Localized UI uses i18n `deities.{id}`. */
@@ -196,15 +207,6 @@ export const DEITIES: Deity[] = [
     imageGame: '/images/deities/game/dattatreya-face.png',
   },
   {
-    id: 'saiBaba',
-    name: 'Sai Baba',
-    color: '#FF8F00',
-    mantraAudio: '/sounds/saiBaba.m4a',
-    mantra: 'Om Sai Ram',
-    image: '/images/deities/saiBaba.png',
-    imageGame: '/images/deities/game/saiBaba-face.png',
-  },
-  {
     id: 'narayana',
     name: 'Narayana',
     color: '#283593',
@@ -258,6 +260,19 @@ export const DEITIES: Deity[] = [
     image: '/images/deities/ketu.png',
     imageGame: '/images/deities/game/ketu-face.png',
   },
+];
+
+/** Not merged into `DEITIES` / `DEITY_IDS`; see `HIDDEN_GURU_RESERVED_IDS`. */
+export const HIDDEN_GURU_DEITIES: Deity[] = [
+  {
+    id: 'saiBaba',
+    name: 'Sai Baba',
+    color: '#FF8F00',
+    mantraAudio: '/sounds/saiBaba.m4a',
+    mantra: 'Om Sai Ram',
+    image: '/images/deities/saiBaba.png',
+    imageGame: '/images/deities/game/saiBaba-face.png',
+  },
   {
     id: 'bramhamgaaru',
     name: 'Bramhamgaaru',
@@ -269,10 +284,17 @@ export const DEITIES: Deity[] = [
   },
 ];
 
-export const DEITY_IDS: DeityId[] = DEITIES.map((d) => d.id);
+export const DEITY_IDS: PlayableDeityId[] = DEITIES.map((d) => d.id as PlayableDeityId);
+
+/** Per-deity japa buckets in Firestore may still include guru-reserved ids — merge/save with this list. */
+export const JAPA_COUNT_DEITY_IDS: DeityId[] = [...DEITY_IDS, ...HIDDEN_GURU_RESERVED_IDS];
 
 export function getDeity(id: DeityId): Deity {
-  return DEITIES.find((d) => d.id === id)!;
+  const d = DEITIES.find((x) => x.id === id);
+  if (d) return d;
+  const h = HIDDEN_GURU_DEITIES.find((x) => x.id === id);
+  if (h) return h;
+  throw new Error(`Unknown deity: ${id}`);
 }
 
 export function mantraForMatchTier(d: Deity, tier: 3 | 4 | 5): string {

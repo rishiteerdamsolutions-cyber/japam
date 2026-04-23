@@ -4,7 +4,7 @@ import { useProgressStore, progressKey } from '../../store/progressStore';
 import { useUnlockStore, FIRST_LOCKED_LEVEL_INDEX } from '../../store/unlockStore';
 import { useLevelsConfigStore } from '../../store/levelsConfigStore';
 import { DonateThankYouBox } from '../donation/DonateThankYouBox';
-import { AppHeader } from '../layout/AppHeader';
+import { MenuMatchChantHeader } from '../layout/MenuMatchChantHeader';
 import { AppFooter } from '../layout/AppFooter';
 import { BottomNav } from '../nav/BottomNav';
 import { LEVELS } from '../../data/levels';
@@ -15,10 +15,9 @@ import type { GameMode } from '../../types';
 interface WorldMapProps {
   mode: GameMode;
   onSelectLevel: (index: number, mode: GameMode) => void;
-  onBack: () => void;
 }
 
-export function WorldMap({ mode: initialMode, onSelectLevel, onBack }: WorldMapProps) {
+export function WorldMap({ mode: initialMode, onSelectLevel }: WorldMapProps) {
   const { t } = useTranslation();
   const [mapMode, setMapMode] = useState<GameMode>(initialMode);
   const { levelProgress, getCurrentLevelIndex } = useProgressStore();
@@ -40,7 +39,10 @@ export function WorldMap({ mode: initialMode, onSelectLevel, onBack }: WorldMapP
     <div className="relative min-h-screen p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] max-w-lg mx-auto overflow-hidden">
       <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10">
-      <AppHeader title={levelsTitle} showBack onBack={onBack} />
+      <MenuMatchChantHeader />
+      <h2 className="text-base sm:text-xl font-bold text-amber-400 mb-3 truncate" style={{ fontFamily: 'serif' }}>
+        {levelsTitle}
+      </h2>
 
       <div className="flex flex-wrap gap-1 mb-4 min-w-0">
         <button

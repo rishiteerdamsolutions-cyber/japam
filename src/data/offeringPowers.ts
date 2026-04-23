@@ -27,7 +27,8 @@ export interface OfferingPowerMeta {
  * Artist / doc line — must match the authoritative table in docs/POWER_BOOSTER_PHASES.md (Phase 2).
  * Player-facing short labels live in i18n `powers.offering.{id}`.
  */
-const summaries: Record<DeityId, string> = {
+/** Offering art briefs for playable strip powers only (`DEITIES` / `DEITY_IDS`). */
+const summaries = {
   rama: 'Silver tumbler (paanakam), jaggery water, Tulasi leaf floating on top',
   shiva: 'Kalash pouring over lingam — continuous milk/water flow',
   ganesh: 'Plate of modaks — ridged dumpling silhouette',
@@ -44,15 +45,13 @@ const summaries: Record<DeityId, string> = {
   ayyappan: 'Whole coconut, ghee drips from all three eyes',
   jagannath: 'Rice mound (abhada) on traditional leaf plate',
   dattatreya: 'Wooden padukas + falling flower',
-  saiBaba: 'Vibhuti / tripundra — grey-white ash only, no hand',
   narayana: 'Śaṅkha pouring water — spiral conch as vessel',
   iskcon: 'Prasādam bowl + Tulasi — prepared-meal read',
   guru: 'Garland on paduka',
   shani: 'Sesame oil lamp — dark iron/black base, flame',
   rahu: 'One coconut half, flesh up — single half for strip clarity',
   ketu: 'Turmeric root + small clay lamp (navagraha-style game read)',
-  bramhamgaaru: 'Hands offering a garland — forward giving gesture',
-};
+} satisfies Record<(typeof DEITY_IDS)[number], string>;
 
 export const OFFERING_POWERS: OfferingPowerMeta[] = DEITY_IDS.map((deityId) => ({
   deityId,

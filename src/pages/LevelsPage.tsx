@@ -18,10 +18,6 @@ export function LevelsPage() {
   };
 
   return (
-    <WorldMap
-      mode="general"
-      onSelectLevel={handleSelectLevel}
-      onBack={() => navigate('/menu')}
-    />
+    <WorldMap mode="general" onSelectLevel={handleSelectLevel} />
   );
 }

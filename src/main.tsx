@@ -16,6 +16,7 @@ import { OfflineBanner } from './components/OfflineBanner'
 import { RouterChrome } from './components/RouterChrome'
 import App from './App.tsx'
 import { MenuPage } from './pages/MenuPage'
+import { MenuDemoTestPage } from './pages/MenuDemoTestPage'
 import { LAUNCH_FEATURE_OCCASION_GAMES } from './config/launchFeatures'
 
 const GamePage = lazy(() => import('./pages/GamePage').then(m => ({ default: m.GamePage })))
@@ -81,6 +82,7 @@ createRoot(document.getElementById('root')!).render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/menu" element={<MenuPage />} />
+        <Route path="/test/menu-demo" element={<MenuDemoTestPage />} />
         <Route path="/game" element={<GamePage />} />
         <Route path="/levels" element={<LevelsPage />} />
         <Route path="/japa" element={<JapaPage />} />

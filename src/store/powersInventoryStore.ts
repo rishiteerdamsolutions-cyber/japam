@@ -24,7 +24,7 @@ function isValidEntry(e: unknown): e is PowerInventoryEntry {
   const o = e as PowerInventoryEntry;
   if (typeof o.count !== 'number' || o.count < 1) return false;
   if (o.id === 'namaskaram' || o.id === 'freeSwap' || o.id === 'bomb') return true;
-  return DEITY_IDS.includes(o.id as DeityId);
+  return (DEITY_IDS as readonly string[]).includes(o.id);
 }
 
 /** One random strip charge per general level (normal map): Namaskaram, strip bomb, or free swap. */
@@ -35,7 +35,7 @@ function randomGeneralStripReward(): 'namaskaram' | 'bomb' | 'freeSwap' {
 
 function normalizeWinGrant(mode: GameMode): PowerInventoryId | null {
   if (mode === 'general') return randomGeneralStripReward();
-  if (DEITY_IDS.includes(mode as DeityId)) return mode as DeityId;
+  if ((DEITY_IDS as readonly string[]).includes(mode)) return mode as DeityId;
   return null;
 }
 

@@ -24,7 +24,10 @@ export async function GET(request) {
   }
 }
 
-/** All deity IDs that can earn japas (must match frontend deities.ts for Maha Japa Yagna + marathon attribution). */
+/**
+ * Per-deity japa keys (must cover `JAPA_COUNT_DEITY_IDS` in frontend deities.ts).
+ * `saiBaba` + `bramhamgaaru` stay listed for legacy Firestore docs even though the client hides them from play.
+ */
 const DEITY_IDS = [
   'rama', 'shiva', 'ganesh', 'surya', 'shakthi', 'krishna', 'shanmukha', 'venkateswara',
   'hanuman', 'narasimha', 'lakshmi', 'durga', 'saraswati', 'ayyappan', 'jagannath', 'dattatreya',

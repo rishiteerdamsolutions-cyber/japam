@@ -10,6 +10,9 @@ import {
 } from 'firebase/auth';
 import { auth, googleProvider, isFirebaseConfigured } from '../lib/firebase';
 
+/** Set while Google sign-in is in progress; AuthProvider navigates to `/menu` after success. */
+export const POST_SIGN_IN_NAV_TO_MENU_KEY = 'japam.postSignInToMenu';
+
 let popupRequestInFlight = false;
 
 /**
@@ -75,13 +78,16 @@ export const useAuthStore = create<AuthState>((set) => ({
     popupRequestInFlight = true;
 
     try {
+      sessionStorage.setItem(POST_SIGN_IN_NAV_TO_MENU_KEY, '1');
       await signInWithPopup(auth, googleProvider);
     } catch (err) {
       const authErr = err as AuthError;
       if (authErr?.code === 'auth/cancelled-popup-request') {
+        sessionStorage.removeItem(POST_SIGN_IN_NAV_TO_MENU_KEY);
         return;
       }
       if (authErr?.code === 'auth/popup-closed-by-user') {
+        sessionStorage.removeItem(POST_SIGN_IN_NAV_TO_MENU_KEY);
         return;
       }
 
@@ -95,10 +101,12 @@ export const useAuthStore = create<AuthState>((set) => ({
           await signInWithRedirect(auth, googleProvider);
         } catch (redirectErr) {
           isRedirectFlow = false;
+          sessionStorage.removeItem(POST_SIGN_IN_NAV_TO_MENU_KEY);
           set({ error: getAuthErrorMessage(redirectErr) });
         }
         return;
       }
+      sessionStorage.removeItem(POST_SIGN_IN_NAV_TO_MENU_KEY);
       set({ error: getAuthErrorMessage(err) });
     } finally {
       popupRequestInFlight = false;
@@ -110,6 +118,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   signOut: async () => {
     if (!isFirebaseConfigured) return;
+    sessionStorage.removeItem(POST_SIGN_IN_NAV_TO_MENU_KEY);
     set({ error: null });
     try {
       await firebaseSignOut(auth);

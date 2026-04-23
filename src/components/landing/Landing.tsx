@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { OpeningVideoModal } from './OpeningVideoModal';
 import { JapamLogo } from '../ui/JapamLogo';
@@ -7,6 +8,8 @@ import { LanguageDropdown } from '../ui/LanguageDropdown';
 import { AppFooter } from '../layout/AppFooter';
 import { useAuthStore } from '../../store/authStore';
 import { landingStartJapaButtonClass, landingTryJapaButtonClass } from '../../lib/landingCtaStyles';
+import { MenuMiniGameDemo } from '../demo/MenuMiniGameDemo';
+import { DemoCornerRibbon } from '../demo/DemoCornerRibbon';
 
 interface LandingProps {
   onEnterApp: () => void;
@@ -38,6 +41,7 @@ export function Landing({
   onMultiplayer,
 }: LandingProps) {
   const { t } = useTranslation();
+  const location = useLocation();
   const user = useAuthStore((s) => s.user);
   const [showVideo, setShowVideo] = useState(true);
   const showSpecialsRow = Boolean(onBirthday || onAnniversary);
@@ -178,19 +182,27 @@ export function Landing({
             )}
 
             {!user && (
-              <motion.button
-                type="button"
-                aria-label={`${t('landing.tryJapam')} ${t('landing.tryJapamNoLoginHint')}`}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.99 }}
-                onClick={onGuestPlay}
-                className={`${landingTryJapaButtonClass} mt-2`}
-              >
-                <span className="text-sm sm:text-base leading-tight">{t('landing.tryJapam')}</span>
-                <span className="text-[11px] sm:text-xs text-white/85 font-medium leading-tight">
-                  {t('landing.tryJapamNoLoginHint')}
-                </span>
-              </motion.button>
+              <>
+                <motion.button
+                  type="button"
+                  aria-label={`${t('landing.tryJapam')} ${t('landing.tryJapamNoLoginHint')}`}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.99 }}
+                  onClick={onGuestPlay}
+                  className={`${landingTryJapaButtonClass} mt-2`}
+                >
+                  <span className="text-sm sm:text-base leading-tight">{t('landing.tryJapam')}</span>
+                  <span className="text-[11px] sm:text-xs text-white/85 font-medium leading-tight">
+                    {t('landing.tryJapamNoLoginHint')}
+                  </span>
+                </motion.button>
+                <div className="mt-5 w-full flex justify-center items-center px-1">
+                  <div className="relative @container max-w-full rounded-2xl border-2 border-amber-400/75 p-1.5 sm:p-2 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.45),0_0_0_1px_rgba(251,191,36,0.2)_inset] bg-black/20 ring-1 ring-amber-300/35 w-full min-w-0 overflow-visible">
+                    <DemoCornerRibbon />
+                    <MenuMiniGameDemo key={location.key} />
+                  </div>
+                </div>
+              </>
             )}
           </motion.section>
 

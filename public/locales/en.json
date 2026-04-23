@@ -121,8 +121,10 @@
     "guestPowersTileHint": "Sign in with Google to use this power",
     "powersArmSelectGem": "Choose a candy on the board.",
     "powerEarn": {
-      "fromGeneralLevel": "Finish an All Deity Japa level on the normal map (not marathon or yāga): you get one random charge — Namaskaram, Color Bomb, or Free swap. Usable in any mode.",
-      "deityOffering": "Finish a level on that deity’s path (normal map): you get that deity’s offering. Usable in any mode.",
+      "freeSwap": "All Deity map (normal levels): each 4-in-a-row gives +1 Free swap. Level wins can also give a random strip charge (Namaskaram, bomb, or swap).",
+      "namaskaram": "All Deity map (normal levels): each 5-or-more in a row gives +1 Namaskaram (disappear one gem). Level wins can also give a random strip charge.",
+      "bomb": "All Deity map: level wins may give a random strip charge including this flower bomb. On a single-deity path: each 5+ line of that deity’s gems gives +1 strip bomb (usable on any gems).",
+      "deityOffering": "That deity’s path (normal levels): each 4-in-a-row of that deity’s gems gives +1 this offering. Level wins on that path also grant +1. Usable on any board where this deity’s gems appear.",
       "boardBlessing": "Make a match of five in a row on the board: a blessing (color bomb) gem can appear on the board for that game (separate from strip charges)."
     },
     "candyBorderSpinTurnOn": "Turn on rotating candy borders",

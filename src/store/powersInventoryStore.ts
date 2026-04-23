@@ -3,6 +3,7 @@ import { get as idbGet, set as idbSet } from 'idb-keyval';
 import { DEITY_IDS, type DeityId } from '../data/deities';
 import type { GameMode } from '../types';
 import type { InventoryPowerId } from '../data/gamePowers';
+import type { Match } from '../engine/types';
 
 const STORAGE_KEY = 'japam-powers-inventory';
 const VERSION = 2 as const;
@@ -39,6 +40,56 @@ function normalizeWinGrant(mode: GameMode): PowerInventoryId | null {
   return null;
 }
 
+function isDeityGameMode(mode: GameMode): mode is DeityId {
+  return mode !== 'general' && (DEITY_IDS as readonly string[]).includes(mode);
+}
+
+/**
+ * Per line from `findMatches` (player’s direct swap only — caller filters cascades).
+ * General: 4 → freeSwap, 5+ → namaskaram. Single-deity path: 4 of path deity → +1 that offering, 5+ of path deity → +1 bomb.
+ */
+function collectMatchLineGrantDeltas(mode: GameMode, matches: Match[]): Map<PowerInventoryId, number> {
+  const deltas = new Map<PowerInventoryId, number>();
+  const bump = (id: PowerInventoryId, n: number) => {
+    deltas.set(id, (deltas.get(id) ?? 0) + n);
+  };
+
+  for (const m of matches) {
+    const len = m.positions.length;
+    if (len < 4) continue;
+
+    if (mode === 'general') {
+      if (len === 4) bump('freeSwap', 1);
+      else bump('namaskaram', 1);
+      continue;
+    }
+
+    if (isDeityGameMode(mode) && m.deity === mode) {
+      if (len === 4) bump(mode, 1);
+      else bump('bomb', 1);
+    }
+  }
+  return deltas;
+}
+
+function applyDeltasToEntries(
+  prev: PowerInventoryEntry[],
+  deltas: Map<PowerInventoryId, number>,
+): PowerInventoryEntry[] {
+  if (deltas.size === 0) return prev;
+  let entries = [...prev];
+  for (const [id, delta] of deltas) {
+    if (delta <= 0) continue;
+    const idx = entries.findIndex((e) => e.id === id);
+    if (idx >= 0) {
+      entries = entries.map((e, i) => (i === idx ? { ...e, count: e.count + delta } : e));
+    } else {
+      entries.push({ id, count: delta });
+    }
+  }
+  return entries;
+}
+
 async function persistEntries(entries: PowerInventoryEntry[]): Promise<void> {
   try {
     await idbSet(STORAGE_KEY, { version: VERSION, entries } satisfies PersistShape);
@@ -68,6 +119,8 @@ interface PowersInventoryState {
   ensureStarterPackOnce: (uid: string) => Promise<void>;
   /** Normal level wins only (not marathon / yāga). General → one random among namaskaram / bomb / freeSwap; deity path → that offering. */
   grantAfterLevelWin: (mode: GameMode) => Promise<void>;
+  /** Normal map only; caller should pass the player’s first match batch (not cascades). */
+  applyMatchLinePowerGrants: (mode: GameMode, matches: Match[]) => Promise<void>;
   tryConsumeOne: (id: PowerInventoryId) => Promise<boolean>;
 }
 
@@ -123,6 +176,15 @@ export const usePowersInventoryStore = create<PowersInventoryState>((set, get) =
     } else {
       entries = [...prev, { id, count: 1 }];
     }
+    set({ entries });
+    await persistEntries(entries);
+  },
+
+  applyMatchLinePowerGrants: async (mode, matches) => {
+    const deltas = collectMatchLineGrantDeltas(mode, matches);
+    if (deltas.size === 0) return;
+    const prev = get().entries;
+    const entries = applyDeltasToEntries(prev, deltas);
     set({ entries });
     await persistEntries(entries);
   },

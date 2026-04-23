@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getDeity, type DeityId } from '../../data/deities';
+import { stripIconSrc } from '../../data/gamePowers';
 
 const SIZE = 6;
 
@@ -486,6 +487,10 @@ export function MenuMiniGameDemo() {
       ? grid[step.matchCells[0].r][step.matchCells[0].c]
       : null;
   const scoreMantra = scoreDeityId ? mantraForMatch(scoreDeityId) : '';
+  const matchLineLen = step.matchCells.length;
+  const scorePowerLabel = matchLineLen === 4 ? 'Swap Power' : matchLineLen >= 5 ? 'Disappear Power' : null;
+  const scorePowerIconSrc =
+    matchLineLen === 4 ? stripIconSrc('freeSwap') : matchLineLen >= 5 ? stripIconSrc('namaskaram') : null;
 
   return (
     <div
@@ -528,7 +533,7 @@ export function MenuMiniGameDemo() {
         {phase === 'score' && (
           <motion.div
             key={`plus-${stepIndex}-${step.matchCells.length}`}
-            className="pointer-events-none absolute left-1/2 top-[40%] z-20 flex w-[min(94%,22rem)] -translate-x-1/2 flex-col items-center gap-1 text-center px-1"
+            className="pointer-events-none absolute left-1/2 top-[40%] z-20 flex w-[min(94%,22rem)] -translate-x-1/2 flex-col items-center gap-1.5 text-center px-1"
             initial={{ opacity: 0, y: 12, scale: 0.75 }}
             animate={{
               opacity: [0, 1, 1, 0],
@@ -542,6 +547,22 @@ export function MenuMiniGameDemo() {
             }}
             exit={{ opacity: 0 }}
           >
+            {scorePowerLabel && scorePowerIconSrc ? (
+              <div className="flex items-center justify-center gap-2 sm:gap-2.5">
+                <img
+                  src={scorePowerIconSrc}
+                  alt=""
+                  draggable={false}
+                  className="h-[clamp(2rem,8.5vmin,2.85rem)] w-[clamp(2rem,8.5vmin,2.85rem)] shrink-0 object-contain drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]"
+                />
+                <span
+                  className="font-extrabold uppercase tracking-wide text-amber-100 text-[clamp(0.7rem,2.8vmin,0.95rem)] drop-shadow-[0_1px_3px_rgba(0,0,0,0.95)]"
+                  style={{ textShadow: '0 0 8px rgba(0,0,0,0.9)' }}
+                >
+                  {scorePowerLabel}
+                </span>
+              </div>
+            ) : null}
             <span className="font-black text-amber-200 text-[clamp(2.1rem,8.4vmin,3rem)] drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)] [text-shadow:0_0_12px_rgba(251,191,36,0.7)]">
               +1
             </span>

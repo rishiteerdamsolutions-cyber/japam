@@ -30,10 +30,11 @@ export function stripIconSrc(id: InventoryPowerId): string {
 }
 
 const DEITY_EARN_KEY = 'game.powerEarn.deityOffering' as const;
-const GENERAL_RANDOM_KEY = 'game.powerEarn.fromGeneralLevel' as const;
 
 /** i18n key for “how you get this” tooltips / empty copy. */
 export function powerEarnI18nKey(id: InventoryPowerId): string {
-  if (id === 'namaskaram' || id === 'freeSwap' || id === 'bomb') return GENERAL_RANDOM_KEY;
+  if (id === 'namaskaram') return 'game.powerEarn.namaskaram';
+  if (id === 'freeSwap') return 'game.powerEarn.freeSwap';
+  if (id === 'bomb') return 'game.powerEarn.bomb';
   return DEITY_EARN_KEY;
 }

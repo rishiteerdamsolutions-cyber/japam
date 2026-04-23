@@ -899,6 +899,13 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
         }
       }
     }
+    if (isUserDirectMatch && !isGuest) {
+      const snap = get();
+      const blockMatchPowers = snap.marathonTargetJapas != null || snap.occasionKind != null;
+      if (!blockMatchPowers) {
+        void usePowersInventoryStore.getState().applyMatchLinePowerGrants(gameMode, pendingMatchBatch);
+      }
+    }
     const totalScore = get().score + calculateScore(pendingMatchBatch, comboLevel);
     const japasThisLevel = get().japasThisLevel + japaDelta;
     const boardBeforeClear = get().board;

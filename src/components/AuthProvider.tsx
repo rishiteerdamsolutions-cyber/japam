@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { useAuthStore } from '../store/authStore';
+import { useNavigate } from 'react-router-dom';
+import { useAuthStore, POST_SIGN_IN_NAV_TO_MENU_KEY } from '../store/authStore';
 import { useProgressStore } from '../store/progressStore';
 import { useJapaStore } from '../store/japaStore';
 import { useUnlockStore } from '../store/unlockStore';
@@ -17,6 +18,7 @@ import { RefAttribution } from './RefAttribution';
  * cross-origin iframe console errors on every page load.
  */
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const navigate = useNavigate();
   const init = useAuthStore((s) => s.init);
   const user = useAuthStore((s) => s.user);
   const authLoading = useAuthStore((s) => s.loading);
@@ -34,6 +36,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const unsubscribe = init();
     return unsubscribe;
   }, [init]);
+
+  // After Google sign-in (any entry URL), open the menu instead of staying on e.g. /game or /levels.
+  useEffect(() => {
+    if (authLoading || !user) return;
+    if (sessionStorage.getItem(POST_SIGN_IN_NAV_TO_MENU_KEY) !== '1') return;
+    sessionStorage.removeItem(POST_SIGN_IN_NAV_TO_MENU_KEY);
+    navigate('/menu', { replace: true });
+  }, [user, authLoading, navigate]);
 
   // Global app bootstrap: settings on every route refresh.
   useEffect(() => {

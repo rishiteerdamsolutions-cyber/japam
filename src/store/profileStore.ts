@@ -37,13 +37,25 @@ export const useProfileStore = create<ProfileState>((setState, get) => ({
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        setState({ displayName: null, loaded: true });
-        return;
+      const fromApi =
+        res.ok &&
+        typeof data.displayName === 'string' &&
+        data.displayName.trim()
+          ? data.displayName.trim()
+          : null;
+      const fromAuth =
+        user.displayName?.trim() ||
+        user.email?.split('@')[0]?.trim() ||
+        null;
+      // If the API is down or returns 401 (e.g. local dev without FIREBASE_SERVICE_ACCOUNT_JSON),
+      // still use the signed-in Firebase profile so play-name gating and UI stay usable.
+      const name = fromApi ?? fromAuth;
+      if (!res.ok && import.meta.env.DEV) {
+        console.warn(
+          '[profile] GET /api/user/profile failed; using auth display name if available. Set FIREBASE_SERVICE_ACCOUNT_JSON in .env.local for full API.',
+          res.status,
+        );
       }
-      const name = typeof data.displayName === 'string' && data.displayName.trim()
-        ? data.displayName.trim()
-        : null;
       setState({ displayName: name, loaded: true });
 
       // Keep Firebase auth profile in sync so other UI paths using user.displayName stay consistent.

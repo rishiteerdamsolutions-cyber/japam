@@ -38,3 +38,4 @@ sentry-dsn.txt
 *.pem
 serviceAccount*.json
 *-service-account.json
+.env*.local

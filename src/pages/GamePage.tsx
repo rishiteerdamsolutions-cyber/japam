@@ -125,11 +125,17 @@ export function GamePage() {
   const [playNameSaving, setPlayNameSaving] = useState(false);
   const [playNameError, setPlayNameError] = useState<string | null>(null);
 
+  const resolvedPlayName = (
+    profileDisplayName?.trim() ||
+    user?.displayName?.trim() ||
+    user?.email?.split('@')[0]?.trim() ||
+    ''
+  ).trim();
   const needPlayName =
     !isGuest &&
     !!user?.uid &&
     profileLoaded &&
-    !(profileDisplayName && profileDisplayName.trim());
+    !resolvedPlayName;
 
   useEffect(() => {
     if (!needPlayName || !user) return;

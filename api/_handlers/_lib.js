@@ -69,12 +69,32 @@ export function getAdminTokenFromRequest(request) {
   return null;
 }
 
+/** Parse service account JSON from env; tolerate real newlines inside private_key (dotenv turns \\n into line breaks). */
+function parseServiceAccountJson(raw) {
+  if (!raw || typeof raw !== 'string') return null;
+  const trimmed = raw.trim();
+  try {
+    return JSON.parse(trimmed);
+  } catch {
+    try {
+      const fixed = trimmed.replace(
+        /("private_key"\s*:\s*")([\s\S]*?)("\s*,\s*"client_email")/,
+        (_, pre, body, post) => pre + body.replace(/\r?\n/g, '\\n') + post,
+      );
+      return JSON.parse(fixed);
+    } catch {
+      return null;
+    }
+  }
+}
+
 export function getDb() {
   if (db) return db;
   const json = process.env.FIREBASE_SERVICE_ACCOUNT_JSON;
   if (!json) return null;
   try {
-    const serviceAccount = JSON.parse(json);
+    const serviceAccount = parseServiceAccountJson(json);
+    if (!serviceAccount) return null;
     if (!admin.apps.length) {
       admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
     }

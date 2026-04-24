@@ -30,25 +30,35 @@ function RewardVideoStage({ children }: { children: React.ReactNode }) {
   );
 }
 
-/** Coalesce concurrent fetches (e.g. React Strict Mode remount) into one POST so the global cursor advances once. */
-let nextRewardVideoInFlight: Promise<RewardVideoItem | null> | null = null;
+type NextRewardVideoResult =
+  | { ok: true; item: RewardVideoItem }
+  | { ok: false; reason: 'empty' | 'no_database' | 'http' | 'network' };
 
-async function fetchNextRewardVideoItem(apiBase: string): Promise<RewardVideoItem | null> {
+/** Coalesce concurrent fetches (e.g. React Strict Mode remount) into one POST so the global cursor advances once. */
+let nextRewardVideoInFlight: Promise<NextRewardVideoResult> | null = null;
+
+async function fetchNextRewardVideoItem(apiBase: string): Promise<NextRewardVideoResult> {
   if (!nextRewardVideoInFlight) {
     const url = apiBase ? `${apiBase}/api/config/reward-videos/next` : '/api/config/reward-videos/next';
     nextRewardVideoInFlight = fetch(url, { method: 'POST' })
-      .then(async (r) => {
-        if (!r.ok) return null;
-        const data = (await r.json()) as { item?: RewardVideoItem };
+      .then(async (r): Promise<NextRewardVideoResult> => {
+        const data = (await r.json().catch(() => ({}))) as { item?: RewardVideoItem; error?: string };
+        const err = typeof data?.error === 'string' ? data.error : '';
+        if (!r.ok) {
+          if (r.status === 404 || err === 'No videos configured') return { ok: false, reason: 'empty' };
+          if (r.status === 503 || err.includes('Database not configured')) return { ok: false, reason: 'no_database' };
+          return { ok: false, reason: 'http' };
+        }
         const item = data?.item;
-        if (!item?.youtubeId) return null;
-        return item;
+        if (!item?.youtubeId) return { ok: false, reason: 'empty' };
+        return { ok: true, item };
       })
+      .catch((): NextRewardVideoResult => ({ ok: false, reason: 'network' }))
       .finally(() => {
         nextRewardVideoInFlight = null;
       });
   }
-  return nextRewardVideoInFlight;
+  return nextRewardVideoInFlight as Promise<NextRewardVideoResult>;
 }
 
 export interface RewardVideoItem {
@@ -95,16 +105,27 @@ export function RewardVideoModal({ onComplete, onClose, rewardLabel, rewardType,
     let cancelled = false;
     const base = getApiBase();
     fetchNextRewardVideoItem(base)
-      .then((item) => {
+      .then((result) => {
         if (cancelled) return;
-        setVideo(item);
         setLoading(false);
-        if (!item) setError(t('game.noVideosAvailable') || 'No videos available');
+        if (result.ok) {
+          setVideo(result.item);
+          setError(null);
+          return;
+        }
+        setVideo(null);
+        const msg =
+          result.reason === 'empty'
+            ? t('game.noVideosAvailable')
+            : result.reason === 'no_database'
+              ? t('game.rewardVideosServerUnavailable')
+              : t('game.rewardVideosLoadFailed');
+        setError(msg);
       })
       .catch(() => {
         if (cancelled) return;
         setLoading(false);
-        setError(t('game.noVideosAvailable') || 'No videos available');
+        setError(t('game.rewardVideosLoadFailed'));
       });
     return () => {
       cancelled = true;

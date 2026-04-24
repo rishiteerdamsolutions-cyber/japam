@@ -41,7 +41,7 @@ Until these files are added, the app uses a placeholder tone. See `AUDIO_FILES_N
 
 ## Opening Video
 
-The landing page plays `public/openingvideo.mp4` on first visit. To replace it: overwrite this file with a new video. Use painted/artistic imagery only for best visual consistency.
+The landing page plays `public/openingvideo.mp4` on first visit. To replace it: overwrite this file with a new video, then bump `OPENING_VIDEO_VER` in `src/components/landing/OpeningVideoModal.tsx` so browsers fetch the new bytes (same path is heavily cached). Use painted/artistic imagery only for best visual consistency.
 
 ## Google Sign-In
 

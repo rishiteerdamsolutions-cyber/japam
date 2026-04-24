@@ -2,11 +2,13 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 
-const OPENING_VIDEO = '/openingvideo.mp4';
+/** Bump when you replace `public/openingvideo.mp4` (same filename) so browsers skip stale HTTP / disk cache. */
+const OPENING_VIDEO_VER = '2026-04-23';
+const OPENING_VIDEO = `/openingvideo.mp4?v=${OPENING_VIDEO_VER}`;
 
 interface OpeningVideoModalProps {
   onClose: () => void;
-  /** Optional override. Default: openingvideo.mp4 */
+  /** Optional override. Default: openingvideo.mp4 with cache-bust query. */
   videoSrc?: string;
 }
 const TYPE_DELAY_MS = 120;
@@ -93,6 +95,7 @@ export function OpeningVideoModal({ onClose, videoSrc }: OpeningVideoModalProps)
           className="relative w-full max-w-[min(90vw,400px)] aspect-square rounded-2xl overflow-hidden bg-black/90 shadow-2xl ring-2 ring-amber-400/60 ring-offset-2 ring-offset-transparent"
         >
           <video
+            key={src}
             ref={videoRef}
             src={src}
             className="w-full h-full object-contain"

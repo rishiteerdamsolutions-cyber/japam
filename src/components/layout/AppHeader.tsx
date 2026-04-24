@@ -1,9 +1,7 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../store/authStore';
 import { useUnlockStore } from '../../store/unlockStore';
-import { DonateModal } from '../donation/DonateModal';
 import { useProfileStore } from '../../store/profileStore';
 import { getProfileRingFlags } from '../../lib/membershipDisplay';
 
@@ -49,8 +47,6 @@ export function AppHeader({ title, showBack, onBack, rightElement }: AppHeaderPr
   const unlockExpiresAt = useUnlockStore((s) => s.unlockExpiresAt);
   const isDonor = useUnlockStore((s) => s.isDonor);
   const profileName = useProfileStore((s) => s.displayName);
-  const [showDonate, setShowDonate] = useState(false);
-
   const fallbackName = user?.displayName ?? user?.email ?? null;
   const displayName = profileName ?? fallbackName ?? 'Signed in';
   const { showProRing: isPro, showPremiumRing: isPremium } = getProfileRingFlags({
@@ -115,9 +111,9 @@ export function AppHeader({ title, showBack, onBack, rightElement }: AppHeaderPr
               </div>
               <button
                 type="button"
-                onClick={() => setShowDonate(true)}
+                onClick={() => navigate('/plans')}
                 className="p-2 rounded-lg text-amber-400/90 hover:bg-white/10 hover:text-amber-400 min-h-[44px] min-w-[44px] flex items-center justify-center"
-                aria-label={t('menu.donate')}
+                aria-label={t('menu.openPlansA11y')}
               >
                 <HeartIcon />
               </button>
@@ -142,12 +138,6 @@ export function AppHeader({ title, showBack, onBack, rightElement }: AppHeaderPr
           {rightElement}
         </div>
       </header>
-      {showDonate && (
-        <DonateModal
-          onClose={() => setShowDonate(false)}
-          onDonated={() => setShowDonate(false)}
-        />
-      )}
     </>
   );
 }

@@ -6,6 +6,14 @@ import { useUnlockStore } from '../../store/unlockStore';
 import { useProfileStore } from '../../store/profileStore';
 import { getProfileRingFlags } from '../../lib/membershipDisplay';
 
+function HeartIcon() {
+  return (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+    </svg>
+  );
+}
+
 interface MenuMatchChantHeaderProps {
   /** Optional extra control on the right (before profile / sign-in), e.g. Priest link */
   rightElement?: React.ReactNode;
@@ -13,12 +21,13 @@ interface MenuMatchChantHeaderProps {
 
 /**
  * Same top bar pattern as the main menu: JAPAM + tagline (→ /menu) on the left;
- * profile avatar only on the right (→ /settings with return path). No back, heart, gear, or sign-out.
+ * profile avatar on the right (→ /settings). Heart → /plans (Pro & Premium). No back, gear, or sign-out.
  */
 export function MenuMatchChantHeader({ rightElement }: MenuMatchChantHeaderProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
+  const onPlansPage = location.pathname === '/plans';
   const { user, loading, signInWithGoogle, signInPending } = useAuthStore();
   const tier = useUnlockStore((s) => s.tier);
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
@@ -67,6 +76,16 @@ export function MenuMatchChantHeader({ rightElement }: MenuMatchChantHeaderProps
             className="text-amber-400/90 text-xs font-medium hover:text-amber-400 whitespace-nowrap disabled:opacity-60"
           >
             {signInPending ? '…' : t('menu.signIn')}
+          </button>
+        )}
+        {!loading && user && !onPlansPage && (
+          <button
+            type="button"
+            onClick={() => navigate('/plans')}
+            className="p-2 rounded-lg text-amber-400/90 hover:bg-white/10 hover:text-amber-400 min-h-[44px] min-w-[44px] flex items-center justify-center"
+            aria-label={t('menu.openPlansA11y')}
+          >
+            <HeartIcon />
           </button>
         )}
         {!loading && user && (

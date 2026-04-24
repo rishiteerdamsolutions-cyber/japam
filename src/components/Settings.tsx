@@ -10,7 +10,6 @@ import { useUnlockStore } from '../store/unlockStore';
 import { hasActivePaidAccess, getProfileRingFlags } from '../lib/membershipDisplay';
 import { isFirebaseConfigured } from '../lib/firebase';
 import { DonateThankYouBox } from './donation/DonateThankYouBox';
-import { DonateModal } from './donation/DonateModal';
 import { buildJapamWhatsAppShareHref } from './ui/WhatsAppFab';
 import { loadMyAppreciations, type MyAppreciations } from '../lib/firestore';
 import { useReminderStore } from '../store/reminderStore';
@@ -180,7 +179,6 @@ export function Settings({ onBack }: SettingsProps) {
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState(false);
   const [expanded, setExpanded] = useState<string | null>(null);
-  const [showDonate, setShowDonate] = useState(false);
   const [apavargaLaunched, setApavargaLaunched] = useState(false);
   const [waMenuOpen, setWaMenuOpen] = useState(false);
   const waMenuRef = useRef<HTMLDivElement>(null);
@@ -392,10 +390,6 @@ export function Settings({ onBack }: SettingsProps) {
           </div>
         </header>
 
-        {showDonate && (
-          <DonateModal onClose={() => setShowDonate(false)} onDonated={() => setShowDonate(false)} />
-        )}
-
         {user && (
           <div className="flex items-center gap-3 p-3 rounded-xl bg-black/25 border border-white/10">
             <div
@@ -418,9 +412,9 @@ export function Settings({ onBack }: SettingsProps) {
             </div>
             <button
               type="button"
-              onClick={() => setShowDonate(true)}
+              onClick={() => navigate('/plans')}
               className="p-2 rounded-lg text-amber-400/90 hover:bg-white/10 hover:text-amber-400 min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0"
-              aria-label={t('menu.donate')}
+              aria-label={t('menu.openPlansA11y')}
             >
               <HeartIconSm />
             </button>

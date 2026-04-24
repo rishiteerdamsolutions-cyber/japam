@@ -1,4 +1,5 @@
 import { useState, type ReactNode } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { AppFooter } from '../layout/AppFooter';
@@ -6,7 +7,6 @@ import { BottomNav } from '../nav/BottomNav';
 import { ActiveUsersStrip } from '../game/ActiveUsersStrip';
 import { DEITIES } from '../../data/deities';
 import { JapamBrand } from '../ui/JapamBrand';
-import { DonateModal } from '../donation/DonateModal';
 import { useAuthStore } from '../../store/authStore';
 import { useUnlockStore } from '../../store/unlockStore';
 import type { GameMode } from '../../store/gameStore';
@@ -35,12 +35,12 @@ interface MainMenuProps {
 
 export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }: MainMenuProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { user, loading, signInWithGoogle, signInPending } = useAuthStore();
   const tier = useUnlockStore((s) => s.tier);
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
   const unlockExpiresAt = useUnlockStore((s) => s.unlockExpiresAt);
   const isDonor = useUnlockStore((s) => s.isDonor);
-  const [showDonate, setShowDonate] = useState(false);
   const [istaDevataRevealed, setIstaDevataRevealed] = useState(false);
   const profileName = useProfileStore((s) => s.displayName);
   const fallbackName = user?.displayName || (user?.email ? user.email.split('@')[0] : null);
@@ -85,21 +85,17 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
           )}
           {!loading && user && (
             <div className="flex items-center gap-1.5 sm:gap-2 justify-end">
-              {isPro && (
-                <button
-                  type="button"
-                  onClick={() => setShowDonate(true)}
-                  className="p-2 rounded-lg text-amber-400/90 hover:bg-white/10 hover:text-amber-400 min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0"
-                  aria-label={t('menu.donate')}
-                >
-                  <HeartIcon />
-                </button>
-              )}
-              {!isPro && (
-                <span className="hidden sm:inline text-amber-200/90 text-xs truncate max-w-[72px] text-right" title={displayName}>
-                  {displayName}
-                </span>
-              )}
+              <button
+                type="button"
+                onClick={() => navigate('/plans')}
+                className="p-2 rounded-lg text-amber-400/90 hover:bg-white/10 hover:text-amber-400 min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0"
+                aria-label={t('menu.openPlansA11y')}
+              >
+                <HeartIcon />
+              </button>
+              <span className="hidden sm:inline text-amber-200/90 text-xs truncate max-w-[72px] text-right" title={displayName}>
+                {displayName}
+              </span>
               <button
                 type="button"
                 onClick={() => onOpenSettings()}
@@ -130,13 +126,6 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
         </div>
 
         {demoNotice}
-
-        {showDonate && (
-          <DonateModal
-            onClose={() => setShowDonate(false)}
-            onDonated={() => { setShowDonate(false); }}
-          />
-        )}
 
         <motion.button
           type="button"

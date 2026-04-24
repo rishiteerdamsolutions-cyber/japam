@@ -39,6 +39,7 @@ const AdminAppConfigPage = lazy(() => import('./pages/admin/AdminAppConfigPage')
 const PriestPage = lazy(() => import('./pages/PriestPage').then(m => ({ default: m.PriestPage })))
 const MarathonsPage = lazy(() => import('./pages/MarathonsPage').then(m => ({ default: m.MarathonsPage })))
 const MahaYagnasPage = lazy(() => import('./pages/MahaYagnasPage').then(m => ({ default: m.MahaYagnasPage })))
+const PlansDakshinaPage = lazy(() => import('./pages/PlansDakshinaPage').then(m => ({ default: m.PlansDakshinaPage })))
 const SettingsPage = lazy(() => import('./pages/SettingsPage').then(m => ({ default: m.SettingsPage })))
 const ApavargaPage = lazy(() => import('./pages/ApavargaPage').then(m => ({ default: m.ApavargaPage })))
 const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage').then(m => ({ default: m.PrivacyPolicyPage })))
@@ -124,6 +125,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/priest" element={<PriestPage />} />
         <Route path="/marathons" element={<MarathonsPage />} />
         <Route path="/maha-yagnas" element={<MahaYagnasPage />} />
+        <Route path="/plans" element={<PlansDakshinaPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/about-apavarga" element={<ApavargaPage />} />
         <Route path="/privacy" element={<PrivacyPolicyPage />} />

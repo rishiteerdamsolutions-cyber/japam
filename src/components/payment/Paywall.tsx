@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { loadPricingConfig } from '../../lib/firestore';
 import { openCashfreeCheckout } from '../../lib/cashfree';
@@ -23,6 +24,7 @@ interface CouponPreview {
 
 export function Paywall({ onClose, onUnlocked }: PaywallProps) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
   const loadUnlock = useUnlockStore((s) => s.load);
   /** null until loadPricingConfig finishes — avoids flashing default ₹108 before real admin price. */
@@ -241,7 +243,20 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
         <p className="text-amber-200/90 text-sm mb-1">
           You've completed the first 2 levels. Offer Dakshina once to unlock levels 3–50.
         </p>
-        <p className="text-amber-200/70 text-xs mb-4">Access is valid for 30 days from the date of payment.</p>
+        <p className="text-amber-200/70 text-xs mb-2">Access is valid for 30 days from the date of payment.</p>
+        <p className="text-amber-200/80 text-sm mb-4">
+          <button
+            type="button"
+            onClick={() => {
+              onClose();
+              navigate('/plans');
+            }}
+            className="text-amber-300 underline underline-offset-2 font-medium hover:text-amber-200"
+          >
+            {t('menu.plansLink')}
+          </button>
+          <span className="text-amber-200/60"> — {t('plans.paywallLinkHint')}</span>
+        </p>
         {!priceLoaded ? (
           <div className="space-y-4">
             <p className="text-amber-200/70 text-sm">{t('menu.loadingPrice')}</p>

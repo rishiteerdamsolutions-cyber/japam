@@ -33,6 +33,19 @@ import {
   pickGeneralBoardDeities,
 } from '../lib/generalBoardDeities';
 
+/** Durations for the in-game dead-board message overlay before auto regen (`DeadBoardRegenOverlay`). */
+const DEAD_BOARD_MSG_MS = 520;
+const DEAD_BOARD_REFRESH_MS = 780;
+
+let deadBoardRegenTimeouts: ReturnType<typeof setTimeout>[] = [];
+
+function clearDeadBoardRegenTimeouts() {
+  for (const t of deadBoardRegenTimeouts) {
+    clearTimeout(t);
+  }
+  deadBoardRegenTimeouts.length = 0;
+}
+
 /** Īṣṭa path: deities the player has offering charges for — gems must appear so powers are usable. */
 function inventoryOfferingDeities(): DeityId[] {
   const { entries } = usePowersInventoryStore.getState();
@@ -148,6 +161,8 @@ interface GameState {
    * so a small clear does not replace the entire layout. Cleared in finalizeMatchChain. Bomb clears use normal regen.
    */
   suppressDeadBoardRegenOnce: boolean;
+  /** Two-line overlay before auto dead-board regen (`finalizeMatchChain`); null when idle. */
+  deadBoardOverlayPhase: null | 'no_matches' | 'refreshing';
 }
 
 function sessionHasUnlimitedMoves(state: GameState): boolean {
@@ -273,6 +288,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   anniversaryAutoRefreshToken: 0,
   anniversarySessionFlavor: 'occasion',
   suppressDeadBoardRegenOnce: false,
+  deadBoardOverlayPhase: null,
 
   initGame: (mode, levelIndex = 0, options) => {
     const resolvedMode = normalizeGameMode(mode);
@@ -288,6 +304,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     stopAllMantras();
     const { matchAnimationTimeoutId } = get();
     if (matchAnimationTimeoutId != null) clearTimeout(matchAnimationTimeoutId);
+    clearDeadBoardRegenTimeouts();
     const level = getLevel(levelIndex);
     const maxGemTypes = level.maxGemTypes ?? 8;
     const deityMode = resolvedMode !== 'general' ? (resolvedMode as DeityId) : undefined;
@@ -400,6 +417,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       anniversaryAutoRefreshToken: 0,
       anniversarySessionFlavor: occasionKind === 'anniversary' ? anniversarySessionFlavor : 'occasion',
       suppressDeadBoardRegenOnce: false,
+      deadBoardOverlayPhase: null,
     });
     usePowerArmStore.getState().reset();
   },
@@ -453,6 +471,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
 
   restoreGame: (saved: PausedGameState) => {
     stopAllMantras();
+    clearDeadBoardRegenTimeouts();
     // For resume we only restore progress (moves + japa counts). We start with a fresh board.
     const resolvedMode = normalizeGameMode(saved.mode);
     const level = getLevel(saved.levelIndex);
@@ -531,6 +550,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       anniversarySessionPaused: false,
       anniversaryAutoRefreshToken: 0,
       suppressDeadBoardRegenOnce: false,
+      deadBoardOverlayPhase: null,
     });
     usePowerArmStore.getState().reset();
   },
@@ -1016,18 +1036,21 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     }
 
     let anniversaryAutoRefreshToken = state.anniversaryAutoRefreshToken;
-    if (status === 'playing' && !hasValidMoves(finalBoard)) {
+    let boardOut = finalBoard;
+    let deadOverlayPhase: null | 'no_matches' | 'refreshing' = null;
+
+    if (status === 'playing' && !hasValidMoves(boardOut)) {
       if (state.suppressDeadBoardRegenOnce) {
         // Single-tile / namaskaram offering: keep layout; full regen would feel like the whole board changed.
       } else {
+        clearDeadBoardRegenTimeouts();
         const gemCtxDead = boardGemContext(state);
+        let regenerated: Board;
         if (state.occasionKind === 'anniversary' && state.anniversarySessionId) {
-          // Couple play has no refresh button — always guarantee valid moves.
-          // Use seeded boards so both partners converge even if they regenerate locally at the same moment.
           let salt = 0;
           do {
             const seed = `${state.anniversarySessionId}|${state.anniversaryFirestoreVersion}|L${state.levelIndex}|dead|${salt}`;
-            finalBoard = createBoardSeeded(
+            regenerated = createBoardSeeded(
               level.rows,
               level.cols,
               state.maxGemTypes,
@@ -1037,10 +1060,9 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
               seed,
             );
             salt++;
-          } while (!hasValidMoves(finalBoard) && salt < 100);
-          anniversaryAutoRefreshToken = anniversaryAutoRefreshToken + 1;
+          } while (!hasValidMoves(regenerated) && salt < 100);
         } else {
-          finalBoard = createBoard(
+          regenerated = createBoard(
             level.rows,
             level.cols,
             state.maxGemTypes,
@@ -1048,8 +1070,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
             gemCtxDead.powerBacked,
             gemCtxDead.generalSubset,
           );
-          while (!hasValidMoves(finalBoard)) {
-            finalBoard = createBoard(
+          while (!hasValidMoves(regenerated)) {
+            regenerated = createBoard(
               level.rows,
               level.cols,
               state.maxGemTypes,
@@ -1059,11 +1081,34 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
             );
           }
         }
+
+        const nextAnnToken =
+          state.occasionKind === 'anniversary' && state.anniversarySessionId
+            ? anniversaryAutoRefreshToken + 1
+            : anniversaryAutoRefreshToken;
+        deadOverlayPhase = 'no_matches';
+        boardOut = state.board;
+
+        const t1 = setTimeout(() => {
+          set({ deadBoardOverlayPhase: 'refreshing' });
+        }, DEAD_BOARD_MSG_MS);
+        deadBoardRegenTimeouts.push(t1);
+        const t2 = setTimeout(() => {
+          clearDeadBoardRegenTimeouts();
+          set({
+            board: regenerated,
+            deadBoardOverlayPhase: null,
+            anniversaryAutoRefreshToken: nextAnnToken,
+          });
+        }, DEAD_BOARD_MSG_MS + DEAD_BOARD_REFRESH_MS);
+        deadBoardRegenTimeouts.push(t2);
+
+        anniversaryAutoRefreshToken = state.anniversaryAutoRefreshToken;
       }
     }
 
     set({
-      board: finalBoard,
+      board: boardOut,
       moves,
       comboLevel: 0,
       status,
@@ -1077,6 +1122,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       manualCreditArmed: false,
       anniversaryAutoRefreshToken,
       suppressDeadBoardRegenOnce: false,
+      deadBoardOverlayPhase: deadOverlayPhase,
     });
   },
 
@@ -1109,6 +1155,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   refreshBoard: () => {
     const state = get();
     if (state.status !== 'playing' || state.board.length === 0) return;
+    clearDeadBoardRegenTimeouts();
     const level = getLevel(state.levelIndex);
     const gemCtxRefresh = boardGemContext(state);
     let board: Board;
@@ -1158,6 +1205,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       matchSfx: null,
       matchSfxPlayToken: 0,
       lastSwapDestination: null,
+      deadBoardOverlayPhase: null,
     });
   },
 
@@ -1221,6 +1269,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     if (matchAnimationTimeoutId != null) {
       clearTimeout(matchAnimationTimeoutId);
     }
+    clearDeadBoardRegenTimeouts();
     let board: Board;
     try {
       const raw = payload.boardJson;
@@ -1301,6 +1350,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       anniversaryAutoRefreshToken: 0,
       anniversarySessionFlavor: sessionFlavor,
       suppressDeadBoardRegenOnce: false,
+      deadBoardOverlayPhase: null,
     });
   },
 

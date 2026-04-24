@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Board } from './Board';
 import { BoardDeityHints } from './BoardDeityHints';
+import { DeadBoardRegenOverlay } from './DeadBoardRegenOverlay';
 import { GameOverlay } from './GameOverlay';
 import { OutOfLivesOverlay } from './OutOfLivesOverlay';
 import { ActiveUsersStrip } from './ActiveUsersStrip';
@@ -839,6 +840,7 @@ export function GameScreen({
         <div className="relative w-full pt-5 sm:pt-6">
           <BoardDeityHints />
           <Board />
+          <DeadBoardRegenOverlay />
         </div>
       </div>
 

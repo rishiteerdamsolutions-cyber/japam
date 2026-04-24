@@ -224,6 +224,7 @@ export function PlansDakshinaPage() {
 
       {showProPay && (
         <Paywall
+          gateMode="general"
           onClose={() => setShowProPay(false)}
           onUnlocked={onUnlocked}
         />

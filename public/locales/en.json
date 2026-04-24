@@ -64,7 +64,7 @@
     "subtitle": "Pro is your monthly Dakshina for app access. Premium is an optional, larger Dakshina to support the mission — with a special profile badge. Both are explained here so you can choose with clarity.",
     "proTitle": "Pro — Monthly Dakshina",
     "proBody": "Offer Monthly Dakshina to unlock the full level path, join temple Japa Marathons, and use every Pro feature for the current access period shown in your account.",
-    "proBullet1": "Levels 3–50 and the level map for all supported deities",
+    "proBullet1": "All-Devatā: first 5 levels (108 japas) are free, then Pro; each Iṣṭa Devatā: first 2 levels free, then Pro — then levels through 50 and the map for all supported deities",
     "proBullet2": "Join temple Japa Marathons and community yāga-style events that require Pro",
     "proBullet3": "Profile marked as Pro (green) while your access is active",
     "proFootnote": "New payments are described at checkout. Access period follows the terms shown on the pay screen (e.g. validity from payment date).",
@@ -86,6 +86,22 @@
     "premiumThankYou": "Thank you for your Premium support. Your badge reflects our appreciation.",
     "legalLinkSuffix": "For purchases, refunds, and digital delivery, see our terms.",
     "paywallLinkHint": "see how Pro and Premium differ"
+  },
+  "paywall": {
+    "title": "Unlock all levels",
+    "bodyAfterFreeGeneral": "You completed the free mālā on All-Devatā Japa (first 5 levels, 108 japas). Offer Monthly Dakshina to continue from level 6 and unlock the full path.",
+    "bodyAfterFreeDeity": "You completed the first 2 free levels on this Iṣṭa path. Get Pro to continue this deity’s levels and the full level map (3–50) everywhere."
+  },
+  "levelGate": {
+    "alreadyCompleteTitle": "Level already completed",
+    "alreadyCompleteBodyGeneral": "You have finished this level in All-Devatā Japa. Play the next number on the map, try another free path, or get Pro to continue. You can’t replay a level you’ve already passed here.",
+    "alreadyCompleteBodyDeity": "You have finished this level for this Iṣṭa Devatā. Open another deity’s first free levels, or get Pro to keep going on this path.",
+    "alreadyCompleteOk": "Back to level map",
+    "malaCompleteTitle": "One mālā complete",
+    "malaCompleteBody": "You have offered 108 japas across the first five All-Devatā levels. To continue your daily practice on this path, continue with Pro.",
+    "malaCompleteIsta": "With Pro you can do a full 108 (or more) on your Iṣṭa Devatā and unlock the rest of the journey.",
+    "malaCompleteCtaPro": "Get Pro to continue",
+    "malaCompleteLater": "Later"
   },
   "activeUsers": {
     "yesterdaysAchievers": "Yesterday's achievers",

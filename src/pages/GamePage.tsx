@@ -11,12 +11,18 @@ import { useAuthStore } from '../store/authStore';
 import { useLivesStore } from '../store/livesStore';
 import { useLevelsConfigStore } from '../store/levelsConfigStore';
 import { useProfileStore } from '../store/profileStore';
-import { FIRST_LOCKED_LEVEL_INDEX } from '../store/unlockStore';
+import { useProgressStore } from '../store/progressStore';
+import {
+  getFirstLockedLevelIndex,
+  FIRST_LOCKED_LEVEL_INDEX_GENERAL,
+  isLevelIndexCompleted,
+} from '../lib/levelGates';
 import { LEVELS, ANNIVERSARY_COUPLE_LAST_LEVEL_INDEX } from '../data/levels';
 import { DEITY_IDS } from '../data/deities';
 import type { GameMode } from '../types';
 import { getOccasionEntryGate } from '../lib/occasionEntryGate';
 import { LAUNCH_FEATURE_OCCASION_GAMES } from '../config/launchFeatures';
+import { LevelAlreadyCompleteModal, GeneralMalaCompleteModal } from '../components/game/LevelGateModals';
 
 function parseGameMode(rawMode: string | null): GameMode {
   if (!rawMode) return 'general';
@@ -109,6 +115,12 @@ export function GamePage() {
   const [justRestored, setJustRestored] = useState(false);
   const [pauseCheckDone, setPauseCheckDone] = useState(false);
   const [startFreshConfirmOpen, setStartFreshConfirmOpen] = useState(false);
+  const [malaCompleteModal, setMalaCompleteModal] = useState(false);
+  const [levelCompleteBlock, setLevelCompleteBlock] = useState<GameMode | null>(null);
+
+  const levelProgress = useProgressStore((s) => s.levelProgress);
+  const progressLoaded = useProgressStore((s) => s.loaded);
+  const firstLock = getFirstLockedLevelIndex(mode);
 
   const initGame = useGameStore((s) => s.initGame);
   const restoreGame = useGameStore((s) => s.restoreGame);
@@ -119,7 +131,7 @@ export function GamePage() {
   const profileDisplayName = useProfileStore((s) => s.displayName);
   const profileLoaded = useProfileStore((s) => s.loaded);
   const setProfileDisplayName = useProfileStore((s) => s.setDisplayName);
-  const isLocked = !isGuest && !isMarathon && levelIndex >= FIRST_LOCKED_LEVEL_INDEX && levelsUnlocked !== true;
+  const isLocked = !isGuest && !isMarathon && levelIndex >= firstLock && levelsUnlocked !== true;
 
   const [playNameDraft, setPlayNameDraft] = useState('');
   const [playNameSaving, setPlayNameSaving] = useState(false);
@@ -181,6 +193,7 @@ export function GamePage() {
       setResumePending(null);
       setResumeKey(null);
       setPauseCheckDone(true);
+      setLevelCompleteBlock(null);
       if (isLocked) setPaywallPending({ mode, levelIndex });
       return;
     }
@@ -188,11 +201,24 @@ export function GamePage() {
       setResumePending(null);
       setResumeKey(null);
       setPauseCheckDone(true);
+      setLevelCompleteBlock(null);
       if (isLocked) setPaywallPending({ mode, levelIndex });
       return;
     }
     // Wait for Firebase auth to settle so we can fetch ID token.
     if (user?.uid && authLoading) return;
+
+    setLevelCompleteBlock(null);
+    if (user?.uid && !isMarathon && !occasionKind) {
+      if (!progressLoaded) return;
+      if (isLevelIndexCompleted(mode, levelIndex, levelProgress)) {
+        setLevelCompleteBlock(mode);
+        setResumePending(null);
+        setResumeKey(null);
+        setPauseCheckDone(true);
+        return;
+      }
+    }
 
     let cancelled = false;
     const load = async () => {
@@ -247,7 +273,7 @@ export function GamePage() {
     };
     load();
     return () => { cancelled = true; };
-  }, [mode, levelIndex, isMarathon, marathonId, yagnaId, expectedKey, isLocked, paywallPending, user, authLoading, occasionKind, isGuest]);
+  }, [mode, levelIndex, isMarathon, marathonId, yagnaId, expectedKey, isLocked, paywallPending, user, authLoading, occasionKind, isGuest, progressLoaded, levelProgress]);
 
   const handleResume = () => {
     if (resumePending) {
@@ -281,7 +307,12 @@ export function GamePage() {
 
   const handleNextLevel = (nextMode: GameMode, nextIndex: number) => {
     const idx = Math.min(nextIndex, LEVELS.length - 1, revealedMax);
-    const locked = idx >= FIRST_LOCKED_LEVEL_INDEX && levelsUnlocked !== true;
+    const nextFirstLock = getFirstLockedLevelIndex(nextMode);
+    const locked = idx >= nextFirstLock && levelsUnlocked !== true;
+    if (locked && nextMode === 'general' && idx === FIRST_LOCKED_LEVEL_INDEX_GENERAL) {
+      setMalaCompleteModal(true);
+      return;
+    }
     if (locked) {
       setPaywallPending({ mode: nextMode, levelIndex: idx });
       return;
@@ -328,13 +359,25 @@ export function GamePage() {
 
   const waitingProfile = !isGuest && !!user?.uid && !profileLoaded;
 
-  // Signed-in: wait for pause check and profile before resume / name gate / game.
-  if (!isGuest && (waitingProfile || !pauseCheckDone)) {
+  // Signed-in: wait for progress (to detect completed levels) and pause check before game.
+  if (!isGuest && (waitingProfile || !pauseCheckDone || (!!user?.uid && !isMarathon && !occasionKind && !progressLoaded))) {
     return (
       <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
         <div className="relative z-10 text-amber-400 text-sm">{t('common.loading')}</div>
       </div>
+    );
+  }
+
+  if (levelCompleteBlock != null) {
+    return (
+      <LevelAlreadyCompleteModal
+        mode={levelCompleteBlock}
+        onClose={() => {
+          setLevelCompleteBlock(null);
+          navigate('/levels');
+        }}
+      />
     );
   }
 
@@ -433,6 +476,7 @@ export function GamePage() {
     const pending = paywallPending;
     return (
       <Paywall
+        gateMode={pending.mode}
         onClose={() => navigate('/levels')}
         onUnlocked={() => {
           loadUnlock(user?.uid).then(() => {
@@ -445,6 +489,19 @@ export function GamePage() {
   }
 
   return (
+    <>
+    {malaCompleteModal && (
+      <GeneralMalaCompleteModal
+        onGetPro={() => {
+          setMalaCompleteModal(false);
+          setPaywallPending({ mode: 'general', levelIndex: FIRST_LOCKED_LEVEL_INDEX_GENERAL });
+        }}
+        onLater={() => {
+          setMalaCompleteModal(false);
+          navigate('/levels');
+        }}
+      />
+    )}
     <GameScreen
       mode={mode}
       levelIndex={levelIndex}
@@ -464,5 +521,6 @@ export function GamePage() {
       anniversaryIsHost={occasionKind === 'anniversary' ? anniversaryHost : undefined}
       anniversarySessionFlavor={occasionKind === 'anniversary' ? anniversarySessionFlavor : undefined}
     />
+    </>
   );
 }

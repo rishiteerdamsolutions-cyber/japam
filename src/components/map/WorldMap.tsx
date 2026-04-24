@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useProgressStore, progressKey } from '../../store/progressStore';
-import { useUnlockStore, FIRST_LOCKED_LEVEL_INDEX } from '../../store/unlockStore';
+import { useUnlockStore } from '../../store/unlockStore';
+import { getFirstLockedLevelIndex } from '../../lib/levelGates';
 import { useLevelsConfigStore } from '../../store/levelsConfigStore';
 import { DonateThankYouBox } from '../donation/DonateThankYouBox';
 import { MenuMatchChantHeader } from '../layout/MenuMatchChantHeader';
@@ -34,6 +35,7 @@ export function WorldMap({ mode: initialMode, onSelectLevel }: WorldMapProps) {
   const revealedMax = maxRevealedLevelIndex ?? 49;
   const maxEpisodeId = Math.min(100, Math.ceil((revealedMax + 1) / 10));
   const episodesToShow = EPISODES.filter(ep => ep.id <= maxEpisodeId);
+  const firstLock = getFirstLockedLevelIndex(mapMode);
 
   return (
     <div className="relative min-h-screen p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] max-w-lg mx-auto overflow-hidden">
@@ -78,14 +80,13 @@ export function WorldMap({ mode: initialMode, onSelectLevel }: WorldMapProps) {
                 const progress = levelProgress[progressKey(mapMode, level.id)];
                 const unlocked = levelsUnlocked === true;
                 const canPlay =
-                  idx <= currentLevelIndex && (idx < FIRST_LOCKED_LEVEL_INDEX || unlocked);
-                // Only the first paid tier (level 3, index 2) opens the unlock flow. Higher levels stay
-                // disabled until Pro so free users cannot jump past the gate.
+                  idx <= currentLevelIndex && (idx < firstLock || unlocked);
+                // First level that requires Pro: opens paywall from map. Higher levels stay disabled until Pro.
                 const isPaywallGate =
                   !unlocked &&
-                  idx === FIRST_LOCKED_LEVEL_INDEX &&
-                  currentLevelIndex >= FIRST_LOCKED_LEVEL_INDEX;
-                const isProLockedAhead = !unlocked && idx > FIRST_LOCKED_LEVEL_INDEX;
+                  idx === firstLock &&
+                  currentLevelIndex >= firstLock;
+                const isProLockedAhead = !unlocked && idx > firstLock;
                 return (
                   <button
                     key={level.id}

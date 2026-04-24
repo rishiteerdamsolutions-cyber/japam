@@ -4,7 +4,8 @@ import { AppFooter } from '../components/layout/AppFooter';
 import INDIA_REGIONS from '../data/indiaRegions.json';
 import { DEITIES } from '../data/deities';
 import { useAuthStore } from '../store/authStore';
-import { FIRST_LOCKED_LEVEL_INDEX, useUnlockStore } from '../store/unlockStore';
+import { useUnlockStore } from '../store/unlockStore';
+import { FIRST_LOCKED_LEVEL_INDEX_GENERAL } from '../lib/levelGates';
 import { auth } from '../lib/firebase';
 import { DonateThankYouBox } from '../components/donation/DonateThankYouBox';
 import { MenuMatchChantHeader } from '../components/layout/MenuMatchChantHeader';
@@ -359,7 +360,7 @@ export function MarathonsPage() {
           Pro is required to join <span className="font-medium">temple</span> marathons. Your free Shiva marathon (1080 japas) is personal to you — rank cards show only your progress. The free Rama Maha Japa Yagna is open to everyone on the app with the usual shared leaderboard.
           <button
             type="button"
-            onClick={() => navigate(`/game?mode=general&level=${FIRST_LOCKED_LEVEL_INDEX}`)}
+            onClick={() => navigate(`/game?mode=general&level=${FIRST_LOCKED_LEVEL_INDEX_GENERAL}`)}
             className="ml-2 underline text-amber-300"
           >
             Unlock Pro

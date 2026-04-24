@@ -2,7 +2,14 @@ import { create } from 'zustand';
 import { loadUserUnlock, type UserTier } from '../lib/firestore';
 import { useAuthStore } from './authStore';
 
-export const FIRST_LOCKED_LEVEL_INDEX = 2; // Level 3 and above need payment (pay after 2nd level)
+/** @deprecated Use getFirstLockedLevelIndex(mode) — general has 5 free levels, each deity has 2. */
+export const FIRST_LOCKED_LEVEL_INDEX = 2;
+export {
+  getFirstLockedLevelIndex,
+  FIRST_LOCKED_LEVEL_INDEX_DEITY,
+  FIRST_LOCKED_LEVEL_INDEX_GENERAL,
+  isLevelIndexCompleted,
+} from '../lib/levelGates';
 
 interface UnlockState {
   levelsUnlocked: boolean | null;

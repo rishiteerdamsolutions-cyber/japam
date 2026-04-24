@@ -6,7 +6,8 @@ import { BottomNav } from '../components/nav/BottomNav';
 import { AppFooter } from '../components/layout/AppFooter';
 import { DEITIES } from '../data/deities';
 import { useAuthStore } from '../store/authStore';
-import { FIRST_LOCKED_LEVEL_INDEX, useUnlockStore } from '../store/unlockStore';
+import { useUnlockStore } from '../store/unlockStore';
+import { FIRST_LOCKED_LEVEL_INDEX_GENERAL } from '../lib/levelGates';
 import { auth } from '../lib/firebase';
 import { paddedLeaderboard, renderRankCardBlob } from '../lib/rankCard';
 import { trackShareEvent } from '../lib/firestore';
@@ -413,7 +414,7 @@ export function MahaYagnasPage() {
             </p>
             <button
               type="button"
-              onClick={() => navigate(`/game?mode=general&level=${FIRST_LOCKED_LEVEL_INDEX}`)}
+              onClick={() => navigate(`/game?mode=general&level=${FIRST_LOCKED_LEVEL_INDEX_GENERAL}`)}
               className="mt-2 text-amber-400 text-sm font-medium hover:underline whitespace-nowrap"
             >
               {t('mahaYagnas.unlockPro')}

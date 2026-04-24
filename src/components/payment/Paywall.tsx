@@ -8,10 +8,13 @@ import { verifyCashfreeOrderAfterCheckout } from '../../lib/verifyCashfreeOrder'
 import { useAuthStore } from '../../store/authStore';
 import { useUnlockStore } from '../../store/unlockStore';
 import { auth } from '../../lib/firebase';
+import type { GameMode } from '../../types';
 
 interface PaywallProps {
   onClose: () => void;
   onUnlocked?: () => void;
+  /** Which path hit the paywall (copy differs: general = 5 free / mala, deity = 2 free levels). */
+  gateMode?: GameMode;
 }
 
 interface CouponPreview {
@@ -22,7 +25,7 @@ interface CouponPreview {
   fullyCovered: boolean;
 }
 
-export function Paywall({ onClose, onUnlocked }: PaywallProps) {
+export function Paywall({ onClose, onUnlocked, gateMode = 'general' }: PaywallProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
@@ -239,9 +242,9 @@ export function Paywall({ onClose, onUnlocked }: PaywallProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4" role="dialog" aria-modal="true" aria-labelledby="paywall-title">
       <div className="bg-[#C2185B]/90 rounded-2xl border border-amber-500/30 p-6 max-w-sm w-full shadow-xl">
-        <h2 id="paywall-title" className="text-xl font-bold text-amber-400 mb-2">Unlock all levels</h2>
+        <h2 id="paywall-title" className="text-xl font-bold text-amber-400 mb-2">{t('paywall.title')}</h2>
         <p className="text-amber-200/90 text-sm mb-1">
-          You've completed the first 2 levels. Offer Dakshina once to unlock levels 3–50.
+          {gateMode === 'general' ? t('paywall.bodyAfterFreeGeneral') : t('paywall.bodyAfterFreeDeity')}
         </p>
         <p className="text-amber-200/70 text-xs mb-2">Access is valid for 30 days from the date of payment.</p>
         <p className="text-amber-200/80 text-sm mb-4">

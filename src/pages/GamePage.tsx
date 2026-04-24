@@ -118,7 +118,6 @@ export function GamePage() {
   const [malaCompleteModal, setMalaCompleteModal] = useState(false);
   const [levelCompleteBlock, setLevelCompleteBlock] = useState<GameMode | null>(null);
 
-  const levelProgress = useProgressStore((s) => s.levelProgress);
   const progressLoaded = useProgressStore((s) => s.loaded);
   const firstLock = getFirstLockedLevelIndex(mode);
 
@@ -211,7 +210,11 @@ export function GamePage() {
     setLevelCompleteBlock(null);
     if (user?.uid && !isMarathon && !occasionKind) {
       if (!progressLoaded) return;
-      if (isLevelIndexCompleted(mode, levelIndex, levelProgress)) {
+      // Read progress here; do NOT list `levelProgress` in effect deps — on win, saveLevel updates
+      // progress in the same beat as the victory UI; re-running the effect would mistake "just won"
+      // for "replaying a done level" and replace the next-level flow with the replay block.
+      const lp = useProgressStore.getState().levelProgress;
+      if (isLevelIndexCompleted(mode, levelIndex, lp)) {
         setLevelCompleteBlock(mode);
         setResumePending(null);
         setResumeKey(null);
@@ -273,7 +276,7 @@ export function GamePage() {
     };
     load();
     return () => { cancelled = true; };
-  }, [mode, levelIndex, isMarathon, marathonId, yagnaId, expectedKey, isLocked, paywallPending, user, authLoading, occasionKind, isGuest, progressLoaded, levelProgress]);
+  }, [mode, levelIndex, isMarathon, marathonId, yagnaId, expectedKey, isLocked, paywallPending, user, authLoading, occasionKind, isGuest, progressLoaded]);
 
   const handleResume = () => {
     if (resumePending) {

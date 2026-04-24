@@ -3,15 +3,17 @@ import { DEITY_IDS } from '../data/deities';
 import type { DeityId } from '../data/deities';
 import { deityGemAllowedOnIstaPath } from '../lib/generalBoardDeities';
 import { displayDeityId, isBlessing, isStriped, isWrapped, sameLineGroup } from './gemKinds';
-import { hasValidMoves } from './matcher';
+import { countValidSwapOpportunities, hasValidMoves } from './matcher';
 
 /**
  * Īṣṭa (specific-deity) mode: favor the path deity on spawns so japa matches stay doable, but keep other
  * types common enough that the board still feels like match‑3 (planning, mixed clears), not a free win.
- * Used whenever `deityMode` is set — normal level play, marathons, maha yagnas, birthday path, anniversary
- * when `mode` is a deity, etc. (~36% path deity with 8 pool types vs ~12.5% uniform). Tune up if too grindy.
+ * Weight doubled from the original 4 (see product: path-deity gems ~2× prior spawn rate vs other pool types).
  */
-const ISTA_DEITY_GEM_WEIGHT = 4;
+const ISTA_DEITY_GEM_WEIGHT = 8;
+
+/** All-deity boards: try several random layouts and keep the one with the most match-creating swaps. */
+const GENERAL_BOARD_SWAP_TRIALS = 18;
 
 function weightedPickGemType(
   types: GemType[],
@@ -143,6 +145,36 @@ export function createBoardSeeded(
   return board;
 }
 
+function createSingleRandomBoard(
+  rows: number,
+  cols: number,
+  types: GemType[],
+  deityMode?: DeityId,
+): Board {
+  const board: Board = [];
+  for (let r = 0; r < rows; r++) {
+    const rowData: (GemType | null)[] = [];
+    for (let c = 0; c < cols; c++) {
+      rowData.push(pickRandomGem(board, rowData, r, c, rows, cols, types, deityMode));
+    }
+    board.push(rowData);
+  }
+  return board;
+}
+
+function createPlayableBoard(
+  rows: number,
+  cols: number,
+  types: GemType[],
+  deityMode?: DeityId,
+): Board {
+  for (let guard = 0; guard < 400; guard++) {
+    const b = createSingleRandomBoard(rows, cols, types, deityMode);
+    if (hasValidMoves(b)) return b;
+  }
+  return createSingleRandomBoard(rows, cols, types, deityMode);
+}
+
 /** When deityMode is set, that deity's gem is always included (required for deity-specific games). */
 export function createBoard(
   rows: number,
@@ -153,15 +185,22 @@ export function createBoard(
   generalGemSubset: DeityId[] | null = null,
 ): Board {
   const types = buildGemTypesPool(maxGemTypes, deityMode, powerBackedDeities, generalGemSubset);
-  const board: Board = [];
-  for (let r = 0; r < rows; r++) {
-    const rowData: (GemType | null)[] = [];
-    for (let c = 0; c < cols; c++) {
-      rowData.push(pickRandomGem(board, rowData, r, c, rows, cols, types, deityMode));
+
+  if (!deityMode) {
+    let best = createPlayableBoard(rows, cols, types, deityMode);
+    let bestScore = countValidSwapOpportunities(best);
+    for (let i = 0; i < GENERAL_BOARD_SWAP_TRIALS; i++) {
+      const cand = createPlayableBoard(rows, cols, types, deityMode);
+      const s = countValidSwapOpportunities(cand);
+      if (s > bestScore) {
+        best = cand;
+        bestScore = s;
+      }
     }
-    board.push(rowData);
+    return best;
   }
-  return board;
+
+  return createPlayableBoard(rows, cols, types, deityMode);
 }
 
 function pickRandomGem(
@@ -265,50 +304,4 @@ export function fillGaps(
   }
 
   return { board: next, newGems };
-}
-
-export type RepairBoardOptions = {
-  /** When set, repair picks are deterministic (couple play stays in sync). */
-  seed?: string;
-  maxIter?: number;
-};
-
-/**
- * Cheap local fixes before a full-board regen: nudge random swappable cells toward types that avoid instant auto-lines.
- * Uses the same spawn heuristics as `createBoard` / `fillGaps`.
- */
-export function repairBoardUntilHasValidMove(
-  board: Board,
-  maxGemTypes = 8,
-  deityMode?: DeityId,
-  powerBackedDeities: DeityId[] = [],
-  generalGemSubset: DeityId[] | null = null,
-  options?: RepairBoardOptions,
-): Board {
-  const b = board.map((row) => [...row]);
-  if (hasValidMoves(b)) return b;
-  const types = buildGemTypesPool(maxGemTypes, deityMode, powerBackedDeities, generalGemSubset);
-  const rows = b.length;
-  const cols = b[0]?.length ?? 0;
-  const maxIter = Math.max(50, Math.min(options?.maxIter ?? 600, 4000));
-  const posRng =
-    options?.seed != null
-      ? mulberry32(hashStringToUint32(`${options.seed}|pos`))
-      : (Math.random.bind(Math) as () => number);
-  const gemRng =
-    options?.seed != null
-      ? mulberry32(hashStringToUint32(`${options.seed}|gem`))
-      : (Math.random.bind(Math) as () => number);
-
-  for (let n = 0; n < maxIter && !hasValidMoves(b); n++) {
-    const r = Math.floor(posRng() * rows);
-    const c = Math.floor(posRng() * cols);
-    const cell = b[r][c];
-    if (cell == null || isBlessing(cell) || isStriped(cell) || isWrapped(cell)) continue;
-    b[r][c] =
-      options?.seed != null
-        ? pickRandomGemSeeded(b, b[r], r, c, rows, cols, types, deityMode, gemRng)
-        : pickRandomGem(b, b[r], r, c, rows, cols, types, deityMode);
-  }
-  return b;
 }

@@ -69,6 +69,28 @@ export function hasValidMoves(board: Board): boolean {
   return false;
 }
 
+/** Count of adjacent swaps that would create at least one match (higher ⇒ more immediate move options). */
+export function countValidSwapOpportunities(board: Board): number {
+  const rows = board.length;
+  const cols = board[0]?.length ?? 0;
+  let n = 0;
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const gem = board[r][c];
+      if (!gem) continue;
+      if (c < cols - 1) {
+        const swapped = swapCells(board, r, c, r, c + 1);
+        if (findMatches(swapped).length > 0) n++;
+      }
+      if (r < rows - 1) {
+        const swapped = swapCells(board, r, c, r + 1, c);
+        if (findMatches(swapped).length > 0) n++;
+      }
+    }
+  }
+  return n;
+}
+
 function swapCells(board: Board, r1: number, c1: number, r2: number, c2: number): Board {
   const next = board.map(row => [...row]);
   const t = next[r1][c1];

@@ -10,7 +10,6 @@ import {
   removeMatches,
   fillGaps,
   sanitizeBoardToDeitySubset,
-  repairBoardUntilHasValidMove,
 } from '../engine/board';
 import { findMatches, getAllMatchPositions, hasValidMoves } from '../engine/matcher';
 import { computeMatchSfxSelection, type MatchSfxSelection } from '../lib/matchSfx';
@@ -33,6 +32,16 @@ import {
   normalizeGeneralBoardDeities,
   pickGeneralBoardDeities,
 } from '../lib/generalBoardDeities';
+
+/** Pause before swapping in a full dead-board regen so the player sees a clear notice first. */
+const DEAD_BOARD_AUTO_NOTICE_MS = 1400;
+
+let deadBoardAutoRefreshTimeouts: ReturnType<typeof setTimeout>[] = [];
+
+function clearDeadBoardAutoRefreshTimeouts() {
+  for (const t of deadBoardAutoRefreshTimeouts) clearTimeout(t);
+  deadBoardAutoRefreshTimeouts.length = 0;
+}
 
 /** Īṣṭa path: deities the player has offering charges for — gems must appear so powers are usable. */
 function inventoryOfferingDeities(): DeityId[] {
@@ -64,6 +73,8 @@ export type AnniversarySessionFlavor = 'occasion' | 'couple_daily';
 export interface PausedGameState {
   key: string;
   moves: number;
+  /** Pause format v5+; omitted in older saves (resume treats as 0). */
+  score?: number;
   japasThisLevel: number;
   japasByDeity: Record<string, number>;
   mode: GameMode;
@@ -149,6 +160,8 @@ interface GameState {
    * so a small clear does not replace the entire layout. Cleared in finalizeMatchChain. Bomb clears use normal regen.
    */
   suppressDeadBoardRegenOnce: boolean;
+  /** Brief banner before automatic full-board regen when the board has no valid moves (not manual refresh). */
+  deadBoardAutoRefreshPhase: null | 'notice';
 }
 
 function sessionHasUnlimitedMoves(state: GameState): boolean {
@@ -322,6 +335,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   anniversaryAutoRefreshToken: 0,
   anniversarySessionFlavor: 'occasion',
   suppressDeadBoardRegenOnce: false,
+  deadBoardAutoRefreshPhase: null,
 
   initGame: (mode, levelIndex = 0, options) => {
     const resolvedMode = normalizeGameMode(mode);
@@ -335,6 +349,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       guest: options?.isGuest === true,
     });
     stopAllMantras();
+    clearDeadBoardAutoRefreshTimeouts();
     const { matchAnimationTimeoutId } = get();
     if (matchAnimationTimeoutId != null) clearTimeout(matchAnimationTimeoutId);
     const level = getLevel(levelIndex);
@@ -449,6 +464,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       anniversaryAutoRefreshToken: 0,
       anniversarySessionFlavor: occasionKind === 'anniversary' ? anniversarySessionFlavor : 'occasion',
       suppressDeadBoardRegenOnce: false,
+      deadBoardAutoRefreshPhase: null,
     });
     usePowerArmStore.getState().reset();
   },
@@ -475,6 +491,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const payload: PausedGameState = {
       key,
       moves: state.moves,
+      score: state.score,
       japasThisLevel: state.japasThisLevel,
       japasByDeity: { ...state.japasByDeity },
       mode: state.mode,
@@ -486,7 +503,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       overrideJapaTarget: state.overrideJapaTarget ?? undefined,
       generalBoardDeities: state.generalBoardDeities ?? undefined,
       savedAt: Date.now(),
-      version: 4,
+      version: 5,
       occasionKind: state.occasionKind ?? undefined,
       anniversarySessionId: state.anniversarySessionId ?? undefined,
       anniversaryMyRole: state.anniversaryMyRole ?? undefined,
@@ -502,6 +519,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
 
   restoreGame: (saved: PausedGameState) => {
     stopAllMantras();
+    clearDeadBoardAutoRefreshTimeouts();
     // For resume we only restore progress (moves + japa counts). We start with a fresh board.
     const resolvedMode = normalizeGameMode(saved.mode);
     const level = getLevel(saved.levelIndex);
@@ -538,6 +556,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     set({
       board,
       moves: saved.moves,
+      score: typeof saved.score === 'number' ? saved.score : 0,
       japasThisLevel: saved.japasThisLevel,
       japasByDeity: { ...emptyJapas(), ...saved.japasByDeity } as Record<DeityId, number>,
       comboLevel: 0,
@@ -580,6 +599,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       anniversarySessionPaused: false,
       anniversaryAutoRefreshToken: 0,
       suppressDeadBoardRegenOnce: false,
+      deadBoardAutoRefreshPhase: null,
     });
     usePowerArmStore.getState().reset();
   },
@@ -1066,35 +1086,31 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
 
     let anniversaryAutoRefreshToken = state.anniversaryAutoRefreshToken;
     let boardOut = finalBoard;
+    let deadBoardAutoRefreshPhase: null | 'notice' = null;
 
     if (status === 'playing' && !hasValidMoves(boardOut)) {
       if (state.suppressDeadBoardRegenOnce) {
         // Single-tile / namaskaram offering: keep layout; full regen would feel like the whole board changed.
       } else {
         const gemCtxDead = boardGemContext(state);
-        const repairSeed =
-          state.occasionKind === 'anniversary' && state.anniversarySessionId
-            ? `${state.anniversarySessionId}|${state.anniversaryFirestoreVersion}|L${state.levelIndex}|repair|${JSON.stringify(finalBoard).slice(0, 8000)}`
-            : undefined;
-        const repaired = repairBoardUntilHasValidMove(
-          finalBoard,
-          state.maxGemTypes,
-          gemCtxDead.deityMode,
-          gemCtxDead.powerBacked,
-          gemCtxDead.generalSubset,
-          repairSeed != null ? { seed: repairSeed } : undefined,
+        clearDeadBoardAutoRefreshTimeouts();
+        const { board: regenerated, anniversaryAutoRefreshToken: nextAnnToken } = buildDeadBoardReplacement(
+          state,
+          level,
+          gemCtxDead,
         );
-        if (hasValidMoves(repaired)) {
-          boardOut = repaired;
-        } else {
-          const { board: regenerated, anniversaryAutoRefreshToken: nextAnnToken } = buildDeadBoardReplacement(
-            state,
-            level,
-            gemCtxDead,
-          );
-          boardOut = regenerated;
-          anniversaryAutoRefreshToken = nextAnnToken;
-        }
+        boardOut = finalBoard;
+        deadBoardAutoRefreshPhase = 'notice';
+        deadBoardAutoRefreshTimeouts.push(
+          setTimeout(() => {
+            clearDeadBoardAutoRefreshTimeouts();
+            set({
+              board: regenerated,
+              deadBoardAutoRefreshPhase: null,
+              anniversaryAutoRefreshToken: nextAnnToken,
+            });
+          }, DEAD_BOARD_AUTO_NOTICE_MS),
+        );
       }
     }
 
@@ -1113,6 +1129,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       manualCreditArmed: false,
       anniversaryAutoRefreshToken,
       suppressDeadBoardRegenOnce: false,
+      deadBoardAutoRefreshPhase,
     });
   },
 
@@ -1145,6 +1162,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   refreshBoard: () => {
     const state = get();
     if (state.status !== 'playing' || state.board.length === 0) return;
+    clearDeadBoardAutoRefreshTimeouts();
     const level = getLevel(state.levelIndex);
     const gemCtxRefresh = boardGemContext(state);
     let board: Board;
@@ -1194,6 +1212,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       matchSfx: null,
       matchSfxPlayToken: 0,
       lastSwapDestination: null,
+      deadBoardAutoRefreshPhase: null,
     });
   },
 
@@ -1257,6 +1276,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     if (matchAnimationTimeoutId != null) {
       clearTimeout(matchAnimationTimeoutId);
     }
+    clearDeadBoardAutoRefreshTimeouts();
     let board: Board;
     try {
       const raw = payload.boardJson;
@@ -1337,6 +1357,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       anniversaryAutoRefreshToken: 0,
       anniversarySessionFlavor: sessionFlavor,
       suppressDeadBoardRegenOnce: false,
+      deadBoardAutoRefreshPhase: null,
     });
   },
 

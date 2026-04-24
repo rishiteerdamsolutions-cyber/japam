@@ -112,6 +112,8 @@
     "pause": "Pause",
     "exit": "Exit",
     "refreshBoard": "No matches? Refresh board",
+    "deadBoardAutoNoticeTitle": "No moves on this board",
+    "deadBoardAutoNoticeSubtitle": "Refreshing with a new layout — your score and japas stay the same.",
     "powersStripRegion": "Collected powers",
     "powersInteractionHint": "Tap a power to read details. Long press to arm, then tap a gem on the board.",
     "powersStripLayoutHint": "Namaskaram stays on the left; deity offerings scroll in the middle; free swap and flower bomb stay on the right.",

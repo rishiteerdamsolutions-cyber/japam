@@ -632,10 +632,12 @@ export function GameScreen({
     reset();
   }, [reset]);
 
-  const refreshBoard = useGameStore(s => s.refreshBoard);
+  const refreshBoard = useGameStore((s) => s.refreshBoard);
   const handleRefreshBoard = useCallback(() => {
     refreshBoard();
   }, [refreshBoard]);
+
+  const deadBoardAutoRefreshPhase = useGameStore((s) => s.deadBoardAutoRefreshPhase);
 
   const addMoves = useGameStore((s) => s.addMoves);
   const handleRetryAfterLife = useCallback(() => {
@@ -839,6 +841,20 @@ export function GameScreen({
         <div className="relative w-full pt-5 sm:pt-6">
           <BoardDeityHints />
           <Board />
+          {deadBoardAutoRefreshPhase === 'notice' && status === 'playing' && (
+            <div
+              className="absolute inset-0 z-[22] flex flex-col items-center justify-center gap-2 rounded-2xl bg-black/72 px-4 text-center pointer-events-none"
+              role="status"
+              aria-live="polite"
+            >
+              <p className="text-amber-200 font-semibold text-sm sm:text-base leading-snug max-w-[18rem]">
+                {t('game.deadBoardAutoNoticeTitle')}
+              </p>
+              <p className="text-amber-100/85 text-xs sm:text-sm leading-snug max-w-[20rem]">
+                {t('game.deadBoardAutoNoticeSubtitle')}
+              </p>
+            </div>
+          )}
         </div>
       </div>
 

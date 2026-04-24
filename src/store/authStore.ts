@@ -29,19 +29,55 @@ function attachFirebaseAuthListeners() {
   if (!isFirebaseConfigured || firebaseAuthListenersAttached) return;
   firebaseAuthListenersAttached = true;
 
-  onAuthStateChanged(auth, (user) => {
-    useAuthStore.setState({ user, loading: false, signInPending: false });
-  });
-
+  /**
+   * Firebase can emit the first `onAuthStateChanged(null)` before IndexedDB persistence
+   * restores the session — UI briefly shows "signed out". We defer that first empty
+   * snapshot, then re-read `auth.currentUser`. Redirect sign-in is resolved first so
+   * we do not clobber a fresh redirect user with a spurious null.
+   */
   void (async () => {
+    let redirectUser = false;
     try {
       const cred = await getRedirectResultOnce();
       if (cred?.user) {
-        useAuthStore.setState({ user: cred.user, signInPending: false, error: null });
+        redirectUser = true;
+        useAuthStore.setState({
+          user: cred.user,
+          signInPending: false,
+          error: null,
+          loading: false,
+        });
       }
     } catch (err) {
       useAuthStore.setState({ error: getAuthErrorMessage(err), signInPending: false });
     }
+
+    let firstCallback = true;
+    let hydrationTimer: ReturnType<typeof setTimeout> | null = null;
+
+    const commit = (user: User | null) => {
+      if (hydrationTimer !== null) {
+        clearTimeout(hydrationTimer);
+        hydrationTimer = null;
+      }
+      useAuthStore.setState({ user, loading: false, signInPending: false });
+    };
+
+    onAuthStateChanged(auth, (user) => {
+      if (firstCallback) {
+        firstCallback = false;
+        if (user || redirectUser) {
+          commit(user ?? auth.currentUser);
+          return;
+        }
+        hydrationTimer = setTimeout(() => {
+          hydrationTimer = null;
+          commit(auth.currentUser);
+        }, 320);
+        return;
+      }
+      commit(user);
+    });
   })();
 }
 

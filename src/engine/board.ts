@@ -3,6 +3,7 @@ import { DEITY_IDS } from '../data/deities';
 import type { DeityId } from '../data/deities';
 import { deityGemAllowedOnIstaPath } from '../lib/generalBoardDeities';
 import { displayDeityId, isBlessing, isStriped, isWrapped, sameLineGroup } from './gemKinds';
+import { hasValidMoves } from './matcher';
 
 /**
  * Īṣṭa (specific-deity) mode: favor the path deity on spawns so japa matches stay doable, but keep other
@@ -256,13 +257,58 @@ export function fillGaps(
         writeRow--;
       }
     }
-    const rng = () => Math.random();
     for (let r = writeRow; r >= 0; r--) {
-      const gem = weightedPickGemType(types, deityMode, rng);
+      const gem = pickRandomGem(next, next[r], r, c, rows, cols, types, deityMode);
       next[r][c] = gem;
       newGems.push({ row: r, col: c, gem });
     }
   }
 
   return { board: next, newGems };
+}
+
+export type RepairBoardOptions = {
+  /** When set, repair picks are deterministic (couple play stays in sync). */
+  seed?: string;
+  maxIter?: number;
+};
+
+/**
+ * Cheap local fixes before a full-board regen: nudge random swappable cells toward types that avoid instant auto-lines.
+ * Uses the same spawn heuristics as `createBoard` / `fillGaps`.
+ */
+export function repairBoardUntilHasValidMove(
+  board: Board,
+  maxGemTypes = 8,
+  deityMode?: DeityId,
+  powerBackedDeities: DeityId[] = [],
+  generalGemSubset: DeityId[] | null = null,
+  options?: RepairBoardOptions,
+): Board {
+  const b = board.map((row) => [...row]);
+  if (hasValidMoves(b)) return b;
+  const types = buildGemTypesPool(maxGemTypes, deityMode, powerBackedDeities, generalGemSubset);
+  const rows = b.length;
+  const cols = b[0]?.length ?? 0;
+  const maxIter = Math.max(50, Math.min(options?.maxIter ?? 600, 4000));
+  const posRng =
+    options?.seed != null
+      ? mulberry32(hashStringToUint32(`${options.seed}|pos`))
+      : (Math.random.bind(Math) as () => number);
+  const gemRng =
+    options?.seed != null
+      ? mulberry32(hashStringToUint32(`${options.seed}|gem`))
+      : (Math.random.bind(Math) as () => number);
+
+  for (let n = 0; n < maxIter && !hasValidMoves(b); n++) {
+    const r = Math.floor(posRng() * rows);
+    const c = Math.floor(posRng() * cols);
+    const cell = b[r][c];
+    if (cell == null || isBlessing(cell) || isStriped(cell) || isWrapped(cell)) continue;
+    b[r][c] =
+      options?.seed != null
+        ? pickRandomGemSeeded(b, b[r], r, c, rows, cols, types, deityMode, gemRng)
+        : pickRandomGem(b, b[r], r, c, rows, cols, types, deityMode);
+  }
+  return b;
 }

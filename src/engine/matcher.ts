@@ -1,6 +1,6 @@
 import type { DeityId } from '../data/deities';
 import type { Board, Match, Position } from './types';
-import { baseDeityForLine, sameLineGroup } from './gemKinds';
+import { baseDeityForLine, displayDeityId, isBlessing, sameLineGroup, type GemType } from './gemKinds';
 
 export function findMatches(board: Board): Match[] {
   const matches: Match[] = [];
@@ -49,7 +49,7 @@ export function findMatches(board: Board): Match[] {
   return matches;
 }
 
-export function hasValidMoves(board: Board): boolean {
+function lineMatchExistsAfterAnySwap(board: Board): boolean {
   const rows = board.length;
   const cols = board[0]?.length ?? 0;
   for (let r = 0; r < rows; r++) {
@@ -67,6 +67,45 @@ export function hasValidMoves(board: Board): boolean {
     }
   }
   return false;
+}
+
+/** Blessing (color-bomb) + adjacent deity: valid move in game, but not a 3-in-line in findMatches. */
+function blessingDeityPairMoveExists(board: Board): boolean {
+  const rows = board.length;
+  const cols = board[0]?.length ?? 0;
+  const pairOk = (a: GemType | null, b: GemType | null) => {
+    if (!a || !b) return false;
+    return (
+      (isBlessing(a) && !isBlessing(b) && !!displayDeityId(b)) ||
+      (isBlessing(b) && !isBlessing(a) && !!displayDeityId(a))
+    );
+  };
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const a = board[r][c];
+      if (!a) continue;
+      if (c < cols - 1) {
+        if (pairOk(a, board[r][c + 1]!)) return true;
+      }
+      if (r < rows - 1) {
+        if (pairOk(a, board[r + 1]![c]!)) return true;
+      }
+    }
+  }
+  return false;
+}
+
+/**
+ * @param allowBlessingPair — When false (anniversary), blessing activations are disabled in gameplay;
+ *   treat those swaps as not playable for dead-board detection.
+ */
+export function hasValidMoves(
+  board: Board,
+  opts?: { allowBlessingPair?: boolean },
+): boolean {
+  if (lineMatchExistsAfterAnySwap(board)) return true;
+  if (opts?.allowBlessingPair === false) return false;
+  return blessingDeityPairMoveExists(board);
 }
 
 /** Count of adjacent swaps that would create at least one match (higher ⇒ more immediate move options). */

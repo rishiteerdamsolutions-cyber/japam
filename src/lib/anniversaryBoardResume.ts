@@ -64,7 +64,7 @@ export function buildAnniversaryResumeBoardFromSessionDoc(
       seed,
     );
     salt++;
-  } while (!hasValidMoves(board) && salt < 100);
+  } while (!hasValidMoves(board, { allowBlessingPair: false }) && salt < 100);
 
   return board;
 }

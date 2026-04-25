@@ -222,7 +222,10 @@ function buildDeadBoardReplacement(
         seed,
       );
       salt++;
-    } while (!hasValidMoves(regenerated) && salt < 100);
+    } while (
+      !hasValidMoves(regenerated, { allowBlessingPair: false }) &&
+      salt < 100
+    );
     return { board: regenerated, anniversaryAutoRefreshToken: state.anniversaryAutoRefreshToken + 1 };
   }
   let regenerated = createBoard(
@@ -396,7 +399,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
           seed,
         );
         salt++;
-      } while (!hasValidMoves(board) && salt < 100);
+      } while (!hasValidMoves(board, { allowBlessingPair: false }) && salt < 100);
     } else {
       board = createBoard(
         level.rows,
@@ -1088,7 +1091,10 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     let boardOut = finalBoard;
     let deadBoardAutoRefreshPhase: null | 'notice' = null;
 
-    if (status === 'playing' && !hasValidMoves(boardOut)) {
+    if (
+      status === 'playing' &&
+      !hasValidMoves(boardOut, { allowBlessingPair: state.occasionKind !== 'anniversary' })
+    ) {
       if (state.suppressDeadBoardRegenOnce) {
         // Single-tile / namaskaram offering: keep layout; full regen would feel like the whole board changed.
       } else {
@@ -1180,7 +1186,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
           seed,
         );
         salt++;
-      } while (!hasValidMoves(board) && salt < 100);
+      } while (!hasValidMoves(board, { allowBlessingPair: false }) && salt < 100);
     } else {
       board = createBoard(
         level.rows,

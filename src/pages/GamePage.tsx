@@ -362,6 +362,16 @@ export function GamePage() {
 
   const waitingProfile = !isGuest && !!user?.uid && !profileLoaded;
 
+  // Do not flash signed-out or guest UI while Firebase restores the persisted session.
+  if (!isGuest && authLoading) {
+    return (
+      <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
+        <div className="relative z-10 text-amber-400 text-sm">{t('common.loading')}</div>
+      </div>
+    );
+  }
+
   // Signed-in: wait for progress (to detect completed levels) and pause check before game.
   if (!isGuest && (waitingProfile || !pauseCheckDone || (!!user?.uid && !isMarathon && !occasionKind && !progressLoaded))) {
     return (

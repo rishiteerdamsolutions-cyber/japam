@@ -31,9 +31,9 @@ function attachFirebaseAuthListeners() {
 
   /**
    * Firebase can emit the first `onAuthStateChanged(null)` before IndexedDB persistence
-   * restores the session — UI briefly shows "signed out". We defer that first empty
-   * snapshot, then re-read `auth.currentUser`. Redirect sign-in is resolved first so
-   * we do not clobber a fresh redirect user with a spurious null.
+   * restores the session. We must not flip the UI to "signed out" until we've re-read
+   * `auth.currentUser` over a few ticks (persistence is async; 320ms was not always enough).
+   * Redirect result is still applied first. `loading` stays true until the first commit.
    */
   void (async () => {
     let redirectUser = false;
@@ -52,32 +52,53 @@ function attachFirebaseAuthListeners() {
       useAuthStore.setState({ error: getAuthErrorMessage(err), signInPending: false });
     }
 
-    let firstCallback = true;
-    let hydrationTimer: ReturnType<typeof setTimeout> | null = null;
-
-    const commit = (user: User | null) => {
-      if (hydrationTimer !== null) {
-        clearTimeout(hydrationTimer);
-        hydrationTimer = null;
-      }
-      useAuthStore.setState({ user, loading: false, signInPending: false });
+    const commit = (u: User | null) => {
+      useAuthStore.setState({ user: u, loading: false, signInPending: false });
     };
 
-    onAuthStateChanged(auth, (user) => {
-      if (firstCallback) {
-        firstCallback = false;
-        if (user || redirectUser) {
-          commit(user ?? auth.currentUser);
-          return;
+    const waitAndReadCurrentUser = async (): Promise<User | null> => {
+      const steps = [0, 25, 50, 100, 200, 400];
+      for (let i = 0; i < steps.length; i++) {
+        const wait = i === 0 ? 0 : steps[i]! - steps[i - 1]!;
+        if (wait > 0) {
+          // eslint-disable-next-line no-await-in-loop
+          await new Promise((r) => setTimeout(r, wait));
         }
-        hydrationTimer = setTimeout(() => {
-          hydrationTimer = null;
-          commit(auth.currentUser);
-        }, 320);
+        const u = auth.currentUser;
+        if (u) return u;
+      }
+      return null;
+    };
+
+    let firstCallback = true;
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        firstCallback = false;
+        commit(user);
         return;
       }
-      commit(user);
+      if (firstCallback) {
+        firstCallback = false;
+        if (redirectUser) {
+          commit(auth.currentUser);
+          return;
+        }
+        void (async () => {
+          const resolved = await waitAndReadCurrentUser();
+          commit(resolved);
+        })();
+        return;
+      }
+      commit(null);
     });
+
+    // Never leave the app stuck on loading if Auth misbehaves
+    setTimeout(() => {
+      if (useAuthStore.getState().loading) {
+        useAuthStore.setState({ user: auth.currentUser, loading: false, signInPending: false });
+      }
+    }, 5000);
   })();
 }
 

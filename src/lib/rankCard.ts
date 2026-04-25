@@ -1,5 +1,12 @@
 export type LeaderboardEntry = { rank: number; uid: string; name: string; japasCount: number };
 
+/** For the viewer row: show the higher of leaderboard count and local override (never split 86 vs 109). */
+function viewerJapasDisplay(leaderboardJp: number, override?: number): number {
+  const lb = Math.max(0, Math.round(Number(leaderboardJp) || 0));
+  if (typeof override !== 'number' || !Number.isFinite(override)) return lb;
+  return Math.max(lb, Math.max(0, Math.round(override)));
+}
+
 /**
  * Sort by japas (desc), assign contiguous ranks 1..n, drop entries without uid.
  * Ensures the rank card top-5 grid fills correctly even if the API sent missing or duplicate `rank`.
@@ -82,10 +89,7 @@ export function buildRankCardRows(
       ];
     }
     const userEntry = leaderboard.find((e) => e.uid === currentUserUid);
-    const jp =
-      typeof overrideJp === 'number' && overrideJp > (userEntry?.japasCount ?? 0)
-        ? overrideJp
-        : (userEntry?.japasCount ?? 0);
+    const jp = viewerJapasDisplay(userEntry?.japasCount ?? 0, overrideJp);
     return [
       {
         kind: 'player',
@@ -454,10 +458,8 @@ export async function renderRankCardBlob(opts: RenderRankCardOptions): Promise<B
       const textX = cardX + 72;
       const nameText = isVacant ? 'Vacant' : String(p.name || '');
       const japasCount =
-        isCurrent &&
-        typeof opts.currentUserJapasOverride === 'number' &&
-        opts.currentUserJapasOverride > (p.japasCount || 0)
-          ? opts.currentUserJapasOverride
+        isCurrent && typeof opts.currentUserJapasOverride === 'number'
+          ? viewerJapasDisplay(p.japasCount ?? 0, opts.currentUserJapasOverride)
           : (p.japasCount ?? 0);
       const japasText = isVacant ? '—' : `${japasCount} japas`;
       const nameMaxW = cardW - 100;

@@ -152,7 +152,7 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.08 }}
           onClick={() => navigate('/pushpa-abhisheka')}
-          className={`${landingTryJapaButtonClass} mb-2 inline-flex items-center justify-center w-full max-w-sm`}
+          className={`${landingTryJapaButtonClass} mb-2 inline-flex items-center justify-center`}
         >
           <span className="text-sm sm:text-base text-white font-semibold leading-tight text-center whitespace-normal">
             {t('menu.pushpaAbhishekaJapa')}
@@ -169,7 +169,7 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.99 }}
               onClick={() => setIstaDevataRevealed(true)}
-              className={`${landingTryJapaButtonClass} mt-8`}
+              className={`${landingTryJapaButtonClass} mt-8 inline-flex items-center justify-center`}
             >
               <span className="text-sm sm:text-base text-white font-semibold leading-tight text-center whitespace-normal">
                 {t('menu.istaDevata')}

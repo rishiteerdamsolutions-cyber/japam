@@ -79,6 +79,7 @@ export function PushpaAbhishekaPage() {
   const navigate = useNavigate();
   const deityId = useMemo(() => parseDeity(searchParams.get('deity')), [searchParams]);
   const user = useAuthStore((s) => s.user);
+  const authLoading = useAuthStore((s) => s.loading);
   const tier = useUnlockStore((s) => s.tier);
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
   const unlockExpiresAt = useUnlockStore((s) => s.unlockExpiresAt);
@@ -103,6 +104,29 @@ export function PushpaAbhishekaPage() {
   const [shareError, setShareError] = useState<string | null>(null);
   const [shareNotice, setShareNotice] = useState<string | null>(null);
   const [shareResult, setShareResult] = useState<ShareResult | null>(null);
+
+  const myLeaderboardRow = useMemo(
+    () => (user?.uid ? leaderboard.find((r) => r.uid === user.uid) : undefined),
+    [leaderboard, user?.uid],
+  );
+  /** Same number everywhere: local japa doc vs public leaderboard can briefly differ — use the higher. */
+  const pushpaDisplayCount = useMemo(
+    () => Math.max(pushpaJapaTotal, myLeaderboardRow?.japasCount ?? 0),
+    [pushpaJapaTotal, myLeaderboardRow?.japasCount],
+  );
+
+  useEffect(() => {
+    const uid = user?.uid;
+    if (!uid) return;
+    void useJapaStore.getState().load(uid);
+  }, [user?.uid]);
+
+  useEffect(() => {
+    if (!user?.uid) return;
+    const mine = leaderboard.find((r) => r.uid === user.uid);
+    if (!mine || typeof mine.japasCount !== 'number') return;
+    useJapaStore.getState().raisePushpaAbhishekaToAtLeast(mine.japasCount);
+  }, [leaderboard, user?.uid]);
 
   const setDeity = useCallback(
     (id: DeityId) => {
@@ -237,12 +261,15 @@ export function PushpaAbhishekaPage() {
         lbFresh.length > 0 ? lbFresh : (leaderboard as unknown as LeaderboardEntry[]);
       const lbNormalized = normalizeLeaderboardForRankCard(lbForCard);
       const solo = lbNormalized.length === 0;
-      const participated = pushpaJapaTotal > 0;
+      const myNorm = lbNormalized.find((r) => r.uid === user.uid);
+      const storePushpa = useJapaStore.getState().counts.pushpaAbhishekaJapa ?? 0;
+      const pushpaForCard = Math.max(storePushpa, myNorm?.japasCount ?? 0);
+      const participated = pushpaForCard > 0;
       const deityLabel = deityId ? t(`deities.${deityId}`) : '';
       const headerName = deityId
         ? t('pushpa.rankCardHeaderWithDeity', { deity: deityLabel })
         : t('pushpa.rankCardHeaderPicker');
-      const summaryLine = t('pushpa.rankCardSummary', { count: pushpaJapaTotal });
+      const summaryLine = t('pushpa.rankCardSummary', { count: pushpaForCard });
       const blob = await renderRankCardBlob({
         title: 'PUSHPA ABHISHEKA',
         headerName,
@@ -250,7 +277,7 @@ export function PushpaAbhishekaPage() {
         subtitleLine: '',
         leaderboard: lbNormalized,
         currentUserUid: user.uid,
-        currentUserJapasOverride: pushpaJapaTotal,
+        currentUserJapasOverride: pushpaForCard,
         currentUserDisplayName: user.displayName || user.email?.split('@')[0] || undefined,
         currentUserParticipated: participated,
         soloPersonalMarathon: solo,
@@ -309,7 +336,9 @@ export function PushpaAbhishekaPage() {
             >
               <span className="text-amber-400/90 shrink-0">{t('pushpa.leaderboardRank', { rank: row.rank })}</span>
               <span className="truncate flex-1 text-left">{row.name}</span>
-              <span className="shrink-0 tabular-nums">{row.japasCount}</span>
+              <span className="shrink-0 tabular-nums">
+                {user?.uid === row.uid ? pushpaDisplayCount : row.japasCount}
+              </span>
             </li>
           ))}
         </ul>
@@ -368,13 +397,15 @@ export function PushpaAbhishekaPage() {
           ) : (
             <p className="text-amber-200/70 text-[10px] text-center mb-2 max-w-sm">{t('pushpa.proGateNotice')}</p>
           )}
-          {!user ? (
+          {authLoading ? (
+            <p className="text-amber-200/50 text-[10px] text-center mb-3 max-w-sm">…</p>
+          ) : !user ? (
             <p className="text-amber-200/60 text-[10px] text-center mb-3 max-w-sm">
               {t('pushpa.yourPushpaJapaSignedOut')}
             </p>
           ) : (
             <p className="text-amber-200/80 text-[11px] text-center mb-3 tabular-nums">
-              {t('pushpa.yourPushpaJapa', { count: pushpaJapaTotal })}
+              {t('pushpa.yourPushpaJapa', { count: pushpaDisplayCount })}
             </p>
           )}
           <div className="grid grid-cols-2 min-[400px]:grid-cols-3 gap-2 sm:gap-3 w-full">
@@ -444,9 +475,11 @@ export function PushpaAbhishekaPage() {
         >
           {t(`deities.${deityId}`)} · {t('pushpa.title')}
         </p>
-        {user ? (
+        {authLoading ? (
+          <p className="text-center text-amber-200/50 text-[clamp(0.55rem,2.6vw,0.65rem)] shrink-0 px-1">…</p>
+        ) : user ? (
           <p className="text-center text-amber-200/65 text-[clamp(0.55rem,2.6vw,0.65rem)] tabular-nums shrink-0 px-1">
-            {t('pushpa.yourPushpaJapa', { count: pushpaJapaTotal })}
+            {t('pushpa.yourPushpaJapa', { count: pushpaDisplayCount })}
           </p>
         ) : (
           <p className="text-center text-amber-200/50 text-[clamp(0.55rem,2.6vw,0.65rem)] shrink-0 px-1">

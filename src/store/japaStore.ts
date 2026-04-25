@@ -60,6 +60,11 @@ interface JapaStore {
   addJapa: (deity: DeityId, count?: number, opts?: { matchTier?: 3 | 4 | 5 }) => void;
   addOccasionJapa: (kind: 'birthday' | 'anniversary' | 'coupleGame', count?: number) => void;
   addPushpaAbhishekaJapa: (count?: number) => void;
+  /**
+   * If the public leaderboard (or server) shows a higher Pushpa total than local state,
+   * raise local + persist so UI and saves stay aligned with `publicUsers`.
+   */
+  raisePushpaAbhishekaToAtLeast: (floor: number) => void;
   /** Force-save current counts to backend. Call before leaving Maha Yagna game. */
   flushJapas: () => Promise<void>;
 }
@@ -190,6 +195,18 @@ export const useJapaStore = create<JapaStore>((setState, getState) => ({
     setState({ counts: next });
     const uid = useAuthStore.getState().user?.uid;
     if (uid) saveUserJapa(uid, next).catch(() => {});
+  },
+
+  raisePushpaAbhishekaToAtLeast: (floor) => {
+    const n = Math.max(0, Math.round(Number(floor) || 0));
+    if (n <= 0) return;
+    const { counts } = getState();
+    const cur = counts.pushpaAbhishekaJapa ?? 0;
+    if (n <= cur) return;
+    const next = { ...counts, pushpaAbhishekaJapa: n };
+    setState({ counts: next });
+    const uid = useAuthStore.getState().user?.uid;
+    if (uid) void saveUserJapa(uid, next);
   },
 
   flushJapas: async () => {

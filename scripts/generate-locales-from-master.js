@@ -68,7 +68,7 @@ const CSV_KEY_TO_APP = {
   you_reached_the_marathon_target: [{ ns: 'game', key: 'marathonTargetReached' }],
   out_of_moves_chant_more_next_time: [{ ns: 'game', key: 'outOfMoves' }],
   next_level: [{ ns: 'game', key: 'nextLevel' }],
-  retry: [{ ns: 'game', key: 'retry' }],
+  retry: [{ ns: 'game', key: 'restart' }],
   japas: [{ ns: 'game', key: 'japas' }],
   moves: [{ ns: 'game', key: 'moves' }],
   pause: [{ ns: 'game', key: 'pause' }],

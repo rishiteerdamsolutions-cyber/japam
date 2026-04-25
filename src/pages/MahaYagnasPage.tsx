@@ -221,15 +221,18 @@ export function MahaYagnasPage() {
       const participated = contribByYagna.has(y.id);
       const yTitle = displayYagnaTitle(y.id, y.name);
       const myJp = contrib?.userJapas ?? 0;
+      const dn = deityName(y.deityId);
       const blob = await renderRankCardBlob({
         title: 'MAHA JAPA YAGNA',
         headerName: yTitle,
-        deityName: deityName(y.deityId),
+        deityName: '',
+        subtitleLine: t('mahaYagnas.rankCardSubtitle', { deity: dn }),
         leaderboard: lb,
         currentUserUid: user.uid,
         currentUserJapasOverride: contrib?.userJapas,
         currentUserDisplayName: user.displayName || user.email?.split('@')[0] || undefined,
         currentUserParticipated: participated,
+        rankCardFooterCtaLine: t('mahaYagnas.rankCardFooterCta'),
         japaSummaryLine: `You: ${formatNum(myJp)} japas • Collective: ${formatNum(y.currentJapas)} / ${formatNum(y.goalJapas)}`,
       });
       if (!blob) throw new Error('Failed to generate image');

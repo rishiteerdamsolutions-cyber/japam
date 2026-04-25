@@ -58,6 +58,27 @@ function playDeityTone(ctx: AudioContext, deity: DeityId) {
   osc2.stop(now + 0.3);
 }
 
+/** Short placeholder tone for Shodashopachara tiles until per-step narration audio is added. */
+export function playPushpaUpacharaPlaceholder(stepIndex: number) {
+  const ctx = getAudioContext();
+  if (ctx.state === 'suspended') {
+    ctx.resume().catch(() => {});
+  }
+  const now = ctx.currentTime;
+  const base = 311;
+  const f = base * 1.059 ** (Math.max(0, stepIndex) % 28);
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(f, now);
+  gain.gain.setValueAtTime(0.12, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.24);
+  osc.start(now);
+  osc.stop(now + 0.26);
+}
+
 const mantraBuffers = new Map<DeityId, AudioBuffer>();
 let mantraLoadAttempted = false;
 

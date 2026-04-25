@@ -12,6 +12,7 @@ type OverviewPayload = {
     total_shares?: number;
     marathon_rank_downloads?: number;
     maha_yagna_rank_downloads?: number;
+    pushpa_rank_downloads?: number;
     japa_pdf_downloads?: number;
     referral_growth?: number;
   };
@@ -92,6 +93,7 @@ export function AdminAnalyticsPage() {
       shares: v.total_shares || 0,
       marathonRankDownloads: v.marathon_rank_downloads || 0,
       mahaYagnaRankDownloads: v.maha_yagna_rank_downloads || 0,
+      pushpaRankDownloads: v.pushpa_rank_downloads || 0,
       japaPdfDownloads: v.japa_pdf_downloads || 0,
       referrals: v.referral_growth || 0,
     };
@@ -138,7 +140,7 @@ export function AdminAnalyticsPage() {
           subtitle="Users who signed up via referral link (Pro + Free)"
         />
       </div>
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <MetricCard
           title="Marathon Rank Cards"
           value={cards.marathonRankDownloads}
@@ -148,6 +150,11 @@ export function AdminAnalyticsPage() {
           title="Maha Yagna Rank Cards"
           value={cards.mahaYagnaRankDownloads}
           subtitle="Rank card downloads from Maha Japa Yagnas"
+        />
+        <MetricCard
+          title="Pushpa Abhisheka Rank Cards"
+          value={cards.pushpaRankDownloads}
+          subtitle="Rank card downloads from Pushpa Abhisheka Japam"
         />
         <MetricCard
           title="Japa PDF (Handwritten Naamas)"

@@ -223,6 +223,7 @@ export async function trackShareEvent(db, uid, eventType) {
     share_clicks: admin.firestore.FieldValue.increment(eventType === 'share_click' ? 1 : 0),
     marathon_rank_downloads: admin.firestore.FieldValue.increment(eventType === 'marathon_rank_card' ? 1 : 0),
     maha_yagna_rank_downloads: admin.firestore.FieldValue.increment(eventType === 'maha_yagna_rank_card' ? 1 : 0),
+    pushpa_rank_downloads: admin.firestore.FieldValue.increment(eventType === 'pushpa_rank_card' ? 1 : 0),
     japa_pdf_downloads: admin.firestore.FieldValue.increment(eventType === 'japa_pdf' ? 1 : 0),
   };
   await db.doc(`analyticsDaily/${todayDay}`).set(updates, { merge: true });

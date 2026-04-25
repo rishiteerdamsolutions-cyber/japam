@@ -57,13 +57,13 @@
     "marathonTargetReached": "ꯃꯦꯔꯥꯊꯟ ꯂꯥꯛꯁꯤꯌꯥ ꯄꯥꯈꯤ!",
     "outOfMoves": "ꯆꯥꯂꯁꯤꯡ ꯃꯨꯇꯈꯤ। ꯑꯍꯦꯟꯕ ꯃꯃꯥꯡ ꯃꯈꯥ ꯖꯄ ꯇꯧꯌꯨ!",
     "nextLevel": "ꯑꯍꯦꯟꯕ ꯁꯇꯔ",
-    "retry": "ꯑꯍꯦꯟꯕ ꯇꯨꯡꯕꯤꯌꯨ",
     "menu": "ꯃꯦꯅꯨ",
     "japas": "ꯖꯄꯁꯤꯡ",
     "moves": "ꯆꯥꯂꯁꯤꯡ",
     "back": "← ꯄꯤꯆꯍꯨ",
     "pause": "ꯔꯣꯀꯕꯤꯌꯨ",
-    "exit": "ꯕꯥꯍꯤꯔ ꯅꯤꯀꯂꯕꯤꯌꯨ"
+    "exit": "ꯕꯥꯍꯤꯔ ꯅꯤꯀꯂꯕꯤꯌꯨ",
+    "restart": "Restart"
   },
   "common": {
     "loading": "ꯂꯣꯗꯤꯡ…",

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { AppFooter } from '../components/layout/AppFooter';
 import INDIA_REGIONS from '../data/indiaRegions.json';
@@ -54,6 +55,7 @@ interface MyMarathon {
 }
 
 export function MarathonsPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const urlTempleId = searchParams.get('templeId');
@@ -270,16 +272,21 @@ export function MarathonsPage() {
             : '';
       const shareText = `${rankText}Join at www.japam.digital`;
 
+      const dn = deityName(marathon.deityId);
       const blob = await renderRankCardBlob({
         title: 'JAPA MARATHON',
         headerName: marathonTitle,
-        deityName: deityName(marathon.deityId),
+        deityName: '',
+        subtitleLine: isDefaultFreeMarathon
+          ? t('rankCardMarathon.subtitleSolo', { deity: dn })
+          : t('rankCardMarathon.subtitle', { deity: dn }),
         leaderboard: lb,
         currentUserUid: user.uid,
         currentUserJapasOverride: japasOverride,
         currentUserDisplayName: user.displayName || user.email?.split('@')[0] || undefined,
         currentUserParticipated: participated,
         soloPersonalMarathon: isDefaultFreeMarathon,
+        rankCardFooterCtaLine: isDefaultFreeMarathon ? undefined : t('rankCardMarathon.footerCta'),
         japaSummaryLine: `Your japas: ${jp.toLocaleString('en-IN')} / ${marathon.targetJapas.toLocaleString('en-IN')} goal`,
       });
       if (!blob) throw new Error('Failed to generate image');

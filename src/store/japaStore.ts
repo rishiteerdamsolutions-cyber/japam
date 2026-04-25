@@ -14,6 +14,8 @@ export interface JapaCounts extends Record<DeityId, number> {
   anniversaryJapa: number;
   /** Lifetime japas from daily couple game (same mechanics; separate dashboard row; also per deity + total). */
   coupleGameJapa: number;
+  /** Lifetime floral offerings completed in Pushpa Abhisheka (leaderboard + stats; also increments per-deity via addJapa). */
+  pushpaAbhishekaJapa: number;
   japaByTier: Record<DeityId, DeityJapaTier>;
 }
 
@@ -47,6 +49,7 @@ const initial: JapaCounts = {
   birthdayJapa: 0,
   anniversaryJapa: 0,
   coupleGameJapa: 0,
+  pushpaAbhishekaJapa: 0,
   japaByTier: emptyJapaByTier(),
 };
 
@@ -56,6 +59,7 @@ interface JapaStore {
   load: (userId?: string) => Promise<void>;
   addJapa: (deity: DeityId, count?: number, opts?: { matchTier?: 3 | 4 | 5 }) => void;
   addOccasionJapa: (kind: 'birthday' | 'anniversary' | 'coupleGame', count?: number) => void;
+  addPushpaAbhishekaJapa: (count?: number) => void;
   /** Force-save current counts to backend. Call before leaving Maha Yagna game. */
   flushJapas: () => Promise<void>;
 }
@@ -104,6 +108,13 @@ export const useJapaStore = create<JapaStore>((setState, getState) => ({
           : 0;
       const fromCurrentCg = typeof current.coupleGameJapa === 'number' ? current.coupleGameJapa : 0;
       merged.coupleGameJapa = Math.max(fromStoredCg, fromCurrentCg);
+      const fromStoredPushpa =
+        stored && typeof (stored as JapaCounts).pushpaAbhishekaJapa === 'number'
+          ? (stored as JapaCounts).pushpaAbhishekaJapa
+          : 0;
+      const fromCurrentPushpa =
+        typeof current.pushpaAbhishekaJapa === 'number' ? current.pushpaAbhishekaJapa : 0;
+      merged.pushpaAbhishekaJapa = Math.max(fromStoredPushpa, fromCurrentPushpa);
       const storedTier = normalizeJapaByTier((stored as JapaCounts | null)?.japaByTier);
       const currentTier = normalizeJapaByTier(current.japaByTier);
       merged.japaByTier = emptyJapaByTier();
@@ -163,6 +174,18 @@ export const useJapaStore = create<JapaStore>((setState, getState) => ({
     const next = {
       ...counts,
       [key]: (counts[key] ?? 0) + count,
+    };
+    setState({ counts: next });
+    const uid = useAuthStore.getState().user?.uid;
+    if (uid) saveUserJapa(uid, next).catch(() => {});
+  },
+
+  addPushpaAbhishekaJapa: (count = 1) => {
+    if (count <= 0) return;
+    const { counts } = getState();
+    const next = {
+      ...counts,
+      pushpaAbhishekaJapa: (counts.pushpaAbhishekaJapa ?? 0) + count,
     };
     setState({ counts: next });
     const uid = useAuthStore.getState().user?.uid;

@@ -416,6 +416,26 @@ export async function loadPublicActiveUsers(): Promise<PublicActiveUser[]> {
   }
 }
 
+export type PushpaAbhishekaLeaderboardEntry = {
+  rank: number;
+  uid: string;
+  name: string;
+  japasCount: number;
+};
+
+/** Public: top Pushpa Abhisheka japas (optional auth so your row is included if outside the top list). */
+export async function loadPushpaAbhishekaLeaderboard(): Promise<PushpaAbhishekaLeaderboardEntry[]> {
+  const token = await getFirebaseIdToken();
+  const url = apiUrl('/api/public/pushpa-abhisheka-leaderboard');
+  try {
+    const res = await fetch(url, token ? { headers: { Authorization: `Bearer ${token}` } } : undefined);
+    const data = (await res.json().catch(() => ({}))) as { leaderboard?: PushpaAbhishekaLeaderboardEntry[] };
+    return Array.isArray(data.leaderboard) ? data.leaderboard : [];
+  } catch {
+    return [];
+  }
+}
+
 /** Send appreciation. Logged-in only. Retries ID token so react works right after Google sign-in. */
 export async function sendUserReaction(_uid: string, targetUid: string, type: 'heart' | 'like' | 'clap'): Promise<boolean> {
   const token = await getIdTokenWithRetry(null, 8, 120);
@@ -491,7 +511,12 @@ export async function saveUserReminder(_uid: string, reminder: DailyReminder): P
 }
 
 /** Track share/download events for virality analytics. Fire-and-forget. */
-export type ShareEventType = 'marathon_rank_card' | 'maha_yagna_rank_card' | 'japa_pdf' | 'share_click';
+export type ShareEventType =
+  | 'marathon_rank_card'
+  | 'maha_yagna_rank_card'
+  | 'pushpa_rank_card'
+  | 'japa_pdf'
+  | 'share_click';
 
 export async function trackShareEvent(event: ShareEventType): Promise<void> {
   const token = await getFirebaseIdToken();

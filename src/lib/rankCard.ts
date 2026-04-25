@@ -162,6 +162,12 @@ export interface RenderRankCardOptions {
   title: string;
   headerName: string;
   deityName: string;
+  /**
+   * Amber line under the white header. If set (including `''`), replaces the default `${deityName} Japa`
+   * line: non-empty string is drawn as-is; empty string skips the line.
+   * If omitted, legacy `${deityName} Japa` is used when that trims to a non-empty string other than bare "Japa".
+   */
+  subtitleLine?: string;
   /** Raw leaderboard from API (ranked entries); do not pre-pad to 10 for the card. */
   leaderboard: LeaderboardEntry[];
   currentUserUid: string;
@@ -173,6 +179,10 @@ export interface RenderRankCardOptions {
   currentUserParticipated?: boolean;
   /** Free default marathon: personal card copy and single-row layout */
   soloPersonalMarathon?: boolean;
+  /** When `soloPersonalMarathon` is true, overrides the default marathon footer line on the PNG */
+  rankCardFooterSoloLine?: string;
+  /** When not solo, overrides default “Match, chant, and climb the leaderboard.” */
+  rankCardFooterCtaLine?: string;
   /** Goal / progress (e.g. your count vs target, or collective vs goal) — drawn under the deity line */
   japaSummaryLine?: string;
 }
@@ -288,11 +298,25 @@ export async function renderRankCardBlob(opts: RenderRankCardOptions): Promise<B
     const headerH = wrapAndDraw(headerName, maxW, headerPx, '700', '#FFFFFF', y, 6);
     y += (headerH || headerPx + 6) + 12;
 
-    // Deity line: wrap if long
-    const deityLine = `${opts.deityName || ''} Japa`.trim();
+    // Amber subtitle (deity / mode): explicit `subtitleLine` or legacy `${deityName} Japa`
     const deityPx = 26;
-    const deityH = wrapAndDraw(deityLine, maxW, deityPx, '500', 'rgba(253, 230, 138, 0.95)', y, 4);
-    y += (deityH || deityPx + 4) + 10;
+    if (opts.subtitleLine !== undefined) {
+      const sub = opts.subtitleLine.trim();
+      if (sub) {
+        const deityH = wrapAndDraw(sub, maxW, deityPx, '500', 'rgba(253, 230, 138, 0.95)', y, 4);
+        y += (deityH || deityPx + 4) + 10;
+      } else {
+        y += 10;
+      }
+    } else {
+      const legacy = `${opts.deityName || ''} Japa`.trim();
+      if (legacy.length > 0 && legacy !== 'Japa') {
+        const deityH = wrapAndDraw(legacy, maxW, deityPx, '500', 'rgba(253, 230, 138, 0.95)', y, 4);
+        y += (deityH || deityPx + 4) + 10;
+      } else {
+        y += 10;
+      }
+    }
 
     const summary = String(opts.japaSummaryLine || '').trim();
     if (summary) {
@@ -437,8 +461,8 @@ export async function renderRankCardBlob(opts: RenderRankCardOptions): Promise<B
     y += 72;
 
     const ctaLine = opts.soloPersonalMarathon
-      ? 'Your personal japa counts toward your marathon goal.'
-      : 'Match, chant, and climb the leaderboard.';
+      ? (opts.rankCardFooterSoloLine?.trim() || 'Your personal japa counts toward your marathon goal.')
+      : (opts.rankCardFooterCtaLine?.trim() || 'Match, chant, and climb the leaderboard.');
     const ctaH = wrapAndDraw(ctaLine, maxW, 38, '600', 'rgba(255,255,255,0.9)', y, 8, footerFont);
     y += (ctaH || 46) + 16;
 

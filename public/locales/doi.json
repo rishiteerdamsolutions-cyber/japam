@@ -57,13 +57,13 @@
     "marathonTargetReached": "मैराथन लक्ष्य पौछे!",
     "outOfMoves": "चाल खतम। अगली बार ज्यादा जप करो!",
     "nextLevel": "अगला स्तर",
-    "retry": "फेर कोशिश करो",
     "menu": "मेनू",
     "japas": "जप",
     "moves": "चाल",
     "back": "← पिछे",
     "pause": "रुको",
-    "exit": "बाहर निकलो"
+    "exit": "बाहर निकलो",
+    "restart": "फेर शुरू करो"
   },
   "common": {
     "loading": "लोड हो रिया…",

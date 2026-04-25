@@ -57,13 +57,13 @@
     "marathonTargetReached": "মেৰাথন লক্ষ্য পালে!",
     "outOfMoves": "চাল শেষ। পিছত বেছি জপ কৰক!",
     "nextLevel": "পৰৱৰ্তী স্তৰ",
-    "retry": "আকৌ চেষ্টা কৰক",
     "menu": "মেনু",
     "japas": "জপ",
     "moves": "চাল",
     "back": "← পিছলৈ",
     "pause": "বিৰাম",
-    "exit": "ওলাই যাওক"
+    "exit": "ওলাই যাওক",
+    "restart": "পুনৰ আৰম্ভ কৰক"
   },
   "common": {
     "loading": "লোড হৈ আছে…",

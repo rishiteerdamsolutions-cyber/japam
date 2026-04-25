@@ -122,6 +122,7 @@ export async function GET(request) {
           total_shares: todayData.total_shares || 0,
           marathon_rank_downloads: todayData.marathon_rank_downloads || 0,
           maha_yagna_rank_downloads: todayData.maha_yagna_rank_downloads || 0,
+          pushpa_rank_downloads: todayData.pushpa_rank_downloads || 0,
           japa_pdf_downloads: todayData.japa_pdf_downloads || 0,
           referral_growth: todayData.referral_growth || 0,
         },

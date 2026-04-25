@@ -5,6 +5,7 @@ const VALID_EVENTS = new Set([
   'share_click',
   'marathon_rank_card',
   'maha_yagna_rank_card',
+  'pushpa_rank_card',
   'japa_pdf',
 ]);
 

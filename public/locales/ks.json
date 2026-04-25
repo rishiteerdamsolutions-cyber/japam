@@ -57,13 +57,13 @@
     "marathonTargetReached": "میراتھن ہدف پا گۄ!",
     "outOfMoves": "چال ختم۔ اگلی وار زیادہ جپ کرو!",
     "nextLevel": "اگلی سطح",
-    "retry": "دوبارہ کوشش کرو",
     "menu": "مینو",
     "japas": "جپ",
     "moves": "چال",
     "back": "← پچھے",
     "pause": "روکو",
-    "exit": "باہر نکلو"
+    "exit": "باہر نکلو",
+    "restart": "دوبارہ شروع کریو"
   },
   "common": {
     "loading": "لوڈ تھوان چھو…",

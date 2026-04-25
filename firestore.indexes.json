@@ -54,6 +54,13 @@
         { "fieldPath": "yagnaId", "order": "ASCENDING" },
         { "fieldPath": "userId", "order": "ASCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "publicUsers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "pushpaAbhishekaJapa", "order": "DESCENDING" }
+      ]
     }
   ],
   "fieldOverrides": []

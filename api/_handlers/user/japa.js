@@ -67,10 +67,15 @@ export async function POST(request) {
       const totalFromBody = typeof counts.total === 'number' ? counts.total : null;
       const computedTotal = DEITY_IDS.reduce((a, deity) => a + (typeof counts[deity] === 'number' ? counts[deity] : 0), 0);
       const now = admin.firestore.FieldValue.serverTimestamp();
+      const pushpa =
+        typeof counts.pushpaAbhishekaJapa === 'number'
+          ? Math.max(0, Math.round(counts.pushpaAbhishekaJapa))
+          : undefined;
       await db.doc(`publicUsers/${uid}`).set(
         {
           uid,
           totalJapas: Math.max(0, Math.round(totalFromBody ?? computedTotal)),
+          ...(pushpa !== undefined ? { pushpaAbhishekaJapa: pushpa } : {}),
           updatedAt: now,
           lastActiveAt: now,
         },

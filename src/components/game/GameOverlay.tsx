@@ -140,7 +140,7 @@ export function GameOverlay({
                 onClick={onRetry}
                 className="w-full py-3 rounded-xl bg-amber-500/80 text-white font-semibold text-sm sm:text-base break-words min-h-[44px] hover:bg-amber-500/95 active:scale-[0.99] transition-transform"
               >
-                {t('game.retry')}
+                {t('game.restart')}
               </button>
             )}
             <button

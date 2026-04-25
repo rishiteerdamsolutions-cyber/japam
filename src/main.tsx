@@ -47,6 +47,9 @@ const TermsPage = lazy(() => import('./pages/TermsPage').then(m => ({ default: m
 const RefundCancellationPage = lazy(() => import('./pages/RefundCancellationPage').then(m => ({ default: m.RefundCancellationPage })))
 const ShippingDeliveryPage = lazy(() => import('./pages/ShippingDeliveryPage').then(m => ({ default: m.ShippingDeliveryPage })))
 const ContactPage = lazy(() => import('./pages/ContactPage').then(m => ({ default: m.ContactPage })))
+const PushpaAbhishekaPage = lazy(() =>
+  import('./pages/PushpaAbhishekaPage').then((m) => ({ default: m.PushpaAbhishekaPage })),
+)
 const BirthdayOccasionPage = lazy(() =>
   import('./pages/BirthdayOccasionPage').then((m) => ({ default: m.BirthdayOccasionPage })),
 );
@@ -83,6 +86,7 @@ createRoot(document.getElementById('root')!).render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/menu" element={<MenuPage />} />
+        <Route path="/pushpa-abhisheka" element={<PushpaAbhishekaPage />} />
         <Route path="/test/menu-demo" element={<MenuDemoTestPage />} />
         <Route path="/game" element={<GamePage />} />
         <Route path="/levels" element={<LevelsPage />} />

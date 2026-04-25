@@ -143,6 +143,22 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
           </span>
         </motion.button>
 
+        <motion.button
+          type="button"
+          aria-label={t('menu.pushpaAbhishekaJapa')}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.99 }}
+          initial={{ opacity: 0, y: 4 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.08 }}
+          onClick={() => navigate('/pushpa-abhisheka')}
+          className={`${landingTryJapaButtonClass} mb-2 inline-flex items-center justify-center w-full max-w-sm`}
+        >
+          <span className="text-sm sm:text-base text-white font-semibold leading-tight text-center whitespace-normal">
+            {t('menu.pushpaAbhishekaJapa')}
+          </span>
+        </motion.button>
+
         {!istaDevataRevealed ? (
           <div className="w-full mb-4 flex flex-col items-center gap-3">
             <motion.button

@@ -67,21 +67,27 @@ export async function POST(request) {
       const totalFromBody = typeof counts.total === 'number' ? counts.total : null;
       const computedTotal = DEITY_IDS.reduce((a, deity) => a + (typeof counts[deity] === 'number' ? counts[deity] : 0), 0);
       const now = admin.firestore.FieldValue.serverTimestamp();
+      const pBy =
+        counts.pushpaAbhishekaJapaByDeity && typeof counts.pushpaAbhishekaJapaByDeity === 'object'
+          ? counts.pushpaAbhishekaJapaByDeity
+          : {};
       const pushpa =
         typeof counts.pushpaAbhishekaJapa === 'number'
           ? Math.max(0, Math.round(counts.pushpaAbhishekaJapa))
           : undefined;
-      await db.doc(`publicUsers/${uid}`).set(
-        {
-          uid,
-          totalJapas: Math.max(0, Math.round(totalFromBody ?? computedTotal)),
-          ...(pushpa !== undefined ? { pushpaAbhishekaJapa: pushpa } : {}),
-          ...(profileDisplayName ? { name: profileDisplayName } : {}),
-          updatedAt: now,
-          lastActiveAt: now,
-        },
-        { merge: true },
-      );
+      const publicPatch = {
+        uid,
+        totalJapas: Math.max(0, Math.round(totalFromBody ?? computedTotal)),
+        ...(pushpa !== undefined ? { pushpaAbhishekaJapa: pushpa } : {}),
+        ...(profileDisplayName ? { name: profileDisplayName } : {}),
+        updatedAt: now,
+        lastActiveAt: now,
+      };
+      for (const id of DEITY_IDS) {
+        const n = Math.max(0, Math.round(Number(pBy[id]) || 0));
+        publicPatch[`pd_${id}`] = n;
+      }
+      await db.doc(`publicUsers/${uid}`).set(publicPatch, { merge: true });
     } catch {}
 
     const deltas = {};

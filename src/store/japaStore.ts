@@ -14,7 +14,17 @@ export interface JapaCounts extends Record<DeityId, number> {
   anniversaryJapa: number;
   /** Lifetime japas from daily couple game (same mechanics; separate dashboard row; also per deity + total). */
   coupleGameJapa: number;
-  /** Lifetime floral offerings completed in Pushpa Abhisheka (leaderboard + stats; also increments per-deity via addJapa). */
+  /**
+   * Pushpa Abhisheka offerings completed per Devatā (1 per full flower flight to that deity’s vigraham).
+   * `pushpaAbhishekaJapa` below is `sum(this) + pushpaAbhishekaJapaUnattributed`.
+   */
+  pushpaAbhishekaJapaByDeity: Record<DeityId, number>;
+  /**
+   * Total Pushpa not attributed to a specific deity: legacy global-only saves, or sync gap vs server total.
+   * Shown in totals / global rows only—not added to a specific deity’s line.
+   */
+  pushpaAbhishekaJapaUnattributed: number;
+  /** Lifetime Pushpa (sum of per-deity + unattributed); public global leaderboard. */
   pushpaAbhishekaJapa: number;
   japaByTier: Record<DeityId, DeityJapaTier>;
 }
@@ -24,6 +34,44 @@ export function emptyJapaByTier(): Record<DeityId, DeityJapaTier> {
     (acc, id) => ({ ...acc, [id]: { m3: 0, m4: 0, m5: 0 } }),
     {} as Record<DeityId, DeityJapaTier>,
   );
+}
+
+function emptyPushpaByDeity(): Record<DeityId, number> {
+  return JAPA_COUNT_DEITY_IDS.reduce(
+    (acc, id) => ({ ...acc, [id]: 0 }),
+    {} as Record<DeityId, number>,
+  );
+}
+
+function sumPushpaByDeity(c: JapaCounts): number {
+  let s = 0;
+  for (const id of JAPA_COUNT_DEITY_IDS) {
+    s += c.pushpaAbhishekaJapaByDeity?.[id] ?? 0;
+  }
+  return s;
+}
+
+function recomputePushpaTotal(c: JapaCounts): JapaCounts {
+  const u = c.pushpaAbhishekaJapaUnattributed ?? 0;
+  return { ...c, pushpaAbhishekaJapa: sumPushpaByDeity(c) + u };
+}
+
+function readPushpaByDeity(c: JapaCounts | null | undefined): Record<DeityId, number> {
+  if (c?.pushpaAbhishekaJapaByDeity) return c.pushpaAbhishekaJapaByDeity;
+  return emptyPushpaByDeity();
+}
+
+function mergePushpaByDeity(
+  a: JapaCounts | null | undefined,
+  b: JapaCounts,
+): Record<DeityId, number> {
+  const out = emptyPushpaByDeity();
+  for (const id of JAPA_COUNT_DEITY_IDS) {
+    const sa = readPushpaByDeity(a)[id] ?? 0;
+    const sb = readPushpaByDeity(b)[id] ?? 0;
+    out[id] = Math.max(0, Math.round(Math.max(sa, sb)));
+  }
+  return out;
 }
 
 function normalizeJapaByTier(raw: unknown): Record<DeityId, DeityJapaTier> {
@@ -49,6 +97,8 @@ const initial: JapaCounts = {
   birthdayJapa: 0,
   anniversaryJapa: 0,
   coupleGameJapa: 0,
+  pushpaAbhishekaJapaByDeity: emptyPushpaByDeity(),
+  pushpaAbhishekaJapaUnattributed: 0,
   pushpaAbhishekaJapa: 0,
   japaByTier: emptyJapaByTier(),
 };
@@ -59,12 +109,11 @@ interface JapaStore {
   load: (userId?: string) => Promise<void>;
   addJapa: (deity: DeityId, count?: number, opts?: { matchTier?: 3 | 4 | 5 }) => void;
   addOccasionJapa: (kind: 'birthday' | 'anniversary' | 'coupleGame', count?: number) => void;
-  addPushpaAbhishekaJapa: (count?: number) => void;
-  /**
-   * If the public leaderboard (or server) shows a higher Pushpa total than local state,
-   * raise local + persist so UI and saves stay aligned with `publicUsers`.
-   */
-  raisePushpaAbhishekaToAtLeast: (floor: number) => void;
+  addPushpaAbhishekaJapa: (deity: DeityId, count?: number) => void;
+  /** Picker: align local total (unattributed) with global leaderboard row. */
+  raisePushpaTotalToAtLeast: (floor: number) => void;
+  /** Play view: align that deity’s bucket with the per-deity leaderboard. */
+  raisePushpaForDeityToAtLeast: (deity: DeityId, floor: number) => void;
   /** Force-save current counts to backend. Call before leaving Maha Yagna game. */
   flushJapas: () => Promise<void>;
 }
@@ -82,7 +131,7 @@ export const useJapaStore = create<JapaStore>((setState, getState) => ({
       const stored = await loadUserJapa(userId);
       const current = getState().counts;
       // Merge: never overwrite with lower values (avoids race where load wipes in-game progress)
-      const merged: JapaCounts = { ...initial };
+      let merged: JapaCounts = { ...initial };
       let totalSum = 0;
       for (const id of JAPA_COUNT_DEITY_IDS) {
         const fromStored = stored && typeof stored[id] === 'number' ? (stored[id] ?? 0) : 0;
@@ -113,13 +162,39 @@ export const useJapaStore = create<JapaStore>((setState, getState) => ({
           : 0;
       const fromCurrentCg = typeof current.coupleGameJapa === 'number' ? current.coupleGameJapa : 0;
       merged.coupleGameJapa = Math.max(fromStoredCg, fromCurrentCg);
-      const fromStoredPushpa =
+      merged.pushpaAbhishekaJapaByDeity = mergePushpaByDeity(
+        (stored as JapaCounts) || null,
+        current,
+      );
+      const fromStoredU =
+        stored && typeof (stored as JapaCounts).pushpaAbhishekaJapaUnattributed === 'number'
+          ? (stored as JapaCounts).pushpaAbhishekaJapaUnattributed
+          : 0;
+      const fromCurrentU =
+        typeof current.pushpaAbhishekaJapaUnattributed === 'number'
+          ? current.pushpaAbhishekaJapaUnattributed
+          : 0;
+      let mergedU = Math.max(0, Math.max(fromStoredU, fromCurrentU));
+      const gFromStored =
         stored && typeof (stored as JapaCounts).pushpaAbhishekaJapa === 'number'
           ? (stored as JapaCounts).pushpaAbhishekaJapa
           : 0;
-      const fromCurrentPushpa =
-        typeof current.pushpaAbhishekaJapa === 'number' ? current.pushpaAbhishekaJapa : 0;
-      merged.pushpaAbhishekaJapa = Math.max(fromStoredPushpa, fromCurrentPushpa);
+      const sumD = sumPushpaByDeity({
+        ...merged,
+        pushpaAbhishekaJapaUnattributed: 0,
+      } as JapaCounts);
+      mergedU = Math.max(mergedU, Math.max(0, Math.round(gFromStored) - sumD));
+      merged.pushpaAbhishekaJapaUnattributed = mergedU;
+      merged = recomputePushpaTotal(merged);
+      const tMax = Math.max(
+        merged.pushpaAbhishekaJapa,
+        current.pushpaAbhishekaJapa ?? 0,
+        (stored as JapaCounts | null)?.pushpaAbhishekaJapa ?? 0,
+      );
+      if (tMax > merged.pushpaAbhishekaJapa) {
+        merged.pushpaAbhishekaJapaUnattributed = tMax - sumPushpaByDeity(merged);
+        merged = recomputePushpaTotal(merged);
+      }
       const storedTier = normalizeJapaByTier((stored as JapaCounts | null)?.japaByTier);
       const currentTier = normalizeJapaByTier(current.japaByTier);
       merged.japaByTier = emptyJapaByTier();
@@ -185,25 +260,40 @@ export const useJapaStore = create<JapaStore>((setState, getState) => ({
     if (uid) saveUserJapa(uid, next).catch(() => {});
   },
 
-  addPushpaAbhishekaJapa: (count = 1) => {
+  addPushpaAbhishekaJapa: (deity, count = 1) => {
     if (count <= 0) return;
     const { counts } = getState();
-    const next = {
-      ...counts,
-      pushpaAbhishekaJapa: (counts.pushpaAbhishekaJapa ?? 0) + count,
-    };
+    const by = { ...readPushpaByDeity(counts) };
+    by[deity] = (by[deity] ?? 0) + count;
+    const next = recomputePushpaTotal({ ...counts, pushpaAbhishekaJapaByDeity: by });
     setState({ counts: next });
     const uid = useAuthStore.getState().user?.uid;
     if (uid) saveUserJapa(uid, next).catch(() => {});
   },
 
-  raisePushpaAbhishekaToAtLeast: (floor) => {
+  raisePushpaTotalToAtLeast: (floor) => {
     const n = Math.max(0, Math.round(Number(floor) || 0));
     if (n <= 0) return;
     const { counts } = getState();
-    const cur = counts.pushpaAbhishekaJapa ?? 0;
+    const cur = sumPushpaByDeity(counts) + (counts.pushpaAbhishekaJapaUnattributed ?? 0);
     if (n <= cur) return;
-    const next = { ...counts, pushpaAbhishekaJapa: n };
+    const next = recomputePushpaTotal({
+      ...counts,
+      pushpaAbhishekaJapaUnattributed: (counts.pushpaAbhishekaJapaUnattributed ?? 0) + (n - cur),
+    });
+    setState({ counts: next });
+    const uid = useAuthStore.getState().user?.uid;
+    if (uid) void saveUserJapa(uid, next);
+  },
+
+  raisePushpaForDeityToAtLeast: (deity, floor) => {
+    const n = Math.max(0, Math.round(Number(floor) || 0));
+    if (n <= 0) return;
+    const { counts } = getState();
+    const cur = readPushpaByDeity(counts)[deity] ?? 0;
+    if (n <= cur) return;
+    const by = { ...readPushpaByDeity(counts), [deity]: n };
+    const next = recomputePushpaTotal({ ...counts, pushpaAbhishekaJapaByDeity: by });
     setState({ counts: next });
     const uid = useAuthStore.getState().user?.uid;
     if (uid) void saveUserJapa(uid, next);

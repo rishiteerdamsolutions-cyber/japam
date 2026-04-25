@@ -83,7 +83,10 @@ export function PushpaAbhishekaPage() {
   const tier = useUnlockStore((s) => s.tier);
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
   const unlockExpiresAt = useUnlockStore((s) => s.unlockExpiresAt);
-  const pushpaJapaTotal = useJapaStore((s) => s.counts.pushpaAbhishekaJapa ?? 0);
+  const pushpaBase = useJapaStore((s) => {
+    if (!deityId) return s.counts.pushpaAbhishekaJapa ?? 0;
+    return s.counts.pushpaAbhishekaJapaByDeity?.[deityId] ?? 0;
+  });
 
   const proOrPremiumActive =
     (tier === 'pro' || tier === 'premium') &&
@@ -109,10 +112,10 @@ export function PushpaAbhishekaPage() {
     () => (user?.uid ? leaderboard.find((r) => r.uid === user.uid) : undefined),
     [leaderboard, user?.uid],
   );
-  /** Same number everywhere: local japa doc vs public leaderboard can briefly differ — use the higher. */
+  /** Local vs public leaderboard: use the higher. Totals on picker; per-Devatā when a deity is selected. */
   const pushpaDisplayCount = useMemo(
-    () => Math.max(pushpaJapaTotal, myLeaderboardRow?.japasCount ?? 0),
-    [pushpaJapaTotal, myLeaderboardRow?.japasCount],
+    () => Math.max(pushpaBase, myLeaderboardRow?.japasCount ?? 0),
+    [pushpaBase, myLeaderboardRow?.japasCount],
   );
 
   useEffect(() => {
@@ -125,8 +128,12 @@ export function PushpaAbhishekaPage() {
     if (!user?.uid) return;
     const mine = leaderboard.find((r) => r.uid === user.uid);
     if (!mine || typeof mine.japasCount !== 'number') return;
-    useJapaStore.getState().raisePushpaAbhishekaToAtLeast(mine.japasCount);
-  }, [leaderboard, user?.uid]);
+    if (deityId) {
+      useJapaStore.getState().raisePushpaForDeityToAtLeast(deityId, mine.japasCount);
+    } else {
+      useJapaStore.getState().raisePushpaTotalToAtLeast(mine.japasCount);
+    }
+  }, [leaderboard, user?.uid, deityId]);
 
   const setDeity = useCallback(
     (id: DeityId) => {
@@ -136,8 +143,10 @@ export function PushpaAbhishekaPage() {
   );
 
   useEffect(() => {
-    loadPushpaAbhishekaLeaderboard().then(setLeaderboard).catch(() => setLeaderboard([]));
-  }, []);
+    void loadPushpaAbhishekaLeaderboard(deityId ?? undefined)
+      .then(setLeaderboard)
+      .catch(() => setLeaderboard([]));
+  }, [deityId]);
 
   useEffect(() => {
     if (!deityId) return;
@@ -220,8 +229,10 @@ export function PushpaAbhishekaPage() {
       playMatchSfxSelection({ deity: deityId, tier: 3 });
       if (user) {
         useJapaStore.getState().addJapa(deityId, 1, { matchTier: 3 });
-        useJapaStore.getState().addPushpaAbhishekaJapa(1);
-        loadPushpaAbhishekaLeaderboard().then(setLeaderboard).catch(() => {});
+        useJapaStore.getState().addPushpaAbhishekaJapa(deityId, 1);
+        void loadPushpaAbhishekaLeaderboard(deityId)
+          .then(setLeaderboard)
+          .catch(() => {});
       }
     }
   }, [deityId, user]);
@@ -253,7 +264,8 @@ export function PushpaAbhishekaPage() {
     setShareNotice(null);
     setSharing(true);
     try {
-      const lbFresh = (await loadPushpaAbhishekaLeaderboard()) as LeaderboardEntry[];
+      const scope = deityId ?? undefined;
+      const lbFresh = (await loadPushpaAbhishekaLeaderboard(scope)) as LeaderboardEntry[];
       if (lbFresh.length > 0) {
         setLeaderboard(lbFresh as PushpaAbhishekaLeaderboardEntry[]);
       }
@@ -262,7 +274,10 @@ export function PushpaAbhishekaPage() {
       const lbNormalized = normalizeLeaderboardForRankCard(lbForCard);
       const solo = lbNormalized.length === 0;
       const myNorm = lbNormalized.find((r) => r.uid === user.uid);
-      const storePushpa = useJapaStore.getState().counts.pushpaAbhishekaJapa ?? 0;
+      const c = useJapaStore.getState().counts;
+      const storePushpa = deityId
+        ? c.pushpaAbhishekaJapaByDeity?.[deityId] ?? 0
+        : c.pushpaAbhishekaJapa ?? 0;
       const pushpaForCard = Math.max(storePushpa, myNorm?.japasCount ?? 0);
       const participated = pushpaForCard > 0;
       const deityLabel = deityId ? t(`deities.${deityId}`) : '';
@@ -305,7 +320,7 @@ export function PushpaAbhishekaPage() {
     } finally {
       setSharing(false);
     }
-  }, [deityId, leaderboard, pushpaJapaTotal, sharing, t, user]);
+  }, [deityId, leaderboard, sharing, t, user]);
 
   const leaderboardBlock = (
     <div className="w-full max-w-lg mt-3 sm:mt-4 rounded-xl border border-amber-500/25 bg-black/30 p-2.5 sm:p-3">

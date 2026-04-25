@@ -61,6 +61,174 @@
       "fields": [
         { "fieldPath": "pushpaAbhishekaJapa", "order": "DESCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "publicUsers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "pd_rama", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "publicUsers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "pd_shiva", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "publicUsers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "pd_ganesh", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "publicUsers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "pd_surya", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "publicUsers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "pd_shakthi", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "publicUsers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "pd_krishna", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "publicUsers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "pd_shanmukha", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "publicUsers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "pd_venkateswara", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "publicUsers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "pd_hanuman", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "publicUsers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "pd_narasimha", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "publicUsers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "pd_lakshmi", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "publicUsers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "pd_durga", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "publicUsers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "pd_saraswati", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "publicUsers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "pd_ayyappan", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "publicUsers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "pd_jagannath", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "publicUsers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "pd_dattatreya", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "publicUsers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "pd_saiBaba", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "publicUsers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "pd_narayana", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "publicUsers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "pd_iskcon", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "publicUsers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "pd_guru", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "publicUsers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "pd_shani", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "publicUsers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "pd_rahu", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "publicUsers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "pd_ketu", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "publicUsers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "pd_bramhamgaaru", "order": "DESCENDING" }
+      ]
     }
   ],
   "fieldOverrides": []

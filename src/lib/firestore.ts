@@ -5,6 +5,7 @@ import { getApiBase } from './apiBase';
 import { fetchWithRetry } from './fetchWithRetry';
 import type { LevelProgress } from '../store/progressStore';
 import type { JapaCounts } from '../store/japaStore';
+import type { DeityId } from '../data/deities';
 
 const db = isFirebaseConfigured && app ? getFirestore(app) : null;
 
@@ -424,9 +425,10 @@ export type PushpaAbhishekaLeaderboardEntry = {
 };
 
 /** Public: top Pushpa Abhisheka japas (optional auth so your row is included if outside the top list). */
-export async function loadPushpaAbhishekaLeaderboard(): Promise<PushpaAbhishekaLeaderboardEntry[]> {
+export async function loadPushpaAbhishekaLeaderboard(deityId?: DeityId): Promise<PushpaAbhishekaLeaderboardEntry[]> {
   const token = await getFirebaseIdToken();
-  const url = apiUrl('/api/public/pushpa-abhisheka-leaderboard');
+  const q = deityId ? `?deity=${encodeURIComponent(deityId)}` : '';
+  const url = apiUrl(`/api/public/pushpa-abhisheka-leaderboard${q}`);
   try {
     const res = await fetch(url, token ? { headers: { Authorization: `Bearer ${token}` } } : undefined);
     const data = (await res.json().catch(() => ({}))) as { leaderboard?: PushpaAbhishekaLeaderboardEntry[] };

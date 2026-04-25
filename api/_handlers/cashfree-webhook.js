@@ -194,6 +194,11 @@ async function handleDonationPaid(db, orderId, uid, nowIso, amountPaise) {
     },
     { merge: true },
   );
+
+  await db.collection('orders').doc(String(orderId)).set(
+    { status: 'paid', fulfilledAt: nowIso, fulfilledVia: 'webhook' },
+    { merge: true },
+  );
 }
 
 export async function POST(request) {

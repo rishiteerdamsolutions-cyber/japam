@@ -208,9 +208,12 @@ export function GameScreen({
   const { playMatchSfx } = useSound(bgMusicEnabled, bgMusicVolume);
 
   const useLives = !!user && !isGuest && !isMarathon && !occasionKind;
+  const getIdToken = useCallback(async () => (user ? user.getIdToken() : null), [user]);
+  /** Reward moves video: any standard map loss (not marathon / occasion), including guest. */
+  const rewardMovesVideoEnabled = !isMarathon && !occasionKind;
+  const rewardMovesGetIdToken = user && !isGuest ? getIdToken : undefined;
   const load = useLivesStore((s) => s.load);
   const consume = useLivesStore((s) => s.consume);
-  const getIdToken = useCallback(async () => (user ? user.getIdToken() : null), [user]);
   const [showOutOfLives, setShowOutOfLives] = useState(false);
   const [guestPowerSignInOpen, setGuestPowerSignInOpen] = useState(false);
   const [occasionRecordSaved, setOccasionRecordSaved] = useState(false);
@@ -979,13 +982,6 @@ export function GameScreen({
             )}
             <button
               type="button"
-              onClick={handleRetry}
-              className="w-full py-2.5 rounded-xl bg-amber-500/80 text-white font-semibold text-sm mb-2"
-            >
-              {t('game.retry')}
-            </button>
-            <button
-              type="button"
               onClick={() => void handleMenuBack()}
               className="w-full py-2.5 rounded-xl border border-amber-500/50 text-amber-300 text-sm"
             >
@@ -1024,7 +1020,7 @@ export function GameScreen({
           <GameOverlay
             status="won"
             isMarathon={isMarathon}
-            onRetry={handleRetry}
+            completedLevelNumber={isMarathon ? undefined : currentLevelIndex + 1}
             onMenu={handleMenuBack}
             onNext={isMarathon ? undefined : handleNext}
           />
@@ -1035,8 +1031,8 @@ export function GameScreen({
           status="lost"
           onRetry={handleRetry}
           onMenu={handleMenuBack}
-          showWatchForMoves={useLives}
-          getIdToken={useLives ? getIdToken : undefined}
+          showWatchForMoves={rewardMovesVideoEnabled}
+          getIdToken={rewardMovesGetIdToken}
         />
       )}
       {guestPowerSignInOpen && isGuest && (

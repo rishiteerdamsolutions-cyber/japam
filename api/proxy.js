@@ -91,6 +91,7 @@ import * as marathonsMyParticipationsHandler from './_handlers/marathons/my-part
 import * as userProgressHandler from './_handlers/user/progress.js';
 import * as userJapaHandler from './_handlers/user/japa.js';
 import * as userUnlockHandler from './_handlers/user/unlock.js';
+import * as userPaymentHistoryHandler from './_handlers/user/payment-history.js';
 import * as userProfileHandler from './_handlers/user/profile.js';
 import * as userPausedGameHandler from './_handlers/user/paused-game.js';
 import * as userLivesHandler from './_handlers/user/lives.js';
@@ -231,6 +232,7 @@ const HANDLERS = {
   'GET user/japa': userJapaHandler,
   'POST user/japa': userJapaHandler,
   'GET user/unlock': userUnlockHandler,
+  'GET user/payment-history': userPaymentHistoryHandler,
   'GET user/profile': userProfileHandler,
   'POST user/profile': userProfileHandler,
   'GET user/paused-game': userPausedGameHandler,

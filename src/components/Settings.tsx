@@ -11,7 +11,7 @@ import { hasActivePaidAccess, getProfileRingFlags } from '../lib/membershipDispl
 import { isFirebaseConfigured } from '../lib/firebase';
 import { DonateThankYouBox } from './donation/DonateThankYouBox';
 import { buildJapamWhatsAppShareHref } from './ui/WhatsAppFab';
-import { loadMyAppreciations, type MyAppreciations } from '../lib/firestore';
+import { loadMyAppreciations, loadUserPaymentHistory, type MyAppreciations, type UserPaymentHistoryData } from '../lib/firestore';
 import { useReminderStore } from '../store/reminderStore';
 import {
   JAPAM_CHECK_UPDATES_EVENT,
@@ -70,6 +70,11 @@ const Icons = {
   apavarga: () => (
     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+    </svg>
+  ),
+  receipt: () => (
+    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
     </svg>
   ),
   install: () => (
@@ -136,6 +141,22 @@ function SettingsCard({
   );
 }
 
+function formatInrPaise(paise: number | null) {
+  if (paise == null || !Number.isFinite(paise)) return '—';
+  return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(
+    paise / 100,
+  );
+}
+
+function formatDateTime(iso: string | null) {
+  if (!iso) return '—';
+  try {
+    return new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(iso));
+  } catch {
+    return iso;
+  }
+}
+
 interface SettingsProps {
   onBack: () => void;
 }
@@ -179,6 +200,9 @@ export function Settings({ onBack }: SettingsProps) {
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState(false);
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [paymentHistory, setPaymentHistory] = useState<UserPaymentHistoryData | null>(null);
+  const [paymentHistoryLoading, setPaymentHistoryLoading] = useState(false);
+  const [paymentHistoryError, setPaymentHistoryError] = useState<string | null>(null);
   const [apavargaLaunched, setApavargaLaunched] = useState(false);
   const [waMenuOpen, setWaMenuOpen] = useState(false);
   const waMenuRef = useRef<HTMLDivElement>(null);
@@ -201,6 +225,26 @@ export function Settings({ onBack }: SettingsProps) {
       .then((d) => setApavargaLaunched(d?.apavargaLaunched === true))
       .catch(() => setApavargaLaunched(false));
   }, []);
+
+  useEffect(() => {
+    if (expanded !== 'billing' || !user) return;
+    let cancelled = false;
+    setPaymentHistoryLoading(true);
+    setPaymentHistoryError(null);
+    void loadUserPaymentHistory().then((d) => {
+      if (cancelled) return;
+      setPaymentHistoryLoading(false);
+      if (!d) {
+        setPaymentHistory(null);
+        setPaymentHistoryError(t('settingsPage.loadError'));
+        return;
+      }
+      setPaymentHistory(d);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [expanded, user, t]);
 
   useEffect(() => {
     if (!waMenuOpen) return;
@@ -424,6 +468,100 @@ export function Settings({ onBack }: SettingsProps) {
         <DonateThankYouBox />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {user && (
+            <div className="sm:col-span-2">
+              <SettingsCard
+                icon={Icons.receipt}
+                label={t('settingsPage.membershipPayments')}
+                badge={
+                  paymentHistoryLoading
+                    ? '…'
+                    : paymentHistory
+                      ? t('settingsPage.orderCount', { count: paymentHistory.orders.length })
+                      : '—'
+                }
+                expanded={expanded === 'billing'}
+                onToggle={() => toggle('billing')}
+              >
+                <div className="space-y-4 text-sm">
+                  {paymentHistoryError && <p className="text-amber-200/80 text-xs">{paymentHistoryError}</p>}
+                  {paymentHistory && (
+                    <div className="rounded-xl bg-black/30 border border-white/10 p-3 space-y-2 text-amber-200/90">
+                      <p className="text-amber-200/60 text-xs uppercase tracking-wide">{t('settingsPage.proMonthly')}</p>
+                      {paymentHistory.subscription.pro.hasAccess && paymentHistory.subscription.pro.unlockExpiresAt ? (
+                        <p>
+                          {t('settingsPage.proExpires')}: {formatDateTime(paymentHistory.subscription.pro.unlockExpiresAt)}
+                        </p>
+                      ) : (
+                        <p className="text-amber-200/70 text-xs">{t('settingsPage.proNever')}</p>
+                      )}
+                      <p className="text-amber-200/60 text-xs uppercase tracking-wide pt-2 border-t border-white/10">
+                        {t('settingsPage.premiumDakshina')}
+                      </p>
+                      {paymentHistory.subscription.premium.isLifetime ? (
+                        <p className="text-amber-300/95">{t('settingsPage.premiumLifetime')}</p>
+                      ) : paymentHistory.subscription.premium.isActive && paymentHistory.subscription.premium.premiumExpiresAt ? (
+                        <p>
+                          {t('settingsPage.premiumExpires')}: {formatDateTime(paymentHistory.subscription.premium.premiumExpiresAt)}
+                        </p>
+                      ) : (
+                        <p className="text-amber-200/70 text-xs">{t('settingsPage.premiumNone')}</p>
+                      )}
+                    </div>
+                  )}
+                  <p className="text-amber-200/60 text-xs font-medium">{t('settingsPage.paymentHistory')}</p>
+                  {paymentHistoryLoading && <p className="text-amber-200/50 text-xs">…</p>}
+                  {!paymentHistoryLoading && paymentHistory && paymentHistory.orders.length === 0 && (
+                    <p className="text-amber-200/70 text-xs">{t('settingsPage.empty')}</p>
+                  )}
+                  {!paymentHistoryLoading && paymentHistory && paymentHistory.orders.length > 0 && (
+                    <div className="overflow-x-auto -mx-1">
+                      <table className="w-full text-left text-xs min-w-[320px]">
+                        <thead>
+                          <tr className="text-amber-200/50 border-b border-white/10">
+                            <th className="py-2 pr-2 font-medium">{t('settingsPage.colDate')}</th>
+                            <th className="py-2 pr-2 font-medium">{t('settingsPage.colType')}</th>
+                            <th className="py-2 pr-2 font-medium">{t('settingsPage.colAmount')}</th>
+                            <th className="py-2 font-medium">{t('settingsPage.colStatus')}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {paymentHistory.orders.map((row) => {
+                            const when = row.fulfilledAt || row.createdAt;
+                            const kindKey =
+                              row.kind === 'donate'
+                                ? 'typeDonate'
+                                : row.kind === 'lives'
+                                  ? 'typeLives'
+                                  : row.kind === 'unlock'
+                                    ? 'typeUnlock'
+                                    : 'typeUnknown';
+                            const st = row.status;
+                            const statusText =
+                              st === 'paid'
+                                ? t('settingsPage.statusPaid')
+                                : st === 'created'
+                                  ? t('settingsPage.statusCreated')
+                                  : st === 'failed' || st === 'cancelled' || st === 'canceled' || st === 'user_dropped'
+                                    ? t('settingsPage.statusFailed')
+                                    : t('settingsPage.statusOther');
+                            return (
+                              <tr key={row.orderId} className="border-b border-white/5 text-amber-100/90">
+                                <td className="py-2 pr-2 align-top whitespace-nowrap">{formatDateTime(when)}</td>
+                                <td className="py-2 pr-2 align-top">{t(`settingsPage.${kindKey}`)}</td>
+                                <td className="py-2 pr-2 align-top">{formatInrPaise(row.amountPaise)}</td>
+                                <td className="py-2 align-top whitespace-nowrap">{statusText}</td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              </SettingsCard>
+            </div>
+          )}
           {user && (
             <SettingsCard
               icon={Icons.profile}

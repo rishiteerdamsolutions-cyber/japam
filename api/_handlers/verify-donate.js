@@ -117,6 +117,15 @@ export async function POST(request) {
       { merge: true }
     );
 
+    try {
+      await db.collection('orders').doc(String(order_id)).set(
+        { status: 'paid', fulfilledAt: nowIso, fulfilledVia: 'verify-donate' },
+        { merge: true },
+      );
+    } catch (e) {
+      console.error('verify-donate: order mark paid failed (non-fatal)', e?.message || e);
+    }
+
     await logAudit('donation_verified', { uid, orderId: order_id, amountPaise });
     return jsonResponse({ ok: true });
   } catch (e) {

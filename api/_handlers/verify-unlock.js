@@ -72,6 +72,15 @@ export async function POST(request) {
       { merge: true }
     );
 
+    try {
+      await db.collection('orders').doc(String(order_id)).set(
+        { status: 'paid', fulfilledAt: unlockedAtIso, fulfilledVia: 'verify-unlock' },
+        { merge: true },
+      );
+    } catch (e) {
+      console.error('verify-unlock: order mark paid failed (non-fatal)', e?.message || e);
+    }
+
     // If a coupon was attached to this order, atomically increment the global and per-user counters.
     // Idempotent: the same order_id can be verified twice (e.g. user refreshes), so we guard with a flag
     // on the order doc (`couponApplied: true`) and only increment once.

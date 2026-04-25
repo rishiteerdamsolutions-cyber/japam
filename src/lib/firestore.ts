@@ -83,6 +83,49 @@ export async function loadUserUnlock(_uid: string): Promise<UserUnlockData> {
   return { levelsUnlocked: false, tier: 'free', isDonor: false };
 }
 
+export type PaymentHistoryOrderRow = {
+  orderId: string;
+  kind: string;
+  status: string;
+  createdAt: string | null;
+  fulfilledAt: string | null;
+  fulfilledVia: string | null;
+  amountPaise: number | null;
+  couponCode: string | null;
+};
+
+export type UserPaymentHistoryData = {
+  subscription: {
+    pro: {
+      hasAccess: boolean;
+      isActive: boolean;
+      unlockedAt: string | null;
+      unlockExpiresAt: string | null;
+    };
+    premium: {
+      isActive: boolean;
+      isLifetime: boolean;
+      totalDonationPaise: number | null;
+      premiumExpiresAt: string | null;
+    };
+  };
+  orders: PaymentHistoryOrderRow[];
+};
+
+/** Pro / Premium summary and recent Cashfree orders (requires same auth as unlock). */
+export async function loadUserPaymentHistory(): Promise<UserPaymentHistoryData | null> {
+  const token = await getFirebaseIdToken();
+  if (!token) return null;
+  try {
+    const url = apiUrl('/api/user/payment-history');
+    const res = await fetchWithRetry(url, { headers: { Authorization: `Bearer ${token}` } });
+    if (!res.ok) return null;
+    return (await res.json()) as UserPaymentHistoryData;
+  } catch {
+    return null;
+  }
+}
+
 const DEFAULT_UNLOCK_PRICE_PAISE = 10800; // ₹108 (auspicious)
 const DEFAULT_DISPLAY_PRICE_PAISE = 9900; // ₹99 strikethrough
 

@@ -364,13 +364,13 @@ export function MarathonsPage() {
       <p className="text-amber-200/80 text-sm mb-4">Discover marathons by location and join to contribute your japas.</p>
       {!isPro && (
         <div className="mb-4 p-3 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-100 text-sm">
-          Pro is required to join <span className="font-medium">temple</span> marathons. Your free Shiva marathon (1080 japas) is personal to you — rank cards show only your progress. The free Rama Maha Japa Yagna is open to everyone on the app with the usual shared leaderboard.
+          {t('communityFree.marathonProGate')}
           <button
             type="button"
             onClick={() => navigate(`/game?mode=general&level=${FIRST_LOCKED_LEVEL_INDEX_GENERAL}`)}
             className="ml-2 underline text-amber-300"
           >
-            Unlock Pro
+            {t('mahaYagnas.unlockPro')}
           </button>
         </div>
       )}

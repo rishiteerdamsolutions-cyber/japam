@@ -67,8 +67,8 @@
     "chooseDeity": "Choose a deity for offering flowers and japam.",
     "changeDeity": "Change deity",
     "offeringBarLabel": "Offerings (tap a flower)",
-    "proGateNotice": "Do Pushpa Abhisheka to Ganesha for free. All other deities need a Pro plan.",
-    "proRedirectOnly": "This deity needs an active Pro or Premium plan. Ganesha stays free for everyone.",
+    "proGateNotice": "Ganesha in Pushpa Abhisheka is free for everyone, like the free Shiva Japa Marathon and the Rama Maha Japa Yagna. All other deities here need a Pro plan.",
+    "proRedirectOnly": "This deity needs an active Pro or Premium plan. Ganesha in Pushpa stays free, like the free Shiva marathon and Rama yagna.",
     "proGateCard": "Pro",
     "yourPushpaJapa": "Your Pushpa japas: {{count}}",
     "yourPushpaJapaSignedOut": "Sign in to save Pushpa japas and appear on the leaderboard.",
@@ -152,7 +152,7 @@
     "proTitle": "Pro — Monthly Dakshina",
     "proBody": "Offer Monthly Dakshina to unlock the full level path, join temple Japa Marathons, and use every Pro feature for the current access period shown in your account.",
     "proBullet1": "All-Devatā: first 5 levels (108 japas) are free, then Pro; each Iṣṭa Devatā: first 2 levels free, then Pro — then levels through 50 and the map for all supported deities",
-    "proBullet2": "Join temple Japa Marathons, community yāga-style events, and Pushpa Abhisheka for all deities — Ganesha is free; other deities need Pro",
+    "proBullet2": "Separately from the All-Devatā / Iṣṭa level path above, community features have their own “one free per area” rules: the Shiva Japa Marathon, the Rama Maha Japa Yagna, and Ganesha in Pushpa Abhisheka are free; other marathons, yagnas, and deities in those features need Pro",
     "proBullet3": "Profile marked as Pro (green) while your access is active",
     "proFootnote": "New payments are described at checkout. Access period follows the terms shown on the pay screen (e.g. validity from payment date).",
     "proAccessUntil": "Your Pro access is active through {{date}}.",
@@ -341,11 +341,15 @@
   "language": {
     "disclaimer": "There may be mistakes in translations. We will improve."
   },
+  "communityFree": {
+    "marathonProGate": "Pro is required to join temple marathons. The same “free for everyone” pattern is used in three places: Shiva Japa Marathon (1080 japas, personal—only your progress on the rank card); Rama Maha Japa Yagna (one shared goal and leaderboard for all); Ganesha in Pushpa Abhisheka (other deities there need Pro).",
+    "yagnaProGateIntro": "Rama Maha Japa Yagna is free for everyone: one shared goal and leaderboard. Without Pro you also have Shiva Japa Marathon (1080 japas, personal) and Ganesha in Pushpa Abhisheka. "
+  },
   "mahaYagnas": {
     "title": "Maha Japa Yagnas",
-    "description": "Japas from Pro members who joined a Maha Japa Yagna count toward that yagna's shared goal.",
+    "description": "Your japas count toward the shared goal of each yagna you join. The Rama Maha Japa Yagna is free for everyone; other temple yagnas need Pro. (All-Devatā and Iṣṭa level access follows its own rules on the Plans page—the free Rama yagna is not the same as those.)",
     "proOnlyTitle": "Pro members only",
-    "proOnlyMessage": "Pro is required to join temple yagnas and contribute there. Unlock Pro for full access.",
+    "proOnlyMessage": "Pro is required to join yagnas other than the free Rama yagna, and to contribute to those. Unlock Pro for full access.",
     "unlockPro": "Unlock Pro",
     "loading": "Loading…",
     "noActive": "No active Maha Japa Yagnas.",

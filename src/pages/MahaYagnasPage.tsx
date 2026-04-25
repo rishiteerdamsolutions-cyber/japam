@@ -412,7 +412,7 @@ export function MahaYagnasPage() {
           <div className="mb-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/30">
             <p className="text-amber-200 text-sm font-medium">{t('mahaYagnas.proOnlyTitle')}</p>
             <p className="text-amber-200/80 text-sm mt-1 break-words">
-              The free Rama Maha Japa (1 crore goal) is open to everyone on the app: one shared goal and leaderboard for all participants.{' '}
+              {t('communityFree.yagnaProGateIntro')}
               {t('mahaYagnas.proOnlyMessage')}
             </p>
             <button

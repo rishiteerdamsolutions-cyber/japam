@@ -46,14 +46,14 @@ export async function POST(request) {
     const prevSnap = await db.doc(`users/${uid}/data/japa`).get();
     const prev = (prevSnap.exists && prevSnap.data()) || {};
 
+    let profileDisplayName = null;
     try {
-      let displayName = null;
       const profileSnap = await db.doc(`users/${uid}/data/profile`).get();
       const profileData = profileSnap.exists ? profileSnap.data() || {} : {};
       if (typeof profileData.displayName === 'string' && profileData.displayName.trim()) {
-        displayName = profileData.displayName.trim().slice(0, 80);
+        profileDisplayName = profileData.displayName.trim().slice(0, 80);
       }
-      await ensureDefaultFreeMarathonParticipation(db, uid, displayName);
+      await ensureDefaultFreeMarathonParticipation(db, uid, profileDisplayName);
       await ensureDefaultFreeYagnaParticipation(db, uid);
     } catch {
       /* non-fatal; user can still save japa counts */
@@ -76,6 +76,7 @@ export async function POST(request) {
           uid,
           totalJapas: Math.max(0, Math.round(totalFromBody ?? computedTotal)),
           ...(pushpa !== undefined ? { pushpaAbhishekaJapa: pushpa } : {}),
+          ...(profileDisplayName ? { name: profileDisplayName } : {}),
           updatedAt: now,
           lastActiveAt: now,
         },

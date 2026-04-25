@@ -19,7 +19,7 @@ import {
   trackShareEvent,
   type PushpaAbhishekaLeaderboardEntry,
 } from '../lib/firestore';
-import { renderRankCardBlob, type LeaderboardEntry } from '../lib/rankCard';
+import { normalizeLeaderboardForRankCard, renderRankCardBlob, type LeaderboardEntry } from '../lib/rankCard';
 
 const FLYING_SIZE = 44;
 const STARTER_PUSHPA_DEITY: DeityId = 'ganesh';
@@ -229,9 +229,14 @@ export function PushpaAbhishekaPage() {
     setShareNotice(null);
     setSharing(true);
     try {
-      const lb = (await loadPushpaAbhishekaLeaderboard()) as LeaderboardEntry[];
-      setLeaderboard(lb as PushpaAbhishekaLeaderboardEntry[]);
-      const solo = lb.length === 0;
+      const lbFresh = (await loadPushpaAbhishekaLeaderboard()) as LeaderboardEntry[];
+      if (lbFresh.length > 0) {
+        setLeaderboard(lbFresh as PushpaAbhishekaLeaderboardEntry[]);
+      }
+      const lbForCard =
+        lbFresh.length > 0 ? lbFresh : (leaderboard as unknown as LeaderboardEntry[]);
+      const lbNormalized = normalizeLeaderboardForRankCard(lbForCard);
+      const solo = lbNormalized.length === 0;
       const participated = pushpaJapaTotal > 0;
       const deityLabel = deityId ? t(`deities.${deityId}`) : '';
       const headerName = deityId
@@ -243,7 +248,7 @@ export function PushpaAbhishekaPage() {
         headerName,
         deityName: '',
         subtitleLine: '',
-        leaderboard: lb,
+        leaderboard: lbNormalized,
         currentUserUid: user.uid,
         currentUserJapasOverride: pushpaJapaTotal,
         currentUserDisplayName: user.displayName || user.email?.split('@')[0] || undefined,
@@ -273,7 +278,7 @@ export function PushpaAbhishekaPage() {
     } finally {
       setSharing(false);
     }
-  }, [deityId, pushpaJapaTotal, sharing, t, user]);
+  }, [deityId, leaderboard, pushpaJapaTotal, sharing, t, user]);
 
   const leaderboardBlock = (
     <div className="w-full max-w-lg mt-3 sm:mt-4 rounded-xl border border-amber-500/25 bg-black/30 p-2.5 sm:p-3">

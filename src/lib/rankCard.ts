@@ -1,5 +1,41 @@
 export type LeaderboardEntry = { rank: number; uid: string; name: string; japasCount: number };
 
+/**
+ * Sort by japas (desc), assign contiguous ranks 1..n, drop entries without uid.
+ * Ensures the rank card top-5 grid fills correctly even if the API sent missing or duplicate `rank`.
+ */
+export function normalizeLeaderboardForRankCard(leaderboard: LeaderboardEntry[]): LeaderboardEntry[] {
+  const raw = Array.isArray(leaderboard) ? leaderboard : [];
+  const withUid = raw.filter((e) => e && String(e.uid ?? '').trim());
+  if (withUid.length === 0) return [];
+  const byUid = new Map<string, LeaderboardEntry>();
+  for (const e of withUid) {
+    const uid = String(e.uid).trim();
+    const jp = Math.max(0, Math.round(Number(e.japasCount) || 0));
+    const prev = byUid.get(uid);
+    if (!prev || jp > (Number(prev.japasCount) || 0)) byUid.set(uid, { ...e, uid, japasCount: jp });
+  }
+  const deduped = [...byUid.values()];
+  const sorted = deduped.sort((a, b) => {
+    const jc = (Number(b.japasCount) || 0) - (Number(a.japasCount) || 0);
+    if (jc !== 0) return jc;
+    const ra = Number(a.rank);
+    const rb = Number(b.rank);
+    if (Number.isFinite(ra) && Number.isFinite(rb) && ra !== rb) return ra - rb;
+    return String(a.uid).localeCompare(String(b.uid));
+  });
+  return sorted.map((e, i) => {
+    const uid = String(e.uid).trim();
+    const nm = typeof e.name === 'string' && e.name.trim() ? e.name.trim().slice(0, 80) : uid.slice(0, 8);
+    return {
+      rank: i + 1,
+      uid,
+      name: nm,
+      japasCount: Math.max(0, Math.round(Number(e.japasCount) || 0)),
+    };
+  });
+}
+
 /** Rows for the PNG: ranks 1–5, optional ellipsis, then viewer (rank 0 if not participated, or real rank if 6+). */
 export type RankCardRow = { kind: 'player'; entry: LeaderboardEntry; isCurrent: boolean } | { kind: 'ellipsis' };
 
@@ -338,7 +374,8 @@ export async function renderRankCardBlob(opts: RenderRankCardOptions): Promise<B
     const curUid = opts.currentUserUid;
     const rowH = 88;
     const ellipsisRowH = 52;
-    const cardRows = buildRankCardRows(opts.leaderboard || [], curUid, {
+    const leaderboardForCard = normalizeLeaderboardForRankCard(opts.leaderboard || []);
+    const cardRows = buildRankCardRows(leaderboardForCard, curUid, {
       currentUserJapasOverride: opts.currentUserJapasOverride,
       currentUserDisplayName: opts.currentUserDisplayName,
       currentUserParticipated: opts.currentUserParticipated,

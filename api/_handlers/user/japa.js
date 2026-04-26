@@ -16,7 +16,14 @@ export async function GET(request) {
   try {
     const snap = await db.doc(`users/${uid}/data/japa`).get();
     if (!snap.exists) return jsonResponse({ counts: null }, 200);
-    const data = snap.data() || {};
+    const data = { ...(snap.data() || {}) };
+    if (data.pushpaAbhishekaJapaByDeity && typeof data.pushpaAbhishekaJapaByDeity === 'object') {
+      data.pushpaAbhishekaJapaByDeity = { ...data.pushpaAbhishekaJapaByDeity };
+    }
+    try {
+      sanitizePushpaCountsInPlace(data);
+    } catch {}
+    delete data.pushpaAbhishekaJapaUnattributed;
     return jsonResponse({ counts: data }, 200);
   } catch (e) {
     console.error('user japa GET', e);
@@ -33,6 +40,26 @@ const DEITY_IDS = [
   'hanuman', 'narasimha', 'lakshmi', 'durga', 'saraswati', 'ayyappan', 'jagannath', 'dattatreya',
   'saiBaba', 'narayana', 'iskcon', 'guru', 'shani', 'rahu', 'ketu', 'bramhamgaaru'
 ];
+
+/**
+ * Pushpa is separate from match-game per-deity japa: only normalize non-negative ints and total sum.
+ * Mutates `counts` in place (POST body or GET copy).
+ */
+function sanitizePushpaCountsInPlace(counts) {
+  const pByRaw =
+    counts.pushpaAbhishekaJapaByDeity && typeof counts.pushpaAbhishekaJapaByDeity === 'object'
+      ? counts.pushpaAbhishekaJapaByDeity
+      : {};
+  const pBy = { ...pByRaw };
+  let sumPd = 0;
+  for (const id of DEITY_IDS) {
+    const p = Math.max(0, Math.round(Number(pBy[id]) || 0));
+    pBy[id] = p;
+    sumPd += p;
+  }
+  counts.pushpaAbhishekaJapaByDeity = pBy;
+  counts.pushpaAbhishekaJapa = sumPd;
+}
 
 /** POST /api/user/japa - Save japa counts for current user (Firebase ID token required). Also attributes deltas to joined marathons by deity. */
 export async function POST(request) {
@@ -59,7 +86,15 @@ export async function POST(request) {
       /* non-fatal; user can still save japa counts */
     }
 
-    await db.doc(`users/${uid}/data/japa`).set(counts, { merge: true });
+    try {
+      sanitizePushpaCountsInPlace(counts);
+    } catch {}
+    delete counts.pushpaAbhishekaJapaUnattributed;
+
+    await db.doc(`users/${uid}/data/japa`).set(
+      { ...counts, pushpaAbhishekaJapaUnattributed: admin.firestore.FieldValue.delete() },
+      { merge: true },
+    );
     await upsertBehaviorFromJapa(db, uid, counts, prev);
 
     // Keep a public summary doc updated for global leaderboards/active users UI (Yesterday's achievers strip).
@@ -71,22 +106,21 @@ export async function POST(request) {
         counts.pushpaAbhishekaJapaByDeity && typeof counts.pushpaAbhishekaJapaByDeity === 'object'
           ? counts.pushpaAbhishekaJapaByDeity
           : {};
-      const pushpa =
-        typeof counts.pushpaAbhishekaJapa === 'number'
-          ? Math.max(0, Math.round(counts.pushpaAbhishekaJapa))
-          : undefined;
+      /** Global Pushpa leaderboard: sum of per-deity Pushpa. */
+      let sumPdPublic = 0;
       const publicPatch = {
         uid,
         totalJapas: Math.max(0, Math.round(totalFromBody ?? computedTotal)),
-        ...(pushpa !== undefined ? { pushpaAbhishekaJapa: pushpa } : {}),
         ...(profileDisplayName ? { name: profileDisplayName } : {}),
         updatedAt: now,
         lastActiveAt: now,
       };
       for (const id of DEITY_IDS) {
         const n = Math.max(0, Math.round(Number(pBy[id]) || 0));
+        sumPdPublic += n;
         publicPatch[`pd_${id}`] = n;
       }
+      publicPatch.pushpaAbhishekaJapa = sumPdPublic;
       await db.doc(`publicUsers/${uid}`).set(publicPatch, { merge: true });
     } catch {}
 

@@ -32,7 +32,7 @@ const DEITY_IDS = new Set([
 
 /**
  * GET /api/public/pushpa-abhisheka-leaderboard
- * - No `deity`: top by lifetime total Pushpa (`pushpaAbhishekaJapa`).
+ * - No `deity`: top by lifetime Pushpa sum (`pushpaAbhishekaJapa` on publicUsers).
  * - `?deity=rama`: top by that Devatā’s Pushpa (`pd_rama`).
  * Optional Authorization: when signed in, appends your row if you are outside the top list.
  */

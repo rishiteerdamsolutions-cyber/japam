@@ -225,6 +225,8 @@ export interface RenderRankCardOptions {
   rankCardFooterCtaLine?: string;
   /** Goal / progress (e.g. your count vs target, or collective vs goal) — drawn under the deity line */
   japaSummaryLine?: string;
+  /** Row score suffix, e.g. `japas` (default) or `flowers offered` for Pushpa Aradhana. */
+  leaderboardScoreUnit?: string;
 }
 
 export async function renderRankCardBlob(opts: RenderRankCardOptions): Promise<Blob | null> {
@@ -461,7 +463,8 @@ export async function renderRankCardBlob(opts: RenderRankCardOptions): Promise<B
         isCurrent && typeof opts.currentUserJapasOverride === 'number'
           ? viewerJapasDisplay(p.japasCount ?? 0, opts.currentUserJapasOverride)
           : (p.japasCount ?? 0);
-      const japasText = isVacant ? '—' : `${japasCount} japas`;
+      const scoreUnit = String(opts.leaderboardScoreUnit ?? 'japas').trim() || 'japas';
+      const japasText = isVacant ? '—' : `${japasCount} ${scoreUnit}`;
       const nameMaxW = cardW - 100;
 
       ctx.textAlign = 'left';

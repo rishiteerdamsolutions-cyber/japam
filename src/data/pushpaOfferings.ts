@@ -1,5 +1,5 @@
 /**
- * Bottom-bar floral offerings for Pushpa Abhisheka Japam (left → right).
+ * Bottom-bar floral offerings for Pushpa Aradhana (left → right).
  * Images under `public/images/pushpa/offerings/`.
  */
 export type PushpaOfferingId = 'tulasi' | 'bilva' | 'lotus-pink' | 'hibiscus' | 'lotus-white';

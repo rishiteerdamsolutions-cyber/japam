@@ -130,7 +130,9 @@ export function GamePage() {
   const profileDisplayName = useProfileStore((s) => s.displayName);
   const profileLoaded = useProfileStore((s) => s.loaded);
   const setProfileDisplayName = useProfileStore((s) => s.setDisplayName);
-  const isLocked = !isGuest && !isMarathon && levelIndex >= firstLock && levelsUnlocked !== true;
+  // Only treat as locked once the server has answered `false`. `null` = still loading — never paywall on null
+  // (previously `!== true` showed Paywall to paying users during the unlock fetch window).
+  const isLocked = !isGuest && !isMarathon && levelIndex >= firstLock && levelsUnlocked === false;
 
   const [playNameDraft, setPlayNameDraft] = useState('');
   const [playNameSaving, setPlayNameSaving] = useState(false);
@@ -311,17 +313,28 @@ export function GamePage() {
   const handleNextLevel = (nextMode: GameMode, nextIndex: number) => {
     const idx = Math.min(nextIndex, LEVELS.length - 1, revealedMax);
     const nextFirstLock = getFirstLockedLevelIndex(nextMode);
-    const locked = idx >= nextFirstLock && levelsUnlocked !== true;
-    if (locked && nextMode === 'general' && idx === FIRST_LOCKED_LEVEL_INDEX_GENERAL) {
-      setMalaCompleteModal(true);
+    const needsPaidGate = idx >= nextFirstLock;
+
+    const go = () => {
+      const lu = useUnlockStore.getState().levelsUnlocked;
+      const locked = needsPaidGate && lu === false;
+      if (locked && nextMode === 'general' && idx === FIRST_LOCKED_LEVEL_INDEX_GENERAL) {
+        setMalaCompleteModal(true);
+        return;
+      }
+      if (locked) {
+        setPaywallPending({ mode: nextMode, levelIndex: idx });
+        return;
+      }
+      navigate(`/game?mode=${encodeURIComponent(nextMode)}&level=${idx}`);
+      initGame(nextMode, idx);
+    };
+
+    if (needsPaidGate && levelsUnlocked === null) {
+      void loadUnlock(user?.uid).then(go);
       return;
     }
-    if (locked) {
-      setPaywallPending({ mode: nextMode, levelIndex: idx });
-      return;
-    }
-    navigate(`/game?mode=${encodeURIComponent(nextMode)}&level=${idx}`);
-    initGame(nextMode, idx);
+    go();
   };
 
   const onJustRestoredCleared = useCallback(() => setJustRestored(false), []);
@@ -361,6 +374,12 @@ export function GamePage() {
   };
 
   const waitingProfile = !isGuest && !!user?.uid && !profileLoaded;
+  const waitingUnlock =
+    !isGuest &&
+    !!user?.uid &&
+    !isMarathon &&
+    levelIndex >= firstLock &&
+    levelsUnlocked === null;
 
   // Do not flash signed-out or guest UI while Firebase restores the persisted session.
   if (!isGuest && authLoading) {
@@ -373,7 +392,13 @@ export function GamePage() {
   }
 
   // Signed-in: wait for progress (to detect completed levels) and pause check before game.
-  if (!isGuest && (waitingProfile || !pauseCheckDone || (!!user?.uid && !isMarathon && !occasionKind && !progressLoaded))) {
+  if (
+    !isGuest &&
+    (waitingProfile ||
+      waitingUnlock ||
+      !pauseCheckDone ||
+      (!!user?.uid && !isMarathon && !occasionKind && !progressLoaded))
+  ) {
     return (
       <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />

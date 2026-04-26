@@ -19,7 +19,7 @@ export function LevelsPage() {
       return;
     }
     const firstLock = getFirstLockedLevelIndex(mode);
-    const isLocked = levelIndex >= firstLock && levelsUnlocked !== true;
+    const isLocked = levelIndex >= firstLock && levelsUnlocked === false;
     if (isLocked) {
       navigate(`/game?mode=${encodeURIComponent(mode)}&level=${levelIndex}`);
       return;

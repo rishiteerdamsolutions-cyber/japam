@@ -6,6 +6,7 @@ import { fetchWithRetry } from './fetchWithRetry';
 import type { LevelProgress } from '../store/progressStore';
 import type { JapaCounts } from '../store/japaStore';
 import type { DeityId } from '../data/deities';
+import type { LeaderboardEntry } from './rankCard';
 
 const db = isFirebaseConfigured && app ? getFirestore(app) : null;
 
@@ -54,7 +55,8 @@ export interface UserUnlockData {
 
 /** Unlock (paid) status and tier. Logged-in: only backend API — same on all devices. */
 export async function loadUserUnlock(_uid: string): Promise<UserUnlockData> {
-  const token = await getFirebaseIdToken();
+  // Retry: right after reload / tab restore, getIdToken can briefly return null while auth hydrates.
+  const token = await getIdTokenWithRetry(auth?.currentUser, 6, 250);
   if (!token) return { levelsUnlocked: false, tier: 'free', isDonor: false };
   try {
     const url = apiUrl('/api/user/unlock');
@@ -417,22 +419,52 @@ export async function loadPublicActiveUsers(): Promise<PublicActiveUser[]> {
   }
 }
 
-export type PushpaAbhishekaLeaderboardEntry = {
+/** Pushpa Aradhana leaderboard row (`pushpaCount` = flowers offered; not japa). */
+export type PushpaAradhanaLeaderboardEntry = {
   rank: number;
   uid: string;
   name: string;
-  japasCount: number;
+  pushpaCount: number;
 };
 
-/** Public: top Pushpa Abhisheka japas (optional auth so your row is included if outside the top list). */
-export async function loadPushpaAbhishekaLeaderboard(deityId?: DeityId): Promise<PushpaAbhishekaLeaderboardEntry[]> {
+function parsePushpaLeaderboardRow(raw: unknown): PushpaAradhanaLeaderboardEntry | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const o = raw as Record<string, unknown>;
+  const rank = Math.max(0, Math.round(Number(o.rank) || 0));
+  const uid = typeof o.uid === 'string' ? o.uid : '';
+  const name = typeof o.name === 'string' ? o.name : '';
+  let pushpaCount = 0;
+  if (typeof o.pushpaCount === 'number') pushpaCount = Math.max(0, Math.round(o.pushpaCount));
+  else if (typeof o.japasCount === 'number') pushpaCount = Math.max(0, Math.round(o.japasCount));
+  if (!uid.trim()) return null;
+  return { rank, uid, name, pushpaCount };
+}
+
+/** Rank card expects `LeaderboardEntry` (score field historically named `japasCount`). */
+export function mapPushpaLeaderboardToRankCardEntries(rows: PushpaAradhanaLeaderboardEntry[]): LeaderboardEntry[] {
+  return rows.map((r) => ({
+    rank: r.rank,
+    uid: r.uid,
+    name: r.name,
+    japasCount: r.pushpaCount,
+  }));
+}
+
+/** Public: Pushpa Aradhana leaderboard (flowers offered; optional auth so your row is included if outside the top list). */
+export async function loadPushpaAradhanaLeaderboard(deityId?: DeityId): Promise<PushpaAradhanaLeaderboardEntry[]> {
   const token = await getFirebaseIdToken();
   const q = deityId ? `?deity=${encodeURIComponent(deityId)}` : '';
   const url = apiUrl(`/api/public/pushpa-abhisheka-leaderboard${q}`);
   try {
     const res = await fetch(url, token ? { headers: { Authorization: `Bearer ${token}` } } : undefined);
-    const data = (await res.json().catch(() => ({}))) as { leaderboard?: PushpaAbhishekaLeaderboardEntry[] };
-    return Array.isArray(data.leaderboard) ? data.leaderboard : [];
+    const data = (await res.json().catch(() => ({}))) as { leaderboard?: unknown[] };
+    const raw = Array.isArray(data.leaderboard) ? data.leaderboard : [];
+    const out: PushpaAradhanaLeaderboardEntry[] = [];
+    for (const item of raw) {
+      const row = parsePushpaLeaderboardRow(item);
+      if (row) out.push(row);
+    }
+    return out;
   } catch {
     return [];
   }

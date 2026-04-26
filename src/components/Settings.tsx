@@ -10,7 +10,7 @@ import { useUnlockStore } from '../store/unlockStore';
 import { hasActivePaidAccess, getProfileRingFlags } from '../lib/membershipDisplay';
 import { isFirebaseConfigured } from '../lib/firebase';
 import { DonateThankYouBox } from './donation/DonateThankYouBox';
-import { buildJapamWhatsAppShareHref } from './ui/WhatsAppFab';
+import { buildJapamWhatsAppShareHref } from '../lib/japamWhatsAppShare';
 import { loadMyAppreciations, loadUserPaymentHistory, type MyAppreciations, type UserPaymentHistoryData } from '../lib/firestore';
 import { useReminderStore } from '../store/reminderStore';
 import {

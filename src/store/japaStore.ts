@@ -15,11 +15,11 @@ export interface JapaCounts extends Record<DeityId, number> {
   /** Lifetime japas from daily couple game (same mechanics; separate dashboard row; also per deity + total). */
   coupleGameJapa: number;
   /**
-   * Pushpa Abhisheka offerings per Devatā (1 per completed flower flight). Independent of match-game `counts[deity]`.
-   * `pushpaAbhishekaJapa` is the sum of this map.
+   * Pushpa Aradhana: flowers offered per Devatā (1 per completed flight to that vigraham).
+   * Separate from match-game japa. Stored field names are legacy; this is a Pushpa count, not japa.
    */
   pushpaAbhishekaJapaByDeity: Record<DeityId, number>;
-  /** Sum of `pushpaAbhishekaJapaByDeity` (denormalized for dashboards / leaderboards). */
+  /** Total flowers offered (sum of `pushpaAbhishekaJapaByDeity`). Legacy key name `pushpaAbhishekaJapa`. */
   pushpaAbhishekaJapa: number;
   japaByTier: Record<DeityId, DeityJapaTier>;
 }
@@ -68,25 +68,6 @@ function mergePushpaByDeity(
   return out;
 }
 
-/**
- * If Pushpa totals match lifetime `total` japas but per-deity Pushpa is tiny, the Pushpa fields were
- * almost certainly filled with the wrong number (e.g. duplicate of `total`). Reset Pushpa-only counters.
- */
-function healPushpaIfLikelyTotalJapasLeak(merged: JapaCounts): JapaCounts {
-  const tj = merged.total;
-  const sd = sumPushpaByDeity(merged);
-  const pt = sd;
-  if (typeof tj !== 'number' || tj < 200 || pt < 500) return merged;
-  // Only when Pushpa stack almost exactly equals lifetime total japas (wrong field copied into Pushpa).
-  const tol = Math.max(2, Math.round(tj * 0.002));
-  if (Math.abs(pt - tj) > tol) return merged;
-  if (sd > Math.min(2500, Math.max(200, tj * 0.12))) return merged;
-  return recomputePushpaTotal({
-    ...merged,
-    pushpaAbhishekaJapaByDeity: emptyPushpaByDeity(),
-  });
-}
-
 function normalizeJapaByTier(raw: unknown): Record<DeityId, DeityJapaTier> {
   const base = emptyJapaByTier();
   if (!raw || typeof raw !== 'object') return base;
@@ -121,7 +102,8 @@ interface JapaStore {
   load: (userId?: string) => Promise<void>;
   addJapa: (deity: DeityId, count?: number, opts?: { matchTier?: 3 | 4 | 5 }) => void;
   addOccasionJapa: (kind: 'birthday' | 'anniversary' | 'coupleGame', count?: number) => void;
-  addPushpaAbhishekaJapa: (deity: DeityId, count?: number) => void;
+  /** Record one Pushpa Aradhana flower offering for a deity (not match-game japa). */
+  addPushpaAradhanaCount: (deity: DeityId, count?: number) => void;
   /** Force-save current counts to backend. Call before leaving Maha Yagna game. */
   flushJapas: () => Promise<void>;
 }
@@ -175,15 +157,6 @@ export const useJapaStore = create<JapaStore>((setState, getState) => ({
         current,
       );
       merged = recomputePushpaTotal(merged);
-      const beforeSanitizePushpaSumD = sumPushpaByDeity(merged);
-      const beforeSanitizePushpaPt = merged.pushpaAbhishekaJapa;
-      merged = healPushpaIfLikelyTotalJapasLeak(merged);
-      const pushpaNeedsPersist =
-        merged.pushpaAbhishekaJapa !== beforeSanitizePushpaPt ||
-        sumPushpaByDeity(merged) !== beforeSanitizePushpaSumD;
-      if (pushpaNeedsPersist) {
-        void saveUserJapa(userId, merged).catch(() => {});
-      }
       const storedTier = normalizeJapaByTier((stored as JapaCounts | null)?.japaByTier);
       const currentTier = normalizeJapaByTier(current.japaByTier);
       merged.japaByTier = emptyJapaByTier();
@@ -249,7 +222,7 @@ export const useJapaStore = create<JapaStore>((setState, getState) => ({
     if (uid) saveUserJapa(uid, next).catch(() => {});
   },
 
-  addPushpaAbhishekaJapa: (deity, count = 1) => {
+  addPushpaAradhanaCount: (deity, count = 1) => {
     if (count <= 0) return;
     const { counts } = getState();
     const by = { ...readPushpaByDeity(counts) };

@@ -61,7 +61,6 @@ function attachFirebaseAuthListeners() {
       for (let i = 0; i < steps.length; i++) {
         const wait = i === 0 ? 0 : steps[i]! - steps[i - 1]!;
         if (wait > 0) {
-          // eslint-disable-next-line no-await-in-loop
           await new Promise((r) => setTimeout(r, wait));
         }
         const u = auth.currentUser;

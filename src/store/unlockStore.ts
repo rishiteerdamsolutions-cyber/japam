@@ -44,10 +44,22 @@ export const useUnlockStore = create<UnlockState>((set) => ({
       });
       return;
     }
+    set({
+      levelsUnlocked: null,
+      userBlocked: false,
+    });
     try {
       const data = await loadUserUnlock(userId);
       if (data.blocked) {
-        set({ userBlocked: true });
+        set({
+          userBlocked: true,
+          levelsUnlocked: false,
+          tier: 'free',
+          isDonor: false,
+          unlockedAt: null,
+          unlockExpiresAt: null,
+          hasPaidEver: false,
+        });
         return;
       }
       set({

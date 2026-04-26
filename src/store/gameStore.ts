@@ -36,7 +36,7 @@ import {
 /** Pause before swapping in a full dead-board regen so the player sees a clear notice first. */
 const DEAD_BOARD_AUTO_NOTICE_MS = 1400;
 
-let deadBoardAutoRefreshTimeouts: ReturnType<typeof setTimeout>[] = [];
+const deadBoardAutoRefreshTimeouts: ReturnType<typeof setTimeout>[] = [];
 
 function clearDeadBoardAutoRefreshTimeouts() {
   for (const t of deadBoardAutoRefreshTimeouts) clearTimeout(t);
@@ -200,6 +200,28 @@ const getLevel = (index: number) => LEVELS[index] ?? LEVELS[0];
 
 type LevelDef = (typeof LEVELS)[number];
 
+/** Anniversary disables blessing-pair swaps; dead-board checks must use the same rules as gameplay. */
+const ANNIVERSARY_VALID_MOVE_OPTS = { allowBlessingPair: false as const };
+const MAX_BOARD_REGEN_ATTEMPTS = 2500;
+
+/** Seeded anniversary boards can exhaust salts without a valid layout; fall back to unseeded regen (same move rules). */
+function ensureAnniversaryBoardPlayable(
+  rows: number,
+  cols: number,
+  maxGem: number,
+  deityMode: DeityId | undefined,
+  powerBacked: DeityId[],
+  generalSubset: DeityId[] | null,
+): Board {
+  let board = createBoard(rows, cols, maxGem, deityMode, powerBacked, generalSubset);
+  let n = 0;
+  while (!hasValidMoves(board, ANNIVERSARY_VALID_MOVE_OPTS) && n < MAX_BOARD_REGEN_ATTEMPTS) {
+    board = createBoard(rows, cols, maxGem, deityMode, powerBacked, generalSubset);
+    n++;
+  }
+  return board;
+}
+
 /** Full-board replacement when no valid swaps exist; always yields `hasValidMoves`. */
 function buildDeadBoardReplacement(
   state: GameState,
@@ -223,9 +245,19 @@ function buildDeadBoardReplacement(
       );
       salt++;
     } while (
-      !hasValidMoves(regenerated, { allowBlessingPair: false }) &&
-      salt < 100
+      !hasValidMoves(regenerated, ANNIVERSARY_VALID_MOVE_OPTS) &&
+      salt < 250
     );
+    if (!hasValidMoves(regenerated, ANNIVERSARY_VALID_MOVE_OPTS)) {
+      regenerated = ensureAnniversaryBoardPlayable(
+        level.rows,
+        level.cols,
+        maxGem,
+        gemCtxDead.deityMode,
+        gemCtxDead.powerBacked,
+        gemCtxDead.generalSubset,
+      );
+    }
     return { board: regenerated, anniversaryAutoRefreshToken: state.anniversaryAutoRefreshToken + 1 };
   }
   let regenerated = createBoard(
@@ -236,7 +268,8 @@ function buildDeadBoardReplacement(
     gemCtxDead.powerBacked,
     gemCtxDead.generalSubset,
   );
-  while (!hasValidMoves(regenerated)) {
+  let regenGuard = 0;
+  while (!hasValidMoves(regenerated) && regenGuard < MAX_BOARD_REGEN_ATTEMPTS) {
     regenerated = createBoard(
       level.rows,
       level.cols,
@@ -245,6 +278,7 @@ function buildDeadBoardReplacement(
       gemCtxDead.powerBacked,
       gemCtxDead.generalSubset,
     );
+    regenGuard++;
   }
   return { board: regenerated, anniversaryAutoRefreshToken: state.anniversaryAutoRefreshToken };
 }
@@ -399,7 +433,17 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
           seed,
         );
         salt++;
-      } while (!hasValidMoves(board, { allowBlessingPair: false }) && salt < 100);
+      } while (!hasValidMoves(board, ANNIVERSARY_VALID_MOVE_OPTS) && salt < 250);
+      if (!hasValidMoves(board, ANNIVERSARY_VALID_MOVE_OPTS)) {
+        board = ensureAnniversaryBoardPlayable(
+          level.rows,
+          level.cols,
+          maxGemTypes,
+          deityMode,
+          powerPool,
+          generalBoardDeities,
+        );
+      }
     } else {
       board = createBoard(
         level.rows,
@@ -409,7 +453,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
         powerPool,
         generalBoardDeities,
       );
-      while (!hasValidMoves(board)) {
+      let initGuard = 0;
+      while (!hasValidMoves(board) && initGuard < MAX_BOARD_REGEN_ATTEMPTS) {
         board = createBoard(
           level.rows,
           level.cols,
@@ -418,6 +463,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
           powerPool,
           generalBoardDeities,
         );
+        initGuard++;
       }
     }
     set({
@@ -546,7 +592,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       powerPoolResume,
       generalBoardDeities,
     );
-    while (!hasValidMoves(board)) {
+    let resumeGuard = 0;
+    while (!hasValidMoves(board) && resumeGuard < MAX_BOARD_REGEN_ATTEMPTS) {
       board = createBoard(
         level.rows,
         level.cols,
@@ -555,6 +602,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
         powerPoolResume,
         generalBoardDeities,
       );
+      resumeGuard++;
     }
     set({
       board,
@@ -1053,7 +1101,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const occasionBlocksProgress = state.occasionKind != null;
 
     let status: GameStatus = 'playing';
-    let finalBoard = state.board;
+    const finalBoard = state.board;
 
     if (japasForTarget >= japaTarget) {
       status = 'won';
@@ -1087,7 +1135,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       nextAnniversaryMovePending = false;
     }
 
-    let anniversaryAutoRefreshToken = state.anniversaryAutoRefreshToken;
+    const anniversaryAutoRefreshToken = state.anniversaryAutoRefreshToken;
     let boardOut = finalBoard;
     let deadBoardAutoRefreshPhase: null | 'notice' = null;
 
@@ -1186,7 +1234,17 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
           seed,
         );
         salt++;
-      } while (!hasValidMoves(board, { allowBlessingPair: false }) && salt < 100);
+      } while (!hasValidMoves(board, ANNIVERSARY_VALID_MOVE_OPTS) && salt < 250);
+      if (!hasValidMoves(board, ANNIVERSARY_VALID_MOVE_OPTS)) {
+        board = ensureAnniversaryBoardPlayable(
+          level.rows,
+          level.cols,
+          state.maxGemTypes,
+          gemCtxRefresh.deityMode,
+          gemCtxRefresh.powerBacked,
+          gemCtxRefresh.generalSubset,
+        );
+      }
     } else {
       board = createBoard(
         level.rows,
@@ -1196,7 +1254,8 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
         gemCtxRefresh.powerBacked,
         gemCtxRefresh.generalSubset,
       );
-      while (!hasValidMoves(board)) {
+      let regenGuard = 0;
+      while (!hasValidMoves(board) && regenGuard < MAX_BOARD_REGEN_ATTEMPTS) {
         board = createBoard(
           level.rows,
           level.cols,
@@ -1205,6 +1264,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
           gemCtxRefresh.powerBacked,
           gemCtxRefresh.generalSubset,
         );
+        regenGuard++;
       }
     }
     set({

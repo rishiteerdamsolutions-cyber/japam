@@ -1,5 +1,5 @@
 /**
- * Shodashopachara (16 upacharas) for Pushpa Abhisheka Japam UI.
+ * Shodashopachara (16 upacharas) for Pushpa Aradhana UI.
  * Order: left column 1–8, right column 9–16. Images under `public/images/pushpa/shodashopachara/`.
  */
 export type ShodashopacharaId =

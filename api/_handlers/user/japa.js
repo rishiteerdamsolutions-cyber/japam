@@ -42,7 +42,7 @@ const DEITY_IDS = [
 ];
 
 /**
- * Pushpa is separate from match-game per-deity japa: only normalize non-negative ints and total sum.
+ * Pushpa Aradhana (flowers offered): normalize non-negative ints per deity and total sum. Not match-game japa.
  * Mutates `counts` in place (POST body or GET copy).
  */
 function sanitizePushpaCountsInPlace(counts) {

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useProgressStore, progressKey } from '../../store/progressStore';
 import { useUnlockStore } from '../../store/unlockStore';
+import { useAuthStore } from '../../store/authStore';
 import { getFirstLockedLevelIndex } from '../../lib/levelGates';
 import { useLevelsConfigStore } from '../../store/levelsConfigStore';
 import { DonateThankYouBox } from '../donation/DonateThankYouBox';
@@ -23,6 +24,9 @@ export function WorldMap({ mode: initialMode, onSelectLevel }: WorldMapProps) {
   const [mapMode, setMapMode] = useState<GameMode>(initialMode);
   const { levelProgress, getCurrentLevelIndex } = useProgressStore();
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
+  const user = useAuthStore((s) => s.user);
+  const unlockResolving = Boolean(user?.uid && levelsUnlocked === null);
+  const unlocked = levelsUnlocked === true || unlockResolving;
   const loadLevelsConfig = useLevelsConfigStore((s) => s.load);
   const maxRevealedLevelIndex = useLevelsConfigStore((s) => s.maxRevealedLevelIndex);
   const currentLevelIndex = getCurrentLevelIndex(mapMode);
@@ -78,7 +82,6 @@ export function WorldMap({ mode: initialMode, onSelectLevel }: WorldMapProps) {
                 const idx = (ep.id - 1) * 10 + i;
                 if (idx > revealedMax) return null;
                 const progress = levelProgress[progressKey(mapMode, level.id)];
-                const unlocked = levelsUnlocked === true;
                 const canPlay =
                   idx <= currentLevelIndex && (idx < firstLock || unlocked);
                 // First level that requires Pro: opens paywall from map. Higher levels stay disabled until Pro.

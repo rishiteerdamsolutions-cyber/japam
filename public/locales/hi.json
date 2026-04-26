@@ -47,7 +47,8 @@
     "offerDakshinaToUnlock": "Offer Dakshina to unlock",
     "mahaJapaYagnas": "महा जप यज्ञ",
     "navStripMarathons": "Marathons",
-    "navStripYagnas": "Yagnas"
+    "navStripYagnas": "Yagnas",
+    "pushpaAradhana": "पुष्प आराधना"
   },
   "game": {
     "resumeJapa": "जप फिर शुरू करें?",
@@ -477,6 +478,7 @@
     "name": "name",
     "gotram": "gotram",
     "mobileNumber": "mobile_number",
-    "generating": "generating"
+    "generating": "generating",
+    "pushpaAradhana": "पुष्प आराधना (फूल अर्पण)"
   }
 }

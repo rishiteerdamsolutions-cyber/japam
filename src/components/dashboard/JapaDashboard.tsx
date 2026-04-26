@@ -99,12 +99,13 @@ export function JapaDashboard() {
   const birthdayJapa = counts.birthdayJapa ?? 0;
   const anniversaryJapa = counts.anniversaryJapa ?? 0;
   const coupleGameJapa = counts.coupleGameJapa ?? 0;
-  const pushpaAbhishekaJapa = counts.pushpaAbhishekaJapa ?? 0;
+  /** Pushpa Aradhana: total flowers offered (not match-game japa). */
+  const pushpaFlowerCount = counts.pushpaAbhishekaJapa ?? 0;
   /** Scale all bars together; occasion rows follow `DEITIES` when those features ship. */
   const maxRow = Math.max(
     ...DEITIES.map((d) => counts[d.id] ?? 0),
     ...(LAUNCH_FEATURE_OCCASION_GAMES ? [birthdayJapa, anniversaryJapa, coupleGameJapa] : []),
-    pushpaAbhishekaJapa,
+    pushpaFlowerCount,
     1,
   );
 
@@ -390,14 +391,14 @@ export function JapaDashboard() {
         )}
         <div className="bg-black/20 rounded-xl p-3">
           <div className="flex justify-between items-center mb-1 gap-2">
-            <span className="font-medium text-amber-400 shrink-0">{t('japaDashboard.pushpaAbhishekaJapa')}</span>
-            <span className="text-amber-200 shrink-0">{pushpaAbhishekaJapa.toLocaleString()}</span>
+            <span className="font-medium text-amber-400 shrink-0">{t('japaDashboard.pushpaAradhana')}</span>
+            <span className="text-amber-200 shrink-0">{pushpaFlowerCount.toLocaleString()}</span>
             <span className="shrink-0 w-[72px]" aria-hidden />
           </div>
           <div className="h-2 bg-black/30 rounded-full overflow-hidden">
             <div
               className="h-full rounded-full transition-all bg-emerald-500/80"
-              style={{ width: `${maxRow > 0 ? Math.min(100, (pushpaAbhishekaJapa / maxRow) * 100) : 0}%` }}
+              style={{ width: `${maxRow > 0 ? Math.min(100, (pushpaFlowerCount / maxRow) * 100) : 0}%` }}
             />
           </div>
         </div>

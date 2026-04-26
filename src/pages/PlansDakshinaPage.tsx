@@ -67,7 +67,7 @@ export function PlansDakshinaPage() {
 
   const refreshUnlock = useCallback(async () => {
     if (user?.uid) await loadUnlock(user.uid);
-  }, [loadUnlock, user?.uid]);
+  }, [loadUnlock, user]);
 
   const onUnlocked = async () => {
     setShowProPay(false);

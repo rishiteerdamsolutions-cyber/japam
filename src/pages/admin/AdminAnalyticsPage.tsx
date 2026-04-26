@@ -152,9 +152,9 @@ export function AdminAnalyticsPage() {
           subtitle="Rank card downloads from Maha Japa Yagnas"
         />
         <MetricCard
-          title="Pushpa Abhisheka Rank Cards"
+          title="Pushpa Aradhana rank cards"
           value={cards.pushpaRankDownloads}
-          subtitle="Rank card downloads from Pushpa Abhisheka Japam"
+          subtitle="Rank card downloads from Pushpa Aradhana"
         />
         <MetricCard
           title="Japa PDF (Handwritten Naamas)"

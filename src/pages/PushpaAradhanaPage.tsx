@@ -15,11 +15,12 @@ import { useAuthStore } from '../store/authStore';
 import { useUnlockStore } from '../store/unlockStore';
 import { hasActivePaidAccess } from '../lib/membershipDisplay';
 import {
-  loadPushpaAbhishekaLeaderboard,
+  loadPushpaAradhanaLeaderboard,
+  mapPushpaLeaderboardToRankCardEntries,
   trackShareEvent,
-  type PushpaAbhishekaLeaderboardEntry,
+  type PushpaAradhanaLeaderboardEntry,
 } from '../lib/firestore';
-import { normalizeLeaderboardForRankCard, renderRankCardBlob, type LeaderboardEntry } from '../lib/rankCard';
+import { normalizeLeaderboardForRankCard, renderRankCardBlob } from '../lib/rankCard';
 
 const FLYING_SIZE = 44;
 const STARTER_PUSHPA_DEITY: DeityId = 'ganesh';
@@ -73,7 +74,7 @@ function UpacharaSlot({
   );
 }
 
-export function PushpaAbhishekaPage() {
+export function PushpaAradhanaPage() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -91,6 +92,7 @@ export function PushpaAbhishekaPage() {
   const proOrPremiumActive =
     (tier === 'pro' || tier === 'premium') &&
     hasActivePaidAccess(levelsUnlocked === true, unlockExpiresAt);
+  const unlockPending = Boolean(user?.uid && levelsUnlocked === null);
 
   const offeringBtnRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const deityImgRef = useRef<HTMLImageElement | null>(null);
@@ -101,14 +103,14 @@ export function PushpaAbhishekaPage() {
   const completionHandledRef = useRef(false);
 
   const [upacharaModal, setUpacharaModal] = useState<UpacharaModal | null>(null);
-  const [leaderboard, setLeaderboard] = useState<PushpaAbhishekaLeaderboardEntry[]>([]);
+  const [leaderboard, setLeaderboard] = useState<PushpaAradhanaLeaderboardEntry[]>([]);
   const [proRedirectNotice, setProRedirectNotice] = useState(false);
   const [sharing, setSharing] = useState(false);
   const [shareError, setShareError] = useState<string | null>(null);
   const [shareNotice, setShareNotice] = useState<string | null>(null);
   const [shareResult, setShareResult] = useState<ShareResult | null>(null);
 
-  /** From saved japa counts (picker = total Pushpa); not from the leaderboard fetch. */
+  /** From saved counts: total flowers offered (Pushpa Aradhana), not from the leaderboard fetch. */
   const pushpaMyCount = pushpaBase;
 
   useEffect(() => {
@@ -127,7 +129,7 @@ export function PushpaAbhishekaPage() {
 
   useEffect(() => {
     const req = ++pushpaLbRequestId.current;
-    void loadPushpaAbhishekaLeaderboard(deityId ?? undefined)
+    void loadPushpaAradhanaLeaderboard(deityId ?? undefined)
       .then((rows) => {
         if (pushpaLbRequestId.current !== req) return;
         setLeaderboard(rows);
@@ -140,21 +142,23 @@ export function PushpaAbhishekaPage() {
 
   useEffect(() => {
     if (!deityId) return;
+    if (unlockPending) return;
     if (!pushpaDeityAllowedForUser(deityId, proOrPremiumActive)) {
       setSearchParams({}, { replace: true });
       setProRedirectNotice(true);
     }
-  }, [deityId, proOrPremiumActive, setSearchParams]);
+  }, [deityId, proOrPremiumActive, unlockPending, setSearchParams]);
 
   const handleDeityCardClick = useCallback(
     (id: DeityId) => {
+      if (unlockPending) return;
       if (!pushpaDeityAllowedForUser(id, proOrPremiumActive)) {
         navigate('/plans');
         return;
       }
       setDeity(id);
     },
-    [navigate, proOrPremiumActive, setDeity],
+    [navigate, proOrPremiumActive, unlockPending, setDeity],
   );
 
   const handleUpacharaOpen = useCallback((step: ShodashopacharaStep, stepIndex: number) => {
@@ -218,8 +222,8 @@ export function PushpaAbhishekaPage() {
     if (deityId) {
       playMatchSfxSelection({ deity: deityId, tier: 3 });
       if (user) {
-        useJapaStore.getState().addPushpaAbhishekaJapa(deityId, 1);
-        void loadPushpaAbhishekaLeaderboard(deityId)
+        useJapaStore.getState().addPushpaAradhanaCount(deityId, 1);
+        void loadPushpaAradhanaLeaderboard(deityId)
           .then(setLeaderboard)
           .catch(() => {});
       }
@@ -237,7 +241,7 @@ export function PushpaAbhishekaPage() {
     if (!shareResult) return;
     const a = document.createElement('a');
     a.href = shareResult.url;
-    a.download = 'japam-pushpa-abhisheka.png';
+    a.download = 'japam-pushpa-aradhana.png';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -254,13 +258,12 @@ export function PushpaAbhishekaPage() {
     setSharing(true);
     try {
       const scope = deityId ?? undefined;
-      const lbFresh = (await loadPushpaAbhishekaLeaderboard(scope)) as LeaderboardEntry[];
+      const lbFresh = await loadPushpaAradhanaLeaderboard(scope);
       if (lbFresh.length > 0) {
-        setLeaderboard(lbFresh as PushpaAbhishekaLeaderboardEntry[]);
+        setLeaderboard(lbFresh);
       }
-      const lbForCard =
-        lbFresh.length > 0 ? lbFresh : (leaderboard as unknown as LeaderboardEntry[]);
-      const lbNormalized = normalizeLeaderboardForRankCard(lbForCard);
+      const lbForCard = lbFresh.length > 0 ? lbFresh : leaderboard;
+      const lbNormalized = normalizeLeaderboardForRankCard(mapPushpaLeaderboardToRankCardEntries(lbForCard));
       const solo = lbNormalized.length === 0;
       const c = useJapaStore.getState().counts;
       const pushpaForCard = deityId
@@ -273,7 +276,7 @@ export function PushpaAbhishekaPage() {
         : t('pushpa.rankCardHeaderPicker');
       const summaryLine = t('pushpa.rankCardSummary', { count: pushpaForCard });
       const blob = await renderRankCardBlob({
-        title: 'PUSHPA ABHISHEKA',
+        title: 'PUSHPA ARADHANA',
         headerName,
         deityName: '',
         subtitleLine: '',
@@ -286,6 +289,7 @@ export function PushpaAbhishekaPage() {
         rankCardFooterSoloLine: solo ? t('pushpa.rankCardFooterSolo') : undefined,
         rankCardFooterCtaLine: solo ? undefined : t('pushpa.rankCardFooterCommunity'),
         japaSummaryLine: summaryLine,
+        leaderboardScoreUnit: t('pushpa.rankCardScoreUnit'),
       });
       if (!blob) throw new Error('blob');
       const url = URL.createObjectURL(blob);
@@ -296,7 +300,7 @@ export function PushpaAbhishekaPage() {
       });
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'japam-pushpa-abhisheka.png';
+      a.download = 'japam-pushpa-aradhana.png';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -330,20 +334,32 @@ export function PushpaAbhishekaPage() {
       {leaderboard.length === 0 ? (
         <p className="text-amber-200/60 text-[clamp(0.6rem,3vw,0.75rem)]">{t('pushpa.leaderboardEmpty')}</p>
       ) : (
-        <ul className="space-y-1.5 max-h-[min(36svh,11rem)] sm:max-h-44 overflow-y-auto overscroll-contain pr-1 touch-pan-y">
-          {leaderboard.map((row) => (
-            <li
-              key={`${row.uid}-${row.rank}`}
-              className="flex items-center justify-between gap-2 text-[clamp(0.6rem,3.1vw,0.75rem)] text-amber-100/90"
-            >
-              <span className="text-amber-400/90 shrink-0">{t('pushpa.leaderboardRank', { rank: row.rank })}</span>
-              <span className="truncate flex-1 text-left">{row.name}</span>
-              <span className="shrink-0 tabular-nums">
-                {user?.uid === row.uid ? pushpaMyCount : row.japasCount}
-              </span>
-            </li>
-          ))}
-        </ul>
+        <>
+          <div
+            className="flex items-center justify-between gap-2 text-[clamp(0.5rem,2.6vw,0.65rem)] text-amber-200/55 uppercase tracking-wide mb-1 px-0.5"
+            aria-hidden
+          >
+            <span className="shrink-0 w-[2.5rem]">{t('pushpa.leaderboardColRank')}</span>
+            <span className="flex-1 text-left">{t('pushpa.leaderboardColName')}</span>
+            <span className="shrink-0 text-right min-w-[3.25rem]">{t('pushpa.leaderboardColFlowers')}</span>
+          </div>
+          <ul className="space-y-1.5 max-h-[min(36svh,11rem)] sm:max-h-44 overflow-y-auto overscroll-contain pr-1 touch-pan-y">
+            {leaderboard.map((row) => (
+              <li
+                key={`${row.uid}-${row.rank}`}
+                className="flex items-center justify-between gap-2 text-[clamp(0.6rem,3.1vw,0.75rem)] text-amber-100/90"
+              >
+                <span className="text-amber-400/90 shrink-0 w-[2.5rem]">
+                  {t('pushpa.leaderboardRank', { rank: row.rank })}
+                </span>
+                <span className="truncate flex-1 text-left">{row.name}</span>
+                <span className="shrink-0 tabular-nums text-right min-w-[3.25rem]">
+                  {user?.uid === row.uid ? pushpaMyCount : row.pushpaCount}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </>
       )}
     </div>
   );
@@ -403,43 +419,47 @@ export function PushpaAbhishekaPage() {
             <p className="text-amber-200/50 text-[10px] text-center mb-3 max-w-sm">…</p>
           ) : !user ? (
             <p className="text-amber-200/60 text-[10px] text-center mb-3 max-w-sm">
-              {t('pushpa.yourPushpaJapaSignedOut')}
+              {t('pushpa.yourPushpaCountSignedOut')}
             </p>
           ) : (
             <p className="text-amber-200/80 text-[11px] text-center mb-3 tabular-nums">
-              {t('pushpa.yourPushpaJapa', { count: pushpaMyCount })}
+              {t('pushpa.yourPushpaCount', { count: pushpaMyCount })}
             </p>
           )}
-          <div className="grid grid-cols-2 min-[400px]:grid-cols-3 gap-2 sm:gap-3 w-full">
-            {DEITIES.map((d, i) => {
-              const locked = !pushpaDeityAllowedForUser(d.id, proOrPremiumActive);
-              return (
-                <motion.button
-                  key={d.id}
-                  type="button"
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.02 }}
-                  className={`relative flex flex-col items-center rounded-2xl overflow-hidden border hover:border-amber-400/50 ${
-                    locked ? 'bg-black/30 border-white/15' : 'bg-black/40 border-white/20'
-                  }`}
-                  onClick={() => handleDeityCardClick(d.id)}
-                >
-                  {locked ? (
-                    <span className="absolute top-2 right-2 z-[2] rounded bg-black/55 text-[9px] px-1.5 py-0.5 text-amber-200/95 border border-amber-500/40">
-                      {t('pushpa.proGateCard')}
+          {user && unlockPending ? (
+            <p className="text-amber-200/75 text-[11px] text-center py-10 w-full">{t('common.loading')}</p>
+          ) : (
+            <div className="grid grid-cols-2 min-[400px]:grid-cols-3 gap-2 sm:gap-3 w-full">
+              {DEITIES.map((d, i) => {
+                const locked = !pushpaDeityAllowedForUser(d.id, proOrPremiumActive);
+                return (
+                  <motion.button
+                    key={d.id}
+                    type="button"
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.02 }}
+                    className={`relative flex flex-col items-center rounded-2xl overflow-hidden border hover:border-amber-400/50 ${
+                      locked ? 'bg-black/30 border-white/15' : 'bg-black/40 border-white/20'
+                    }`}
+                    onClick={() => handleDeityCardClick(d.id)}
+                  >
+                    {locked ? (
+                      <span className="absolute top-2 right-2 z-[2] rounded bg-black/55 text-[9px] px-1.5 py-0.5 text-amber-200/95 border border-amber-500/40">
+                        {t('pushpa.proGateCard')}
+                      </span>
+                    ) : null}
+                    <div className="w-full aspect-square relative bg-black/30">
+                      <img src={d.image} alt="" className={`w-full h-full object-cover ${locked ? 'opacity-55' : ''}`} />
+                    </div>
+                    <span className="py-2 px-2 text-xs font-semibold text-white truncate w-full text-center">
+                      {t(`deities.${d.id}`)}
                     </span>
-                  ) : null}
-                  <div className="w-full aspect-square relative bg-black/30">
-                    <img src={d.image} alt="" className={`w-full h-full object-cover ${locked ? 'opacity-55' : ''}`} />
-                  </div>
-                  <span className="py-2 px-2 text-xs font-semibold text-white truncate w-full text-center">
-                    {t(`deities.${d.id}`)}
-                  </span>
-                </motion.button>
-              );
-            })}
-          </div>
+                  </motion.button>
+                );
+              })}
+            </div>
+          )}
           {leaderboardBlock}
         </div>
       </div>
@@ -481,11 +501,11 @@ export function PushpaAbhishekaPage() {
           <p className="text-center text-amber-200/50 text-[clamp(0.55rem,2.6vw,0.65rem)] shrink-0 px-1">…</p>
         ) : user ? (
           <p className="text-center text-amber-200/65 text-[clamp(0.55rem,2.6vw,0.65rem)] tabular-nums shrink-0 px-1">
-            {t('pushpa.yourPushpaJapa', { count: pushpaMyCount })}
+            {t('pushpa.yourPushpaCount', { count: pushpaMyCount })}
           </p>
         ) : (
           <p className="text-center text-amber-200/50 text-[clamp(0.55rem,2.6vw,0.65rem)] shrink-0 px-1">
-            {t('pushpa.yourPushpaJapaSignedOut')}
+            {t('pushpa.yourPushpaCountSignedOut')}
           </p>
         )}
         {user ? (

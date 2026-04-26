@@ -31,9 +31,9 @@ const DEITY_IDS = new Set([
 ]);
 
 /**
- * GET /api/public/pushpa-abhisheka-leaderboard
- * - No `deity`: top by lifetime Pushpa sum (`pushpaAbhishekaJapa` on publicUsers).
- * - `?deity=rama`: top by that Devatā’s Pushpa (`pd_rama`).
+ * GET /api/public/pushpa-abhisheka-leaderboard (Pushpa Aradhana — flowers offered; UI route `/pushpa-aradhana`).
+ * - No `deity`: top by lifetime flower sum (`pushpaAbhishekaJapa` on publicUsers).
+ * - `?deity=rama`: top by that Devatā (`pd_rama`).
  * Optional Authorization: when signed in, appends your row if you are outside the top list.
  */
 export async function GET(request) {
@@ -67,37 +67,36 @@ export async function GET(request) {
         typeof data.name === 'string' && data.name.trim()
           ? data.name.trim().slice(0, 80)
           : uid.slice(0, 8);
-      let japasCount = 0;
+      let pushpaCount = 0;
       if (useDeity) {
         const k = `pd_${useDeity}`;
-        japasCount =
-          typeof data[k] === 'number' ? Math.max(0, Math.round(data[k])) : 0;
+        pushpaCount = typeof data[k] === 'number' ? Math.max(0, Math.round(data[k])) : 0;
       } else {
-        japasCount =
+        pushpaCount =
           typeof data.pushpaAbhishekaJapa === 'number'
             ? Math.max(0, Math.round(data.pushpaAbhishekaJapa))
             : 0;
       }
-      return { uid, name, japasCount };
+      return { uid, name, pushpaCount };
     });
-    rows.sort((a, b) => b.japasCount - a.japasCount);
+    rows.sort((a, b) => b.pushpaCount - a.pushpaCount);
 
     const top = rows.slice(0, TOP_N).map((p, i) => ({
       rank: i + 1,
       uid: p.uid,
       name: p.name,
-      japasCount: p.japasCount,
+      pushpaCount: p.pushpaCount,
     }));
 
     if (viewerUid && !top.some((e) => e.uid === viewerUid)) {
       const mine = rows.find((r) => r.uid === viewerUid);
-      if (mine && mine.japasCount > 0) {
+      if (mine && mine.pushpaCount > 0) {
         const rank = rows.findIndex((r) => r.uid === viewerUid) + 1;
         top.push({
           rank,
           uid: mine.uid,
           name: mine.name,
-          japasCount: mine.japasCount,
+          pushpaCount: mine.pushpaCount,
         });
       }
     }

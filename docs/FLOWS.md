@@ -85,6 +85,14 @@ Users **must sign in with Google** to play. All progress and japa data is stored
 
 ---
 
+## 8b. Pushpa Aradhana (flowers offered)
+
+1. **Route**: `/pushpa-aradhana` (legacy `/pushpa-abhisheka` redirects here). Menu entry **Pushpa Aradhana**.
+2. **Separate from japa**: Completing a flower flight calls **`addPushpaAradhanaCount(deity)`** only. It updates **`pushpaAbhishekaJapaByDeity`** and **`pushpaAbhishekaJapa`** (stored field names; values are **flower counts**, not match-game japa). It does **not** call **`addJapa`** — no effect on level progress, per-deity mantra totals, marathons, or Maha Japa Yagna.
+3. **Leaderboard**: GET `/api/public/pushpa-abhisheka-leaderboard` returns rows with **`pushpaCount`** (flowers). Public **`publicUsers`** docs carry **`pushpaAbhishekaJapa`** (sum) and **`pd_{deity}`** for per-deity totals, written when **`POST /api/user/japa`** saves counts.
+
+---
+
 ## 9. Marathon flow
 
 1. **Discovery**: User opens **Japa Marathons** (route `/marathons`). Selects State → District → City/Town/Village → GET `/api/marathons/discover?state=…&district=…&cityTownVillage=…` → list of temples and their marathons (with leaderboard).

@@ -2,7 +2,15 @@
  * POST /api/admin/data - Single admin endpoint. Body: { type: "temples" | "marathons" | "users" }
  * Token: Authorization: Bearer <token> or X-Admin-Token.
  */
-import { getDb, verifyAdminToken, jsonResponse, getAdminTokenFromRequest, jsonInternalServerError } from '../_lib.js';
+import {
+  getDb,
+  verifyAdminToken,
+  jsonResponse,
+  getAdminTokenFromRequest,
+  jsonInternalServerError,
+  isPremiumActiveFromDonorData,
+} from '../_lib.js';
+import admin from 'firebase-admin';
 
 const DEITY_NAMES = { rama: 'Rama', shiva: 'Shiva', ganesh: 'Ganesh', surya: 'Surya', shakthi: 'Shakthi', krishna: 'Krishna', shanmukha: 'Shanmukha', venkateswara: 'Venkateswara' };
 
@@ -86,74 +94,103 @@ export async function POST(request) {
     }
 
     if (type === 'users') {
-      const [unlockedSnap, blockedSnap] = await Promise.all([
+      const [unlockedSnap, blockedSnap, donorsSnap] = await Promise.all([
         db.collection('unlockedUsers').get(),
         db.collection('blockedUsers').get(),
+        db.collection('donors').get(),
       ]);
       const blockedSet = new Set(blockedSnap.docs.map((d) => d.id));
 
-      const unlocked = unlockedSnap.docs.map((d) => {
-        const data = d.data();
-        const uid = data.uid || d.id;
-        return { uid, email: data.email || null, unlockedAt: data.unlockedAt || null };
-      });
+      const unlockMetaByUid = new Map(
+        unlockedSnap.docs.map((d) => {
+          const data = d.data() || {};
+          const uid = data.uid || d.id;
+          return [uid, { unlockedAt: data.unlockedAt || null, email: data.email || null }];
+        }),
+      );
 
-      // Load lastActiveAt for these users (best-effort).
+      const donorByUid = new Map(donorsSnap.docs.map((d) => [d.id, d.data() || {}]));
+
+      let authRecords = [];
+      let pageToken = undefined;
+      try {
+        do {
+          const result = await admin.auth().listUsers(1000, pageToken);
+          authRecords = authRecords.concat(result.users);
+          pageToken = result.pageToken;
+        } while (pageToken);
+      } catch (e) {
+        console.error('admin listUsers', e);
+        return jsonResponse({ error: 'Could not list Firebase Auth users.' }, 503);
+      }
+
       let activityByUid = new Map();
       try {
-        const refs = unlocked.map((u) => db.doc(`users/${u.uid}/data/activity`));
-        const snaps = refs.length ? await db.getAll(...refs) : [];
-        activityByUid = new Map(
-          snaps
-            .filter((s) => s.exists)
-            .map((s) => {
-              const data = s.data() || {};
-              const ts = data.lastActiveAt;
-              const iso =
-                ts && typeof ts.toDate === 'function'
-                  ? ts.toDate().toISOString()
-                  : typeof ts === 'string'
-                    ? ts
-                    : null;
-              return [s.ref?.path?.split('/')[1] || s.id, iso];
-            }),
-        );
+        const chunk = 400;
+        for (let i = 0; i < authRecords.length; i += chunk) {
+          const slice = authRecords.slice(i, i + chunk);
+          const refs = slice.map((u) => db.doc(`users/${u.uid}/data/activity`));
+          const snaps = refs.length ? await db.getAll(...refs) : [];
+          for (let j = 0; j < snaps.length; j++) {
+            const s = snaps[j];
+            const uid = slice[j]?.uid;
+            if (!s.exists || !uid) continue;
+            const data = s.data() || {};
+            const ts = data.lastActiveAt;
+            const iso =
+              ts && typeof ts.toDate === 'function'
+                ? ts.toDate().toISOString()
+                : typeof ts === 'string'
+                  ? ts
+                  : null;
+            if (iso) activityByUid.set(uid, iso);
+          }
+        }
       } catch {
         activityByUid = new Map();
       }
 
-      // Premium = donor with active premium window (or lifetime donor).
-      let donorByUid = new Map();
-      try {
-        const refs = unlocked.map((u) => db.collection('donors').doc(u.uid));
-        const snaps = refs.length ? await db.getAll(...refs) : [];
-        donorByUid = new Map(snaps.filter((s) => s.exists).map((s) => [s.id, s.data() || {}]));
-      } catch {
-        donorByUid = new Map();
-      }
-
-      const users = unlocked
-        .map((u) => {
-          const donor = donorByUid.get(u.uid) || null;
+      const users = authRecords
+        .map((rec) => {
+          const uid = rec.uid;
+          const email = rec.email || unlockMetaByUid.get(uid)?.email || null;
+          const unlockMeta = unlockMetaByUid.get(uid);
+          const unlockedAt = unlockMeta?.unlockedAt || null;
+          const hasUnlockRecord = unlockMeta != null;
+          const donor = donorByUid.get(uid) || null;
           const donationAmountPaise = donor && typeof donor.amount === 'number' ? donor.amount : null;
           const lifetimeDonor = donor ? donor.lifetimeDonor === true : false;
-          const premiumExpiresAt = donor && typeof donor.premiumExpiresAt === 'string' ? Date.parse(donor.premiumExpiresAt) : NaN;
-          const premiumActive = lifetimeDonor || (Number.isFinite(premiumExpiresAt) && Date.now() < premiumExpiresAt);
-          const tier = premiumActive ? 'premium' : 'pro';
+          const premiumActive = isPremiumActiveFromDonorData(donor);
+          const premiumExpiresAtMs =
+            donor && typeof donor.premiumExpiresAt === 'string' ? Date.parse(donor.premiumExpiresAt) : NaN;
+
+          let tier = 'free';
+          if (premiumActive) tier = 'premium';
+          else if (hasUnlockRecord) tier = 'pro';
+
+          const lastSignInAt =
+            typeof rec.metadata?.lastSignInTime === 'string' ? rec.metadata.lastSignInTime : null;
+          const createdAt = typeof rec.metadata?.creationTime === 'string' ? rec.metadata.creationTime : null;
+
           return {
-            uid: u.uid,
-            email: u.email,
-            unlockedAt: u.unlockedAt,
+            uid,
+            email,
+            unlockedAt,
             tier,
             isPremium: tier === 'premium',
             donationAmountPaise,
             lifetimeDonor,
-            premiumExpiresAt: premiumActive && Number.isFinite(premiumExpiresAt) ? new Date(premiumExpiresAt).toISOString() : null,
-            isBlocked: blockedSet.has(u.uid),
-            lastActiveAt: activityByUid.get(u.uid) || null,
+            premiumExpiresAt:
+              premiumActive && Number.isFinite(premiumExpiresAtMs)
+                ? new Date(premiumExpiresAtMs).toISOString()
+                : null,
+            isBlocked: blockedSet.has(uid),
+            lastActiveAt: activityByUid.get(uid) || null,
+            lastSignInAt,
+            createdAt,
           };
         })
-        .sort((a, b) => (b.unlockedAt || '').localeCompare(a.unlockedAt || ''));
+        .sort((a, b) => (b.lastSignInAt || '').localeCompare(a.lastSignInAt || ''));
 
       return jsonResponse({ users, total: users.length });
     }

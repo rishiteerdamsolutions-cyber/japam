@@ -8,6 +8,7 @@ import { ErrorBoundary } from './components/ErrorBoundary'
 
 initSentry()
 import { AuthProvider } from './components/AuthProvider'
+import { AuthSessionOverlay } from './components/AuthSessionOverlay'
 import { PaymentReturnHandler } from './components/PaymentReturnHandler'
 import { RefCapture } from './components/RefCapture'
 import { BlockedOverlay } from './components/BlockedOverlay'
@@ -50,6 +51,7 @@ const ContactPage = lazy(() => import('./pages/ContactPage').then(m => ({ defaul
 const PushpaAradhanaPage = lazy(() =>
   import('./pages/PushpaAradhanaPage').then((m) => ({ default: m.PushpaAradhanaPage })),
 )
+const SpecialsPage = lazy(() => import('./pages/SpecialsPage').then((m) => ({ default: m.SpecialsPage })))
 const BirthdayOccasionPage = lazy(() =>
   import('./pages/BirthdayOccasionPage').then((m) => ({ default: m.BirthdayOccasionPage })),
 );
@@ -77,6 +79,7 @@ createRoot(document.getElementById('root')!).render(
     <ErrorBoundary>
     <BrowserRouter>
       <AuthProvider>
+      <AuthSessionOverlay />
       <PaymentReturnHandler />
       <RefCapture />
       <BlockedOverlay />
@@ -87,6 +90,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/" element={<App />} />
         <Route path="/menu" element={<MenuPage />} />
         <Route path="/pushpa-aradhana" element={<PushpaAradhanaPage />} />
+        <Route path="/specials" element={<SpecialsPage />} />
         <Route path="/pushpa-abhisheka" element={<Navigate to="/pushpa-aradhana" replace />} />
         <Route path="/test/menu-demo" element={<MenuDemoTestPage />} />
         <Route path="/game" element={<GamePage />} />

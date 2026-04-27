@@ -10,11 +10,13 @@ export function AdminUsersPage() {
     uid: string;
     email: string | null;
     unlockedAt: string | null;
-    tier?: 'pro' | 'premium' | string;
+    tier?: 'free' | 'pro' | 'premium' | string;
     donationAmountPaise?: number | null;
     lifetimeDonor?: boolean;
     isBlocked?: boolean;
     lastActiveAt?: string | null;
+    lastSignInAt?: string | null;
+    createdAt?: string | null;
   }[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -37,7 +39,7 @@ export function AdminUsersPage() {
         }
         return r.json();
       })
-      .then((data: { users?: { uid: string; email: string | null; unlockedAt: string | null; tier?: string; donationAmountPaise?: number | null; lifetimeDonor?: boolean; isBlocked?: boolean; lastActiveAt?: string | null }[]; error?: string } | null) => {
+      .then((data: { users?: { uid: string; email: string | null; unlockedAt: string | null; tier?: string; donationAmountPaise?: number | null; lifetimeDonor?: boolean; isBlocked?: boolean; lastActiveAt?: string | null; lastSignInAt?: string | null; createdAt?: string | null }[]; error?: string } | null) => {
         if (data == null) return;
         if (data.error) {
           setError(String(data.error));
@@ -119,10 +121,10 @@ export function AdminUsersPage() {
 
   return (
     <>
-      <h1 className="text-2xl font-bold text-amber-400 mb-4">Users who paid (unlock)</h1>
-      <p className="text-amber-200/80 text-sm mb-4">Total: {users.length}</p>
+      <h1 className="text-2xl font-bold text-amber-400 mb-4">All signed-in users (Firebase Auth)</h1>
+      <p className="text-amber-200/80 text-sm mb-4">Total accounts: {users.length}</p>
       {users.length === 0 ? (
-        <p className="text-amber-200/70">No paid users yet. New payments will appear here.</p>
+        <p className="text-amber-200/70">No users returned. Check Firebase Admin / Auth configuration.</p>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm text-amber-200 border border-amber-500/30 rounded-lg overflow-hidden">
@@ -130,8 +132,9 @@ export function AdminUsersPage() {
               <tr className="bg-amber-500/20">
                 <th className="px-3 py-2">Email</th>
                 <th className="px-3 py-2">User ID</th>
+                <th className="px-3 py-2">Last sign-in</th>
                 <th className="px-3 py-2">Paid at</th>
-                <th className="px-3 py-2">Last active</th>
+                <th className="px-3 py-2">Last active (app)</th>
                 <th className="px-3 py-2">Tier</th>
                 <th className="px-3 py-2">Status</th>
               </tr>
@@ -141,6 +144,9 @@ export function AdminUsersPage() {
                 <tr key={u.uid} className="border-t border-amber-500/20">
                   <td className="px-3 py-2">{u.email || '—'}</td>
                   <td className="px-3 py-2 font-mono text-xs">{u.uid.slice(0, 12)}…</td>
+                  <td className="px-3 py-2">
+                    {u.lastSignInAt ? new Date(u.lastSignInAt).toLocaleString() : '—'}
+                  </td>
                   <td className="px-3 py-2">{u.unlockedAt ? new Date(u.unlockedAt).toLocaleString() : '—'}</td>
                   <td className="px-3 py-2">{u.lastActiveAt ? new Date(u.lastActiveAt).toLocaleString() : '—'}</td>
                   <td className="px-3 py-2">
@@ -152,9 +158,13 @@ export function AdminUsersPage() {
                           <span className="text-amber-200/70">₹{Math.round(u.donationAmountPaise / 100)}</span>
                         ) : null}
                       </span>
-                    ) : (
+                    ) : u.tier === 'pro' ? (
                       <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] border border-green-500/60 bg-green-500/15 text-green-200">
                         Pro
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] border border-white/20 bg-black/25 text-amber-200/90">
+                        Free
                       </span>
                     )}
                   </td>

@@ -94,7 +94,7 @@ export function AdminPanel({ onBack, passwordAuth, adminToken, onLogout }: Admin
         setMessage('Saved. Paywall: ~~₹' + displayRupees.toFixed(0) + '~~ ₹' + rupees.toFixed(0));
       }
     } catch {
-      setMessage('Failed to save (check Firestore rules or API)');
+      setMessage('Could not save. Try again.');
     } finally {
       setSaving(false);
     }

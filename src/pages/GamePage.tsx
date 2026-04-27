@@ -23,6 +23,7 @@ import type { GameMode } from '../types';
 import { getOccasionEntryGate } from '../lib/occasionEntryGate';
 import { LAUNCH_FEATURE_OCCASION_GAMES } from '../config/launchFeatures';
 import { LevelAlreadyCompleteModal, GeneralMalaCompleteModal } from '../components/game/LevelGateModals';
+import { shouldOfferResumePausedGame } from '../lib/pausedGameResume';
 
 function parseGameMode(rawMode: string | null): GameMode {
   if (!rawMode) return 'general';
@@ -245,7 +246,16 @@ export function GamePage() {
           const modeMatches = isMarathon
             ? (yagnaId ? savedYagna === yagnaId : savedMarathon === marathonId)
             : savedMode === mode;
-          if (modeMatches) {
+          const savedLevelIndex = typeof saved.levelIndex === 'number' ? saved.levelIndex : levelIndex;
+          const unlimitedPause =
+            saved.marathonTargetJapas != null ||
+            (saved.overrideJapaTarget != null && saved.overrideJapaTarget >= 50) ||
+            saved.occasionKind === 'birthday' ||
+            saved.occasionKind === 'anniversary';
+          const resumable =
+            modeMatches &&
+            shouldOfferResumePausedGame(saved, savedLevelIndex, { isUnlimitedMoves: unlimitedPause });
+          if (resumable) {
             setResumePending(saved);
             setResumeKey(saved.key);
             setPauseCheckDone(true);
@@ -258,7 +268,16 @@ export function GamePage() {
           const raw = localStorage.getItem(expectedKey);
           if (raw) {
             const parsed = JSON.parse(raw) as PausedGameState;
-            if (parsed?.savedAt) {
+            const savedLevelIndex = typeof parsed.levelIndex === 'number' ? parsed.levelIndex : levelIndex;
+            const unlimitedPause =
+              parsed.marathonTargetJapas != null ||
+              (parsed.overrideJapaTarget != null && parsed.overrideJapaTarget >= 50) ||
+              parsed.occasionKind === 'birthday' ||
+              parsed.occasionKind === 'anniversary';
+            if (
+              parsed?.savedAt &&
+              shouldOfferResumePausedGame(parsed, savedLevelIndex, { isUnlimitedMoves: unlimitedPause })
+            ) {
               setResumePending(parsed);
               setResumeKey(expectedKey);
               setPauseCheckDone(true);

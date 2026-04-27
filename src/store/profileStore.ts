@@ -5,6 +5,8 @@ import { updateProfile } from 'firebase/auth';
 
 interface ProfileState {
   displayName: string | null;
+  /** Signed URL for custom Pushpa Aradhana deity image (Pro); refreshed from GET profile. */
+  pushpaCustomDeityPhotoUrl: string | null;
   loaded: boolean;
   load: () => Promise<void>;
   /** Persists display name; updates store only on successful API response. */
@@ -18,18 +20,19 @@ function apiUrl(path: string): string {
 
 export const useProfileStore = create<ProfileState>((setState, get) => ({
   displayName: null,
+  pushpaCustomDeityPhotoUrl: null,
   loaded: false,
 
   load: async () => {
     try {
       const user = auth?.currentUser;
       if (!user) {
-        setState({ displayName: null, loaded: true });
+        setState({ displayName: null, pushpaCustomDeityPhotoUrl: null, loaded: true });
         return;
       }
       const token = await user.getIdToken().catch(() => null);
       if (!token) {
-        setState({ displayName: null, loaded: true });
+        setState({ displayName: null, pushpaCustomDeityPhotoUrl: null, loaded: true });
         return;
       }
       const url = apiUrl('/api/user/profile');
@@ -50,20 +53,24 @@ export const useProfileStore = create<ProfileState>((setState, get) => ({
       // If the API is down or returns 401 (e.g. local dev without FIREBASE_SERVICE_ACCOUNT_JSON),
       // still use the signed-in Firebase profile so play-name gating and UI stay usable.
       const name = fromApi ?? fromAuth;
+      const photoUrl =
+        res.ok && typeof data.pushpaCustomDeityPhotoUrl === 'string' && data.pushpaCustomDeityPhotoUrl.startsWith('http')
+          ? data.pushpaCustomDeityPhotoUrl
+          : null;
       if (!res.ok && import.meta.env.DEV) {
         console.warn(
           '[profile] GET /api/user/profile failed; using auth display name if available. Set FIREBASE_SERVICE_ACCOUNT_JSON in .env.local for full API.',
           res.status,
         );
       }
-      setState({ displayName: name, loaded: true });
+      setState({ displayName: name, pushpaCustomDeityPhotoUrl: photoUrl, loaded: true });
 
       // Keep Firebase auth profile in sync so other UI paths using user.displayName stay consistent.
       if (name && user.displayName !== name) {
         updateProfile(user, { displayName: name }).catch(() => {});
       }
     } catch {
-      setState({ displayName: null, loaded: true });
+      setState({ displayName: null, pushpaCustomDeityPhotoUrl: null, loaded: true });
     }
   },
 

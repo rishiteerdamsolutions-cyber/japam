@@ -99,12 +99,14 @@ export function JapaDashboard() {
   const birthdayJapa = counts.birthdayJapa ?? 0;
   const anniversaryJapa = counts.anniversaryJapa ?? 0;
   const coupleGameJapa = counts.coupleGameJapa ?? 0;
-  /** Pushpa Aradhana: total flowers offered (not match-game japa). */
+  /** Pushpa Aradhana: flowers per deity + total (not match-game japa). */
+  const pushpaByDeity = counts.pushpaAbhishekaJapaByDeity ?? {};
   const pushpaFlowerCount = counts.pushpaAbhishekaJapa ?? 0;
-  /** Scale all bars together; occasion rows follow `DEITIES` when those features ship. */
+  /** Scale all bars together. */
   const maxRow = Math.max(
     ...DEITIES.map((d) => counts[d.id] ?? 0),
     ...(LAUNCH_FEATURE_OCCASION_GAMES ? [birthdayJapa, anniversaryJapa, coupleGameJapa] : []),
+    ...DEITIES.map((d) => pushpaByDeity[d.id] ?? 0),
     pushpaFlowerCount,
     1,
   );
@@ -346,6 +348,27 @@ export function JapaDashboard() {
             </div>
           );
         })}
+        <p className="text-amber-300/90 text-xs font-semibold mt-6 mb-2 px-0.5">{t('japaDashboard.pushpaSectionTitle')}</p>
+        {DEITIES.map((deity) => {
+          const flowers = pushpaByDeity[deity.id] ?? 0;
+          const pct = maxRow > 0 ? (flowers / maxRow) * 100 : 0;
+          return (
+            <div key={`pushpa-${deity.id}`} className="bg-black/20 rounded-xl p-3 border border-emerald-500/15">
+              <div className="flex justify-between items-center mb-1 gap-2">
+                <span className="font-medium text-amber-400 shrink-0 min-w-0 truncate pr-2">
+                  {deity.name} · {t('japaDashboard.pushpaFlowersShort')}
+                </span>
+                <span className="text-amber-200 shrink-0 tabular-nums">{flowers.toLocaleString()}</span>
+              </div>
+              <div className="h-2 bg-black/30 rounded-full overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all bg-emerald-500/75"
+                  style={{ width: `${pct}%` }}
+                />
+              </div>
+            </div>
+          );
+        })}
         {LAUNCH_FEATURE_OCCASION_GAMES && (
           <>
             <div className="bg-black/20 rounded-xl p-3">
@@ -389,19 +412,6 @@ export function JapaDashboard() {
             </div>
           </>
         )}
-        <div className="bg-black/20 rounded-xl p-3">
-          <div className="flex justify-between items-center mb-1 gap-2">
-            <span className="font-medium text-amber-400 shrink-0">{t('japaDashboard.pushpaAradhana')}</span>
-            <span className="text-amber-200 shrink-0">{pushpaFlowerCount.toLocaleString()}</span>
-            <span className="shrink-0 w-[72px]" aria-hidden />
-          </div>
-          <div className="h-2 bg-black/30 rounded-full overflow-hidden">
-            <div
-              className="h-full rounded-full transition-all bg-emerald-500/80"
-              style={{ width: `${maxRow > 0 ? Math.min(100, (pushpaFlowerCount / maxRow) * 100) : 0}%` }}
-            />
-          </div>
-        </div>
       </div>
 
       {downloadModal && (

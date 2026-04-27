@@ -22,6 +22,8 @@ import {
 } from '../lib/firestore';
 import { normalizeLeaderboardForRankCard, renderRankCardBlob } from '../lib/rankCard';
 
+const PUSHPA_CUSTOM_DEITY_PHOTO_ENABLED = false;
+
 const FLYING_SIZE = 44;
 const STARTER_PUSHPA_DEITY: DeityId = 'ganesh';
 
@@ -521,6 +523,12 @@ export function PushpaAradhanaPage() {
             {shareError ? (
               <p className="text-amber-400/95 text-[clamp(0.55rem,2.6vw,0.65rem)] text-center max-w-xs">{shareError}</p>
             ) : null}
+          </div>
+        ) : null}
+
+        {user && proOrPremiumActive && !PUSHPA_CUSTOM_DEITY_PHOTO_ENABLED ? (
+          <div className="rounded-lg border border-amber-500/25 bg-black/25 px-3 py-2 mt-1 mb-0.5 max-w-md mx-auto text-center">
+            <p className="text-amber-200/85 text-[11px] font-medium">{t('pushpa.customDeityComingSoonTitle')}</p>
           </div>
         ) : null}
 

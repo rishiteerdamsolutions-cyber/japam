@@ -2,6 +2,21 @@ import { getDb, jsonResponse, verifyFirebaseUser, jsonInternalServerError } from
 import admin from 'firebase-admin';
 import { touchUserLogin } from '../_analytics.js';
 
+async function signedUrlForGsPath(gsPath, expiresMs) {
+  try {
+    const bucket = admin.storage().bucket();
+    const [exists] = await bucket.file(gsPath).exists();
+    if (!exists) return null;
+    const [url] = await bucket.file(gsPath).getSignedUrl({
+      action: 'read',
+      expires: Date.now() + expiresMs,
+    });
+    return url;
+  } catch {
+    return null;
+  }
+}
+
 /** GET /api/user/profile - Get current user's profile (displayName). Firebase ID token required. */
 export async function GET(request) {
   try {
@@ -13,6 +28,25 @@ export async function GET(request) {
     const snap = await db.doc(`users/${uid}/data/profile`).get();
     const data = snap.exists ? (snap.data() || {}) : {};
     const displayName = typeof data.displayName === 'string' ? data.displayName : null;
+
+    let pushpaCustomDeityPhotoUrl = null;
+    const gsPath =
+      typeof data.pushpaCustomDeityPhotoGsPath === 'string' && data.pushpaCustomDeityPhotoGsPath.trim()
+        ? data.pushpaCustomDeityPhotoGsPath.trim()
+        : null;
+    if (gsPath) {
+      pushpaCustomDeityPhotoUrl = await signedUrlForGsPath(gsPath, 7 * 24 * 60 * 60 * 1000);
+      if (!pushpaCustomDeityPhotoUrl) {
+        try {
+          await db.doc(`users/${uid}/data/profile`).set(
+            { pushpaCustomDeityPhotoGsPath: admin.firestore.FieldValue.delete() },
+            { merge: true },
+          );
+        } catch {
+          /* ignore */
+        }
+      }
+    }
 
     // Include lifetime appreciations from public summary doc (best-effort).
     let appreciations = { heart: 0, like: 0, clap: 0 };
@@ -29,7 +63,7 @@ export async function GET(request) {
       }
     } catch {}
 
-    return jsonResponse({ displayName, appreciations }, 200);
+    return jsonResponse({ displayName, appreciations, pushpaCustomDeityPhotoUrl }, 200);
   } catch (e) {
     console.error('user profile GET', e);
     return jsonInternalServerError(e, 'api/_handlers/user/profile.js');

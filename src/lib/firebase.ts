@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, type Auth } from 'firebase/auth';
 import { getFirestore, type Firestore } from 'firebase/firestore';
+import { getStorage, type FirebaseStorage } from 'firebase/storage';
 import {
   initializeAppCheck,
   ReCaptchaV3Provider,
@@ -23,11 +24,13 @@ export const isFirebaseConfigured = Boolean(
 let auth: Auth;
 let app: ReturnType<typeof initializeApp> | null = null;
 let firestore: Firestore | null = null;
+let storage: FirebaseStorage | null = null;
 
 if (isFirebaseConfigured) {
   app = initializeApp(firebaseConfig);
   auth = getAuth(app);
   firestore = getFirestore(app);
+  storage = getStorage(app);
 
   /**
    * Firebase App Check — blocks non-app traffic from hitting your Firestore quota.
@@ -67,5 +70,5 @@ if (isFirebaseConfigured) {
   auth = null as unknown as Auth;
 }
 
-export { auth, app, firestore };
+export { auth, app, firestore, storage };
 export const googleProvider = new GoogleAuthProvider();

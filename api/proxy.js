@@ -93,6 +93,7 @@ import * as userJapaHandler from './_handlers/user/japa.js';
 import * as userUnlockHandler from './_handlers/user/unlock.js';
 import * as userPaymentHistoryHandler from './_handlers/user/payment-history.js';
 import * as userProfileHandler from './_handlers/user/profile.js';
+import * as userPushpaDeityPhotoHandler from './_handlers/user/pushpa-deity-photo.js';
 import * as userPausedGameHandler from './_handlers/user/paused-game.js';
 import * as userLivesHandler from './_handlers/user/lives.js';
 import * as userLivesConsumeHandler from './_handlers/user/lives-consume.js';
@@ -236,6 +237,8 @@ const HANDLERS = {
   'GET user/payment-history': userPaymentHistoryHandler,
   'GET user/profile': userProfileHandler,
   'POST user/profile': userProfileHandler,
+  'POST user/pushpa-deity-photo': userPushpaDeityPhotoHandler,
+  'DELETE user/pushpa-deity-photo': userPushpaDeityPhotoHandler,
   'GET user/paused-game': userPausedGameHandler,
   'POST user/paused-game': userPausedGameHandler,
   'GET user/lives': userLivesHandler,

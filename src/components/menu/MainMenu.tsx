@@ -127,55 +127,61 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
 
         {demoNotice}
 
-        <motion.button
-          type="button"
-          aria-label={t('menu.allDevatasJapa')}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.99 }}
-          initial={{ opacity: 0, y: 4 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.05 }}
-          onClick={() => onSelect('general')}
-          className={`${landingStartJapaButtonClass} mt-4 mb-2 inline-flex items-center justify-center`}
-        >
-          <span className="text-white font-bold text-sm sm:text-base leading-tight text-center whitespace-normal">
-            {t('menu.allDevatasJapa')}
-          </span>
-        </motion.button>
+        <div className="grid grid-cols-3 gap-2 w-full mt-4 mb-2 items-stretch">
+          <motion.button
+            type="button"
+            aria-label={t('menu.allDevatasJapa')}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.99 }}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05 }}
+            onClick={() => onSelect('general')}
+            className={`${landingStartJapaButtonClass} w-full min-h-[3.75rem] h-full inline-flex items-center justify-center px-1 sm:px-2 !max-w-none`}
+          >
+            <span className="text-white font-bold text-[clamp(0.65rem,2.8vw,0.85rem)] sm:text-sm leading-tight text-center whitespace-normal">
+              {t('menu.allDevatasJapa')}
+            </span>
+          </motion.button>
 
-        <motion.button
-          type="button"
-          aria-label={t('menu.pushpaAradhana')}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.99 }}
-          initial={{ opacity: 0, y: 4 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.08 }}
-          onClick={() => navigate('/pushpa-aradhana')}
-          className={`${landingTryJapaButtonClass} mb-2 inline-flex items-center justify-center`}
-        >
-          <span className="text-sm sm:text-base text-white font-semibold leading-tight text-center whitespace-normal">
-            {t('menu.pushpaAradhana')}
-          </span>
-        </motion.button>
+          <motion.button
+            type="button"
+            aria-label={t('menu.specials')}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.99 }}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.08 }}
+            onClick={() => navigate('/specials')}
+            className={`${landingTryJapaButtonClass} w-full min-h-[3.75rem] h-full inline-flex items-center justify-center px-1 sm:px-2 !max-w-none border-amber-400/45 bg-amber-500/15`}
+          >
+            <span className="text-[clamp(0.65rem,2.8vw,0.85rem)] sm:text-sm text-amber-100 font-semibold leading-tight text-center whitespace-normal">
+              {t('menu.specials')}
+            </span>
+          </motion.button>
+
+          <motion.button
+            type="button"
+            id="ista-devata-reveal"
+            aria-expanded={istaDevataRevealed}
+            aria-controls="ista-devata-grid"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.99 }}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.11 }}
+            onClick={() => setIstaDevataRevealed(true)}
+            className={`${landingTryJapaButtonClass} w-full min-h-[3.75rem] h-full inline-flex items-center justify-center px-1 sm:px-2 !max-w-none`}
+          >
+            <span className="text-[clamp(0.65rem,2.8vw,0.85rem)] sm:text-sm text-white font-semibold leading-tight text-center whitespace-normal">
+              {t('menu.istaDevata')}
+            </span>
+          </motion.button>
+        </div>
 
         {!istaDevataRevealed ? (
-          <div className="w-full mb-4 flex flex-col items-center gap-3">
-            <motion.button
-              type="button"
-              id="ista-devata-reveal"
-              aria-expanded={false}
-              aria-controls="ista-devata-grid"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.99 }}
-              onClick={() => setIstaDevataRevealed(true)}
-              className={`${landingTryJapaButtonClass} mt-8 inline-flex items-center justify-center`}
-            >
-              <span className="text-sm sm:text-base text-white font-semibold leading-tight text-center whitespace-normal">
-                {t('menu.istaDevata')}
-              </span>
-            </motion.button>
-            <div className="mt-5 w-full min-w-0 max-w-full flex justify-center items-center pl-[max(0.25rem,env(safe-area-inset-left,0px))] pr-[max(0.25rem,env(safe-area-inset-right,0px))]">
+          <div className="w-full mb-4 flex flex-col items-center gap-3 mt-4">
+            <div className="w-full min-w-0 max-w-full flex justify-center items-center pl-[max(0.25rem,env(safe-area-inset-left,0px))] pr-[max(0.25rem,env(safe-area-inset-right,0px))]">
               <div className="relative @container max-w-full rounded-2xl border-2 border-amber-400/75 p-0 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.45),0_0_0_1px_rgba(251,191,36,0.2)_inset] bg-black/20 ring-1 ring-amber-300/35 w-full min-w-0 max-w-[min(100%,26rem)] overflow-hidden">
                 {introHeroSlot ?? (
                   <img

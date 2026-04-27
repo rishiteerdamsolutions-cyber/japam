@@ -105,10 +105,16 @@ function FooterIcon({
   );
 }
 
-export function AppFooter() {
+interface AppFooterProps {
+  className?: string;
+}
+
+export function AppFooter({ className = '' }: AppFooterProps) {
   const { t } = useTranslation();
   return (
-    <footer className="mt-auto pt-6 pb-4 px-4 flex flex-col items-center justify-center gap-3 text-white/40 text-xs border-t border-white/10 w-full">
+    <footer
+      className={`mt-auto shrink-0 pt-6 pb-4 px-4 flex flex-col items-center justify-center gap-3 text-white/40 text-xs border-t border-white/10 w-full ${className}`}
+    >
       <div className="flex items-center justify-center gap-1 flex-wrap">
         <FooterIcon href="/contact" label={t('landing.contact')} icon={ContactIcon} />
         <FooterIcon href="/privacy" label={t('landing.privacy')} icon={PrivacyIcon} />

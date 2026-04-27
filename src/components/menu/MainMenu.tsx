@@ -12,7 +12,7 @@ import { useUnlockStore } from '../../store/unlockStore';
 import type { GameMode } from '../../store/gameStore';
 import { useProfileStore } from '../../store/profileStore';
 import { getProfileRingFlags } from '../../lib/membershipDisplay';
-import { landingStartJapaButtonClass, landingTryJapaButtonClass } from '../../lib/landingCtaStyles';
+import { landingStartJapaButtonClass } from '../../lib/landingCtaStyles';
 /** `public/japam.gif` — keyed transparent intro (640px wide) until Ista Devata Japa is tapped. */
 const ISTA_DEVATA_INTRO_GIF_SRC = '/japam.gif';
 
@@ -153,9 +153,9 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.08 }}
             onClick={() => navigate('/specials')}
-            className={`${landingTryJapaButtonClass} w-full min-h-[3.75rem] h-full inline-flex items-center justify-center px-1 sm:px-2 !max-w-none border-amber-400/45 bg-amber-500/15`}
+            className={`${landingStartJapaButtonClass} w-full min-h-[3.75rem] h-full inline-flex items-center justify-center px-1 sm:px-2 !max-w-none`}
           >
-            <span className="text-[clamp(0.65rem,2.8vw,0.85rem)] sm:text-sm text-amber-100 font-semibold leading-tight text-center whitespace-normal">
+            <span className="text-white font-bold text-[clamp(0.65rem,2.8vw,0.85rem)] sm:text-sm leading-tight text-center whitespace-normal">
               {t('menu.specials')}
             </span>
           </motion.button>
@@ -171,9 +171,9 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.11 }}
             onClick={() => setIstaDevataRevealed(true)}
-            className={`${landingTryJapaButtonClass} w-full min-h-[3.75rem] h-full inline-flex items-center justify-center px-1 sm:px-2 !max-w-none`}
+            className={`${landingStartJapaButtonClass} w-full min-h-[3.75rem] h-full inline-flex items-center justify-center px-1 sm:px-2 !max-w-none`}
           >
-            <span className="text-[clamp(0.65rem,2.8vw,0.85rem)] sm:text-sm text-white font-semibold leading-tight text-center whitespace-normal">
+            <span className="text-white font-bold text-[clamp(0.65rem,2.8vw,0.85rem)] sm:text-sm leading-tight text-center whitespace-normal">
               {t('menu.istaDevata')}
             </span>
           </motion.button>

@@ -15,6 +15,7 @@ import { BlockedOverlay } from './components/BlockedOverlay'
 import { PWAUpdatePrompt } from './components/PWAUpdatePrompt'
 import { OfflineBanner } from './components/OfflineBanner'
 import { RouterChrome } from './components/RouterChrome'
+import { RequireAuth } from './components/auth/RequireAuth'
 import App from './App.tsx'
 import { MenuPage } from './pages/MenuPage'
 import { MenuDemoTestPage } from './pages/MenuDemoTestPage'
@@ -89,7 +90,14 @@ createRoot(document.getElementById('root')!).render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/menu" element={<MenuPage />} />
-        <Route path="/pushpa-aradhana" element={<PushpaAradhanaPage />} />
+        <Route
+          path="/pushpa-aradhana"
+          element={
+            <RequireAuth>
+              <PushpaAradhanaPage />
+            </RequireAuth>
+          }
+        />
         <Route path="/specials" element={<SpecialsPage />} />
         <Route path="/pushpa-abhisheka" element={<Navigate to="/pushpa-aradhana" replace />} />
         <Route path="/test/menu-demo" element={<MenuDemoTestPage />} />

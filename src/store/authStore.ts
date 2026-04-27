@@ -10,6 +10,12 @@ import {
 } from 'firebase/auth';
 import { auth, googleProvider, isFirebaseConfigured } from '../lib/firebase';
 
+/** Phones / tablets: OAuth redirect avoids slow or blocked embedded popups and opens accounts.google.com directly. */
+function prefersRedirectSignIn(): boolean {
+  if (typeof navigator === 'undefined') return false;
+  return /Android|iPhone|iPad|iPod|webOS|Mobile|Opera Mini/i.test(navigator.userAgent);
+}
+
 /**
  * `getRedirectResult` must run at most once per full page load. In React 18 Strict Mode
  * (dev), the auth bootstrap effect runs twice; without sharing this promise, the second
@@ -146,6 +152,17 @@ export const useAuthStore = create<AuthState>((set) => ({
       return { signInPending: true, error: null };
     });
     if (!started) return;
+
+    if (prefersRedirectSignIn()) {
+      redirectStarted = true;
+      try {
+        await signInWithRedirect(auth, googleProvider);
+      } catch (redirectErr) {
+        redirectStarted = false;
+        set({ error: getAuthErrorMessage(redirectErr), signInPending: false });
+      }
+      return;
+    }
 
     try {
       await signInWithPopup(auth, googleProvider);

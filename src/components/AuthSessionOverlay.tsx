@@ -9,17 +9,37 @@ const SESSION_WELCOME_KEY = 'japam.authWelcomeShown';
  * Full-screen messaging while Firebase resolves persistence, then a short welcome when
  * signed in (once per browser session). Reduces “signed out then suddenly signed in” confusion.
  */
+/** Full-screen “checking” blocks taps (e.g. Sign in); skip on routes where users must interact immediately. */
+function skipBlockingAuthOverlay(pathname: string): boolean {
+  if (pathname === '/') return true;
+  const prefixes = [
+    '/menu',
+    '/specials',
+    '/signin',
+    '/plans',
+    '/settings',
+    '/game',
+    '/japa',
+    '/levels',
+    '/pushpa-aradhana',
+    '/occasion',
+    '/contact',
+  ];
+  return prefixes.some((p) => pathname === p || pathname.startsWith(`${p}/`));
+}
+
 export function AuthSessionOverlay() {
   const { t } = useTranslation();
   const { pathname } = useLocation();
   const loading = useAuthStore((s) => s.loading);
   const user = useAuthStore((s) => s.user);
   const onLandingEntry = pathname === '/';
+  const skipBlocking = skipBlockingAuthOverlay(pathname);
 
   const [phase, setPhase] = useState<'checking' | 'welcome' | 'idle'>('checking');
 
   useEffect(() => {
-    if (onLandingEntry) {
+    if (onLandingEntry || skipBlocking) {
       setPhase('idle');
       return;
     }
@@ -51,9 +71,9 @@ export function AuthSessionOverlay() {
     }
 
     setPhase('idle');
-  }, [loading, user, onLandingEntry]);
+  }, [loading, user, onLandingEntry, skipBlocking]);
 
-  if (onLandingEntry || phase === 'idle') return null;
+  if (onLandingEntry || skipBlocking || phase === 'idle') return null;
 
   return (
     <div

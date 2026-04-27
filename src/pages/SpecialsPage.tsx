@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+import { useAuthStore } from '../store/authStore';
+import { isFirebaseConfigured } from '../lib/firebase';
 import { AppFooter } from '../components/layout/AppFooter';
 import { BottomNav } from '../components/nav/BottomNav';
 import { MenuMatchChantHeader } from '../components/layout/MenuMatchChantHeader';
@@ -10,6 +12,16 @@ import { landingStartJapaButtonClass, landingTryJapaButtonClass } from '../lib/l
 export function SpecialsPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const user = useAuthStore((s) => s.user);
+  const authLoading = useAuthStore((s) => s.loading);
+
+  const openPushpaAradhana = () => {
+    if (isFirebaseConfigured && !authLoading && !user) {
+      navigate('/signin?return=/pushpa-aradhana');
+      return;
+    }
+    navigate('/pushpa-aradhana');
+  };
 
   return (
     <div className="relative min-h-screen flex flex-col items-center p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] overflow-hidden">
@@ -32,7 +44,7 @@ export function SpecialsPage() {
             type="button"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.99 }}
-            onClick={() => navigate('/pushpa-aradhana')}
+            onClick={openPushpaAradhana}
             className={`${landingStartJapaButtonClass} w-full min-h-[3rem] inline-flex items-center justify-center px-3`}
           >
             <span className="text-white font-bold text-sm sm:text-base text-center">{t('specials.pushpaAradhana')}</span>

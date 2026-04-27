@@ -402,8 +402,14 @@ export function MenuMiniGameDemo() {
   const [boardOpacity, setBoardOpacity] = useState(1);
   /** During `score`: japa (+1 mantra) first, then strip power (+1 icon name) for 4+ lines. */
   const [scoreStage, setScoreStage] = useState<'japa' | 'power' | null>(null);
-  /** Off by default: no timers or phase churn until the user taps Play (saves CPU/battery). */
-  const [demoPlaying, setDemoPlaying] = useState(false);
+  /**
+   * Autoplay on load: demo is local-only (no network); same CPU as after “Play”.
+   * `prefers-reduced-motion`: start paused; user can tap Play (lighter default).
+   */
+  const [demoPlaying, setDemoPlaying] = useState(() => {
+    if (typeof window === 'undefined') return true;
+    return !window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
+  });
 
   const step = DEMO_CHAIN[stepIndex % DEMO_CHAIN.length]!;
 

@@ -13,10 +13,9 @@ export function SpecialsPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
-  const authLoading = useAuthStore((s) => s.loading);
 
   const openPushpaAradhana = () => {
-    if (isFirebaseConfigured && !authLoading && !user) {
+    if (isFirebaseConfigured && !user) {
       navigate('/signin?return=/pushpa-aradhana');
       return;
     }

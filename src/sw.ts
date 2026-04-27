@@ -1,6 +1,30 @@
+import { registerRoute } from 'workbox-routing'
+import { NetworkOnly } from 'workbox-strategies'
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching'
 
 declare let self: ServiceWorkerGlobalScope
+
+/**
+ * Installed PWA: OAuth / Firebase return URLs often include query parameters. Serving a
+ * precached (possibly stale) index.html for that navigation can break redirect sign-in
+ * because the app bundle must be current. Match before precache: network-only.
+ */
+function looksLikeAuthReturnNavigation(request: Request, url: URL): boolean {
+  if (request.mode !== 'navigate' || url.origin !== self.location.origin) return false
+  if (!url.search || url.search === '?') return false
+  const p = url.searchParams
+  if (p.has('code') || p.has('apiKey') || p.has('oobCode')) return true
+  if (p.has('state') && (p.has('scope') || p.has('authuser'))) return true
+  if (p.has('mode') && (p.get('mode') === 'signIn' || p.get('mode') === 'signin')) {
+    return true
+  }
+  return false
+}
+
+registerRoute(
+  ({ request, url }) => looksLikeAuthReturnNavigation(request, url),
+  new NetworkOnly()
+)
 
 // Precaching (manifest injected by vite-plugin-pwa)
 cleanupOutdatedCaches()

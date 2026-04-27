@@ -29,11 +29,10 @@ export function MenuPage() {
   }, [navigate]);
   const getCurrentLevelIndex = useProgressStore((s) => s.getCurrentLevelIndex);
   const user = useAuthStore((s) => s.user);
-  const authLoading = useAuthStore((s) => s.loading);
   const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle);
 
   const handleSelect = async (mode: GameMode) => {
-    if (isFirebaseConfigured && !user && !authLoading) {
+    if (isFirebaseConfigured && !user) {
       await signInWithGoogle();
       if (!useAuthStore.getState().user) return;
     }

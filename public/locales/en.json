@@ -800,7 +800,7 @@
     "update_check_badge": "Check",
     "update_check_button": "Check for updates",
     "update_check_failed": "Couldn't check for updates. Try again or refresh the page.",
-    "update_check_hint": "Checks for a new app version in the background. If one is ready, tap Update now to reload.",
+    "update_check_hint": "Checks for a new app version. If one is ready, tap Update now — we clear offline file cache, then reload so you get the latest build (your sign-in is kept).",
     "update_check_new_version": "A new version is ready. Tap Update now to reload.",
     "update_check_no_sw": "Updates can't run here (development tab or not the installed app). Use the installed Japam app or hard-refresh the site after a new release.",
     "update_check_up_to_date": "You're up to date.",

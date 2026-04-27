@@ -3,15 +3,9 @@ import { useAuthStore } from '../../store/authStore';
 import { isFirebaseConfigured } from '../../lib/firebase';
 
 export function GoogleSignIn() {
-  const { user, loading, signInPending, error, signInWithGoogle, signOut } = useAuthStore();
+  const { user, signInPending, error, signInWithGoogle, signOut } = useAuthStore();
 
   if (!isFirebaseConfigured) return null;
-
-  if (loading) {
-    return (
-      <div className="h-10 w-48 rounded-lg bg-black/20 animate-pulse" />
-    );
-  }
 
   if (user) {
     return (

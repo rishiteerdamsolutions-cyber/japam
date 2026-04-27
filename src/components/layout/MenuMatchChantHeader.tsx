@@ -67,8 +67,7 @@ export function MenuMatchChantHeader({ rightElement }: MenuMatchChantHeaderProps
       </button>
       <div className="flex items-center gap-2 shrink-0">
         {rightElement}
-        {loading && <span className="text-amber-200/60 text-sm">…</span>}
-        {!loading && !user && (
+        {!user && (
           <button
             type="button"
             disabled={signInPending}

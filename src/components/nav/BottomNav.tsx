@@ -75,11 +75,10 @@ export function BottomNav() {
   const pathname = location.pathname;
   const getCurrentLevelIndex = useProgressStore((s) => s.getCurrentLevelIndex);
   const user = useAuthStore((s) => s.user);
-  const authLoading = useAuthStore((s) => s.loading);
   const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle);
 
   const handlePlay = async () => {
-    if (isFirebaseConfigured && !user && !authLoading) {
+    if (isFirebaseConfigured && !user) {
       await signInWithGoogle();
       if (!useAuthStore.getState().user) return;
     }

@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import {
-  signInWithPopup,
   signInWithRedirect,
   getRedirectResult,
   signOut as firebaseSignOut,
@@ -9,12 +8,6 @@ import {
   type User
 } from 'firebase/auth';
 import { auth, googleProvider, isFirebaseConfigured } from '../lib/firebase';
-
-/** Phones / tablets: OAuth redirect avoids slow or blocked embedded popups and opens accounts.google.com directly. */
-function prefersRedirectSignIn(): boolean {
-  if (typeof navigator === 'undefined') return false;
-  return /Android|iPhone|iPad|iPod|webOS|Mobile|Opera Mini/i.test(navigator.userAgent);
-}
 
 /**
  * `getRedirectResult` must run at most once per full page load. In React 18 Strict Mode
@@ -86,7 +79,17 @@ function attachFirebaseAuthListeners() {
       if (firstCallback) {
         firstCallback = false;
         if (redirectUser) {
-          commit(auth.currentUser);
+          /**
+           * After OAuth redirect, the first emission is often `null` while persistence
+           * catches up — `auth.currentUser` can still be null for a moment. Never overwrite
+           * the user we already stored from `getRedirectResult` with null.
+           */
+          void (async () => {
+            let u = auth.currentUser;
+            if (!u) u = await waitAndReadCurrentUser();
+            if (!u) u = useAuthStore.getState().user;
+            commit(u);
+          })();
           return;
         }
         void (async () => {
@@ -131,6 +134,7 @@ interface AuthState {
   signInPending: boolean;
   error: string | null;
   signInWithGoogle: () => Promise<void>;
+  clearError: () => void;
   signOut: () => Promise<void>;
   init: () => () => void;
 }
@@ -140,6 +144,8 @@ export const useAuthStore = create<AuthState>((set) => ({
   loading: true,
   signInPending: false,
   error: null,
+
+  clearError: () => set({ error: null }),
 
   signInWithGoogle: async () => {
     if (!isFirebaseConfigured) return;
@@ -153,42 +159,13 @@ export const useAuthStore = create<AuthState>((set) => ({
     });
     if (!started) return;
 
-    if (prefersRedirectSignIn()) {
-      redirectStarted = true;
-      try {
-        await signInWithRedirect(auth, googleProvider);
-      } catch (redirectErr) {
-        redirectStarted = false;
-        set({ error: getAuthErrorMessage(redirectErr), signInPending: false });
-      }
-      return;
-    }
-
     try {
-      await signInWithPopup(auth, googleProvider);
+      redirectStarted = true;
+      await signInWithRedirect(auth, googleProvider);
     } catch (err) {
       const authErr = err as AuthError;
-      if (
-        authErr?.code === 'auth/cancelled-popup-request' ||
-        authErr?.code === 'auth/popup-closed-by-user'
-      ) {
-        return;
-      }
-
-      const useRedirect =
-        authErr?.code === 'auth/popup-blocked' ||
-        authErr?.code === 'auth/operation-not-supported-in-this-environment';
-
-      if (useRedirect) {
-        redirectStarted = true;
-        try {
-          await signInWithRedirect(auth, googleProvider);
-        } catch (redirectErr) {
-          redirectStarted = false;
-          set({ error: getAuthErrorMessage(redirectErr) });
-        }
-        return;
-      }
+      redirectStarted = false;
+      if (authErr?.code === 'auth/cancelled-popup-request') return;
       set({ error: getAuthErrorMessage(err) });
     } finally {
       if (!redirectStarted) {

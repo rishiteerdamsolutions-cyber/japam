@@ -165,7 +165,6 @@ export function Settings({ onBack }: SettingsProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
-  const loading = useAuthStore((s) => s.loading);
   const signInPending = useAuthStore((s) => s.signInPending);
   const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle);
   const signOut = useAuthStore((s) => s.signOut);
@@ -418,18 +417,14 @@ export function Settings({ onBack }: SettingsProps) {
           </h1>
           <div className="flex items-center justify-end min-h-[44px] min-w-0 justify-self-end">
             {!user && isFirebaseConfigured && (
-              loading ? (
-                <span className="text-amber-200/60 text-sm">…</span>
-              ) : (
-                <button
-                  type="button"
-                  disabled={signInPending}
-                  onClick={() => signInWithGoogle()}
-                  className="text-amber-400/90 text-xs font-medium hover:text-amber-400 whitespace-nowrap disabled:opacity-60"
-                >
-                  {signInPending ? '…' : t('menu.signIn')}
-                </button>
-              )
+              <button
+                type="button"
+                disabled={signInPending}
+                onClick={() => signInWithGoogle()}
+                className="text-amber-400/90 text-xs font-medium hover:text-amber-400 whitespace-nowrap disabled:opacity-60"
+              >
+                {signInPending ? '…' : t('menu.signIn')}
+              </button>
             )}
           </div>
         </header>

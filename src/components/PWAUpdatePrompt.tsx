@@ -12,6 +12,13 @@ export interface PwaCheckUpdateResultDetail {
   status: PwaCheckUpdateStatus;
 }
 
+/** Workbox precache + runtime caches only — does not clear IndexedDB (Firebase session stays signed in). */
+export async function clearPwaContentCaches(): Promise<void> {
+  if (typeof caches === 'undefined') return;
+  const keys = await caches.keys();
+  await Promise.all(keys.map((k) => caches.delete(k)));
+}
+
 function waitForServiceWorkerInstalled(sw: ServiceWorker, timeoutMs: number): Promise<void> {
   if (sw.state === 'installed' || sw.state === 'redundant') return Promise.resolve();
   return new Promise((resolve) => {
@@ -50,11 +57,18 @@ export function PWAUpdatePrompt() {
     setUpdating(true);
     setUpdated(false);
     setTimeout(() => {
-      setUpdating(false);
-      setUpdated(true);
-      setTimeout(() => {
-        updateSWRef.current?.();
-      }, 800);
+      void (async () => {
+        try {
+          await clearPwaContentCaches();
+        } catch {
+          // still try to activate new worker + reload
+        }
+        setUpdating(false);
+        setUpdated(true);
+        setTimeout(() => {
+          void updateSWRef.current?.();
+        }, 800);
+      })();
     }, 600);
   }, []);
 

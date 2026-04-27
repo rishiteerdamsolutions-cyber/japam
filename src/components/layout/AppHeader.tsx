@@ -41,7 +41,7 @@ interface AppHeaderProps {
 export function AppHeader({ title, showBack, onBack, rightElement }: AppHeaderProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { user, loading, signOut } = useAuthStore();
+  const { user, loading, signInWithGoogle, signInPending, signOut } = useAuthStore();
   const tier = useUnlockStore((s) => s.tier);
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
   const unlockExpiresAt = useUnlockStore((s) => s.unlockExpiresAt);
@@ -75,14 +75,14 @@ export function AppHeader({ title, showBack, onBack, rightElement }: AppHeaderPr
           </h1>
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
-          {loading && <span className="text-amber-200/60 text-sm">…</span>}
-          {!loading && !user && (
+          {!user && (
             <button
               type="button"
-              onClick={() => navigate('/signin')}
-              className="text-amber-400/90 text-xs font-medium hover:text-amber-400 whitespace-nowrap"
+              disabled={signInPending}
+              onClick={() => signInWithGoogle()}
+              className="text-amber-400/90 text-xs font-medium hover:text-amber-400 whitespace-nowrap disabled:opacity-60"
             >
-              Sign in
+              {signInPending ? '…' : 'Sign in'}
             </button>
           )}
           {!loading && user && (

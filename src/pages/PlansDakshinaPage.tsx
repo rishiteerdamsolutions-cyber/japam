@@ -136,7 +136,7 @@ export function PlansDakshinaPage() {
               </p>
             )}
             {!isPremiumMember && <p className="text-amber-200/60 text-xs mb-3">{t('plans.proFootnote')}</p>}
-            {!user && isFirebaseConfigured && !loading && (
+            {!user && isFirebaseConfigured && (
               <button
                 type="button"
                 disabled={signInPending}
@@ -185,7 +185,7 @@ export function PlansDakshinaPage() {
             {user && isPremiumMember && (
               <p className="text-amber-300/90 text-sm font-medium mb-2">{t('plans.premiumThankYou')}</p>
             )}
-            {!user && isFirebaseConfigured && !loading && (
+            {!user && isFirebaseConfigured && (
               <p className="text-amber-200/60 text-sm mb-2">{t('plans.premiumAfterSignIn')}</p>
             )}
             {user && canDonateForPremium && (

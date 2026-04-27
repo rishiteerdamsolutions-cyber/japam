@@ -68,10 +68,7 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
             </p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
-          {loading && (
-            <span className="text-amber-200/60 text-sm">…</span>
-          )}
-          {!loading && !user && (
+          {!user && (
             <div className="flex items-center gap-2">
               <button
                 type="button"

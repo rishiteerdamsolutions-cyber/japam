@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import {
-  signInWithRedirect,
-  getRedirectResult,
+  signInWithPopup,
   signOut as firebaseSignOut,
   onAuthStateChanged,
   type AuthError,
@@ -10,109 +9,39 @@ import {
 import { auth, googleProvider, isFirebaseConfigured } from '../lib/firebase';
 
 /**
- * `getRedirectResult` must run at most once per full page load. In React 18 Strict Mode
- * (dev), the auth bootstrap effect runs twice; without sharing this promise, the second
- * call returns null and the redirect sign-in is lost (Firebase behavior).
+ * In dev (Vite HMR + React 18 Strict Mode), modules can be re-evaluated while the Firebase
+ * `auth` singleton stays alive. Store the "attached" flag on `globalThis` so we don't add
+ * duplicate listeners after a hot reload.
  */
-let redirectResultPromise: ReturnType<typeof getRedirectResult> | null = null;
-
-function getRedirectResultOnce() {
-  redirectResultPromise ??= getRedirectResult(auth);
-  return redirectResultPromise;
-}
-
-/** One listener per full page load — avoids Strict Mode double-mount races with Firebase. */
-let firebaseAuthListenersAttached = false;
+const LISTENER_FLAG = '__japam_firebase_auth_listener_attached__';
 
 function attachFirebaseAuthListeners() {
-  if (!isFirebaseConfigured || firebaseAuthListenersAttached) return;
-  firebaseAuthListenersAttached = true;
+  if (!isFirebaseConfigured || !auth) return;
+  const a = auth;
+  const g = globalThis as unknown as Record<string, unknown>;
+  if (g[LISTENER_FLAG]) return;
+  g[LISTENER_FLAG] = true;
 
-  /**
-   * Firebase can emit the first `onAuthStateChanged(null)` before IndexedDB persistence
-   * restores the session. We must not flip the UI to "signed out" until we've re-read
-   * `auth.currentUser` over a few ticks (persistence is async; 320ms was not always enough).
-   * Redirect result is still applied first. `loading` stays true until the first commit.
-   */
-  void (async () => {
-    let redirectUser = false;
-    try {
-      const cred = await getRedirectResultOnce();
-      if (cred?.user) {
-        redirectUser = true;
-        useAuthStore.setState({
-          user: cred.user,
-          signInPending: false,
-          error: null,
-          loading: false,
-        });
-      }
-    } catch (err) {
-      useAuthStore.setState({ error: getAuthErrorMessage(err), signInPending: false });
-    }
-
-    const commit = (u: User | null) => {
-      useAuthStore.setState({ user: u, loading: false, signInPending: false });
-    };
-
-    const waitAndReadCurrentUser = async (): Promise<User | null> => {
-      const steps = [0, 25, 50, 100, 200, 400];
-      for (let i = 0; i < steps.length; i++) {
-        const wait = i === 0 ? 0 : steps[i]! - steps[i - 1]!;
-        if (wait > 0) {
-          await new Promise((r) => setTimeout(r, wait));
-        }
-        const u = auth.currentUser;
-        if (u) return u;
-      }
-      return null;
-    };
-
-    let firstCallback = true;
-
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        firstCallback = false;
-        commit(user);
-        return;
-      }
-      if (firstCallback) {
-        firstCallback = false;
-        if (redirectUser) {
-          /**
-           * After OAuth redirect, the first emission is often `null` while persistence
-           * catches up — `auth.currentUser` can still be null for a moment. Never overwrite
-           * the user we already stored from `getRedirectResult` with null.
-           */
-          void (async () => {
-            let u = auth.currentUser;
-            if (!u) u = await waitAndReadCurrentUser();
-            if (!u) u = useAuthStore.getState().user;
-            commit(u);
-          })();
-          return;
-        }
-        void (async () => {
-          const resolved = await waitAndReadCurrentUser();
-          commit(resolved);
-        })();
-        return;
-      }
-      commit(null);
+  onAuthStateChanged(a, (user) => {
+    useAuthStore.setState({
+      user,
+      loading: false,
+      signInPending: false,
     });
+  });
 
-    // Never leave the app stuck on loading if Auth misbehaves
-    setTimeout(() => {
-      if (useAuthStore.getState().loading) {
-        useAuthStore.setState({ user: auth.currentUser, loading: false, signInPending: false });
-      }
-    }, 5000);
-  })();
+  // Never leave the app stuck on loading if Auth misbehaves
+  setTimeout(() => {
+    if (useAuthStore.getState().loading) {
+      useAuthStore.setState({ user: a.currentUser, loading: false, signInPending: false });
+    }
+  }, 5000);
 }
 
 function getAuthErrorMessage(err: unknown): string {
   const authErr = err as AuthError | undefined;
-  switch (authErr?.code) {
+  const code = authErr?.code;
+  switch (code) {
     case 'auth/popup-closed-by-user':
       return 'Sign-in was cancelled. Please try again.';
     case 'auth/popup-blocked':
@@ -120,10 +49,27 @@ function getAuthErrorMessage(err: unknown): string {
     case 'auth/cancelled-popup-request':
       return 'Sign-in was interrupted. Please try once more.';
     case 'auth/unauthorized-domain':
-      return 'This domain is not authorized in Firebase Authentication settings.';
+      return 'This site’s domain is not listed under Firebase Authentication → Settings → Authorized domains.';
     case 'auth/operation-not-supported-in-this-environment':
-      return 'This browser does not support popup sign-in. Trying redirect sign-in...';
+      return 'This environment does not support that sign-in method. Try another browser or update the app.';
+    case 'auth/network-request-failed':
+      return 'Network error while contacting Google. Check your connection and try again.';
+    case 'auth/internal-error':
+      return 'Sign-in service had a temporary error. Please try again in a moment.';
+    case 'auth/timeout':
+      return 'Sign-in timed out. Check your connection and try again.';
+    case 'auth/too-many-requests':
+      return 'Too many attempts. Please wait a few minutes and try again.';
+    case 'auth/operation-not-allowed':
+      return 'Google sign-in is not enabled for this app in the Firebase console.';
+    case 'auth/invalid-api-key':
+      return 'App configuration error (invalid API key). Contact support.';
+    case 'auth/user-disabled':
+      return 'This account has been disabled.';
     default:
+      if (typeof code === 'string' && code.startsWith('auth/')) {
+        return 'Sign-in could not complete. Please try again.';
+      }
       return err instanceof Error ? err.message : 'Sign-in failed';
   }
 }
@@ -148,10 +94,9 @@ export const useAuthStore = create<AuthState>((set) => ({
   clearError: () => set({ error: null }),
 
   signInWithGoogle: async () => {
-    if (!isFirebaseConfigured) return;
+    if (!isFirebaseConfigured || !auth || !googleProvider) return;
 
     let started = false;
-    let redirectStarted = false;
     set((state) => {
       if (state.signInPending) return state;
       started = true;
@@ -160,22 +105,25 @@ export const useAuthStore = create<AuthState>((set) => ({
     if (!started) return;
 
     try {
-      redirectStarted = true;
-      await signInWithRedirect(auth, googleProvider);
+      await signInWithPopup(auth, googleProvider);
+      // `onAuthStateChanged` will update the store.
     } catch (err) {
       const authErr = err as AuthError;
-      redirectStarted = false;
-      if (authErr?.code === 'auth/cancelled-popup-request') return;
-      set({ error: getAuthErrorMessage(err) });
-    } finally {
-      if (!redirectStarted) {
+      if (
+        authErr?.code === 'auth/popup-closed-by-user' ||
+        authErr?.code === 'auth/cancelled-popup-request'
+      ) {
         set({ signInPending: false });
+        return;
       }
+      set({ error: getAuthErrorMessage(err), signInPending: false });
+    } finally {
+      set({ signInPending: false });
     }
   },
 
   signOut: async () => {
-    if (!isFirebaseConfigured) return;
+    if (!isFirebaseConfigured || !auth) return;
     set({ error: null });
     try {
       await firebaseSignOut(auth);

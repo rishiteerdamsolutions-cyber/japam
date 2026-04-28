@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getApiBase } from '../lib/apiBase';
 
-const API_BASE = import.meta.env.VITE_API_URL ?? '';
 const PRIEST_TOKEN_KEY = 'japam_priest_token';
 const PRIEST_TEMPLE_KEY = 'japam_priest_temple';
 
@@ -17,7 +17,7 @@ export function PriestLoginPage() {
     setError(null);
     setLoading(true);
     try {
-      const url = API_BASE ? `${API_BASE}/api/priest-login` : '/api/priest-login';
+      const url = `${getApiBase()}/api/priest-login`;
       const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

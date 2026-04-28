@@ -3,7 +3,7 @@ import { useAuthStore } from '../../store/authStore';
 import { isFirebaseConfigured } from '../../lib/firebase';
 
 export function GoogleSignIn() {
-  const { user, signInPending, error, signInWithGoogle, signOut } = useAuthStore();
+  const { user, signInPending, signInWithGoogle, signOut } = useAuthStore();
 
   if (!isFirebaseConfigured) return null;
 
@@ -60,9 +60,6 @@ export function GoogleSignIn() {
         </svg>
         {signInPending ? 'Opening Google…' : 'Sign in with Google'}
       </motion.button>
-      {error && (
-        <p className="text-red-400 text-xs text-center">{error}</p>
-      )}
     </div>
   );
 }

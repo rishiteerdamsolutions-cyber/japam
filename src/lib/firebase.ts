@@ -21,16 +21,18 @@ export const isFirebaseConfigured = Boolean(
   firebaseConfig.apiKey && firebaseConfig.projectId
 );
 
-let auth: Auth;
+let auth: Auth | null = null;
 let app: ReturnType<typeof initializeApp> | null = null;
 let firestore: Firestore | null = null;
 let storage: FirebaseStorage | null = null;
+let googleProvider: GoogleAuthProvider | null = null;
 
 if (isFirebaseConfigured) {
   app = initializeApp(firebaseConfig);
   auth = getAuth(app);
   firestore = getFirestore(app);
   storage = getStorage(app);
+  googleProvider = new GoogleAuthProvider();
 
   /**
    * Firebase App Check — blocks non-app traffic from hitting your Firestore quota.
@@ -66,9 +68,6 @@ if (isFirebaseConfigured) {
       console.warn('[AppCheck] Failed to initialise:', e);
     }
   }
-} else {
-  auth = null as unknown as Auth;
 }
 
-export { auth, app, firestore, storage };
-export const googleProvider = new GoogleAuthProvider();
+export { auth, app, firestore, storage, googleProvider };

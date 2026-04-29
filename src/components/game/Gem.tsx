@@ -101,7 +101,8 @@ export const Gem = memo(function Gem({
         <button
         type="button"
         aria-label={deityName}
-        title={deityName}
+        // Avoid native `title` tooltips on mobile/PWA; we use our own tooltip UI.
+        title={undefined}
         onMouseEnter={() => setTooltipOpen(true)}
         onMouseLeave={() => {
           clearTooltipHideTimer();

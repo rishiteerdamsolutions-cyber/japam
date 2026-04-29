@@ -96,6 +96,7 @@ export function Board() {
 
   const lastDragSwapAtRef = useRef<number>(0);
   const dragStartRef = useRef<{ row: number; col: number; x: number; y: number } | null>(null);
+  const touchStartRef = useRef<{ row: number; col: number; x: number; y: number } | null>(null);
   const handlePointerDown = useCallback((e: React.PointerEvent, row: number, col: number) => {
     if (status !== 'playing' || isAnimatingMatch) return;
     primeAudio();
@@ -105,6 +106,22 @@ export function Board() {
     host.setPointerCapture?.(e.pointerId);
   }, [status, isAnimatingMatch, blockDragForTargetPower]);
 
+  const resolveAdjacentFromDelta = useCallback((
+    start: { row: number; col: number; x: number; y: number },
+    clientX: number,
+    clientY: number,
+  ): { row: number; col: number } | null => {
+    const dx = clientX - start.x;
+    const dy = clientY - start.y;
+    const absX = Math.abs(dx);
+    const absY = Math.abs(dy);
+    const SWAP_THRESHOLD_PX = 10;
+
+    if (Math.max(absX, absY) < SWAP_THRESHOLD_PX) return null;
+    if (absX > absY) return { row: start.row, col: start.col + (dx > 0 ? 1 : -1) };
+    return { row: start.row + (dy > 0 ? 1 : -1), col: start.col };
+  }, []);
+
   const handlePointerMove = useCallback((e: React.PointerEvent) => {
     const start = dragStartRef.current;
     if (!start || status !== 'playing' || isAnimatingMatch || blockDragForTargetPower) return;
@@ -112,17 +129,8 @@ export function Board() {
 
     // Touch users often drag "between" cells (over grid gaps), where `elementsFromPoint` may not
     // resolve a `[data-cell]`. Prefer direction+threshold to pick the intended adjacent swap.
-    const dx = e.clientX - start.x;
-    const dy = e.clientY - start.y;
-    const absX = Math.abs(dx);
-    const absY = Math.abs(dy);
-    const SWAP_THRESHOLD_PX = 10;
-
     let target: { row: number; col: number } | null = null;
-    if (Math.max(absX, absY) >= SWAP_THRESHOLD_PX) {
-      if (absX > absY) target = { row: start.row, col: start.col + (dx > 0 ? 1 : -1) };
-      else target = { row: start.row + (dy > 0 ? 1 : -1), col: start.col };
-    }
+    target = resolveAdjacentFromDelta(start, e.clientX, e.clientY);
 
     if (!target) {
       const key = readCellKeyFromPoint(e.clientX, e.clientY);
@@ -141,7 +149,7 @@ export function Board() {
         dragStartRef.current = null;
       }
     }
-  }, [status, swap, isAnimatingMatch, blockDragForTargetPower]);
+  }, [status, swap, isAnimatingMatch, blockDragForTargetPower, resolveAdjacentFromDelta]);
 
   const handlePointerUp = useCallback((e: React.PointerEvent) => {
     const start = dragStartRef.current;
@@ -166,6 +174,77 @@ export function Board() {
       }
     }
   }, [status, swap, selectCell, isAnimatingMatch, blockDragForTargetPower]);
+
+  const handleTouchStart = useCallback((e: React.TouchEvent, row: number, col: number) => {
+    if (status !== 'playing' || isAnimatingMatch) return;
+    primeAudio();
+    const t = e.touches[0];
+    if (!t) return;
+    touchStartRef.current = { row, col, x: t.clientX, y: t.clientY };
+  }, [status, isAnimatingMatch]);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    const start = touchStartRef.current;
+    if (!start || status !== 'playing' || isAnimatingMatch || blockDragForTargetPower) return;
+    const t = e.touches[0];
+    if (!t) return;
+    if (e.cancelable) e.preventDefault();
+
+    let target = resolveAdjacentFromDelta(start, t.clientX, t.clientY);
+    if (!target) {
+      const key = readCellKeyFromPoint(t.clientX, t.clientY);
+      if (key) {
+        const [r, c] = key.split(',').map(Number);
+        target = { row: r, col: c };
+      }
+    }
+    if (target) {
+      const dr = Math.abs(start.row - target.row);
+      const dc = Math.abs(start.col - target.col);
+      if ((dr === 1 && dc === 0) || (dr === 0 && dc === 1)) {
+        swap(target.row, target.col, start.row, start.col);
+        lastDragSwapAtRef.current = Date.now();
+        touchStartRef.current = null;
+      }
+    }
+  }, [status, swap, isAnimatingMatch, blockDragForTargetPower, resolveAdjacentFromDelta]);
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    const start = touchStartRef.current;
+    touchStartRef.current = null;
+    if (!start || status !== 'playing' || isAnimatingMatch) return;
+    const t = e.changedTouches[0];
+    if (!t) {
+      if (blockDragForTargetPower) selectCell(start.row, start.col);
+      return;
+    }
+    if (blockDragForTargetPower) {
+      const keyTap = readCellKeyFromPoint(t.clientX, t.clientY);
+      if (keyTap) {
+        const [r, c] = keyTap.split(',').map(Number);
+        if (r === start.row && c === start.col) selectCell(r, c);
+      } else {
+        selectCell(start.row, start.col);
+      }
+      return;
+    }
+    let target = resolveAdjacentFromDelta(start, t.clientX, t.clientY);
+    if (!target) {
+      const key = readCellKeyFromPoint(t.clientX, t.clientY);
+      if (key) {
+        const [r, c] = key.split(',').map(Number);
+        target = { row: r, col: c };
+      }
+    }
+    if (target) {
+      const dr = Math.abs(start.row - target.row);
+      const dc = Math.abs(start.col - target.col);
+      if ((dr === 1 && dc === 0) || (dr === 0 && dc === 1)) {
+        swap(target.row, target.col, start.row, start.col);
+        lastDragSwapAtRef.current = Date.now();
+      }
+    }
+  }, [status, swap, selectCell, isAnimatingMatch, blockDragForTargetPower, resolveAdjacentFromDelta]);
 
   const handleClick = useCallback((row: number, col: number) => {
     if (status !== 'playing' || isAnimatingMatch) return;
@@ -235,6 +314,10 @@ export function Board() {
                 onPointerMove={handlePointerMove}
                 onPointerUp={handlePointerUp}
                 onPointerCancel={handlePointerUp}
+                onTouchStart={(e) => handleTouchStart(e, r, c)}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+                onTouchCancel={handleTouchEnd}
                 onClick={() => handleClick(r, c)}
               >
                 <Gem

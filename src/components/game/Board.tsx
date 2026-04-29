@@ -94,11 +94,12 @@ export function Board() {
     });
   }, []);
 
-  const dragStartRef = useRef<{ row: number; col: number } | null>(null);
+  const lastDragSwapAtRef = useRef<number>(0);
+  const dragStartRef = useRef<{ row: number; col: number; x: number; y: number } | null>(null);
   const handlePointerDown = useCallback((e: React.PointerEvent, row: number, col: number) => {
     if (status !== 'playing' || isAnimatingMatch) return;
     primeAudio();
-    dragStartRef.current = { row, col };
+    dragStartRef.current = { row, col, x: e.clientX, y: e.clientY };
     if (blockDragForTargetPower) return;
     const host = e.currentTarget as HTMLElement;
     host.setPointerCapture?.(e.pointerId);
@@ -108,13 +109,35 @@ export function Board() {
     const start = dragStartRef.current;
     if (!start || status !== 'playing' || isAnimatingMatch || blockDragForTargetPower) return;
     if (e.pointerType === 'mouse' && e.buttons !== 1) return;
-    const key = readCellKeyFromPoint(e.clientX, e.clientY);
-    if (key) {
-      const [r, c] = key.split(',').map(Number);
-      const dr = Math.abs(start.row - r);
-      const dc = Math.abs(start.col - c);
+
+    // Touch users often drag "between" cells (over grid gaps), where `elementsFromPoint` may not
+    // resolve a `[data-cell]`. Prefer direction+threshold to pick the intended adjacent swap.
+    const dx = e.clientX - start.x;
+    const dy = e.clientY - start.y;
+    const absX = Math.abs(dx);
+    const absY = Math.abs(dy);
+    const SWAP_THRESHOLD_PX = 10;
+
+    let target: { row: number; col: number } | null = null;
+    if (Math.max(absX, absY) >= SWAP_THRESHOLD_PX) {
+      if (absX > absY) target = { row: start.row, col: start.col + (dx > 0 ? 1 : -1) };
+      else target = { row: start.row + (dy > 0 ? 1 : -1), col: start.col };
+    }
+
+    if (!target) {
+      const key = readCellKeyFromPoint(e.clientX, e.clientY);
+      if (key) {
+        const [r, c] = key.split(',').map(Number);
+        target = { row: r, col: c };
+      }
+    }
+
+    if (target) {
+      const dr = Math.abs(start.row - target.row);
+      const dc = Math.abs(start.col - target.col);
       if ((dr === 1 && dc === 0) || (dr === 0 && dc === 1)) {
-        swap(r, c, start.row, start.col);
+        swap(target.row, target.col, start.row, start.col);
+        lastDragSwapAtRef.current = Date.now();
         dragStartRef.current = null;
       }
     }
@@ -139,12 +162,16 @@ export function Board() {
       const dc = Math.abs(start.col - c);
       if ((dr === 1 && dc === 0) || (dr === 0 && dc === 1)) {
         swap(r, c, start.row, start.col);
+        lastDragSwapAtRef.current = Date.now();
       }
     }
   }, [status, swap, selectCell, isAnimatingMatch, blockDragForTargetPower]);
 
   const handleClick = useCallback((row: number, col: number) => {
     if (status !== 'playing' || isAnimatingMatch) return;
+    // iOS Safari commonly emits a click after a drag gesture; suppress it so we don't
+    // flash the deity tooltip / accidentally reselect after a drag-swap.
+    if (Date.now() - lastDragSwapAtRef.current < 350) return;
     const armed = usePowerArmStore.getState().armedPowerId;
     if (armed && armed !== 'freeSwap') return;
     selectCell(row, col);

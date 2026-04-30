@@ -54,9 +54,9 @@ export function MenuMatchChantHeader({ rightElement }: MenuMatchChantHeaderProps
     <header className="flex items-center justify-between gap-2 w-full mb-4 min-h-[44px]">
       <button
         type="button"
-        onClick={() => navigate('/menu')}
+        onClick={() => navigate('/')}
         className="min-w-0 flex-1 pr-2 text-left rounded-lg hover:bg-white/5 -ml-1 pl-1 py-1 transition-colors"
-        aria-label={t('menu.goToMenu')}
+        aria-label={t('menu.goToLanding', { defaultValue: 'Go to landing page' })}
       >
         <JapamBrand as="span" className="block text-lg sm:text-xl leading-tight truncate">
           {t('menu.title')}

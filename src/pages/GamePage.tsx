@@ -45,8 +45,12 @@ export function GamePage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const user = useAuthStore((s) => s.user);
+  const authLoading = useAuthStore((s) => s.loading);
   const guestParam = searchParams.get('guest');
-  const isGuest = guestParam === '1' || guestParam === 'true' || guestParam === 'yes';
+  // Guest mode is URL-driven, but if the user signs in mid-session we should immediately
+  // "upgrade" to signed-in gameplay (powers unlock, guest modal closes) without requiring reload.
+  const isGuest = (guestParam === '1' || guestParam === 'true' || guestParam === 'yes') && !user?.uid;
   const mode = isGuest ? 'general' : parseGameMode(searchParams.get('mode'));
   const levelParam = searchParams.get('level');
   const marathonId = searchParams.get('marathon');
@@ -126,8 +130,6 @@ export function GamePage() {
   const restoreGame = useGameStore((s) => s.restoreGame);
   const loadUnlock = useUnlockStore((s) => s.load);
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
-  const user = useAuthStore((s) => s.user);
-  const authLoading = useAuthStore((s) => s.loading);
   const profileDisplayName = useProfileStore((s) => s.displayName);
   const profileLoaded = useProfileStore((s) => s.loaded);
   const setProfileDisplayName = useProfileStore((s) => s.setDisplayName);

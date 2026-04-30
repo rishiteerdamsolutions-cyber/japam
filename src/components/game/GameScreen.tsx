@@ -1038,18 +1038,21 @@ export function GameScreen({
       {guestPowerSignInOpen && isGuest && (
         <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center p-4 bg-black/75">
           <div className="bg-[#C2185B]/95 rounded-2xl p-4 sm:p-6 max-w-sm w-full text-center border-2 border-[#5D4037] shadow-xl">
+            <button
+              type="button"
+              onClick={() => setGuestPowerSignInOpen(false)}
+              className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full border border-amber-500/45 bg-black/40 text-amber-100 hover:bg-black/60 active:scale-95"
+              aria-label="Close"
+            >
+              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+                <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" />
+              </svg>
+            </button>
             <h2 className="text-lg sm:text-xl font-bold text-amber-400 mb-2">{t('game.guestPowersSignInTitle')}</h2>
             <p className="text-amber-200/90 text-sm sm:text-base mb-5">{t('game.guestPowersSignInBody')}</p>
             <div className="mb-3 flex justify-center">
               <GoogleSignIn />
             </div>
-            <button
-              type="button"
-              onClick={() => setGuestPowerSignInOpen(false)}
-              className="w-full py-2.5 rounded-xl border border-amber-500/50 text-amber-300 text-sm font-medium"
-            >
-              {t('common.later')}
-            </button>
           </div>
         </div>
       )}

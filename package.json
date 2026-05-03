@@ -2,6 +2,9 @@
   "name": "japam",
   "private": true,
   "version": "0.0.0",
+  "engines": {
+    "node": ">=20 <24"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",

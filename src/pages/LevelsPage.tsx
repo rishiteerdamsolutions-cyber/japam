@@ -32,7 +32,7 @@ export function LevelsPage() {
       {replayMode != null && (
         <LevelAlreadyCompleteModal mode={replayMode} onClose={() => setReplayMode(null)} />
       )}
-      <WorldMap mode="general" onSelectLevel={handleSelectLevel} />
+      <WorldMap onSelectLevel={handleSelectLevel} />
     </>
   );
 }

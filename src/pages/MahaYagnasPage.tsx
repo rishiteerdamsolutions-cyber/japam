@@ -17,6 +17,7 @@ import {
   displayYagnaTitle,
   isDefaultFreeYagnaId,
 } from '../lib/defaultCommunityEvents';
+import { AccessBadge } from '../components/ui/AccessBadge';
 
 const API_BASE = import.meta.env.VITE_API_URL ?? '';
 
@@ -443,8 +444,13 @@ export function MahaYagnasPage() {
               <div
                 id={`yagna-${y.id}`}
                 key={y.id}
-                className={`p-4 rounded-2xl bg-black/30 border overflow-hidden ${urlYagnaId === y.id ? 'border-amber-400 ring-2 ring-amber-500/50' : 'border-amber-500/20'}`}
+                className={`relative p-4 rounded-2xl bg-black/30 border overflow-hidden ${urlYagnaId === y.id ? 'border-amber-400 ring-2 ring-amber-500/50' : 'border-amber-500/20'}`}
               >
+                {!isPro && isDefaultFreeYagnaId(y.id) ? (
+                  <AccessBadge variant="free" label={t('common.free')} className="absolute top-3 right-3 z-[1]" />
+                ) : !isPro ? (
+                  <AccessBadge variant="pro" label={t('menu.pro')} className="absolute top-3 right-3 z-[1]" />
+                ) : null}
                 <div className="flex gap-4 min-w-0">
                   <div className="w-16 h-16 rounded-xl overflow-hidden bg-black/40 shrink-0">
                     <img

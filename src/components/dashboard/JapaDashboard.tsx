@@ -4,7 +4,7 @@ import { useJapaStore } from '../../store/japaStore';
 import { useAuthStore } from '../../store/authStore';
 import { fetchOccasionsList, type OccasionListItem } from '../../lib/occasionsApi';
 import { downloadAnniversaryReportPdf, downloadOccasionSummaryPdf } from '../../utils/occasionPdf';
-import { DEITIES, mantraForMatchTier, type Deity } from '../../data/deities';
+import { DEITIES, type Deity } from '../../data/deities';
 import { DAILY_GOAL_JAPAS } from '../../data/levels';
 import { downloadMantraPdf, type PdfDetails } from '../../utils/pdfExport';
 import { trackShareEvent } from '../../lib/firestore';
@@ -35,7 +35,6 @@ export function JapaDashboard() {
     mantra: string;
     count: number;
     deityName: string;
-    matchTier: 3 | 4 | 5;
   } | null>(null);
   const [name, setName] = useState('');
   const [gotram, setGotram] = useState('');
@@ -111,15 +110,13 @@ export function JapaDashboard() {
     1,
   );
 
-  const openDownloadModalForTier = (deity: Deity, matchTier: 3 | 4 | 5) => {
-    const row = counts.japaByTier?.[deity.id] ?? { m3: 0, m4: 0, m5: 0 };
-    const c = matchTier === 3 ? row.m3 : matchTier === 4 ? row.m4 : row.m5;
+  const openDownloadModalForDeity = (deity: Deity) => {
+    const c = counts[deity.id] ?? 0;
     if (c <= 0) return;
     setDownloadModal({
-      mantra: mantraForMatchTier(deity, matchTier),
+      mantra: deity.mantra,
       count: c,
       deityName: deity.name,
-      matchTier,
     });
     setName('');
     setGotram('');
@@ -178,13 +175,8 @@ export function JapaDashboard() {
         gotram: gotram.trim(),
         mobileNumber: mobileNumber.trim()
       };
-      const tierNote =
-        downloadModal.matchTier === 3
-          ? t('japaDashboard.matchRows3')
-          : downloadModal.matchTier === 4
-            ? t('japaDashboard.matchRows4')
-            : t('japaDashboard.matchRows5');
-      const fileStem = `${downloadModal.deityName}-${downloadModal.matchTier}match-${downloadModal.count}-japas`;
+      const tierNote = t('japaDashboard.totalLifetimeJapasPdfNote');
+      const fileStem = `${downloadModal.deityName}-lifetime-${downloadModal.count}-japas`;
       await downloadMantraPdf(
         downloadModal.mantra,
         downloadModal.count,
@@ -261,9 +253,6 @@ export function JapaDashboard() {
           const count = counts[deity.id];
           const tierRow = counts.japaByTier?.[deity.id] ?? { m3: 0, m4: 0, m5: 0 };
           const pct = maxRow > 0 ? (count / maxRow) * 100 : 0;
-          const tierLabel3 = t('japaDashboard.matchRows3');
-          const tierLabel4 = t('japaDashboard.matchRows4');
-          const tierLabel5 = t('japaDashboard.matchRows5');
           return (
             <div key={deity.id} className="bg-black/20 rounded-xl p-3">
               <div className="flex flex-wrap justify-between items-start gap-2 mb-2">
@@ -271,61 +260,18 @@ export function JapaDashboard() {
                   <span className="font-medium text-amber-400 block">{deity.name}</span>
                   <span className="text-amber-200/90 text-sm font-semibold">{count.toLocaleString()} total</span>
                 </div>
-                <div className="flex items-end gap-1.5 shrink-0">
-                  <div className="flex flex-col items-center gap-0.5">
-                    <button
-                      type="button"
-                      onClick={() => openDownloadModalForTier(deity, 3)}
-                      disabled={tierRow.m3 <= 0}
-                      title={`${tierLabel3} · ${mantraForMatchTier(deity, 3)}`}
-                      aria-label={t('japaDashboard.downloadPdfTierAria', {
-                        deity: deity.name,
-                        tier: tierLabel3,
-                      })}
-                      className="p-2 rounded-lg bg-amber-500/85 text-white hover:bg-amber-400 disabled:opacity-35 disabled:cursor-not-allowed transition-colors"
-                    >
-                      <DownloadPdfIcon className="w-5 h-5" />
-                    </button>
-                    <span className="text-[9px] text-amber-200/55 tabular-nums leading-none" aria-hidden>
-                      3
-                    </span>
-                  </div>
-                  <div className="flex flex-col items-center gap-0.5">
-                    <button
-                      type="button"
-                      onClick={() => openDownloadModalForTier(deity, 4)}
-                      disabled={tierRow.m4 <= 0}
-                      title={`${tierLabel4} · ${mantraForMatchTier(deity, 4)}`}
-                      aria-label={t('japaDashboard.downloadPdfTierAria', {
-                        deity: deity.name,
-                        tier: tierLabel4,
-                      })}
-                      className="p-2 rounded-lg bg-amber-500/85 text-white hover:bg-amber-400 disabled:opacity-35 disabled:cursor-not-allowed transition-colors"
-                    >
-                      <DownloadPdfIcon className="w-5 h-5" />
-                    </button>
-                    <span className="text-[9px] text-amber-200/55 tabular-nums leading-none" aria-hidden>
-                      4
-                    </span>
-                  </div>
-                  <div className="flex flex-col items-center gap-0.5">
-                    <button
-                      type="button"
-                      onClick={() => openDownloadModalForTier(deity, 5)}
-                      disabled={tierRow.m5 <= 0}
-                      title={`${tierLabel5} · ${mantraForMatchTier(deity, 5)}`}
-                      aria-label={t('japaDashboard.downloadPdfTierAria', {
-                        deity: deity.name,
-                        tier: tierLabel5,
-                      })}
-                      className="p-2 rounded-lg bg-amber-500/85 text-white hover:bg-amber-400 disabled:opacity-35 disabled:cursor-not-allowed transition-colors"
-                    >
-                      <DownloadPdfIcon className="w-5 h-5" />
-                    </button>
-                    <span className="text-[9px] text-amber-200/55 tabular-nums leading-none" aria-hidden>
-                      5+
-                    </span>
-                  </div>
+                <div className="flex flex-col items-end gap-0.5 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => openDownloadModalForDeity(deity)}
+                    disabled={count <= 0}
+                    title={`${t('japaDashboard.downloadPdf')} · ${deity.mantra}`}
+                    aria-label={t('japaDashboard.downloadPdfTotalAria', { deity: deity.name })}
+                    className="inline-flex flex-col items-center gap-0.5 p-2 rounded-lg bg-amber-500/85 text-white hover:bg-amber-400 disabled:opacity-35 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <DownloadPdfIcon className="w-5 h-5" />
+                    <span className="text-[9px] font-semibold leading-none">{t('japaDashboard.downloadPdf')}</span>
+                  </button>
                 </div>
               </div>
               <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-[10px] sm:text-[11px] text-amber-200/65 mb-2 font-mono tabular-nums">
@@ -419,23 +365,20 @@ export function JapaDashboard() {
           <div className="bg-[#C2185B]/90 rounded-2xl border border-amber-500/30 p-6 max-w-sm w-full shadow-xl my-4">
             <h2 className="text-xl font-bold text-amber-400 mb-1">{t('japaDashboard.downloadPdfTitle')}</h2>
             <p className="text-amber-200/85 text-xs mb-1 font-medium leading-snug">
-              {t('japaDashboard.pdfModalSubtitle', {
+              {t('japaDashboard.pdfModalSubtitleTotal', {
                 deity: downloadModal.deityName,
-                tier:
-                  downloadModal.matchTier === 3
-                    ? t('japaDashboard.matchRows3')
-                    : downloadModal.matchTier === 4
-                      ? t('japaDashboard.matchRows4')
-                      : t('japaDashboard.matchRows5'),
                 count: downloadModal.count,
               })}
             </p>
-            <p className="text-amber-300/90 text-[11px] mb-4 italic">&ldquo;{downloadModal.mantra}&rdquo;</p>
+            <p className="text-amber-300/90 text-[11px] mb-2 italic">&ldquo;{downloadModal.mantra}&rdquo;</p>
+            <p className="text-amber-200/70 text-[11px] mb-4 leading-snug">
+              {t('japaDashboard.handwritingRepeatTotal', { count: downloadModal.count })}
+            </p>
 
             <div className="mb-4 p-3 rounded-lg bg-black/30 border border-amber-500/20">
               <p className="text-amber-300 text-[11px] font-semibold mb-2">{t('japaDashboard.handwritingRequiredTitle')}</p>
               <p className="text-amber-200/80 text-[11px] mb-2">{t('japaDashboard.uploadHandwritingRequired')}</p>
-              <p className="text-amber-200/80 text-[11px] mb-2 font-medium">Steps: 1) Upload your handwritten nama → 2) White background is removed → 3) PDF is generated with your handwriting repeated</p>
+              <p className="text-amber-200/80 text-[11px] mb-2 font-medium">{t('japaDashboard.handwritingStepsShort')}</p>
               <p className="text-amber-200/80 text-[11px] mb-2">Example of what to upload:</p>
               <div className="mb-2 flex justify-center">
                 <img

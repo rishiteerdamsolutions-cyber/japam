@@ -250,7 +250,7 @@ export function MarathonsPage() {
     const participated = joinedMarathonIds.has(marathon.id);
     const lb = leaderboardForRankCard(marathon, participated);
     if (lb.length === 0) {
-      setShareError('Leaderboard not available yet. Try again in a moment.');
+      setShareError(t('marathonsPage.leaderboardUnavailable'));
       return;
     }
 
@@ -294,19 +294,10 @@ export function MarathonsPage() {
 
       const url = URL.createObjectURL(blob);
       setShareResult({ blob, url, shareText });
-
-      // Download immediately (more reliable than waiting for a secondary click).
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'japam-marathon.png';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-
-      setShareNotice('Downloaded. To post on WhatsApp Status: open WhatsApp → Status → My Status → add the downloaded image.');
+      setShareNotice(null);
       trackShareEvent('marathon_rank_card').catch(() => {});
     } catch {
-      setShareError('Could not generate/download the image. Please try again.');
+      setShareError(t('marathonsPage.shareFailed'));
     } finally {
       setSharing(false);
     }
@@ -320,6 +311,7 @@ export function MarathonsPage() {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
+    setShareNotice(t('marathonsPage.downloadNoticeShort'));
   };
 
   const closeShareResult = () => {
@@ -335,41 +327,41 @@ export function MarathonsPage() {
       <div className="relative z-10">
       {shareResult && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 p-4">
-          <div className="bg-[#C2185B]/90 rounded-2xl border border-amber-500/30 p-6 max-w-sm w-full shadow-xl">
-            <h2 className="text-xl font-bold text-amber-400 mb-2">Your rank card</h2>
-            <p className="text-amber-200/80 text-sm mb-3">Your leaderboard image is downloaded.</p>
-            <p className="text-amber-200/70 text-xs mb-4">To post it on WhatsApp Status: WhatsApp → Status → My Status → add the downloaded image.</p>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={downloadShareImage}
-                className="flex-1 py-3 rounded-xl bg-amber-500 text-white font-semibold"
-              >
-                Download again
-              </button>
-            </div>
+          <div className="bg-[#C2185B]/90 rounded-2xl border border-amber-500/30 p-5 max-w-sm w-full shadow-xl">
+            <h2 className="text-lg font-bold text-amber-400 mb-1">{t('marathonsPage.rankCardTitle')}</h2>
+            <p className="text-amber-200/75 text-sm mb-3">{t('marathonsPage.rankCardReady')}</p>
+            {shareNotice ? <p className="text-amber-200/65 text-xs mb-4">{shareNotice}</p> : null}
+            <button
+              type="button"
+              onClick={downloadShareImage}
+              className="w-full py-3 rounded-xl bg-amber-500 text-white font-semibold text-sm"
+            >
+              {t('marathonsPage.downloadImage')}
+            </button>
             <button
               type="button"
               onClick={closeShareResult}
-              className="mt-3 w-full py-2 rounded-xl bg-white/5 text-amber-200/80 text-sm"
+              className="mt-2 w-full py-2 rounded-xl bg-white/5 text-amber-200/80 text-sm"
             >
-              Close
+              {t('marathonsPage.close')}
             </button>
           </div>
         </div>
       )}
       <MenuMatchChantHeader />
-      <h2 className="text-base sm:text-xl font-bold text-amber-400 mb-2" style={{ fontFamily: 'serif' }}>
-        Japa Marathons
+      <h2 className="text-base sm:text-xl font-bold text-amber-400 mb-1.5" style={{ fontFamily: 'serif' }}>
+        {t('marathonsPage.title')}
       </h2>
-      <p className="text-amber-200/80 text-sm mb-4">Discover marathons by location and join to contribute your japas.</p>
+      <p className="text-amber-200/70 text-xs sm:text-sm mb-3 leading-snug max-w-xl">
+        {t('marathonsPage.description')}
+      </p>
       {!isPro && (
-        <div className="mb-4 p-3 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-100 text-sm">
-          {t('communityFree.marathonProGate')}
+        <div className="mb-3 p-3 rounded-xl bg-amber-500/10 border border-amber-500/25 text-amber-200/90 text-xs sm:text-sm leading-snug">
+          {t('marathonsPage.proGateShort')}{' '}
           <button
             type="button"
             onClick={() => navigate(`/game?mode=general&level=${FIRST_LOCKED_LEVEL_INDEX_GENERAL}`)}
-            className="ml-2 underline text-amber-300"
+            className="text-amber-400 font-medium hover:underline"
           >
             {t('mahaYagnas.unlockPro')}
           </button>
@@ -389,7 +381,7 @@ export function MarathonsPage() {
           <button type="button" onClick={() => setShareError(null)} className="ml-2 underline">Dismiss</button>
         </div>
       )}
-      {shareNotice && (
+      {shareNotice && !shareResult && (
         <div className="mb-4 p-3 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-100 text-sm">
           {shareNotice}
           <button type="button" onClick={() => setShareNotice(null)} className="ml-2 underline">Dismiss</button>
@@ -399,26 +391,37 @@ export function MarathonsPage() {
       <DonateThankYouBox className="mt-4" />
 
       {user && myMarathons.length > 0 && (
-        <div className="mb-6 p-4 rounded-xl bg-black/30 border border-amber-500/30">
-          <h2 className="text-amber-400 font-semibold mb-3">Your marathons</h2>
-          <p className="text-amber-200/70 text-sm mb-3">Do your japa for these marathons — your japas count toward the marathon.</p>
-          <div className="space-y-2">
+        <div className="mb-5 p-3 rounded-xl bg-black/30 border border-amber-500/25">
+          <h2 className="text-amber-400 font-semibold text-sm sm:text-base mb-1">{t('marathonsPage.yourMarathons')}</h2>
+          <p className="text-amber-200/60 text-xs mb-2.5 leading-snug">{t('marathonsPage.yourMarathonsDesc')}</p>
+          <div className="space-y-2.5">
             {[...myMarathons].sort((a, b) => (a.marathonId === DEFAULT_FREE_MARATHON_ID ? -1 : b.marathonId === DEFAULT_FREE_MARATHON_ID ? 1 : 0)).map((my) => (
               <div key={my.marathonId} className="py-2 border-t border-amber-500/10 first:border-t-0 first:pt-0">
-                <div className="flex items-center justify-between gap-2">
-                  <div>
-                    <p className="text-amber-200 font-medium">{displayMarathonTitle(my.marathonId, my.templeName)} • {deityName(my.deityId)}</p>
-                    <p className="text-amber-200/60 text-xs">Target {my.targetJapas} japas • Your japas: {my.japasCount}</p>
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0 flex-1">
+                    {!isPro ? (
+                      <div className="flex flex-wrap items-center gap-1.5 mb-0.5">
+                        {isDefaultFreeMarathonId(my.marathonId) ? (
+                          <AccessBadge variant="free" label={t('common.free')} size="sm" />
+                        ) : (
+                          <AccessBadge variant="pro" label={t('menu.pro')} size="sm" />
+                        )}
+                      </div>
+                    ) : null}
+                    <p className="text-amber-200 font-medium text-sm truncate">{displayMarathonTitle(my.marathonId, my.templeName)} · {deityName(my.deityId)}</p>
+                    <p className="text-amber-200/60 text-[11px] sm:text-xs mt-0.5">
+                      {t('marathonsPage.myProgressLine', { target: my.targetJapas, n: my.japasCount })}
+                    </p>
                   </div>
-                  <div className="flex flex-col items-end gap-1">
+                  <div className="flex flex-col items-end gap-1 shrink-0">
                     <button
                       type="button"
                       onClick={() => {
                         navigate(`/game?mode=${encodeURIComponent(my.deityId)}&marathon=${encodeURIComponent(my.marathonId)}&target=${my.targetJapas}`);
                       }}
-                      className="px-4 py-2 rounded-lg bg-green-600 text-white text-sm font-medium"
+                      className="px-3 py-1.5 rounded-lg bg-green-600 text-white text-xs font-medium min-h-[40px]"
                     >
-                      Japa
+                      {t('marathonsPage.japa')}
                     </button>
                     <button
                       type="button"
@@ -443,7 +446,7 @@ export function MarathonsPage() {
                       disabled={sharing || !my.leaderboard?.length}
                       className="shrink-0 px-3 py-1.5 rounded-lg bg-amber-500/90 text-white text-xs font-semibold shadow-md disabled:opacity-50"
                     >
-                      {sharing ? 'Preparing…' : 'Download rank card'}
+                      {sharing ? t('mahaYagnas.preparing') : t('mahaYagnas.downloadRankCard')}
                     </button>
                     {!!my.leaderboard && my.leaderboard.length > 0 && (
                       <button
@@ -456,9 +459,9 @@ export function MarathonsPage() {
                             return next;
                           });
                         }}
-                        className="text-[11px] text-amber-300 underline"
+                        className="text-[11px] text-amber-300/90 underline underline-offset-2"
                       >
-                        {openMyLeaderboard.has(my.marathonId) ? 'Hide leaderboard' : 'Show leaderboard'}
+                        {openMyLeaderboard.has(my.marathonId) ? t('mahaYagnas.hideLeaderboard') : t('mahaYagnas.showLeaderboard')}
                       </button>
                     )}
                   </div>
@@ -468,7 +471,7 @@ export function MarathonsPage() {
                   <div className="mt-2 pl-2 border-l-2 border-amber-500/20">
                     <div className="flex items-center justify-between gap-2">
                       <p className="text-amber-200/70 text-xs font-medium mb-1">
-                        {isDefaultFreeMarathonId(my.marathonId) ? 'Your progress' : 'Top participants'}
+                        {isDefaultFreeMarathonId(my.marathonId) ? t('marathonsPage.leaderboardSolo') : t('marathonsPage.leaderboardTop')}
                       </p>
                     </div>
                     {(isDefaultFreeMarathonId(my.marathonId)
@@ -487,9 +490,9 @@ export function MarathonsPage() {
         </div>
       )}
 
-      <div className="space-y-3 mb-6">
+      <div className="space-y-3 mb-5">
         <div>
-          <label className="text-amber-200/80 text-sm block mb-1">State (required)</label>
+          <label className="text-amber-200/80 text-sm block mb-1">{t('marathonsPage.state')}</label>
           <select
             value={stateName}
             onChange={(e) => { setStateName(e.target.value); setDistrictName(''); }}
@@ -503,7 +506,7 @@ export function MarathonsPage() {
         </div>
         {state && (
           <div>
-            <label className="text-amber-200/80 text-sm block mb-1">District (optional)</label>
+            <label className="text-amber-200/80 text-sm block mb-1">{t('marathonsPage.district')}</label>
             <select
               value={districtName}
               onChange={(e) => setDistrictName(e.target.value)}
@@ -517,7 +520,7 @@ export function MarathonsPage() {
           </div>
         )}
         <div>
-          <label className="text-amber-200/80 text-sm block mb-1">City / Town / Village (optional)</label>
+          <label className="text-amber-200/80 text-sm block mb-1">{t('marathonsPage.city')}</label>
           <input
             type="text"
             value={cityName}
@@ -527,7 +530,7 @@ export function MarathonsPage() {
           />
         </div>
         <div>
-          <label className="text-amber-200/80 text-sm block mb-1">Area (optional)</label>
+          <label className="text-amber-200/80 text-sm block mb-1">{t('marathonsPage.area')}</label>
           <input
             type="text"
             value={areaName}
@@ -542,25 +545,25 @@ export function MarathonsPage() {
           disabled={!stateName.trim() || loading}
           className="px-6 py-2 rounded-lg bg-amber-500 text-white font-medium disabled:opacity-50"
         >
-          {loading ? 'Searching…' : 'Search'}
+          {loading ? t('marathonsPage.searching') : t('marathonsPage.search')}
         </button>
       </div>
 
-      {loading && <p className="text-amber-200/70 text-sm">Loading…</p>}
+      {loading && <p className="text-amber-200/70 text-sm">{t('marathonsPage.loading')}</p>}
 
       {searched && !loading && (
         <div className="space-y-6 relative">
           {temples.length === 0 ? (
-            <p className="text-amber-200/60 text-sm">No temples in this location yet.</p>
+            <p className="text-amber-200/60 text-sm">{t('marathonsPage.noTemples')}</p>
           ) : (
             temples.map((temple) => {
               const marathons = marathonsByTemple[temple.id] || [];
               return (
-                <div key={temple.id} className="p-4 rounded-xl bg-black/30 border border-amber-500/20">
+                <div key={temple.id} className="p-3 sm:p-4 rounded-xl bg-black/30 border border-amber-500/20">
                   <p className="font-medium text-amber-200">{temple.name}</p>
                   <p className="text-amber-200/60 text-xs">{temple.area}</p>
                   {marathons.length === 0 ? (
-                    <p className="text-amber-200/50 text-sm mt-2">No active marathons</p>
+                    <p className="text-amber-200/50 text-sm mt-2">{t('marathonsPage.noMarathons')}</p>
                   ) : (
                     <div className="mt-3 space-y-2">
                       {marathons.map((m) => {
@@ -568,12 +571,25 @@ export function MarathonsPage() {
                           !!user?.uid && joinedMarathonIds.has(m.id) && !!m.leaderboard && m.leaderboard.length > 0;
                         return (
                           <div key={m.id} className="py-2 border-t border-amber-500/10">
-                            <div className="flex items-center justify-between gap-2">
-                              <div>
-                                <p className="text-amber-200 font-medium">{deityName(m.deityId)} • {m.targetJapas} japas</p>
-                                <p className="text-amber-200/60 text-xs">Started {m.startDate} • {m.joinedCount} joined</p>
+                            <div className="flex items-start justify-between gap-2">
+                              <div className="min-w-0 flex-1">
+                                {!isPro ? (
+                                  <div className="flex flex-wrap items-center gap-1.5 mb-0.5">
+                                    {isDefaultFreeMarathonId(m.id) ? (
+                                      <AccessBadge variant="free" label={t('common.free')} size="sm" />
+                                    ) : (
+                                      <AccessBadge variant="pro" label={t('menu.pro')} size="sm" />
+                                    )}
+                                  </div>
+                                ) : null}
+                                <p className="text-amber-200 font-medium text-sm">
+                                  {t('marathonsPage.targetJapasLine', { deity: deityName(m.deityId), target: m.targetJapas })}
+                                </p>
+                                <p className="text-amber-200/60 text-[11px] sm:text-xs mt-0.5">
+                                  {t('marathonsPage.startedJoined', { date: m.startDate, n: m.joinedCount })}
+                                </p>
                               </div>
-                              <div className="flex flex-col items-end gap-1">
+                              <div className="flex flex-col items-end gap-1 shrink-0">
                                 <button
                                   onClick={() => handleJoin(m.id)}
                                   disabled={
@@ -584,17 +600,17 @@ export function MarathonsPage() {
                                   className="px-4 py-2 rounded-lg bg-amber-500 text-white text-sm font-medium disabled:opacity-50"
                                 >
                                   {joining === m.id
-                                    ? '…'
+                                    ? t('marathonsPage.joining')
                                     : joinedMarathonIds.has(m.id)
-                                      ? 'Joined'
+                                      ? t('marathonsPage.joined')
                                       : !isPro && !isDefaultFreeMarathonId(m.id)
                                         ? (
                                             <span className="inline-flex items-center gap-1.5">
-                                              <AccessBadge variant="pro" label="Pro" size="sm" />
-                                              <span>required</span>
+                                              <AccessBadge variant="pro" label={t('menu.pro')} size="sm" />
+                                              <span>{t('marathonsPage.proRequiredSuffix')}</span>
                                             </span>
                                           )
-                                        : 'Join'}
+                                        : t('marathonsPage.join')}
                                 </button>
                                 {canDownload && (
                                   <button
@@ -603,14 +619,14 @@ export function MarathonsPage() {
                                     disabled={sharing}
                                     className="px-3 py-1.5 rounded-lg bg-amber-500/90 text-white text-xs font-semibold shadow-md disabled:opacity-50"
                                   >
-                                    {sharing ? 'Preparing…' : 'Download rank card'}
+                                    {sharing ? t('mahaYagnas.preparing') : t('mahaYagnas.downloadRankCard')}
                                   </button>
                                 )}
                               </div>
                             </div>
                             {m.leaderboard && m.leaderboard.length > 0 && (
                               <div className="mt-2 pl-2 border-l-2 border-amber-500/20">
-                                <p className="text-amber-200/70 text-xs font-medium mb-1">Top participants</p>
+                                <p className="text-amber-200/70 text-xs font-medium mb-1">{t('marathonsPage.leaderboardTop')}</p>
                                 {paddedLeaderboard(m.leaderboard).map((p) => (
                                   <p key={p.rank} className="text-amber-200/60 text-xs">
                                     {p.rank}. {p.uid ? `${p.name} — ${p.japasCount} japas` : 'Vacant'}

@@ -8,6 +8,7 @@ import { ActiveUsersStrip } from '../game/ActiveUsersStrip';
 import { DEITIES } from '../../data/deities';
 import { JapamBrand } from '../ui/JapamBrand';
 import { useAuthStore } from '../../store/authStore';
+import { AuthSessionRestoreHint } from '../auth/AuthSessionRestoreHint';
 import { useUnlockStore } from '../../store/unlockStore';
 import type { GameMode } from '../../store/gameStore';
 import { useProfileStore } from '../../store/profileStore';
@@ -69,18 +70,22 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
           </div>
           <div className="flex items-center gap-2 shrink-0">
           {!user && (
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                disabled={signInPending}
-                onClick={() => signInWithGoogle()}
-                className="text-amber-400/90 text-xs font-medium hover:text-amber-400 whitespace-nowrap disabled:opacity-60"
-              >
-                {signInPending ? '…' : t('menu.signIn')}
-              </button>
+            <div className="flex items-center gap-2 justify-end">
+              {loading ? (
+                <AuthSessionRestoreHint />
+              ) : (
+                <button
+                  type="button"
+                  disabled={signInPending}
+                  onClick={() => signInWithGoogle()}
+                  className="text-amber-400/90 text-xs font-medium hover:text-amber-400 whitespace-nowrap disabled:opacity-60"
+                >
+                  {signInPending ? '…' : t('menu.signIn')}
+                </button>
+              )}
             </div>
           )}
-          {!loading && user && (
+          {user && (
             <div className="flex items-center gap-1.5 sm:gap-2 justify-end">
               <button
                 type="button"

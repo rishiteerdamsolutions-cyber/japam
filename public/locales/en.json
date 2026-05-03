@@ -29,7 +29,13 @@
   },
   "auth": {
     "checkingSignIn": "Checking sign-in…",
-    "signedInWelcome": "You are signed in! Enjoy your Japa!"
+    "signedInWelcome": "You are signed in! Enjoy your Japa!",
+    "sessionRestoreAria": "Restoring your session, please wait",
+    "sessionRestoreLines": [
+      "Invoking the mantras…",
+      "Preparing the Japa board…",
+      "Gathering your japa…"
+    ]
   },
   "menu": {
     "back": "← Back",

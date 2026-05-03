@@ -30,12 +30,30 @@ function attachFirebaseAuthListeners() {
     });
   });
 
-  // Never leave the app stuck on loading if Auth misbehaves
+  /** Resolves when persisted session (IndexedDB) has been read — avoids a false “signed out” flash before the first `onAuthStateChanged` in slow cold starts. */
+  void a
+    .authStateReady()
+    .then(() => {
+      useAuthStore.setState({
+        user: a.currentUser,
+        loading: false,
+        signInPending: false,
+      });
+    })
+    .catch(() => {
+      useAuthStore.setState({
+        user: a.currentUser,
+        loading: false,
+        signInPending: false,
+      });
+    });
+
+  // Last resort if neither listener nor authStateReady clears loading (network / SDK hang)
   setTimeout(() => {
     if (useAuthStore.getState().loading) {
       useAuthStore.setState({ user: a.currentUser, loading: false, signInPending: false });
     }
-  }, 5000);
+  }, 20000);
 }
 
 function getAuthErrorMessage(err: unknown): string {

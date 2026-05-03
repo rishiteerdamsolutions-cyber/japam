@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../store/authStore';
+import { AuthSessionRestoreHint } from '../auth/AuthSessionRestoreHint';
 import { useUnlockStore } from '../../store/unlockStore';
 import { useProfileStore } from '../../store/profileStore';
 import { getProfileRingFlags } from '../../lib/membershipDisplay';
@@ -76,16 +77,22 @@ export function AppHeader({ title, showBack, onBack, rightElement }: AppHeaderPr
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
           {!user && (
-            <button
-              type="button"
-              disabled={signInPending}
-              onClick={() => signInWithGoogle()}
-              className="text-amber-400/90 text-xs font-medium hover:text-amber-400 whitespace-nowrap disabled:opacity-60"
-            >
-              {signInPending ? '…' : 'Sign in'}
-            </button>
+            <>
+              {loading ? (
+                <AuthSessionRestoreHint />
+              ) : (
+                <button
+                  type="button"
+                  disabled={signInPending}
+                  onClick={() => signInWithGoogle()}
+                  className="text-amber-400/90 text-xs font-medium hover:text-amber-400 whitespace-nowrap disabled:opacity-60"
+                >
+                  {signInPending ? '…' : t('menu.signIn')}
+                </button>
+              )}
+            </>
           )}
-          {!loading && user && (
+          {user && (
             <>
               <div className="flex items-center gap-1.5 min-w-0 max-w-[100px] sm:max-w-[140px]">
                 <div

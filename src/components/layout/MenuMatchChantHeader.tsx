@@ -2,6 +2,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { JapamBrand } from '../ui/JapamBrand';
 import { useAuthStore } from '../../store/authStore';
+import { AuthSessionRestoreHint } from '../auth/AuthSessionRestoreHint';
 import { useUnlockStore } from '../../store/unlockStore';
 import { useProfileStore } from '../../store/profileStore';
 import { getProfileRingFlags } from '../../lib/membershipDisplay';
@@ -68,16 +69,22 @@ export function MenuMatchChantHeader({ rightElement }: MenuMatchChantHeaderProps
       <div className="flex items-center gap-2 shrink-0">
         {rightElement}
         {!user && (
-          <button
-            type="button"
-            disabled={signInPending}
-            onClick={() => signInWithGoogle()}
-            className="text-amber-400/90 text-xs font-medium hover:text-amber-400 whitespace-nowrap disabled:opacity-60"
-          >
-            {signInPending ? '…' : t('menu.signIn')}
-          </button>
+          <>
+            {loading ? (
+              <AuthSessionRestoreHint />
+            ) : (
+              <button
+                type="button"
+                disabled={signInPending}
+                onClick={() => signInWithGoogle()}
+                className="text-amber-400/90 text-xs font-medium hover:text-amber-400 whitespace-nowrap disabled:opacity-60"
+              >
+                {signInPending ? '…' : t('menu.signIn')}
+              </button>
+            )}
+          </>
         )}
-        {!loading && user && !onPlansPage && (
+        {user && !onPlansPage && (
           <button
             type="button"
             onClick={() => navigate('/plans')}
@@ -87,7 +94,7 @@ export function MenuMatchChantHeader({ rightElement }: MenuMatchChantHeaderProps
             <HeartIcon />
           </button>
         )}
-        {!loading && user && (
+        {user && (
           <button
             type="button"
             onClick={openSettings}

@@ -18,7 +18,7 @@ import {
   JAPAM_CHECK_RESULT_EVENT,
   JAPAM_PWA_APPLY_UPDATE_EVENT,
   type PwaCheckUpdateResultDetail,
-} from './PWAUpdatePrompt';
+} from '../lib/pwaUpdate';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;

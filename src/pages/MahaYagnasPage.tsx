@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import { MenuMatchChantHeader } from '../components/layout/MenuMatchChantHeader';
 import { BottomNav } from '../components/nav/BottomNav';
 import { AppFooter } from '../components/layout/AppFooter';
@@ -45,6 +46,18 @@ interface Contribution {
 
 function formatNum(n: number): string {
   return new Intl.NumberFormat('en-IN').format(n);
+}
+
+function contributionSummary(t: TFunction, y: Yagna, contrib: Contribution): string {
+  const poolPct = y.goalJapas > 0 ? ((100 * contrib.totalJapas) / y.goalJapas).toFixed(1) : '0';
+  const share = contrib.totalJapas > 0 ? ((100 * contrib.userJapas) / contrib.totalJapas).toFixed(1) : '0';
+  return t('mahaYagnas.contributionLine', {
+    you: formatNum(contrib.userJapas),
+    pool: formatNum(contrib.totalJapas),
+    goal: formatNum(y.goalJapas),
+    poolPct,
+    share,
+  });
 }
 
 export function MahaYagnasPage() {
@@ -238,13 +251,7 @@ export function MahaYagnasPage() {
       if (!blob) throw new Error('Failed to generate image');
       const url = URL.createObjectURL(blob);
       setShareResult({ blob, url, shareText: `My rank in ${yTitle}! You: ${formatNum(myJp)} japas. Join at www.japam.digital` });
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'japam-maha-yagna.png';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      setShareNotice(t('mahaYagnas.downloadNotice') || 'Downloaded. To post on WhatsApp Status: open WhatsApp → Status → My Status → add the downloaded image.');
+      setShareNotice(null);
       trackShareEvent('maha_yagna_rank_card').catch(() => {});
     } catch {
       setShareError(t('mahaYagnas.shareFailed') || 'Could not generate/download the image.');
@@ -261,6 +268,7 @@ export function MahaYagnasPage() {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
+    setShareNotice(t('mahaYagnas.downloadNoticeShort'));
   };
 
   const closeShareResult = () => {
@@ -290,35 +298,35 @@ export function MahaYagnasPage() {
       <div className="relative z-10 flex flex-col flex-1">
       {shareResult && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 p-4">
-          <div className="bg-[#C2185B]/90 rounded-2xl border border-amber-500/30 p-6 max-w-sm w-full shadow-xl">
-            <h2 className="text-xl font-bold text-amber-400 mb-2">{t('mahaYagnas.rankCard') || 'Your rank card'}</h2>
-            <p className="text-amber-200/80 text-sm mb-3">{t('mahaYagnas.downloaded') || 'Your leaderboard image is downloaded.'}</p>
-            <p className="text-amber-200/70 text-xs mb-4">{shareNotice || ''}</p>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={downloadShareImage}
-                className="flex-1 py-3 rounded-xl bg-amber-500 text-white font-semibold"
-              >
-                {t('mahaYagnas.downloadAgain') || 'Download again'}
-              </button>
-            </div>
+          <div className="bg-[#C2185B]/90 rounded-2xl border border-amber-500/30 p-5 max-w-sm w-full shadow-xl">
+            <h2 className="text-lg font-bold text-amber-400 mb-1">{t('mahaYagnas.rankCard')}</h2>
+            <p className="text-amber-200/75 text-sm mb-3">{t('mahaYagnas.rankCardReady')}</p>
+            {shareNotice ? (
+              <p className="text-amber-200/65 text-xs mb-4">{shareNotice}</p>
+            ) : null}
+            <button
+              type="button"
+              onClick={downloadShareImage}
+              className="w-full py-3 rounded-xl bg-amber-500 text-white font-semibold text-sm"
+            >
+              {t('mahaYagnas.downloadImage')}
+            </button>
             <button
               type="button"
               onClick={closeShareResult}
-              className="mt-3 w-full py-2 rounded-xl bg-white/5 text-amber-200/80 text-sm"
+              className="mt-2 w-full py-2 rounded-xl bg-white/5 text-amber-200/80 text-sm"
             >
-              Close
+              {t('mahaYagnas.close')}
             </button>
           </div>
         </div>
       )}
       <main className="flex-1 p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] max-w-2xl mx-auto w-full min-w-0">
         <MenuMatchChantHeader />
-        <h2 className="text-base sm:text-xl font-bold text-amber-400 mb-2" style={{ fontFamily: 'serif' }}>
+        <h2 className="text-base sm:text-xl font-bold text-amber-400 mb-1.5" style={{ fontFamily: 'serif' }}>
           {t('mahaYagnas.title')}
         </h2>
-        <p className="text-amber-200/80 text-sm mb-4 break-words">
+        <p className="text-amber-200/70 text-xs sm:text-sm mb-3 leading-snug break-words max-w-xl">
           {t('mahaYagnas.description')}
         </p>
 
@@ -336,52 +344,40 @@ export function MahaYagnasPage() {
         )}
 
         {user && joinedYagnas.length > 0 && (
-          <div className="mb-6 p-4 rounded-xl bg-black/30 border border-amber-500/30">
-            <h2 className="text-amber-400 font-semibold mb-3">{t('mahaYagnas.yourYagnas') || 'Your yagnas'}</h2>
-            <p className="text-amber-200/70 text-sm mb-3">{t('mahaYagnas.yourYagnasDesc') || 'Do your japa for these yagnas — your japas count toward the collective goal.'}</p>
-            <div className="space-y-2">
+          <div className="mb-5 p-3 rounded-xl bg-black/30 border border-amber-500/25">
+            <div className="flex items-baseline justify-between gap-2 mb-2">
+              <h2 className="text-amber-400 font-semibold text-sm sm:text-base">{t('mahaYagnas.yourYagnas')}</h2>
+            </div>
+            <p className="text-amber-200/60 text-xs mb-2.5 leading-snug">{t('mahaYagnas.yourYagnasDesc')}</p>
+            <div className="space-y-2.5">
               {[...joinedYagnas].sort((a, b) => (a.id === DEFAULT_FREE_YAGNA_ID ? -1 : b.id === DEFAULT_FREE_YAGNA_ID ? 1 : 0)).map((y) => {
                 const contrib = contribByYagna.get(y.id)!;
                 const lb = leaderboards[y.id] ?? [];
                 const showLb = openLeaderboard.has(y.id);
                 return (
                   <div key={y.id} className="py-2 border-t border-amber-500/10 first:border-t-0 first:pt-0">
-                    <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0 flex-1">
-                        <p className="text-amber-200 font-medium truncate">{displayYagnaTitle(y.id, y.name)} • {deityName(y.deityId)}</p>
-                        <p className="text-amber-200/60 text-xs">
-                          {t('mahaYagnas.yourJapas')}: {formatNum(contrib.userJapas)} / {formatNum(y.goalJapas)} (
-                          {(y.goalJapas > 0 ? (100 * contrib.userJapas) / y.goalJapas : 0).toFixed(2)}%)
-                          {' '}•{' '}
-                          {t('mahaYagnas.totalYagnaJapas')}: {formatNum(contrib.totalJapas)} / {formatNum(y.goalJapas)} (
-                          {(y.goalJapas > 0 ? (100 * contrib.totalJapas) / y.goalJapas : 0).toFixed(2)}%)
-                          {' '}•{' '}
-                          {t('mahaYagnas.yourShare')}: {(contrib.totalJapas > 0 ? (100 * contrib.userJapas) / contrib.totalJapas : 0).toFixed(2)}%
+                        <p className="text-amber-200 font-medium text-sm truncate">{displayYagnaTitle(y.id, y.name)} · {deityName(y.deityId)}</p>
+                        <p className="text-amber-200/65 text-[11px] sm:text-xs mt-0.5 leading-snug break-words">
+                          {contributionSummary(t, y, contrib)}
                         </p>
                       </div>
                       <div className="flex flex-col items-end gap-1 shrink-0">
                         <button
                           type="button"
                           onClick={() => navigate(`/game?mode=${encodeURIComponent(y.deityId)}&yagna=${encodeURIComponent(y.id)}&target=${y.goalJapas}`)}
-                          className="px-4 py-2 rounded-lg bg-green-600 text-white text-sm font-medium"
+                          className="px-3 py-1.5 rounded-lg bg-green-600 text-white text-xs font-medium min-h-[40px]"
                         >
-                          {t('mahaYagnas.play') || 'Play'}
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleShare(y, lb.length ? lb : undefined)}
-                          disabled={sharing}
-                          className="shrink-0 px-3 py-1.5 rounded-lg bg-amber-500/90 text-white text-xs font-semibold shadow-md disabled:opacity-50"
-                        >
-                          {sharing ? (t('mahaYagnas.preparing') || 'Preparing…') : (t('mahaYagnas.downloadRankCard') || 'Download rank card')}
+                          {t('mahaYagnas.play')}
                         </button>
                         <button
                           type="button"
                           onClick={() => toggleLeaderboard(y.id)}
                           disabled={loadingLeaderboard.has(y.id)}
-                          className="text-[11px] text-amber-300 underline disabled:opacity-50"
+                          className="text-[11px] text-amber-300/90 underline underline-offset-2 disabled:opacity-50"
                         >
-                          {loadingLeaderboard.has(y.id) ? '…' : showLb ? (t('mahaYagnas.hideLeaderboard') || 'Hide leaderboard') : (t('mahaYagnas.showLeaderboard') || 'Show leaderboard')}
+                          {loadingLeaderboard.has(y.id) ? '…' : showLb ? t('mahaYagnas.hideLeaderboard') : t('mahaYagnas.showLeaderboard')}
                         </button>
                       </div>
                     </div>
@@ -409,16 +405,15 @@ export function MahaYagnasPage() {
         )}
 
         {!isPro && (
-          <div className="mb-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/30">
-            <p className="text-amber-200 text-sm font-medium">{t('mahaYagnas.proOnlyTitle')}</p>
-            <p className="text-amber-200/80 text-sm mt-1 break-words">
-              {t('communityFree.yagnaProGateIntro')}
-              {t('mahaYagnas.proOnlyMessage')}
+          <div className="mb-3 p-3 rounded-xl bg-amber-500/10 border border-amber-500/25">
+            <p className="text-amber-200/90 text-xs sm:text-sm leading-snug break-words">
+              <span className="font-medium text-amber-200">{t('mahaYagnas.proOnlyTitle')}.</span>{' '}
+              {t('communityFree.yagnaProGateIntro')} {t('mahaYagnas.proOnlyMessage')}
             </p>
             <button
               type="button"
               onClick={() => navigate(`/game?mode=general&level=${FIRST_LOCKED_LEVEL_INDEX_GENERAL}`)}
-              className="mt-2 text-amber-400 text-sm font-medium hover:underline whitespace-nowrap"
+              className="mt-2 text-amber-400 text-xs sm:text-sm font-medium hover:underline"
             >
               {t('mahaYagnas.unlockPro')}
             </button>
@@ -459,8 +454,8 @@ export function MahaYagnasPage() {
                     />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h2 className="font-semibold text-amber-200 truncate">{displayYagnaTitle(y.id, y.name)}</h2>
-                    <p className="text-amber-200/80 text-sm mt-0.5 break-words">{y.mantra}</p>
+                    <h2 className="font-semibold text-amber-200 text-sm sm:text-base truncate">{displayYagnaTitle(y.id, y.name)}</h2>
+                    <p className="text-amber-200/70 text-xs sm:text-sm mt-0.5 break-words leading-snug">{y.mantra}</p>
                     {y.daysRemaining !== null && (
                       <p className="text-amber-200/60 text-xs mt-1">
                         {y.daysRemaining} {y.daysRemaining === 1 ? t('mahaYagnas.daysRemaining') : t('mahaYagnas.daysRemainingPlural')}
@@ -503,13 +498,13 @@ export function MahaYagnasPage() {
 
                 {user && contrib && (
                   <>
-                    <div className="mt-3 flex flex-wrap gap-2">
+                    <div className="mt-3 flex flex-wrap items-center gap-2">
                       <button
                         type="button"
                         onClick={() => navigate(`/game?mode=${encodeURIComponent(y.deityId)}&yagna=${encodeURIComponent(y.id)}&target=${y.goalJapas}`)}
                         className="px-4 py-2 rounded-lg bg-green-600 text-white text-sm font-medium"
                       >
-                        {t('mahaYagnas.play') || 'Play'}
+                        {t('mahaYagnas.play')}
                       </button>
                       <button
                         type="button"
@@ -520,24 +515,24 @@ export function MahaYagnasPage() {
                         disabled={sharing}
                         className="px-4 py-2 rounded-lg bg-amber-500/90 text-white text-sm font-semibold disabled:opacity-50"
                       >
-                        {sharing ? (t('mahaYagnas.preparing') || 'Preparing…') : (t('mahaYagnas.downloadRankCard') || 'Download rank card')}
+                        {sharing ? t('mahaYagnas.preparing') : t('mahaYagnas.downloadRankCard')}
                       </button>
                       <button
                         type="button"
                         onClick={() => toggleLeaderboard(y.id)}
                         disabled={loadingLeaderboard.has(y.id)}
-                        className="px-4 py-2 rounded-lg border border-amber-500/50 text-amber-400 text-sm disabled:opacity-50"
+                        className="px-3 py-2 rounded-lg border border-amber-500/40 text-amber-300 text-xs sm:text-sm disabled:opacity-50"
                       >
-                        {loadingLeaderboard.has(y.id) ? '…' : openLeaderboard.has(y.id) ? (t('mahaYagnas.hideLeaderboard') || 'Hide leaderboard') : (t('mahaYagnas.showLeaderboard') || 'Show leaderboard')}
+                        {loadingLeaderboard.has(y.id) ? '…' : openLeaderboard.has(y.id) ? t('mahaYagnas.hideLeaderboard') : t('mahaYagnas.showLeaderboard')}
                       </button>
                     </div>
                     {openLeaderboard.has(y.id) && (
                       <div className="mt-2 pl-2 border-l-2 border-amber-500/20">
                         <div className="flex items-center justify-between gap-2">
-                          <p className="text-amber-200/70 text-xs font-medium mb-1">{t('mahaYagnas.topParticipants') || 'Top participants'}</p>
+                          <p className="text-amber-200/70 text-xs font-medium mb-1">{t('mahaYagnas.topParticipants')}</p>
                         </div>
                         {(leaderboards[y.id] ?? []).length === 0 && !loadingLeaderboard.has(y.id) ? (
-                          <p className="text-amber-200/50 text-xs">{t('mahaYagnas.loading') || 'Loading…'}</p>
+                          <p className="text-amber-200/50 text-xs">{t('mahaYagnas.loading')}</p>
                         ) : (
                           paddedLeaderboard(leaderboards[y.id]).slice(0, 5).map((p) => (
                             <p key={p.rank} className="text-amber-200/60 text-xs">
@@ -547,35 +542,9 @@ export function MahaYagnasPage() {
                         )}
                       </div>
                     )}
-                    <div className="mt-4 pt-3 border-t border-amber-500/10 grid grid-cols-2 gap-2 text-sm">
-                      <div className="min-w-0">
-                        <p className="text-amber-200/60 break-words">{t('mahaYagnas.yourJapas')}</p>
-                        <p className="text-amber-200 font-medium">
-                          {formatNum(contrib.userJapas)} / {formatNum(y.goalJapas)}
-                        </p>
-                        <p className="text-amber-200/60 text-xs">
-                          {(y.goalJapas > 0 ? (100 * contrib.userJapas) / y.goalJapas : 0).toFixed(2)}% of target
-                        </p>
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-amber-200/60 break-words">{t('mahaYagnas.totalYagnaJapas')}</p>
-                        <p className="text-amber-200 font-medium">
-                          {formatNum(contrib.totalJapas)} / {formatNum(y.goalJapas)}
-                        </p>
-                        <p className="text-amber-200/60 text-xs">
-                          {(y.goalJapas > 0 ? (100 * contrib.totalJapas) / y.goalJapas : 0).toFixed(2)}% complete
-                        </p>
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-amber-200/60 break-words">{t('mahaYagnas.yourShare')}</p>
-                        <p className="text-amber-200 font-medium">
-                          {(contrib.totalJapas > 0 ? (100 * contrib.userJapas) / contrib.totalJapas : 0).toFixed(2)}%
-                        </p>
-                        <p className="text-amber-200/60 text-xs">
-                          of all japas done so far
-                        </p>
-                      </div>
-                    </div>
+                    <p className="mt-3 pt-3 border-t border-amber-500/10 text-amber-200/80 text-xs sm:text-sm leading-snug tabular-nums break-words">
+                      {contributionSummary(t, y, contrib)}
+                    </p>
                   </>
                 )}
               </div>

@@ -13,6 +13,7 @@ import { MenuMatchChantHeader } from '../components/layout/MenuMatchChantHeader'
 import { BottomNav } from '../components/nav/BottomNav';
 import { paddedLeaderboard, renderRankCardBlob } from '../lib/rankCard';
 import { trackShareEvent } from '../lib/firestore';
+import { AccessBadge } from '../components/ui/AccessBadge';
 import {
   DEFAULT_FREE_MARATHON_ID,
   displayMarathonTitle,
@@ -587,7 +588,12 @@ export function MarathonsPage() {
                                     : joinedMarathonIds.has(m.id)
                                       ? 'Joined'
                                       : !isPro && !isDefaultFreeMarathonId(m.id)
-                                        ? 'Pro required'
+                                        ? (
+                                            <span className="inline-flex items-center gap-1.5">
+                                              <AccessBadge variant="pro" label="Pro" size="sm" />
+                                              <span>required</span>
+                                            </span>
+                                          )
                                         : 'Join'}
                                 </button>
                                 {canDownload && (

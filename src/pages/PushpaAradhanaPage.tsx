@@ -21,6 +21,7 @@ import {
   type PushpaAradhanaLeaderboardEntry,
 } from '../lib/firestore';
 import { normalizeLeaderboardForRankCard, renderRankCardBlob } from '../lib/rankCard';
+import { AccessBadge } from '../components/ui/AccessBadge';
 
 const PUSHPA_CUSTOM_DEITY_PHOTO_ENABLED = false;
 
@@ -447,9 +448,17 @@ export function PushpaAradhanaPage() {
                     onClick={() => handleDeityCardClick(d.id)}
                   >
                     {locked ? (
-                      <span className="absolute top-2 right-2 z-[2] rounded bg-black/55 text-[9px] px-1.5 py-0.5 text-amber-200/95 border border-amber-500/40">
-                        {t('pushpa.proGateCard')}
-                      </span>
+                      <AccessBadge
+                        variant="pro"
+                        label={t('pushpa.proGateCard')}
+                        className="absolute top-2 right-2 z-[2]"
+                      />
+                    ) : d.id === STARTER_PUSHPA_DEITY && !proOrPremiumActive ? (
+                      <AccessBadge
+                        variant="free"
+                        label={t('common.free', { defaultValue: 'Free' })}
+                        className="absolute top-2 right-2 z-[2]"
+                      />
                     ) : null}
                     <div className="w-full aspect-square relative bg-black/30">
                       <img src={d.image} alt="" className={`w-full h-full object-cover ${locked ? 'opacity-55' : ''}`} />

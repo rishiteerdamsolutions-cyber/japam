@@ -352,20 +352,21 @@
     "saving": "Saving…",
     "cancel": "Cancel",
     "ok": "OK",
-    "later": "Later"
+    "later": "Later",
+    "free": "Free"
   },
   "language": {
     "disclaimer": "There may be mistakes in translations. We will improve."
   },
   "communityFree": {
     "marathonProGate": "Temple marathons need Pro except where a free track is listed on Plans.",
-    "yagnaProGateIntro": "Rama Maha Japa Yagna is free for everyone."
+    "yagnaProGateIntro": "Rama yagna is free."
   },
   "mahaYagnas": {
     "title": "Maha Japa Yagnas",
-    "description": "Your japas count toward each yagna’s goal. Rama Yagna is free; other temple yagnas need Pro.",
-    "proOnlyTitle": "Pro members only",
-    "proOnlyMessage": "Other temple yagnas need Pro. Unlock Pro to join.",
+    "description": "Shared temple goals. Rama yagna is free; other yagnas need Pro.",
+    "proOnlyTitle": "Pro required",
+    "proOnlyMessage": "Unlock Pro to join paid temple yagnas.",
     "unlockPro": "Unlock Pro",
     "loading": "Loading…",
     "noActive": "No active Maha Japa Yagnas.",
@@ -391,12 +392,14 @@
     "topParticipants": "Top participants",
     "noParticipants": "No participants yet",
     "yourYagnas": "Your yagnas",
-    "yourYagnasDesc": "Do your japa for these yagnas — your japas count toward the collective goal.",
-    "rankCard": "Your rank card",
-    "downloaded": "Your leaderboard image is downloaded.",
-    "downloadAgain": "Download again",
-    "downloadNotice": "Downloaded. WhatsApp → Status → My Status → add the image.",
-    "shareFailed": "Could not generate/download the image.",
+    "yourYagnasDesc": "Your japa adds to the shared pool.",
+    "contributionLine": "You {{you}} · Pool {{pool}} / {{goal}} ({{poolPct}}%) · Share {{share}}%",
+    "rankCard": "Rank card",
+    "rankCardReady": "Ready to save.",
+    "downloadImage": "Download image",
+    "downloadNoticeShort": "Tip: WhatsApp → Status → add from gallery.",
+    "close": "Close",
+    "shareFailed": "Could not create the image.",
     "rankCardSubtitle": "{{deity}} · Devatā for this yāga",
     "rankCardFooterCta": "Collective offering — play levels and add your japam toward the shared goal."
   },

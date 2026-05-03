@@ -10,6 +10,7 @@ import { useUnlockStore } from '../store/unlockStore';
 import { hasActivePaidAccess, getProfileRingFlags } from '../lib/membershipDisplay';
 import { isFirebaseConfigured } from '../lib/firebase';
 import { DonateThankYouBox } from './donation/DonateThankYouBox';
+import { AccessBadge } from './ui/AccessBadge';
 import { buildJapamWhatsAppShareHref } from '../lib/japamWhatsAppShare';
 import { loadMyAppreciations, loadUserPaymentHistory, type MyAppreciations, type UserPaymentHistoryData } from '../lib/firestore';
 import { useReminderStore } from '../store/reminderStore';
@@ -723,7 +724,10 @@ export function Settings({ onBack }: SettingsProps) {
               </div>
               <div className="flex-1 min-w-0">
                 <span className="font-medium text-amber-200 block">Apavarga</span>
-                <span className="text-amber-400/70 text-xs">Unlock with Pro</span>
+                <span className="text-amber-400/70 text-xs flex items-center gap-1.5">
+                  <span>Unlock with</span>
+                  <AccessBadge variant="pro" label="Pro" />
+                </span>
               </div>
             </button>
           )}

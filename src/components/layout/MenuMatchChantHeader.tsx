@@ -2,6 +2,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { JapamBrand } from '../ui/JapamBrand';
 import { useAuthStore } from '../../store/authStore';
+import { auth, isFirebaseConfigured } from '../../lib/firebase';
 import { AuthSessionRestoreHint } from '../auth/AuthSessionRestoreHint';
 import { useUnlockStore } from '../../store/unlockStore';
 import { useProfileStore } from '../../store/profileStore';
@@ -30,6 +31,12 @@ export function MenuMatchChantHeader({ rightElement }: MenuMatchChantHeaderProps
   const location = useLocation();
   const onPlansPage = location.pathname === '/plans';
   const { user, loading, signInWithGoogle, signInPending } = useAuthStore();
+  const firebaseUser = auth?.currentUser ?? null;
+  const profileLoaded = useProfileStore((s) => s.loaded);
+  const showSessionRestore =
+    isFirebaseConfigured && !user && !!firebaseUser && (loading || signInPending);
+  const showAuthChecking =
+    isFirebaseConfigured && !user && loading && !firebaseUser && !signInPending;
   const tier = useUnlockStore((s) => s.tier);
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
   const unlockExpiresAt = useUnlockStore((s) => s.unlockExpiresAt);
@@ -70,8 +77,12 @@ export function MenuMatchChantHeader({ rightElement }: MenuMatchChantHeaderProps
         {rightElement}
         {!user && (
           <>
-            {loading ? (
+            {showSessionRestore ? (
               <AuthSessionRestoreHint />
+            ) : showAuthChecking ? (
+              <span className="text-amber-200/70 text-xs tabular-nums" aria-busy="true">
+                …
+              </span>
             ) : (
               <button
                 type="button"
@@ -83,6 +94,9 @@ export function MenuMatchChantHeader({ rightElement }: MenuMatchChantHeaderProps
               </button>
             )}
           </>
+        )}
+        {user && !profileLoaded && (
+          <AuthSessionRestoreHint variant="profileSync" className="hidden sm:inline max-w-[min(9rem,36vw)]" />
         )}
         {user && !onPlansPage && (
           <button

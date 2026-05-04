@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../store/authStore';
+import { auth, isFirebaseConfigured } from '../../lib/firebase';
 import { AuthSessionRestoreHint } from '../auth/AuthSessionRestoreHint';
 import { useUnlockStore } from '../../store/unlockStore';
 import { useProfileStore } from '../../store/profileStore';
@@ -43,6 +44,12 @@ export function AppHeader({ title, showBack, onBack, rightElement }: AppHeaderPr
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user, loading, signInWithGoogle, signInPending, signOut } = useAuthStore();
+  const firebaseUser = auth?.currentUser ?? null;
+  const profileLoaded = useProfileStore((s) => s.loaded);
+  const showSessionRestore =
+    isFirebaseConfigured && !user && !!firebaseUser && (loading || signInPending);
+  const showAuthChecking =
+    isFirebaseConfigured && !user && loading && !firebaseUser && !signInPending;
   const tier = useUnlockStore((s) => s.tier);
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
   const unlockExpiresAt = useUnlockStore((s) => s.unlockExpiresAt);
@@ -78,8 +85,12 @@ export function AppHeader({ title, showBack, onBack, rightElement }: AppHeaderPr
         <div className="flex items-center gap-2 flex-shrink-0">
           {!user && (
             <>
-              {loading ? (
+              {showSessionRestore ? (
                 <AuthSessionRestoreHint />
+              ) : showAuthChecking ? (
+                <span className="text-amber-200/70 text-xs tabular-nums" aria-busy="true">
+                  …
+                </span>
               ) : (
                 <button
                   type="button"
@@ -94,6 +105,9 @@ export function AppHeader({ title, showBack, onBack, rightElement }: AppHeaderPr
           )}
           {user && (
             <>
+              {!profileLoaded && (
+                <AuthSessionRestoreHint variant="profileSync" className="hidden sm:inline max-w-[min(9rem,36vw)]" />
+              )}
               <div className="flex items-center gap-1.5 min-w-0 max-w-[100px] sm:max-w-[140px]">
                 <div
                   className={`relative flex-shrink-0 w-8 h-8 rounded-full border-2 flex items-center justify-center text-amber-200 font-semibold text-xs

@@ -8,7 +8,7 @@ import { ActiveUsersStrip } from '../game/ActiveUsersStrip';
 import { DEITIES } from '../../data/deities';
 import { JapamBrand } from '../ui/JapamBrand';
 import { useAuthStore } from '../../store/authStore';
-import { isFirebaseConfigured } from '../../lib/firebase';
+import { auth, isFirebaseConfigured } from '../../lib/firebase';
 import { AuthSessionRestoreHint } from '../auth/AuthSessionRestoreHint';
 import { useUnlockStore } from '../../store/unlockStore';
 import type { GameMode } from '../../store/gameStore';
@@ -39,7 +39,12 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user, loading, signInWithGoogle, signInPending } = useAuthStore();
-  const showSessionRestore = isFirebaseConfigured && !user && (loading || signInPending);
+  const firebaseUser = auth?.currentUser ?? null;
+  const profileLoaded = useProfileStore((s) => s.loaded);
+  const showSessionRestore =
+    isFirebaseConfigured && !user && !!firebaseUser && (loading || signInPending);
+  const showAuthChecking =
+    isFirebaseConfigured && !user && loading && !firebaseUser && !signInPending;
   const tier = useUnlockStore((s) => s.tier);
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
   const unlockExpiresAt = useUnlockStore((s) => s.unlockExpiresAt);
@@ -75,6 +80,10 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
             <div className="flex items-center gap-2 justify-end">
               {showSessionRestore ? (
                 <AuthSessionRestoreHint />
+              ) : showAuthChecking ? (
+                <span className="text-amber-200/70 text-xs tabular-nums" aria-busy="true">
+                  …
+                </span>
               ) : (
                 <button
                   type="button"
@@ -89,6 +98,9 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
           )}
           {user && (
             <div className="flex items-center gap-1.5 sm:gap-2 justify-end">
+              {!profileLoaded && (
+                <AuthSessionRestoreHint variant="profileSync" className="hidden sm:inline max-w-[min(9rem,36vw)]" />
+              )}
               <button
                 type="button"
                 onClick={() => navigate('/plans')}

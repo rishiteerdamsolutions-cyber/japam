@@ -13,19 +13,21 @@ export function SpecialsPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
+  const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle);
 
-  const openPushpaAradhana = () => {
+  /** Stay on Specials during Google popup, then open the feature (same pattern as main menu). */
+  const openPushpaAradhana = async () => {
     if (isFirebaseConfigured && !user) {
-      navigate('/signin?return=/pushpa-aradhana');
-      return;
+      await signInWithGoogle();
+      if (!useAuthStore.getState().user) return;
     }
     navigate('/pushpa-aradhana');
   };
 
-  const openJapa108 = () => {
+  const openJapa108 = async () => {
     if (isFirebaseConfigured && !user) {
-      navigate('/signin?return=/special-108-japa');
-      return;
+      await signInWithGoogle();
+      if (!useAuthStore.getState().user) return;
     }
     navigate('/special-108-japa');
   };

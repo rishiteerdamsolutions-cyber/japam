@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { SignInRequired } from '../components/auth/SignInRequired';
@@ -29,10 +29,16 @@ export function SignInPage() {
     return `${base} ${t('auth.signInContinueHint')}`;
   }, [t, returnParam, afterSignInPath]);
 
+  /** Avoid double `navigate` (e.g. React Strict Mode) which can feel like a flicker or odd history. */
+  const postAuthNavigatedRef = useRef(false);
   useEffect(() => {
-    if (!loading && user) {
-      navigate(afterSignInPath, { replace: true });
-    }
+    if (!user) postAuthNavigatedRef.current = false;
+  }, [user]);
+
+  useEffect(() => {
+    if (loading || !user || postAuthNavigatedRef.current) return;
+    postAuthNavigatedRef.current = true;
+    navigate(afterSignInPath, { replace: true });
   }, [user, loading, navigate, afterSignInPath]);
 
   return (

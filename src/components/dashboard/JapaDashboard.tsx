@@ -101,12 +101,16 @@ export function JapaDashboard() {
   /** Pushpa Aradhana: flowers per deity + total (not match-game japa). */
   const pushpaByDeity = counts.pushpaAbhishekaJapaByDeity ?? {};
   const pushpaFlowerCount = counts.pushpaAbhishekaJapa ?? 0;
+  const special108ByDeity = counts.special108JapaByDeity ?? {};
+  const special108Total = counts.special108JapaTotal ?? 0;
   /** Scale all bars together. */
   const maxRow = Math.max(
     ...DEITIES.map((d) => counts[d.id] ?? 0),
     ...(LAUNCH_FEATURE_OCCASION_GAMES ? [birthdayJapa, anniversaryJapa, coupleGameJapa] : []),
     ...DEITIES.map((d) => pushpaByDeity[d.id] ?? 0),
     pushpaFlowerCount,
+    ...DEITIES.map((d) => special108ByDeity[d.id] ?? 0),
+    special108Total,
     1,
   );
 
@@ -309,6 +313,27 @@ export function JapaDashboard() {
               <div className="h-2 bg-black/30 rounded-full overflow-hidden">
                 <div
                   className="h-full rounded-full transition-all bg-emerald-500/75"
+                  style={{ width: `${pct}%` }}
+                />
+              </div>
+            </div>
+          );
+        })}
+        <p className="text-amber-300/90 text-xs font-semibold mt-6 mb-2 px-0.5">{t('japaDashboard.special108SectionTitle')}</p>
+        {DEITIES.map((deity) => {
+          const sessions = special108ByDeity[deity.id] ?? 0;
+          const pct = maxRow > 0 ? (sessions / maxRow) * 100 : 0;
+          return (
+            <div key={`special108-${deity.id}`} className="bg-black/20 rounded-xl p-3 border border-amber-500/20">
+              <div className="flex justify-between items-center mb-1 gap-2">
+                <span className="font-medium text-amber-400 shrink-0 min-w-0 truncate pr-2">
+                  {deity.name} · {t('japaDashboard.special108Short')}
+                </span>
+                <span className="text-amber-200 shrink-0 tabular-nums">{sessions.toLocaleString()}</span>
+              </div>
+              <div className="h-2 bg-black/30 rounded-full overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all bg-amber-500/70"
                   style={{ width: `${pct}%` }}
                 />
               </div>

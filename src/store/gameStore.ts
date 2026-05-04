@@ -85,6 +85,8 @@ export interface PausedGameState {
   /** Present when paused game was guest play (e.g. /game?guest=1). */
   isGuest?: boolean;
   overrideJapaTarget?: number | null;
+  /** Specials → 108 Japa session (single-board 108 target). */
+  special108Japa?: boolean;
   /** All Deity Japa only: which deities are on this board / strip for this session. */
   generalBoardDeities?: DeityId[];
   savedAt: number;
@@ -113,6 +115,8 @@ interface GameState {
   marathonTargetJapas: number | null;
   yagnaId: string | null;
   overrideJapaTarget: number | null;
+  /** Specials: 108 Japa mode — do not write map progress; credit `special108JapaByDeity` on win. */
+  special108Japa: boolean;
   isGuest: boolean;
   selectedCell: { row: number; col: number } | null;
   lastMatches: { deity: DeityId; count: number; combo: number }[];
@@ -292,6 +296,7 @@ interface GameActions {
       marathonTargetJapas?: number;
       yagnaId?: string;
       overrideJapaTarget?: number;
+      special108Japa?: boolean;
       isGuest?: boolean;
       occasionKind?: 'birthday' | 'anniversary';
       anniversarySessionId?: string | null;
@@ -339,6 +344,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   marathonTargetJapas: null,
   yagnaId: null,
   overrideJapaTarget: null,
+  special108Japa: false,
   isGuest: false,
   selectedCell: null,
   lastMatches: [],
@@ -396,6 +402,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const marathonTargetJapas = options?.marathonTargetJapas ?? null;
     const yagnaId = options?.yagnaId ?? null;
     const overrideJapaTarget = options?.overrideJapaTarget ?? null;
+    const special108Japa = options?.special108Japa === true;
     const isGuest = options?.isGuest === true;
     const occasionKind = options?.occasionKind ?? null;
     const anniversarySessionId = options?.anniversarySessionId ?? null;
@@ -480,6 +487,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       marathonTargetJapas,
       yagnaId,
       overrideJapaTarget,
+      special108Japa,
       isGuest,
       selectedCell: null,
       lastMatches: [],
@@ -519,13 +527,14 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   },
 
   getPausedKey: () => {
-    const { mode, levelIndex, marathonId, yagnaId, occasionKind, anniversarySessionId } = get();
+    const { mode, levelIndex, marathonId, yagnaId, occasionKind, anniversarySessionId, special108Japa } = get();
     if (occasionKind === 'anniversary' && anniversarySessionId) {
       return `${PAUSED_KEY_PREFIX}anniversary-${anniversarySessionId}`;
     }
     if (occasionKind === 'birthday') {
       return `${PAUSED_KEY_PREFIX}occasion-birthday-${mode}-${levelIndex}`;
     }
+    if (special108Japa) return `${PAUSED_KEY_PREFIX}special108-${mode}`;
     if (yagnaId) return `${PAUSED_KEY_PREFIX}yagna-${yagnaId}`;
     if (marathonId) return `${PAUSED_KEY_PREFIX}marathon-${marathonId}`;
     return `${PAUSED_KEY_PREFIX}${mode}-${levelIndex}`;
@@ -550,6 +559,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       yagnaId: state.yagnaId ?? undefined,
       isGuest: state.isGuest,
       overrideJapaTarget: state.overrideJapaTarget ?? undefined,
+      special108Japa: state.special108Japa || undefined,
       generalBoardDeities: state.generalBoardDeities ?? undefined,
       savedAt: Date.now(),
       version: 5,
@@ -618,6 +628,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       marathonTargetJapas: saved.marathonTargetJapas ?? null,
       yagnaId: saved.yagnaId ?? null,
       overrideJapaTarget: saved.overrideJapaTarget ?? null,
+      special108Japa: saved.special108Japa === true,
       isGuest: saved.isGuest ?? false,
       selectedCell: null,
       lastMatches: [],
@@ -1099,17 +1110,21 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const japasForTarget =
       state.occasionKind === 'anniversary' ? state.japasThisLevel : japasNeeded;
     const occasionBlocksProgress = state.occasionKind != null;
+    const special108 = state.special108Japa === true;
 
     let status: GameStatus = 'playing';
     const finalBoard = state.board;
 
     if (japasForTarget >= japaTarget) {
       status = 'won';
-      // Marathons / yāgās: no new powers; inventory still usable there in UI.
-      if (!isMarathon && !occasionBlocksProgress) {
+      if (special108 && deityTarget) {
+        useJapaStore.getState().addSpecial108JapaCompletion(deityTarget);
+      }
+      // Marathons / yāgās / 108 special: no map-style level power grant.
+      if (!isMarathon && !occasionBlocksProgress && !special108) {
         void usePowersInventoryStore.getState().grantAfterLevelWin(state.mode);
       }
-      if (!isMarathon && !state.isGuest && !occasionBlocksProgress) {
+      if (!isMarathon && !state.isGuest && !occasionBlocksProgress && !special108) {
         const totalScore = state.score;
         const stars = getStars(japasNeeded, japaTarget, moves);
         useProgressStore.getState().saveLevel(state.mode, level.id, {
@@ -1292,6 +1307,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       marathonTargetJapas,
       yagnaId,
       overrideJapaTarget,
+      special108Japa,
       isGuest,
       occasionKind,
       anniversarySessionId,
@@ -1333,7 +1349,12 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
             isGuest,
             ...occasionOpts,
           }
-        : { overrideJapaTarget: overrideJapaTarget ?? undefined, isGuest, ...occasionOpts };
+        : {
+            overrideJapaTarget: overrideJapaTarget ?? undefined,
+            special108Japa: special108Japa ? true : undefined,
+            isGuest,
+            ...occasionOpts,
+          };
     get().initGame(mode, levelIndex, opts);
   },
 

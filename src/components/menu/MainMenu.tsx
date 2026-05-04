@@ -8,6 +8,7 @@ import { ActiveUsersStrip } from '../game/ActiveUsersStrip';
 import { DEITIES } from '../../data/deities';
 import { JapamBrand } from '../ui/JapamBrand';
 import { useAuthStore } from '../../store/authStore';
+import { isFirebaseConfigured } from '../../lib/firebase';
 import { AuthSessionRestoreHint } from '../auth/AuthSessionRestoreHint';
 import { useUnlockStore } from '../../store/unlockStore';
 import type { GameMode } from '../../store/gameStore';
@@ -38,6 +39,7 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user, loading, signInWithGoogle, signInPending } = useAuthStore();
+  const showSessionRestore = isFirebaseConfigured && !user && (loading || signInPending);
   const tier = useUnlockStore((s) => s.tier);
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
   const unlockExpiresAt = useUnlockStore((s) => s.unlockExpiresAt);
@@ -71,7 +73,7 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
           <div className="flex items-center gap-2 shrink-0">
           {!user && (
             <div className="flex items-center gap-2 justify-end">
-              {loading ? (
+              {showSessionRestore ? (
                 <AuthSessionRestoreHint />
               ) : (
                 <button

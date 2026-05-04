@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { getDeity, type DeityId } from '../../data/deities';
 import { DemoCornerRibbon } from './DemoCornerRibbon';
 
@@ -400,8 +400,6 @@ export function MenuMiniGameDemo() {
   const [phase, setPhase] = useState<Phase>('idle');
   const [stepIndex, setStepIndex] = useState(0);
   const [boardOpacity, setBoardOpacity] = useState(1);
-  /** During `score`: japa (+1 mantra) first, then strip power (+1 icon name) for 4+ lines. */
-  const [scoreStage, setScoreStage] = useState<'japa' | 'power' | null>(null);
   /**
    * Autoplay on load: demo is local-only (no network); same CPU as after “Play”.
    * `prefers-reduced-motion`: start paused; user can tap Play (lighter default).
@@ -465,20 +463,13 @@ export function MenuMiniGameDemo() {
         if (cancelled) break;
 
         const matchLen = st.matchCells.length;
-        setScoreStage('japa');
         setPhase('score');
-        if (matchLen >= 4) {
-          await wait(reducedMotion ? 420 : 520);
-          if (cancelled) break;
-          setScoreStage('power');
-          await wait(reducedMotion ? 520 : 780);
-        } else {
-          await wait(reducedMotion ? 450 : 1000);
-        }
+        const scoreHoldMs =
+          matchLen >= 4 ? (reducedMotion ? 1000 : 1480) : reducedMotion ? 450 : 1000;
+        await wait(scoreHoldMs);
         if (cancelled) break;
 
         setPhase('clear');
-        setScoreStage(null);
         await wait(850);
         if (cancelled) break;
 
@@ -533,9 +524,9 @@ export function MenuMiniGameDemo() {
     'font-black text-amber-200 text-[clamp(1.65rem,min(8.4vmin,calc(0.82rem+6.2cqi)),3rem)] [paint-order:stroke_fill] [-webkit-text-stroke:clamp(1.5px,min(0.45vmin,0.85cqi),3.5px)_rgba(0,0,0,0.82)] drop-shadow-[0_2px_0_rgba(0,0,0,0.85)] [text-shadow:0_0.08em_0_rgba(0,0,0,0.55),0_0_14px_rgba(251,191,36,0.45)]';
   const scoreMantraTypographyClass =
     'font-semibold leading-snug text-white text-[clamp(1.05rem,min(5.6vmin,calc(0.65rem+3.8cqi)),1.7rem)] [paint-order:stroke_fill] [-webkit-text-stroke:clamp(1px,min(0.35vmin,0.65cqi),2.5px)_rgba(0,0,0,0.78)] drop-shadow-[0_2px_0_rgba(0,0,0,0.88)] [text-shadow:0_0.06em_0_rgba(0,0,0,0.5)]';
-  /** Power row: icon scales with frame height/width caps so it never dominates small screens. */
+  /** Fixed frame avoids intrinsic-size jump when the PNG decodes (layout-stable). */
   const scorePowerRowIconClass =
-    'mx-auto h-auto max-h-[min(32vmin,38svh,10.5cqi,8.5rem)] w-full max-w-[min(100%,10.5rem,85cqi)] object-contain [filter:drop-shadow(0_0_1px_rgba(0,0,0,0.95))_drop-shadow(0_0_0_rgba(0,0,0,0.6))_drop-shadow(0_2px_8px_rgba(0,0,0,0.55))_drop-shadow(0_0_14px_rgba(251,191,36,0.4))]';
+    'max-h-full max-w-full w-auto h-auto object-contain [filter:drop-shadow(0_0_1px_rgba(0,0,0,0.95))_drop-shadow(0_0_0_rgba(0,0,0,0.6))_drop-shadow(0_2px_8px_rgba(0,0,0,0.55))_drop-shadow(0_0_14px_rgba(251,191,36,0.4))]';
 
   return (
     <div
@@ -605,57 +596,39 @@ export function MenuMiniGameDemo() {
           className="pointer-events-none absolute inset-0 z-20 flex items-start justify-center bg-black/15 pt-[min(30%,clamp(3.25rem,min(22cqi,26vmin),7.25rem))] px-[clamp(0.125rem,1.5cqi,0.5rem)] backdrop-blur-[0.5px]"
           aria-hidden
         >
-          {/* Shared slot + `sync`: japa exit and power enter overlap (no empty frame between stages). */}
-          <div className="relative w-full max-w-[min(94%,22rem,96cqi)] min-h-[clamp(5.75rem,min(26cqi,26vmin),10.5rem)]">
-            <AnimatePresence mode="sync" initial={false}>
-              {scoreStage === 'japa' ? (
-                <motion.div
-                  key={`score-japa-${stepIndex}-${step.matchCells.length}`}
-                  className="absolute inset-x-0 top-0 flex flex-col items-center gap-1.5 text-center"
-                  initial={{ opacity: 0, y: 10, scale: 0.92 }}
-                  animate={{
-                    opacity: 1,
-                    y: reducedMotion ? 0 : -6,
-                    scale: reducedMotion ? 1 : 1.06,
-                  }}
-                  exit={{ opacity: 0, y: reducedMotion ? 0 : -8, scale: 0.96 }}
-                  transition={{
-                    opacity: { duration: reducedMotion ? 0.18 : 0.22 },
-                    y: { duration: reducedMotion ? 0.2 : 0.28, ease: 'easeOut' },
-                    scale: { duration: reducedMotion ? 0.2 : 0.28 },
-                  }}
-                >
-                  <span className={scorePlusOneClass}>+1</span>
-                  {scoreMantra ? <span className={scoreMantraTypographyClass}>{scoreMantra}</span> : null}
-                </motion.div>
-              ) : null}
-              {scoreStage === 'power' && scorePowerLabel ? (
-                <motion.div
-                  key={`score-power-${stepIndex}-${step.matchCells.length}`}
-                  className="absolute inset-x-0 top-0 flex flex-row flex-wrap items-center justify-center gap-x-[clamp(0.35rem,2vmin,0.85rem)] gap-y-1 text-center"
-                  initial={{ opacity: 0, y: 10, scale: 0.92 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -6, scale: 0.96 }}
-                  transition={{ duration: reducedMotion ? 0.2 : 0.28, ease: 'easeOut' }}
-                >
-                  <span className={`${scorePlusOneClass} shrink-0`}>+1</span>
-                  <div className="flex min-w-0 max-w-[min(100%,13.5rem,88cqi)] flex-col items-center justify-center gap-1">
-                    <div className="rounded-[min(0.55rem,3vmin)] bg-black/55 p-1.5 ring-[clamp(2px,0.35vmin,3px)] ring-black/80 ring-offset-0 shadow-[0_2px_14px_rgba(0,0,0,0.65)]">
-                      <img
-                        src={scorePowerPngSrc}
-                        alt=""
-                        decoding="sync"
-                        draggable={false}
-                        className={scorePowerRowIconClass}
-                      />
-                    </div>
-                    <span className={`${scoreMantraTypographyClass} max-w-full text-balance px-0.5`}>
-                      {scorePowerLabel}
-                    </span>
-                  </div>
-                </motion.div>
-              ) : null}
-            </AnimatePresence>
+          <div className="relative w-full max-w-[min(94%,22rem,96cqi)] min-h-[clamp(6.5rem,min(28cqi,28vmin),12rem)] flex flex-col items-center gap-2 text-center">
+            <motion.div
+              key={`score-head-${stepIndex}-${step.matchCells.length}`}
+              className="flex flex-col items-center gap-1.5 w-full"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: reducedMotion ? 0.16 : 0.2, ease: 'easeOut' }}
+            >
+              <span className={scorePlusOneClass}>+1</span>
+              {scoreMantra ? <span className={scoreMantraTypographyClass}>{scoreMantra}</span> : null}
+            </motion.div>
+            {matchLineLen >= 4 && scorePowerLabel ? (
+              <motion.div
+                key={`score-pow-${stepIndex}-${step.matchCells.length}`}
+                className="flex w-full min-h-[7.25rem] flex-col items-center justify-start gap-1.5 pt-0.5"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: reducedMotion ? 0.12 : 0.26, duration: reducedMotion ? 0.22 : 0.32, ease: 'easeOut' }}
+              >
+                <div className="flex h-[min(7.25rem,28vmin,22cqi)] w-[min(7.25rem,28vmin,22cqi)] shrink-0 items-center justify-center rounded-[min(0.55rem,3vmin)] bg-black/55 p-2 ring-[clamp(2px,0.35vmin,3px)] ring-black/80 shadow-[0_2px_14px_rgba(0,0,0,0.65)]">
+                  <img
+                    src={scorePowerPngSrc}
+                    alt=""
+                    width={112}
+                    height={112}
+                    decoding="async"
+                    draggable={false}
+                    className={scorePowerRowIconClass}
+                  />
+                </div>
+                <span className={`${scoreMantraTypographyClass} max-w-full text-balance px-0.5`}>{scorePowerLabel}</span>
+              </motion.div>
+            ) : null}
           </div>
         </div>
       ) : null}

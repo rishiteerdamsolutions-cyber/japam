@@ -124,7 +124,8 @@ export const useAuthStore = create<AuthState>((set) => ({
 
     try {
       await signInWithPopup(auth, googleProvider);
-      // `onAuthStateChanged` will update the store.
+      // Sync immediately so callers (e.g. menu → game) see `user` without waiting for the next listener tick.
+      set({ user: auth.currentUser, signInPending: false, error: null });
     } catch (err) {
       const authErr = err as AuthError;
       if (
@@ -135,8 +136,6 @@ export const useAuthStore = create<AuthState>((set) => ({
         return;
       }
       set({ error: getAuthErrorMessage(err), signInPending: false });
-    } finally {
-      set({ signInPending: false });
     }
   },
 

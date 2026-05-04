@@ -21,6 +21,12 @@ export interface JapaCounts extends Record<DeityId, number> {
   pushpaAbhishekaJapaByDeity: Record<DeityId, number>;
   /** Total flowers offered (sum of `pushpaAbhishekaJapaByDeity`). Legacy key name `pushpaAbhishekaJapa`. */
   pushpaAbhishekaJapa: number;
+  /**
+   * Special “108 Japa” mode (Specials): number of completed 108-japa sessions per Devatā (not match-line tier).
+   */
+  special108JapaByDeity: Record<DeityId, number>;
+  /** Sum of `special108JapaByDeity`. */
+  special108JapaTotal: number;
   japaByTier: Record<DeityId, DeityJapaTier>;
 }
 
@@ -48,6 +54,45 @@ function sumPushpaByDeity(c: JapaCounts): number {
 
 function recomputePushpaTotal(c: JapaCounts): JapaCounts {
   return { ...c, pushpaAbhishekaJapa: sumPushpaByDeity(c) };
+}
+
+function emptySpecial108ByDeity(): Record<DeityId, number> {
+  return JAPA_COUNT_DEITY_IDS.reduce(
+    (acc, id) => ({ ...acc, [id]: 0 }),
+    {} as Record<DeityId, number>,
+  );
+}
+
+function readSpecial108ByDeity(c: JapaCounts | null | undefined): Record<DeityId, number> {
+  if (c?.special108JapaByDeity && typeof c.special108JapaByDeity === 'object') {
+    return c.special108JapaByDeity as Record<DeityId, number>;
+  }
+  return emptySpecial108ByDeity();
+}
+
+function sumSpecial108ByDeity(c: JapaCounts): number {
+  let s = 0;
+  for (const id of JAPA_COUNT_DEITY_IDS) {
+    s += c.special108JapaByDeity?.[id] ?? 0;
+  }
+  return s;
+}
+
+function recomputeSpecial108Total(c: JapaCounts): JapaCounts {
+  return { ...c, special108JapaTotal: sumSpecial108ByDeity(c) };
+}
+
+function mergeSpecial108ByDeity(
+  a: JapaCounts | null | undefined,
+  b: JapaCounts,
+): Record<DeityId, number> {
+  const out = emptySpecial108ByDeity();
+  for (const id of JAPA_COUNT_DEITY_IDS) {
+    const sa = readSpecial108ByDeity(a)[id] ?? 0;
+    const sb = readSpecial108ByDeity(b)[id] ?? 0;
+    out[id] = Math.max(0, Math.round(Math.max(sa, sb)));
+  }
+  return out;
 }
 
 function readPushpaByDeity(c: JapaCounts | null | undefined): Record<DeityId, number> {
@@ -93,6 +138,8 @@ const initial: JapaCounts = {
   coupleGameJapa: 0,
   pushpaAbhishekaJapaByDeity: emptyPushpaByDeity(),
   pushpaAbhishekaJapa: 0,
+  special108JapaByDeity: emptySpecial108ByDeity(),
+  special108JapaTotal: 0,
   japaByTier: emptyJapaByTier(),
 };
 
@@ -104,6 +151,8 @@ interface JapaStore {
   addOccasionJapa: (kind: 'birthday' | 'anniversary' | 'coupleGame', count?: number) => void;
   /** Record one Pushpa Aradhana flower offering for a deity (not match-game japa). */
   addPushpaAradhanaCount: (deity: DeityId, count?: number) => void;
+  /** One completed 108-Japa special session for this Devatā (dashboard / persistence). */
+  addSpecial108JapaCompletion: (deity: DeityId, count?: number) => void;
   /** Force-save current counts to backend. Call before leaving Maha Yagna game. */
   flushJapas: () => Promise<void>;
 }
@@ -157,6 +206,8 @@ export const useJapaStore = create<JapaStore>((setState, getState) => ({
         current,
       );
       merged = recomputePushpaTotal(merged);
+      merged.special108JapaByDeity = mergeSpecial108ByDeity((stored as JapaCounts) || null, current);
+      merged = recomputeSpecial108Total(merged);
       const storedTier = normalizeJapaByTier((stored as JapaCounts | null)?.japaByTier);
       const currentTier = normalizeJapaByTier(current.japaByTier);
       merged.japaByTier = emptyJapaByTier();
@@ -228,6 +279,17 @@ export const useJapaStore = create<JapaStore>((setState, getState) => ({
     const by = { ...readPushpaByDeity(counts) };
     by[deity] = (by[deity] ?? 0) + count;
     const next = recomputePushpaTotal({ ...counts, pushpaAbhishekaJapaByDeity: by });
+    setState({ counts: next });
+    const uid = useAuthStore.getState().user?.uid;
+    if (uid) saveUserJapa(uid, next).catch(() => {});
+  },
+
+  addSpecial108JapaCompletion: (deity, count = 1) => {
+    if (count <= 0) return;
+    const { counts } = getState();
+    const by = { ...readSpecial108ByDeity(counts) };
+    by[deity] = (by[deity] ?? 0) + count;
+    const next = recomputeSpecial108Total({ ...counts, special108JapaByDeity: by });
     setState({ counts: next });
     const uid = useAuthStore.getState().user?.uid;
     if (uid) saveUserJapa(uid, next).catch(() => {});

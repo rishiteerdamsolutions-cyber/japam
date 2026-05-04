@@ -169,6 +169,8 @@ interface GameScreenProps {
   anniversaryMyRole?: 'husband' | 'wife';
   anniversaryIsHost?: boolean;
   anniversarySessionFlavor?: AnniversarySessionFlavor;
+  /** Specials → 108 Japa (īṣṭa path, 108 japa in one session). */
+  special108Japa?: boolean;
 }
 
 export function GameScreen({
@@ -189,6 +191,7 @@ export function GameScreen({
   anniversaryMyRole = 'husband',
   anniversaryIsHost = false,
   anniversarySessionFlavor = 'occasion',
+  special108Japa = false,
 }: GameScreenProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -281,6 +284,14 @@ export function GameScreen({
   const anniversaryMidWin =
     occasionKind === 'anniversary' && status === 'won' && !anniversaryIsFinalWin;
 
+  const special108Completions = useJapaStore((s) =>
+    mode !== 'general' ? (s.counts.special108JapaByDeity?.[mode as DeityId] ?? 0) : 0,
+  );
+  const special108WinFooter =
+    special108Japa && mode !== 'general' && status === 'won'
+      ? t('game.special108WinFooter', { n: special108Completions })
+      : undefined;
+
   useEffect(() => {
     if (!isGuest) setGuestPowerSignInOpen(false);
   }, [isGuest]);
@@ -326,6 +337,8 @@ export function GameScreen({
       });
       if (isMarathon && marathonTargetJapas != null && (marathonId || yagnaId)) {
         initGame(mode, 0, { marathonId: marathonId ?? undefined, marathonTargetJapas, yagnaId: yagnaId ?? undefined });
+      } else if (special108Japa && mode !== 'general') {
+        initGame(mode, 0, { overrideJapaTarget: 108, special108Japa: true });
       } else if (occasionKind === 'birthday') {
         initGame(mode, levelIndex, {
           overrideJapaTarget: occasionJapaTarget,
@@ -384,6 +397,7 @@ export function GameScreen({
     anniversaryMyRole,
     anniversaryIsHost,
     anniversarySessionFlavor,
+    special108Japa,
   ]);
 
   const powersInventoryLoaded = usePowersInventoryStore((s) => s.loaded);
@@ -1020,9 +1034,12 @@ export function GameScreen({
           <GameOverlay
             status="won"
             isMarathon={isMarathon}
-            completedLevelNumber={isMarathon ? undefined : currentLevelIndex + 1}
+            winFooterNote={special108WinFooter}
+            completedLevelNumber={
+              isMarathon || special108Japa ? undefined : currentLevelIndex + 1
+            }
             onMenu={handleMenuBack}
-            onNext={isMarathon ? undefined : handleNext}
+            onNext={isMarathon || special108Japa ? undefined : handleNext}
           />
         ) : null
       )}

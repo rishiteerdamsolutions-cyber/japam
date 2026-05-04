@@ -322,7 +322,7 @@ export function MahaYagnasPage() {
           </div>
         </div>
       )}
-      <main className="flex-1 p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] max-w-2xl mx-auto w-full min-w-0">
+      <main className="flex-1 p-4 pb-[calc(8.5rem+env(safe-area-inset-bottom))] max-w-2xl mx-auto w-full min-w-0">
         <MenuMatchChantHeader />
         <h2 className="text-base sm:text-xl font-bold text-amber-400 mb-1.5" style={{ fontFamily: 'serif' }}>
           {t('mahaYagnas.title')}
@@ -558,7 +558,9 @@ export function MahaYagnasPage() {
           })}
         </div>
       </main>
-      <AppFooter />
+      <div className="shrink-0 w-full bg-black/60 backdrop-blur-md border-t border-amber-500/25 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
+        <AppFooter className="!border-t-0 !text-amber-200/90 !pt-4 !pb-3 [&_p]:!text-amber-200/75 [&_a]:!text-amber-200/85" />
+      </div>
       <BottomNav />
       </div>
     </div>

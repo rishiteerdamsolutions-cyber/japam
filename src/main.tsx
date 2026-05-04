@@ -54,6 +54,9 @@ const PushpaAradhanaPage = lazy(() =>
   import('./pages/PushpaAradhanaPage').then((m) => ({ default: m.PushpaAradhanaPage })),
 )
 const SpecialsPage = lazy(() => import('./pages/SpecialsPage').then((m) => ({ default: m.SpecialsPage })))
+const Japa108SpecialPage = lazy(() =>
+  import('./pages/Japa108SpecialPage').then((m) => ({ default: m.Japa108SpecialPage })),
+)
 const BirthdayOccasionPage = lazy(() =>
   import('./pages/BirthdayOccasionPage').then((m) => ({ default: m.BirthdayOccasionPage })),
 );
@@ -100,6 +103,14 @@ createRoot(document.getElementById('root')!).render(
           }
         />
         <Route path="/specials" element={<SpecialsPage />} />
+        <Route
+          path="/special-108-japa"
+          element={
+            <RequireAuth>
+              <Japa108SpecialPage />
+            </RequireAuth>
+          }
+        />
         <Route path="/pushpa-abhisheka" element={<Navigate to="/pushpa-aradhana" replace />} />
         <Route path="/test/menu-demo" element={<MenuDemoTestPage />} />
         <Route path="/game" element={<GamePage />} />

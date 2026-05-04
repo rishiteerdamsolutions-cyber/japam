@@ -352,7 +352,7 @@ export function MarathonsPage() {
       <h2 className="text-base sm:text-xl font-bold text-amber-400 mb-1.5" style={{ fontFamily: 'serif' }}>
         {t('marathonsPage.title')}
       </h2>
-      <p className="text-amber-200/70 text-xs sm:text-sm mb-3 leading-snug max-w-xl">
+      <p className="text-amber-200/80 text-xs sm:text-sm mb-3 leading-snug max-w-xl">
         {t('marathonsPage.description')}
       </p>
       {!isPro && (
@@ -393,33 +393,33 @@ export function MarathonsPage() {
       {user && myMarathons.length > 0 && (
         <div className="mb-5 p-3 rounded-xl bg-black/30 border border-amber-500/25">
           <h2 className="text-amber-400 font-semibold text-sm sm:text-base mb-1">{t('marathonsPage.yourMarathons')}</h2>
-          <p className="text-amber-200/60 text-xs mb-2.5 leading-snug">{t('marathonsPage.yourMarathonsDesc')}</p>
+          <p className="text-amber-200/65 text-[11px] sm:text-xs mb-2.5 leading-snug">{t('marathonsPage.yourMarathonsDesc')}</p>
           <div className="space-y-2.5">
             {[...myMarathons].sort((a, b) => (a.marathonId === DEFAULT_FREE_MARATHON_ID ? -1 : b.marathonId === DEFAULT_FREE_MARATHON_ID ? 1 : 0)).map((my) => (
-              <div key={my.marathonId} className="py-2 border-t border-amber-500/10 first:border-t-0 first:pt-0">
+              <div key={my.marathonId} className="relative py-3 pl-3 pr-3 sm:pr-24 rounded-xl bg-black/25 border border-amber-500/15">
+                {!isPro ? (
+                  <div className="absolute top-2.5 right-2.5 z-[1]">
+                    {isDefaultFreeMarathonId(my.marathonId) ? (
+                      <AccessBadge variant="free" label={t('common.free')} size="sm" />
+                    ) : (
+                      <AccessBadge variant="pro" label={t('menu.pro')} size="sm" />
+                    )}
+                  </div>
+                ) : null}
                 <div className="flex items-start justify-between gap-2">
-                  <div className="min-w-0 flex-1">
-                    {!isPro ? (
-                      <div className="flex flex-wrap items-center gap-1.5 mb-0.5">
-                        {isDefaultFreeMarathonId(my.marathonId) ? (
-                          <AccessBadge variant="free" label={t('common.free')} size="sm" />
-                        ) : (
-                          <AccessBadge variant="pro" label={t('menu.pro')} size="sm" />
-                        )}
-                      </div>
-                    ) : null}
+                  <div className="min-w-0 flex-1 pr-2">
                     <p className="text-amber-200 font-medium text-sm truncate">{displayMarathonTitle(my.marathonId, my.templeName)} · {deityName(my.deityId)}</p>
-                    <p className="text-amber-200/60 text-[11px] sm:text-xs mt-0.5">
+                    <p className="text-amber-200/65 text-[11px] sm:text-xs mt-0.5 tabular-nums">
                       {t('marathonsPage.myProgressLine', { target: my.targetJapas, n: my.japasCount })}
                     </p>
                   </div>
-                  <div className="flex flex-col items-end gap-1 shrink-0">
+                  <div className="flex flex-col items-stretch sm:items-end gap-1 shrink-0 w-full sm:w-auto mt-2 sm:mt-0">
                     <button
                       type="button"
                       onClick={() => {
                         navigate(`/game?mode=${encodeURIComponent(my.deityId)}&marathon=${encodeURIComponent(my.marathonId)}&target=${my.targetJapas}`);
                       }}
-                      className="px-3 py-1.5 rounded-lg bg-green-600 text-white text-xs font-medium min-h-[40px]"
+                      className="px-3 py-1.5 rounded-lg bg-green-600 text-white text-xs font-medium min-h-[40px] w-full sm:w-auto"
                     >
                       {t('marathonsPage.japa')}
                     </button>
@@ -570,26 +570,26 @@ export function MarathonsPage() {
                         const canDownload =
                           !!user?.uid && joinedMarathonIds.has(m.id) && !!m.leaderboard && m.leaderboard.length > 0;
                         return (
-                          <div key={m.id} className="py-2 border-t border-amber-500/10">
-                            <div className="flex items-start justify-between gap-2">
-                              <div className="min-w-0 flex-1">
-                                {!isPro ? (
-                                  <div className="flex flex-wrap items-center gap-1.5 mb-0.5">
-                                    {isDefaultFreeMarathonId(m.id) ? (
-                                      <AccessBadge variant="free" label={t('common.free')} size="sm" />
-                                    ) : (
-                                      <AccessBadge variant="pro" label={t('menu.pro')} size="sm" />
-                                    )}
-                                  </div>
-                                ) : null}
-                                <p className="text-amber-200 font-medium text-sm">
+                          <div key={m.id} className="relative py-3 pl-3 pr-3 sm:pr-36 rounded-xl bg-black/25 border border-amber-500/15">
+                            {!isPro ? (
+                              <div className="absolute top-2.5 right-2.5 z-[1]">
+                                {isDefaultFreeMarathonId(m.id) ? (
+                                  <AccessBadge variant="free" label={t('common.free')} size="sm" />
+                                ) : (
+                                  <AccessBadge variant="pro" label={t('menu.pro')} size="sm" />
+                                )}
+                              </div>
+                            ) : null}
+                            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+                              <div className="min-w-0 flex-1 pr-1">
+                                <p className="text-amber-200 font-medium text-sm leading-snug">
                                   {t('marathonsPage.targetJapasLine', { deity: deityName(m.deityId), target: m.targetJapas })}
                                 </p>
-                                <p className="text-amber-200/60 text-[11px] sm:text-xs mt-0.5">
+                                <p className="text-amber-200/60 text-[11px] sm:text-xs mt-1 tabular-nums">
                                   {t('marathonsPage.startedJoined', { date: m.startDate, n: m.joinedCount })}
                                 </p>
                               </div>
-                              <div className="flex flex-col items-end gap-1 shrink-0">
+                              <div className="flex flex-col items-stretch sm:items-end gap-1 shrink-0 w-full sm:w-auto">
                                 <button
                                   onClick={() => handleJoin(m.id)}
                                   disabled={

@@ -23,6 +23,9 @@ export async function GET(request) {
     try {
       sanitizePushpaCountsInPlace(data);
     } catch {}
+    try {
+      sanitizeSpecial108InPlace(data);
+    } catch {}
     delete data.pushpaAbhishekaJapaUnattributed;
     return jsonResponse({ counts: data }, 200);
   } catch (e) {
@@ -61,6 +64,23 @@ function sanitizePushpaCountsInPlace(counts) {
   counts.pushpaAbhishekaJapa = sumPd;
 }
 
+/** 108 Japa special completions per deity + total (optional client fields). */
+function sanitizeSpecial108InPlace(counts) {
+  const raw =
+    counts.special108JapaByDeity && typeof counts.special108JapaByDeity === 'object'
+      ? counts.special108JapaByDeity
+      : {};
+  const by = { ...raw };
+  let sum = 0;
+  for (const id of DEITY_IDS) {
+    const n = Math.max(0, Math.round(Number(by[id]) || 0));
+    by[id] = n;
+    sum += n;
+  }
+  counts.special108JapaByDeity = by;
+  counts.special108JapaTotal = sum;
+}
+
 /** POST /api/user/japa - Save japa counts for current user (Firebase ID token required). Also attributes deltas to joined marathons by deity. */
 export async function POST(request) {
   const uid = await verifyFirebaseUser(request);
@@ -88,6 +108,9 @@ export async function POST(request) {
 
     try {
       sanitizePushpaCountsInPlace(counts);
+    } catch {}
+    try {
+      sanitizeSpecial108InPlace(counts);
     } catch {}
     delete counts.pushpaAbhishekaJapaUnattributed;
 

@@ -70,6 +70,16 @@ export function GamePage() {
   const occasionTarget = Math.min(500, Math.max(1, parseInt(searchParams.get('target') || '108', 10) || 108));
   const occasionKind = anniversarySession ? ('anniversary' as const) : occasionBirthday ? ('birthday' as const) : null;
 
+  const isSpecial108 =
+    searchParams.get('special108') === '1' && !gameContextId && !occasionKind && !isGuest;
+
+  useEffect(() => {
+    if (!isSpecial108) return;
+    if (mode === 'general') {
+      navigate('/special-108-japa', { replace: true });
+    }
+  }, [isSpecial108, mode, navigate]);
+
   useEffect(() => {
     if (!occasionKind) return;
     if (!LAUNCH_FEATURE_OCCASION_GAMES) {
@@ -103,6 +113,8 @@ export function GamePage() {
   const levelIndex = isGuest
     ? 0
     : gameContextId
+    ? 0
+    : isSpecial108
     ? 0
     : anniversarySession
     ? Math.max(
@@ -189,6 +201,8 @@ export function GamePage() {
 
   const expectedKey = isMarathon
     ? (yagnaId ? `japam-paused-yagna-${yagnaId}` : `japam-paused-marathon-${marathonId}`)
+    : isSpecial108
+    ? `japam-paused-special108-${mode}`
     : `japam-paused-${mode}-${levelIndex}`;
 
   useEffect(() => {
@@ -213,7 +227,7 @@ export function GamePage() {
     if (user?.uid && authLoading) return;
 
     setLevelCompleteBlock(null);
-    if (user?.uid && !isMarathon && !occasionKind) {
+    if (user?.uid && !isMarathon && !occasionKind && !isSpecial108) {
       if (!progressLoaded) return;
       // Read progress here; do NOT list `levelProgress` in effect deps — on win, saveLevel updates
       // progress in the same beat as the victory UI; re-running the effect would mistake "just won"
@@ -299,7 +313,7 @@ export function GamePage() {
     };
     load();
     return () => { cancelled = true; };
-  }, [mode, levelIndex, isMarathon, marathonId, yagnaId, expectedKey, isLocked, paywallPending, user, authLoading, occasionKind, isGuest, progressLoaded]);
+  }, [mode, levelIndex, isMarathon, isSpecial108, marathonId, yagnaId, expectedKey, isLocked, paywallPending, user, authLoading, occasionKind, isGuest, progressLoaded]);
 
   const handleResume = () => {
     if (resumePending) {
@@ -372,10 +386,12 @@ export function GamePage() {
       navigate(yagnaId ? '/maha-yagnas' : '/marathons');
     } else if (isGuest) {
       navigate('/');
+    } else if (isSpecial108) {
+      navigate('/special-108-japa');
     } else {
       navigate('/levels');
     }
-  }, [navigate, isMarathon, yagnaId, isGuest, occasionKind]);
+  }, [navigate, isMarathon, yagnaId, isGuest, occasionKind, isSpecial108]);
 
   const handlePlayNameSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -418,7 +434,7 @@ export function GamePage() {
     (waitingProfile ||
       waitingUnlock ||
       !pauseCheckDone ||
-      (!!user?.uid && !isMarathon && !occasionKind && !progressLoaded))
+      (!!user?.uid && !isMarathon && !occasionKind && !isSpecial108 && !progressLoaded))
   ) {
     return (
       <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -572,13 +588,14 @@ export function GamePage() {
       justRestored={justRestored}
       onJustRestoredCleared={onJustRestoredCleared}
       onBack={onBack}
-      onNextLevel={isMarathon ? undefined : (m, idx) => handleNextLevel(m, idx)}
+      onNextLevel={isMarathon || isSpecial108 ? undefined : (m, idx) => handleNextLevel(m, idx)}
       occasionKind={occasionKind}
       occasionJapaTarget={occasionKind === 'birthday' ? occasionTarget : undefined}
       anniversarySessionId={anniversarySession}
       anniversaryMyRole={occasionKind === 'anniversary' ? anniversaryRole : undefined}
       anniversaryIsHost={occasionKind === 'anniversary' ? anniversaryHost : undefined}
       anniversarySessionFlavor={occasionKind === 'anniversary' ? anniversarySessionFlavor : undefined}
+      special108Japa={isSpecial108}
     />
     </>
   );

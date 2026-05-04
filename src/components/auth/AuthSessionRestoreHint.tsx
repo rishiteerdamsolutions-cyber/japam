@@ -33,6 +33,7 @@ type AuthSessionRestoreHintProps = {
 export function AuthSessionRestoreHint({ className = '' }: AuthSessionRestoreHintProps) {
   const { t } = useTranslation();
   const loading = useAuthStore((s) => s.loading);
+  const signInPending = useAuthStore((s) => s.signInPending);
   const user = useAuthStore((s) => s.user);
 
   const lines = useMemo(() => {
@@ -43,19 +44,19 @@ export function AuthSessionRestoreHint({ className = '' }: AuthSessionRestoreHin
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    if (loading && !user && isFirebaseConfigured) setIndex(0);
-  }, [loading, user]);
+    if ((loading || signInPending) && !user && isFirebaseConfigured) setIndex(0);
+  }, [loading, signInPending, user]);
 
   useEffect(() => {
-    if (!loading || user || !isFirebaseConfigured) return;
+    if ((!loading && !signInPending) || user || !isFirebaseConfigured) return;
     const id = window.setInterval(() => {
       setIndex((i) => (i + 1) % SESSION_RESTORE_COUNT);
     }, ROTATE_MS);
     return () => window.clearInterval(id);
-  }, [loading, user]);
+  }, [loading, signInPending, user]);
 
-  /** Hide as soon as the signed-in profile can render (`user`), not when `loading` flips alone. */
-  if (!isFirebaseConfigured || user || !loading) return null;
+  /** Hide once `user` is set; keep during `loading` or Google popup (`signInPending`) so Sign-in never flashes in between. */
+  if (!isFirebaseConfigured || user || (!loading && !signInPending)) return null;
 
   const line = lines[index % SESSION_RESTORE_COUNT] ?? lines[0];
   const label = t('auth.sessionRestoreAria');

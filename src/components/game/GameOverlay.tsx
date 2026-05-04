@@ -7,6 +7,8 @@ import { useGameStore } from '../../store/gameStore';
 interface GameOverlayProps {
   status: 'won' | 'lost';
   isMarathon?: boolean;
+  /** Extra line under the win message (e.g. 108 Japa special completions). */
+  winFooterNote?: string;
   /** 1-based level in the map (ignored for marathon wins). */
   completedLevelNumber?: number;
   /** Shown only when `status === 'lost'` (restart same level / board). */
@@ -20,6 +22,7 @@ interface GameOverlayProps {
 export function GameOverlay({
   status,
   isMarathon,
+  winFooterNote,
   completedLevelNumber,
   onRetry,
   onMenu,
@@ -91,9 +94,14 @@ export function GameOverlay({
               ) : (
                 <>
                   <h2 className="text-xl sm:text-2xl font-bold text-amber-300 mb-2 break-words">{t('game.jai')}</h2>
-                  <p className="text-amber-100/85 mb-6 text-sm sm:text-base break-words leading-relaxed">
+                  <p className="text-amber-100/85 mb-2 text-sm sm:text-base break-words leading-relaxed">
                     {t('game.youCompletedJapas')}
                   </p>
+                  {winFooterNote ? (
+                    <p className="text-emerald-300/90 text-sm font-medium mb-6 tabular-nums">{winFooterNote}</p>
+                  ) : (
+                    <div className="mb-6" aria-hidden />
+                  )}
                 </>
               )}
             </>

@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { SignInRequired } from '../components/auth/SignInRequired';
 import { useAuthStore } from '../store/authStore';
 
@@ -14,6 +15,7 @@ function safeReturnPath(raw: string | null): string {
 }
 
 export function SignInPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const user = useAuthStore((s) => s.user);
@@ -21,6 +23,11 @@ export function SignInPage() {
   const returnParam = searchParams.get('return');
 
   const afterSignInPath = useMemo(() => safeReturnPath(returnParam), [returnParam]);
+  const signInMessage = useMemo(() => {
+    const base = t('auth.signInBodyDefault', { defaultValue: 'Sign in with Google to play and save your progress.' });
+    if (!returnParam || afterSignInPath === '/menu') return base;
+    return `${base} ${t('auth.signInContinueHint')}`;
+  }, [t, returnParam, afterSignInPath]);
 
   useEffect(() => {
     if (!loading && user) {
@@ -31,7 +38,7 @@ export function SignInPage() {
   return (
     <SignInRequired
       onBack={() => navigate(-1)}
-      message="Sign in with Google to play and save your progress"
+      message={signInMessage}
     />
   );
 }

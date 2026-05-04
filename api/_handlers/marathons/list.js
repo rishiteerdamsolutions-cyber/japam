@@ -5,6 +5,7 @@ import {
   ensureDefaultFreeMarathonDoc,
   DEFAULT_FREE_MARATHON_ID,
 } from '../_defaultCommunityEvents.js';
+import { normalizeMarathonStartDate } from './_marathonDisplay.js';
 
 /** GET /api/marathons/list — default free marathon + all active community marathons (public; optional auth for leaderboard viewer row). */
 export async function GET(request) {
@@ -28,7 +29,7 @@ export async function GET(request) {
           templeId: data.templeId ?? null,
           deityId: data.deityId || '',
           targetJapas: typeof data.targetJapas === 'number' ? data.targetJapas : 1080,
-          startDate: data.startDate || '',
+          startDate: normalizeMarathonStartDate(data.startDate),
           joinedCount: data.joinedCount ?? 0,
           communityName: data.communityName || null,
           leaderboard,
@@ -53,7 +54,7 @@ export async function GET(request) {
         templeId: data.templeId ?? null,
         deityId: data.deityId || '',
         targetJapas: typeof data.targetJapas === 'number' ? data.targetJapas : 0,
-        startDate: data.startDate || '',
+        startDate: normalizeMarathonStartDate(data.startDate),
         joinedCount: data.joinedCount ?? 0,
         communityName: data.communityName || null,
         leaderboard,

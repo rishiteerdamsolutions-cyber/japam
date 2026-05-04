@@ -49,6 +49,32 @@ export function findMatches(board: Board): Match[] {
   return matches;
 }
 
+function lineMatchAt(board: Board, r: number, c: number, read: (row: number, col: number) => GemType | null): boolean {
+  const gem = read(r, c);
+  if (!gem) return false;
+  let h = 1;
+  for (let x = c - 1; x >= 0 && sameLineGroup(read(r, x), gem); x--) h++;
+  for (let x = c + 1; x < (board[0]?.length ?? 0) && sameLineGroup(read(r, x), gem); x++) h++;
+  if (h >= 3) return true;
+  let v = 1;
+  for (let y = r - 1; y >= 0 && sameLineGroup(read(y, c), gem); y--) v++;
+  for (let y = r + 1; y < board.length && sameLineGroup(read(y, c), gem); y++) v++;
+  return v >= 3;
+}
+
+function swapCreatesLineMatch(board: Board, r1: number, c1: number, r2: number, c2: number): boolean {
+  const a = board[r1]?.[c1] ?? null;
+  const b = board[r2]?.[c2] ?? null;
+  if (!a || !b) return false;
+  const read = (r: number, c: number): GemType | null => {
+    if (r === r1 && c === c1) return b;
+    if (r === r2 && c === c2) return a;
+    return (board[r]?.[c] ?? null) as GemType | null;
+  };
+  // Only swapped cells can create a new line.
+  return lineMatchAt(board, r1, c1, read) || lineMatchAt(board, r2, c2, read);
+}
+
 function lineMatchExistsAfterAnySwap(board: Board): boolean {
   const rows = board.length;
   const cols = board[0]?.length ?? 0;
@@ -57,12 +83,10 @@ function lineMatchExistsAfterAnySwap(board: Board): boolean {
       const gem = board[r][c];
       if (!gem) continue;
       if (c < cols - 1) {
-        const swapped = swapCells(board, r, c, r, c + 1);
-        if (findMatches(swapped).length > 0) return true;
+        if (swapCreatesLineMatch(board, r, c, r, c + 1)) return true;
       }
       if (r < rows - 1) {
-        const swapped = swapCells(board, r, c, r + 1, c);
-        if (findMatches(swapped).length > 0) return true;
+        if (swapCreatesLineMatch(board, r, c, r + 1, c)) return true;
       }
     }
   }
@@ -118,24 +142,14 @@ export function countValidSwapOpportunities(board: Board): number {
       const gem = board[r][c];
       if (!gem) continue;
       if (c < cols - 1) {
-        const swapped = swapCells(board, r, c, r, c + 1);
-        if (findMatches(swapped).length > 0) n++;
+        if (swapCreatesLineMatch(board, r, c, r, c + 1)) n++;
       }
       if (r < rows - 1) {
-        const swapped = swapCells(board, r, c, r + 1, c);
-        if (findMatches(swapped).length > 0) n++;
+        if (swapCreatesLineMatch(board, r, c, r + 1, c)) n++;
       }
     }
   }
   return n;
-}
-
-function swapCells(board: Board, r1: number, c1: number, r2: number, c2: number): Board {
-  const next = board.map(row => [...row]);
-  const t = next[r1][c1];
-  next[r1][c1] = next[r2][c2];
-  next[r2][c2] = t;
-  return next;
 }
 
 export function getAllMatchPositions(matches: Match[]): Position[] {

@@ -1,6 +1,7 @@
 import { getDb, jsonResponse, verifyFirebaseUser, jsonInternalServerError } from '../_lib.js';
 import { buildMarathonLeaderboard } from './_marathonLeaderboard.js';
 import { isMarathonPublicActive } from '../_lifecycle.js';
+import { normalizeMarathonStartDate } from './_marathonDisplay.js';
 
 function normalize(s) {
   return (s || '').trim().toLowerCase();
@@ -91,7 +92,7 @@ export async function GET(request) {
           templeId: data.templeId,
           deityId: data.deityId,
           targetJapas: data.targetJapas,
-          startDate: data.startDate,
+          startDate: normalizeMarathonStartDate(data.startDate),
           joinedCount: data.joinedCount ?? 0,
           leaderboard,
         };
@@ -142,7 +143,7 @@ export async function GET(request) {
           templeId: null,
           deityId: data.deityId,
           targetJapas: data.targetJapas,
-          startDate: data.startDate,
+          startDate: normalizeMarathonStartDate(data.startDate),
           joinedCount: data.joinedCount ?? 0,
           leaderboard,
         }];

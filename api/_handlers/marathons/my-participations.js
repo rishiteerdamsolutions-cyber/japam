@@ -1,6 +1,7 @@
 import { getDb, jsonResponse, verifyFirebaseUser, jsonInternalServerError } from '../_lib.js';
 import { buildMarathonLeaderboard } from './_marathonLeaderboard.js';
 import { ensureDefaultFreeMarathonParticipation } from '../_defaultCommunityEvents.js';
+import { normalizeMarathonStartDate } from './_marathonDisplay.js';
 
 /** GET /api/marathons/my-participations - List marathons the current user has joined. Requires Firebase auth. */
 export async function GET(request) {
@@ -65,7 +66,7 @@ export async function GET(request) {
         templeId: mData.templeId,
         templeName,
         targetJapas: mData.targetJapas ?? 0,
-        startDate: mData.startDate,
+        startDate: normalizeMarathonStartDate(mData.startDate),
         japasCount,
         leaderboard,
       });

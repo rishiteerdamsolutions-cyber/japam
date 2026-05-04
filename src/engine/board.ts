@@ -3,17 +3,23 @@ import { DEITY_IDS } from '../data/deities';
 import type { DeityId } from '../data/deities';
 import { deityGemAllowedOnIstaPath } from '../lib/generalBoardDeities';
 import { displayDeityId, isBlessing, isStriped, isWrapped, sameLineGroup } from './gemKinds';
-import { countValidSwapOpportunities, hasValidMoves } from './matcher';
+import { countValidSwapOpportunities } from './matcher';
 
 /**
  * Īṣṭa (specific-deity) mode: favor the path deity on spawns so japa matches stay doable, but keep other
  * types common enough that the board still feels like match‑3 (planning, mixed clears), not a free win.
  * Weight doubled from the original 4 (see product: path-deity gems ~2× prior spawn rate vs other pool types).
  */
-const ISTA_DEITY_GEM_WEIGHT = 8;
+const ISTA_DEITY_GEM_WEIGHT = 12;
 
 /** All-deity boards: try several random layouts and keep the one with the most match-creating swaps. */
 const GENERAL_BOARD_SWAP_TRIALS = 18;
+const ISTA_BOARD_SWAP_TRIALS = 10;
+const GENERAL_MIN_SWAP_OPPORTUNITIES = 3;
+const ISTA_MIN_SWAP_OPPORTUNITIES = 4;
+const FILL_GAPS_SWAP_TRIALS = 6;
+const FILL_GAPS_TARGET_SWAPS_GENERAL = 2;
+const FILL_GAPS_TARGET_SWAPS_ISTA = 3;
 
 function weightedPickGemType(
   types: GemType[],
@@ -167,12 +173,21 @@ function createPlayableBoard(
   cols: number,
   types: GemType[],
   deityMode?: DeityId,
+  minSwapOpportunities = 1,
 ): Board {
+  let best = createSingleRandomBoard(rows, cols, types, deityMode);
+  let bestScore = countValidSwapOpportunities(best);
+  if (bestScore >= minSwapOpportunities) return best;
   for (let guard = 0; guard < 400; guard++) {
     const b = createSingleRandomBoard(rows, cols, types, deityMode);
-    if (hasValidMoves(b)) return b;
+    const swaps = countValidSwapOpportunities(b);
+    if (swaps > bestScore) {
+      best = b;
+      bestScore = swaps;
+    }
+    if (swaps >= minSwapOpportunities) return b;
   }
-  return createSingleRandomBoard(rows, cols, types, deityMode);
+  return best;
 }
 
 /** When deityMode is set, that deity's gem is always included (required for deity-specific games). */
@@ -187,10 +202,10 @@ export function createBoard(
   const types = buildGemTypesPool(maxGemTypes, deityMode, powerBackedDeities, generalGemSubset);
 
   if (!deityMode) {
-    let best = createPlayableBoard(rows, cols, types, deityMode);
+    let best = createPlayableBoard(rows, cols, types, deityMode, GENERAL_MIN_SWAP_OPPORTUNITIES);
     let bestScore = countValidSwapOpportunities(best);
     for (let i = 0; i < GENERAL_BOARD_SWAP_TRIALS; i++) {
-      const cand = createPlayableBoard(rows, cols, types, deityMode);
+      const cand = createPlayableBoard(rows, cols, types, deityMode, GENERAL_MIN_SWAP_OPPORTUNITIES);
       const s = countValidSwapOpportunities(cand);
       if (s > bestScore) {
         best = cand;
@@ -200,7 +215,17 @@ export function createBoard(
     return best;
   }
 
-  return createPlayableBoard(rows, cols, types, deityMode);
+  let best = createPlayableBoard(rows, cols, types, deityMode, ISTA_MIN_SWAP_OPPORTUNITIES);
+  let bestScore = countValidSwapOpportunities(best);
+  for (let i = 0; i < ISTA_BOARD_SWAP_TRIALS; i++) {
+    const cand = createPlayableBoard(rows, cols, types, deityMode, ISTA_MIN_SWAP_OPPORTUNITIES);
+    const s = countValidSwapOpportunities(cand);
+    if (s > bestScore) {
+      best = cand;
+      bestScore = s;
+    }
+  }
+  return best;
 }
 
 function pickRandomGem(
@@ -282,26 +307,41 @@ export function fillGaps(
   const types = buildGemTypesPool(maxGemTypes, deityMode, powerBackedDeities, generalGemSubset);
   const rows = board.length;
   const cols = board[0]?.length ?? 0;
-  const next = board.map(r => [...r]);
-  const newGems: { row: number; col: number; gem: GemType }[] = [];
-
-  for (let c = 0; c < cols; c++) {
-    let writeRow = rows - 1;
-    for (let r = rows - 1; r >= 0; r--) {
-      if (next[r][c] !== null) {
-        if (r !== writeRow) {
-          next[writeRow][c] = next[r][c];
-          next[r][c] = null;
+  const fillOnce = (): { board: Board; newGems: { row: number; col: number; gem: GemType }[] } => {
+    const next = board.map(r => [...r]);
+    const newGems: { row: number; col: number; gem: GemType }[] = [];
+    for (let c = 0; c < cols; c++) {
+      let writeRow = rows - 1;
+      for (let r = rows - 1; r >= 0; r--) {
+        if (next[r][c] !== null) {
+          if (r !== writeRow) {
+            next[writeRow][c] = next[r][c];
+            next[r][c] = null;
+          }
+          writeRow--;
         }
-        writeRow--;
+      }
+      for (let r = writeRow; r >= 0; r--) {
+        const gem = pickRandomGem(next, next[r], r, c, rows, cols, types, deityMode);
+        next[r][c] = gem;
+        newGems.push({ row: r, col: c, gem });
       }
     }
-    for (let r = writeRow; r >= 0; r--) {
-      const gem = pickRandomGem(next, next[r], r, c, rows, cols, types, deityMode);
-      next[r][c] = gem;
-      newGems.push({ row: r, col: c, gem });
-    }
-  }
+    return { board: next, newGems };
+  };
 
-  return { board: next, newGems };
+  const targetSwaps = deityMode ? FILL_GAPS_TARGET_SWAPS_ISTA : FILL_GAPS_TARGET_SWAPS_GENERAL;
+  let best = fillOnce();
+  let bestScore = countValidSwapOpportunities(best.board);
+  if (bestScore >= targetSwaps) return best;
+  for (let i = 0; i < FILL_GAPS_SWAP_TRIALS; i++) {
+    const cand = fillOnce();
+    const score = countValidSwapOpportunities(cand.board);
+    if (score > bestScore) {
+      best = cand;
+      bestScore = score;
+    }
+    if (score >= targetSwaps) return cand;
+  }
+  return best;
 }

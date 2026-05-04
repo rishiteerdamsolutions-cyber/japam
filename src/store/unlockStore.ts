@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { loadUserUnlock, type UserTier } from '../lib/firestore';
 import { useAuthStore } from './authStore';
 
-/** @deprecated Use getFirstLockedLevelIndex(mode) — general has 5 free levels, each deity has 2. */
+/** @deprecated Use getFirstLockedLevelIndex(mode) — all tracks use five free levels (indices 0–4). */
 export const FIRST_LOCKED_LEVEL_INDEX = 2;
 export {
   getFirstLockedLevelIndex,

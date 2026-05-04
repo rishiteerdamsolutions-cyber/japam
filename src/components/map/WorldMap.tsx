@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useProgressStore, progressKey } from '../../store/progressStore';
 import { useUnlockStore } from '../../store/unlockStore';
@@ -11,10 +11,8 @@ import { AppFooter } from '../layout/AppFooter';
 import { BottomNav } from '../nav/BottomNav';
 import { LEVELS } from '../../data/levels';
 import { EPISODES } from '../../data/episodes';
+import { DEITIES } from '../../data/deities';
 import type { GameMode } from '../../types';
-
-/** Bottom-nav Levels map is All-Devatā only so free tiers match general gates (5 levels), not per-deity gates. */
-const MAP_MODE: GameMode = 'general';
 
 interface WorldMapProps {
   onSelectLevel: (index: number, mode: GameMode) => void;
@@ -22,6 +20,7 @@ interface WorldMapProps {
 
 export function WorldMap({ onSelectLevel }: WorldMapProps) {
   const { t } = useTranslation();
+  const [mapMode, setMapMode] = useState<GameMode>('general');
   const { levelProgress, getCurrentLevelIndex } = useProgressStore();
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
   const user = useAuthStore((s) => s.user);
@@ -29,8 +28,8 @@ export function WorldMap({ onSelectLevel }: WorldMapProps) {
   const unlocked = levelsUnlocked === true || unlockResolving;
   const loadLevelsConfig = useLevelsConfigStore((s) => s.load);
   const maxRevealedLevelIndex = useLevelsConfigStore((s) => s.maxRevealedLevelIndex);
-  const currentLevelIndex = getCurrentLevelIndex(MAP_MODE);
-  const levelsTitle = t('menu.levels');
+  const currentLevelIndex = getCurrentLevelIndex(mapMode);
+  const levelsTitle = mapMode === 'general' ? t('menu.levels') : `${t(`deities.${mapMode}`)} ${t('menu.levels')}`;
 
   useEffect(() => {
     loadLevelsConfig();
@@ -39,16 +38,39 @@ export function WorldMap({ onSelectLevel }: WorldMapProps) {
   const revealedMax = maxRevealedLevelIndex ?? 49;
   const maxEpisodeId = Math.min(100, Math.ceil((revealedMax + 1) / 10));
   const episodesToShow = EPISODES.filter(ep => ep.id <= maxEpisodeId);
-  const firstLock = getFirstLockedLevelIndex(MAP_MODE);
+  const firstLock = getFirstLockedLevelIndex(mapMode);
 
   return (
     <div className="relative min-h-screen p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] max-w-lg mx-auto overflow-hidden">
       <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10">
       <MenuMatchChantHeader />
-      <h2 className="text-base sm:text-xl font-bold text-amber-400 mb-3 truncate" style={{ fontFamily: 'serif' }}>
+      <h2 className="text-base sm:text-xl font-bold text-amber-400 mb-2 truncate" style={{ fontFamily: 'serif' }}>
         {levelsTitle}
       </h2>
+
+      <div className="flex flex-wrap gap-1 mb-3 min-w-0">
+        <button
+          type="button"
+          onClick={() => setMapMode('general')}
+          className={`px-2 py-1.5 rounded text-xs max-w-[5rem] sm:max-w-none truncate ${mapMode === 'general' ? 'bg-amber-500 text-white' : 'bg-black/20 text-amber-200'}`}
+          title={t('menu.general')}
+        >
+          {t('menu.general')}
+        </button>
+        {DEITIES.map((d) => (
+          <button
+            type="button"
+            key={d.id}
+            onClick={() => setMapMode(d.id)}
+            className={`px-2 py-1.5 rounded text-xs max-w-[5rem] sm:max-w-none truncate ${mapMode === d.id ? 'text-white' : 'bg-black/20 text-amber-200'}`}
+            style={{ backgroundColor: mapMode === d.id ? d.color : undefined }}
+            title={t(`deities.${d.id}`)}
+          >
+            {t(`deities.${d.id}`)}
+          </button>
+        ))}
+      </div>
 
       <DonateThankYouBox className="mt-4" />
 
@@ -60,7 +82,7 @@ export function WorldMap({ onSelectLevel }: WorldMapProps) {
               {LEVELS.filter(l => l.episode === ep.id).map((level, i) => {
                 const idx = (ep.id - 1) * 10 + i;
                 if (idx > revealedMax) return null;
-                const progress = levelProgress[progressKey(MAP_MODE, level.id)];
+                const progress = levelProgress[progressKey(mapMode, level.id)];
                 const canPlay =
                   idx <= currentLevelIndex && (idx < firstLock || unlocked);
                 // First level that requires Pro: opens paywall from map. Higher levels stay disabled until Pro.
@@ -72,7 +94,7 @@ export function WorldMap({ onSelectLevel }: WorldMapProps) {
                 return (
                   <button
                     key={level.id}
-                    onClick={() => (canPlay || isPaywallGate) && onSelectLevel(idx, MAP_MODE)}
+                    onClick={() => (canPlay || isPaywallGate) && onSelectLevel(idx, mapMode)}
                     disabled={!canPlay && !isPaywallGate}
                     className={`
                       aspect-square rounded-xl flex flex-col items-center justify-center

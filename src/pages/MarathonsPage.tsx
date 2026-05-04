@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import type { User } from 'firebase/auth';
+import type { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { AppFooter } from '../components/layout/AppFooter';
@@ -55,6 +57,105 @@ interface MyMarathon {
   leaderboard?: { rank: number; uid: string; name: string; japasCount: number }[];
 }
 
+function MarathonDiscoverCard({
+  m,
+  temple,
+  user,
+  isPro,
+  joining,
+  joinedMarathonIds,
+  sharing,
+  onJoin,
+  onShare,
+  deityName,
+  t,
+}: {
+  m: Marathon;
+  temple: Temple;
+  user: User | null;
+  isPro: boolean;
+  joining: string | null;
+  joinedMarathonIds: Set<string>;
+  sharing: boolean;
+  onJoin: (marathonId: string) => void;
+  onShare: (marathon: Marathon, temple: Temple) => void;
+  deityName: (id: string) => string;
+  t: TFunction;
+}) {
+  const canDownload =
+    !!user?.uid && joinedMarathonIds.has(m.id) && !!m.leaderboard && m.leaderboard.length > 0;
+  const soloLb = isDefaultFreeMarathonId(m.id);
+  const lbRows = soloLb && m.leaderboard ? m.leaderboard : m.leaderboard ? paddedLeaderboard(m.leaderboard) : [];
+  return (
+    <div className="relative py-3 pl-3 pr-3 sm:pr-36 rounded-xl bg-black/25 border border-amber-500/15">
+      {!isPro ? (
+        <div className="absolute top-2.5 right-2.5 z-[1]">
+          {isDefaultFreeMarathonId(m.id) ? (
+            <AccessBadge variant="free" label={t('common.free')} size="sm" />
+          ) : (
+            <AccessBadge variant="pro" label={t('menu.pro')} size="sm" />
+          )}
+        </div>
+      ) : null}
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+        <div className="min-w-0 flex-1 pr-1">
+          <p className="text-amber-200 font-medium text-sm leading-snug">
+            {t('marathonsPage.targetJapasLine', { deity: deityName(m.deityId), target: m.targetJapas })}
+          </p>
+          <p className="text-amber-200/60 text-[11px] sm:text-xs mt-1 tabular-nums">
+            {t('marathonsPage.startedJoined', { date: m.startDate, n: m.joinedCount })}
+          </p>
+        </div>
+        <div className="flex flex-col items-stretch sm:items-end gap-1 shrink-0 w-full sm:w-auto">
+          <button
+            type="button"
+            onClick={() => onJoin(m.id)}
+            disabled={
+              !!joining || joinedMarathonIds.has(m.id) || (!isPro && !isDefaultFreeMarathonId(m.id))
+            }
+            className="px-4 py-2 rounded-lg bg-amber-500 text-white text-sm font-medium disabled:opacity-50"
+          >
+            {joining === m.id
+              ? t('marathonsPage.joining')
+              : joinedMarathonIds.has(m.id)
+                ? t('marathonsPage.joined')
+                : !isPro && !isDefaultFreeMarathonId(m.id)
+                  ? (
+                      <span className="inline-flex items-center gap-1.5">
+                        <AccessBadge variant="pro" label={t('menu.pro')} size="sm" />
+                        <span>{t('marathonsPage.proRequiredSuffix')}</span>
+                      </span>
+                    )
+                  : t('marathonsPage.join')}
+          </button>
+          {canDownload && (
+            <button
+              type="button"
+              onClick={() => onShare(m, temple)}
+              disabled={sharing}
+              className="px-3 py-1.5 rounded-lg bg-amber-500/90 text-white text-xs font-semibold shadow-md disabled:opacity-50"
+            >
+              {sharing ? t('mahaYagnas.preparing') : t('mahaYagnas.downloadRankCard')}
+            </button>
+          )}
+        </div>
+      </div>
+      {m.leaderboard && m.leaderboard.length > 0 && (
+        <div className="mt-2 pl-2 border-l-2 border-amber-500/20">
+          <p className="text-amber-200/70 text-xs font-medium mb-1">
+            {soloLb ? t('marathonsPage.leaderboardSolo') : t('marathonsPage.leaderboardTop')}
+          </p>
+          {lbRows.map((p) => (
+            <p key={p.rank} className="text-amber-200/60 text-xs">
+              {p.rank}. {p.uid ? `${p.name} — ${p.japasCount} japas` : 'Vacant'}
+            </p>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function MarathonsPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -81,8 +182,44 @@ export function MarathonsPage() {
   const [shareResult, setShareResult] = useState<{ blob: Blob; url: string; shareText: string } | null>(null);
   const [shareError, setShareError] = useState<string | null>(null);
   const [shareNotice, setShareNotice] = useState<string | null>(null);
+  const [browseMarathons, setBrowseMarathons] = useState<Marathon[]>([]);
+  const [browseLoading, setBrowseLoading] = useState(true);
+  const [browseError, setBrowseError] = useState<string | null>(null);
 
   const state = STATES.find((s) => s.name === stateName) || null;
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      setBrowseLoading(true);
+      setBrowseError(null);
+      try {
+        const url = API_BASE ? `${API_BASE}/api/marathons/list` : '/api/marathons/list';
+        const idToken = await auth?.currentUser?.getIdToken?.().catch(() => null);
+        const headers: HeadersInit = idToken ? { Authorization: `Bearer ${idToken}` } : {};
+        const res = await fetch(url, { headers });
+        const data = (await res.json().catch(() => ({}))) as { marathons?: Marathon[] };
+        if (cancelled) return;
+        if (res.ok && Array.isArray(data.marathons)) {
+          setBrowseMarathons(data.marathons);
+          setBrowseError(null);
+        } else {
+          setBrowseMarathons([]);
+          setBrowseError('loadFailed');
+        }
+      } catch {
+        if (!cancelled) {
+          setBrowseMarathons([]);
+          setBrowseError('loadFailed');
+        }
+      } finally {
+        if (!cancelled) setBrowseLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.uid]);
 
   useEffect(() => {
     if (!user?.uid) {
@@ -224,6 +361,11 @@ export function MarathonsPage() {
             }
             return next;
           });
+          setBrowseMarathons((prev) =>
+            prev.map((m) =>
+              m.id === marathonId ? { ...m, joinedCount: (m.joinedCount || 0) + 1 } : m
+            ),
+          );
         }
         const refetchUrl = API_BASE ? `${API_BASE}/api/marathons/my-participations` : '/api/marathons/my-participations';
         const refetchRes = await fetch(refetchUrl, { headers: { Authorization: `Bearer ${idToken}` } });
@@ -355,18 +497,6 @@ export function MarathonsPage() {
       <p className="text-amber-200/80 text-xs sm:text-sm mb-3 leading-snug max-w-xl">
         {t('marathonsPage.description')}
       </p>
-      {!isPro && (
-        <div className="mb-3 p-3 rounded-xl bg-amber-500/10 border border-amber-500/25 text-amber-200/90 text-xs sm:text-sm leading-snug">
-          {t('marathonsPage.proGateShort')}{' '}
-          <button
-            type="button"
-            onClick={() => navigate(`/game?mode=general&level=${FIRST_LOCKED_LEVEL_INDEX_GENERAL}`)}
-            className="text-amber-400 font-medium hover:underline"
-          >
-            {t('mahaYagnas.unlockPro')}
-          </button>
-        </div>
-      )}
 
       {joinError && (
         <div className="mb-4 p-3 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-200 text-sm">
@@ -490,7 +620,61 @@ export function MarathonsPage() {
         </div>
       )}
 
+      <div className="mb-5 p-3 sm:p-4 rounded-xl bg-black/30 border border-amber-500/20">
+        <h3 className="text-amber-400 font-semibold text-sm sm:text-base mb-1">{t('marathonsPage.browseTitle')}</h3>
+        <p className="text-amber-200/65 text-[11px] sm:text-xs mb-3 leading-snug">{t('marathonsPage.browseIntro')}</p>
+        {browseLoading && <p className="text-amber-200/70 text-sm">{t('marathonsPage.loading')}</p>}
+        {browseError && <p className="text-red-400/90 text-sm mb-2">{t('marathonsPage.browseLoadFailed')}</p>}
+        {!browseLoading && !browseError && browseMarathons.length === 0 && (
+          <p className="text-amber-200/60 text-sm">{t('marathonsPage.browseEmpty')}</p>
+        )}
+        {!browseLoading && browseMarathons.length > 0 && (
+          <div className="space-y-2">
+            {browseMarathons.map((m) => {
+              const temple: Temple = {
+                id: m.templeId || m.id,
+                name: displayMarathonTitle(m.id, m.communityName ?? null),
+                area: '',
+              };
+              return (
+                <MarathonDiscoverCard
+                  key={`browse-${m.id}`}
+                  m={m}
+                  temple={temple}
+                  user={user}
+                  isPro={isPro}
+                  joining={joining}
+                  joinedMarathonIds={joinedMarathonIds}
+                  sharing={sharing}
+                  onJoin={handleJoin}
+                  onShare={handleShare}
+                  deityName={deityName}
+                  t={t}
+                />
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+      {!isPro && (
+        <div className="mb-4 p-3 rounded-xl bg-amber-500/10 border border-amber-500/25">
+          <p className="text-amber-200/90 text-xs sm:text-sm leading-snug break-words">
+            <span className="font-medium text-amber-200">{t('marathonsPage.proOnlyTitle')}.</span>{' '}
+            {t('marathonsPage.proGateBody')}
+          </p>
+          <button
+            type="button"
+            onClick={() => navigate(`/game?mode=general&level=${FIRST_LOCKED_LEVEL_INDEX_GENERAL}`)}
+            className="mt-2 text-amber-400 text-xs sm:text-sm font-medium hover:underline"
+          >
+            {t('mahaYagnas.unlockPro')}
+          </button>
+        </div>
+      )}
+
       <div className="space-y-3 mb-5">
+        <h3 className="text-amber-400 font-semibold text-sm sm:text-base">{t('marathonsPage.searchSectionTitle')}</h3>
         <div>
           <label className="text-amber-200/80 text-sm block mb-1">{t('marathonsPage.state')}</label>
           <select
@@ -566,77 +750,22 @@ export function MarathonsPage() {
                     <p className="text-amber-200/50 text-sm mt-2">{t('marathonsPage.noMarathons')}</p>
                   ) : (
                     <div className="mt-3 space-y-2">
-                      {marathons.map((m) => {
-                        const canDownload =
-                          !!user?.uid && joinedMarathonIds.has(m.id) && !!m.leaderboard && m.leaderboard.length > 0;
-                        return (
-                          <div key={m.id} className="relative py-3 pl-3 pr-3 sm:pr-36 rounded-xl bg-black/25 border border-amber-500/15">
-                            {!isPro ? (
-                              <div className="absolute top-2.5 right-2.5 z-[1]">
-                                {isDefaultFreeMarathonId(m.id) ? (
-                                  <AccessBadge variant="free" label={t('common.free')} size="sm" />
-                                ) : (
-                                  <AccessBadge variant="pro" label={t('menu.pro')} size="sm" />
-                                )}
-                              </div>
-                            ) : null}
-                            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
-                              <div className="min-w-0 flex-1 pr-1">
-                                <p className="text-amber-200 font-medium text-sm leading-snug">
-                                  {t('marathonsPage.targetJapasLine', { deity: deityName(m.deityId), target: m.targetJapas })}
-                                </p>
-                                <p className="text-amber-200/60 text-[11px] sm:text-xs mt-1 tabular-nums">
-                                  {t('marathonsPage.startedJoined', { date: m.startDate, n: m.joinedCount })}
-                                </p>
-                              </div>
-                              <div className="flex flex-col items-stretch sm:items-end gap-1 shrink-0 w-full sm:w-auto">
-                                <button
-                                  onClick={() => handleJoin(m.id)}
-                                  disabled={
-                                    !!joining ||
-                                    joinedMarathonIds.has(m.id) ||
-                                    (!isPro && !isDefaultFreeMarathonId(m.id))
-                                  }
-                                  className="px-4 py-2 rounded-lg bg-amber-500 text-white text-sm font-medium disabled:opacity-50"
-                                >
-                                  {joining === m.id
-                                    ? t('marathonsPage.joining')
-                                    : joinedMarathonIds.has(m.id)
-                                      ? t('marathonsPage.joined')
-                                      : !isPro && !isDefaultFreeMarathonId(m.id)
-                                        ? (
-                                            <span className="inline-flex items-center gap-1.5">
-                                              <AccessBadge variant="pro" label={t('menu.pro')} size="sm" />
-                                              <span>{t('marathonsPage.proRequiredSuffix')}</span>
-                                            </span>
-                                          )
-                                        : t('marathonsPage.join')}
-                                </button>
-                                {canDownload && (
-                                  <button
-                                    type="button"
-                                    onClick={() => handleShare(m, temple)}
-                                    disabled={sharing}
-                                    className="px-3 py-1.5 rounded-lg bg-amber-500/90 text-white text-xs font-semibold shadow-md disabled:opacity-50"
-                                  >
-                                    {sharing ? t('mahaYagnas.preparing') : t('mahaYagnas.downloadRankCard')}
-                                  </button>
-                                )}
-                              </div>
-                            </div>
-                            {m.leaderboard && m.leaderboard.length > 0 && (
-                              <div className="mt-2 pl-2 border-l-2 border-amber-500/20">
-                                <p className="text-amber-200/70 text-xs font-medium mb-1">{t('marathonsPage.leaderboardTop')}</p>
-                                {paddedLeaderboard(m.leaderboard).map((p) => (
-                                  <p key={p.rank} className="text-amber-200/60 text-xs">
-                                    {p.rank}. {p.uid ? `${p.name} — ${p.japasCount} japas` : 'Vacant'}
-                                  </p>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
+                      {marathons.map((m) => (
+                        <MarathonDiscoverCard
+                          key={m.id}
+                          m={m}
+                          temple={temple}
+                          user={user}
+                          isPro={isPro}
+                          joining={joining}
+                          joinedMarathonIds={joinedMarathonIds}
+                          sharing={sharing}
+                          onJoin={handleJoin}
+                          onShare={handleShare}
+                          deityName={deityName}
+                          t={t}
+                        />
+                      ))}
                     </div>
                   )}
                 </div>

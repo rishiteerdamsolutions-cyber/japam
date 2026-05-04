@@ -86,6 +86,7 @@ import * as adminDataHandler from './_handlers/admin/data.js';
 import * as priestMarathonsHandler from './_handlers/priest/marathons.js';
 import * as priestLinkHandler from './_handlers/priest/link.js';
 import * as marathonsDiscoverHandler from './_handlers/marathons/discover.js';
+import * as marathonsListHandler from './_handlers/marathons/list.js';
 import * as marathonsJoinHandler from './_handlers/marathons/join.js';
 import * as marathonsMyParticipationsHandler from './_handlers/marathons/my-participations.js';
 import * as userProgressHandler from './_handlers/user/progress.js';
@@ -227,6 +228,7 @@ const HANDLERS = {
   'POST priest/marathons': priestMarathonsHandler,
   'POST priest/link': priestLinkHandler,
   'GET marathons/discover': marathonsDiscoverHandler,
+  'GET marathons/list': marathonsListHandler,
   'GET marathons/my-participations': marathonsMyParticipationsHandler,
   'POST marathons/join': marathonsJoinHandler,
   'GET user/progress': userProgressHandler,

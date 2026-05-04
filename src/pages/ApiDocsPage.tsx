@@ -32,6 +32,7 @@ export function ApiDocsPage() {
           <li><code className="bg-black/30 px-1 rounded">POST /api/verify-unlock</code> – Verify payment (Bearer)</li>
           <li><code className="bg-black/30 px-1 rounded">POST /api/admin-login</code> – Admin login</li>
           <li><code className="bg-black/30 px-1 rounded">POST /api/priest-login</code> – Priest login</li>
+          <li><code className="bg-black/30 px-1 rounded">GET /api/marathons/list</code> – Free default + active community marathons</li>
           <li><code className="bg-black/30 px-1 rounded">GET /api/marathons/discover</code> – Discover marathons</li>
         </ul>
       </div>

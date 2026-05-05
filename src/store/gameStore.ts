@@ -629,6 +629,9 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     clearDeadBoardAutoRefreshTimeouts();
     // For resume we only restore progress (moves + japa counts). We start with a fresh board.
     const resolvedMode = normalizeGameMode(saved.mode);
+    const restoredSpecial108 =
+      saved.special108Japa === true ||
+      (typeof saved.key === 'string' && saved.key.startsWith(`${PAUSED_KEY_PREFIX}special108-`));
     const level = getLevel(saved.levelIndex);
     const maxGemTypes = level.maxGemTypes ?? 8;
     const deityMode = resolvedMode !== 'general' ? (resolvedMode as DeityId) : undefined;
@@ -662,12 +665,38 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       );
       resumeGuard++;
     }
+    const restoredJapasByDeity = { ...emptyJapas(), ...saved.japasByDeity } as Record<DeityId, number>;
+    const rawJapasThisLevel = typeof saved.japasThisLevel === 'number' && Number.isFinite(saved.japasThisLevel)
+      ? saved.japasThisLevel
+      : 0;
+    let normalizedJapasThisLevel = rawJapasThisLevel;
+    const sumByDeity = Object.values(restoredJapasByDeity).reduce(
+      (acc, n) => acc + (typeof n === 'number' && Number.isFinite(n) ? n : 0),
+      0,
+    );
+    if (resolvedMode === 'general') {
+      normalizedJapasThisLevel = Math.max(rawJapasThisLevel, sumByDeity);
+    }
+    if (restoredSpecial108 && resolvedMode !== 'general') {
+      const modeId = resolvedMode as DeityId;
+      const fromMode = restoredJapasByDeity[modeId] ?? 0;
+      const fromLevel = rawJapasThisLevel;
+      restoredJapasByDeity[modeId] = Math.max(fromMode, fromLevel);
+      normalizedJapasThisLevel = Math.max(normalizedJapasThisLevel, restoredJapasByDeity[modeId] ?? 0);
+    } else if (resolvedMode !== 'general') {
+      // Generic guard for all deity-path games: preserve the higher count if either side is stale.
+      const modeId = resolvedMode as DeityId;
+      const fromMode = restoredJapasByDeity[modeId] ?? 0;
+      const unified = Math.max(fromMode, rawJapasThisLevel);
+      restoredJapasByDeity[modeId] = unified;
+      normalizedJapasThisLevel = Math.max(normalizedJapasThisLevel, unified);
+    }
     set({
       board,
       moves: saved.moves,
       score: typeof saved.score === 'number' ? saved.score : 0,
-      japasThisLevel: saved.japasThisLevel,
-      japasByDeity: { ...emptyJapas(), ...saved.japasByDeity } as Record<DeityId, number>,
+      japasThisLevel: normalizedJapasThisLevel,
+      japasByDeity: restoredJapasByDeity,
       comboLevel: 0,
       status: 'playing',
       mode: resolvedMode,
@@ -675,8 +704,13 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       marathonId: saved.marathonId ?? null,
       marathonTargetJapas: saved.marathonTargetJapas ?? null,
       yagnaId: saved.yagnaId ?? null,
-      overrideJapaTarget: saved.overrideJapaTarget ?? null,
-      special108Japa: saved.special108Japa === true,
+      overrideJapaTarget:
+        restoredSpecial108
+          ? (typeof saved.overrideJapaTarget === 'number' && Number.isFinite(saved.overrideJapaTarget)
+              ? saved.overrideJapaTarget
+              : 108)
+          : (saved.overrideJapaTarget ?? null),
+      special108Japa: restoredSpecial108,
       isGuest: saved.isGuest ?? false,
       selectedCell: null,
       lastMatches: [],

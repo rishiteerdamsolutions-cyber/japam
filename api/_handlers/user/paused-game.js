@@ -3,6 +3,19 @@
  *  Returns the paused game for that specific key only. Supports multiple paused games per user. */
 import { getDb, jsonResponse, verifyFirebaseUser, jsonInternalServerError } from '../_lib.js';
 
+function normalizePausedGameForResponse(game, requestedKey) {
+  if (!game || typeof game !== 'object' || !game.key) return null;
+  const out = { ...game };
+  const key = typeof out.key === 'string' ? out.key : requestedKey;
+  if (typeof key === 'string' && key.startsWith('japam-paused-special108-')) {
+    out.special108Japa = true;
+    if (!(typeof out.overrideJapaTarget === 'number' && Number.isFinite(out.overrideJapaTarget))) {
+      out.overrideJapaTarget = 108;
+    }
+  }
+  return out;
+}
+
 export async function GET(request) {
   const uid = await verifyFirebaseUser(request);
   if (!uid) return jsonResponse({ error: 'Unauthorized' }, 401);
@@ -22,14 +35,14 @@ export async function GET(request) {
     if (pausedGames && typeof pausedGames === 'object' && pausedGames[key]) {
       const game = pausedGames[key];
       if (game && typeof game === 'object' && game.key) {
-        return jsonResponse({ pausedGame: game }, 200);
+        return jsonResponse({ pausedGame: normalizePausedGameForResponse(game, key) }, 200);
       }
     }
 
     // Legacy: single pausedGame (migrate on read if key matches)
     const legacy = data.pausedGame;
     if (legacy && typeof legacy === 'object' && legacy.key === key) {
-      return jsonResponse({ pausedGame: legacy }, 200);
+      return jsonResponse({ pausedGame: normalizePausedGameForResponse(legacy, key) }, 200);
     }
     return jsonResponse({ pausedGame: null }, 200);
   } catch (e) {

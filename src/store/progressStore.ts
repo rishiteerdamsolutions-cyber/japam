@@ -2,6 +2,8 @@ import { create } from 'zustand';
 import type { GameMode } from '../types';
 import { loadUserProgress, saveUserProgress } from '../lib/firestore';
 import { useAuthStore } from './authStore';
+import { LEVELS } from '../data/levels';
+import { DEITY_IDS } from '../data/deities';
 
 export interface LevelProgress {
   stars: number;
@@ -24,6 +26,37 @@ export function progressKey(mode: GameMode, levelId: string) {
   return `${mode}-${levelId}`;
 }
 
+function deriveCurrentLevelIndexFromProgress(
+  mode: GameMode,
+  levelProgress: Record<string, LevelProgress>,
+): number {
+  let highestContiguousCompleted = -1;
+  for (let i = 0; i < LEVELS.length; i++) {
+    const level = LEVELS[i];
+    if (!level) break;
+    if (levelProgress[progressKey(mode, level.id)]?.completed === true) {
+      highestContiguousCompleted = i;
+      continue;
+    }
+    break;
+  }
+  return Math.min(highestContiguousCompleted + 1, Math.max(LEVELS.length - 1, 0));
+}
+
+function normalizeCurrentLevelByMode(
+  levelProgress: Record<string, LevelProgress>,
+  currentLevelByMode: Record<string, number>,
+): Record<string, number> {
+  const modes: GameMode[] = ['general', ...DEITY_IDS];
+  const next: Record<string, number> = { ...currentLevelByMode };
+  for (const mode of modes) {
+    const stored = currentLevelByMode[mode] ?? 0;
+    const derived = deriveCurrentLevelIndexFromProgress(mode, levelProgress);
+    next[mode] = Math.max(stored, derived);
+  }
+  return next;
+}
+
 export const useProgressStore = create<ProgressState>((setState, getState) => ({
   levelProgress: {},
   currentLevelByMode: {},
@@ -36,9 +69,14 @@ export const useProgressStore = create<ProgressState>((setState, getState) => ({
         return;
       }
       const stored = await loadUserProgress(userId);
+      const levelProgress = stored?.levelProgress ?? {};
+      const currentLevelByMode = normalizeCurrentLevelByMode(
+        levelProgress,
+        stored?.currentLevelByMode ?? {},
+      );
       setState({
-        levelProgress: stored?.levelProgress ?? {},
-        currentLevelByMode: stored?.currentLevelByMode ?? {},
+        levelProgress,
+        currentLevelByMode,
         loaded: true
       });
     } catch (e: unknown) {
@@ -73,7 +111,10 @@ export const useProgressStore = create<ProgressState>((setState, getState) => ({
   },
 
   getCurrentLevelIndex: (mode) => {
-    return getState().currentLevelByMode[mode] ?? 0;
+    const state = getState();
+    const stored = state.currentLevelByMode[mode] ?? 0;
+    const derived = deriveCurrentLevelIndexFromProgress(mode, state.levelProgress);
+    return Math.max(stored, derived);
   },
 
   setCurrentLevel: async (mode, index) => {

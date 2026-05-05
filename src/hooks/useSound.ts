@@ -142,6 +142,7 @@ export function stopAllMantras() {
 }
 
 const activeBonusAudios: HTMLAudioElement[] = [];
+let sfxSessionId = 0;
 
 function registerSfxAudio(audio: HTMLAudioElement) {
   activeBonusAudios.push(audio);
@@ -152,12 +153,14 @@ function registerSfxAudio(audio: HTMLAudioElement) {
 }
 
 function playSfxPath(path: string, volume: number) {
+  const sessionAtStart = sfxSessionId;
   const ctx = getAudioContext();
   if (ctx.state === 'suspended') ctx.resume().catch(() => {});
   const audio = new Audio(path);
   audio.volume = volume;
   registerSfxAudio(audio);
   audio.play().catch(() => {
+    if (sessionAtStart !== sfxSessionId) return;
     const i = activeBonusAudios.indexOf(audio);
     if (i >= 0) activeBonusAudios.splice(i, 1);
   });
@@ -165,15 +168,18 @@ function playSfxPath(path: string, volume: number) {
 
 /** Try per-deity URLs in order until one plays (missing files fall through). */
 function playFirstAvailableUrl(urls: string[], volume: number) {
+  const sessionAtStart = sfxSessionId;
   const ctx = getAudioContext();
   if (ctx.state === 'suspended') ctx.resume().catch(() => {});
 
   const tryAt = (index: number) => {
+    if (sessionAtStart !== sfxSessionId) return;
     if (index >= urls.length) return;
     const path = urls[index]!;
     const audio = new Audio(path);
     audio.volume = volume;
     const fail = () => {
+      if (sessionAtStart !== sfxSessionId) return;
       const i = activeBonusAudios.indexOf(audio);
       if (i >= 0) activeBonusAudios.splice(i, 1);
       tryAt(index + 1);
@@ -191,6 +197,8 @@ function playFirstAvailableUrl(urls: string[], volume: number) {
  */
 export function playMatchSfxSelection(sel: MatchSfxSelection | null) {
   if (!sel) return;
+  // Newest invoked match SFX always wins.
+  stopMatchBonusAudio();
   const urls = matchSfxUrlCandidates(sel.deity, sel.tier);
   playFirstAvailableUrl(urls, 0.72);
   if (sel.tier === 4) {
@@ -201,6 +209,7 @@ export function playMatchSfxSelection(sel: MatchSfxSelection | null) {
 }
 
 export function stopMatchBonusAudio() {
+  sfxSessionId++;
   for (const a of activeBonusAudios) {
     try {
       a.pause();

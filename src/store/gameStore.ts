@@ -227,12 +227,53 @@ function ensureAnniversaryBoardPlayable(
   return board;
 }
 
+function countBlessingsOnBoard(board: Board): number {
+  let n = 0;
+  for (const row of board) {
+    for (const g of row) {
+      if (isBlessing(g)) n++;
+    }
+  }
+  return n;
+}
+
+/** Keep/add flower bombs after board regen (manual keeps count; auto dead-board adds one bonus). */
+function applyBlessingCarryOver(board: Board, desiredCount: number): Board {
+  const rows = board.length;
+  const cols = board[0]?.length ?? 0;
+  if (rows === 0 || cols === 0) return board;
+
+  const current = countBlessingsOnBoard(board);
+  if (desiredCount <= current) return board;
+
+  const next = board.map((r) => [...r]);
+  const candidates: Array<{ row: number; col: number }> = [];
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const g = next[r]?.[c];
+      if (g != null && !isBlessing(g)) candidates.push({ row: r, col: c });
+    }
+  }
+  if (candidates.length === 0) return board;
+
+  const need = Math.min(desiredCount - current, candidates.length);
+  for (let i = 0; i < need; i++) {
+    const pick = Math.floor(Math.random() * candidates.length);
+    const cell = candidates.splice(pick, 1)[0];
+    if (!cell) break;
+    next[cell.row][cell.col] = { kind: 'blessing' } as GemType;
+  }
+  return next;
+}
+
 /** Full-board replacement when no valid swaps exist; always yields `hasValidMoves`. */
 function buildDeadBoardReplacement(
   state: GameState,
   level: LevelDef,
   gemCtxDead: ReturnType<typeof boardGemContext>,
 ): { board: Board; anniversaryAutoRefreshToken: number } {
+  const existingBlessings = countBlessingsOnBoard(state.board);
+  const desiredBlessings = existingBlessings + 1;
   const maxGem = state.maxGemTypes;
   if (state.occasionKind === 'anniversary' && state.anniversarySessionId) {
     let salt = 0;
@@ -263,7 +304,10 @@ function buildDeadBoardReplacement(
         gemCtxDead.generalSubset,
       );
     }
-    return { board: regenerated, anniversaryAutoRefreshToken: state.anniversaryAutoRefreshToken + 1 };
+    return {
+      board: applyBlessingCarryOver(regenerated, desiredBlessings),
+      anniversaryAutoRefreshToken: state.anniversaryAutoRefreshToken + 1,
+    };
   }
   let regenerated = createBoard(
     level.rows,
@@ -285,7 +329,10 @@ function buildDeadBoardReplacement(
     );
     regenGuard++;
   }
-  return { board: regenerated, anniversaryAutoRefreshToken: state.anniversaryAutoRefreshToken };
+  return {
+    board: applyBlessingCarryOver(regenerated, desiredBlessings),
+    anniversaryAutoRefreshToken: state.anniversaryAutoRefreshToken,
+  };
 }
 
 interface GameActions {
@@ -1245,6 +1292,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     clearDeadBoardAutoRefreshTimeouts();
     const level = getLevel(state.levelIndex);
     const gemCtxRefresh = boardGemContext(state);
+    const existingBlessings = countBlessingsOnBoard(state.board);
     let board: Board;
     if (state.occasionKind === 'anniversary' && state.anniversarySessionId) {
       let salt = 0;
@@ -1293,6 +1341,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
         regenGuard++;
       }
     }
+    board = applyBlessingCarryOver(board, existingBlessings);
     set({
       board,
       selectedCell: null,

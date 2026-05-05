@@ -70,7 +70,7 @@ export async function POST(request) {
       return jsonResponse({ ok: true }, 200);
     }
 
-    // Only store the minimal progress needed: moves + japa counts (no board snapshot).
+    // Only store progress needed for resume (no board snapshot).
     const safe = {
       version: 2,
       key: typeof raw.key === 'string' ? raw.key : null,
@@ -82,6 +82,12 @@ export async function POST(request) {
       marathonId: typeof raw.marathonId === 'string' ? raw.marathonId : null,
       marathonTargetJapas: typeof raw.marathonTargetJapas === 'number' && Number.isFinite(raw.marathonTargetJapas) ? raw.marathonTargetJapas : null,
       yagnaId: typeof raw.yagnaId === 'string' ? raw.yagnaId : null,
+      overrideJapaTarget:
+        typeof raw.overrideJapaTarget === 'number' && Number.isFinite(raw.overrideJapaTarget)
+          ? raw.overrideJapaTarget
+          : null,
+      special108Japa: raw.special108Japa === true,
+      isGuest: raw.isGuest === true,
       savedAt: typeof raw.savedAt === 'number' && Number.isFinite(raw.savedAt) ? raw.savedAt : Date.now(),
     };
     if (!safe.key || !safe.mode || safe.levelIndex == null || safe.moves == null) {

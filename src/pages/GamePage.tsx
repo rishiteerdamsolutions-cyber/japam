@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { GameScreen } from '../components/game/GameScreen';
@@ -134,6 +134,8 @@ export function GamePage() {
   const [startFreshConfirmOpen, setStartFreshConfirmOpen] = useState(false);
   const [malaCompleteModal, setMalaCompleteModal] = useState(false);
   const [levelCompleteBlock, setLevelCompleteBlock] = useState<GameMode | null>(null);
+  /** Prevent re-showing the same resume modal if Start Fresh was just confirmed. */
+  const dismissedResumeKeyRef = useRef<string | null>(null);
 
   const progressLoaded = useProgressStore((s) => s.loaded);
   const firstLock = getFirstLockedLevelIndex(mode);
@@ -271,6 +273,12 @@ export function GamePage() {
           const resumable =
             modeMatches &&
             shouldOfferResumePausedGame(saved, savedLevelIndex, { isUnlimitedMoves: unlimitedPause });
+          if (saved.key && dismissedResumeKeyRef.current === saved.key) {
+            setResumePending(null);
+            setResumeKey(null);
+            setPauseCheckDone(true);
+            return;
+          }
           if (resumable) {
             setResumePending(saved);
             setResumeKey(saved.key);
@@ -294,6 +302,12 @@ export function GamePage() {
               parsed?.savedAt &&
               shouldOfferResumePausedGame(parsed, savedLevelIndex, { isUnlimitedMoves: unlimitedPause })
             ) {
+              if (dismissedResumeKeyRef.current === expectedKey) {
+                setResumePending(null);
+                setResumeKey(null);
+                setPauseCheckDone(true);
+                return;
+              }
               setResumePending(parsed);
               setResumeKey(expectedKey);
               setPauseCheckDone(true);
@@ -330,18 +344,21 @@ export function GamePage() {
 
   const handleStartFreshConfirm = async () => {
     setStartFreshConfirmOpen(false);
-    if (resumeKey) {
+    const keyToClear = resumeKey;
+    if (keyToClear) {
+      dismissedResumeKeyRef.current = keyToClear;
+      // Optimistic close first to avoid race where pause-check reopens the same prompt.
+      setResumePending(null);
+      setResumeKey(null);
       if (user?.uid) {
         if (yagnaId) await resetMahaYagnaContribution(yagnaId, user);
-        await saveUserPausedGame(user.uid, null, user, resumeKey);
+        await saveUserPausedGame(user.uid, null, user, keyToClear);
       } else {
         try {
-          localStorage.removeItem(resumeKey);
+          localStorage.removeItem(keyToClear);
         } catch {}
       }
       setLastPausedGame(null);
-      setResumePending(null);
-      setResumeKey(null);
     }
   };
 

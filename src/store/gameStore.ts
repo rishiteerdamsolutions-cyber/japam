@@ -207,6 +207,7 @@ type LevelDef = (typeof LEVELS)[number];
 /** Anniversary disables blessing-pair swaps; dead-board checks must use the same rules as gameplay. */
 const ANNIVERSARY_VALID_MOVE_OPTS = { allowBlessingPair: false as const };
 const MAX_BOARD_REGEN_ATTEMPTS = 2500;
+const BLESSING_CLEAR_VFX_MS = 1000;
 
 /** Seeded anniversary boards can exhaust salts without a valid layout; fall back to unseeded regen (same move rules). */
 function ensureAnniversaryBoardPlayable(
@@ -845,40 +846,50 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
           else if (displayDeityId(g) === targetId) clearPos.push({ row: r, col: c });
         }
       }
-      const cleared = removeMatches(nextBoard, clearPos);
-      const { board: afterG } = applyGravity(cleared);
-      const gemCtxSwap = boardGemContext(get());
-      const { board: filled } = fillGaps(
-        afterG,
-        get().maxGemTypes,
-        gemCtxSwap.deityMode,
-        gemCtxSwap.powerBacked,
-        gemCtxSwap.generalSubset,
-      );
-      const gh = afterG.length;
-      const gw = afterG[0]?.length ?? 0;
-      const spawnKeys: string[] = [];
-      for (let r = 0; r < gh; r++) {
-        for (let c = 0; c < gw; c++) {
-          if (!afterG[r]?.[c] && filled[r]?.[c]) spawnKeys.push(`${r},${c}`);
-        }
-      }
       const st = get();
       set({
-        board: filled,
+        board: nextBoard,
         moves: moves - 1,
         selectedCell: null,
         lastSwapDestination: null,
         lastSwappedTypes: [gemA, gemB],
         intendedDeity: targetGem,
         hintsSwapCount: st.hintsSwapCount + 1,
-        refillSpawnKeys: spawnKeys,
-        refillSpawnGeneration: st.refillSpawnGeneration + (spawnKeys.length > 0 ? 1 : 0),
-        powerVfxToken: st.powerVfxToken + 1,
         anniversaryMovePending: st.occasionKind === 'anniversary' ? true : st.anniversaryMovePending,
         manualCreditArmed: true,
+        matchHighlightPositions: clearPos,
       });
-      get().processMatches([]);
+      const timer = setTimeout(() => {
+        const live = get();
+        const cleared = removeMatches(live.board, clearPos);
+        const { board: afterG } = applyGravity(cleared);
+        const gemCtxSwap = boardGemContext(live);
+        const { board: filled } = fillGaps(
+          afterG,
+          live.maxGemTypes,
+          gemCtxSwap.deityMode,
+          gemCtxSwap.powerBacked,
+          gemCtxSwap.generalSubset,
+        );
+        const gh = afterG.length;
+        const gw = afterG[0]?.length ?? 0;
+        const spawnKeys: string[] = [];
+        for (let r = 0; r < gh; r++) {
+          for (let c = 0; c < gw; c++) {
+            if (!afterG[r]?.[c] && filled[r]?.[c]) spawnKeys.push(`${r},${c}`);
+          }
+        }
+        set({
+          board: filled,
+          matchHighlightPositions: null,
+          matchAnimationTimeoutId: null,
+          refillSpawnKeys: spawnKeys,
+          refillSpawnGeneration: live.refillSpawnGeneration + (spawnKeys.length > 0 ? 1 : 0),
+          powerVfxToken: live.powerVfxToken + 1,
+        });
+        get().processMatches([]);
+      }, BLESSING_CLEAR_VFX_MS);
+      set({ matchAnimationTimeoutId: timer });
       return true;
     }
 

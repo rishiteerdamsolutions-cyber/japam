@@ -2,8 +2,6 @@ import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
-// @ts-expect-error api/proxy.js has no types
-import * as apiProxy from './api/proxy.js'
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
@@ -17,6 +15,9 @@ export default defineConfig(({ mode }) => {
   return {
   build: {
     chunkSizeWarningLimit: 1000, // Increase from default 500KB to suppress chunk size warnings
+    // Vite's default publicDir copy can be very slow in CI for large static assets.
+    // We selectively copy only the assets the app actually references.
+    copyPublicDir: false,
   },
   server: {
     port: 5173,
@@ -25,10 +26,107 @@ export default defineConfig(({ mode }) => {
   },
   plugins: [
     {
+      name: 'japam-copy-public-required',
+      apply: 'build',
+      async closeBundle() {
+        const fs = await import('node:fs/promises');
+        const path = await import('node:path');
+        const root = process.cwd();
+        const publicDir = path.join(root, 'public');
+        const outDir = path.join(root, 'dist');
+
+        // Copy only what's referenced by the app at runtime.
+        const copyDirs = ['images', 'sounds', 'locales', 'videos', 'weapons', 'asura'];
+        const copyFiles = [
+          'vite.svg',
+          'openapi.json',
+          'birthday.png',
+          'anniversary-japa.png',
+          'openingvideo.mp4',
+          'japam.gif',
+          'TWOPLAYER.png',
+          'SAVED TWOPLAYER.png',
+          'general-japa.mp4',
+          'regular-japa-vid.mp4',
+          'regular-japa-button-test.html',
+          'asura-combat-test.html',
+          'SAMPLE NAMA IMAGE.png',
+        ];
+
+        async function exists(p: string) {
+          try {
+            await fs.stat(p);
+            return true;
+          } catch {
+            return false;
+          }
+        }
+
+        async function fastCopyFile(src: string, dest: string) {
+          try {
+            await fs.rm(dest, { force: true });
+          } catch {}
+          try {
+            // Prefer hardlink (fast, no duplicate IO); fall back to copyFile.
+            await fs.link(src, dest);
+          } catch (e) {
+            const err = e as NodeJS.ErrnoException;
+            if (err?.code === 'EXDEV' || err?.code === 'EPERM' || err?.code === 'EACCES') {
+              await fs.copyFile(src, dest);
+              return;
+            }
+            // Some filesystems don't allow linking directories/special files; caller handles dirs.
+            await fs.copyFile(src, dest);
+          }
+        }
+
+        async function fastCopyTree(src: string, dest: string) {
+          const st = await fs.stat(src);
+          if (st.isDirectory()) {
+            await fs.mkdir(dest, { recursive: true });
+            const entries = await fs.readdir(src, { withFileTypes: true });
+            for (const ent of entries) {
+              if (ent.name === '.DS_Store') continue;
+              const s = path.join(src, ent.name);
+              const d = path.join(dest, ent.name);
+              if (ent.isDirectory()) await fastCopyTree(s, d);
+              else if (ent.isFile()) {
+                await fs.mkdir(path.dirname(d), { recursive: true });
+                await fastCopyFile(s, d);
+              }
+            }
+            return;
+          }
+          if (st.isFile()) {
+            await fs.mkdir(path.dirname(dest), { recursive: true });
+            await fastCopyFile(src, dest);
+          }
+        }
+
+        async function copyIfPresent(src: string, dest: string) {
+          if (!(await exists(src))) return;
+          await fastCopyTree(src, dest);
+        }
+
+        for (const d of copyDirs) {
+          await copyIfPresent(path.join(publicDir, d), path.join(outDir, d));
+        }
+        for (const f of copyFiles) {
+          await copyIfPresent(path.join(publicDir, f), path.join(outDir, f));
+        }
+      },
+    },
+    {
       name: 'japam-local-api',
       configureServer(viteServer) {
         viteServer.middlewares.use('/api', async (req, res, next) => {
           try {
+            // Lazy import so `vite build` doesn't load server-only code (Firebase Admin, etc).
+            // `api/proxy.js` has no TS types (JS file).
+            // @ts-expect-error - JS-only module; no .d.ts (dev-only proxy)
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const apiProxy = (await import('./api/proxy.js')) as any;
+
             const method = (req.method || 'GET').toUpperCase();
             if (method !== 'GET' && method !== 'POST') return next();
 

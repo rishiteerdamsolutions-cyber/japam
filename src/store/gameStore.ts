@@ -261,7 +261,7 @@ function applyBlessingCarryOver(board: Board, desiredCount: number): Board {
     const pick = Math.floor(Math.random() * candidates.length);
     const cell = candidates.splice(pick, 1)[0];
     if (!cell) break;
-    next[cell.row][cell.col] = { kind: 'blessing' } as GemType;
+    next[cell.row][cell.col] = { _t: 'blessing' };
   }
   return next;
 }

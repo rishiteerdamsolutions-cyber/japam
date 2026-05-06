@@ -916,6 +916,10 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
         return false;
       }
       const nextBoard = swapGems(board, from, { row: toRow, col: toCol });
+      // Clear only the activated blessing (not every blessing on board).
+      const activatedBlessingPos: Position = isBlessing(gemA)
+        ? { row: toRow, col: toCol }
+        : { row: from.row, col: from.col };
       const clearPos: Position[] = [];
       for (let r = 0; r < nextBoard.length; r++) {
         const rowg = nextBoard[r];
@@ -923,8 +927,11 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
         for (let c = 0; c < rowg.length; c++) {
           const g = rowg[c];
           if (!g) continue;
-          if (isBlessing(g)) clearPos.push({ row: r, col: c });
-          else if (displayDeityId(g) === targetId) clearPos.push({ row: r, col: c });
+          if (r === activatedBlessingPos.row && c === activatedBlessingPos.col) {
+            clearPos.push({ row: r, col: c });
+            continue;
+          }
+          if (!isBlessing(g) && displayDeityId(g) === targetId) clearPos.push({ row: r, col: c });
         }
       }
       const st = get();

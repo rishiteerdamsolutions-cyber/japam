@@ -1225,7 +1225,6 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
           bestScore: totalScore,
           completed: true
         });
-        useProgressStore.getState().setCurrentLevel(state.mode, Math.min(state.levelIndex + 1, LEVELS.length - 1));
       }
     } else if (moves <= 0) {
       status = 'lost';

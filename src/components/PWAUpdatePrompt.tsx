@@ -33,6 +33,9 @@ async function resolveUpdateStatusAfterCheck(reg: ServiceWorkerRegistration): Pr
   return 'current';
 }
 
+/** How often to ask the browser for a new service worker while the app is open (ms). */
+const PWA_UPDATE_POLL_MS = 60_000;
+
 export function PWAUpdatePrompt() {
   const [needRefresh, setNeedRefresh] = useState(false);
   const [updating, setUpdating] = useState(false);
@@ -64,6 +67,8 @@ export function PWAUpdatePrompt() {
 
   useEffect(() => {
     const update = registerSW({
+      /** Registers before `window` "load" so slow assets (video, fonts) do not delay SW / update checks. */
+      immediate: true,
       onNeedRefresh() {
         setNeedRefresh(true);
       },
@@ -114,6 +119,43 @@ export function PWAUpdatePrompt() {
       window.removeEventListener(JAPAM_PWA_APPLY_UPDATE_EVENT, handleApplyFromSettings);
     };
   }, [applyPwaUpdate]);
+
+  /** Proactive polls: long-lived SPA sessions may not re-hit navigation-triggered SW checks for a long time. */
+  useEffect(() => {
+    if (!('serviceWorker' in navigator)) return undefined;
+    let cancelled = false;
+    let intervalId: ReturnType<typeof setInterval> | undefined;
+
+    const poll = async () => {
+      if (cancelled || document.visibilityState !== 'visible') return;
+      try {
+        const reg = registrationRef.current ?? (await navigator.serviceWorker.getRegistration());
+        if (!reg) return;
+        await reg.update();
+        const outcome = await resolveUpdateStatusAfterCheck(reg);
+        if (outcome === 'available') setNeedRefresh(true);
+      } catch {
+        /* ignore — offline, throttled, etc. */
+      }
+    };
+
+    void navigator.serviceWorker.ready.then(() => {
+      if (cancelled) return;
+      void poll();
+      intervalId = setInterval(poll, PWA_UPDATE_POLL_MS);
+    });
+
+    const onVisibility = () => {
+      if (document.visibilityState === 'visible') void poll();
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+
+    return () => {
+      cancelled = true;
+      if (intervalId != null) clearInterval(intervalId);
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
+  }, []);
 
   const closeOffline = () => setOfflineReady(false);
   const closeRefresh = () => setNeedRefresh(false);

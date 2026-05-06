@@ -12,6 +12,7 @@ export function LevelAlreadyCompleteModal({ mode, onClose }: LevelAlreadyComplet
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/85 p-4" role="dialog" aria-modal="true">
       <div className="bg-[#C2185B]/90 rounded-2xl border border-amber-500/30 p-6 max-w-sm w-full shadow-xl text-center">
         <h2 className="text-xl font-bold text-amber-400 mb-2">{t('levelGate.alreadyCompleteTitle')}</h2>
+        <p className="text-amber-300/95 text-xs mb-2 font-medium">{t('levelGate.alreadyCompleteCaption')}</p>
         <p className="text-amber-200/90 text-sm mb-4">
           {mode === 'general' ? t('levelGate.alreadyCompleteBodyGeneral') : t('levelGate.alreadyCompleteBodyDeity')}
         </p>

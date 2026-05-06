@@ -21,6 +21,8 @@ function skipBlockingAuthOverlay(pathname: string): boolean {
     '/game',
     '/japa',
     '/levels',
+    '/marathons',
+    '/maha-yagnas',
     '/pushpa-aradhana',
     '/special-108-japa',
     '/occasion',
@@ -88,6 +90,7 @@ export function AuthSessionOverlay() {
           <>
             <div className="w-11 h-11 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" aria-hidden />
             <p className="text-amber-100 text-base font-medium leading-snug">{t('auth.checkingSignIn')}</p>
+            <p className="text-amber-200/80 text-xs leading-snug max-w-xs">{t('auth.checkingSignInNote')}</p>
           </>
         ) : (
           <>
@@ -95,6 +98,7 @@ export function AuthSessionOverlay() {
               ✓
             </p>
             <p className="text-amber-100 text-base font-semibold leading-snug">{t('auth.signedInWelcome')}</p>
+            <p className="text-amber-200/80 text-xs leading-snug max-w-xs">{t('auth.signedInWelcomeNote')}</p>
           </>
         )}
       </div>

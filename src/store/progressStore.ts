@@ -26,7 +26,8 @@ export function progressKey(mode: GameMode, levelId: string) {
   return `${mode}-${levelId}`;
 }
 
-function deriveCurrentLevelIndexFromProgress(
+/** First level index the player may enter: next unfinished level in order (0-based). */
+export function deriveCurrentLevelIndexFromProgress(
   mode: GameMode,
   levelProgress: Record<string, LevelProgress>,
 ): number {
@@ -45,14 +46,12 @@ function deriveCurrentLevelIndexFromProgress(
 
 function normalizeCurrentLevelByMode(
   levelProgress: Record<string, LevelProgress>,
-  currentLevelByMode: Record<string, number>,
+  _currentLevelByMode: Record<string, number>,
 ): Record<string, number> {
   const modes: GameMode[] = ['general', ...DEITY_IDS];
-  const next: Record<string, number> = { ...currentLevelByMode };
+  const next: Record<string, number> = {};
   for (const mode of modes) {
-    const stored = currentLevelByMode[mode] ?? 0;
-    const derived = deriveCurrentLevelIndexFromProgress(mode, levelProgress);
-    next[mode] = Math.max(stored, derived);
+    next[mode] = deriveCurrentLevelIndexFromProgress(mode, levelProgress);
   }
   return next;
 }
@@ -102,8 +101,8 @@ export const useProgressStore = create<ProgressState>((setState, getState) => ({
         completed: true
       }
     };
-    const nextLevelByMode = { ...state.currentLevelByMode };
-    setState({ levelProgress: next });
+    const nextLevelByMode = normalizeCurrentLevelByMode(next, state.currentLevelByMode);
+    setState({ levelProgress: next, currentLevelByMode: nextLevelByMode });
     try {
       const uid = useAuthStore.getState().user?.uid;
       if (uid) await saveUserProgress(uid, { levelProgress: next, currentLevelByMode: nextLevelByMode });
@@ -112,16 +111,12 @@ export const useProgressStore = create<ProgressState>((setState, getState) => ({
 
   getCurrentLevelIndex: (mode) => {
     const state = getState();
-    const stored = state.currentLevelByMode[mode] ?? 0;
-    const derived = deriveCurrentLevelIndexFromProgress(mode, state.levelProgress);
-    return Math.max(stored, derived);
+    return deriveCurrentLevelIndexFromProgress(mode, state.levelProgress);
   },
 
-  setCurrentLevel: async (mode, index) => {
+  setCurrentLevel: async (_mode, _index) => {
     const state = getState();
-    const prev = state.currentLevelByMode[mode] ?? 0;
-    const nextIndex = Math.max(prev, index);
-    const next = { ...state.currentLevelByMode, [mode]: nextIndex };
+    const next = normalizeCurrentLevelByMode(state.levelProgress, state.currentLevelByMode);
     setState({ currentLevelByMode: next });
     try {
       const uid = useAuthStore.getState().user?.uid;

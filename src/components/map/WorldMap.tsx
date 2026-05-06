@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useProgressStore, progressKey } from '../../store/progressStore';
 import { useUnlockStore } from '../../store/unlockStore';
-import { useAuthStore } from '../../store/authStore';
 import { getFirstLockedLevelIndex } from '../../lib/levelGates';
 import { useLevelsConfigStore } from '../../store/levelsConfigStore';
+import { AccessBadge } from '../ui/AccessBadge';
 import { DonateThankYouBox } from '../donation/DonateThankYouBox';
 import { MenuMatchChantHeader } from '../layout/MenuMatchChantHeader';
 import { AppFooter } from '../layout/AppFooter';
@@ -23,9 +23,7 @@ export function WorldMap({ onSelectLevel }: WorldMapProps) {
   const [mapMode, setMapMode] = useState<GameMode>('general');
   const { levelProgress, getCurrentLevelIndex } = useProgressStore();
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
-  const user = useAuthStore((s) => s.user);
-  const unlockResolving = Boolean(user?.uid && levelsUnlocked === null);
-  const unlocked = levelsUnlocked === true || unlockResolving;
+  const hasProAccess = levelsUnlocked === true;
   const loadLevelsConfig = useLevelsConfigStore((s) => s.load);
   const maxRevealedLevelIndex = useLevelsConfigStore((s) => s.maxRevealedLevelIndex);
   const currentLevelIndex = getCurrentLevelIndex(mapMode);
@@ -83,14 +81,15 @@ export function WorldMap({ onSelectLevel }: WorldMapProps) {
                 const idx = (ep.id - 1) * 10 + i;
                 if (idx > revealedMax) return null;
                 const progress = levelProgress[progressKey(mapMode, level.id)];
+                const isFreeBlock = idx < firstLock;
                 const canPlay =
-                  idx <= currentLevelIndex && (idx < firstLock || unlocked);
+                  idx <= currentLevelIndex && (isFreeBlock || hasProAccess);
                 // First level that requires Pro: opens paywall from map. Higher levels stay disabled until Pro.
                 const isPaywallGate =
-                  !unlocked &&
+                  levelsUnlocked === false &&
                   idx === firstLock &&
                   currentLevelIndex >= firstLock;
-                const isProLockedAhead = !unlocked && idx > firstLock;
+                const isProLockedAhead = levelsUnlocked !== true && idx >= firstLock && !isPaywallGate;
                 return (
                   <button
                     key={level.id}
@@ -109,10 +108,17 @@ export function WorldMap({ onSelectLevel }: WorldMapProps) {
                           : undefined
                     }
                   >
-                    <span>{idx + 1}</span>
-                    {isPaywallGate && <span className="text-xs">🔒</span>}
+                    <span className="tabular-nums">{idx + 1}</span>
+                    {isFreeBlock ? (
+                      <AccessBadge variant="free" label={t('common.free')} size="xs" className="mt-0.5 scale-90 origin-center" />
+                    ) : (
+                      <span className="mt-0.5 inline-flex items-center gap-0.5">
+                        <AccessBadge variant="pro" label={t('menu.pro')} size="xs" className="scale-90 origin-center" />
+                        {!hasProAccess ? <span className="text-[10px] leading-none">🔒</span> : null}
+                      </span>
+                    )}
                     {progress && canPlay && (
-                      <span className="text-amber-400 text-xs">
+                      <span className="text-amber-400 text-[10px] leading-none">
                         {'★'.repeat(progress.stars)}
                       </span>
                     )}

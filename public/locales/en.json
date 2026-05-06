@@ -28,10 +28,12 @@
     "skip": "Skip"
   },
   "auth": {
-    "checkingSignIn": "Checking sign-in…",
+    "checkingSignIn": "Refreshing your saved sign-in…",
+    "checkingSignInNote": "You are seeing this because you were already signed in on this device. Firebase is briefly verifying your session—this is not for new sign-ins.",
     "signInBodyDefault": "Sign in with Google to play and save your progress.",
     "signInContinueHint": "After sign-in you will return here and can continue into your japa.",
-    "signedInWelcome": "You are signed in! Enjoy your Japa!",
+    "signedInWelcome": "Session restored—you are still signed in.",
+    "signedInWelcomeNote": "This confirmation is only shown for people who were already signed in while the app reconnects.",
     "sessionRestoreAria": "Restoring your session, please wait",
     "sessionRestoreLines": [
       "Invoking the mantras…",
@@ -199,6 +201,7 @@
   },
   "levelGate": {
     "alreadyCompleteTitle": "Level already completed",
+    "alreadyCompleteCaption": "Tap the next level on the map to continue. This message only appears for a level you have already finished.",
     "alreadyCompleteBodyGeneral": "You have finished this level in All-Devatā Japa. Play the next number on the map, try another free path, or get Pro to continue. You can’t replay a level you’ve already passed here.",
     "alreadyCompleteBodyDeity": "You have finished this level for this Iṣṭa Devatā. Open another deity’s first free levels, or get Pro to keep going on this path.",
     "alreadyCompleteOk": "Back to level map",

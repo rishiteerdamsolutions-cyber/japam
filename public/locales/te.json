@@ -27,6 +27,20 @@
     "title2": "డిజిటల్ మంత్ర సాధన",
     "skip": "దాటివెళ్ళండి"
   },
+  "auth": {
+    "checkingSignIn": "Refreshing your saved sign-in…",
+    "checkingSignInNote": "You are seeing this because you were already signed in on this device. Firebase is briefly verifying your session—this is not for new sign-ins.",
+    "signInBodyDefault": "Sign in with Google to play and save your progress.",
+    "signInContinueHint": "After sign-in you will return here and can continue into your japa.",
+    "signedInWelcome": "Session restored—you are still signed in.",
+    "signedInWelcomeNote": "This confirmation is only shown for people who were already signed in while the app reconnects.",
+    "sessionRestoreAria": "Restoring your session, please wait",
+    "sessionRestoreLines": [
+      "Invoking the mantras…",
+      "Preparing the Japa board…",
+      "Gathering your japa…"
+    ]
+  },
   "menu": {
     "back": "← వెనుక",
     "general": "సాధారణ",
@@ -115,6 +129,7 @@
   },
   "levelGate": {
     "alreadyCompleteTitle": "ఈ స్థాయి ఇప్పటికే పూర్తి",
+    "alreadyCompleteCaption": "Tap the next level on the map to continue. This message only appears for a level you have already finished.",
     "alreadyCompleteBodyGeneral": "ఈ స్థాయి అన్ని దేవతా జపంలో ఇదివరకే పూర్తి. మ్యాప్‌లో తరువాతి స్థాయి లేదా ఇతర పథం లేదా ప్రో. పూర్తి చేసిన స్థాయిని మళ్ళీ ఆడరాదు.",
     "alreadyCompleteBodyDeity": "ఈ ఇష్ట దేవతకు ఈ స్థాయి పూర్తి. వేరే దేవత మొదటి స్థాయిలు లేదా ప్రో.",
     "alreadyCompleteOk": "లెవళ్ మ్యాప్‌కు",

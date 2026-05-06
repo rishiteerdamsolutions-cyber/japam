@@ -179,6 +179,28 @@ export function GamePage() {
     loadLevelsConfig();
   }, [loadLevelsConfig]);
 
+  /** Block skipping ahead by URL: only the next sequential level (per saved progress) may open. */
+  useEffect(() => {
+    if (!user?.uid || isGuest || gameContextId || occasionKind || isSpecial108 || !progressLoaded) return;
+    const playable = useProgressStore.getState().getCurrentLevelIndex(mode);
+    if (parsedLevel > playable) {
+      const next = new URLSearchParams(searchParams);
+      next.set('level', String(playable));
+      navigate({ search: next.toString() ? `?${next.toString()}` : '' }, { replace: true });
+    }
+  }, [
+    user?.uid,
+    isGuest,
+    gameContextId,
+    occasionKind,
+    isSpecial108,
+    progressLoaded,
+    mode,
+    parsedLevel,
+    navigate,
+    searchParams,
+  ]);
+
   const loadLives = useLivesStore((s) => s.load);
   const userForLives = useAuthStore((s) => s.user);
 

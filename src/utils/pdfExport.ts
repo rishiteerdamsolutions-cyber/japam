@@ -6,6 +6,23 @@ export interface PdfDetails {
   mobileNumber: string;
 }
 
+async function fetchImageAsDataUrl(url: string): Promise<string | null> {
+  try {
+    const res = await fetch(url, { cache: 'force-cache' });
+    if (!res.ok) return null;
+    const blob = await res.blob();
+    if (!blob.type.startsWith('image/')) return null;
+    return await new Promise<string>((resolve, reject) => {
+      const r = new FileReader();
+      r.onerror = () => reject(new Error('Failed to read image'));
+      r.onload = () => resolve(String(r.result));
+      r.readAsDataURL(blob);
+    });
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Composites a transparent image onto white and exports as JPEG.
  * Opaque JPEG avoids PDF viewer issues with transparent PNGs (e.g. colored boxes).
@@ -54,11 +71,12 @@ async function addHandwrittenJapasToPdf(
   imageDataUrl: string,
   count: number,
   startY: number,
+  contentTopY: number,
+  contentBottomY: number,
   margin: number,
   headingSize: number
 ): Promise<void> {
   const pageWidth = doc.internal.pageSize.getWidth();
-  const pageHeight = doc.internal.pageSize.getHeight();
   const usableWidth = pageWidth - margin * 2;
 
   const { w: imgW, h: imgH } = await getImageDimensions(imageDataUrl);
@@ -79,9 +97,9 @@ async function addHandwrittenJapasToPdf(
   let col = 0;
 
   for (let i = 0; i < count; i++) {
-    if (y + cellHeight > pageHeight - margin) {
+    if (y + cellHeight > contentBottomY) {
       doc.addPage();
-      y = margin;
+      y = contentTopY;
       x = margin;
       col = 0;
     }
@@ -145,15 +163,48 @@ export async function downloadMantraPdf(
   const headingSize = 10;
   doc.setFont('helvetica', 'normal');
 
-  let y = margin;
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const contentTopY = margin + 58;
+  const contentBottomY = pageHeight - margin - 28;
 
-  // Heading: JAPAM — same branding as menu (amber-400, serif)
-  doc.setFontSize(titleSize);
-  doc.setFont('times', 'bold');
-  doc.setTextColor(251, 191, 36); // amber-400 #FBBF24
-  doc.text('JAPAM', margin, y);
-  doc.setTextColor(0, 0, 0);
-  y += lineHeight * 2.5;
+  const logoDataUrl = await fetchImageAsDataUrl('/images/favicon.png');
+  const logoSize = 22;
+
+  const drawChromeForPage = (pageNumber: number, totalPages: number) => {
+    // Top-right page number
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(90, 90, 90);
+    const pn = `${pageNumber} / ${totalPages}`;
+    doc.text(pn, pageWidth - margin, margin - 10, { align: 'right' });
+
+    // Header: logo + JAPAM centered
+    const headerY = margin;
+    const centerX = pageWidth / 2;
+    if (logoDataUrl) {
+      try {
+        const fmt = logoDataUrl.startsWith('data:image/jpeg') ? 'JPEG' : 'PNG';
+        doc.addImage(logoDataUrl, fmt, centerX - logoSize / 2, headerY - 2, logoSize, logoSize, undefined, 'FAST');
+      } catch {
+        // ignore logo draw failures; keep PDF functional
+      }
+    }
+    doc.setFontSize(titleSize);
+    doc.setFont('times', 'bold');
+    doc.setTextColor(251, 191, 36); // amber-400 #FBBF24
+    doc.text('JAPAM', centerX, headerY + 24, { align: 'center' });
+    doc.setTextColor(0, 0, 0);
+
+    // Footer: website centered
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(90, 90, 90);
+    doc.text('www.japam.digital', centerX, pageHeight - 14, { align: 'center' });
+    doc.setTextColor(0, 0, 0);
+  };
+
+  let y = contentTopY;
 
   // User details if provided
   if (details?.name || details?.gotram || details?.mobileNumber) {
@@ -185,32 +236,39 @@ export async function downloadMantraPdf(
   if (handwritingImageDataUrl) {
     // Use handwriting as-is (background already removed); composite on white for PDF compatibility
     const opaqueImageDataUrl = await compositeOnWhiteAsJpeg(handwritingImageDataUrl);
-    await addHandwrittenJapasToPdf(doc, opaqueImageDataUrl, count, y, margin, headingSize);
+    await addHandwrittenJapasToPdf(doc, opaqueImageDataUrl, count, y, contentTopY, contentBottomY, margin, headingSize);
   } else {
     // Default: text-based japas
     const mantraRepeated = Array(count).fill(mantra).join(' ');
     const words = mantraRepeated.split(' ');
-    const pageWidth = doc.internal.pageSize.getWidth() - margin * 2;
+    const usableTextWidth = pageWidth - margin * 2;
     const x = margin;
-    const maxY = doc.internal.pageSize.getHeight() - margin;
+    const maxY = contentBottomY;
 
     let line = '';
     for (const word of words) {
       const testLine = line ? `${line} ${word}` : word;
       const textWidth = doc.getTextWidth(testLine);
-      if (textWidth > pageWidth && line) {
+      if (textWidth > usableTextWidth && line) {
         doc.text(line, x, y);
         y += lineHeight;
         line = word;
         if (y > maxY) {
           doc.addPage();
-          y = margin;
+          y = contentTopY;
         }
       } else {
         line = testLine;
       }
     }
     if (line) doc.text(line, x, y);
+  }
+
+  // Draw header/footer/page numbers on every page (after content, so numbering is correct).
+  const totalPages = doc.getNumberOfPages();
+  for (let i = 1; i <= totalPages; i++) {
+    doc.setPage(i);
+    drawChromeForPage(i, totalPages);
   }
 
   const defaultStem = `${deityName}-${count}-japas`;

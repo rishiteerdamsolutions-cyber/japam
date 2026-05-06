@@ -567,6 +567,27 @@ export async function trackShareEvent(event: ShareEventType): Promise<void> {
   }
 }
 
+export async function saveJapaPdfContact(details: {
+  name: string;
+  gotram: string;
+  mobileNumber: string;
+  deityName: string;
+  count: number;
+}): Promise<void> {
+  const token = await getFirebaseIdToken();
+  if (!token) return;
+  const url = apiUrl('/api/user/japa-pdf-contact');
+  try {
+    await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify(details),
+    });
+  } catch {
+    // optional metadata only
+  }
+}
+
 /** Attribute current user (referred) to referrer when they become pro. Clears stored ref code. */
 export async function attributeReferral(referralCode: string): Promise<boolean> {
   const token = await getFirebaseIdToken();

@@ -102,6 +102,7 @@ import * as userLivesGrantHandler from './_handlers/user/lives-grant.js';
 import * as userRewardVideoEventHandler from './_handlers/user/reward-video-event.js';
 import * as userReactHandler from './_handlers/user/react.js';
 import * as userShareEventHandler from './_handlers/user/share-event.js';
+import * as userJapaPdfContactHandler from './_handlers/user/japa-pdf-contact.js';
 import * as userReferralEventHandler from './_handlers/user/referral-event.js';
 import * as userReferralAttributeHandler from './_handlers/user/referral-attribute.js';
 import * as publicActiveUsersHandler from './_handlers/public/active-users.js';
@@ -249,6 +250,7 @@ const HANDLERS = {
   'POST user/reward-video-event': userRewardVideoEventHandler,
   'POST user/react': userReactHandler,
   'POST user/share-event': userShareEventHandler,
+  'POST user/japa-pdf-contact': userJapaPdfContactHandler,
   'POST user/referral-event': userReferralEventHandler,
   'POST user/referral-attribute': userReferralAttributeHandler,
   'GET public/active-users': publicActiveUsersHandler,

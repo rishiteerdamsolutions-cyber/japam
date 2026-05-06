@@ -778,7 +778,6 @@ export function Settings({ onBack }: SettingsProps) {
             onToggle={() => toggle('update')}
           >
             <div className="space-y-3">
-              <p className="text-amber-200/70 text-xs leading-relaxed">{t('shared.update_check_hint')}</p>
               <button
                 type="button"
                 disabled={checkingUpdate}

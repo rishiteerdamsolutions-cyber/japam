@@ -7,7 +7,7 @@ import { downloadAnniversaryReportPdf, downloadOccasionSummaryPdf } from '../../
 import { DEITIES, type Deity } from '../../data/deities';
 import { DAILY_GOAL_JAPAS } from '../../data/levels';
 import { downloadMantraPdf, type PdfDetails } from '../../utils/pdfExport';
-import { trackShareEvent } from '../../lib/firestore';
+import { saveJapaPdfContact, trackShareEvent } from '../../lib/firestore';
 import { removeBackgroundFromImage } from '../../utils/removeBackground';
 import { DonateThankYouBox } from '../donation/DonateThankYouBox';
 import { MenuMatchChantHeader } from '../layout/MenuMatchChantHeader';
@@ -189,6 +189,13 @@ export function JapaDashboard() {
         handwritingDataUrl,
         { matchTierNote: tierNote, fileStem }
       );
+      void saveJapaPdfContact({
+        name: details.name,
+        gotram: details.gotram,
+        mobileNumber: details.mobileNumber,
+        deityName: downloadModal.deityName,
+        count: downloadModal.count,
+      });
       trackShareEvent('japa_pdf').catch(() => {});
       closeDownloadModal();
     } finally {

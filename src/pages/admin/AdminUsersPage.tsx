@@ -4,20 +4,64 @@ import { getStoredAdminToken, clearStoredAdminToken } from '../../lib/adminAuth'
 
 const API_BASE = import.meta.env.VITE_API_URL ?? '';
 
+type AdminUser = {
+  uid: string;
+  email: string | null;
+  unlockedAt: string | null;
+  tier?: 'free' | 'pro' | 'premium' | string;
+  donationAmountPaise?: number | null;
+  lifetimeDonor?: boolean;
+  isBlocked?: boolean;
+  lastActiveAt?: string | null;
+  lastSignInAt?: string | null;
+  createdAt?: string | null;
+  hasPaidEver?: boolean;
+  completedFreeLevelsGeneral?: number;
+  greedyFreeUser?: boolean;
+  discontinuedPaidUser?: boolean;
+  playedGeneral?: boolean;
+  playedDeitySpecific?: boolean;
+  playedSpecial108?: boolean;
+  playedPushpa?: boolean;
+  playedMarathons?: boolean;
+  playedYagnas?: boolean;
+  pdfContacts?: Array<{
+    id: string;
+    name: string;
+    gotram: string;
+    mobileNumber: string;
+    deityName: string;
+    count: number;
+    createdAt: string | null;
+    whatsappUrl: string | null;
+  }>;
+};
+
+type UsersAnalytics = {
+  modePlayers: {
+    general: number;
+    deitySpecific: number;
+    special108: number;
+    pushpaAradhana: number;
+    marathons: number;
+    yagnas: number;
+  };
+  segments: {
+    free: number;
+    paid: number;
+    discontinued: number;
+    greedy: number;
+  };
+  pdfContactsCount: number;
+};
+
+type UserFilter = 'all' | 'free' | 'paid' | 'discontinued' | 'greedy';
+
 export function AdminUsersPage() {
   const navigate = useNavigate();
-  const [users, setUsers] = useState<{
-    uid: string;
-    email: string | null;
-    unlockedAt: string | null;
-    tier?: 'free' | 'pro' | 'premium' | string;
-    donationAmountPaise?: number | null;
-    lifetimeDonor?: boolean;
-    isBlocked?: boolean;
-    lastActiveAt?: string | null;
-    lastSignInAt?: string | null;
-    createdAt?: string | null;
-  }[]>([]);
+  const [users, setUsers] = useState<AdminUser[]>([]);
+  const [analytics, setAnalytics] = useState<UsersAnalytics | null>(null);
+  const [filter, setFilter] = useState<UserFilter>('all');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [actionUid, setActionUid] = useState<string | null>(null);
@@ -39,13 +83,15 @@ export function AdminUsersPage() {
         }
         return r.json();
       })
-      .then((data: { users?: { uid: string; email: string | null; unlockedAt: string | null; tier?: string; donationAmountPaise?: number | null; lifetimeDonor?: boolean; isBlocked?: boolean; lastActiveAt?: string | null; lastSignInAt?: string | null; createdAt?: string | null }[]; error?: string } | null) => {
+      .then((data: { users?: AdminUser[]; analytics?: UsersAnalytics; error?: string } | null) => {
         if (data == null) return;
         if (data.error) {
           setError(String(data.error));
           setUsers([]);
+          setAnalytics(null);
         } else {
           setUsers(data.users ?? []);
+          setAnalytics(data.analytics ?? null);
           setError(null);
         }
       })
@@ -119,11 +165,60 @@ export function AdminUsersPage() {
   if (loading) return <p className="text-amber-200/70">Loading…</p>;
   if (error) return <p className="text-red-400 text-sm">{error}</p>;
 
+  const filteredUsers = users.filter((u) => {
+    if (filter === 'free') return u.tier === 'free';
+    if (filter === 'paid') return u.tier === 'pro' || u.tier === 'premium';
+    if (filter === 'discontinued') return u.discontinuedPaidUser === true;
+    if (filter === 'greedy') return u.greedyFreeUser === true;
+    return true;
+  });
+
   return (
     <>
-      <h1 className="text-2xl font-bold text-amber-400 mb-4">All signed-in users (Firebase Auth)</h1>
-      <p className="text-amber-200/80 text-sm mb-4">Total accounts: {users.length}</p>
-      {users.length === 0 ? (
+      <h1 className="text-2xl font-bold text-amber-400 mb-4">Users</h1>
+
+      {analytics && (
+        <div className="mb-5 grid gap-3 sm:grid-cols-2">
+          <div className="rounded-lg border border-amber-500/25 bg-black/20 p-3 text-sm text-amber-100/90">
+            <p className="text-amber-300 font-semibold mb-2">User Segments</p>
+            <p>Free users: {analytics.segments.free}</p>
+            <p>Paid users: {analytics.segments.paid}</p>
+            <p>Discontinued paid: {analytics.segments.discontinued}</p>
+            <p>Greedy users (finished free, no Pro): {analytics.segments.greedy}</p>
+          </div>
+          <div className="rounded-lg border border-amber-500/25 bg-black/20 p-3 text-sm text-amber-100/90">
+            <p className="text-amber-300 font-semibold mb-2">Feature Usage (users)</p>
+            <p>General levels: {analytics.modePlayers.general}</p>
+            <p>Deity levels: {analytics.modePlayers.deitySpecific}</p>
+            <p>108 Japa: {analytics.modePlayers.special108}</p>
+            <p>Pushpa Aradhana: {analytics.modePlayers.pushpaAradhana}</p>
+            <p>Marathons: {analytics.modePlayers.marathons}</p>
+            <p>Yagnas: {analytics.modePlayers.yagnas}</p>
+            <p className="mt-1 text-amber-200/75">PDF contacts saved: {analytics.pdfContactsCount}</p>
+          </div>
+        </div>
+      )}
+
+      <div className="mb-4 flex flex-wrap gap-2">
+        {([
+          { id: 'all', label: `All (${users.length})` },
+          { id: 'free', label: `Free (${analytics?.segments.free ?? 0})` },
+          { id: 'paid', label: `Paid (${analytics?.segments.paid ?? 0})` },
+          { id: 'discontinued', label: `Discontinued (${analytics?.segments.discontinued ?? 0})` },
+          { id: 'greedy', label: `Greedy (${analytics?.segments.greedy ?? 0})` },
+        ] as const).map((f) => (
+          <button
+            key={f.id}
+            type="button"
+            onClick={() => setFilter(f.id)}
+            className={`px-3 py-1.5 rounded text-xs border ${filter === f.id ? 'bg-amber-500/35 border-amber-400 text-amber-100' : 'bg-black/20 border-white/20 text-amber-200/90'}`}
+          >
+            {f.label}
+          </button>
+        ))}
+      </div>
+
+      {filteredUsers.length === 0 ? (
         <p className="text-amber-200/70">No users returned. Check Firebase Admin / Auth configuration.</p>
       ) : (
         <div className="overflow-x-auto">
@@ -131,6 +226,7 @@ export function AdminUsersPage() {
             <thead>
               <tr className="bg-amber-500/20">
                 <th className="px-3 py-2">Email</th>
+                <th className="px-3 py-2">Phone / Gotram</th>
                 <th className="px-3 py-2">User ID</th>
                 <th className="px-3 py-2">Last sign-in</th>
                 <th className="px-3 py-2">Paid at</th>
@@ -140,9 +236,35 @@ export function AdminUsersPage() {
               </tr>
             </thead>
             <tbody>
-              {users.map((u) => (
+              {filteredUsers.map((u) => (
                 <tr key={u.uid} className="border-t border-amber-500/20">
                   <td className="px-3 py-2">{u.email || '—'}</td>
+                  <td className="px-3 py-2 align-top">
+                    {(u.pdfContacts?.length ?? 0) > 0 ? (
+                      <div className="space-y-1">
+                        {(u.pdfContacts || []).map((c) => (
+                          <div key={c.id} className="text-xs leading-snug">
+                            <div className="text-amber-100/90">
+                              {[c.name || '—', c.gotram ? `(${c.gotram})` : ''].filter(Boolean).join(' ')}
+                            </div>
+                            <div className="text-amber-200/80">{c.mobileNumber || '—'}</div>
+                            {c.whatsappUrl ? (
+                              <a
+                                href={c.whatsappUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-block mt-0.5 text-[11px] text-green-300 underline"
+                              >
+                                WhatsApp
+                              </a>
+                            ) : null}
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <span className="text-amber-200/60 text-xs">—</span>
+                    )}
+                  </td>
                   <td className="px-3 py-2 font-mono text-xs">{u.uid.slice(0, 12)}…</td>
                   <td className="px-3 py-2">
                     {u.lastSignInAt ? new Date(u.lastSignInAt).toLocaleString() : '—'}
@@ -167,6 +289,16 @@ export function AdminUsersPage() {
                         Free
                       </span>
                     )}
+                    {u.discontinuedPaidUser ? (
+                      <span className="ml-1 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] border border-orange-400/60 bg-orange-500/20 text-orange-100">
+                        Discontinued
+                      </span>
+                    ) : null}
+                    {u.greedyFreeUser ? (
+                      <span className="ml-1 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] border border-fuchsia-400/60 bg-fuchsia-500/15 text-fuchsia-100">
+                        Greedy
+                      </span>
+                    ) : null}
                   </td>
                   <td className="px-3 py-2">
                     {u.isBlocked ? (

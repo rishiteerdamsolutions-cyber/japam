@@ -8,7 +8,6 @@ import INDIA_REGIONS from '../data/indiaRegions.json';
 import { DEITIES } from '../data/deities';
 import { useAuthStore } from '../store/authStore';
 import { useUnlockStore } from '../store/unlockStore';
-import { FIRST_LOCKED_LEVEL_INDEX_GENERAL } from '../lib/levelGates';
 import { auth } from '../lib/firebase';
 import { DonateThankYouBox } from '../components/donation/DonateThankYouBox';
 import { MenuMatchChantHeader } from '../components/layout/MenuMatchChantHeader';
@@ -670,7 +669,7 @@ export function MarathonsPage() {
           </p>
           <button
             type="button"
-            onClick={() => navigate(`/game?mode=general&level=${FIRST_LOCKED_LEVEL_INDEX_GENERAL}`)}
+            onClick={() => navigate('/plans')}
             className="mt-2 text-amber-400 text-xs sm:text-sm font-medium hover:underline"
           >
             {t('mahaYagnas.unlockPro')}

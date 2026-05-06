@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { AppHeader } from '../components/layout/AppHeader';
 import { AppFooter } from '../components/layout/AppFooter';
 import { useUnlockStore } from '../store/unlockStore';
-import { FIRST_LOCKED_LEVEL_INDEX_GENERAL } from '../lib/levelGates';
 import { hasActivePaidAccess } from '../lib/membershipDisplay';
 import { auth } from '../lib/firebase';
 
@@ -113,7 +112,7 @@ export function ApavargaPage() {
                 <p className="text-amber-200/70 text-xs mb-3">Unlock Pro to enter.</p>
                 <button
                   type="button"
-                  onClick={() => navigate(`/game?mode=general&level=${FIRST_LOCKED_LEVEL_INDEX_GENERAL}`)}
+                  onClick={() => navigate('/plans')}
                   className="px-4 py-2 rounded-lg bg-amber-500 text-white text-sm font-semibold"
                 >
                   Unlock Pro

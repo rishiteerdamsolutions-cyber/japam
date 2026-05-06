@@ -220,6 +220,7 @@
     "resumeJapa": "Resume Japa?",
     "resumeJapaMessage": "You have a saved session. Continue where you left off?",
     "saveProgressTip": "Progress saves when you pause, go back, or leave the game.",
+    "progressSaved": "Progress saved",
     "resume": "Resume",
     "startFresh": "Start fresh",
     "startFreshConfirmTitle": "Start fresh?",

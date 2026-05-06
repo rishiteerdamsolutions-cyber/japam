@@ -479,6 +479,8 @@ export function GameScreen({
   const [showBreakReminder, setShowBreakReminder] = useState(false);
   const [pauseSaving, setPauseSaving] = useState(false);
   const [pauseError, setPauseError] = useState<string | null>(null);
+  const [pauseSavedNotice, setPauseSavedNotice] = useState(false);
+  const pauseSavedTimerRef = useRef<number | null>(null);
 
   const breakTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const sessionStartRef = useRef<number>(0);
@@ -574,6 +576,14 @@ export function GameScreen({
   }, [status, occasionKind, user, occasionRecordSaved]);
 
   const saveAndExit = useCallback(async () => {
+    const exitWithSavedNotice = () => {
+      setPauseSavedNotice(true);
+      if (pauseSavedTimerRef.current != null) window.clearTimeout(pauseSavedTimerRef.current);
+      pauseSavedTimerRef.current = window.setTimeout(() => {
+        onBack();
+      }, 700);
+    };
+
     const gs = useGameStore.getState();
     if (gs.occasionKind === 'anniversary' && gs.anniversarySessionId && user?.uid) {
       setPauseError(null);
@@ -586,7 +596,7 @@ export function GameScreen({
           return;
         }
       }
-      onBack();
+      exitWithSavedNotice();
       return;
     }
 
@@ -614,12 +624,18 @@ export function GameScreen({
         marathonTargetJapas: payload.marathonTargetJapas,
         yagnaId: payload.yagnaId,
       });
-      onBack();
+      exitWithSavedNotice();
     } else {
       if (user?.uid && (yagnaId || marathonId)) await flushJapas();
-      onBack();
+      exitWithSavedNotice();
     }
   }, [savePausedState, user, onBack, flushJapas, yagnaId, marathonId]);
+
+  useEffect(() => {
+    return () => {
+      if (pauseSavedTimerRef.current != null) window.clearTimeout(pauseSavedTimerRef.current);
+    };
+  }, []);
 
   const handleResumeCouple = useCallback(async () => {
     if (!anniversarySessionId || !user?.uid || !isFirebaseConfigured || !firestore) return;
@@ -777,6 +793,13 @@ export function GameScreen({
         <div className="w-full max-w-md mb-2 px-2">
           <div className="rounded-lg bg-red-500/20 border border-red-500/40 text-red-200 text-xs px-3 py-2">
             {pauseError}
+          </div>
+        </div>
+      )}
+      {pauseSavedNotice && (
+        <div className="w-full max-w-md mb-2 px-2">
+          <div className="rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-200 text-xs px-3 py-2">
+            {t('game.progressSaved')}
           </div>
         </div>
       )}

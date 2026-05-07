@@ -32,20 +32,23 @@ async function showNotification(title: string, body: string) {
           icon: '/vite.svg',
           badge: '/vite.svg',
           tag: 'japam-daily-reminder',
+          renotify: true,
+          requireInteraction: true,
+          vibrate: [300, 120, 300],
         });
         return;
       }
     }
     // Fallback: plain Notification API
-    new Notification(title, { body, icon: '/vite.svg' });
+    new Notification(title, { body, icon: '/vite.svg', tag: 'japam-daily-reminder', renotify: true });
   } catch {
     // ignore
   }
 }
 
 function getReminderAudioUrl(): string | null {
-  // User-provided file can be dropped at public/audio/reminder.mp3.
-  const candidate = '/audio/reminder.mp3';
+  // User-provided file path: public/sounds/notification.mp3
+  const candidate = '/sounds/notification.mp3';
   return candidate;
 }
 

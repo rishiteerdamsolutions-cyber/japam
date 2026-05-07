@@ -9,6 +9,7 @@ import { usePowersInventoryStore } from '../store/powersInventoryStore';
 import { useProfileStore } from '../store/profileStore';
 import { useDailyReminder } from '../hooks/useDailyReminder';
 import { RefAttribution } from './RefAttribution';
+import { ProfileNamePrompt } from './auth/ProfileNamePrompt';
 
 /**
  * Keeps Firebase auth state in sync on every route.
@@ -80,6 +81,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   return (
     <>
       <RefAttribution />
+      <ProfileNamePrompt />
       {children}
     </>
   );

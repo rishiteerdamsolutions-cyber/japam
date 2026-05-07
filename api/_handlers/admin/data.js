@@ -18,6 +18,7 @@ const DEITY_IDS = [
   'hanuman', 'narasimha', 'lakshmi', 'durga', 'saraswati', 'ayyappan', 'jagannath', 'dattatreya',
   'saiBaba', 'narayana', 'iskcon', 'guru', 'shani', 'rahu', 'ketu', 'bramhamgaaru',
 ];
+const MAX_ADMIN_USERS_SCAN = Math.max(500, Math.min(10000, Number(process.env.ADMIN_USERS_MAX_SCAN || 3000) || 3000));
 
 function sanitizePhoneForWhatsapp(raw) {
   if (!raw || typeof raw !== 'string') return null;
@@ -112,9 +113,9 @@ export async function POST(request) {
         db.collection('unlockedUsers').get(),
         db.collection('blockedUsers').get(),
         db.collection('donors').get(),
-        db.collection('orders').where('status', '==', 'paid').limit(5000).get(),
-        db.collection('marathonParticipations').limit(10000).get(),
-        db.collection('mahaJapaYagnaUsers').limit(10000).get(),
+        db.collection('orders').where('status', '==', 'paid').limit(5000).get().catch(() => ({ docs: [] })),
+        db.collection('marathonParticipations').limit(10000).get().catch(() => ({ docs: [] })),
+        db.collection('mahaJapaYagnaUsers').limit(10000).get().catch(() => ({ docs: [] })),
         db.collection('japaPdfContacts').orderBy('createdAt', 'desc').limit(5000).get().catch(() => ({ docs: [] })),
       ]);
       const blockedSet = new Set(blockedSnap.docs.map((d) => d.id));
@@ -174,11 +175,28 @@ export async function POST(request) {
         do {
           const result = await admin.auth().listUsers(1000, pageToken);
           authRecords = authRecords.concat(result.users);
+          if (authRecords.length >= MAX_ADMIN_USERS_SCAN) {
+            authRecords = authRecords.slice(0, MAX_ADMIN_USERS_SCAN);
+            pageToken = undefined;
+            break;
+          }
           pageToken = result.pageToken;
         } while (pageToken);
       } catch (e) {
-        console.error('admin listUsers', e);
-        return jsonResponse({ error: 'Could not list Firebase Auth users.' }, 503);
+        console.error('admin listUsers fallback', e);
+        const uids = new Set([
+          ...unlockedSnap.docs.map((d) => d.id),
+          ...blockedSnap.docs.map((d) => d.id),
+          ...donorsSnap.docs.map((d) => d.id),
+          ...paidOrdersSnap.docs.map((d) => d.data()?.uid).filter((v) => typeof v === 'string' && v),
+          ...marathonPartsSnap.docs.map((d) => d.data()?.userId).filter((v) => typeof v === 'string' && v),
+          ...yagnaUsersSnap.docs.map((d) => d.data()?.userId).filter((v) => typeof v === 'string' && v),
+        ]);
+        authRecords = Array.from(uids).slice(0, MAX_ADMIN_USERS_SCAN).map((uid) => ({
+          uid,
+          email: unlockMetaByUid.get(uid)?.email || null,
+          metadata: {},
+        }));
       }
 
       let activityByUid = new Map();
@@ -251,7 +269,7 @@ export async function POST(request) {
           const hasDeityPlay = Object.keys(lp).some((k) => DEITY_IDS.some((d) => k.startsWith(`${d}-`) && lp[k]?.completed === true));
           let completedFreeLevelsGeneral = 0;
           for (let i = 1; i <= 5; i++) {
-            if (lp[`general-level-${i}`]?.completed === true) completedFreeLevelsGeneral++;
+            if (lp[`general-${i}`]?.completed === true) completedFreeLevelsGeneral++;
           }
           const greedyFreeUser = tier === 'free' && completedFreeLevelsGeneral >= 5;
 

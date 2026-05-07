@@ -203,6 +203,9 @@ export function Settings({ onBack }: SettingsProps) {
   const [paymentHistory, setPaymentHistory] = useState<UserPaymentHistoryData | null>(null);
   const [paymentHistoryLoading, setPaymentHistoryLoading] = useState(false);
   const [paymentHistoryError, setPaymentHistoryError] = useState<string | null>(null);
+  const heartCount = appreciations?.heart ?? 0;
+  const likeCount = appreciations?.like ?? 0;
+  const clapCount = appreciations?.clap ?? 0;
   const [apavargaLaunched, setApavargaLaunched] = useState(false);
   const [waMenuOpen, setWaMenuOpen] = useState(false);
   const waMenuRef = useRef<HTMLDivElement>(null);
@@ -562,11 +565,27 @@ export function Settings({ onBack }: SettingsProps) {
             <SettingsCard
               icon={Icons.profile}
               label="Profile"
-              badge={loadingAppreciations ? '…' : ((appreciations?.heart ?? 0) + (appreciations?.like ?? 0) + (appreciations?.clap ?? 0) > 0 ? `❤️${appreciations?.heart ?? 0} 👍${appreciations?.like ?? 0} 👏${appreciations?.clap ?? 0}` : 'Edit name')}
+              badge={loadingAppreciations ? '…' : `❤️${heartCount} 👍${likeCount} 👏${clapCount}`}
               expanded={expanded === 'profile'}
               onToggle={() => toggle('profile')}
             >
-              <form onSubmit={handleNameSave} className="space-y-3">
+              <div className="rounded-xl bg-black/30 border border-white/10 p-3">
+                <p className="text-amber-200/60 text-xs uppercase tracking-wide">
+                  Appreciations received
+                </p>
+                <div className="mt-2 flex flex-wrap gap-2 text-xs">
+                  <span className="rounded-lg bg-black/30 border border-white/10 px-2 py-1 text-amber-100">
+                    ❤️ {heartCount}
+                  </span>
+                  <span className="rounded-lg bg-black/30 border border-white/10 px-2 py-1 text-amber-100">
+                    👍 {likeCount}
+                  </span>
+                  <span className="rounded-lg bg-black/30 border border-white/10 px-2 py-1 text-amber-100">
+                    👏 {clapCount}
+                  </span>
+                </div>
+              </div>
+              <form onSubmit={handleNameSave} className="space-y-3 pt-3">
                 <input
                   type="text"
                   value={localName}

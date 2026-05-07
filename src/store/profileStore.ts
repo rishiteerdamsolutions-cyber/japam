@@ -5,6 +5,8 @@ import { updateProfile } from 'firebase/auth';
 
 interface ProfileState {
   displayName: string | null;
+  /** True only when profile name exists in backend user profile doc. */
+  hasSavedDisplayName: boolean;
   /** Signed URL for custom Pushpa Aradhana deity image (Pro); refreshed from GET profile. */
   pushpaCustomDeityPhotoUrl: string | null;
   loaded: boolean;
@@ -20,6 +22,7 @@ function apiUrl(path: string): string {
 
 export const useProfileStore = create<ProfileState>((setState, get) => ({
   displayName: null,
+  hasSavedDisplayName: false,
   pushpaCustomDeityPhotoUrl: null,
   loaded: false,
 
@@ -27,12 +30,12 @@ export const useProfileStore = create<ProfileState>((setState, get) => ({
     try {
       const user = auth?.currentUser;
       if (!user) {
-        setState({ displayName: null, pushpaCustomDeityPhotoUrl: null, loaded: true });
+        setState({ displayName: null, hasSavedDisplayName: false, pushpaCustomDeityPhotoUrl: null, loaded: true });
         return;
       }
       const token = await user.getIdToken().catch(() => null);
       if (!token) {
-        setState({ displayName: null, pushpaCustomDeityPhotoUrl: null, loaded: true });
+        setState({ displayName: null, hasSavedDisplayName: false, pushpaCustomDeityPhotoUrl: null, loaded: true });
         return;
       }
       const url = apiUrl('/api/user/profile');
@@ -46,6 +49,7 @@ export const useProfileStore = create<ProfileState>((setState, get) => ({
         data.displayName.trim()
           ? data.displayName.trim()
           : null;
+      const hasSavedDisplayName = Boolean(fromApi);
       const fromAuth =
         user.displayName?.trim() ||
         user.email?.split('@')[0]?.trim() ||
@@ -63,14 +67,14 @@ export const useProfileStore = create<ProfileState>((setState, get) => ({
           res.status,
         );
       }
-      setState({ displayName: name, pushpaCustomDeityPhotoUrl: photoUrl, loaded: true });
+      setState({ displayName: name, hasSavedDisplayName, pushpaCustomDeityPhotoUrl: photoUrl, loaded: true });
 
       // Keep Firebase auth profile in sync so other UI paths using user.displayName stay consistent.
       if (name && user.displayName !== name) {
         updateProfile(user, { displayName: name }).catch(() => {});
       }
     } catch {
-      setState({ displayName: null, pushpaCustomDeityPhotoUrl: null, loaded: true });
+      setState({ displayName: null, hasSavedDisplayName: false, pushpaCustomDeityPhotoUrl: null, loaded: true });
     }
   },
 
@@ -99,7 +103,7 @@ export const useProfileStore = create<ProfileState>((setState, get) => ({
       }).catch(() => null);
 
       if (res && res.ok) {
-        setState({ displayName: trimmed });
+        setState({ displayName: trimmed, hasSavedDisplayName: true });
         updateProfile(user, { displayName: trimmed }).catch(() => {});
         return true;
       }

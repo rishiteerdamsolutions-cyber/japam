@@ -18,7 +18,12 @@ export async function GET(request) {
     const db = getDb();
     if (!db) return jsonResponse({ error: 'Database not configured' }, 503);
     // Fallback path: if scheduled job missed today, run aggregation once on first admin hit.
-    await runDailyAnalyticsAggregation(db);
+    // Keep endpoint resilient even if aggregation fails for any reason.
+    try {
+      await runDailyAnalyticsAggregation(db);
+    } catch (e) {
+      console.error('admin analytics-overview: daily aggregation fallback failed', e?.message || e);
+    }
 
     const today = getDayKeyFromOffset(0);
     const yesterday = getDayKeyFromOffset(-1);
@@ -29,7 +34,7 @@ export async function GET(request) {
       db.collection('analyticsUsers').orderBy('total_japam', 'desc').limit(10).get(),
       db.collection('analyticsUsers').where('drop_off_stage', '==', 'high_value_loss').limit(20).get(),
       db.collection('analyticsUsers').where('drop_off_stage', '==', 'no_start').limit(20).get(),
-      db.collection('analyticsUsers').count().get(),
+      db.collection('analyticsUsers').count().get().catch(() => null),
     ]);
 
     const todayData = todaySnap.exists ? todaySnap.data() || {} : {};

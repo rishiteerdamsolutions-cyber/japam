@@ -43,7 +43,26 @@ async function showNotification(title: string, body: string) {
   }
 }
 
-function playAlarmBeep() {
+function getReminderAudioUrl(): string | null {
+  // User-provided file can be dropped at public/audio/reminder.mp3.
+  const candidate = '/audio/reminder.mp3';
+  return candidate;
+}
+
+async function playReminderAudio() {
+  const src = getReminderAudioUrl();
+  if (!src) return false;
+  try {
+    const audio = new Audio(src);
+    audio.preload = 'auto';
+    await audio.play();
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function playAlarmBeepFallback() {
   try {
     const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
     if (!AudioCtx) return;
@@ -66,6 +85,11 @@ function playAlarmBeep() {
   } catch {
     // ignore
   }
+}
+
+async function playAlarm() {
+  const played = await playReminderAudio();
+  if (!played) playAlarmBeepFallback();
 }
 
 function buildNotificationText(displayName: string | null): { title: string; body: string } {
@@ -92,6 +116,7 @@ export function useDailyReminder() {
   );
 
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     if (loading) return;
@@ -105,6 +130,30 @@ export function useDailyReminder() {
     const clear = () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    };
+
+    const dayKey = () => new Date().toISOString().slice(0, 10);
+    const firedStorageKey = `japam-reminder-fired:${uid ?? 'guest'}:${reminder.time ?? 'na'}`;
+
+    const maybeFire = () => {
+      if (cancelled) return;
+      if (!reminder.enabled || !reminder.time) return;
+      const m = reminder.time.match(/^(\d{2}):(\d{2})$/);
+      if (!m) return;
+      const hh = Number(m[1]);
+      const mm = Number(m[2]);
+      const now = new Date();
+      const nowMinutes = now.getHours() * 60 + now.getMinutes();
+      const targetMinutes = hh * 60 + mm;
+      if (nowMinutes < targetMinutes) return;
+      const today = dayKey();
+      if (localStorage.getItem(firedStorageKey) === today) return;
+      localStorage.setItem(firedStorageKey, today);
+      const { title, body } = buildNotificationText(displayName);
+      showNotification(title, body).catch(() => {});
+      void playAlarm();
     };
 
     const schedule = () => {
@@ -116,16 +165,26 @@ export function useDailyReminder() {
       timeoutRef.current = setTimeout(() => {
         if (cancelled) return;
         const { title, body } = buildNotificationText(displayName);
+        localStorage.setItem(firedStorageKey, dayKey());
         showNotification(title, body).catch(() => {});
-        playAlarmBeep();
+        void playAlarm();
         schedule();
       }, delay);
+      // Reliability layer: if browser throttles/suspends timeout, poll every minute and fire once/day.
+      intervalRef.current = setInterval(maybeFire, 60_000);
     };
 
+    // Immediate catch-up when app regains focus / tab becomes visible.
+    const onVisibility = () => {
+      if (document.visibilityState === 'visible') maybeFire();
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+    maybeFire();
     schedule();
 
     return () => {
       cancelled = true;
+      document.removeEventListener('visibilitychange', onVisibility);
       clear();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -14,6 +14,8 @@ import { AccessBadge } from './ui/AccessBadge';
 import { buildJapamWhatsAppShareHref } from '../lib/japamWhatsAppShare';
 import { loadMyAppreciations, loadUserPaymentHistory, type MyAppreciations, type UserPaymentHistoryData } from '../lib/firestore';
 import { useReminderStore } from '../store/reminderStore';
+import { auth } from '../lib/firebase';
+import { AuthSessionRestoreHint } from './auth/AuthSessionRestoreHint';
 import {
   JAPAM_CHECK_UPDATES_EVENT,
   JAPAM_CHECK_RESULT_EVENT,
@@ -168,7 +170,12 @@ export function Settings({ onBack }: SettingsProps) {
   const user = useAuthStore((s) => s.user);
   const signInPending = useAuthStore((s) => s.signInPending);
   const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle);
+  const authLoading = useAuthStore((s) => s.loading);
   const signOut = useAuthStore((s) => s.signOut);
+  const firebaseUser = auth?.currentUser ?? null;
+  const showSessionRestore = isFirebaseConfigured && !user && !!firebaseUser;
+  const showAuthChecking =
+    isFirebaseConfigured && !user && authLoading && !firebaseUser && !signInPending;
   const tier = useUnlockStore((s) => s.tier);
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
   const unlockExpiresAt = useUnlockStore((s) => s.unlockExpiresAt);
@@ -421,14 +428,24 @@ export function Settings({ onBack }: SettingsProps) {
           </h1>
           <div className="flex items-center justify-end min-h-[44px] min-w-0 justify-self-end">
             {!user && isFirebaseConfigured && (
-              <button
-                type="button"
-                disabled={signInPending}
-                onClick={() => signInWithGoogle()}
-                className="text-amber-400/90 text-xs font-medium hover:text-amber-400 whitespace-nowrap disabled:opacity-60"
-              >
-                {signInPending ? '…' : t('menu.signIn')}
-              </button>
+              <>
+                {showSessionRestore ? (
+                  <AuthSessionRestoreHint />
+                ) : showAuthChecking ? (
+                  <span className="text-amber-200/70 text-xs tabular-nums" aria-busy="true">
+                    …
+                  </span>
+                ) : (
+                  <button
+                    type="button"
+                    disabled={signInPending}
+                    onClick={() => signInWithGoogle()}
+                    className="text-amber-400/90 text-xs font-medium hover:text-amber-400 whitespace-nowrap disabled:opacity-60"
+                  >
+                    {signInPending ? '…' : t('menu.signIn')}
+                  </button>
+                )}
+              </>
             )}
           </div>
         </header>

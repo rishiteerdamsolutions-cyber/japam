@@ -42,7 +42,7 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
   const firebaseUser = auth?.currentUser ?? null;
   const profileLoaded = useProfileStore((s) => s.loaded);
   const showSessionRestore =
-    isFirebaseConfigured && !user && !!firebaseUser && (loading || signInPending);
+    isFirebaseConfigured && !user && !!firebaseUser;
   const showAuthChecking =
     isFirebaseConfigured && !user && loading && !firebaseUser && !signInPending;
   const tier = useUnlockStore((s) => s.tier);

@@ -50,8 +50,7 @@ export function AuthSessionRestoreHint({ className = '', variant = 'session' }: 
     variant === 'session' &&
     isFirebaseConfigured &&
     !user &&
-    !!firebaseUser &&
-    (loading || signInPending);
+    !!firebaseUser;
 
   const profileSyncActive =
     variant === 'profileSync' && isFirebaseConfigured && !!user && !profileLoaded;

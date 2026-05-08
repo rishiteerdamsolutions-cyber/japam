@@ -32,6 +32,7 @@ export function JapaDashboard() {
   const [occasions, setOccasions] = useState<OccasionListItem[]>([]);
   const [occasionsLoaded, setOccasionsLoaded] = useState(false);
   const [downloadModal, setDownloadModal] = useState<{
+    source: 'lifetime' | 'pushpa' | 'special108';
     mantra: string;
     count: number;
     deityName: string;
@@ -118,8 +119,45 @@ export function JapaDashboard() {
     const c = counts[deity.id] ?? 0;
     if (c <= 0) return;
     setDownloadModal({
+      source: 'lifetime',
       mantra: deity.mantra,
       count: c,
+      deityName: deity.name,
+    });
+    setName('');
+    setGotram('');
+    setMobileNumber('');
+    setHandwritingDataUrl(null);
+    setUploadError(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const openDownloadModalForPushpa = (deity: Deity) => {
+    const c = pushpaByDeity[deity.id] ?? 0;
+    if (c <= 0) return;
+    setDownloadModal({
+      source: 'pushpa',
+      mantra: deity.mantra,
+      count: c,
+      deityName: deity.name,
+    });
+    setName('');
+    setGotram('');
+    setMobileNumber('');
+    setHandwritingDataUrl(null);
+    setUploadError(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const openDownloadModalForSpecial108 = (deity: Deity) => {
+    const sessions = special108ByDeity[deity.id] ?? 0;
+    if (sessions <= 0) return;
+    // Special 108 download should reflect special completions only, not lifetime deity japa.
+    const specialJapaCount = sessions * 108;
+    setDownloadModal({
+      source: 'special108',
+      mantra: deity.mantra,
+      count: specialJapaCount,
       deityName: deity.name,
     });
     setName('');
@@ -179,8 +217,18 @@ export function JapaDashboard() {
         gotram: gotram.trim(),
         mobileNumber: mobileNumber.trim()
       };
-      const tierNote = t('japaDashboard.totalLifetimeJapasPdfNote');
-      const fileStem = `${downloadModal.deityName}-lifetime-${downloadModal.count}-japas`;
+      const tierNote =
+        downloadModal.source === 'lifetime'
+          ? t('japaDashboard.totalLifetimeJapasPdfNote')
+          : downloadModal.source === 'pushpa'
+            ? 'Pushpa Aradhana'
+            : 'Special 108 Japa';
+      const fileStem =
+        downloadModal.source === 'lifetime'
+          ? `${downloadModal.deityName}-lifetime-${downloadModal.count}-japas`
+          : downloadModal.source === 'pushpa'
+            ? `${downloadModal.deityName}-pushpa-aradhana-${downloadModal.count}-offerings`
+            : `${downloadModal.deityName}-special-108-${downloadModal.count}-japas`;
       await downloadMantraPdf(
         downloadModal.mantra,
         downloadModal.count,
@@ -315,7 +363,20 @@ export function JapaDashboard() {
                 <span className="font-medium text-amber-400 shrink-0 min-w-0 truncate pr-2">
                   {deity.name} · {t('japaDashboard.pushpaFlowersShort')}
                 </span>
-                <span className="text-amber-200 shrink-0 tabular-nums">{flowers.toLocaleString()}</span>
+                <div className="flex items-center gap-2 shrink-0">
+                  <span className="text-amber-200 tabular-nums">{flowers.toLocaleString()}</span>
+                  <button
+                    type="button"
+                    onClick={() => openDownloadModalForPushpa(deity)}
+                    disabled={flowers <= 0}
+                    title={`${t('japaDashboard.downloadPdf')} · ${deity.mantra}`}
+                    aria-label={`${t('japaDashboard.downloadPdf')} ${deity.name} Pushpa Aradhana`}
+                    className="inline-flex flex-col items-center gap-0.5 p-2 rounded-lg bg-amber-500/85 text-white hover:bg-amber-400 disabled:opacity-35 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <DownloadPdfIcon className="w-5 h-5" />
+                    <span className="text-[9px] font-semibold leading-none">{t('japaDashboard.downloadPdf')}</span>
+                  </button>
+                </div>
               </div>
               <div className="h-2 bg-black/30 rounded-full overflow-hidden">
                 <div
@@ -330,14 +391,31 @@ export function JapaDashboard() {
         {DEITIES.map((deity) => {
           const sessions = special108ByDeity[deity.id] ?? 0;
           const pct = maxRow > 0 ? (sessions / maxRow) * 100 : 0;
+          const specialJapas = sessions * 108;
           return (
             <div key={`special108-${deity.id}`} className="bg-black/20 rounded-xl p-3 border border-amber-500/20">
               <div className="flex justify-between items-center mb-1 gap-2">
                 <span className="font-medium text-amber-400 shrink-0 min-w-0 truncate pr-2">
                   {deity.name} · {t('japaDashboard.special108Short')}
                 </span>
-                <span className="text-amber-200 shrink-0 tabular-nums">{sessions.toLocaleString()}</span>
+                <div className="flex items-center gap-2 shrink-0">
+                  <span className="text-amber-200 tabular-nums">{sessions.toLocaleString()}</span>
+                  <button
+                    type="button"
+                    onClick={() => openDownloadModalForSpecial108(deity)}
+                    disabled={sessions <= 0}
+                    title={`${t('japaDashboard.downloadPdf')} · ${deity.mantra}`}
+                    aria-label={`${t('japaDashboard.downloadPdf')} ${deity.name} Special 108`}
+                    className="inline-flex flex-col items-center gap-0.5 p-2 rounded-lg bg-amber-500/85 text-white hover:bg-amber-400 disabled:opacity-35 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <DownloadPdfIcon className="w-5 h-5" />
+                    <span className="text-[9px] font-semibold leading-none">{t('japaDashboard.downloadPdf')}</span>
+                  </button>
+                </div>
               </div>
+              <p className="text-amber-200/70 text-[10px] mb-1.5 tabular-nums">
+                {specialJapas.toLocaleString()} japas ({sessions.toLocaleString()} x 108)
+              </p>
               <div className="h-2 bg-black/30 rounded-full overflow-hidden">
                 <div
                   className="h-full rounded-full transition-all bg-amber-500/70"
@@ -397,14 +475,22 @@ export function JapaDashboard() {
           <div className="bg-[#C2185B]/90 rounded-2xl border border-amber-500/30 p-6 max-w-sm w-full shadow-xl my-4">
             <h2 className="text-xl font-bold text-amber-400 mb-1">{t('japaDashboard.downloadPdfTitle')}</h2>
             <p className="text-amber-200/85 text-xs mb-1 font-medium leading-snug">
-              {t('japaDashboard.pdfModalSubtitleTotal', {
-                deity: downloadModal.deityName,
-                count: downloadModal.count,
-              })}
+              {downloadModal.source === 'lifetime'
+                ? t('japaDashboard.pdfModalSubtitleTotal', {
+                    deity: downloadModal.deityName,
+                    count: downloadModal.count,
+                  })
+                : downloadModal.source === 'pushpa'
+                  ? `${downloadModal.deityName} · Pushpa Aradhana (${downloadModal.count} offerings)`
+                  : `${downloadModal.deityName} · Special 108 (${downloadModal.count} japas)`}
             </p>
             <p className="text-amber-300/90 text-[11px] mb-2 italic">&ldquo;{downloadModal.mantra}&rdquo;</p>
             <p className="text-amber-200/70 text-[11px] mb-4 leading-snug">
-              {t('japaDashboard.handwritingRepeatTotal', { count: downloadModal.count })}
+              {downloadModal.source === 'lifetime'
+                ? t('japaDashboard.handwritingRepeatTotal', { count: downloadModal.count })
+                : downloadModal.source === 'pushpa'
+                  ? `Your handwritten nama will be repeated ${downloadModal.count} times for Pushpa Aradhana.`
+                  : `Your handwritten nama will be repeated ${downloadModal.count} times for Special 108.`}
             </p>
 
             <div className="mb-4 p-3 rounded-lg bg-black/30 border border-amber-500/20">

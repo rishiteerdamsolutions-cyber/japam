@@ -33,6 +33,7 @@ function GuestLockBadge() {
 }
 
 const ICON_INNER_SCALE = 2.7;
+const POWERS_SCROLL_HINT_SEEN_KEY = 'japam.powersScrollHintSeen';
 
 const DOUBLE_TAP_MS = 340;
 const LONG_PRESS_MS = 560;
@@ -331,7 +332,9 @@ export interface GamePowersScrollStripProps {
 export function GamePowersScrollStrip({ isGuest = false, onGuestPowerTap }: GamePowersScrollStripProps = {}) {
   const { t } = useTranslation();
   const [powerInfoModal, setPowerInfoModal] = useState<PowerInfoModalPayload | null>(null);
+  const [showScrollHint, setShowScrollHint] = useState(false);
   const openPowerInfo = useCallback((payload: PowerInfoModalPayload) => setPowerInfoModal(payload), []);
+  const scrollStripRef = useRef<HTMLDivElement | null>(null);
   const entries = usePowersInventoryStore((s) => s.entries);
   const mode = useGameStore((s) => s.mode);
   const levelIndex = useGameStore((s) => s.levelIndex);
@@ -381,6 +384,44 @@ export function GamePowersScrollStrip({ isGuest = false, onGuestPowerTap }: Game
     },
     [isGuest, onGuestPowerTap, armedPowerId, entries, setArmedPower],
   );
+
+  useEffect(() => {
+    const el = scrollStripRef.current;
+    if (!el) return;
+    const hasScrollableOverflow = el.scrollWidth - el.clientWidth > 8;
+    if (!hasScrollableOverflow) return;
+
+    let seen = false;
+    try {
+      seen = localStorage.getItem(POWERS_SCROLL_HINT_SEEN_KEY) === '1';
+    } catch {
+      seen = false;
+    }
+    if (seen) return;
+
+    setShowScrollHint(true);
+
+    const nudgeRight = window.setTimeout(() => {
+      el.scrollTo({ left: 64, behavior: 'smooth' });
+    }, 260);
+    const nudgeBack = window.setTimeout(() => {
+      el.scrollTo({ left: 0, behavior: 'smooth' });
+    }, 980);
+    const hideHint = window.setTimeout(() => {
+      setShowScrollHint(false);
+      try {
+        localStorage.setItem(POWERS_SCROLL_HINT_SEEN_KEY, '1');
+      } catch {
+        // ignore
+      }
+    }, 1850);
+
+    return () => {
+      window.clearTimeout(nudgeRight);
+      window.clearTimeout(nudgeBack);
+      window.clearTimeout(hideHint);
+    };
+  }, [isGuest, mode, levelIndex, stripDeitySlots.length, guestDeitySlots.length]);
 
   const renderFixedTile = (id: InventoryPowerId) => {
     const count = getPowerCount(entries, id);
@@ -447,13 +488,21 @@ export function GamePowersScrollStrip({ isGuest = false, onGuestPowerTap }: Game
         <div className="flex flex-col items-center gap-0.5 shrink-0 pt-0.5">{renderFixedTile(STRIP_LEFT_POWER)}</div>
 
         <div
+          ref={scrollStripRef}
           className={`
-            flex-1 min-w-0 overflow-x-auto overflow-y-hidden py-1 px-1
+            relative flex-1 min-w-0 overflow-x-auto overflow-y-hidden py-1 px-1
             snap-x snap-mandatory overscroll-x-contain touch-pan-x
             [scrollbar-width:thin]
           `}
           style={{ WebkitOverflowScrolling: 'touch' }}
         >
+          {showScrollHint ? (
+            <div className="pointer-events-none absolute -mt-5 left-1/2 -translate-x-1/2 z-[1]">
+              <span className="inline-flex items-center rounded-full border border-amber-400/45 bg-black/65 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-200">
+                Powers ->
+              </span>
+            </div>
+          ) : null}
           {!isGuest && stripDeitySlots.length === 0 ? (
             <div className="min-h-[3.25rem] flex items-center justify-center px-2 rounded-lg bg-black/20 border border-white/5">
               <p className="text-[10px] sm:text-[11px] text-amber-200/50 text-center leading-relaxed">{t('game.powersScrollEmpty')}</p>

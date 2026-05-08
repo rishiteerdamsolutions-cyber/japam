@@ -529,6 +529,9 @@ export function PushpaAradhanaPage() {
             >
               {sharing ? '…' : t('pushpa.downloadRankCard')}
             </button>
+            <p className="text-amber-200/70 text-[11px] text-center max-w-xs">
+              For handwritten PDF download, use Japa Count page.
+            </p>
             {shareError ? (
               <p className="text-amber-400/95 text-[clamp(0.55rem,2.6vw,0.65rem)] text-center max-w-xs">{shareError}</p>
             ) : null}

@@ -185,6 +185,11 @@ export function Japa108SpecialPage() {
         >
           {t('specials.japa108Start')}
         </motion.button>
+        {user && special108ForDeity > 0 ? (
+          <p className="mt-2 text-amber-200/70 text-xs text-center max-w-sm">
+            For handwritten PDF download, use Japa Count page.
+          </p>
+        ) : null}
       </div>
       <AppFooter />
       <BottomNav />

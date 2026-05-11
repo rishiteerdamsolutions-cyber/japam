@@ -41,10 +41,9 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
   const { user, loading, signInWithGoogle, signInPending } = useAuthStore();
   const firebaseUser = auth?.currentUser ?? null;
   const profileLoaded = useProfileStore((s) => s.loaded);
-  const showSessionRestore =
-    isFirebaseConfigured && !user && !!firebaseUser;
-  const showAuthChecking =
-    isFirebaseConfigured && !user && loading && !firebaseUser && !signInPending;
+  /** Same rotating lines while auth is resolving or session is restoring (see AuthSessionRestoreHint). */
+  const showAuthRestoringHint =
+    isFirebaseConfigured && !user && !signInPending && (loading || !!firebaseUser);
   const tier = useUnlockStore((s) => s.tier);
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
   const unlockExpiresAt = useUnlockStore((s) => s.unlockExpiresAt);
@@ -78,12 +77,8 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
           <div className="flex items-center gap-2 shrink-0">
           {!user && (
             <div className="flex items-center gap-2 justify-end">
-              {showSessionRestore ? (
+              {showAuthRestoringHint ? (
                 <AuthSessionRestoreHint />
-              ) : showAuthChecking ? (
-                <span className="text-amber-200/70 text-xs tabular-nums" aria-busy="true">
-                  …
-                </span>
               ) : (
                 <button
                   type="button"

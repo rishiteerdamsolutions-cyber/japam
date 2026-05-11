@@ -173,9 +173,8 @@ export function Settings({ onBack }: SettingsProps) {
   const authLoading = useAuthStore((s) => s.loading);
   const signOut = useAuthStore((s) => s.signOut);
   const firebaseUser = auth?.currentUser ?? null;
-  const showSessionRestore = isFirebaseConfigured && !user && !!firebaseUser;
-  const showAuthChecking =
-    isFirebaseConfigured && !user && authLoading && !firebaseUser && !signInPending;
+  const showAuthRestoringHint =
+    isFirebaseConfigured && !user && !signInPending && (authLoading || !!firebaseUser);
   const tier = useUnlockStore((s) => s.tier);
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
   const unlockExpiresAt = useUnlockStore((s) => s.unlockExpiresAt);
@@ -429,12 +428,8 @@ export function Settings({ onBack }: SettingsProps) {
           <div className="flex items-center justify-end min-h-[44px] min-w-0 justify-self-end">
             {!user && isFirebaseConfigured && (
               <>
-                {showSessionRestore ? (
+                {showAuthRestoringHint ? (
                   <AuthSessionRestoreHint />
-                ) : showAuthChecking ? (
-                  <span className="text-amber-200/70 text-xs tabular-nums" aria-busy="true">
-                    …
-                  </span>
                 ) : (
                   <button
                     type="button"

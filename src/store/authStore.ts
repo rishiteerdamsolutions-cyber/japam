@@ -15,6 +15,9 @@ import { auth, googleProvider, isFirebaseConfigured } from '../lib/firebase';
  */
 const LISTENER_FLAG = '__japam_firebase_auth_listener_attached__';
 
+/** Ignore `onAuthStateChanged` until IndexedDB persistence has been applied (avoids transient null + “Sign in” flash). */
+let authPersistenceHydrated = false;
+
 function attachFirebaseAuthListeners() {
   if (!isFirebaseConfigured || !auth) return;
   const a = auth;
@@ -23,6 +26,7 @@ function attachFirebaseAuthListeners() {
   g[LISTENER_FLAG] = true;
 
   onAuthStateChanged(a, (user) => {
+    if (!authPersistenceHydrated) return;
     useAuthStore.setState({
       user,
       loading: false,
@@ -30,10 +34,11 @@ function attachFirebaseAuthListeners() {
     });
   });
 
-  /** Resolves when persisted session (IndexedDB) has been read — avoids a false “signed out” flash before the first `onAuthStateChanged` in slow cold starts. */
+  /** Single source of truth for first paint after cold start — then listener handles later sign-in/out. */
   void a
     .authStateReady()
     .then(() => {
+      authPersistenceHydrated = true;
       useAuthStore.setState({
         user: a.currentUser,
         loading: false,
@@ -41,6 +46,7 @@ function attachFirebaseAuthListeners() {
       });
     })
     .catch(() => {
+      authPersistenceHydrated = true;
       useAuthStore.setState({
         user: a.currentUser,
         loading: false,
@@ -51,6 +57,7 @@ function attachFirebaseAuthListeners() {
   // Last resort if neither listener nor authStateReady clears loading (network / SDK hang)
   setTimeout(() => {
     if (useAuthStore.getState().loading) {
+      authPersistenceHydrated = true;
       useAuthStore.setState({ user: a.currentUser, loading: false, signInPending: false });
     }
   }, 20000);

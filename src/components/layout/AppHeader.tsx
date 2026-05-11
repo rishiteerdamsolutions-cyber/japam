@@ -46,10 +46,8 @@ export function AppHeader({ title, showBack, onBack, rightElement }: AppHeaderPr
   const { user, loading, signInWithGoogle, signInPending, signOut } = useAuthStore();
   const firebaseUser = auth?.currentUser ?? null;
   const profileLoaded = useProfileStore((s) => s.loaded);
-  const showSessionRestore =
-    isFirebaseConfigured && !user && !!firebaseUser && (loading || signInPending);
-  const showAuthChecking =
-    isFirebaseConfigured && !user && loading && !firebaseUser && !signInPending;
+  const showAuthRestoringHint =
+    isFirebaseConfigured && !user && !signInPending && (loading || !!firebaseUser);
   const tier = useUnlockStore((s) => s.tier);
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
   const unlockExpiresAt = useUnlockStore((s) => s.unlockExpiresAt);
@@ -85,12 +83,8 @@ export function AppHeader({ title, showBack, onBack, rightElement }: AppHeaderPr
         <div className="flex items-center gap-2 flex-shrink-0">
           {!user && (
             <>
-              {showSessionRestore ? (
+              {showAuthRestoringHint ? (
                 <AuthSessionRestoreHint />
-              ) : showAuthChecking ? (
-                <span className="text-amber-200/70 text-xs tabular-nums" aria-busy="true">
-                  …
-                </span>
               ) : (
                 <button
                   type="button"

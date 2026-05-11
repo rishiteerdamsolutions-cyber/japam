@@ -26,17 +26,16 @@ function resolveThreeLines(raw: unknown): string[] {
 type AuthSessionRestoreHintProps = {
   className?: string;
   /**
-   * `session` — only when Firebase already has a persisted user but the auth store has not
-   * caught up yet (do not show for first-time visitors during `loading` with no session).
+   * `session` — while auth is resolving (`loading`) or Firebase has `currentUser` but Zustand
+   * `user` is not set yet (cold start / persistence).
    * `profileSync` — signed-in in the store while server profile is still loading (avatar/name).
    */
   variant?: 'session' | 'profileSync';
 };
 
 /**
- * Rotating “session restore” lines for returning signed-in users only — not during anonymous
- * initial auth check. Optional `profileSync` covers the gap after `user` is set while profile
- * fetch is in flight.
+ * Rotating lines during auth resolution and session restore. Optional `profileSync` covers the
+ * gap after `user` is set while profile fetch is in flight.
  */
 export function AuthSessionRestoreHint({ className = '', variant = 'session' }: AuthSessionRestoreHintProps) {
   const { t } = useTranslation();
@@ -46,11 +45,13 @@ export function AuthSessionRestoreHint({ className = '', variant = 'session' }: 
   const profileLoaded = useProfileStore((s) => s.loaded);
   const firebaseUser = auth?.currentUser ?? null;
 
+  /** Persisted session restoring, or cold auth still resolving (avoids “Sign in” flash before Firebase answers). */
   const sessionActive =
     variant === 'session' &&
     isFirebaseConfigured &&
     !user &&
-    !!firebaseUser;
+    !signInPending &&
+    (loading || !!firebaseUser);
 
   const profileSyncActive =
     variant === 'profileSync' && isFirebaseConfigured && !!user && !profileLoaded;

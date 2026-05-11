@@ -173,6 +173,9 @@ export function JapaDashboard() {
     setHandwritingDataUrl(null);
   };
 
+  const pdfActionBtnClass =
+    'inline-flex flex-col items-center gap-0.5 p-2 rounded-lg bg-amber-500/85 text-white hover:bg-amber-400 disabled:opacity-45 disabled:saturate-75 disabled:cursor-not-allowed disabled:ring-1 disabled:ring-amber-100/30 transition-colors';
+
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setUploadError(null);
     setHandwritingDataUrl(null);
@@ -260,9 +263,6 @@ export function JapaDashboard() {
         {t('japaDashboard.title')}
       </h2>
 
-      <p className="text-amber-200/80 text-sm mb-1">{t('japaDashboard.lifetimeMantraCount')}</p>
-      <p className="text-amber-200/55 text-[11px] mb-4 leading-snug">{t('japaDashboard.tierCountsHint')}</p>
-
       <DonateThankYouBox className="mt-4" />
 
       {LAUNCH_FEATURE_OCCASION_GAMES && user && occasionsLoaded && historyOccasions.length > 0 && (
@@ -307,6 +307,93 @@ export function JapaDashboard() {
         Daily goal: {DAILY_GOAL_JAPAS} japas (Levels 1–5)
       </h2>
 
+      <p className="text-amber-200/75 text-[11px] leading-snug mb-4 px-0.5">{t('japaDashboard.pushpa108PdfIntro')}</p>
+
+      <p id="japa-dashboard-pushpa" className="text-amber-300/90 text-xs font-semibold mb-2 px-0.5 scroll-mt-4">
+        {t('japaDashboard.pushpaSectionTitle')}
+      </p>
+      <div className="space-y-3 mb-6">
+        {DEITIES.map((deity) => {
+          const flowers = pushpaByDeity[deity.id] ?? 0;
+          const pct = maxRow > 0 ? (flowers / maxRow) * 100 : 0;
+          return (
+            <div key={`pushpa-${deity.id}`} className="bg-black/20 rounded-xl p-3 border border-emerald-500/15">
+              <div className="flex justify-between items-center mb-1 gap-2">
+                <span className="font-medium text-amber-400 shrink-0 min-w-0 truncate pr-2">
+                  {deity.name} · {t('japaDashboard.pushpaFlowersShort')}
+                </span>
+                <div className="flex items-center gap-2 shrink-0">
+                  <span className="text-amber-200 tabular-nums">{flowers.toLocaleString()}</span>
+                  <button
+                    type="button"
+                    onClick={() => openDownloadModalForPushpa(deity)}
+                    disabled={flowers <= 0}
+                    title={`${t('japaDashboard.downloadPdf')} · ${deity.mantra}`}
+                    aria-label={`${t('japaDashboard.downloadPdf')} ${deity.name} Pushpa Aradhana`}
+                    className={pdfActionBtnClass}
+                  >
+                    <DownloadPdfIcon className="w-5 h-5" />
+                    <span className="text-[9px] font-semibold leading-none">{t('japaDashboard.downloadPdf')}</span>
+                  </button>
+                </div>
+              </div>
+              <div className="h-2 bg-black/30 rounded-full overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all bg-emerald-500/75"
+                  style={{ width: `${pct}%` }}
+                />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <p id="japa-dashboard-special108" className="text-amber-300/90 text-xs font-semibold mb-2 px-0.5 scroll-mt-4">
+        {t('japaDashboard.special108SectionTitle')}
+      </p>
+      <div className="space-y-3 mb-6">
+        {DEITIES.map((deity) => {
+          const sessions = special108ByDeity[deity.id] ?? 0;
+          const pct = maxRow > 0 ? (sessions / maxRow) * 100 : 0;
+          const specialJapas = sessions * 108;
+          return (
+            <div key={`special108-${deity.id}`} className="bg-black/20 rounded-xl p-3 border border-amber-500/20">
+              <div className="flex justify-between items-center mb-1 gap-2">
+                <span className="font-medium text-amber-400 shrink-0 min-w-0 truncate pr-2">
+                  {deity.name} · {t('japaDashboard.special108Short')}
+                </span>
+                <div className="flex items-center gap-2 shrink-0">
+                  <span className="text-amber-200 tabular-nums">{sessions.toLocaleString()}</span>
+                  <button
+                    type="button"
+                    onClick={() => openDownloadModalForSpecial108(deity)}
+                    disabled={sessions <= 0}
+                    title={`${t('japaDashboard.downloadPdf')} · ${deity.mantra}`}
+                    aria-label={`${t('japaDashboard.downloadPdf')} ${deity.name} Special 108`}
+                    className={pdfActionBtnClass}
+                  >
+                    <DownloadPdfIcon className="w-5 h-5" />
+                    <span className="text-[9px] font-semibold leading-none">{t('japaDashboard.downloadPdf')}</span>
+                  </button>
+                </div>
+              </div>
+              <p className="text-amber-200/70 text-[10px] mb-1.5 tabular-nums">
+                {specialJapas.toLocaleString()} japas ({sessions.toLocaleString()} x 108)
+              </p>
+              <div className="h-2 bg-black/30 rounded-full overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all bg-amber-500/70"
+                  style={{ width: `${pct}%` }}
+                />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <p className="text-amber-200/90 text-xs font-semibold mb-2 px-0.5">{t('japaDashboard.lifetimeMantraCount')}</p>
+      <p className="text-amber-200/55 text-[11px] mb-3 leading-snug px-0.5">{t('japaDashboard.tierCountsHint')}</p>
+
       <div className="space-y-4">
         {DEITIES.map((deity) => {
           const count = counts[deity.id];
@@ -326,100 +413,27 @@ export function JapaDashboard() {
                     disabled={count <= 0}
                     title={`${t('japaDashboard.downloadPdf')} · ${deity.mantra}`}
                     aria-label={t('japaDashboard.downloadPdfTotalAria', { deity: deity.name })}
-                    className="inline-flex flex-col items-center gap-0.5 p-2 rounded-lg bg-amber-500/85 text-white hover:bg-amber-400 disabled:opacity-35 disabled:cursor-not-allowed transition-colors"
+                    className={pdfActionBtnClass}
                   >
                     <DownloadPdfIcon className="w-5 h-5" />
                     <span className="text-[9px] font-semibold leading-none">{t('japaDashboard.downloadPdf')}</span>
                   </button>
                 </div>
               </div>
-              <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-[10px] sm:text-[11px] text-amber-200/65 mb-2 font-mono tabular-nums">
-                <span>
-                  3: {tierRow.m3.toLocaleString()}
-                </span>
-                <span>
-                  4: {tierRow.m4.toLocaleString()}
-                </span>
-                <span>
-                  5+: {tierRow.m5.toLocaleString()}
-                </span>
-              </div>
+              <p
+                role="note"
+                className="text-[10px] sm:text-[11px] text-amber-200/55 mb-2 leading-snug tabular-nums"
+              >
+                {t('japaDashboard.tierStatsCompact', {
+                  m3: tierRow.m3.toLocaleString(),
+                  m4: tierRow.m4.toLocaleString(),
+                  m5: tierRow.m5.toLocaleString(),
+                })}
+              </p>
               <div className="h-2 bg-black/30 rounded-full overflow-hidden">
                 <div
                   className="h-full rounded-full transition-all"
                   style={{ width: `${pct}%`, backgroundColor: deity.color }}
-                />
-              </div>
-            </div>
-          );
-        })}
-        <p className="text-amber-300/90 text-xs font-semibold mt-6 mb-2 px-0.5">{t('japaDashboard.pushpaSectionTitle')}</p>
-        {DEITIES.map((deity) => {
-          const flowers = pushpaByDeity[deity.id] ?? 0;
-          const pct = maxRow > 0 ? (flowers / maxRow) * 100 : 0;
-          return (
-            <div key={`pushpa-${deity.id}`} className="bg-black/20 rounded-xl p-3 border border-emerald-500/15">
-              <div className="flex justify-between items-center mb-1 gap-2">
-                <span className="font-medium text-amber-400 shrink-0 min-w-0 truncate pr-2">
-                  {deity.name} · {t('japaDashboard.pushpaFlowersShort')}
-                </span>
-                <div className="flex items-center gap-2 shrink-0">
-                  <span className="text-amber-200 tabular-nums">{flowers.toLocaleString()}</span>
-                  <button
-                    type="button"
-                    onClick={() => openDownloadModalForPushpa(deity)}
-                    disabled={flowers <= 0}
-                    title={`${t('japaDashboard.downloadPdf')} · ${deity.mantra}`}
-                    aria-label={`${t('japaDashboard.downloadPdf')} ${deity.name} Pushpa Aradhana`}
-                    className="inline-flex flex-col items-center gap-0.5 p-2 rounded-lg bg-amber-500/85 text-white hover:bg-amber-400 disabled:opacity-35 disabled:cursor-not-allowed transition-colors"
-                  >
-                    <DownloadPdfIcon className="w-5 h-5" />
-                    <span className="text-[9px] font-semibold leading-none">{t('japaDashboard.downloadPdf')}</span>
-                  </button>
-                </div>
-              </div>
-              <div className="h-2 bg-black/30 rounded-full overflow-hidden">
-                <div
-                  className="h-full rounded-full transition-all bg-emerald-500/75"
-                  style={{ width: `${pct}%` }}
-                />
-              </div>
-            </div>
-          );
-        })}
-        <p className="text-amber-300/90 text-xs font-semibold mt-6 mb-2 px-0.5">{t('japaDashboard.special108SectionTitle')}</p>
-        {DEITIES.map((deity) => {
-          const sessions = special108ByDeity[deity.id] ?? 0;
-          const pct = maxRow > 0 ? (sessions / maxRow) * 100 : 0;
-          const specialJapas = sessions * 108;
-          return (
-            <div key={`special108-${deity.id}`} className="bg-black/20 rounded-xl p-3 border border-amber-500/20">
-              <div className="flex justify-between items-center mb-1 gap-2">
-                <span className="font-medium text-amber-400 shrink-0 min-w-0 truncate pr-2">
-                  {deity.name} · {t('japaDashboard.special108Short')}
-                </span>
-                <div className="flex items-center gap-2 shrink-0">
-                  <span className="text-amber-200 tabular-nums">{sessions.toLocaleString()}</span>
-                  <button
-                    type="button"
-                    onClick={() => openDownloadModalForSpecial108(deity)}
-                    disabled={sessions <= 0}
-                    title={`${t('japaDashboard.downloadPdf')} · ${deity.mantra}`}
-                    aria-label={`${t('japaDashboard.downloadPdf')} ${deity.name} Special 108`}
-                    className="inline-flex flex-col items-center gap-0.5 p-2 rounded-lg bg-amber-500/85 text-white hover:bg-amber-400 disabled:opacity-35 disabled:cursor-not-allowed transition-colors"
-                  >
-                    <DownloadPdfIcon className="w-5 h-5" />
-                    <span className="text-[9px] font-semibold leading-none">{t('japaDashboard.downloadPdf')}</span>
-                  </button>
-                </div>
-              </div>
-              <p className="text-amber-200/70 text-[10px] mb-1.5 tabular-nums">
-                {specialJapas.toLocaleString()} japas ({sessions.toLocaleString()} x 108)
-              </p>
-              <div className="h-2 bg-black/30 rounded-full overflow-hidden">
-                <div
-                  className="h-full rounded-full transition-all bg-amber-500/70"
-                  style={{ width: `${pct}%` }}
                 />
               </div>
             </div>

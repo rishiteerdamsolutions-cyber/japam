@@ -499,7 +499,7 @@ export function GamePowersScrollStrip({ isGuest = false, onGuestPowerTap }: Game
           {showScrollHint ? (
             <div className="pointer-events-none absolute -mt-5 left-1/2 -translate-x-1/2 z-[1]">
               <span className="inline-flex items-center rounded-full border border-amber-400/45 bg-black/65 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-200">
-                Powers ->
+                Powers{' ->'}
               </span>
             </div>
           ) : null}

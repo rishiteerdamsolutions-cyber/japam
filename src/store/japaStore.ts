@@ -146,6 +146,8 @@ const initial: JapaCounts = {
 interface JapaStore {
   counts: JapaCounts;
   loaded: boolean;
+  /** Set after a successful `load(uid)`; used so `load(undefined)` clears counts only after sign-out, not on every auth-ready tick for anonymous users. */
+  lastLoadedJapaUserId: string | null;
   load: (userId?: string) => Promise<void>;
   addJapa: (deity: DeityId, count?: number, opts?: { matchTier?: 3 | 4 | 5 }) => void;
   addOccasionJapa: (kind: 'birthday' | 'anniversary' | 'coupleGame', count?: number) => void;
@@ -160,11 +162,16 @@ interface JapaStore {
 export const useJapaStore = create<JapaStore>((setState, getState) => ({
   counts: initial,
   loaded: false,
+  lastLoadedJapaUserId: null,
 
   load: async (userId?: string) => {
     try {
       if (!userId) {
-        setState({ counts: { ...initial }, loaded: true });
+        if (getState().lastLoadedJapaUserId != null) {
+          setState({ counts: { ...initial }, lastLoadedJapaUserId: null, loaded: true });
+        } else {
+          setState({ loaded: true });
+        }
         return;
       }
       const stored = await loadUserJapa(userId);
@@ -218,7 +225,7 @@ export const useJapaStore = create<JapaStore>((setState, getState) => ({
           m5: Math.max(storedTier[id].m5, currentTier[id].m5),
         };
       }
-      setState({ counts: merged, loaded: true });
+      setState({ counts: merged, loaded: true, lastLoadedJapaUserId: userId });
     } catch (e: unknown) {
       const err = e as { status?: number };
       if (err?.status === 403) {

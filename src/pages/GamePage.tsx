@@ -51,7 +51,6 @@ export function GamePage() {
   // Guest mode is URL-driven, but if the user signs in mid-session we should immediately
   // "upgrade" to signed-in gameplay (powers unlock, guest modal closes) without requiring reload.
   const isGuest = (guestParam === '1' || guestParam === 'true' || guestParam === 'yes') && !user?.uid;
-  const mode = isGuest ? 'general' : parseGameMode(searchParams.get('mode'));
   const levelParam = searchParams.get('level');
   const marathonId = searchParams.get('marathon');
   const yagnaId = searchParams.get('yagna');
@@ -70,8 +69,12 @@ export function GamePage() {
   const occasionTarget = Math.min(500, Math.max(1, parseInt(searchParams.get('target') || '108', 10) || 108));
   const occasionKind = anniversarySession ? ('anniversary' as const) : occasionBirthday ? ('birthday' as const) : null;
 
-  const isSpecial108 =
-    searchParams.get('special108') === '1' && !gameContextId && !occasionKind && !isGuest;
+  const isSpecial108Url =
+    searchParams.get('special108') === '1' && !gameContextId && !occasionKind;
+  /** Guest quick-play defaults to general, except Special 108 from URL (needs deity mode + completion credit). */
+  const parsedMode = parseGameMode(searchParams.get('mode'));
+  const mode = isGuest && !isSpecial108Url ? 'general' : parsedMode;
+  const isSpecial108 = isSpecial108Url && mode !== 'general';
 
   useEffect(() => {
     if (!isSpecial108) return;

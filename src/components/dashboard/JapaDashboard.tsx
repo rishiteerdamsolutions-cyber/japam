@@ -311,6 +311,7 @@ export function JapaDashboard() {
         {t('japaDashboard.lifetimeMantraCount')}
       </p>
       <p className="text-amber-200/55 text-[11px] mb-3 leading-snug px-0.5">{t('japaDashboard.tierCountsHint')}</p>
+      <p className="text-amber-200/50 text-[10px] mb-3 leading-snug px-0.5">{t('japaDashboard.lifetimeVsSpecial108Hint')}</p>
 
       <div className="space-y-4">
         {DEITIES.map((deity) => {
@@ -446,6 +447,7 @@ export function JapaDashboard() {
       <p id="japa-dashboard-special108" className="text-amber-300/90 text-xs font-semibold mb-2 px-0.5 scroll-mt-4">
         {t('japaDashboard.special108SectionTitle')}
       </p>
+      <p className="text-amber-200/55 text-[10px] mb-2 leading-snug px-0.5">{t('japaDashboard.special108CreditExplain')}</p>
       <div className="space-y-3 mb-6">
         {DEITIES.map((deity) => {
           const sessions = special108ByDeity[deity.id] ?? 0;

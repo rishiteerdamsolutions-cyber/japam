@@ -477,6 +477,8 @@
     "matchRows4": "4-gem line clears",
     "matchRows5": "5+ gem line clears",
     "tierCountsHint": "Japas by match size (recent sessions).",
+    "lifetimeVsSpecial108Hint": "Lifetime totals above are match-game japas only. Special 108 completions are counted in the section below.",
+    "special108CreditExplain": "Each +1 here is one full 108-japa run from Specials → 108 Japa (not from regular levels). Sign in so it saves to your account.",
     "tierStatsCompact": "Line clears — 3-gem: {{m3}} · 4-gem: {{m4}} · 5+: {{m5}}",
     "pushpa108PdfIntro": "Pushpa Aradhana and 108 Japa use the same handwriting PDF flow as lifetime japa (upload in the modal). Per-Devatā PDF downloads are in the sections below.",
     "uploadHandwritingRequired": "Upload your handwritten image of this nama to generate the PDF.",

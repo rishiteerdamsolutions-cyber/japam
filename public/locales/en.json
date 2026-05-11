@@ -478,7 +478,7 @@
     "matchRows5": "5+ gem line clears",
     "tierCountsHint": "Japas by match size (recent sessions).",
     "tierStatsCompact": "Line clears — 3-gem: {{m3}} · 4-gem: {{m4}} · 5+: {{m5}}",
-    "pushpa108PdfIntro": "Pushpa Aradhana and 108 Japa use the same handwriting PDF flow as lifetime japa (upload in the modal). Scroll each section for per-Devatā downloads.",
+    "pushpa108PdfIntro": "Pushpa Aradhana and 108 Japa use the same handwriting PDF flow as lifetime japa (upload in the modal). Per-Devatā PDF downloads are in the sections below.",
     "uploadHandwritingRequired": "Upload your handwritten image of this nama to generate the PDF.",
     "handwritingRequiredTitle": "Handwriting required",
     "pdfModalSubtitle": "{{deity}} · {{tier}} · {{count}} japas",

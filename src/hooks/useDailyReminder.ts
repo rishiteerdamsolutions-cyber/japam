@@ -3,8 +3,14 @@ import { useAuthStore } from '../store/authStore';
 import { useReminderStore } from '../store/reminderStore';
 import { useProfileStore } from '../store/profileStore';
 
-/** Chromium supports `renotify` for same-tag notifications; TS `NotificationOptions` omits it. */
-type NotificationOpts = NotificationOptions & { renotify?: boolean };
+/**
+ * Chromium / SW notifications support fields that older DOM `NotificationOptions`
+ * typings omit (`renotify`, `vibrate`, etc.).
+ */
+type NotificationOpts = NotificationOptions & {
+  renotify?: boolean;
+  vibrate?: number[];
+};
 
 function nextOccurrenceMs(hhmm: string): number | null {
   const m = hhmm.match(/^(\d{2}):(\d{2})$/);

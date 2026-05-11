@@ -4,11 +4,16 @@ import { useReminderStore } from '../store/reminderStore';
 import { useProfileStore } from '../store/profileStore';
 
 /**
- * Chromium / SW notifications support fields that older DOM `NotificationOptions`
- * typings omit (`renotify`, `vibrate`, etc.).
+ * Fields we pass to `showNotification` / `Notification`. DOM `NotificationOptions`
+ * typings differ across TypeScript versions; cast at the call site only.
  */
-type NotificationOpts = NotificationOptions & {
+type BrowserNotificationPayload = {
+  body?: string;
+  icon?: string;
+  badge?: string;
+  tag?: string;
   renotify?: boolean;
+  requireInteraction?: boolean;
   vibrate?: number[];
 };
 
@@ -36,7 +41,7 @@ async function showNotification(title: string, body: string) {
     if ('serviceWorker' in navigator) {
       const reg = await navigator.serviceWorker.ready.catch(() => null);
       if (reg) {
-        const opts: NotificationOpts = {
+        const opts: BrowserNotificationPayload = {
           body,
           icon: '/vite.svg',
           badge: '/vite.svg',
@@ -45,18 +50,18 @@ async function showNotification(title: string, body: string) {
           requireInteraction: true,
           vibrate: [300, 120, 300],
         };
-        await reg.showNotification(title, opts);
+        await reg.showNotification(title, opts as NotificationOptions);
         return;
       }
     }
     // Fallback: plain Notification API
-    const fallback: NotificationOpts = {
+    const fallback: BrowserNotificationPayload = {
       body,
       icon: '/vite.svg',
       tag: 'japam-daily-reminder',
       renotify: true,
     };
-    new Notification(title, fallback);
+    new Notification(title, fallback as NotificationOptions);
   } catch {
     // ignore
   }

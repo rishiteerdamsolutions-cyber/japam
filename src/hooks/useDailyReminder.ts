@@ -3,6 +3,9 @@ import { useAuthStore } from '../store/authStore';
 import { useReminderStore } from '../store/reminderStore';
 import { useProfileStore } from '../store/profileStore';
 
+/** Chromium supports `renotify` for same-tag notifications; TS `NotificationOptions` omits it. */
+type NotificationOpts = NotificationOptions & { renotify?: boolean };
+
 function nextOccurrenceMs(hhmm: string): number | null {
   const m = hhmm.match(/^(\d{2}):(\d{2})$/);
   if (!m) return null;
@@ -27,7 +30,7 @@ async function showNotification(title: string, body: string) {
     if ('serviceWorker' in navigator) {
       const reg = await navigator.serviceWorker.ready.catch(() => null);
       if (reg) {
-        await reg.showNotification(title, {
+        const opts: NotificationOpts = {
           body,
           icon: '/vite.svg',
           badge: '/vite.svg',
@@ -35,12 +38,19 @@ async function showNotification(title: string, body: string) {
           renotify: true,
           requireInteraction: true,
           vibrate: [300, 120, 300],
-        });
+        };
+        await reg.showNotification(title, opts);
         return;
       }
     }
     // Fallback: plain Notification API
-    new Notification(title, { body, icon: '/vite.svg', tag: 'japam-daily-reminder', renotify: true });
+    const fallback: NotificationOpts = {
+      body,
+      icon: '/vite.svg',
+      tag: 'japam-daily-reminder',
+      renotify: true,
+    };
+    new Notification(title, fallback);
   } catch {
     // ignore
   }

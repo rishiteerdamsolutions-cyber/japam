@@ -133,7 +133,6 @@ export function JapaDashboard() {
   /** Pushpa Aradhana: flowers per deity + total (not match-game japa). */
   const pushpaByDeity = counts.pushpaAbhishekaJapaByDeity ?? {};
   const pushpaFlowerCount = counts.pushpaAbhishekaJapa ?? 0;
-  const special108ByDeity = counts.special108JapaByDeity ?? {};
   const special108Total = counts.special108JapaTotal ?? 0;
   /** Scale all bars together. */
   const maxRow = Math.max(

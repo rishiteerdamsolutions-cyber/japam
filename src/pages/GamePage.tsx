@@ -74,14 +74,13 @@ export function GamePage() {
   /** Guest quick-play defaults to general, except Special 108 from URL (needs deity mode + completion credit). */
   const parsedMode = parseGameMode(searchParams.get('mode'));
   const mode = isGuest && !isSpecial108Url ? 'general' : parsedMode;
-  const isSpecial108 = isSpecial108Url && mode !== 'general';
+  const isSpecial108 = isSpecial108Url && parsedMode !== 'general';
 
+  /** `special108=1` without a valid deity in `mode` — send user to the 108 Japa picker. */
   useEffect(() => {
-    if (!isSpecial108) return;
-    if (mode === 'general') {
-      navigate('/special-108-japa', { replace: true });
-    }
-  }, [isSpecial108, mode, navigate]);
+    if (!isSpecial108Url || parsedMode !== 'general') return;
+    navigate('/special-108-japa', { replace: true });
+  }, [isSpecial108Url, parsedMode, navigate]);
 
   useEffect(() => {
     if (!occasionKind) return;

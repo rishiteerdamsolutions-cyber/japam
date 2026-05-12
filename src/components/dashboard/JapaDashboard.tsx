@@ -1,11 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useJapaStore } from '../../store/japaStore';
 import { useAuthStore } from '../../store/authStore';
+import { useJapaStore, type JapaCounts } from '../../store/japaStore';
 import { fetchOccasionsList, type OccasionListItem } from '../../lib/occasionsApi';
 import { downloadAnniversaryReportPdf, downloadOccasionSummaryPdf } from '../../utils/occasionPdf';
 import { DEITIES, type Deity, type DeityId } from '../../data/deities';
-import type { JapaCounts } from '../../store/japaStore';
 import { DAILY_GOAL_JAPAS } from '../../data/levels';
 import { downloadMantraPdf, type PdfDetails } from '../../utils/pdfExport';
 import { saveJapaPdfContact, trackShareEvent } from '../../lib/firestore';

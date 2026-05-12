@@ -68,6 +68,13 @@ export function computeMatchSfxSelection(
   return { deity: primary.deity, tier };
 }
 
+/**
+ * Bump this string whenever you replace an MP3 **in place** under
+ * `public/sounds/{3,4,5}match-sounds/` (same filename). Otherwise browsers may keep the old cached file.
+ * Hanuman 3-match asset refreshed: 2026-05-11.
+ */
+export const MATCH_SFX_CACHE_BUST = '20260511';
+
 const TIER_FOLDER: Record<MatchStrengthTier, string> = {
   3: '3match-sounds',
   4: '4match-sounds',
@@ -99,8 +106,9 @@ export function matchSfxUrlCandidates(deity: DeityId, tier: MatchStrengthTier): 
   const prefix = TIER_PREFIX[tier];
   const custom = SLUG_TRIES[deity]?.[tier];
   const slugs = custom ? [...custom] : [defaultSlug(deity)];
-  const urls = slugs.map((s) => `/sounds/${folder}/${prefix}${s}.mp3`);
-  const fallback = `/sounds/${folder}/${prefix}ganesh.mp3`;
+  const v = MATCH_SFX_CACHE_BUST ? `?v=${encodeURIComponent(MATCH_SFX_CACHE_BUST)}` : '';
+  const urls = slugs.map((s) => `/sounds/${folder}/${prefix}${s}.mp3${v}`);
+  const fallback = `/sounds/${folder}/${prefix}ganesh.mp3${v}`;
   if (!urls.includes(fallback)) urls.push(fallback);
   return urls;
 }

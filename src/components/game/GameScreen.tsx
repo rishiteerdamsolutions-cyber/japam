@@ -98,12 +98,26 @@ function GameBottomStrip({
   const japasThisLevel = useGameStore((s) => s.japasThisLevel);
   const japasByDeity = useGameStore((s) => s.japasByDeity);
   const marathonTargetJapas = useGameStore((s) => s.marathonTargetJapas);
+  const marathonId = useGameStore((s) => s.marathonId);
+  const yagnaId = useGameStore((s) => s.yagnaId);
   const overrideJapaTarget = useGameStore((s) => s.overrideJapaTarget);
+  const special108JapaFlag = useGameStore((s) => s.special108Japa);
   const anniversaryJapasHusband = useGameStore((s) => s.anniversaryJapasHusband);
   const anniversaryJapasWife = useGameStore((s) => s.anniversaryJapasWife);
   const level = LEVELS[levelIndex];
   const deityTarget: DeityId | undefined = mode !== 'general' ? (mode as DeityId) : undefined;
-  const japasNeeded = deityTarget ? (japasByDeity[deityTarget] ?? 0) : japasThisLevel;
+  const sessionCredits108JapaSpecialHud =
+    special108JapaFlag === true ||
+    (!!deityTarget &&
+      occasionKind == null &&
+      marathonTargetJapas == null &&
+      !marathonId &&
+      !yagnaId &&
+      overrideJapaTarget === 108);
+  let japasNeeded = deityTarget ? (japasByDeity[deityTarget] ?? 0) : japasThisLevel;
+  if (sessionCredits108JapaSpecialHud && deityTarget) {
+    japasNeeded = Math.max(japasNeeded, japasThisLevel);
+  }
   const japaTarget = overrideJapaTarget ?? marathonTargetJapas ?? level?.japaTarget ?? 15;
   const coupleTotal = anniversaryJapasHusband + anniversaryJapasWife;
   const leftLabel =
@@ -439,6 +453,8 @@ export function GameScreen({
           try {
             if (gs.marathonTargetJapas != null && (gs.marathonId || gs.yagnaId)) {
               await useJapaStore.getState().flushJapas();
+            } else if (gs.special108Japa) {
+              await useJapaStore.getState().flushJapas();
             }
           } catch {
             /* ignore */
@@ -605,7 +621,7 @@ export function GameScreen({
       if (user?.uid) {
         setPauseError(null);
         setPauseSaving(true);
-        if (yagnaId || marathonId) await flushJapas();
+        if (yagnaId || marathonId || useGameStore.getState().special108Japa) await flushJapas();
         const ok = await saveUserPausedGame(user.uid, payload as unknown as Record<string, unknown>, user);
         setPauseSaving(false);
         if (!ok) {
@@ -626,7 +642,7 @@ export function GameScreen({
       });
       exitWithSavedNotice();
     } else {
-      if (user?.uid && (yagnaId || marathonId)) await flushJapas();
+      if (user?.uid && (yagnaId || marathonId || useGameStore.getState().special108Japa)) await flushJapas();
       exitWithSavedNotice();
     }
   }, [savePausedState, user, onBack, flushJapas, yagnaId, marathonId]);
@@ -653,7 +669,7 @@ export function GameScreen({
 
   // When leaving via overlay (won/lost), flush japas before navigating.
   const handleMenuBack = useCallback(async () => {
-    if (user?.uid && (yagnaId || marathonId)) await flushJapas();
+    if (user?.uid && (yagnaId || marathonId || useGameStore.getState().special108Japa)) await flushJapas();
     onBack();
   }, [user?.uid, yagnaId, marathonId, flushJapas, onBack]);
 

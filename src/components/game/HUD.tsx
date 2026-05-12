@@ -18,10 +18,24 @@ export function HUD() {
   const japasThisLevel = useGameStore((s) => s.japasThisLevel);
   const japasByDeity = useGameStore((s) => s.japasByDeity);
   const marathonTargetJapas = useGameStore((s) => s.marathonTargetJapas);
+  const marathonId = useGameStore((s) => s.marathonId);
+  const yagnaId = useGameStore((s) => s.yagnaId);
   const overrideJapaTarget = useGameStore((s) => s.overrideJapaTarget);
+  const special108Japa = useGameStore((s) => s.special108Japa);
   const level = LEVELS[levelIndex];
   const deityTarget: DeityId | undefined = mode !== 'general' ? (mode as DeityId) : undefined;
-  const japasNeeded = deityTarget ? (japasByDeity[deityTarget] ?? 0) : japasThisLevel;
+  const sessionCredits108JapaSpecialHud =
+    special108Japa === true ||
+    (!!deityTarget &&
+      occasionKind == null &&
+      marathonTargetJapas == null &&
+      !marathonId &&
+      !yagnaId &&
+      overrideJapaTarget === 108);
+  let japasNeeded = deityTarget ? (japasByDeity[deityTarget] ?? 0) : japasThisLevel;
+  if (sessionCredits108JapaSpecialHud && deityTarget) {
+    japasNeeded = Math.max(japasNeeded, japasThisLevel);
+  }
   const japaTarget = overrideJapaTarget ?? marathonTargetJapas ?? level?.japaTarget ?? 15;
 
   return (

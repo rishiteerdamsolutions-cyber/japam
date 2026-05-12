@@ -1116,7 +1116,18 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
         const japaCount = 1; // 1 japa per manual match (e.g. 3 candies matched = 1 japa)
         japasByDeity[deity] = (japasByDeity[deity] ?? 0) + japaCount;
         const matchTier = matchStrengthTierForDeity(pendingMatchBatch, deity);
-        if (!isGuest) japaStore.addJapa(deity, japaCount, { matchTier });
+        if (!isGuest) {
+          const snap = get();
+          const deferBackendPersist =
+            snap.special108Japa === true ||
+            (snap.mode !== 'general' &&
+              snap.occasionKind == null &&
+              snap.marathonTargetJapas == null &&
+              !snap.marathonId &&
+              !snap.yagnaId &&
+              snap.overrideJapaTarget === 108);
+          japaStore.addJapa(deity, japaCount, { matchTier, deferBackendPersist });
+        }
         japaDelta += shouldCountJapa ? japaCount : 0;
       }
       if (useIntendedOnly && japaDelta > 1) japaDelta = 1; // multi-match: cap at 1 (intended deity only)
@@ -1201,29 +1212,46 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const level = getLevel(state.levelIndex);
     const deityTarget = state.mode !== 'general' ? (state.mode as DeityId) : undefined;
     const japasByDeity = state.japasByDeity;
-    const japasNeeded = deityTarget ? (japasByDeity[deityTarget] ?? 0) : state.japasThisLevel;
+    let japasNeeded = deityTarget ? (japasByDeity[deityTarget] ?? 0) : state.japasThisLevel;
     const japaTarget = state.overrideJapaTarget ?? state.marathonTargetJapas ?? level.japaTarget;
     const moves = state.moves;
     const isMarathon = state.marathonTargetJapas != null;
+    const special108 = state.special108Japa === true;
+    /** Credit 108-session if flag is set, or session matches Special 108 shape (flag can be lost on some resumes). */
+    const sessionCredits108JapaSpecial =
+      special108 ||
+      (!!deityTarget &&
+        state.occasionKind == null &&
+        state.marathonTargetJapas == null &&
+        !state.marathonId &&
+        !state.yagnaId &&
+        state.overrideJapaTarget === 108);
+    /**
+     * Resume / edge cases can leave `japasThisLevel` ahead of `japasByDeity[mode]` (see `restoreGame`).
+     * HUD uses per-deity count; win + dashboard credit must use the same effective progress.
+     */
+    if (sessionCredits108JapaSpecial && deityTarget && state.occasionKind == null) {
+      japasNeeded = Math.max(japasNeeded, state.japasThisLevel);
+    }
     // Anniversary: per-level target (same as general) using japasThisLevel; couple H/W are session tallies for HUD / PDF only.
     const japasForTarget =
       state.occasionKind === 'anniversary' ? state.japasThisLevel : japasNeeded;
     const occasionBlocksProgress = state.occasionKind != null;
-    const special108 = state.special108Japa === true;
 
     let status: GameStatus = 'playing';
     const finalBoard = state.board;
 
     if (japasForTarget >= japaTarget) {
       status = 'won';
-      if (special108 && deityTarget) {
+      if (sessionCredits108JapaSpecial && deityTarget && japaTarget === 108) {
         useJapaStore.getState().addSpecial108JapaCompletion(deityTarget);
+        void useJapaStore.getState().flushJapas();
       }
       // Marathons / yāgās / 108 special: no map-style level power grant.
-      if (!isMarathon && !occasionBlocksProgress && !special108) {
+      if (!isMarathon && !occasionBlocksProgress && !sessionCredits108JapaSpecial) {
         void usePowersInventoryStore.getState().grantAfterLevelWin(state.mode);
       }
-      if (!isMarathon && !state.isGuest && !occasionBlocksProgress && !special108) {
+      if (!isMarathon && !state.isGuest && !occasionBlocksProgress && !sessionCredits108JapaSpecial) {
         const totalScore = state.score;
         const stars = getStars(japasNeeded, japaTarget, moves);
         useProgressStore.getState().saveLevel(state.mode, level.id, {

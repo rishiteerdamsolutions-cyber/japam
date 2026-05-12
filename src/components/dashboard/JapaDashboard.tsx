@@ -4,7 +4,8 @@ import { useJapaStore } from '../../store/japaStore';
 import { useAuthStore } from '../../store/authStore';
 import { fetchOccasionsList, type OccasionListItem } from '../../lib/occasionsApi';
 import { downloadAnniversaryReportPdf, downloadOccasionSummaryPdf } from '../../utils/occasionPdf';
-import { DEITIES, type Deity } from '../../data/deities';
+import { DEITIES, type Deity, type DeityId } from '../../data/deities';
+import type { JapaCounts } from '../../store/japaStore';
 import { DAILY_GOAL_JAPAS } from '../../data/levels';
 import { downloadMantraPdf, type PdfDetails } from '../../utils/pdfExport';
 import { saveJapaPdfContact, trackShareEvent } from '../../lib/firestore';
@@ -16,6 +17,26 @@ import { LAUNCH_FEATURE_OCCASION_GAMES } from '../../config/launchFeatures';
 
 /** Single sample image used across all deities and site-wide */
 const HANDWRITING_SAMPLE_SRC = '/SAMPLE%20NAMA%20IMAGE.png';
+
+const JAPA_PER_SPECIAL_BLOCK = 108;
+
+/**
+ * Saved Special 108 sessions plus full 108-blocks inferred from lifetime mantra count
+ * (helps PDF download when Special 108 was not persisted).
+ */
+function special108RetrospectiveForDeity(counts: JapaCounts, deityId: DeityId): {
+  savedSessions: number;
+  retrospectiveSessions: number;
+  totalJapasForPdf: number;
+} {
+  const lifetime = counts[deityId] ?? 0;
+  const savedSessions = counts.special108JapaByDeity?.[deityId] ?? 0;
+  const fromSaved = savedSessions * JAPA_PER_SPECIAL_BLOCK;
+  const remaining = Math.max(0, lifetime - fromSaved);
+  const retrospectiveSessions = Math.floor(remaining / JAPA_PER_SPECIAL_BLOCK);
+  const totalJapasForPdf = fromSaved + retrospectiveSessions * JAPA_PER_SPECIAL_BLOCK;
+  return { savedSessions, retrospectiveSessions, totalJapasForPdf };
+}
 
 function DownloadPdfIcon({ className }: { className?: string }) {
   return (
@@ -36,6 +57,10 @@ export function JapaDashboard() {
     mantra: string;
     count: number;
     deityName: string;
+    /** Special 108: saved session count (for PDF note). */
+    special108SavedSessions?: number;
+    /** Special 108: extra full 108-blocks from lifetime ÷ 108 (not in saved counter). */
+    special108RetrospectiveSessions?: number;
   } | null>(null);
   const [name, setName] = useState('');
   const [gotram, setGotram] = useState('');
@@ -45,6 +70,12 @@ export function JapaDashboard() {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [processingImage, setProcessingImage] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const uid = user?.uid;
+    if (!uid) return;
+    void useJapaStore.getState().load(uid);
+  }, [user?.uid]);
 
   useEffect(() => {
     if (!LAUNCH_FEATURE_OCCASION_GAMES || !user) {
@@ -110,7 +141,10 @@ export function JapaDashboard() {
     ...(LAUNCH_FEATURE_OCCASION_GAMES ? [birthdayJapa, anniversaryJapa, coupleGameJapa] : []),
     ...DEITIES.map((d) => pushpaByDeity[d.id] ?? 0),
     pushpaFlowerCount,
-    ...DEITIES.map((d) => special108ByDeity[d.id] ?? 0),
+    ...DEITIES.map((d) => {
+      const r = special108RetrospectiveForDeity(counts, d.id);
+      return r.savedSessions + r.retrospectiveSessions;
+    }),
     special108Total,
     1,
   );
@@ -150,15 +184,18 @@ export function JapaDashboard() {
   };
 
   const openDownloadModalForSpecial108 = (deity: Deity) => {
-    const sessions = special108ByDeity[deity.id] ?? 0;
-    if (sessions <= 0) return;
-    // Special 108 download should reflect special completions only, not lifetime deity japa.
-    const specialJapaCount = sessions * 108;
+    const { savedSessions, retrospectiveSessions, totalJapasForPdf } = special108RetrospectiveForDeity(
+      counts,
+      deity.id,
+    );
+    if (totalJapasForPdf <= 0) return;
     setDownloadModal({
       source: 'special108',
       mantra: deity.mantra,
-      count: specialJapaCount,
+      count: totalJapasForPdf,
       deityName: deity.name,
+      special108SavedSessions: savedSessions,
+      special108RetrospectiveSessions: retrospectiveSessions,
     });
     setName('');
     setGotram('');
@@ -225,7 +262,19 @@ export function JapaDashboard() {
           ? t('japaDashboard.totalLifetimeJapasPdfNote')
           : downloadModal.source === 'pushpa'
             ? 'Pushpa Aradhana'
-            : 'Special 108 Japa';
+            : downloadModal.special108RetrospectiveSessions && downloadModal.special108RetrospectiveSessions > 0
+              ? t('japaDashboard.special108PdfNoteWithRetro', {
+                  saved: downloadModal.special108SavedSessions ?? 0,
+                  retro: downloadModal.special108RetrospectiveSessions,
+                  total: downloadModal.count,
+                  defaultValue:
+                    'Special 108: {{saved}} saved session(s) + {{retro}} from lifetime (÷108); PDF {{total}} japas',
+                })
+              : t('japaDashboard.special108PdfNoteSavedOnly', {
+                  sessions: downloadModal.special108SavedSessions ?? 0,
+                  total: downloadModal.count,
+                  defaultValue: 'Special 108: {{sessions}} session(s); PDF {{total}} japas',
+                });
       const fileStem =
         downloadModal.source === 'lifetime'
           ? `${downloadModal.deityName}-lifetime-${downloadModal.count}-japas`
@@ -450,9 +499,9 @@ export function JapaDashboard() {
       <p className="text-amber-200/55 text-[10px] mb-2 leading-snug px-0.5">{t('japaDashboard.special108CreditExplain')}</p>
       <div className="space-y-3 mb-6">
         {DEITIES.map((deity) => {
-          const sessions = special108ByDeity[deity.id] ?? 0;
-          const pct = maxRow > 0 ? (sessions / maxRow) * 100 : 0;
-          const specialJapas = sessions * 108;
+          const r = special108RetrospectiveForDeity(counts, deity.id);
+          const effectiveSessions = r.savedSessions + r.retrospectiveSessions;
+          const pct = maxRow > 0 ? (effectiveSessions / maxRow) * 100 : 0;
           return (
             <div key={`special108-${deity.id}`} className="bg-black/20 rounded-xl p-3 border border-amber-500/20">
               <div className="flex justify-between items-center mb-1 gap-2">
@@ -460,11 +509,22 @@ export function JapaDashboard() {
                   {deity.name} · {t('japaDashboard.special108Short')}
                 </span>
                 <div className="flex items-center gap-2 shrink-0">
-                  <span className="text-amber-200 tabular-nums">{sessions.toLocaleString()}</span>
+                  <span className="text-amber-200 tabular-nums text-right leading-tight">
+                    <span className="block">{effectiveSessions.toLocaleString()}</span>
+                    {r.retrospectiveSessions > 0 ? (
+                      <span className="block text-[9px] text-amber-200/60 font-normal">
+                        {t('japaDashboard.special108RetroBadge', {
+                          saved: r.savedSessions,
+                          retro: r.retrospectiveSessions,
+                          defaultValue: '{{saved}} saved + {{retro}} from lifetime',
+                        })}
+                      </span>
+                    ) : null}
+                  </span>
                   <button
                     type="button"
                     onClick={() => openDownloadModalForSpecial108(deity)}
-                    disabled={sessions <= 0}
+                    disabled={r.totalJapasForPdf <= 0}
                     title={`${t('japaDashboard.downloadPdf')} · ${deity.mantra}`}
                     aria-label={`${t('japaDashboard.downloadPdf')} ${deity.name} Special 108`}
                     className={pdfActionBtnClass}
@@ -475,7 +535,16 @@ export function JapaDashboard() {
                 </div>
               </div>
               <p className="text-amber-200/70 text-[10px] mb-1.5 tabular-nums">
-                {specialJapas.toLocaleString()} japas ({sessions.toLocaleString()} x 108)
+                {r.totalJapasForPdf.toLocaleString()}{' '}
+                {t('japaDashboard.special108JapasForPdf', { defaultValue: 'japas in PDF' })}
+                {r.retrospectiveSessions > 0 ? (
+                  <span className="block text-amber-200/55 mt-0.5">
+                    {t('japaDashboard.special108RetroExplainShort', {
+                      defaultValue:
+                        'Includes full 108-blocks from lifetime mantra count not yet stored as Special 108 (estimate only).',
+                    })}
+                  </span>
+                ) : null}
               </p>
               <div className="h-2 bg-black/30 rounded-full overflow-hidden">
                 <div
@@ -500,7 +569,16 @@ export function JapaDashboard() {
                   })
                 : downloadModal.source === 'pushpa'
                   ? `${downloadModal.deityName} · Pushpa Aradhana (${downloadModal.count} offerings)`
-                  : `${downloadModal.deityName} · Special 108 (${downloadModal.count} japas)`}
+                  : downloadModal.special108RetrospectiveSessions && downloadModal.special108RetrospectiveSessions > 0
+                    ? t('japaDashboard.special108ModalSubtitleRetro', {
+                        deity: downloadModal.deityName,
+                        total: downloadModal.count,
+                        saved: downloadModal.special108SavedSessions ?? 0,
+                        retro: downloadModal.special108RetrospectiveSessions,
+                        defaultValue:
+                          '{{deity}} · Special 108 PDF — {{total}} japas ({{saved}} saved + {{retro}} retrospective from lifetime)',
+                      })
+                    : `${downloadModal.deityName} · Special 108 (${downloadModal.count} japas)`}
             </p>
             <p className="text-amber-300/90 text-[11px] mb-2 italic">&ldquo;{downloadModal.mantra}&rdquo;</p>
             <p className="text-amber-200/70 text-[11px] mb-4 leading-snug">
@@ -508,7 +586,13 @@ export function JapaDashboard() {
                 ? t('japaDashboard.handwritingRepeatTotal', { count: downloadModal.count })
                 : downloadModal.source === 'pushpa'
                   ? `Your handwritten nama will be repeated ${downloadModal.count} times for Pushpa Aradhana.`
-                  : `Your handwritten nama will be repeated ${downloadModal.count} times for Special 108.`}
+                  : downloadModal.special108RetrospectiveSessions && downloadModal.special108RetrospectiveSessions > 0
+                    ? t('japaDashboard.special108HandwritingRetro', {
+                        count: downloadModal.count,
+                        defaultValue:
+                          'Your handwritten nama is repeated once per japa in this PDF total ({{count}}), including retrospective blocks from lifetime where saved Special 108 was lower.',
+                      })
+                    : `Your handwritten nama will be repeated ${downloadModal.count} times for Special 108.`}
             </p>
 
             <div className="mb-4 p-3 rounded-lg bg-black/30 border border-amber-500/20">

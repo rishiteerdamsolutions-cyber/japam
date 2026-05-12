@@ -81,6 +81,55 @@ function sanitizeSpecial108InPlace(counts) {
   counts.special108JapaTotal = sum;
 }
 
+/**
+ * Concurrent POSTs (e.g. last `addJapa` save racing after `addSpecial108JapaCompletion`) can reorder.
+ * Firestore merge replaces whole map fields, so a stale body would wipe newer Special 108 / Pushpa rows.
+ * Keep per-deity max(body, persisted) for these maps (monotonic merge).
+ */
+function mergePushpaAndSpecial108MonotonicWithPrev(counts, prev) {
+  const prevP =
+    prev.pushpaAbhishekaJapaByDeity && typeof prev.pushpaAbhishekaJapaByDeity === 'object'
+      ? prev.pushpaAbhishekaJapaByDeity
+      : {};
+  const curP =
+    counts.pushpaAbhishekaJapaByDeity && typeof counts.pushpaAbhishekaJapaByDeity === 'object'
+      ? counts.pushpaAbhishekaJapaByDeity
+      : {};
+  const mergedP = {};
+  let sumP = 0;
+  for (const id of DEITY_IDS) {
+    const n = Math.max(
+      Math.max(0, Math.round(Number(curP[id]) || 0)),
+      Math.max(0, Math.round(Number(prevP[id]) || 0)),
+    );
+    mergedP[id] = n;
+    sumP += n;
+  }
+  counts.pushpaAbhishekaJapaByDeity = mergedP;
+  counts.pushpaAbhishekaJapa = sumP;
+
+  const prevS =
+    prev.special108JapaByDeity && typeof prev.special108JapaByDeity === 'object'
+      ? prev.special108JapaByDeity
+      : {};
+  const curS =
+    counts.special108JapaByDeity && typeof counts.special108JapaByDeity === 'object'
+      ? counts.special108JapaByDeity
+      : {};
+  const mergedS = {};
+  let sumS = 0;
+  for (const id of DEITY_IDS) {
+    const n = Math.max(
+      Math.max(0, Math.round(Number(curS[id]) || 0)),
+      Math.max(0, Math.round(Number(prevS[id]) || 0)),
+    );
+    mergedS[id] = n;
+    sumS += n;
+  }
+  counts.special108JapaByDeity = mergedS;
+  counts.special108JapaTotal = sumS;
+}
+
 /** POST /api/user/japa - Save japa counts for current user (Firebase ID token required). Also attributes deltas to joined marathons by deity. */
 export async function POST(request) {
   const uid = await verifyFirebaseUser(request);
@@ -111,6 +160,16 @@ export async function POST(request) {
     } catch {}
     try {
       sanitizeSpecial108InPlace(counts);
+    } catch {}
+    // Re-read immediately before merge so a concurrent POST cannot leave us merging 108/Pushpa
+    // against a stale snapshot (then overwriting newer Firestore map fields on set merge).
+    let prevLatest = prev;
+    try {
+      const latestSnap = await db.doc(`users/${uid}/data/japa`).get();
+      prevLatest = (latestSnap.exists && latestSnap.data()) || {};
+    } catch {}
+    try {
+      mergePushpaAndSpecial108MonotonicWithPrev(counts, prevLatest);
     } catch {}
     delete counts.pushpaAbhishekaJapaUnattributed;
 

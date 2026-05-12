@@ -143,13 +143,36 @@ const initial: JapaCounts = {
   japaByTier: emptyJapaByTier(),
 };
 
+/** Coalesce rapid `saveUserJapa` calls (Special 108: many matches then completion) to avoid out-of-order POSTs. */
+const JAPA_BACKEND_DEBOUNCE_MS = 450;
+let japaBackendPersistTimer: ReturnType<typeof setTimeout> | null = null;
+
+function cancelScheduledJapaBackendPersist() {
+  if (japaBackendPersistTimer != null) {
+    clearTimeout(japaBackendPersistTimer);
+    japaBackendPersistTimer = null;
+  }
+}
+
+function scheduleJapaBackendPersist(getCounts: () => JapaCounts) {
+  const uid = useAuthStore.getState().user?.uid;
+  if (!uid) return;
+  if (japaBackendPersistTimer != null) clearTimeout(japaBackendPersistTimer);
+  japaBackendPersistTimer = setTimeout(() => {
+    japaBackendPersistTimer = null;
+    const u = useAuthStore.getState().user?.uid;
+    if (!u) return;
+    void saveUserJapa(u, getCounts());
+  }, JAPA_BACKEND_DEBOUNCE_MS);
+}
+
 interface JapaStore {
   counts: JapaCounts;
   loaded: boolean;
   /** Set after a successful `load(uid)`; used so `load(undefined)` clears counts only after sign-out, not on every auth-ready tick for anonymous users. */
   lastLoadedJapaUserId: string | null;
   load: (userId?: string) => Promise<void>;
-  addJapa: (deity: DeityId, count?: number, opts?: { matchTier?: 3 | 4 | 5 }) => void;
+  addJapa: (deity: DeityId, count?: number, opts?: { matchTier?: 3 | 4 | 5; deferBackendPersist?: boolean }) => void;
   addOccasionJapa: (kind: 'birthday' | 'anniversary' | 'coupleGame', count?: number) => void;
   /** Record one Pushpa Aradhana flower offering for a deity (not match-game japa). */
   addPushpaAradhanaCount: (deity: DeityId, count?: number) => void;
@@ -167,6 +190,7 @@ export const useJapaStore = create<JapaStore>((setState, getState) => ({
   load: async (userId?: string) => {
     try {
       if (!userId) {
+        cancelScheduledJapaBackendPersist();
         if (getState().lastLoadedJapaUserId != null) {
           setState({ counts: { ...initial }, lastLoadedJapaUserId: null, loaded: true });
         } else {
@@ -174,6 +198,7 @@ export const useJapaStore = create<JapaStore>((setState, getState) => ({
         }
         return;
       }
+      cancelScheduledJapaBackendPersist();
       const stored = await loadUserJapa(userId);
       const current = getState().counts;
       // Merge: never overwrite with lower values (avoids race where load wipes in-game progress)
@@ -237,7 +262,7 @@ export const useJapaStore = create<JapaStore>((setState, getState) => ({
     }
   },
 
-  addJapa: (deity: DeityId, count = 1, opts?: { matchTier?: 3 | 4 | 5 }) => {
+  addJapa: (deity: DeityId, count = 1, opts?: { matchTier?: 3 | 4 | 5; deferBackendPersist?: boolean }) => {
     const { counts } = getState();
     const prevByTier = counts.japaByTier ?? emptyJapaByTier();
     const tier = opts?.matchTier;
@@ -259,7 +284,13 @@ export const useJapaStore = create<JapaStore>((setState, getState) => ({
     };
     setState({ counts: next });
     const uid = useAuthStore.getState().user?.uid;
-    if (uid) saveUserJapa(uid, next).catch(() => {});
+    if (!uid) return;
+    if (opts?.deferBackendPersist) {
+      scheduleJapaBackendPersist(() => getState().counts);
+    } else {
+      cancelScheduledJapaBackendPersist();
+      void saveUserJapa(uid, next);
+    }
   },
 
   addOccasionJapa: (kind, count = 1) => {
@@ -298,11 +329,11 @@ export const useJapaStore = create<JapaStore>((setState, getState) => ({
     by[deity] = (by[deity] ?? 0) + count;
     const next = recomputeSpecial108Total({ ...counts, special108JapaByDeity: by });
     setState({ counts: next });
-    const uid = useAuthStore.getState().user?.uid;
-    if (uid) saveUserJapa(uid, next).catch(() => {});
+    /** Persist via `flushJapas()` from game win / pause so one POST carries session + completion (avoids races). */
   },
 
   flushJapas: async () => {
+    cancelScheduledJapaBackendPersist();
     const uid = useAuthStore.getState().user?.uid;
     if (!uid) return;
     const counts = getState().counts;

@@ -501,35 +501,40 @@ export function JapaDashboard() {
           const effectiveSessions = r.savedSessions + r.retrospectiveSessions;
           const pct = maxRow > 0 ? (effectiveSessions / maxRow) * 100 : 0;
           return (
-            <div key={`special108-${deity.id}`} className="bg-black/20 rounded-xl p-3 border border-amber-500/20">
-              <div className="flex justify-between items-center mb-1 gap-2">
-                <span className="font-medium text-amber-400 shrink-0 min-w-0 truncate pr-2">
+            <div
+              key={`special108-${deity.id}`}
+              className="bg-black/20 rounded-xl p-3 border border-amber-500/20 min-w-0 overflow-hidden"
+            >
+              <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-2 gap-y-1 items-start min-w-0 mb-1">
+                <span className="col-start-1 row-start-1 min-w-0 font-medium text-amber-400 truncate pr-1">
                   {deity.name} · {t('japaDashboard.special108Short')}
                 </span>
-                <div className="flex items-center gap-2 shrink-0">
-                  <span className="text-amber-200 tabular-nums text-right leading-tight">
-                    <span className="block">{effectiveSessions.toLocaleString()}</span>
-                    {r.retrospectiveSessions > 0 ? (
-                      <span className="block text-[9px] text-amber-200/60 font-normal">
-                        {t('japaDashboard.special108RetroBadge', {
-                          saved: r.savedSessions,
-                          retro: r.retrospectiveSessions,
-                          defaultValue: '{{saved}} saved + {{retro}} from lifetime',
-                        })}
-                      </span>
-                    ) : null}
+                <button
+                  type="button"
+                  onClick={() => openDownloadModalForSpecial108(deity)}
+                  disabled={r.totalJapasForPdf <= 0}
+                  title={`${t('japaDashboard.downloadPdf')} · ${deity.mantra}`}
+                  aria-label={`${t('japaDashboard.downloadPdf')} ${deity.name} Special 108`}
+                  className={`col-start-2 row-span-2 self-center shrink-0 ${pdfActionBtnClass}`}
+                >
+                  <DownloadPdfIcon className="w-5 h-5 shrink-0" />
+                  <span className="text-[9px] font-semibold leading-none text-center max-w-[4.25rem] sm:max-w-none">
+                    {t('japaDashboard.downloadPdf')}
                   </span>
-                  <button
-                    type="button"
-                    onClick={() => openDownloadModalForSpecial108(deity)}
-                    disabled={r.totalJapasForPdf <= 0}
-                    title={`${t('japaDashboard.downloadPdf')} · ${deity.mantra}`}
-                    aria-label={`${t('japaDashboard.downloadPdf')} ${deity.name} Special 108`}
-                    className={pdfActionBtnClass}
-                  >
-                    <DownloadPdfIcon className="w-5 h-5" />
-                    <span className="text-[9px] font-semibold leading-none">{t('japaDashboard.downloadPdf')}</span>
-                  </button>
+                </button>
+                <div className="col-start-1 row-start-2 min-w-0 space-y-0.5 pr-1">
+                  <span className="text-amber-200 tabular-nums text-sm block">
+                    {effectiveSessions.toLocaleString()}
+                  </span>
+                  {r.retrospectiveSessions > 0 ? (
+                    <span className="block text-[9px] text-amber-200/60 font-normal leading-snug break-words">
+                      {t('japaDashboard.special108RetroBadge', {
+                        saved: r.savedSessions,
+                        retro: r.retrospectiveSessions,
+                        defaultValue: '{{saved}} saved + {{retro}} from lifetime',
+                      })}
+                    </span>
+                  ) : null}
                 </div>
               </div>
               <p className="text-amber-200/70 text-[10px] mb-1.5 tabular-nums">

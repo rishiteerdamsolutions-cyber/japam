@@ -1,19 +1,48 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { useAuthStore } from '../store/authStore';
+import { useUnlockStore } from '../store/unlockStore';
+import { hasActivePaidAccess } from '../lib/membershipDisplay';
 import { isFirebaseConfigured } from '../lib/firebase';
 import { AppFooter } from '../components/layout/AppFooter';
 import { BottomNav } from '../components/nav/BottomNav';
 import { MenuMatchChantHeader } from '../components/layout/MenuMatchChantHeader';
+import { AccessBadge } from '../components/ui/AccessBadge';
 import { LAUNCH_FEATURE_OCCASION_GAMES } from '../config/launchFeatures';
 import { landingStartJapaButtonClass, landingTryJapaButtonClass } from '../lib/landingCtaStyles';
+
+/** Same badges as Marathons / Maha Yāgā / Pushpa deity cards: Free path + Pro for full access. */
+function SpecialsFreemiumBadges() {
+  const { t } = useTranslation();
+  return (
+    <span className="absolute top-2 right-2 z-[2] flex flex-col gap-1 items-end pointer-events-none">
+      <AccessBadge variant="free" label={t('common.free')} size="sm" />
+      <AccessBadge variant="pro" label={t('menu.pro')} size="sm" />
+    </span>
+  );
+}
 
 export function SpecialsPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
   const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle);
+  const tier = useUnlockStore((s) => s.tier);
+  const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
+  const unlockExpiresAt = useUnlockStore((s) => s.unlockExpiresAt);
+  const loadUnlock = useUnlockStore((s) => s.load);
+
+  useEffect(() => {
+    if (user?.uid) void loadUnlock(user.uid);
+  }, [user?.uid, loadUnlock]);
+
+  const proOrPremiumActive =
+    (tier === 'pro' || tier === 'premium') &&
+    hasActivePaidAccess(levelsUnlocked === true, unlockExpiresAt);
+  /** Match MahaYagnasPage / MarathonsPage: hide corner badges once paid window is active. */
+  const showFreemiumBadges = !proOrPremiumActive;
 
   /** Stay on Specials during Google popup, then open the feature (same pattern as main menu). */
   const openPushpaAradhana = async () => {
@@ -62,9 +91,10 @@ export function SpecialsPage() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.99 }}
             onClick={openPushpaAradhana}
-            className={`${landingStartJapaButtonClass} w-full min-h-[3rem] inline-flex items-center justify-center px-3`}
+            className={`relative ${landingStartJapaButtonClass} w-full min-h-[3rem] inline-flex items-center justify-center px-3`}
           >
-            <span className="text-white font-bold text-sm sm:text-base text-center">{t('specials.pushpaAradhana')}</span>
+            {showFreemiumBadges ? <SpecialsFreemiumBadges /> : null}
+            <span className="text-white font-bold text-sm sm:text-base text-center px-10">{t('specials.pushpaAradhana')}</span>
           </motion.button>
 
           <motion.button
@@ -72,9 +102,10 @@ export function SpecialsPage() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.99 }}
             onClick={openJapa108}
-            className={`${landingStartJapaButtonClass} w-full min-h-[3rem] inline-flex items-center justify-center px-3`}
+            className={`relative ${landingStartJapaButtonClass} w-full min-h-[3rem] inline-flex items-center justify-center px-3`}
           >
-            <span className="text-white font-bold text-sm sm:text-base text-center">{t('specials.japa108')}</span>
+            {showFreemiumBadges ? <SpecialsFreemiumBadges /> : null}
+            <span className="text-white font-bold text-sm sm:text-base text-center px-10">{t('specials.japa108')}</span>
           </motion.button>
 
           <motion.button
@@ -82,9 +113,10 @@ export function SpecialsPage() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.99 }}
             onClick={openWeeklyStreak}
-            className={`${landingStartJapaButtonClass} w-full min-h-[3rem] inline-flex items-center justify-center px-3`}
+            className={`relative ${landingStartJapaButtonClass} w-full min-h-[3rem] inline-flex items-center justify-center px-3`}
           >
-            <span className="text-white font-bold text-sm sm:text-base text-center">{t('specials.weeklyStreak')}</span>
+            {showFreemiumBadges ? <SpecialsFreemiumBadges /> : null}
+            <span className="text-white font-bold text-sm sm:text-base text-center px-10">{t('specials.weeklyStreak')}</span>
           </motion.button>
 
           <motion.button

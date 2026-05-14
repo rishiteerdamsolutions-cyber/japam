@@ -71,16 +71,25 @@ export function GamePage() {
 
   const isSpecial108Url =
     searchParams.get('special108') === '1' && !gameContextId && !occasionKind;
-  /** Guest quick-play defaults to general, except Special 108 from URL (needs deity mode + completion credit). */
+  const isWeeklyStreakUrl =
+    searchParams.get('weeklyStreak') === '1' && !gameContextId && !occasionKind;
+  /** Guest quick-play defaults to general, except Special 108 / weekly streak from URL (needs deity mode). */
   const parsedMode = parseGameMode(searchParams.get('mode'));
-  const mode = isGuest && !isSpecial108Url ? 'general' : parsedMode;
+  const mode = isGuest && !isSpecial108Url && !isWeeklyStreakUrl ? 'general' : parsedMode;
   const isSpecial108 = isSpecial108Url && parsedMode !== 'general';
+  const isWeeklyStreak = isWeeklyStreakUrl && parsedMode !== 'general';
 
   /** `special108=1` without a valid deity in `mode` — send user to the 108 Japa picker. */
   useEffect(() => {
     if (!isSpecial108Url || parsedMode !== 'general') return;
     navigate('/special-108-japa', { replace: true });
   }, [isSpecial108Url, parsedMode, navigate]);
+
+  /** `weeklyStreak=1` without deity mode — open streak hub. */
+  useEffect(() => {
+    if (!isWeeklyStreakUrl || parsedMode !== 'general') return;
+    navigate('/weekly-streak', { replace: true });
+  }, [isWeeklyStreakUrl, parsedMode, navigate]);
 
   useEffect(() => {
     if (!occasionKind) return;
@@ -116,7 +125,7 @@ export function GamePage() {
     ? 0
     : gameContextId
     ? 0
-    : isSpecial108
+    : isSpecial108 || isWeeklyStreak
     ? 0
     : anniversarySession
     ? Math.max(
@@ -229,6 +238,8 @@ export function GamePage() {
     ? (yagnaId ? `japam-paused-yagna-${yagnaId}` : `japam-paused-marathon-${marathonId}`)
     : isSpecial108
     ? `japam-paused-special108-${mode}`
+    : isWeeklyStreak
+    ? `japam-paused-weeklyStreak-${mode}`
     : `japam-paused-${mode}-${levelIndex}`;
 
   useEffect(() => {
@@ -253,7 +264,7 @@ export function GamePage() {
     if (user?.uid && authLoading) return;
 
     setLevelCompleteBlock(null);
-    if (user?.uid && !isMarathon && !occasionKind && !isSpecial108) {
+    if (user?.uid && !isMarathon && !occasionKind && !isSpecial108 && !isWeeklyStreak) {
       if (!progressLoaded) return;
       // Read progress here; do NOT list `levelProgress` in effect deps — on win, saveLevel updates
       // progress in the same beat as the victory UI; re-running the effect would mistake "just won"
@@ -351,7 +362,7 @@ export function GamePage() {
     };
     load();
     return () => { cancelled = true; };
-  }, [mode, levelIndex, isMarathon, isSpecial108, marathonId, yagnaId, expectedKey, isLocked, paywallPending, user, authLoading, occasionKind, isGuest, progressLoaded]);
+  }, [mode, levelIndex, isMarathon, isSpecial108, isWeeklyStreak, marathonId, yagnaId, expectedKey, isLocked, paywallPending, user, authLoading, occasionKind, isGuest, progressLoaded]);
 
   const handleResume = () => {
     if (resumePending) {
@@ -427,12 +438,14 @@ export function GamePage() {
       navigate(yagnaId ? '/maha-yagnas' : '/marathons');
     } else if (isGuest) {
       navigate('/');
+    } else if (isWeeklyStreak) {
+      navigate('/weekly-streak');
     } else if (isSpecial108) {
       navigate('/special-108-japa');
     } else {
       navigate('/levels');
     }
-  }, [navigate, isMarathon, yagnaId, isGuest, occasionKind, isSpecial108]);
+  }, [navigate, isMarathon, yagnaId, isGuest, occasionKind, isSpecial108, isWeeklyStreak]);
 
   const handlePlayNameSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -475,7 +488,7 @@ export function GamePage() {
     (waitingProfile ||
       waitingUnlock ||
       !pauseCheckDone ||
-      (!!user?.uid && !isMarathon && !occasionKind && !isSpecial108 && !progressLoaded))
+      (!!user?.uid && !isMarathon && !occasionKind && !isSpecial108 && !isWeeklyStreak && !progressLoaded))
   ) {
     return (
       <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -629,7 +642,7 @@ export function GamePage() {
       justRestored={justRestored}
       onJustRestoredCleared={onJustRestoredCleared}
       onBack={onBack}
-      onNextLevel={isMarathon || isSpecial108 ? undefined : (m, idx) => handleNextLevel(m, idx)}
+      onNextLevel={isMarathon || isSpecial108 || isWeeklyStreak ? undefined : (m, idx) => handleNextLevel(m, idx)}
       occasionKind={occasionKind}
       occasionJapaTarget={occasionKind === 'birthday' ? occasionTarget : undefined}
       anniversarySessionId={anniversarySession}
@@ -637,6 +650,7 @@ export function GamePage() {
       anniversaryIsHost={occasionKind === 'anniversary' ? anniversaryHost : undefined}
       anniversarySessionFlavor={occasionKind === 'anniversary' ? anniversarySessionFlavor : undefined}
       special108Japa={isSpecial108}
+      weeklyStreakJapa={isWeeklyStreak}
     />
     </>
   );

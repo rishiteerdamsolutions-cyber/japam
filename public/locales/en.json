@@ -238,6 +238,7 @@
     "marathonComplete": "Marathon complete!",
     "youCompletedJapas": "You completed the japas!",
     "special108WinFooter": "108 Japa specials completed for this Devatā: {{n}}",
+    "weeklyStreakWinFooter": "Weekly streak (IST): today is saved on this device. Open Specials → Weekly streak for the timeline and PDFs.",
     "levelCompleteTitle": "Level {{level}} complete",
     "levelCompleteSubtitle": "You finished every japa for this level.",
     "marathonTargetReached": "You reached the marathon target!",
@@ -500,7 +501,10 @@
     "special108PdfNoteWithRetro": "Special 108: {{saved}} saved session(s) + {{retro}} from lifetime (÷108); PDF {{total}} japas",
     "special108PdfNoteSavedOnly": "Special 108: {{sessions}} session(s); PDF {{total}} japas",
     "special108ModalSubtitleRetro": "{{deity}} · Special 108 PDF — {{total}} japas ({{saved}} saved + {{retro}} retrospective from lifetime)",
-    "special108HandwritingRetro": "Your handwritten nama is repeated once per japa in this PDF total ({{count}}), including retrospective blocks from lifetime where saved Special 108 was lower."
+    "special108HandwritingRetro": "Your handwritten nama is repeated once per japa in this PDF total ({{count}}), including retrospective blocks from lifetime where saved Special 108 was lower.",
+    "weeklyStreakStripTitle": "Weekly streak (IST)",
+    "weeklyStreakStripIst": "Calendar days use Asia/Kolkata. Per-day and week PDFs are on the streak page.",
+    "weeklyStreakStripOpen": "Open weekly streak"
   },
   "specials": {
     "back": "Back",
@@ -515,9 +519,32 @@
     "japa108YourCompletions": "Times you finished this 108 Japa special: {{n}}",
     "japa108Start": "Start 108 Japa",
     "pushpaAradhana": "Pushpa Aradhana",
+    "weeklyStreak": "Weekly streak (108)",
     "happyBirthday": "Happy Birthday",
     "anniversary": "Anniversary",
     "comingSoon": "Coming soon"
+  },
+  "weeklyStreak": {
+    "title": "Weekly streak",
+    "subtitle": "Seven days (Mon–Sun, IST), one Devatā per day, 108 japas on the board each day you play. Progress stays on this device only.",
+    "istNote": "All dates use Asia/Kolkata (IST).",
+    "done": "Done",
+    "today": "Today",
+    "pending": "Upcoming or missed",
+    "play108": "Play 108",
+    "downloadDayPdf": "Download 108 PDF",
+    "weekComplete": "This IST week is complete.",
+    "downloadWeekCard": "Download week completion card",
+    "weekCardFooter": "Weekly streak — seven IST days with 108 japas each. JAPAM — www.japam.digital",
+    "pdfStreakNote": "Weekly streak (IST)",
+    "proPlanTitle": "Pro: your weekday Devatās",
+    "proPlanHelp": "Pick a Devatā for each weekday. Empty row uses the free default map. “This week” updates immediately; “Next week” applies when the IST Monday rolls.",
+    "proThisWeek": "This week (IST)",
+    "proNextWeek": "Next week (starts next IST Monday)",
+    "useDefault": "Default (free map)",
+    "saveThisWeek": "Save this week’s plan",
+    "saveNextWeek": "Save next week’s plan",
+    "freePlanNote": "Free players follow the shared weekday map (Mon–Sun). Upgrade to Pro to choose Devatās per day."
   },
   "deities": {
     "rama": "Rama",

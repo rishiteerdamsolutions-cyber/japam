@@ -102,12 +102,14 @@ function GameBottomStrip({
   const yagnaId = useGameStore((s) => s.yagnaId);
   const overrideJapaTarget = useGameStore((s) => s.overrideJapaTarget);
   const special108JapaFlag = useGameStore((s) => s.special108Japa);
+  const weeklyStreakJapaFlag = useGameStore((s) => s.weeklyStreakJapa);
   const anniversaryJapasHusband = useGameStore((s) => s.anniversaryJapasHusband);
   const anniversaryJapasWife = useGameStore((s) => s.anniversaryJapasWife);
   const level = LEVELS[levelIndex];
   const deityTarget: DeityId | undefined = mode !== 'general' ? (mode as DeityId) : undefined;
   const sessionCredits108JapaSpecialHud =
     special108JapaFlag === true ||
+    weeklyStreakJapaFlag === true ||
     (!!deityTarget &&
       occasionKind == null &&
       marathonTargetJapas == null &&
@@ -185,6 +187,8 @@ interface GameScreenProps {
   anniversarySessionFlavor?: AnniversarySessionFlavor;
   /** Specials → 108 Japa (īṣṭa path, 108 japa in one session). */
   special108Japa?: boolean;
+  /** Specials → Weekly streak 108 (isolated from platform japa). */
+  weeklyStreakJapa?: boolean;
 }
 
 export function GameScreen({
@@ -206,6 +210,7 @@ export function GameScreen({
   anniversaryIsHost = false,
   anniversarySessionFlavor = 'occasion',
   special108Japa = false,
+  weeklyStreakJapa = false,
 }: GameScreenProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -224,7 +229,7 @@ export function GameScreen({
   const setCandyBorderSpin = useSettingsStore((s) => s.setCandyBorderSpin);
   const { playMatchSfx } = useSound(bgMusicEnabled, bgMusicVolume);
 
-  const useLives = !!user && !isGuest && !isMarathon && !occasionKind;
+  const useLives = !!user && !isGuest && !isMarathon && !occasionKind && !weeklyStreakJapa;
   const getIdToken = useCallback(async () => (user ? user.getIdToken() : null), [user]);
   /** Reward moves video: any standard map loss (not marathon / occasion), including guest. */
   const rewardMovesVideoEnabled = !isMarathon && !occasionKind;
@@ -305,6 +310,9 @@ export function GameScreen({
     special108Japa && mode !== 'general' && status === 'won'
       ? t('game.special108WinFooter', { n: special108Completions })
       : undefined;
+  const weeklyStreakWinFooter =
+    weeklyStreakJapa && mode !== 'general' && status === 'won' ? t('game.weeklyStreakWinFooter') : undefined;
+  const streakWinFooterNote = weeklyStreakWinFooter ?? special108WinFooter;
 
   useEffect(() => {
     if (!isGuest) setGuestPowerSignInOpen(false);
@@ -351,6 +359,8 @@ export function GameScreen({
       });
       if (isMarathon && marathonTargetJapas != null && (marathonId || yagnaId)) {
         initGame(mode, 0, { marathonId: marathonId ?? undefined, marathonTargetJapas, yagnaId: yagnaId ?? undefined });
+      } else if (weeklyStreakJapa && mode !== 'general') {
+        initGame(mode, 0, { overrideJapaTarget: 108, weeklyStreakJapa: true });
       } else if (special108Japa && mode !== 'general') {
         initGame(mode, 0, { overrideJapaTarget: 108, special108Japa: true });
       } else if (occasionKind === 'birthday') {
@@ -412,6 +422,7 @@ export function GameScreen({
     anniversaryIsHost,
     anniversarySessionFlavor,
     special108Japa,
+    weeklyStreakJapa,
   ]);
 
   const powersInventoryLoaded = usePowersInventoryStore((s) => s.loaded);
@@ -1073,12 +1084,12 @@ export function GameScreen({
           <GameOverlay
             status="won"
             isMarathon={isMarathon}
-            winFooterNote={special108WinFooter}
+            winFooterNote={streakWinFooterNote}
             completedLevelNumber={
-              isMarathon || special108Japa ? undefined : currentLevelIndex + 1
+              isMarathon || special108Japa || weeklyStreakJapa ? undefined : currentLevelIndex + 1
             }
             onMenu={handleMenuBack}
-            onNext={isMarathon || special108Japa ? undefined : handleNext}
+            onNext={isMarathon || special108Japa || weeklyStreakJapa ? undefined : handleNext}
           />
         ) : null
       )}

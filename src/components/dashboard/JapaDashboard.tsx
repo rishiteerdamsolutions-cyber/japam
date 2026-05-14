@@ -1,6 +1,11 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
+import { useUnlockStore } from '../../store/unlockStore';
+import { useWeeklyStreakStore } from '../../store/weeklyStreakStore';
+import { hasActivePaidAccess } from '../../lib/membershipDisplay';
+import { istWeekYmdsFromMonday } from '../../lib/weeklyStreakIst';
 import { useJapaStore, type JapaCounts } from '../../store/japaStore';
 import { fetchOccasionsList, type OccasionListItem } from '../../lib/occasionsApi';
 import { downloadAnniversaryReportPdf, downloadOccasionSummaryPdf } from '../../utils/occasionPdf';
@@ -47,8 +52,16 @@ function DownloadPdfIcon({ className }: { className?: string }) {
 
 export function JapaDashboard() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { counts, loaded } = useJapaStore();
   const user = useAuthStore((s) => s.user);
+  const tier = useUnlockStore((s) => s.tier);
+  const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
+  const unlockExpiresAt = useUnlockStore((s) => s.unlockExpiresAt);
+  const loadUnlock = useUnlockStore((s) => s.load);
+  const hydrateStreak = useWeeklyStreakStore((s) => s.hydrate);
+  const streakTrackedMonday = useWeeklyStreakStore((s) => s.trackedWeekMondayIst);
+  const streakDeityForYmd = useWeeklyStreakStore((s) => s.deityForYmd);
   const [occasions, setOccasions] = useState<OccasionListItem[]>([]);
   const [occasionsLoaded, setOccasionsLoaded] = useState(false);
   const [downloadModal, setDownloadModal] = useState<{
@@ -75,6 +88,27 @@ export function JapaDashboard() {
     if (!uid) return;
     void useJapaStore.getState().load(uid);
   }, [user?.uid]);
+
+  useEffect(() => {
+    const uid = user?.uid;
+    if (!uid) return;
+    void loadUnlock(uid);
+  }, [user?.uid, loadUnlock]);
+
+  const proForStreak =
+    (tier === 'pro' || tier === 'premium') && hasActivePaidAccess(levelsUnlocked === true, unlockExpiresAt);
+
+  useEffect(() => {
+    hydrateStreak(proForStreak);
+  }, [hydrateStreak, proForStreak]);
+
+  const streakStripLine = useMemo(() => {
+    const ymds = istWeekYmdsFromMonday(streakTrackedMonday);
+    const labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    return ymds
+      .map((ymd, i) => `${labels[i]} ${t(`deities.${streakDeityForYmd(ymd, proForStreak)}`)}`)
+      .join(' · ');
+  }, [streakTrackedMonday, streakDeityForYmd, proForStreak, t]);
 
   useEffect(() => {
     if (!LAUNCH_FEATURE_OCCASION_GAMES || !user) {
@@ -505,8 +539,8 @@ export function JapaDashboard() {
               key={`special108-${deity.id}`}
               className="bg-black/20 rounded-xl p-3 border border-amber-500/20 min-w-0 overflow-hidden"
             >
-              <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-2 gap-y-1 items-start min-w-0 mb-1">
-                <span className="col-start-1 row-start-1 min-w-0 font-medium text-amber-400 truncate pr-1">
+              <div className="flex items-start justify-between gap-2 min-w-0 mb-1">
+                <span className="font-medium text-amber-400 min-w-0 flex-1 truncate pr-1">
                   {deity.name} · {t('japaDashboard.special108Short')}
                 </span>
                 <button
@@ -515,27 +549,27 @@ export function JapaDashboard() {
                   disabled={r.totalJapasForPdf <= 0}
                   title={`${t('japaDashboard.downloadPdf')} · ${deity.mantra}`}
                   aria-label={`${t('japaDashboard.downloadPdf')} ${deity.name} Special 108`}
-                  className={`col-start-2 row-span-2 self-center shrink-0 ${pdfActionBtnClass}`}
+                  className={`shrink-0 ${pdfActionBtnClass}`}
                 >
                   <DownloadPdfIcon className="w-5 h-5 shrink-0" />
                   <span className="text-[9px] font-semibold leading-none text-center max-w-[4.25rem] sm:max-w-none">
                     {t('japaDashboard.downloadPdf')}
                   </span>
                 </button>
-                <div className="col-start-1 row-start-2 min-w-0 space-y-0.5 pr-1">
-                  <span className="text-amber-200 tabular-nums text-sm block">
-                    {effectiveSessions.toLocaleString()}
+              </div>
+              <div className="min-w-0 space-y-0.5 mb-1">
+                <span className="text-amber-200 tabular-nums text-sm block">
+                  {effectiveSessions.toLocaleString()}
+                </span>
+                {r.retrospectiveSessions > 0 ? (
+                  <span className="block text-[9px] text-amber-200/60 font-normal leading-snug break-words">
+                    {t('japaDashboard.special108RetroBadge', {
+                      saved: r.savedSessions,
+                      retro: r.retrospectiveSessions,
+                      defaultValue: '{{saved}} saved + {{retro}} from lifetime',
+                    })}
                   </span>
-                  {r.retrospectiveSessions > 0 ? (
-                    <span className="block text-[9px] text-amber-200/60 font-normal leading-snug break-words">
-                      {t('japaDashboard.special108RetroBadge', {
-                        saved: r.savedSessions,
-                        retro: r.retrospectiveSessions,
-                        defaultValue: '{{saved}} saved + {{retro}} from lifetime',
-                      })}
-                    </span>
-                  ) : null}
-                </div>
+                ) : null}
               </div>
               <p className="text-amber-200/70 text-[10px] mb-1.5 tabular-nums">
                 {r.totalJapasForPdf.toLocaleString()}{' '}
@@ -558,6 +592,22 @@ export function JapaDashboard() {
             </div>
           );
         })}
+      </div>
+
+      <div
+        id="japa-dashboard-weekly-streak"
+        className="mt-8 mb-2 rounded-xl border border-amber-500/20 bg-black/15 p-3 scroll-mt-4"
+      >
+        <p className="text-amber-300/90 text-xs font-semibold mb-1">{t('japaDashboard.weeklyStreakStripTitle')}</p>
+        <p className="text-amber-200/65 text-[10px] mb-2 leading-snug">{t('japaDashboard.weeklyStreakStripIst')}</p>
+        <p className="text-amber-200/85 text-[10px] leading-snug break-words mb-3">{streakStripLine}</p>
+        <button
+          type="button"
+          onClick={() => navigate('/weekly-streak')}
+          className="w-full py-2 rounded-lg bg-amber-500/90 text-white text-xs font-semibold"
+        >
+          {t('japaDashboard.weeklyStreakStripOpen')}
+        </button>
       </div>
 
       {downloadModal && (

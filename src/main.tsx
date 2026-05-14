@@ -57,6 +57,9 @@ const SpecialsPage = lazy(() => import('./pages/SpecialsPage').then((m) => ({ de
 const Japa108SpecialPage = lazy(() =>
   import('./pages/Japa108SpecialPage').then((m) => ({ default: m.Japa108SpecialPage })),
 )
+const WeeklyStreakPage = lazy(() =>
+  import('./pages/WeeklyStreakPage').then((m) => ({ default: m.WeeklyStreakPage })),
+)
 const BirthdayOccasionPage = lazy(() =>
   import('./pages/BirthdayOccasionPage').then((m) => ({ default: m.BirthdayOccasionPage })),
 );
@@ -108,6 +111,14 @@ createRoot(document.getElementById('root')!).render(
           element={
             <RequireAuth>
               <Japa108SpecialPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/weekly-streak"
+          element={
+            <RequireAuth>
+              <WeeklyStreakPage />
             </RequireAuth>
           }
         />

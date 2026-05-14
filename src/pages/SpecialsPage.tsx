@@ -32,6 +32,14 @@ export function SpecialsPage() {
     navigate('/special-108-japa');
   };
 
+  const openWeeklyStreak = async () => {
+    if (isFirebaseConfigured && !user) {
+      await signInWithGoogle();
+      if (!useAuthStore.getState().user) return;
+    }
+    navigate('/weekly-streak');
+  };
+
   return (
     <div className="relative min-h-screen flex flex-col items-center p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] overflow-hidden">
       <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
@@ -67,6 +75,16 @@ export function SpecialsPage() {
             className={`${landingStartJapaButtonClass} w-full min-h-[3rem] inline-flex items-center justify-center px-3`}
           >
             <span className="text-white font-bold text-sm sm:text-base text-center">{t('specials.japa108')}</span>
+          </motion.button>
+
+          <motion.button
+            type="button"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.99 }}
+            onClick={openWeeklyStreak}
+            className={`${landingStartJapaButtonClass} w-full min-h-[3rem] inline-flex items-center justify-center px-3`}
+          >
+            <span className="text-white font-bold text-sm sm:text-base text-center">{t('specials.weeklyStreak')}</span>
           </motion.button>
 
           <motion.button

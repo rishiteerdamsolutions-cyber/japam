@@ -17,6 +17,8 @@ import { applyGravity } from '../engine/gravity';
 import { calculateScore, getStars } from '../engine/scorer';
 import { LEVELS } from '../data/levels';
 import { useJapaStore } from './japaStore';
+import { useUnlockStore } from './unlockStore';
+import { useWeeklyStreakStore } from './weeklyStreakStore';
 import { useProgressStore } from './progressStore';
 import { usePowersInventoryStore, getPowerCount } from './powersInventoryStore';
 import { usePowerArmStore } from './powerArmStore';
@@ -32,6 +34,7 @@ import {
   normalizeGeneralBoardDeities,
   pickGeneralBoardDeities,
 } from '../lib/generalBoardDeities';
+import { hasActivePaidAccess } from '../lib/membershipDisplay';
 
 /** Pause before swapping in a full dead-board regen so the player sees a clear notice first. */
 const DEAD_BOARD_AUTO_NOTICE_MS = 1400;
@@ -87,6 +90,8 @@ export interface PausedGameState {
   overrideJapaTarget?: number | null;
   /** Specials → 108 Japa session (single-board 108 target). */
   special108Japa?: boolean;
+  /** Specials → Weekly streak 108 (isolated; does not credit platform japa / Special 108). */
+  weeklyStreakJapa?: boolean;
   /** All Deity Japa only: which deities are on this board / strip for this session. */
   generalBoardDeities?: DeityId[];
   savedAt: number;
@@ -117,6 +122,8 @@ interface GameState {
   overrideJapaTarget: number | null;
   /** Specials: 108 Japa mode — do not write map progress; credit `special108JapaByDeity` on win. */
   special108Japa: boolean;
+  /** Weekly streak 108 board — no map progress, no platform japa; completion goes to weekly streak store only. */
+  weeklyStreakJapa: boolean;
   isGuest: boolean;
   selectedCell: { row: number; col: number } | null;
   lastMatches: { deity: DeityId; count: number; combo: number }[];
@@ -345,6 +352,7 @@ interface GameActions {
       yagnaId?: string;
       overrideJapaTarget?: number;
       special108Japa?: boolean;
+      weeklyStreakJapa?: boolean;
       isGuest?: boolean;
       occasionKind?: 'birthday' | 'anniversary';
       anniversarySessionId?: string | null;
@@ -393,6 +401,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   yagnaId: null,
   overrideJapaTarget: null,
   special108Japa: false,
+  weeklyStreakJapa: false,
   isGuest: false,
   selectedCell: null,
   lastMatches: [],
@@ -451,6 +460,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const yagnaId = options?.yagnaId ?? null;
     const overrideJapaTarget = options?.overrideJapaTarget ?? null;
     const special108Japa = options?.special108Japa === true;
+    const weeklyStreakJapa = options?.weeklyStreakJapa === true;
     const isGuest = options?.isGuest === true;
     const occasionKind = options?.occasionKind ?? null;
     const anniversarySessionId = options?.anniversarySessionId ?? null;
@@ -536,6 +546,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       yagnaId,
       overrideJapaTarget,
       special108Japa,
+      weeklyStreakJapa,
       isGuest,
       selectedCell: null,
       lastMatches: [],
@@ -575,13 +586,15 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   },
 
   getPausedKey: () => {
-    const { mode, levelIndex, marathonId, yagnaId, occasionKind, anniversarySessionId, special108Japa } = get();
+    const { mode, levelIndex, marathonId, yagnaId, occasionKind, anniversarySessionId, special108Japa, weeklyStreakJapa } =
+      get();
     if (occasionKind === 'anniversary' && anniversarySessionId) {
       return `${PAUSED_KEY_PREFIX}anniversary-${anniversarySessionId}`;
     }
     if (occasionKind === 'birthday') {
       return `${PAUSED_KEY_PREFIX}occasion-birthday-${mode}-${levelIndex}`;
     }
+    if (weeklyStreakJapa) return `${PAUSED_KEY_PREFIX}weeklyStreak-${mode}`;
     if (special108Japa) return `${PAUSED_KEY_PREFIX}special108-${mode}`;
     if (yagnaId) return `${PAUSED_KEY_PREFIX}yagna-${yagnaId}`;
     if (marathonId) return `${PAUSED_KEY_PREFIX}marathon-${marathonId}`;
@@ -608,6 +621,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       isGuest: state.isGuest,
       overrideJapaTarget: state.overrideJapaTarget ?? undefined,
       special108Japa: state.special108Japa || undefined,
+      weeklyStreakJapa: state.weeklyStreakJapa || undefined,
       generalBoardDeities: state.generalBoardDeities ?? undefined,
       savedAt: Date.now(),
       version: 5,
@@ -632,6 +646,9 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const restoredSpecial108 =
       saved.special108Japa === true ||
       (typeof saved.key === 'string' && saved.key.startsWith(`${PAUSED_KEY_PREFIX}special108-`));
+    const restoredWeeklyStreak =
+      saved.weeklyStreakJapa === true ||
+      (typeof saved.key === 'string' && saved.key.startsWith(`${PAUSED_KEY_PREFIX}weeklyStreak-`));
     const level = getLevel(saved.levelIndex);
     const maxGemTypes = level.maxGemTypes ?? 8;
     const deityMode = resolvedMode !== 'general' ? (resolvedMode as DeityId) : undefined;
@@ -683,6 +700,12 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       const fromLevel = rawJapasThisLevel;
       restoredJapasByDeity[modeId] = Math.max(fromMode, fromLevel);
       normalizedJapasThisLevel = Math.max(normalizedJapasThisLevel, restoredJapasByDeity[modeId] ?? 0);
+    } else if (restoredWeeklyStreak && resolvedMode !== 'general') {
+      const modeId = resolvedMode as DeityId;
+      const fromMode = restoredJapasByDeity[modeId] ?? 0;
+      const fromLevel = rawJapasThisLevel;
+      restoredJapasByDeity[modeId] = Math.max(fromMode, fromLevel);
+      normalizedJapasThisLevel = Math.max(normalizedJapasThisLevel, restoredJapasByDeity[modeId] ?? 0);
     } else if (resolvedMode !== 'general') {
       // Generic guard for all deity-path games: preserve the higher count if either side is stale.
       const modeId = resolvedMode as DeityId;
@@ -705,12 +728,13 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       marathonTargetJapas: saved.marathonTargetJapas ?? null,
       yagnaId: saved.yagnaId ?? null,
       overrideJapaTarget:
-        restoredSpecial108
+        restoredSpecial108 || restoredWeeklyStreak
           ? (typeof saved.overrideJapaTarget === 'number' && Number.isFinite(saved.overrideJapaTarget)
               ? saved.overrideJapaTarget
               : 108)
           : (saved.overrideJapaTarget ?? null),
       special108Japa: restoredSpecial108,
+      weeklyStreakJapa: restoredWeeklyStreak,
       isGuest: saved.isGuest ?? false,
       selectedCell: null,
       lastMatches: [],
@@ -1119,6 +1143,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
         if (!isGuest) {
           const snap = get();
           const deferBackendPersist =
+            snap.weeklyStreakJapa === true ||
             snap.special108Japa === true ||
             (snap.mode !== 'general' &&
               snap.occasionKind == null &&
@@ -1126,7 +1151,9 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
               !snap.marathonId &&
               !snap.yagnaId &&
               snap.overrideJapaTarget === 108);
-          japaStore.addJapa(deity, japaCount, { matchTier, deferBackendPersist });
+          if (!snap.weeklyStreakJapa) {
+            japaStore.addJapa(deity, japaCount, { matchTier, deferBackendPersist });
+          }
         }
         japaDelta += shouldCountJapa ? japaCount : 0;
       }
@@ -1142,7 +1169,10 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     }
     if (isUserDirectMatch && !isGuest) {
       const snap = get();
-      const blockMatchPowers = snap.marathonTargetJapas != null || snap.occasionKind != null;
+      const blockMatchPowers =
+        snap.marathonTargetJapas != null ||
+        snap.occasionKind != null ||
+        snap.weeklyStreakJapa === true;
       if (!blockMatchPowers) {
         void usePowersInventoryStore.getState().applyMatchLinePowerGrants(gameMode, pendingMatchBatch);
       }
@@ -1217,20 +1247,22 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const moves = state.moves;
     const isMarathon = state.marathonTargetJapas != null;
     const special108 = state.special108Japa === true;
-    /** Credit 108-session if flag is set, or session matches Special 108 shape (flag can be lost on some resumes). */
+    const weeklyStreak = state.weeklyStreakJapa === true;
     const sessionCredits108JapaSpecial =
-      special108 ||
-      (!!deityTarget &&
-        state.occasionKind == null &&
-        state.marathonTargetJapas == null &&
-        !state.marathonId &&
-        !state.yagnaId &&
-        state.overrideJapaTarget === 108);
+      !weeklyStreak &&
+      (special108 ||
+        (!!deityTarget &&
+          state.occasionKind == null &&
+          state.marathonTargetJapas == null &&
+          !state.marathonId &&
+          !state.yagnaId &&
+          state.overrideJapaTarget === 108));
+    const session108ShapedBoard = weeklyStreak || sessionCredits108JapaSpecial;
     /**
      * Resume / edge cases can leave `japasThisLevel` ahead of `japasByDeity[mode]` (see `restoreGame`).
      * HUD uses per-deity count; win + dashboard credit must use the same effective progress.
      */
-    if (sessionCredits108JapaSpecial && deityTarget && state.occasionKind == null) {
+    if (session108ShapedBoard && deityTarget && state.occasionKind == null) {
       japasNeeded = Math.max(japasNeeded, state.japasThisLevel);
     }
     // Anniversary: per-level target (same as general) using japasThisLevel; couple H/W are session tallies for HUD / PDF only.
@@ -1243,15 +1275,21 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
 
     if (japasForTarget >= japaTarget) {
       status = 'won';
-      if (sessionCredits108JapaSpecial && deityTarget && japaTarget === 108) {
+      if (weeklyStreak && deityTarget && japaTarget === 108) {
+        const u = useUnlockStore.getState();
+        const proOrPremium =
+          (u.tier === 'pro' || u.tier === 'premium') &&
+          hasActivePaidAccess(u.levelsUnlocked === true, u.unlockExpiresAt);
+        useWeeklyStreakStore.getState().tryRecordWinForIstToday(deityTarget, proOrPremium);
+      } else if (sessionCredits108JapaSpecial && deityTarget && japaTarget === 108) {
         useJapaStore.getState().addSpecial108JapaCompletion(deityTarget);
         void useJapaStore.getState().flushJapas();
       }
-      // Marathons / yāgās / 108 special: no map-style level power grant.
-      if (!isMarathon && !occasionBlocksProgress && !sessionCredits108JapaSpecial) {
+      // Marathons / yāgās / 108 special / weekly streak: no map-style level power grant.
+      if (!isMarathon && !occasionBlocksProgress && !session108ShapedBoard) {
         void usePowersInventoryStore.getState().grantAfterLevelWin(state.mode);
       }
-      if (!isMarathon && !state.isGuest && !occasionBlocksProgress && !sessionCredits108JapaSpecial) {
+      if (!isMarathon && !state.isGuest && !occasionBlocksProgress && !session108ShapedBoard) {
         const totalScore = state.score;
         const stars = getStars(japasNeeded, japaTarget, moves);
         useProgressStore.getState().saveLevel(state.mode, level.id, {
@@ -1436,6 +1474,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       yagnaId,
       overrideJapaTarget,
       special108Japa,
+      weeklyStreakJapa,
       isGuest,
       occasionKind,
       anniversarySessionId,
@@ -1480,6 +1519,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
         : {
             overrideJapaTarget: overrideJapaTarget ?? undefined,
             special108Japa: special108Japa ? true : undefined,
+            weeklyStreakJapa: weeklyStreakJapa ? true : undefined,
             isGuest,
             ...occasionOpts,
           };

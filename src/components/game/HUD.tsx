@@ -22,10 +22,12 @@ export function HUD() {
   const yagnaId = useGameStore((s) => s.yagnaId);
   const overrideJapaTarget = useGameStore((s) => s.overrideJapaTarget);
   const special108Japa = useGameStore((s) => s.special108Japa);
+  const weeklyStreakJapa = useGameStore((s) => s.weeklyStreakJapa);
   const level = LEVELS[levelIndex];
   const deityTarget: DeityId | undefined = mode !== 'general' ? (mode as DeityId) : undefined;
   const sessionCredits108JapaSpecialHud =
     special108Japa === true ||
+    weeklyStreakJapa === true ||
     (!!deityTarget &&
       occasionKind == null &&
       marathonTargetJapas == null &&

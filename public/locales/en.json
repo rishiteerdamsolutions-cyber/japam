@@ -527,6 +527,14 @@
   "weeklyStreak": {
     "title": "Weekly streak",
     "subtitle": "Seven days (Mon–Sun, IST), one Devatā per day, 108 japas on the board each day you play. Progress stays on this device only.",
+    "freeSectionTitle": "Free weekly streak",
+    "freeSectionBody": "Everyone gets the same weekday Devatā map below (Mon–Sun, IST). Play 108 on the board on each day to complete the streak.",
+    "defaultMapHeading": "Default weekday map",
+    "thisWeekTitle": "This IST week",
+    "proSectionTitle": "Pro weekly streak",
+    "proSectionBody": "Pro lets you pick a Devatā for each weekday. Empty rows use the free default map. This week and next week can be set separately; “next week” applies when IST Monday rolls.",
+    "proUpsellBody": "Upgrade to Pro to choose Devatās per weekday instead of only the shared map.",
+    "proUpsellCta": "View Pro & Dakshina",
     "istNote": "All dates use Asia/Kolkata (IST).",
     "done": "Done",
     "today": "Today",
@@ -543,8 +551,7 @@
     "proNextWeek": "Next week (starts next IST Monday)",
     "useDefault": "Default (free map)",
     "saveThisWeek": "Save this week’s plan",
-    "saveNextWeek": "Save next week’s plan",
-    "freePlanNote": "Free players follow the shared weekday map (Mon–Sun). Upgrade to Pro to choose Devatās per day."
+    "saveNextWeek": "Save next week’s plan"
   },
   "deities": {
     "rama": "Rama",

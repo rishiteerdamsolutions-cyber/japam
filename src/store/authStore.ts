@@ -60,7 +60,7 @@ function attachFirebaseAuthListeners() {
       authPersistenceHydrated = true;
       useAuthStore.setState({ user: a.currentUser, loading: false, signInPending: false });
     }
-  }, 20000);
+  }, 10000);
 }
 
 function getAuthErrorMessage(err: unknown): string {

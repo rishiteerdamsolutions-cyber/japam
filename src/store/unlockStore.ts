@@ -11,6 +11,9 @@ export {
   isLevelIndexCompleted,
 } from '../lib/levelGates';
 
+/** Coalesce parallel `load(uid)` calls (Strict Mode + multiple mounts) into one Firestore read. */
+const unlockLoadInflight = new Map<string, Promise<void>>();
+
 interface UnlockState {
   levelsUnlocked: boolean | null;
   tier: UserTier | null;
@@ -44,45 +47,55 @@ export const useUnlockStore = create<UnlockState>((set) => ({
       });
       return;
     }
-    set({
-      levelsUnlocked: null,
-      userBlocked: false,
-    });
-    try {
-      const data = await loadUserUnlock(userId);
-      if (data.blocked) {
+
+    let p = unlockLoadInflight.get(userId);
+    if (!p) {
+      p = (async () => {
         set({
-          userBlocked: true,
-          levelsUnlocked: false,
-          tier: 'free',
-          isDonor: false,
-          unlockedAt: null,
-          unlockExpiresAt: null,
-          hasPaidEver: false,
+          levelsUnlocked: null,
+          userBlocked: false,
         });
-        return;
-      }
-      set({
-        levelsUnlocked: data.levelsUnlocked,
-        tier: data.tier,
-        isDonor: data.isDonor,
-        userBlocked: false,
-        unlockedAt: data.unlockedAt ?? null,
-        unlockExpiresAt: data.unlockExpiresAt ?? null,
-        hasPaidEver: Boolean(data.hasPaidEver),
+        try {
+          const data = await loadUserUnlock(userId);
+          if (data.blocked) {
+            set({
+              userBlocked: true,
+              levelsUnlocked: false,
+              tier: 'free',
+              isDonor: false,
+              unlockedAt: null,
+              unlockExpiresAt: null,
+              hasPaidEver: false,
+            });
+            return;
+          }
+          set({
+            levelsUnlocked: data.levelsUnlocked,
+            tier: data.tier,
+            isDonor: data.isDonor,
+            userBlocked: false,
+            unlockedAt: data.unlockedAt ?? null,
+            unlockExpiresAt: data.unlockExpiresAt ?? null,
+            hasPaidEver: Boolean(data.hasPaidEver),
+          });
+        } catch {
+          set({
+            levelsUnlocked: false,
+            tier: 'free',
+            isDonor: false,
+            userBlocked: false,
+            unlockedAt: null,
+            unlockExpiresAt: null,
+            hasPaidEver: false,
+          });
+        }
+      })().finally(() => {
+        unlockLoadInflight.delete(userId);
       });
-    } catch {
-      set({
-        levelsUnlocked: false,
-        tier: 'free',
-        isDonor: false,
-        userBlocked: false,
-        unlockedAt: null,
-        unlockExpiresAt: null,
-        hasPaidEver: false,
-      });
+      unlockLoadInflight.set(userId, p);
     }
-  }
+    await p;
+  },
 }));
 
 export function useIsLevelUnlocked(): boolean {

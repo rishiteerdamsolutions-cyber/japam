@@ -11,6 +11,12 @@ import { useJapaStore } from '../../store/japaStore';
 import { useLivesStore } from '../../store/livesStore';
 import { LEVELS, ANNIVERSARY_COUPLE_LAST_LEVEL_INDEX } from '../../data/levels';
 import { useAuthStore } from '../../store/authStore';
+import { useUnlockStore } from '../../store/unlockStore';
+import { useWeeklyStreakStore } from '../../store/weeklyStreakStore';
+import { useProfileStore } from '../../store/profileStore';
+import { hasActivePaidAccess } from '../../lib/membershipDisplay';
+import { downloadCurrentIstWeekStreakProgressCard } from '../../lib/downloadWeeklyStreakProgressCard';
+import { trackShareEvent } from '../../lib/firestore';
 import { saveUserPausedGame } from '../../lib/firestore';
 import { gameDebug } from '../../lib/gameDebug';
 import { setLastPausedGame } from '../../lib/pausedGame';
@@ -178,6 +184,8 @@ interface GameScreenProps {
   justRestored?: boolean;
   onJustRestoredCleared?: () => void;
   onBack: () => void;
+  /** Weekly streak: open Japa count → handwritten 108 PDF section. */
+  onOpenWeeklyStreakHandwritingDownloads?: () => void;
   onNextLevel?: (mode: GameMode, levelIndex: number) => void;
   occasionKind?: null | 'birthday' | 'anniversary';
   occasionJapaTarget?: number;
@@ -202,6 +210,7 @@ export function GameScreen({
   justRestored,
   onJustRestoredCleared,
   onBack,
+  onOpenWeeklyStreakHandwritingDownloads,
   onNextLevel,
   occasionKind = null,
   occasionJapaTarget = 108,
@@ -215,6 +224,14 @@ export function GameScreen({
   const { t } = useTranslation();
   const navigate = useNavigate();
   const user = useAuthStore(s => s.user);
+  const tier = useUnlockStore((s) => s.tier);
+  const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
+  const unlockExpiresAt = useUnlockStore((s) => s.unlockExpiresAt);
+  const hydrateStreak = useWeeklyStreakStore((s) => s.hydrate);
+  const streakTrackedMonday = useWeeklyStreakStore((s) => s.trackedWeekMondayIst);
+  const streakDeityForYmd = useWeeklyStreakStore((s) => s.deityForYmd);
+  const streakIsDayDone = useWeeklyStreakStore((s) => s.isDayDone);
+  const profileDisplayName = useProfileStore((s) => s.displayName);
   const initGame = useGameStore(s => s.initGame);
   const status = useGameStore(s => s.status);
   const reset = useGameStore(s => s.reset);
@@ -313,6 +330,44 @@ export function GameScreen({
   const weeklyStreakWinFooter =
     weeklyStreakJapa && mode !== 'general' && status === 'won' ? t('game.weeklyStreakWinFooter') : undefined;
   const streakWinFooterNote = weeklyStreakWinFooter ?? special108WinFooter;
+
+  const proForStreak =
+    (tier === 'pro' || tier === 'premium') && hasActivePaidAccess(levelsUnlocked === true, unlockExpiresAt);
+
+  const streakHeaderName =
+    profileDisplayName?.trim() || user?.displayName?.trim() || user?.email?.split('@')[0] || 'Your streak';
+
+  const handleDownloadWeeklyProgressCard = useCallback(async () => {
+    hydrateStreak(proForStreak);
+    await downloadCurrentIstWeekStreakProgressCard({
+      t,
+      headerName: streakHeaderName,
+      trackedWeekMondayIst: streakTrackedMonday,
+      deityForYmd: streakDeityForYmd,
+      isDayDone: streakIsDayDone,
+      isPro: proForStreak,
+      footerLine: t('weeklyStreak.progressCardFooter', {
+        defaultValue: 'Weekly streak — seven IST days with 108 japas each.',
+      }),
+    });
+    trackShareEvent('japa_pdf').catch(() => {});
+  }, [
+    hydrateStreak,
+    proForStreak,
+    t,
+    streakHeaderName,
+    streakTrackedMonday,
+    streakDeityForYmd,
+    streakIsDayDone,
+  ]);
+
+  const openWeeklyStreakHandwritingDownloads = useCallback(() => {
+    if (onOpenWeeklyStreakHandwritingDownloads) {
+      onOpenWeeklyStreakHandwritingDownloads();
+      return;
+    }
+    navigate('/japa#japa-dashboard-weekly-streak');
+  }, [navigate, onOpenWeeklyStreakHandwritingDownloads]);
 
   useEffect(() => {
     if (!isGuest) setGuestPowerSignInOpen(false);
@@ -1090,6 +1145,10 @@ export function GameScreen({
             }
             onMenu={handleMenuBack}
             onNext={isMarathon || special108Japa || weeklyStreakJapa ? undefined : handleNext}
+            onDownloadWeeklyProgressCard={weeklyStreakJapa ? handleDownloadWeeklyProgressCard : undefined}
+            onOpenWeeklyStreakHandwritingDownloads={
+              weeklyStreakJapa ? openWeeklyStreakHandwritingDownloads : undefined
+            }
           />
         ) : null
       )}

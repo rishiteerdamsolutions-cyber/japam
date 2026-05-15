@@ -17,6 +17,10 @@ interface GameOverlayProps {
   onNext?: () => void;
   showWatchForMoves?: boolean;
   getIdToken?: () => Promise<string | null>;
+  /** Weekly streak win: download IST week progress card (PNG). */
+  onDownloadWeeklyProgressCard?: () => void | Promise<void>;
+  /** Weekly streak win: open Japa count for handwritten 108-japa PDFs. */
+  onOpenWeeklyStreakHandwritingDownloads?: () => void;
 }
 
 export function GameOverlay({
@@ -29,10 +33,14 @@ export function GameOverlay({
   onNext,
   showWatchForMoves,
   getIdToken,
+  onDownloadWeeklyProgressCard,
+  onOpenWeeklyStreakHandwritingDownloads,
 }: GameOverlayProps) {
   const { t } = useTranslation();
   const addMoves = useGameStore((s) => s.addMoves);
   const [showVideo, setShowVideo] = useState(false);
+  const [progressCardLoading, setProgressCardLoading] = useState(false);
+  const [progressCardError, setProgressCardError] = useState<string | null>(null);
 
   const handleWatchComplete = () => {
     addMoves(5);
@@ -53,6 +61,21 @@ export function GameOverlay({
 
   const winIsMarathon = status === 'won' && isMarathon;
   const winIsMapLevel = status === 'won' && !isMarathon && completedLevelNumber != null && completedLevelNumber > 0;
+
+  const handleProgressCardDownload = async () => {
+    if (!onDownloadWeeklyProgressCard || progressCardLoading) return;
+    setProgressCardError(null);
+    setProgressCardLoading(true);
+    try {
+      await onDownloadWeeklyProgressCard();
+    } catch {
+      setProgressCardError(
+        t('japaDashboard.progressCardFailed', { defaultValue: 'Could not create progress card.' }),
+      );
+    } finally {
+      setProgressCardLoading(false);
+    }
+  };
 
   return (
     <AnimatePresence>
@@ -123,7 +146,34 @@ export function GameOverlay({
             </>
           )}
 
+          {progressCardError ? (
+            <p className="text-red-300 text-xs mb-2 leading-snug">{progressCardError}</p>
+          ) : null}
+
           <div className="flex flex-col gap-2.5">
+            {status === 'won' && onDownloadWeeklyProgressCard && (
+              <button
+                type="button"
+                disabled={progressCardLoading}
+                onClick={() => void handleProgressCardDownload()}
+                className="w-full py-3 rounded-xl bg-emerald-600/90 text-white font-semibold text-sm sm:text-base break-words min-h-[44px] shadow-md hover:bg-emerald-500 active:scale-[0.99] transition-transform disabled:opacity-50"
+              >
+                {progressCardLoading
+                  ? t('japaDashboard.generating', { defaultValue: 'Generating…' })
+                  : t('game.weeklyStreakDownloadCta', { defaultValue: 'Download week progress card' })}
+              </button>
+            )}
+            {status === 'won' && onOpenWeeklyStreakHandwritingDownloads && (
+              <button
+                type="button"
+                onClick={onOpenWeeklyStreakHandwritingDownloads}
+                className="w-full py-3 rounded-xl border border-amber-400/50 text-amber-100 font-semibold text-sm sm:text-base break-words min-h-[44px] hover:bg-amber-500/10 active:scale-[0.99] transition-transform"
+              >
+                {t('game.weeklyStreakHandwritingCta', {
+                  defaultValue: 'Handwritten 108 PDF (Japa count)',
+                })}
+              </button>
+            )}
             {status === 'won' && onNext && (
               <button
                 type="button"

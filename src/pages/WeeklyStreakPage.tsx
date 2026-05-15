@@ -13,7 +13,6 @@ import { AppFooter } from '../components/layout/AppFooter';
 import { BottomNav } from '../components/nav/BottomNav';
 import { MenuMatchChantHeader } from '../components/layout/MenuMatchChantHeader';
 import { AccessBadge } from '../components/ui/AccessBadge';
-import { downloadWeeklyStreakDayJapaPdf, downloadWeeklyStreakWeekCardPdf } from '../utils/weeklyStreakPdf';
 
 const WEEKDAYS: { key: StreakIsoWeekday; label: string }[] = [
   { key: 1, label: 'Mon' },
@@ -34,7 +33,6 @@ export function WeeklyStreakPage() {
 
   const hydrate = useWeeklyStreakStore((s) => s.hydrate);
   const trackedWeekMondayIst = useWeeklyStreakStore((s) => s.trackedWeekMondayIst);
-  const dayDone = useWeeklyStreakStore((s) => s.dayDone);
   const proPlanByWeekday = useWeeklyStreakStore((s) => s.proPlanByWeekday);
   const proNextWeekPlan = useWeeklyStreakStore((s) => s.proNextWeekPlan);
   const setProCurrentPlan = useWeeklyStreakStore((s) => s.setProCurrentPlan);
@@ -44,8 +42,6 @@ export function WeeklyStreakPage() {
 
   const [draftCurrent, setDraftCurrent] = useState<WeeklyStreakProPlan>({});
   const [draftNext, setDraftNext] = useState<WeeklyStreakProPlan>({});
-  const [pdfBusy, setPdfBusy] = useState<string | null>(null);
-
   const proActive =
     (tier === 'pro' || tier === 'premium') && hasActivePaidAccess(levelsUnlocked === true, unlockExpiresAt);
 
@@ -67,8 +63,6 @@ export function WeeklyStreakPage() {
 
   const weekYmds = useMemo(() => istWeekYmdsFromMonday(trackedWeekMondayIst), [trackedWeekMondayIst]);
   const todayIst = istYmdFromDate();
-  const weekFullyDone = useMemo(() => weekYmds.every((d) => dayDone[d]), [weekYmds, dayDone]);
-
   const startGamePath = (deityId: DeityId) =>
     `/game?mode=${encodeURIComponent(deityId)}&level=0&weeklyStreak=1&target=108`;
 
@@ -78,8 +72,6 @@ export function WeeklyStreakPage() {
   const onSaveNextPlan = () => {
     setProNextWeekPlan(draftNext);
   };
-
-  const streakNote = t('weeklyStreak.pdfStreakNote', { defaultValue: 'Weekly streak (IST)' });
 
   return (
     <div className="relative min-h-[100dvh] flex flex-col items-center px-3 pt-3 pb-[max(6rem,env(safe-area-inset-bottom))] overflow-y-auto overflow-x-hidden">
@@ -161,21 +153,6 @@ export function WeeklyStreakPage() {
                         {t('weeklyStreak.play108')}
                       </motion.button>
                     ) : null}
-                    {done ? (
-                      <button
-                        type="button"
-                        disabled={pdfBusy === ymd}
-                        onClick={() => {
-                          setPdfBusy(ymd);
-                          void downloadWeeklyStreakDayJapaPdf({ deityId, ymd, streakNote }).finally(() =>
-                            setPdfBusy(null),
-                          );
-                        }}
-                        className="px-2 py-1.5 rounded-lg bg-amber-500/85 text-white text-[10px] font-semibold disabled:opacity-50"
-                      >
-                        {pdfBusy === ymd ? t('common.loading') : t('weeklyStreak.downloadDayPdf')}
-                      </button>
-                    ) : null}
                   </div>
                 </div>
               </div>
@@ -183,34 +160,12 @@ export function WeeklyStreakPage() {
           })}
         </div>
 
-        {weekFullyDone ? (
-          <div className="w-full mb-4 rounded-xl border border-emerald-500/30 bg-black/30 p-3">
-            <p className="text-emerald-300 text-sm font-semibold mb-2 text-center">{t('weeklyStreak.weekComplete')}</p>
-            <button
-              type="button"
-              disabled={pdfBusy === 'week'}
-              onClick={() => {
-                setPdfBusy('week');
-                try {
-                  downloadWeeklyStreakWeekCardPdf({
-                    weekMondayIst: trackedWeekMondayIst,
-                    rows: weekYmds.map((ymd) => ({
-                      ymd,
-                      deityId: deityForYmd(ymd, proActive),
-                      done: !!dayDone[ymd],
-                    })),
-                    footer: t('weeklyStreak.weekCardFooter'),
-                  });
-                } finally {
-                  setPdfBusy(null);
-                }
-              }}
-              className="w-full py-2.5 rounded-xl bg-emerald-600 text-white text-sm font-semibold disabled:opacity-50"
-            >
-              {pdfBusy === 'week' ? t('common.loading') : t('weeklyStreak.downloadWeekCard')}
-            </button>
-          </div>
-        ) : null}
+        <p className="w-full mb-4 text-amber-200/70 text-[11px] text-center leading-snug px-1">
+          {t('weeklyStreak.downloadOnJapaDashboard', {
+            defaultValue:
+              'Download 108-japa PDFs (your handwriting) and the week progress card from Japa count → Weekly streak at the bottom.',
+          })}
+        </p>
 
         <section className="w-full mb-6 space-y-3 rounded-xl border border-amber-500/25 bg-black/25 p-3">
           <div className="flex flex-wrap items-center gap-2">

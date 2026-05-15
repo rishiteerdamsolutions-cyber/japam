@@ -1,11 +1,14 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
 import { useUnlockStore } from '../../store/unlockStore';
 import { useWeeklyStreakStore } from '../../store/weeklyStreakStore';
+import { useProfileStore } from '../../store/profileStore';
 import { hasActivePaidAccess } from '../../lib/membershipDisplay';
-import { istWeekYmdsFromMonday } from '../../lib/weeklyStreakIst';
+import { istWeekYmdsFromMonday, istWeekdayLongFromYmd } from '../../lib/weeklyStreakIst';
+import { downloadCurrentIstWeekStreakProgressCard } from '../../lib/downloadWeeklyStreakProgressCard';
+import { getDeity } from '../../data/deities';
 import { useJapaStore, type JapaCounts } from '../../store/japaStore';
 import { fetchOccasionsList, type OccasionListItem } from '../../lib/occasionsApi';
 import { downloadAnniversaryReportPdf, downloadOccasionSummaryPdf } from '../../utils/occasionPdf';
@@ -23,6 +26,7 @@ import { LAUNCH_FEATURE_OCCASION_GAMES } from '../../config/launchFeatures';
 const HANDWRITING_SAMPLE_SRC = '/SAMPLE%20NAMA%20IMAGE.png';
 
 const JAPA_PER_SPECIAL_BLOCK = 108;
+const STREAK_WEEKDAY_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 /**
  * Saved Special 108 sessions plus full 108-blocks inferred from lifetime mantra count
@@ -53,6 +57,16 @@ function DownloadPdfIcon({ className }: { className?: string }) {
 export function JapaDashboard() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { hash } = useLocation();
+
+  useEffect(() => {
+    if (!hash) return;
+    const id = hash.replace('#', '');
+    const el = document.getElementById(id);
+    if (el) {
+      setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
+    }
+  }, [hash]);
   const { counts, loaded } = useJapaStore();
   const user = useAuthStore((s) => s.user);
   const tier = useUnlockStore((s) => s.tier);
@@ -62,10 +76,12 @@ export function JapaDashboard() {
   const hydrateStreak = useWeeklyStreakStore((s) => s.hydrate);
   const streakTrackedMonday = useWeeklyStreakStore((s) => s.trackedWeekMondayIst);
   const streakDeityForYmd = useWeeklyStreakStore((s) => s.deityForYmd);
+  const streakIsDayDone = useWeeklyStreakStore((s) => s.isDayDone);
+  const profileDisplayName = useProfileStore((s) => s.displayName);
   const [occasions, setOccasions] = useState<OccasionListItem[]>([]);
   const [occasionsLoaded, setOccasionsLoaded] = useState(false);
   const [downloadModal, setDownloadModal] = useState<{
-    source: 'lifetime' | 'pushpa' | 'special108';
+    source: 'lifetime' | 'pushpa' | 'special108' | 'weeklyStreak108';
     mantra: string;
     count: number;
     deityName: string;
@@ -73,7 +89,11 @@ export function JapaDashboard() {
     special108SavedSessions?: number;
     /** Special 108: extra full 108-blocks from lifetime ÷ 108 (not in saved counter). */
     special108RetrospectiveSessions?: number;
+    /** Weekly streak day (IST ymd). */
+    weeklyStreakYmd?: string;
   } | null>(null);
+  const [progressCardLoading, setProgressCardLoading] = useState(false);
+  const [progressCardError, setProgressCardError] = useState<string | null>(null);
   const [name, setName] = useState('');
   const [gotram, setGotram] = useState('');
   const [mobileNumber, setMobileNumber] = useState('');
@@ -102,13 +122,19 @@ export function JapaDashboard() {
     hydrateStreak(proForStreak);
   }, [hydrateStreak, proForStreak]);
 
+  const streakWeekYmds = useMemo(
+    () => istWeekYmdsFromMonday(streakTrackedMonday),
+    [streakTrackedMonday],
+  );
+
   const streakStripLine = useMemo(() => {
-    const ymds = istWeekYmdsFromMonday(streakTrackedMonday);
-    const labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    return ymds
-      .map((ymd, i) => `${labels[i]} ${t(`deities.${streakDeityForYmd(ymd, proForStreak)}`)}`)
+    return streakWeekYmds
+      .map((ymd, i) => `${STREAK_WEEKDAY_LABELS[i]} ${t(`deities.${streakDeityForYmd(ymd, proForStreak)}`)}`)
       .join(' · ');
-  }, [streakTrackedMonday, streakDeityForYmd, proForStreak, t]);
+  }, [streakWeekYmds, streakDeityForYmd, proForStreak, t]);
+
+  const streakHeaderName =
+    profileDisplayName?.trim() || user?.displayName?.trim() || user?.email?.split('@')[0] || 'Your streak';
 
   useEffect(() => {
     if (!LAUNCH_FEATURE_OCCASION_GAMES || !user) {
@@ -215,6 +241,48 @@ export function JapaDashboard() {
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
+  const openDownloadModalForWeeklyStreak = (deityId: DeityId, ymd: string) => {
+    const deity = getDeity(deityId);
+    setDownloadModal({
+      source: 'weeklyStreak108',
+      mantra: deity.mantra,
+      count: 108,
+      deityName: deity.name,
+      weeklyStreakYmd: ymd,
+    });
+    setName('');
+    setGotram('');
+    setMobileNumber('');
+    setHandwritingDataUrl(null);
+    setUploadError(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const handleDownloadProgressCard = async () => {
+    setProgressCardError(null);
+    setProgressCardLoading(true);
+    try {
+      await downloadCurrentIstWeekStreakProgressCard({
+        t,
+        headerName: streakHeaderName,
+        trackedWeekMondayIst: streakTrackedMonday,
+        deityForYmd: streakDeityForYmd,
+        isDayDone: streakIsDayDone,
+        isPro: proForStreak,
+        footerLine: t('weeklyStreak.progressCardFooter', {
+          defaultValue: 'Weekly streak — seven IST days with 108 japas each.',
+        }),
+      });
+      trackShareEvent('japa_pdf').catch(() => {});
+    } catch {
+      setProgressCardError(
+        t('japaDashboard.progressCardFailed', { defaultValue: 'Could not create progress card.' }),
+      );
+    } finally {
+      setProgressCardLoading(false);
+    }
+  };
+
   const openDownloadModalForSpecial108 = (deity: Deity) => {
     const { savedSessions, retrospectiveSessions, totalJapasForPdf } = special108RetrospectiveForDeity(
       counts,
@@ -294,25 +362,32 @@ export function JapaDashboard() {
           ? t('japaDashboard.totalLifetimeJapasPdfNote')
           : downloadModal.source === 'pushpa'
             ? 'Pushpa Aradhana'
-            : downloadModal.special108RetrospectiveSessions && downloadModal.special108RetrospectiveSessions > 0
-              ? t('japaDashboard.special108PdfNoteWithRetro', {
-                  saved: downloadModal.special108SavedSessions ?? 0,
-                  retro: downloadModal.special108RetrospectiveSessions,
-                  total: downloadModal.count,
-                  defaultValue:
-                    'Special 108: {{saved}} saved session(s) + {{retro}} from lifetime (÷108); PDF {{total}} japas',
-                })
-              : t('japaDashboard.special108PdfNoteSavedOnly', {
-                  sessions: downloadModal.special108SavedSessions ?? 0,
-                  total: downloadModal.count,
-                  defaultValue: 'Special 108: {{sessions}} session(s); PDF {{total}} japas',
-                });
+            : downloadModal.source === 'weeklyStreak108' && downloadModal.weeklyStreakYmd
+              ? t('weeklyStreak.pdfStreakNote', {
+                  defaultValue: 'Weekly streak (IST)',
+                }) +
+                ` · ${downloadModal.weeklyStreakYmd} (${istWeekdayLongFromYmd(downloadModal.weeklyStreakYmd)})`
+              : downloadModal.special108RetrospectiveSessions && downloadModal.special108RetrospectiveSessions > 0
+                ? t('japaDashboard.special108PdfNoteWithRetro', {
+                    saved: downloadModal.special108SavedSessions ?? 0,
+                    retro: downloadModal.special108RetrospectiveSessions,
+                    total: downloadModal.count,
+                    defaultValue:
+                      'Special 108: {{saved}} saved session(s) + {{retro}} from lifetime (÷108); PDF {{total}} japas',
+                  })
+                : t('japaDashboard.special108PdfNoteSavedOnly', {
+                    sessions: downloadModal.special108SavedSessions ?? 0,
+                    total: downloadModal.count,
+                    defaultValue: 'Special 108: {{sessions}} session(s); PDF {{total}} japas',
+                  });
       const fileStem =
         downloadModal.source === 'lifetime'
           ? `${downloadModal.deityName}-lifetime-${downloadModal.count}-japas`
           : downloadModal.source === 'pushpa'
             ? `${downloadModal.deityName}-pushpa-aradhana-${downloadModal.count}-offerings`
-            : `${downloadModal.deityName}-special-108-${downloadModal.count}-japas`;
+            : downloadModal.source === 'weeklyStreak108' && downloadModal.weeklyStreakYmd
+              ? `weekly-streak-${downloadModal.deityName}-${downloadModal.weeklyStreakYmd}`
+              : `${downloadModal.deityName}-special-108-${downloadModal.count}-japas`;
       await downloadMantraPdf(
         downloadModal.mantra,
         downloadModal.count,
@@ -601,10 +676,64 @@ export function JapaDashboard() {
         <p className="text-amber-300/90 text-xs font-semibold mb-1">{t('japaDashboard.weeklyStreakStripTitle')}</p>
         <p className="text-amber-200/65 text-[10px] mb-2 leading-snug">{t('japaDashboard.weeklyStreakStripIst')}</p>
         <p className="text-amber-200/85 text-[10px] leading-snug break-words mb-3">{streakStripLine}</p>
+
+        <div className="space-y-2 mb-3">
+          {streakWeekYmds.map((ymd, idx) => {
+            const deityId = streakDeityForYmd(ymd, proForStreak);
+            const done = streakIsDayDone(ymd);
+            return (
+              <div
+                key={ymd}
+                className="flex items-center justify-between gap-2 rounded-lg bg-black/25 border border-white/10 px-2.5 py-2 min-w-0"
+              >
+                <div className="min-w-0 flex-1">
+                  <p className="text-amber-400 text-[10px] font-semibold">
+                    {STREAK_WEEKDAY_LABELS[idx]} · <span className="text-amber-200/50 font-normal tabular-nums">{ymd}</span>
+                  </p>
+                  <p className="text-amber-100 text-xs font-medium truncate">{t(`deities.${deityId}`)}</p>
+                  <p className="text-amber-200/55 text-[10px]">
+                    {done ? t('weeklyStreak.done') : t('weeklyStreak.pending')}
+                  </p>
+                </div>
+                {done ? (
+                  <button
+                    type="button"
+                    onClick={() => openDownloadModalForWeeklyStreak(deityId, ymd)}
+                    className={`shrink-0 ${pdfActionBtnClass}`}
+                    aria-label={t('japaDashboard.weeklyStreakDownload108Aria', {
+                      day: STREAK_WEEKDAY_LABELS[idx],
+                      deity: t(`deities.${deityId}`),
+                      defaultValue: 'Download 108 japas PDF for {{day}} {{deity}}',
+                    })}
+                  >
+                    <DownloadPdfIcon className="w-5 h-5 shrink-0" />
+                    <span className="text-[9px] font-semibold leading-none text-center max-w-[4.25rem]">
+                      {t('weeklyStreak.downloadDayPdf')}
+                    </span>
+                  </button>
+                ) : null}
+              </div>
+            );
+          })}
+        </div>
+
+        {progressCardError ? (
+          <p className="text-red-400 text-[10px] mb-2">{progressCardError}</p>
+        ) : null}
+        <button
+          type="button"
+          disabled={progressCardLoading}
+          onClick={() => void handleDownloadProgressCard()}
+          className="w-full py-2.5 rounded-lg bg-emerald-600/90 text-white text-xs font-semibold mb-2 disabled:opacity-50"
+        >
+          {progressCardLoading
+            ? t('japaDashboard.generating')
+            : t('japaDashboard.downloadWeeklyProgressCard', { defaultValue: 'Download week progress card' })}
+        </button>
         <button
           type="button"
           onClick={() => navigate('/weekly-streak')}
-          className="w-full py-2 rounded-lg bg-amber-500/90 text-white text-xs font-semibold"
+          className="w-full py-2 rounded-lg border border-amber-500/40 text-amber-300 text-xs font-semibold"
         >
           {t('japaDashboard.weeklyStreakStripOpen')}
         </button>
@@ -622,7 +751,17 @@ export function JapaDashboard() {
                   })
                 : downloadModal.source === 'pushpa'
                   ? `${downloadModal.deityName} · Pushpa Aradhana (${downloadModal.count} offerings)`
-                  : downloadModal.special108RetrospectiveSessions && downloadModal.special108RetrospectiveSessions > 0
+                  : downloadModal.source === 'weeklyStreak108'
+                    ? t('japaDashboard.weeklyStreakModalSubtitle', {
+                        deity: downloadModal.deityName,
+                        ymd: downloadModal.weeklyStreakYmd ?? '',
+                        day:
+                          downloadModal.weeklyStreakYmd != null
+                            ? istWeekdayLongFromYmd(downloadModal.weeklyStreakYmd)
+                            : '',
+                        defaultValue: '{{deity}} · Weekly streak 108 · {{ymd}} ({{day}})',
+                      })
+                    : downloadModal.special108RetrospectiveSessions && downloadModal.special108RetrospectiveSessions > 0
                     ? t('japaDashboard.special108ModalSubtitleRetro', {
                         deity: downloadModal.deityName,
                         total: downloadModal.count,
@@ -639,7 +778,12 @@ export function JapaDashboard() {
                 ? t('japaDashboard.handwritingRepeatTotal', { count: downloadModal.count })
                 : downloadModal.source === 'pushpa'
                   ? `Your handwritten nama will be repeated ${downloadModal.count} times for Pushpa Aradhana.`
-                  : downloadModal.special108RetrospectiveSessions && downloadModal.special108RetrospectiveSessions > 0
+                  : downloadModal.source === 'weeklyStreak108'
+                    ? t('japaDashboard.weeklyStreakHandwriting', {
+                        count: downloadModal.count,
+                        defaultValue: 'Your handwritten nama is repeated {{count}} times for this weekly streak day.',
+                      })
+                    : downloadModal.special108RetrospectiveSessions && downloadModal.special108RetrospectiveSessions > 0
                     ? t('japaDashboard.special108HandwritingRetro', {
                         count: downloadModal.count,
                         defaultValue:

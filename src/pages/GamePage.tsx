@@ -642,6 +642,9 @@ export function GamePage() {
       justRestored={justRestored}
       onJustRestoredCleared={onJustRestoredCleared}
       onBack={onBack}
+      onOpenWeeklyStreakHandwritingDownloads={
+        isWeeklyStreak ? () => navigate('/japa#japa-dashboard-weekly-streak') : undefined
+      }
       onNextLevel={isMarathon || isSpecial108 || isWeeklyStreak ? undefined : (m, idx) => handleNextLevel(m, idx)}
       occasionKind={occasionKind}
       occasionJapaTarget={occasionKind === 'birthday' ? occasionTarget : undefined}

@@ -7,7 +7,7 @@
     {"source": "/api/:path*", "destination": "/api/proxy?path=:path*"},
     {"source": "/apavarga", "destination": "/apavarga/index.html"},
     {"source": "/apavarga/:path*", "destination": "/apavarga/index.html"},
-    {"source": "/((?!api/)(?!apavarga).*)", "destination": "/index.html"}
+    {"source": "/((?!api/)(?!apavarga)(?!googlee525cd6fc9a02f00\\.html$)(?!sitemap\\.xml$)(?!robots\\.txt$)(?!content/)(?!learn/).*)", "destination": "/index.html"}
   ],
   "crons": [
     {"path": "/api/apavarga/cleanup", "schedule": "0 0 * * *"},

@@ -15,6 +15,8 @@ import { BlockedOverlay } from './components/BlockedOverlay'
 import { PWAUpdatePrompt } from './components/PWAUpdatePrompt'
 import { OfflineBanner } from './components/OfflineBanner'
 import { RouterChrome } from './components/RouterChrome'
+import { SeoLandingParams } from './components/SeoLandingParams'
+import { LearnLayout } from './layouts/LearnLayout'
 import { RequireAuth } from './components/auth/RequireAuth'
 import App from './App.tsx'
 import { MenuPage } from './pages/MenuPage'
@@ -50,6 +52,7 @@ const TermsPage = lazy(() => import('./pages/TermsPage').then(m => ({ default: m
 const RefundCancellationPage = lazy(() => import('./pages/RefundCancellationPage').then(m => ({ default: m.RefundCancellationPage })))
 const ShippingDeliveryPage = lazy(() => import('./pages/ShippingDeliveryPage').then(m => ({ default: m.ShippingDeliveryPage })))
 const ContactPage = lazy(() => import('./pages/ContactPage').then(m => ({ default: m.ContactPage })))
+const LearnPage = lazy(() => import('./pages/learn/LearnPage').then((m) => ({ default: m.LearnPage })))
 const PushpaAradhanaPage = lazy(() =>
   import('./pages/PushpaAradhanaPage').then((m) => ({ default: m.PushpaAradhanaPage })),
 )
@@ -90,6 +93,7 @@ createRoot(document.getElementById('root')!).render(
       <AuthSessionOverlay />
       <PaymentReturnHandler />
       <RefCapture />
+      <SeoLandingParams />
       <BlockedOverlay />
       <PWAUpdatePrompt />
       <OfflineBanner />
@@ -174,6 +178,10 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/refund-cancellation" element={<RefundCancellationPage />} />
         <Route path="/shipping-delivery" element={<ShippingDeliveryPage />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/learn" element={<LearnLayout />}>
+          <Route index element={<Navigate to="en/japa-108-times" replace />} />
+          <Route path=":lang/:slug" element={<LearnPage />} />
+        </Route>
       </Routes>
       </Suspense>
       <RouterChrome />

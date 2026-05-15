@@ -20,9 +20,11 @@ export default defineConfig(({ mode }) => {
     copyPublicDir: false,
   },
   server: {
-    port: 5173,
-    // Listen on all interfaces so phones on the same Wi‑Fi can open http://<your-LAN-IP>:5173
-    host: true,
+    port: Number(process.env.VITE_DEV_PORT) || 5173,
+    // Default localhost — avoids uv_interface_addresses crashes on some systems.
+    // For phone testing on Wi‑Fi: VITE_DEV_LAN=1 npm run dev (binds 0.0.0.0)
+    host: process.env.VITE_DEV_LAN === '1' ? '0.0.0.0' : '127.0.0.1',
+    strictPort: false,
   },
   plugins: [
     {
@@ -36,10 +38,11 @@ export default defineConfig(({ mode }) => {
         const outDir = path.join(root, 'dist');
 
         // Copy only what's referenced by the app at runtime.
-        const copyDirs = ['images', 'sounds', 'locales', 'videos', 'weapons', 'asura'];
+        const copyDirs = ['images', 'sounds', 'locales', 'videos', 'weapons', 'asura', 'content'];
         const copyFiles = [
           'vite.svg',
           'openapi.json',
+          'robots.txt',
           'birthday.png',
           'anniversary-japa.png',
           'openingvideo.mp4',

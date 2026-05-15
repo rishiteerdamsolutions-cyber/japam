@@ -6,6 +6,8 @@ import { useProgressStore } from '../store/progressStore';
 import { useAuthStore } from '../store/authStore';
 import { isFirebaseConfigured } from '../lib/firebase';
 import type { GameMode } from '../types';
+import { DEITY_IDS, type PlayableDeityId } from '../data/deities';
+import { consumeSeoDeityHint } from '../lib/seoAttribution';
 
 export function MenuPage() {
   const navigate = useNavigate();
@@ -39,6 +41,13 @@ export function MenuPage() {
     const level = getCurrentLevelIndex(mode);
     navigate(`/game?mode=${encodeURIComponent(mode)}&level=${level}`);
   };
+
+  useEffect(() => {
+    const deity = consumeSeoDeityHint();
+    if (!deity || !DEITY_IDS.includes(deity as PlayableDeityId)) return;
+    void handleSelect(deity);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- one-shot SEO deep link on mount
+  }, []);
 
   return (
     <MainMenu

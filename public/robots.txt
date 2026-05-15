@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Allow: /learn/
+
+Sitemap: https://japam.digital/sitemap.xml

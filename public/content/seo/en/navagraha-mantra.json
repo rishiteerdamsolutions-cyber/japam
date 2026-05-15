@@ -1,0 +1,172 @@
+{
+  "schemaVersion": 1,
+  "pageId": "navagraha-mantra",
+  "lang": "en",
+  "slug": "navagraha-mantra",
+  "deityId": null,
+  "primaryKeyword": "navagraha mantra",
+  "secondaryKeywords": [
+    "navagraha puja",
+    "nine planets mantra",
+    "navagraha japa"
+  ],
+  "meta": {
+    "title": "Navagraha Mantra & Nine Planets Japa | Japam",
+    "description": "Nine grahas overview, weekday mantras, and practise Shani/Rahu/Ketu/Surya/Guru in Japam.",
+    "ogImage": "/images/favicon.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "Navagraha Mantra and the Nine Planets"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "The Navagraha are Surya, Chandra, Mangala, Budha, Guru, Shukra, Shani, Rahu, and Ketu — each governing karmic themes in Jyotisha."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Collective Navagraha puja or individual graha japa both aim at harmony (shanti)."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "The nine grahas"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Sun (Surya), Moon (Chandra), Mars (Mangala), Mercury (Budha), Jupiter (Guru), Venus (Shukra), Saturn (Shani), and the lunar nodes Rahu and Ketu. Japam offers several graha and deity mantras for daily practice."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Benefits of japa (traditional view)"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Balances worship across planets instead of fearing one dasha",
+        "Temple Navagraha halls rotate circumambulation",
+        "Individual mantras when astrologer pinpoints a graha",
+        "Builds weekly rhythm — planet per weekday"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "How to chant 108 times"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Learn each graha’s seed mantra or use Navagraha stotram",
+        "Circumambulate nine planet idols if at temple",
+        "Chant 108 for the graha active in your dasha",
+        "Use Japam modes for Shani, Rahu, Ketu, Surya, Guru"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "When to chant"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Sunday–Saturday map to Surya through Shani; Rahu/Ketu have special rules — ask priest."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Practice with Japam"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Open Japam’s deity grid for graha-linked mantras and counting — complement with Navagraha homam when advised.",
+          "bold": false
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start Japa in Japam",
+      "href": "https://japam.digital/?lang=en&utm_source=google&utm_medium=seo&utm_campaign=navagraha-mantra&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=en&try=1&utm_source=google&utm_medium=seo&utm_campaign=navagraha-mantra&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=en&utm_source=google&utm_medium=seo&utm_campaign=navagraha-mantra&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=en&utm_source=google&utm_medium=seo&utm_campaign=navagraha-mantra&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "Full Navagraha stotra length?",
+      "answer": "Longer than 108; some do one planet per day instead."
+    },
+    {
+      "question": "Are Rahu Ketu planets?",
+      "answer": "They are chaya grahas (shadow nodes) in astrology."
+    },
+    {
+      "question": "Chandra mantra in Japam?",
+      "answer": "Deity forms like Shiva/Shakti often cover lunar devotion; ask your tradition."
+    },
+    {
+      "question": "Homam cost?",
+      "answer": "Temple varies; home japa is free and sincere."
+    },
+    {
+      "question": "Which graha first?",
+      "answer": "Astrologer recommends based on chart — often Shani or active dasha lord."
+    }
+  ],
+  "disclaimer": {
+    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice. Results depend on personal faith and consistent practice. Mantra text and audio in the app are for japa support; consult your family priest or tradition for formal puja rules."
+  },
+  "relatedPages": [
+    {
+      "pageId": "graha-shanti-mantra",
+      "label": "Graha shanti"
+    },
+    {
+      "pageId": "shani-mantra-shanti",
+      "label": "Shani"
+    },
+    {
+      "pageId": "guru-graha-mantra",
+      "label": "Guru graha"
+    }
+  ]
+}

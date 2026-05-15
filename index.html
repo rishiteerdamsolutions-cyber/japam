@@ -1,21 +1,36 @@
 <!doctype html>
-<html lang="en">
+<html lang="te" translate="no" class="notranslate">
   <head>
     <meta charset="UTF-8" />
+    <meta name="google" content="notranslate" />
     <meta name="google-site-verification" content="googlee525cd6fc9a02f00" />
-    <!-- Google Analytics (GA4) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-V2CM0HD0Z1"></script>
+  <script>
+    (function () {
+      var k = 'japam_lang', d = 'te';
+      try {
+        var s = localStorage.getItem(k);
+        if (s) d = s;
+      } catch (e) {}
+      document.documentElement.lang = d;
+    })();
+  </script>
+    <!-- Google Analytics (GA4) — after load so LCP is not blocked -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-V2CM0HD0Z1');
+      function japamLoadGA() {
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-V2CM0HD0Z1';
+        s.onload = function () {
+          gtag('js', new Date());
+          gtag('config', 'G-V2CM0HD0Z1');
+        };
+        document.head.appendChild(s);
+      }
+      if (document.readyState === 'complete') japamLoadGA();
+      else window.addEventListener('load', japamLoadGA, { once: true });
     </script>
-    <!-- Fonts for Indian languages - preload for faster load, display=swap for rest of page -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans+Telugu:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Sans+Kannada:wght@400;500;600;700&family=Noto+Sans+Malayalam:wght@400;500;600;700&family=Noto+Sans+Gujarati:wght@400;500;600;700&family=Noto+Sans+Oriya:wght@400;500;600;700&display=swap" as="style" />
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans+Telugu:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Sans+Kannada:wght@400;500;600;700&family=Noto+Sans+Malayalam:wght@400;500;600;700&family=Noto+Sans+Gujarati:wght@400;500;600;700&family=Noto+Sans+Oriya:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="icon" type="image/png" href="/images/favicon.png" />
     <link rel="apple-touch-icon" href="/images/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -40,7 +55,7 @@
     <meta name="twitter:description" content="Match gems, complete japas for your favourite deity, and join community Japa Marathons." />
     <meta name="twitter:image" content="https://japam.digital/images/favicon.png" />
   </head>
-  <body style="background-color: #D81B60;">
+  <body translate="no" class="notranslate" style="background-color: #D81B60;">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

@@ -5,9 +5,14 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import HttpBackend from 'i18next-http-backend';
+import {
+  applyDocumentLanguage,
+  JAPAM_DEFAULT_LANG,
+  JAPAM_LANG_STORAGE_KEY,
+} from '../lib/bootstrapDocument';
 
-const STORAGE_KEY = 'japam_lang';
-const DEFAULT_LANG = 'te';
+const STORAGE_KEY = JAPAM_LANG_STORAGE_KEY;
+const DEFAULT_LANG = JAPAM_DEFAULT_LANG;
 
 function getStoredLang(): string | null {
   try {
@@ -57,7 +62,7 @@ export const LANGUAGES: { code: string; name: string }[] = [
 ];
 
 i18n.on('languageChanged', (lng) => {
-  if (typeof document !== 'undefined') document.documentElement.lang = lng;
+  applyDocumentLanguage(lng);
 });
 
 i18n
@@ -79,6 +84,6 @@ i18n
     load: 'currentOnly',
   });
 
-if (typeof document !== 'undefined') document.documentElement.lang = getInitialLang();
+if (typeof document !== 'undefined') applyDocumentLanguage(getInitialLang());
 
 export default i18n;

@@ -10,12 +10,21 @@ const SITE_ORIGIN = 'https://japam.digital';
 const GA_MEASUREMENT_ID = 'G-V2CM0HD0Z1';
 
 const GA_SNIPPET = `
-    <script async src="https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', '${GA_MEASUREMENT_ID}');
+      function japamLoadGA() {
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}';
+        s.onload = function () {
+          gtag('js', new Date());
+          gtag('config', '${GA_MEASUREMENT_ID}');
+        };
+        document.head.appendChild(s);
+      }
+      if (document.readyState === 'complete') japamLoadGA();
+      else window.addEventListener('load', japamLoadGA, { once: true });
     </script>`;
 const root = process.cwd();
 const contentRoot = path.join(root, 'public', 'content', 'seo');
@@ -148,9 +157,10 @@ function buildLearnHtml(page, slug, lang, availableLangs, shell) {
   const cssLink = shell.cssHref ? `    <link rel="stylesheet" crossorigin href="${shell.cssHref}">\n` : '';
 
   return `<!DOCTYPE html>
-<html lang="${escapeHtml(lang)}">
+<html lang="${escapeHtml(lang)}" translate="no" class="notranslate">
   <head>
     <meta charset="UTF-8" />
+    <meta name="google" content="notranslate" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>${title}</title>
     <meta name="description" content="${description}" />
@@ -170,7 +180,7 @@ ${hreflangLinks(slug, lang, availableLangs)}
 ${GA_SNIPPET}
 ${cssLink}    <style>${PRERENDER_CSS}</style>
   </head>
-  <body style="background:linear-gradient(180deg,#4a148c,#6a1b9a,#4a148c);min-height:100vh;margin:0">
+  <body translate="no" class="notranslate" style="background:linear-gradient(180deg,#4a148c,#6a1b9a,#4a148c);min-height:100vh;margin:0">
     <header class="learn-header learn-prerender">
       <a href="/">← Japam</a>
       <span style="opacity:.8;font-size:.875rem">Mantra guide</span>

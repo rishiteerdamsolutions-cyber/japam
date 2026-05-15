@@ -61,9 +61,9 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
   const initial = (displayName && displayName.charAt(0).toUpperCase()) || '?';
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] overflow-hidden">
+    <div className="relative min-h-screen min-h-[100dvh] flex flex-col items-center p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] overflow-hidden">
       <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
-      <div className="relative z-10 w-full max-w-lg flex flex-col items-center">
+      <div className="relative z-10 w-full max-w-lg flex flex-col flex-1 min-h-0 items-center">
         {/* Top: brand (left) and user / Google sign-in (right) */}
         <div className="w-full flex justify-between items-center gap-2 mt-2 mb-1 min-h-[44px]">
           <div className="min-w-0 flex-1 pr-2 text-left">
@@ -138,7 +138,7 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
 
         {demoNotice}
 
-        <div className="grid grid-cols-3 gap-2 w-full mt-4 mb-2 items-stretch">
+        <div className="grid grid-cols-3 gap-2 w-full mt-3 mb-5 sm:mb-6 items-stretch shrink-0">
           <motion.button
             type="button"
             aria-label={t('menu.allDevatasJapa')}
@@ -191,7 +191,7 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
         </div>
 
         {!istaDevataRevealed ? (
-          <div className="w-full mb-4 flex flex-col items-center gap-3 mt-4">
+          <div className="w-full flex-1 flex flex-col items-center justify-center min-h-0 py-2 sm:py-3">
             <div className="w-full min-w-0 max-w-full flex justify-center items-center pl-[max(0.25rem,env(safe-area-inset-left,0px))] pr-[max(0.25rem,env(safe-area-inset-right,0px))]">
               <div className="relative @container max-w-full rounded-2xl border-2 border-amber-400/75 p-0 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.45),0_0_0_1px_rgba(251,191,36,0.2)_inset] bg-black/20 ring-1 ring-amber-300/35 w-full min-w-0 max-w-[min(100%,26rem)] overflow-hidden">
                 {introHeroSlot ?? (
@@ -199,14 +199,14 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
                     src={ISTA_DEVATA_INTRO_GIF_SRC}
                     alt={t('menu.istaDevataMalaaVideoAria')}
                     decoding="async"
-                    className="block h-auto w-full max-w-full max-h-[min(58vh,440px)] object-contain bg-transparent rounded-xl"
+                    className="block h-auto w-full max-w-full max-h-[min(52svh,400px)] object-contain bg-transparent rounded-xl"
                   />
                 )}
               </div>
             </div>
           </div>
         ) : (
-          <div className="w-full mb-6" role="region" aria-label={t('menu.istaDevata')}>
+          <motion.div className="w-full flex-1 min-h-0 overflow-y-auto overscroll-contain mb-2 sm:mb-3" role="region" aria-label={t('menu.istaDevata')}>
             <p className="text-center text-amber-200/90 text-xs sm:text-sm mb-2">
               {t('menu.chooseIstaDevata')}
             </p>
@@ -236,11 +236,12 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
                 </motion.button>
               ))}
             </div>
-          </div>
+          </motion.div>
         )}
 
-        <div className="mb-40" />
-        <AppFooter />
+        <div className="mt-auto w-full shrink-0 pt-4 sm:pt-5">
+          <AppFooter />
+        </div>
         <BottomNav />
       </div>
     </div>

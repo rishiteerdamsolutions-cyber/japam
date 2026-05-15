@@ -90,6 +90,31 @@ npm run seo:prerender    # after vite build only
 
 ---
 
+## On-page SEO checklist (Japam status)
+
+| Item | Target | Japam `/learn` | App `/` |
+|------|--------|----------------|---------|
+| **Title tag** | ≤60 chars, benefit-driven | ✅ `meta.title` in JSON; validated by `npm run seo:validate` | ⚠️ Generic “Japam - Mantra Match” — OK for brand home |
+| **Meta description** | ≤155 chars | ✅ All 55 EN pages pass | ⚠️ Single global description in `index.html` |
+| **Clean URLs** | Human-readable | ✅ `/learn/en/shani-mantra-shanti` | ✅ `/menu`, `/game`, etc. |
+| **One H1** | Per page | ✅ Exactly one `h1` block in each JSON | Landing has one H1 in React |
+| **H2/H3 hierarchy** | Logical order | ✅ JSON blocks + FAQ `h2` | Per screen |
+| **Image alt text** | Descriptive alts | ⬜ Guide articles are text-only (no inline images yet); deity **OG images** in meta | ✅ Deity/menu images use `alt` in app |
+| **Image weight** | WebP / compressed | N/A on learn text pages | ✅ Build copies optimized assets |
+| **HTTPS** | Required | ✅ `japam.digital` on Vercel SSL | ✅ |
+| **Mobile** | Readable, tappable | ✅ Learn layout, sticky CTA, safe areas | ✅ App designed mobile-first |
+| **Core Web Vitals** | LCP, CLS | ⚠️ Run [PageSpeed](https://pagespeed.web.dev/) on a learn URL + home; prerender helps LCP for guides | ⚠️ Game bundle is heavy — measure separately |
+| **Sitemap + GSC** | Submit & inspect | ✅ Done (56 URLs discovered) | — |
+| **GA4** | Traffic measurement | ✅ `G-V2CM0HD0Z1` + SPA page views | ✅ |
+
+**Stack (not a CMS):** Vite + React SPA. Content = `public/content/seo/{lang}/{slug}.json`. Build generates sitemap + prerendered HTML + injects gtag.
+
+**Launch-day GSC:** URL Inspection → paste a learn URL → **Request indexing** (you can repeat for homepage + top 5 guides).
+
+**Content quality (human):** Template seed copy is valid SEO structure but thin vs 900–1,400 word target — expand top pages for rankings, not just indexing.
+
+---
+
 ## Phase B — Technical SEO (before large localization)
 
 - [ ] Submit `https://japam.digital/sitemap.xml` in Google Search Console

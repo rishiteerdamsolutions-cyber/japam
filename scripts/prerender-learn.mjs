@@ -7,6 +7,16 @@ import { readdir, readFile, writeFile, mkdir, access } from 'node:fs/promises';
 import path from 'node:path';
 
 const SITE_ORIGIN = 'https://japam.digital';
+const GA_MEASUREMENT_ID = 'G-V2CM0HD0Z1';
+
+const GA_SNIPPET = `
+    <script async src="https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '${GA_MEASUREMENT_ID}');
+    </script>`;
 const root = process.cwd();
 const contentRoot = path.join(root, 'public', 'content', 'seo');
 const distDir = path.join(root, 'dist');
@@ -157,6 +167,7 @@ ${hreflangLinks(slug, lang, availableLangs)}
     <meta name="twitter:description" content="${description}" />
     <meta name="twitter:image" content="${ogImage}" />
     <link rel="icon" type="image/png" href="/images/favicon.png" />
+${GA_SNIPPET}
 ${cssLink}    <style>${PRERENDER_CSS}</style>
   </head>
   <body style="background:linear-gradient(180deg,#4a148c,#6a1b9a,#4a148c);min-height:100vh;margin:0">

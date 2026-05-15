@@ -16,6 +16,7 @@ import { PWAUpdatePrompt } from './components/PWAUpdatePrompt'
 import { OfflineBanner } from './components/OfflineBanner'
 import { RouterChrome } from './components/RouterChrome'
 import { SeoLandingParams } from './components/SeoLandingParams'
+import { GoogleAnalytics } from './components/GoogleAnalytics'
 import { LearnLayout } from './layouts/LearnLayout'
 import { RequireAuth } from './components/auth/RequireAuth'
 import App from './App.tsx'
@@ -94,6 +95,7 @@ createRoot(document.getElementById('root')!).render(
       <PaymentReturnHandler />
       <RefCapture />
       <SeoLandingParams />
+      <GoogleAnalytics />
       <BlockedOverlay />
       <PWAUpdatePrompt />
       <OfflineBanner />

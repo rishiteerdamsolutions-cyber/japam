@@ -43,6 +43,7 @@ export default defineConfig(({ mode }) => {
           'vite.svg',
           'openapi.json',
           'robots.txt',
+          'googlee525cd6fc9a02f00.html',
           'birthday.png',
           'anniversary-japa.png',
           'openingvideo.mp4',

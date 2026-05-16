@@ -151,7 +151,7 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
 
         {demoNotice}
 
-        <div className="grid grid-cols-3 gap-2 w-full mt-3 mb-5 sm:mb-6 items-stretch shrink-0">
+        <div className="grid grid-cols-3 gap-2 w-full mt-3 mb-2 items-stretch shrink-0">
           <motion.button
             type="button"
             aria-label={t('menu.allDevatasJapa')}
@@ -204,7 +204,7 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
         </div>
 
         {!istaDevataRevealed ? (
-          <div className="w-full flex-1 flex flex-col items-center justify-center min-h-0 py-2 sm:py-3">
+          <div className="w-full shrink-0 flex flex-col items-center mt-4 sm:mt-6">
             <div className="w-full min-w-0 max-w-full flex justify-center items-center pl-[max(0.25rem,env(safe-area-inset-left,0px))] pr-[max(0.25rem,env(safe-area-inset-right,0px))]">
               <div className="relative @container max-w-full rounded-2xl border-2 border-amber-400/75 p-0 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.45),0_0_0_1px_rgba(251,191,36,0.2)_inset] bg-black/20 ring-1 ring-amber-300/35 w-full min-w-0 max-w-[min(100%,26rem)] overflow-hidden">
                 {introHeroSlot ?? (
@@ -258,7 +258,9 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
           </motion.div>
         )}
 
-        <div className="mt-auto w-full shrink-0 pt-4 sm:pt-5">
+        {!istaDevataRevealed && <div className="flex-1 min-h-6 sm:min-h-10" aria-hidden />}
+
+        <div className="mt-auto w-full shrink-0 pt-3 sm:pt-4 pb-1">
           <AppFooter />
         </div>
         <BottomNav />

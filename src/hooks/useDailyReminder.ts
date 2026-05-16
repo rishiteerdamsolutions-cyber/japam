@@ -2,88 +2,60 @@ import { useEffect, useMemo, useRef } from 'react';
 import { useAuthStore } from '../store/authStore';
 import { useReminderStore } from '../store/reminderStore';
 import { useProfileStore } from '../store/profileStore';
-
-/**
- * Fields we pass to `showNotification` / `Notification`. DOM `NotificationOptions`
- * typings differ across TypeScript versions; cast at the call site only.
- */
-type BrowserNotificationPayload = {
-  body?: string;
-  icon?: string;
-  badge?: string;
-  tag?: string;
-  renotify?: boolean;
-  requireInteraction?: boolean;
-  vibrate?: number[];
-};
-
-function nextOccurrenceMs(hhmm: string): number | null {
-  const m = hhmm.match(/^(\d{2}):(\d{2})$/);
-  if (!m) return null;
-  const hh = Number(m[1]);
-  const mm = Number(m[2]);
-  if (!Number.isFinite(hh) || !Number.isFinite(mm) || hh < 0 || hh > 23 || mm < 0 || mm > 59) return null;
-
-  const now = new Date();
-  const next = new Date(now);
-  next.setSeconds(0, 0);
-  next.setHours(hh, mm, 0, 0);
-  if (next.getTime() <= now.getTime()) next.setDate(next.getDate() + 1);
-  return next.getTime();
-}
+import {
+  REMINDER_SOUND_FALLBACK_URL,
+  REMINDER_SOUND_URL,
+  buildNotificationText,
+  nextOccurrenceMs,
+  syncReminderScheduleToServiceWorker,
+} from '../lib/reminderSync';
 
 async function showNotification(title: string, body: string) {
   try {
     if (typeof Notification === 'undefined') return;
     if (Notification.permission !== 'granted') return;
 
-    // Prefer SW notification — works even when tab is in background
     if ('serviceWorker' in navigator) {
       const reg = await navigator.serviceWorker.ready.catch(() => null);
       if (reg) {
-        const opts: BrowserNotificationPayload = {
+        await reg.showNotification(title, {
           body,
-          icon: '/vite.svg',
-          badge: '/vite.svg',
+          icon: '/images/favicon.png',
+          badge: '/images/favicon.png',
           tag: 'japam-daily-reminder',
           renotify: true,
           requireInteraction: true,
+          silent: false,
           vibrate: [300, 120, 300],
-        };
-        await reg.showNotification(title, opts as NotificationOptions);
+          data: { soundUrl: REMINDER_SOUND_URL, soundFallbackUrl: REMINDER_SOUND_FALLBACK_URL },
+        } as NotificationOptions);
         return;
       }
     }
-    // Fallback: plain Notification API
-    const fallback: BrowserNotificationPayload = {
+    new Notification(title, {
       body,
-      icon: '/vite.svg',
+      icon: '/images/favicon.png',
       tag: 'japam-daily-reminder',
       renotify: true,
-    };
-    new Notification(title, fallback as NotificationOptions);
+      silent: false,
+    } as NotificationOptions);
   } catch {
     // ignore
   }
 }
 
-function getReminderAudioUrl(): string | null {
-  // User-provided file path: public/sounds/notification.mp3
-  const candidate = '/sounds/notification.mp3';
-  return candidate;
-}
-
-async function playReminderAudio() {
-  const src = getReminderAudioUrl();
-  if (!src) return false;
-  try {
-    const audio = new Audio(src);
-    audio.preload = 'auto';
-    await audio.play();
-    return true;
-  } catch {
-    return false;
+async function playReminderAudio(): Promise<boolean> {
+  for (const src of [REMINDER_SOUND_URL, REMINDER_SOUND_FALLBACK_URL]) {
+    try {
+      const audio = new Audio(src);
+      audio.preload = 'auto';
+      await audio.play();
+      return true;
+    } catch {
+      // try fallback
+    }
   }
+  return false;
 }
 
 function playAlarmBeepFallback() {
@@ -104,8 +76,9 @@ function playAlarmBeepFallback() {
     osc.connect(gain);
     osc.start(now);
     osc.stop(now + 1.25);
-
-    osc.onended = () => { ctx.close().catch(() => {}); };
+    osc.onended = () => {
+      ctx.close().catch(() => {});
+    };
   } catch {
     // ignore
   }
@@ -116,15 +89,7 @@ async function playAlarm() {
   if (!played) playAlarmBeepFallback();
 }
 
-function buildNotificationText(displayName: string | null): { title: string; body: string } {
-  const name = displayName?.trim() || null;
-  const greeting = name ? `Namaskaram ${name} \uD83D\uDE4F` : 'Japam reminder \uD83D\uDE4F';
-  const body = name
-    ? "It's time for your daily japa! Chant your favourite God's name and remove obstacles. Open Japam now."
-    : "Time to chant your favourite God's name. Open Japam for your daily japa.";
-  return { title: greeting, body };
-}
-
+/** In-app fallback scheduler when the tab is open; primary scheduling lives in the service worker. */
 export function useDailyReminder() {
   const user = useAuthStore((s) => s.user);
   const loading = useAuthStore((s) => s.loading);
@@ -146,6 +111,16 @@ export function useDailyReminder() {
     if (loading) return;
     load(uid ?? undefined).catch(() => {});
   }, [uid, loading, load]);
+
+  useEffect(() => {
+    if (!loaded) return;
+    syncReminderScheduleToServiceWorker({
+      enabled: reminder.enabled,
+      time: reminder.time,
+      displayName,
+      uid,
+    }).catch(() => {});
+  }, [loaded, reminder.enabled, reminder.time, displayName, uid]);
 
   useEffect(() => {
     if (!loaded) return;
@@ -194,11 +169,9 @@ export function useDailyReminder() {
         void playAlarm();
         schedule();
       }, delay);
-      // Reliability layer: if browser throttles/suspends timeout, poll every minute and fire once/day.
       intervalRef.current = setInterval(maybeFire, 60_000);
     };
 
-    // Immediate catch-up when app regains focus / tab becomes visible.
     const onVisibility = () => {
       if (document.visibilityState === 'visible') maybeFire();
     };

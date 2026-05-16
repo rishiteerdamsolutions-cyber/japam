@@ -1,8 +1,11 @@
 import { registerRoute } from 'workbox-routing'
 import { NetworkOnly } from 'workbox-strategies'
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching'
+import { handleReminderMessage, installReminderListeners } from './sw-reminder'
 
 declare let self: ServiceWorkerGlobalScope
+
+installReminderListeners(self)
 
 /**
  * Installed PWA: OAuth / Firebase return URLs often include query parameters. Serving a
@@ -33,6 +36,7 @@ precacheAndRoute(self.__WB_MANIFEST)
 // For registerType: 'prompt' — only skip waiting when user clicks "Update Now"
 self.addEventListener('message', (event: ExtendableMessageEvent) => {
   if (event.data?.type === 'SKIP_WAITING') self.skipWaiting()
+  if (handleReminderMessage(event.data)) return
 })
 
 // Notification click: focus existing app window or open new one

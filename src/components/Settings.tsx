@@ -195,6 +195,9 @@ export function Settings({ onBack }: SettingsProps) {
   const loadReminder = useReminderStore((s) => s.load);
   const setReminder = useReminderStore((s) => s.setReminder);
   const [savingReminder, setSavingReminder] = useState(false);
+  const [draftReminderEnabled, setDraftReminderEnabled] = useState(false);
+  const [draftReminderTime, setDraftReminderTime] = useState('07:00');
+  const [reminderSaveMessage, setReminderSaveMessage] = useState<string | null>(null);
   const [notifPermission, setNotifPermission] = useState<NotificationPermission | 'unsupported'>(() => {
     if (typeof Notification === 'undefined') return 'unsupported';
     return Notification.permission;
@@ -347,6 +350,12 @@ export function Settings({ onBack }: SettingsProps) {
     if (user?.uid) loadReminder(user.uid).catch(() => {});
     else loadReminder(undefined).catch(() => {});
   }, [user?.uid, loadReminder]);
+  useEffect(() => {
+    if (!reminderLoaded) return;
+    setDraftReminderEnabled(reminder.enabled);
+    setDraftReminderTime(reminder.time || '07:00');
+    setReminderSaveMessage(null);
+  }, [reminderLoaded, reminder.enabled, reminder.time]);
   useEffect(() => { setLocalName(displayName ?? ''); }, [displayName]);
   useEffect(() => {
     if (!user?.uid) { setAppreciations(null); return; }
@@ -650,35 +659,64 @@ export function Settings({ onBack }: SettingsProps) {
                   <button
                     type="button"
                     disabled={!reminderLoaded || savingReminder}
-                    onClick={async () => {
-                      if (!reminderLoaded) return;
-                      const next = !reminder.enabled;
-                      if (next && typeof Notification !== 'undefined' && Notification.permission !== 'granted') {
-                        setNotifPermission(await Notification.requestPermission().catch(() => 'default' as NotificationPermission));
-                      }
-                      setSavingReminder(true);
-                      try { await setReminder({ enabled: next, time: next ? (reminder.time || '07:00') : null }); } finally { setSavingReminder(false); }
+                    onClick={() => {
+                      setDraftReminderEnabled((on) => !on);
+                      setReminderSaveMessage(null);
                     }}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium ${reminder.enabled ? 'bg-amber-500 text-white' : 'bg-white/10 text-amber-200'} disabled:opacity-50`}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium ${draftReminderEnabled ? 'bg-amber-500 text-white' : 'bg-white/10 text-amber-200'} disabled:opacity-50`}
                   >
-                    {reminder.enabled ? 'ON' : 'OFF'}
+                    {draftReminderEnabled ? 'ON' : 'OFF'}
                   </button>
                 </div>
-                <div className={`${reminder.enabled ? '' : 'opacity-50'}`}>
-                  <label className="text-amber-200/70 text-xs block mb-1">Time</label>
+                <div className={`${draftReminderEnabled ? '' : 'opacity-50'}`}>
+                  <label className="text-amber-200/70 text-xs block mb-1">Set time</label>
                   <input
                     type="time"
-                    disabled={!reminder.enabled || savingReminder}
-                    value={reminder.time || '07:00'}
-                    onChange={async (e) => {
+                    disabled={!draftReminderEnabled || savingReminder}
+                    value={draftReminderTime}
+                    onChange={(e) => {
                       const time = e.target.value;
                       if (!/^\d{2}:\d{2}$/.test(time)) return;
-                      setSavingReminder(true);
-                      try { await setReminder({ enabled: true, time }); } finally { setSavingReminder(false); }
+                      setDraftReminderTime(time);
+                      setReminderSaveMessage(null);
                     }}
                     className="w-full px-3 py-2 rounded-lg bg-black/30 text-white border border-white/10 text-sm"
                   />
                 </div>
+                <button
+                  type="button"
+                  disabled={!reminderLoaded || savingReminder}
+                  onClick={async () => {
+                    if (!reminderLoaded) return;
+                    if (draftReminderEnabled && typeof Notification !== 'undefined' && Notification.permission !== 'granted') {
+                      const perm = await Notification.requestPermission().catch(() => 'default' as NotificationPermission);
+                      setNotifPermission(perm);
+                      if (perm !== 'granted') {
+                        setReminderSaveMessage('Allow notifications to save your reminder.');
+                        return;
+                      }
+                    }
+                    setSavingReminder(true);
+                    setReminderSaveMessage(null);
+                    try {
+                      const ok = await setReminder({
+                        enabled: draftReminderEnabled,
+                        time: draftReminderEnabled ? draftReminderTime : null,
+                      });
+                      setReminderSaveMessage(ok ? 'Reminder saved.' : 'Could not save reminder. Try again.');
+                    } finally {
+                      setSavingReminder(false);
+                    }
+                  }}
+                  className="w-full py-2.5 rounded-xl bg-amber-500 text-white text-sm font-medium disabled:opacity-50"
+                >
+                  {savingReminder ? 'Saving…' : 'Save'}
+                </button>
+                {reminderSaveMessage && (
+                  <p className={`text-xs ${reminderSaveMessage.includes('saved') ? 'text-green-400/90' : 'text-amber-200/80'}`}>
+                    {reminderSaveMessage}
+                  </p>
+                )}
                 {notifPermission === 'granted' && (
                   <button type="button" disabled={testingNotif} onClick={sendTestNotification} className="w-full py-2 rounded-lg bg-white/10 text-amber-200 text-sm">
                     {testingNotif ? 'Sending…' : 'Test notification'}

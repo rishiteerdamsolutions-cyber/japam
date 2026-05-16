@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppHeader } from '../components/layout/AppHeader';
-import { AppFooter } from '../components/layout/AppFooter';
 import { useUnlockStore } from '../store/unlockStore';
 import { hasActivePaidAccess } from '../lib/membershipDisplay';
 import { auth } from '../lib/firebase';
@@ -125,7 +124,6 @@ export function ApavargaPage() {
             Apavarga means liberation — a sacred space for the Japam community. Back button returns you to Settings.
           </p>
         </div>
-        <AppFooter />
       </div>
     </div>
   );

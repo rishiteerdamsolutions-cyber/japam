@@ -32,6 +32,7 @@ export const useReminderStore = create<ReminderState>((setState) => ({
   load: async (uid?: string) => {
     if (!uid) {
       setState({ reminder: initial, loaded: true });
+      await pushReminderToServiceWorker(initial).catch(() => {});
       return;
     }
     const r = await loadUserReminder(uid);

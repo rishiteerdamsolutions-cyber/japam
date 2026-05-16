@@ -2,8 +2,6 @@ import { useEffect } from 'react';
 import { GoogleSignIn } from './GoogleSignIn';
 import { JapamLogo } from '../ui/JapamLogo';
 import { isFirebaseConfigured } from '../../lib/firebase';
-import { AppFooter } from '../layout/AppFooter';
-
 interface SignInRequiredProps {
   onBack: () => void;
   message?: string;
@@ -34,9 +32,6 @@ export function SignInRequired({ onBack, message = 'Sign in with Google to play'
           <div className="flex justify-center pt-2">
             <GoogleSignIn />
           </div>
-        </div>
-        <div className="mt-auto pt-8 w-full">
-          <AppFooter />
         </div>
       </div>
     </div>

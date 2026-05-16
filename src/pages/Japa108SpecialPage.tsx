@@ -8,7 +8,6 @@ import { useAuthStore } from '../store/authStore';
 import { useUnlockStore } from '../store/unlockStore';
 import { hasActivePaidAccess } from '../lib/membershipDisplay';
 import { AccessBadge } from '../components/ui/AccessBadge';
-import { AppFooter } from '../components/layout/AppFooter';
 import { BottomNav } from '../components/nav/BottomNav';
 import { MenuMatchChantHeader } from '../components/layout/MenuMatchChantHeader';
 
@@ -147,8 +146,6 @@ export function Japa108SpecialPage() {
             </div>
           )}
         </div>
-        <div className="flex-1 min-h-8" />
-        <AppFooter />
         <BottomNav />
       </div>
     );
@@ -191,7 +188,6 @@ export function Japa108SpecialPage() {
           </p>
         ) : null}
       </div>
-      <AppFooter />
       <BottomNav />
     </div>
   );

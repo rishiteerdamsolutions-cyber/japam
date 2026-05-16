@@ -65,7 +65,7 @@ async function showReminderNotification(config: ReminderConfig): Promise<void> {
 
 async function fireIfDue(): Promise<boolean> {
   const config = await readReminderConfig();
-  if (!config?.enabled || !config.time) return false;
+  if (!config?.enabled || !config.time || !config.uid) return false;
   const m = config.time.match(/^(\d{2}):(\d{2})$/);
   if (!m) return false;
 
@@ -85,7 +85,7 @@ async function fireIfDue(): Promise<boolean> {
 export async function scheduleReminderFromCache(): Promise<void> {
   clearSchedule();
   const config = await readReminderConfig();
-  if (!config?.enabled || !config.time) return;
+  if (!config?.enabled || !config.time || !config.uid) return;
 
   const nextMs = nextOccurrenceMs(config.time);
   if (nextMs == null) return;

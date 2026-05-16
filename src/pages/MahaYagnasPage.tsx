@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
 import { MenuMatchChantHeader } from '../components/layout/MenuMatchChantHeader';
 import { BottomNav } from '../components/nav/BottomNav';
-import { AppFooter } from '../components/layout/AppFooter';
 import { DEITIES } from '../data/deities';
 import { useAuthStore } from '../store/authStore';
 import { useUnlockStore } from '../store/unlockStore';
@@ -557,9 +556,6 @@ export function MahaYagnasPage() {
           })}
         </div>
       </main>
-      <div className="shrink-0 w-full bg-black/60 backdrop-blur-md border-t border-amber-500/25 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
-        <AppFooter className="!border-t-0 !text-amber-200/90 !pt-4 !pb-3 [&_p]:!text-amber-200/75 [&_a]:!text-amber-200/85" />
-      </div>
       <BottomNav />
       </div>
     </div>

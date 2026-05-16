@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { MenuMatchChantHeader } from '../components/layout/MenuMatchChantHeader';
-import { AppFooter } from '../components/layout/AppFooter';
 import { BottomNav } from '../components/nav/BottomNav';
 import { Paywall } from '../components/payment/Paywall';
 import { DonateModal } from '../components/donation/DonateModal';
@@ -217,8 +216,6 @@ export function PlansDakshinaPage() {
           {t('plans.legalLinkSuffix')}
         </p>
 
-        <div className="mb-6" />
-        <AppFooter />
         <BottomNav />
       </div>
 

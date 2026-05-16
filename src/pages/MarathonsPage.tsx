@@ -3,7 +3,6 @@ import type { User } from 'firebase/auth';
 import type { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { AppFooter } from '../components/layout/AppFooter';
 import INDIA_REGIONS from '../data/indiaRegions.json';
 import { DEITIES } from '../data/deities';
 import { useAuthStore } from '../store/authStore';
@@ -778,7 +777,6 @@ export function MarathonsPage() {
           )}
         </div>
       )}
-      <AppFooter />
       <BottomNav />
       </div>
     </div>

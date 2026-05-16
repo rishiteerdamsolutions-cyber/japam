@@ -9,7 +9,6 @@ import { FREE_WEEKLY_STREAK_DEITY } from '../lib/weeklyStreakPlan';
 import { hasActivePaidAccess } from '../lib/membershipDisplay';
 import { useUnlockStore } from '../store/unlockStore';
 import { useWeeklyStreakStore, type WeeklyStreakProPlan } from '../store/weeklyStreakStore';
-import { AppFooter } from '../components/layout/AppFooter';
 import { BottomNav } from '../components/nav/BottomNav';
 import { MenuMatchChantHeader } from '../components/layout/MenuMatchChantHeader';
 import { AccessBadge } from '../components/ui/AccessBadge';
@@ -263,7 +262,6 @@ export function WeeklyStreakPage() {
           )}
         </section>
       </div>
-      <AppFooter />
       <BottomNav />
     </div>
   );

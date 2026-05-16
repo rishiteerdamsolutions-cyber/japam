@@ -114,12 +114,10 @@ export function useDailyReminder() {
 
   useEffect(() => {
     if (!loaded) return;
-    syncReminderScheduleToServiceWorker({
-      enabled: reminder.enabled,
-      time: reminder.time,
-      displayName,
-      uid,
-    }).catch(() => {});
+    const config = uid
+      ? { enabled: reminder.enabled, time: reminder.time, displayName, uid }
+      : { enabled: false, time: null, displayName: null, uid: null };
+    syncReminderScheduleToServiceWorker(config).catch(() => {});
   }, [loaded, reminder.enabled, reminder.time, displayName, uid]);
 
   useEffect(() => {
@@ -133,12 +131,20 @@ export function useDailyReminder() {
       intervalRef.current = null;
     };
 
+    if (!uid) {
+      clear();
+      return () => {
+        cancelled = true;
+        clear();
+      };
+    }
+
     const dayKey = () => new Date().toISOString().slice(0, 10);
-    const firedStorageKey = `japam-reminder-fired:${uid ?? 'guest'}:${reminder.time ?? 'na'}`;
+    const firedStorageKey = `japam-reminder-fired:${uid}:${reminder.time ?? 'na'}`;
 
     const maybeFire = () => {
       if (cancelled) return;
-      if (!reminder.enabled || !reminder.time) return;
+      if (!uid || !reminder.enabled || !reminder.time) return;
       const m = reminder.time.match(/^(\d{2}):(\d{2})$/);
       if (!m) return;
       const hh = Number(m[1]);
@@ -157,7 +163,7 @@ export function useDailyReminder() {
 
     const schedule = () => {
       clear();
-      if (!reminder.enabled || !reminder.time) return;
+      if (!uid || !reminder.enabled || !reminder.time) return;
       const nextMs = nextOccurrenceMs(reminder.time);
       if (nextMs == null) return;
       const delay = Math.max(500, nextMs - Date.now());
@@ -176,7 +182,6 @@ export function useDailyReminder() {
       if (document.visibilityState === 'visible') maybeFire();
     };
     document.addEventListener('visibilitychange', onVisibility);
-    maybeFire();
     schedule();
 
     return () => {
@@ -185,5 +190,5 @@ export function useDailyReminder() {
       clear();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [key, loaded]);
+  }, [key, loaded, uid]);
 }

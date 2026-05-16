@@ -1,6 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import { AppFooter } from '../components/layout/AppFooter';
-
 export function ShippingDeliveryPage() {
   const navigate = useNavigate();
 
@@ -67,8 +65,6 @@ export function ShippingDeliveryPage() {
             </div>
           </section>
         </div>
-
-        <AppFooter />
       </div>
     </div>
   );

@@ -1,6 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import { AppFooter } from '../components/layout/AppFooter';
-
 export function PrivacyPolicyPage() {
   const navigate = useNavigate();
 
@@ -144,8 +142,6 @@ export function PrivacyPolicyPage() {
             </div>
           </section>
         </div>
-
-        <AppFooter />
       </div>
     </div>
   );

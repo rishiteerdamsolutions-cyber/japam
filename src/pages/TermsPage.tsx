@@ -1,6 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import { AppFooter } from '../components/layout/AppFooter';
-
 export function TermsPage() {
   const navigate = useNavigate();
 
@@ -168,7 +166,6 @@ export function TermsPage() {
           </section>
         </div>
 
-        <AppFooter />
       </div>
     </div>
   );

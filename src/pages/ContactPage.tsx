@@ -1,6 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import { AppFooter } from '../components/layout/AppFooter';
-
 export function ContactPage() {
   const navigate = useNavigate();
 
@@ -56,8 +54,6 @@ export function ContactPage() {
             For support, refund requests, or policy questions, please use the contact details above. We aim to respond within 2–3 business days.
           </p>
         </div>
-
-        <AppFooter />
       </div>
     </div>
   );

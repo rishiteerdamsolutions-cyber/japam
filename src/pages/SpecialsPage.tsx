@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { useAuthStore } from '../store/authStore';
 import { isFirebaseConfigured } from '../lib/firebase';
-import { AppFooter } from '../components/layout/AppFooter';
 import { BottomNav } from '../components/nav/BottomNav';
 import { MenuMatchChantHeader } from '../components/layout/MenuMatchChantHeader';
 import { LAUNCH_FEATURE_OCCASION_GAMES } from '../config/launchFeatures';
@@ -110,8 +109,6 @@ export function SpecialsPage() {
           </motion.button>
         </div>
 
-        <div className="flex-1 min-h-16" />
-        <AppFooter />
         <BottomNav />
       </div>
     </div>

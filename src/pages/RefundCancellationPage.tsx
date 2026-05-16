@@ -1,6 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import { AppFooter } from '../components/layout/AppFooter';
-
 export function RefundCancellationPage() {
   const navigate = useNavigate();
 
@@ -70,7 +68,6 @@ export function RefundCancellationPage() {
           </section>
         </div>
 
-        <AppFooter />
       </div>
     </div>
   );

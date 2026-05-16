@@ -7,7 +7,6 @@ import { useLevelsConfigStore } from '../../store/levelsConfigStore';
 import { AccessBadge } from '../ui/AccessBadge';
 import { DonateThankYouBox } from '../donation/DonateThankYouBox';
 import { MenuMatchChantHeader } from '../layout/MenuMatchChantHeader';
-import { AppFooter } from '../layout/AppFooter';
 import { BottomNav } from '../nav/BottomNav';
 import { LEVELS } from '../../data/levels';
 import { EPISODES } from '../../data/episodes';
@@ -129,7 +128,6 @@ export function WorldMap({ onSelectLevel }: WorldMapProps) {
           </div>
         ))}
       </div>
-      <AppFooter />
       <BottomNav />
       </div>
     </div>

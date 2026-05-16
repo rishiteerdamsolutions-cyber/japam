@@ -2,7 +2,6 @@ import { useState, useRef, useEffect, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { AppFooter } from '../layout/AppFooter';
 import { BottomNav } from '../nav/BottomNav';
 import { ActiveUsersStrip } from '../game/ActiveUsersStrip';
 import { DEITIES } from '../../data/deities';
@@ -260,9 +259,6 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
 
         {!istaDevataRevealed && <div className="flex-1 min-h-6 sm:min-h-10" aria-hidden />}
 
-        <div className="mt-auto w-full shrink-0 pt-3 sm:pt-4 pb-1">
-          <AppFooter />
-        </div>
         <BottomNav />
       </div>
     </div>

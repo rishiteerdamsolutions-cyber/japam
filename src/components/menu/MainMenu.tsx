@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { useState, useRef, useEffect, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -49,6 +49,19 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
   const unlockExpiresAt = useUnlockStore((s) => s.unlockExpiresAt);
   const isDonor = useUnlockStore((s) => s.isDonor);
   const [istaDevataRevealed, setIstaDevataRevealed] = useState(false);
+  const istaDevataScrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!istaDevataRevealed) return;
+    const el = istaDevataScrollRef.current;
+    if (!el) return;
+    const resetScroll = () => {
+      el.scrollTop = 0;
+    };
+    resetScroll();
+    const frame = requestAnimationFrame(resetScroll);
+    return () => cancelAnimationFrame(frame);
+  }, [istaDevataRevealed]);
   const profileName = useProfileStore((s) => s.displayName);
   const fallbackName = user?.displayName || (user?.email ? user.email.split('@')[0] : null);
   const displayName = profileName || fallbackName || t('menu.signedIn');
@@ -61,7 +74,7 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
   const initial = (displayName && displayName.charAt(0).toUpperCase()) || '?';
 
   return (
-    <div className="relative min-h-screen min-h-[100dvh] flex flex-col items-center p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] overflow-hidden">
+    <div className="relative h-[100dvh] max-h-[100dvh] flex flex-col items-center p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] overflow-hidden">
       <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10 w-full max-w-lg flex flex-col flex-1 min-h-0 items-center">
         {/* Top: brand (left) and user / Google sign-in (right) */}
@@ -206,7 +219,13 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
             </div>
           </div>
         ) : (
-          <motion.div className="w-full flex-1 min-h-0 overflow-y-auto overscroll-contain mb-2 sm:mb-3" role="region" aria-label={t('menu.istaDevata')}>
+          <motion.div
+            ref={istaDevataScrollRef}
+            tabIndex={-1}
+            className="w-full flex-1 min-h-0 overflow-y-auto overscroll-contain touch-pan-y mb-2 sm:mb-3"
+            role="region"
+            aria-label={t('menu.istaDevata')}
+          >
             <p className="text-center text-amber-200/90 text-xs sm:text-sm mb-2">
               {t('menu.chooseIstaDevata')}
             </p>

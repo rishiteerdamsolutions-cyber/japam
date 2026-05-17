@@ -236,6 +236,7 @@ export function GameScreen({
   const status = useGameStore(s => s.status);
   const reset = useGameStore(s => s.reset);
   const matchSfxPlayToken = useGameStore((s) => s.matchSfxPlayToken);
+  const lastMatchSfxTokenRef = useRef(0);
   const currentLevelIndex = useGameStore(s => s.levelIndex);
   const pendingTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const bgMusicEnabled = useSettingsStore(s => s.backgroundMusicEnabled);
@@ -762,9 +763,14 @@ export function GameScreen({
     addMoves(movesToAdd);
   }, [addMoves, currentLevelIndex]);
 
-  /** Per-deity 3/4/5 match SFX: play as soon as the match pop animation starts (store bumps token with highlight). */
+  /** Per-deity 3/4/5 match SFX: play only when token increases (not on remount with a stale token). */
   useEffect(() => {
-    if (matchSfxPlayToken === 0) return;
+    if (matchSfxPlayToken === 0) {
+      lastMatchSfxTokenRef.current = 0;
+      return;
+    }
+    if (matchSfxPlayToken <= lastMatchSfxTokenRef.current) return;
+    lastMatchSfxTokenRef.current = matchSfxPlayToken;
     const sel = useGameStore.getState().matchSfx;
     if (sel) playMatchSfx(sel);
   }, [matchSfxPlayToken, playMatchSfx]);

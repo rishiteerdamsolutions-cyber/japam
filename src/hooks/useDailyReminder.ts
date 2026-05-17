@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import { useAuthStore } from '../store/authStore';
 import { useReminderStore } from '../store/reminderStore';
 import { useProfileStore } from '../store/profileStore';
+import { shouldSuppressIncidentalAudio } from '../lib/authAudioGuard';
 import {
   REMINDER_SOUND_FALLBACK_URL,
   REMINDER_SOUND_URL,
@@ -85,6 +86,7 @@ function playAlarmBeepFallback() {
 }
 
 async function playAlarm() {
+  if (shouldSuppressIncidentalAudio()) return;
   const played = await playReminderAudio();
   if (!played) playAlarmBeepFallback();
 }
@@ -140,7 +142,8 @@ export function useDailyReminder() {
     }
 
     const dayKey = () => new Date().toISOString().slice(0, 10);
-    const firedStorageKey = `japam-reminder-fired:${uid}:${reminder.time ?? 'na'}`;
+    /** Per device + time (not per uid) so sign-in does not re-trigger today's alarm audio. */
+    const firedStorageKey = `japam-reminder-fired:${reminder.time ?? 'na'}`;
 
     const maybeFire = () => {
       if (cancelled) return;

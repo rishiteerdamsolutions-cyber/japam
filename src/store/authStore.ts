@@ -7,6 +7,7 @@ import {
   type User
 } from 'firebase/auth';
 import { auth, googleProvider, isFirebaseConfigured } from '../lib/firebase';
+import { onAuthUidChanged, silenceActiveGameAudio, suppressIncidentalAudioAfterAuth } from '../lib/authAudioGuard';
 
 /**
  * In dev (Vite HMR + React 18 Strict Mode), modules can be re-evaluated while the Firebase
@@ -27,6 +28,9 @@ function attachFirebaseAuthListeners() {
 
   onAuthStateChanged(a, (user) => {
     if (!authPersistenceHydrated) return;
+    const prevUid = useAuthStore.getState().user?.uid ?? null;
+    const nextUid = user?.uid ?? null;
+    onAuthUidChanged(prevUid, nextUid);
     useAuthStore.setState({
       user,
       loading: false,
@@ -130,6 +134,8 @@ export const useAuthStore = create<AuthState>((set) => ({
     if (!started) return;
 
     try {
+      suppressIncidentalAudioAfterAuth();
+      silenceActiveGameAudio();
       await signInWithPopup(auth, googleProvider);
       // Sync immediately so callers (e.g. menu → game) see `user` without waiting for the next listener tick.
       set({ user: auth.currentUser, signInPending: false, error: null });
@@ -149,6 +155,8 @@ export const useAuthStore = create<AuthState>((set) => ({
   signOut: async () => {
     if (!isFirebaseConfigured || !auth) return;
     set({ error: null });
+    suppressIncidentalAudioAfterAuth();
+    silenceActiveGameAudio();
     try {
       await firebaseSignOut(auth);
     } catch (err) {

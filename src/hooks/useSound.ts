@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { DEITY_IDS, getDeity } from '../data/deities';
 import type { DeityId } from '../data/deities';
+import { shouldSuppressIncidentalAudio } from '../lib/authAudioGuard';
 import { matchSfxUrlCandidates, type MatchSfxSelection } from '../lib/matchSfx';
 
 let audioContext: AudioContext | null = null;
@@ -196,7 +197,7 @@ function playFirstAvailableUrl(urls: string[], volume: number) {
  * plus temple bells on 4-matches and conch (shank) on 5-matches.
  */
 export function playMatchSfxSelection(sel: MatchSfxSelection | null) {
-  if (!sel) return;
+  if (!sel || shouldSuppressIncidentalAudio()) return;
   // Newest invoked match SFX always wins.
   stopMatchBonusAudio();
   const urls = matchSfxUrlCandidates(sel.deity, sel.tier);

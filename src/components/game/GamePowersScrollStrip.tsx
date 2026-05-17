@@ -45,7 +45,7 @@ export interface PowerInfoModalPayload {
   armHints: string;
 }
 
-function PowerInfoModal({ payload, onClose }: { payload: PowerInfoModalPayload; onClose: () => void }) {
+export function PowerInfoModal({ payload, onClose }: { payload: PowerInfoModalPayload; onClose: () => void }) {
   const { t } = useTranslation();
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -100,7 +100,7 @@ function PowerInfoModal({ payload, onClose }: { payload: PowerInfoModalPayload; 
   );
 }
 
-function RoundPowerTile({
+export function RoundPowerTile({
   iconSrc,
   count,
   isArmed,
@@ -108,6 +108,7 @@ function RoundPowerTile({
   onOpenInfo,
   disabled,
   guestPreview,
+  menuPreview,
   revealTitle,
   revealDescription,
   earnDescription,
@@ -121,6 +122,8 @@ function RoundPowerTile({
   onOpenInfo: (payload: PowerInfoModalPayload) => void;
   disabled: boolean;
   guestPreview?: boolean;
+  /** Menu demo strip: long-press / double-tap opens info only; never arms or consumes. */
+  menuPreview?: boolean;
   revealTitle: string;
   revealDescription: string;
   earnDescription: string;
@@ -157,8 +160,11 @@ function RoundPowerTile({
       description = revealDescription;
       earnLine = undefined;
     }
-    const armHints =
-      !guestPreview && canArm && !isArmed
+    const armHints = menuPreview
+      ? t('menu.powersPreviewInteraction', {
+          defaultValue: 'Long-press or double-tap to read how this power works. Play a level to use it.',
+        })
+      : !guestPreview && canArm && !isArmed
         ? t('powers.longPressToUse')
         : guestPreview
           ? t('game.guestPowersTileHint')
@@ -170,6 +176,7 @@ function RoundPowerTile({
     disarmHint,
     earnDescription,
     guestPreview,
+    menuPreview,
     isArmed,
     revealDescription,
     revealTitle,
@@ -187,6 +194,10 @@ function RoundPowerTile({
     onArmCycle();
   }, [onArmCycle]);
 
+  const openInfo = useCallback(() => {
+    onOpenInfo(buildInfoPayload());
+  }, [buildInfoPayload, onOpenInfo]);
+
   const handlePointerDown = (e: React.PointerEvent) => {
     if (guestPreview) return;
     if (e.pointerType !== 'touch') return;
@@ -194,6 +205,14 @@ function RoundPowerTile({
     clearSingleTapTimer();
     longPressTimerRef.current = window.setTimeout(() => {
       longPressTimerRef.current = null;
+      if (menuPreview) {
+        longPressFiredRef.current = true;
+        lastTouchGestureRef.current = Date.now();
+        lastPointerUpRef.current = 0;
+        clearSingleTapTimer();
+        openInfo();
+        return;
+      }
       if (!canArm) return;
       longPressFiredRef.current = true;
       lastTouchGestureRef.current = Date.now();
@@ -224,7 +243,16 @@ function RoundPowerTile({
     if (lastPointerUpRef.current > 0 && now - lastPointerUpRef.current < DOUBLE_TAP_MS) {
       clearSingleTapTimer();
       lastPointerUpRef.current = 0;
+      if (menuPreview) {
+        openInfo();
+        return;
+      }
       if (canArm) runArmCycle();
+      return;
+    }
+
+    if (menuPreview) {
+      lastPointerUpRef.current = now;
       return;
     }
 
@@ -247,11 +275,19 @@ function RoundPowerTile({
     e.preventDefault();
     clearSingleTapTimer();
     lastMouseClickForModalRef.current = 0;
+    if (menuPreview) {
+      openInfo();
+      return;
+    }
     if (!canArm) return;
     runArmCycle();
   };
 
   const handleClick = (e: React.MouseEvent) => {
+    if (menuPreview) {
+      e.preventDefault();
+      return;
+    }
     if (guestPreview) {
       runArmCycle();
       return;
@@ -301,7 +337,7 @@ function RoundPowerTile({
         border-2 transition-transform shadow-md
         bg-[#2a1f24] border-[color-mix(in_srgb,#2a1f24_88%,#000)]
         ${isArmed ? 'border-amber-300 ring-2 ring-amber-400/50 scale-[1.02]' : 'border-white/22 hover:border-white/35'}
-        ${guestPreview ? 'cursor-pointer opacity-95' : disabled && !isArmed ? 'opacity-40 cursor-not-allowed' : 'active:scale-95 hover:border-amber-400/45'}
+        ${menuPreview ? 'cursor-pointer opacity-95 active:scale-95 hover:border-amber-400/45' : guestPreview ? 'cursor-pointer opacity-95' : disabled && !isArmed ? 'opacity-40 cursor-not-allowed' : 'active:scale-95 hover:border-amber-400/45'}
         focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400
       `}
       >

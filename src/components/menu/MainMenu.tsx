@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { BottomNav } from '../nav/BottomNav';
 import { ActiveUsersStrip } from '../game/ActiveUsersStrip';
+import { MenuPowersScrollStrip } from './MenuPowersScrollStrip';
 import { DEITIES } from '../../data/deities';
 import { JapamBrand } from '../ui/JapamBrand';
 import { useAuthStore } from '../../store/authStore';
@@ -257,7 +258,16 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
           </motion.div>
         )}
 
-        {!istaDevataRevealed && <div className="flex-1 min-h-6 sm:min-h-10" aria-hidden />}
+        {!istaDevataRevealed && (
+          <motion.div
+            className="w-full flex-1 min-h-0 flex flex-col mt-2"
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15, duration: 0.28 }}
+          >
+            <MenuPowersScrollStrip />
+          </motion.div>
+        )}
 
         <BottomNav />
       </div>

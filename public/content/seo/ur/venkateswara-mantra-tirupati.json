@@ -1,0 +1,181 @@
+{
+  "schemaVersion": 1,
+  "pageId": "venkateswara-mantra-tirupati",
+  "lang": "ur",
+  "slug": "venkateswara-mantra-tirupati",
+  "deityId": "venkateswara",
+  "primaryKeyword": "venkateswara tirupati balaji mantra",
+  "secondaryKeywords": [
+    "om namo venkateshaaya",
+    "tirupati darshan mantra",
+    "venkateswara japa"
+  ],
+  "meta": {
+    "title": "Venkateswara Mantra — Tirupati Balaji Japa | Japam",
+    "description": "Om Namo Venkateshaaya — meaning, 108 japa, and digital practice for Balaji bhakti in Japam.",
+    "ogImage": "/images/deities/venkateswara.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "Venkateswara Mantra and Tirupati Balaji Japa"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Lord Venkateswara (Balaji) of Tirupati is beloved across South India and beyond. His name mantra is chanted for surrender and auspiciousness."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Whether you plan a darshan or pray from home, steady japa deepens bhakti."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Meaning of the mantra"
+    },
+    {
+      "type": "blockquote",
+      "runs": [
+        {
+          "text": "Om namo Venkateshaaya",
+          "bold": true
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Chant with a calm mind, offering salutation (Namaha) rather than demanding outcomes."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Benefits of japa (traditional view)"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Expresses complete surrender (Sharanagati)",
+        "Popular before Tirupati pilgrimage",
+        "Friday and Saturdays see heavy temple crowds — home japa anytime",
+        "Pairs with Tulasi leaves in traditional puja"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "How to chant 108 times"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Chant 108 or 1008 times as vow (kankana) before trip",
+        "Offer hair tonsuring only at temple if that is your sankalpa — not required for japa",
+        "Keep image or photo of Balaji before you",
+        "Use Japam to hear the mantra with counting"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "When to chant"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Any day; many increase japa before Vaikunta Ekadashi and Brahmotsavam season."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Practice with Japam"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Venkateswara mode in Japam uses Om namo Venkateshaaya during match-3 — helpful when you cannot visit the hill temple daily.",
+          "bold": false
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start وینکٹیشور Japa in Japam",
+      "href": "https://japam.digital/?lang=ur&deity=venkateswara&utm_source=google&utm_medium=seo&utm_campaign=venkateswara-mantra-tirupati&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=ur&try=1&utm_source=google&utm_medium=seo&utm_campaign=venkateswara-mantra-tirupati&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=ur&utm_source=google&utm_medium=seo&utm_campaign=venkateswara-mantra-tirupati&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=ur&deity=venkateswara&utm_source=google&utm_medium=seo&utm_campaign=venkateswara-mantra-tirupati&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "Spelling Venkateshaaya?",
+      "answer": "Regional spellings vary; follow your priest’s transliteration."
+    },
+    {
+      "question": "Is Tirupati laddu prasadam required?",
+      "answer": "No for home japa — prasadam is optional devotion."
+    },
+    {
+      "question": "Can I chant for marriage?",
+      "answer": "Many pray for family blessings; see marriage delay guide for more deities."
+    },
+    {
+      "question": "How many days before darshan?",
+      "answer": "Some chant 11 or 21 days — personal vow."
+    },
+    {
+      "question": "Does Japam have Venkateswara image?",
+      "answer": "Yes — select Venkateswara on the deity grid."
+    }
+  ],
+  "disclaimer": {
+    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+  },
+  "relatedPages": [
+    {
+      "pageId": "mantra-venkateswara",
+      "label": "Venkateswara pillar"
+    },
+    {
+      "pageId": "marriage-delay-mantra",
+      "label": "Marriage mantras"
+    },
+    {
+      "pageId": "japa-108-times",
+      "label": "108 japa guide"
+    }
+  ]
+}

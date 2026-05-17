@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 1,
+  "pageId": "guru-graha-mantra",
+  "lang": "sd",
+  "slug": "guru-graha-mantra",
+  "deityId": "guru",
+  "primaryKeyword": "guru graha mantra jupiter",
+  "secondaryKeywords": [
+    "brihaspati mantra",
+    "guru shanti"
+  ],
+  "meta": {
+    "title": "Guru (Jupiter) Graha Mantra | Japam",
+    "description": "Jupiter/Guru graha mantra and 108 japa in Japam.",
+    "ogImage": "/images/deities/guru.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "Guru Graha Mantra (Jupiter)"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Guru (Brihaspati) governs wisdom, teachers, and expansion in astrology."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Thursday is the classic day for Guru worship and mantra japa."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Meaning of the mantra"
+    },
+    {
+      "type": "blockquote",
+      "runs": [
+        {
+          "text": "Om Graam Greem Graum Sah Gurave Namaha",
+          "bold": true
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Chant with a calm mind, offering salutation rather than demanding specific outcomes."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Benefits of japa (traditional view)"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Builds festival discipline",
+        "Deepens deity bhakti",
+        "Community yagnas may align with season",
+        "Educational — not outcome guarantees"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "How to chant 108 times"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Set daily 108 sankalpa for festival period",
+        "Keep fast/vrat rules from your family tradition",
+        "Visit temple when possible",
+        "Use Japam counter between work/study"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "When to chant"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Thursday mornings are widely observed for Guru."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Practice with Japam"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Japam’s Guru mode plays the graha mantra during match-3 japa."
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start گرو Japa in Japam",
+      "href": "https://japam.digital/?lang=sd&deity=guru&utm_source=google&utm_medium=seo&utm_campaign=guru-graha-mantra&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=sd&try=1&utm_source=google&utm_medium=seo&utm_campaign=guru-graha-mantra&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=sd&utm_source=google&utm_medium=seo&utm_campaign=guru-graha-mantra&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=sd&deity=guru&utm_source=google&utm_medium=seo&utm_campaign=guru-graha-mantra&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "Exact festival date this year?",
+      "answer": "Check Hindu panchang for your region — we avoid locking a Gregorian year in this guide."
+    },
+    {
+      "question": "How many japas per day?",
+      "answer": "108 minimum for many vows; some do 1008 on main day under guidance."
+    },
+    {
+      "question": "Guest mode OK?",
+      "answer": "Yes for try; sign in to save progress across festival weeks."
+    },
+    {
+      "question": "Replace temple?",
+      "answer": "No — digital japa supports home practice."
+    },
+    {
+      "question": "Join collective yagna?",
+      "answer": "See Maha Japa Yagnas in Japam menu during campaigns."
+    }
+  ],
+  "disclaimer": {
+    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+  },
+  "relatedPages": [
+    {
+      "pageId": "navagraha-mantra",
+      "label": "Navagraha"
+    },
+    {
+      "pageId": "saraswati-mantra-exams",
+      "label": "Saraswati for study"
+    },
+    {
+      "pageId": "graha-shanti-mantra",
+      "label": "Graha shanti"
+    }
+  ]
+}

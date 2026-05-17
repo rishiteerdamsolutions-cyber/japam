@@ -1,0 +1,226 @@
+{
+  "schemaVersion": 1,
+  "pageId": "mantra-shanmukha-murugan",
+  "lang": "ks",
+  "slug": "mantra-shanmukha-murugan",
+  "deityId": "shanmukha",
+  "primaryKeyword": "موروگن سبرامنیا منتر",
+  "secondaryKeywords": [
+    "اوم سروانا بھاوایا نامہ",
+    "سکند شاستی منتر",
+    "تمل موروگن جاپا"
+  ],
+  "meta": {
+    "title": "موروگن (شنمکھا) منتر جاپ | جاپم",
+    "description": "سبرامنیا/مورگن/سکند منتر — اوم سراوان بھاوایا نامہ — جاپم میں 108 جاپ۔",
+    "ogImage": "/images/deities/shanmukha.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "موروگن منتر - اوم سراوان بھاوایا نامہ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "لارڈ موروگن (شنمکھا، سبرامنیا، سکندا) ہمت اور حکمت کے تامل اور پین انڈین دیوتا ہیں۔ اس کا منتر سکندا شاستی اور تھائی پوسم میں مرکزی حیثیت رکھتا ہے۔"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "جاپم میں روزانہ جاپ کے لیے مستند منتر آڈیو کے ساتھ موروگن شامل ہے۔"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "منتر کا مفہوم"
+    },
+    {
+      "type": "blockquote",
+      "runs": [
+        {
+          "text": "Om Saravana Bhavaya Namaha",
+          "bold": true
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "پُرسکون ذہن کے ساتھ نعرہ لگائیں، نتائج کا مطالبہ کرنے کی بجائے سلام پیش کریں۔"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "جاپ کے فوائد (روایتی نقطہ نظر)"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "اندرونی خوف پر فتح - روایتی سکنڈا کی علامت",
+        "منگل اور شاستی کے دن مقدس ہیں۔",
+        "ویل پوجا اور کاوڑی روایات جاپ کی تکمیل کرتی ہیں۔",
+        "طلباء وضاحت اور نظم و ضبط کے لیے دعا کرتے ہیں۔"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "108 مرتبہ پڑھنے کا طریقہ"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "شاستی یا روزانہ صبح 108 کا جاپ کریں۔",
+        "پوجا کرتے وقت سرخ پھول چڑھائیں۔",
+        "جب ممکن ہو تھائی پوسم پر موروگن مندر کا دورہ کریں۔",
+        "سفر کے دوران Japam میں راؤنڈ ٹریک کریں۔"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "کب نعرہ لگانا ہے۔"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "سکندا شاستی (ایپاسی/تملم مہینے میں چھ دن)، تھائی پوسم، اور منگل۔"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "108 تکرار کیوں اہم ہے۔",
+      "_enrichId": "why-108-enrich"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "نمبر 108 جاپ مالا پر ایک مکمل دور ہے۔ مسلسل تکرار ذہن کو پرسکون کرتی ہے اور منتر کے معنی پر توجہ مرکوز کرتی ہے۔"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "کچھ روایات 11 یا 21 مالوں کی تجویز کرتی ہیں - اپنے گرو یا پجاری سے اپنی منت کے مطابق گنتی کے لیے پوچھیں۔"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "عام غلطیوں سے بچنا ہے۔"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "بہت تیز گانا اور آواز پر توجہ کھو دینا",
+        "ہدایت کے بغیر متعدد دیوتا منتوں کو ملانا",
+        "بھکتی اور اخلاقی زندگی کے بجائے صرف مادی نتائج کی توقع کرنا"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "مندر اور گھر کی مشق ایک ساتھ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ہوم جاپا مندر کی پوجا کی حمایت کرتا ہے۔ یہ درشن کی جگہ نہیں لیتا۔ تہوار کے دنوں یا ہفتہ کے دن مندر جانا خاندانی روایت کو مضبوط کرتا ہے۔"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Japam کے ساتھ مشق کریں۔"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "اوم سراوان بھاوایا نامہ کے لیے جاپم میں شنمکھا کا انتخاب کریں — علاقائی نام موروگن/سکند سب ایک ہی پیارے دیوتا کی طرف اشارہ کرتے ہیں۔",
+          "bold": false
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start Shanmukha Japa in Japam",
+      "href": "https://japam.digital/?lang=ks&deity=shanmukha&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=ks&try=1&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=ks&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=ks&deity=shanmukha&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "موروگن بمقابلہ سبرامنیا؟",
+      "answer": "ایک ہی دیوتا - علاقائی نام۔"
+    },
+    {
+      "question": "تمل یا سنسکرت کا نعرہ؟",
+      "answer": "منتر سنسکرت ہے؛ تمل پاڈیگم الگ عقیدت ہیں۔"
+    },
+    {
+      "question": "کاوڑی اور جاپا ایک ساتھ؟",
+      "answer": "کاوڑی یاترا سے پہلے کئی منتیں جپتے ہیں۔"
+    },
+    {
+      "question": "شاستی روزہ؟",
+      "answer": "اختیاری - مندر کی روایت کی پیروی کریں۔"
+    },
+    {
+      "question": "کیا ویل آئیکن کی ضرورت ہے؟",
+      "answer": "پوجا میں مددگار؛ ذہنی جاپ کو صرف توجہ کی ضرورت ہے۔"
+    }
+  ],
+  "disclaimer": {
+    "text": "یہ مضمون صرف تعلیمی اور عقیدتی مشق کے لیے ہے۔ Japam طبی، قانونی، یا مالی مشورہ فراہم نہیں کرتا ہے۔ نتائج کا انحصار ذاتی ایمان اور مستقل مشق پر ہوتا ہے۔ ایپ میں منتر کا متن اور آڈیو جاپا سپورٹ کے لیے ہیں۔ رسمی پوجا کے قواعد کے لیے اپنے خاندانی پجاری یا روایت سے مشورہ کریں۔"
+  },
+  "relatedPages": [
+    {
+      "pageId": "skanda-shasti-murugan",
+      "label": "سکند شاستی"
+    },
+    {
+      "pageId": "japa-108-times",
+      "label": "108 جاپ"
+    },
+    {
+      "pageId": "online-japa-mantra",
+      "label": "آن لائن جاپا"
+    }
+  ]
+}

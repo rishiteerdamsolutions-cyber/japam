@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 1,
+  "pageId": "narasimha-mantra-protection",
+  "lang": "pa",
+  "slug": "narasimha-mantra-protection",
+  "deityId": "narasimha",
+  "primaryKeyword": "narasimha protection mantra",
+  "secondaryKeywords": [
+    "om namo narasimhaya",
+    "fear removal mantra"
+  ],
+  "meta": {
+    "title": "Narasimha Protection Mantra | Japam",
+    "description": "Narasimha mantra for courage and protection — 108 japa in Japam.",
+    "ogImage": "/images/deities/narasimha.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "Narasimha Mantra for Protection"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Lord Narasimha protects devotees from harm and inner fear in Vaishnava tradition."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Chant Om Namo Narasimhaya with faith, not aggression toward others."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Meaning of the mantra"
+    },
+    {
+      "type": "blockquote",
+      "runs": [
+        {
+          "text": "Om Namo Narasimhaya",
+          "bold": true
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Chant with a calm mind, offering salutation rather than demanding specific outcomes."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Benefits of japa (traditional view)"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Builds festival discipline",
+        "Deepens deity bhakti",
+        "Community yagnas may align with season",
+        "Educational — not outcome guarantees"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "How to chant 108 times"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Set daily 108 sankalpa for festival period",
+        "Keep fast/vrat rules from your family tradition",
+        "Visit temple when possible",
+        "Use Japam counter between work/study"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "When to chant"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Twilight (sandhya) is sacred for Narasimha in some lineages."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Practice with Japam"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Narasimha mode in Japam includes mantra audio and japa count."
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start ਨਰਸਿੰਘ Japa in Japam",
+      "href": "https://japam.digital/?lang=pa&deity=narasimha&utm_source=google&utm_medium=seo&utm_campaign=narasimha-mantra-protection&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=pa&try=1&utm_source=google&utm_medium=seo&utm_campaign=narasimha-mantra-protection&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=pa&utm_source=google&utm_medium=seo&utm_campaign=narasimha-mantra-protection&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=pa&deity=narasimha&utm_source=google&utm_medium=seo&utm_campaign=narasimha-mantra-protection&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "Exact festival date this year?",
+      "answer": "Check Hindu panchang for your region — we avoid locking a Gregorian year in this guide."
+    },
+    {
+      "question": "How many japas per day?",
+      "answer": "108 minimum for many vows; some do 1008 on main day under guidance."
+    },
+    {
+      "question": "Guest mode OK?",
+      "answer": "Yes for try; sign in to save progress across festival weeks."
+    },
+    {
+      "question": "Replace temple?",
+      "answer": "No — digital japa supports home practice."
+    },
+    {
+      "question": "Join collective yagna?",
+      "answer": "See Maha Japa Yagnas in Japam menu during campaigns."
+    }
+  ],
+  "disclaimer": {
+    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+  },
+  "relatedPages": [
+    {
+      "pageId": "mantra-narasimha",
+      "label": "Narasimha pillar"
+    },
+    {
+      "pageId": "mantra-narayana",
+      "label": "Narayana"
+    },
+    {
+      "pageId": "japa-108-times",
+      "label": "108 japa guide"
+    }
+  ]
+}

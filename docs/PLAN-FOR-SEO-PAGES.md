@@ -17,8 +17,9 @@
 | **English total** | **55** (`ALL_SEO_SLUGS`) | **55** |
 | Prerender / bot HTML | 1 strategy | ✅ build-time `scripts/prerender-learn.mjs` |
 | Search Console + indexing validation | — | ⬜ |
-| Wave 3 — 8 priority languages × published EN slugs | 96–416 | ⬜ |
-| Wave 4 — Full 23 languages × 52 slugs | 1,196 | ⬜ |
+| Wave 3 — 8 priority languages × 55 slugs | 440 | 🔄 translating (`seo:seed-wave3 -- --force`) |
+| Wave 4 — remaining 15 languages × 55 slugs | 825 | ⬜ after Wave 3 |
+| **Localized JSON on disk** | **1,265** (55×23) | 🔄 files exist; **relocalize** for native copy |
 | Wave 5 — Festival pages (timed release) | 8 | ⬜ |
 
 **Commands**
@@ -201,6 +202,212 @@ npm run seo:prerender    # after vite build only
 4. **Wave 3** translations (8 langs).
 5. **Wave 4** remaining languages.
 6. **Wave 5** festival timed releases.
+
+---
+
+## Full completion to-do list
+
+Use this as the master checklist until **all** SEO work is done. Counts assume **55 slugs** (`ALL_SEO_SLUGS`), **23 locales** (`SEO_LANG_CODES`), guru-hidden deities excluded.
+
+**Legend:** ✅ done · 🔄 in progress · ⬜ not started
+
+---
+
+### 0 — Foundation (engineering) — ✅ mostly done
+
+- [x] Routes `/learn/:lang/:slug` + redirect `/learn` → default guide
+- [x] `LearnLayout` (logo + language switcher only; no game nav)
+- [x] No `/learn` links in main app chrome
+- [x] JSON loader + `SeoContentRenderer` + meta / canonical / hreflang hooks
+- [x] `public/content/seo/{lang}/{pageId}.json` pipeline
+- [x] `scripts/generate-sitemap.mjs` + `public/robots.txt`
+- [x] Build-time prerender `scripts/prerender-learn.mjs`
+- [x] CTA attribution (`?lang=`, `?deity=`, `?try=1`) + `SeoLandingParams`
+- [x] `npm run seo:validate` (title/desc/h1 checks)
+- [x] GA4 + SPA page views
+- [ ] Privacy policy mentions analytics (optional legal)
+- [ ] CTA click events in GA4 (`utm_content` already on URLs)
+
+---
+
+### 1 — English scaffold (55 pages) — ✅ files exist
+
+- [x] Wave 1 — 12 slugs (`WAVE_1_SLUGS`)
+- [x] Wave 2 — 43 slugs (`WAVE_2_SLUGS` + pillars/festivals/hubs)
+- [x] Inventory `src/learn/seoInventory.ts` matches on-disk JSON
+- [x] Sitemap includes published `/learn/en/*` + homepage
+- [ ] Run `npm run seo:validate` in CI or pre-deploy (fail build on regressions)
+
+---
+
+### 2 — English content quality (55 pages) — ⬜ main writing work
+
+**Target per page:** 900–1,400 words, unique intent, compliant disclaimers, mantra Roman aligned with `src/data/deities.ts`.
+
+#### 2a — Priority expansion (do first — 12 pages)
+
+- [ ] `shani-mantra-shanti`
+- [ ] `sade-sati-remedies`
+- [ ] `lakshmi-mantra-money`
+- [ ] `ganesh-mantra-success`
+- [ ] `hanuman-mantra-tuesday`
+- [ ] `shiva-mrityunjaya-mantra`
+- [ ] `graha-shanti-mantra`
+- [ ] `japa-108-times`
+- [ ] `online-japa-mantra`
+- [ ] `venkateswara-mantra-tirupati`
+- [ ] `mantra-shanmukha-murugan`
+- [ ] `navagraha-mantra`
+
+#### 2b — High-intent English (next — 15 pages)
+
+- [ ] `rahu-mantra-shanti`, `ketu-mantra-shanti`, `guru-graha-mantra`, `surya-graha-mantra`
+- [ ] `saraswati-mantra-exams`, `hanuman-mantra-shani`, `krishna-mantra-peace`, `rama-nam-japa`
+- [ ] `marriage-delay-mantra`, `mantra-for-debt-relief`, `narasimha-mantra-protection`, `durga-mantra-protection`
+- [ ] `ishta-devata-japa`, `maha-japa-yagna`, `pushpa-aradhana-guide`
+
+#### 2c — Deity pillar pages (22 pages)
+
+- [ ] `mantra-rama` … `mantra-ketu` (all `mantra-{deity}` in inventory except guru-hidden)
+- [ ] Confirm **no** `mantra-sai-baba` / `mantra-bramhamgaaru` (guru-hidden rule)
+
+#### 2d — Festival pages (8 pages) — copy + calendar
+
+- [ ] `navratri-durga-japa`
+- [ ] `diwali-lakshmi-japa`
+- [ ] `shivaratri-mantra`
+- [ ] `hanuman-jayanti-japa`
+- [ ] `rama-navami-japa`
+- [ ] `krishna-janmashtami-japa`
+- [ ] `skanda-shasti-murugan`
+- [ ] `ayyappa-mandala-japa`
+- [ ] Add release calendar (publish/refresh before each festival season; avoid year-locked headlines)
+
+#### 2e — Per-page QA (all 55 — checklist each JSON)
+
+- [ ] `pageId` === URL slug; `lang` === folder (`en`)
+- [ ] `deityId` valid in app or `null` for hubs
+- [ ] Mantra Roman matches `deities.ts` when applicable
+- [ ] ≥3 CTAs with `utm_campaign={pageId}` + `utm_content={cta-id}`
+- [ ] ≥5 FAQs + disclaimer present
+- [ ] `meta.title` ≤60 chars; `meta.description` ≤155 chars
+- [ ] Exactly one `h1` block
+- [ ] 2–4 `relatedPages` to real inventory slugs
+- [ ] No guaranteed wealth/cure/legal outcome claims
+- [ ] Re-run `npm run seo:validate` after edits
+
+---
+
+### 3 — Technical SEO & indexing — 🔄 partial
+
+- [x] Submit `https://japam.digital/sitemap.xml` in Google Search Console
+- [ ] URL Inspection: homepage `/`
+- [ ] URL Inspection: 5–10 priority `/learn/en/...` (Wave 1 list)
+- [ ] Confirm rendered HTML shows prerendered `<title>`, `<h1>`, body (not empty SPA shell)
+- [ ] Fix any crawl errors / soft 404s in GSC
+- [ ] Request indexing for top 10 EN guides after major content updates
+- [ ] Optional: `noindex` on `/game`, `/admin` (keep `/learn` indexable)
+- [ ] Core Web Vitals: PageSpeed on `/` + `/learn/en/japa-108-times`; fix regressions
+
+---
+
+### 4 — Production verification — ⬜
+
+- [ ] `npm run build` locally — no errors; `dist/learn/en/{slug}/index.html` × 55
+- [ ] `dist/sitemap.xml` URL count matches published pages
+- [ ] Production: each `/learn/en/{slug}` → 200 + correct canonical
+- [ ] Production: `/content/seo/en/{slug}.json` → 200
+- [ ] CTA smoke: `/?lang=te&try=1`, `/?deity=shiva`, learn CTA → app with UTM preserved
+- [ ] hreflang: only lists langs that have JSON on disk (no broken alternates)
+
+---
+
+### 5 — Wave 3 localization (8 languages) — ⬜
+
+**Languages:** `hi`, `te`, `ta`, `kn`, `ml`, `mr`, `gu`, `bn`  
+**Scope options (pick one strategy):**
+
+| Strategy | Pages to create | Total new JSON |
+|----------|-----------------|----------------|
+| A — Wave 1 only first | 12 slugs × 8 langs | **96** |
+| B — All 55 slugs | 55 slugs × 8 langs | **440** |
+
+**Per language batch (repeat × 8):**
+
+- [ ] Create `public/content/seo/{lang}/` folder
+- [ ] Translate or generate JSON for chosen slug set
+- [ ] Native QA: mantra Roman + local script in body where used
+- [ ] CTAs include `?lang={code}`; meta title/description in target language
+- [ ] `npm run seo:validate` for that language folder
+- [ ] `npm run build` + deploy; verify sitemap adds new URLs
+- [ ] GSC: inspect 2–3 URLs per new language
+
+**Language checklist:**
+
+- [ ] Hindi (`hi`)
+- [ ] Telugu (`te`)
+- [ ] Tamil (`ta`)
+- [ ] Kannada (`kn`)
+- [ ] Malayalam (`ml`)
+- [ ] Marathi (`mr`)
+- [ ] Gujarati (`gu`)
+- [ ] Bengali (`bn`)
+
+**Engineering (once):**
+
+- [ ] Seed/translate script or writer workflow for non-EN JSON
+- [ ] Learn language switcher shows only langs with content (or graceful fallback to `en`)
+
+---
+
+### 6 — Wave 4 localization (remaining 15 languages) — ⬜
+
+**Remaining codes (23 − 8 − en):** `as`, `bn`*, `brx`, `doi`, `gu`*, `hi`*, `kn`*, `kok`, `ks`, `mai`, `ml`*, `mni`, `mr`*, `ne`, `or`, `pa`, `sa`, `sat`, `sd`, `ta`*, `te`*, `ur`  
+\*Already in Wave 3 — skip duplicate.
+
+**Actual Wave 4-only codes (15):** `as`, `brx`, `doi`, `kok`, `ks`, `mai`, `mni`, `ne`, `or`, `pa`, `sa`, `sat`, `sd`, `ur` (+ any Wave 3 not yet done)
+
+- [ ] Same per-language batch as §5 for each remaining locale
+- [ ] **55 slugs × 15 langs = 825** additional pages (if full coverage)
+- [ ] hreflang: emit alternates only for published `public/content/seo/{lang}/` files
+- [ ] Sitemap size / crawl budget: monitor GSC after large drops
+
+---
+
+### 7 — Wave 5 — Festival operations — ⬜
+
+- [ ] Document festival publish dates (internal calendar)
+- [ ] Pre-season content refresh for all 8 festival slugs (EN + translated copies)
+- [ ] Optional: temporary homepage or in-app banner → festival learn URL (product decision)
+- [ ] Post-season: keep evergreen URL; update “this year” language if any slipped in
+
+---
+
+### 8 — Ongoing / maintenance — ⬜
+
+- [ ] Monthly GSC review: impressions, CTR, queries, crawl errors
+- [ ] Quarterly: expand underperforming pages (EN + top 3 langs by traffic)
+- [ ] New playable deity in app → add `mantra-{id}` slug + EN JSON + sitemap + prerender
+- [ ] Retire or redirect broken slugs (301 in `vercel.json` if ever renamed)
+- [ ] Keep `docs/PLAN-FOR-SEO-PAGES.md` progress table updated when shipping batches
+
+---
+
+### Completion scorecard (fill in as you ship)
+
+| Milestone | Target | Done |
+|-----------|--------|------|
+| Foundation (engineering) | 1 | ✅ |
+| EN JSON files (scaffold) | 55 | ✅ 55 |
+| EN writer-quality pages | 55 | ⬜ 0 |
+| EN QA sign-off | 55 | ⬜ 0 |
+| GSC indexing validated | 1 | 🔄 |
+| Wave 3 locales (8) × slugs | 96–440 | 🔄 `npm run seo:seed-wave3 -- --force` |
+| Wave 4 remaining locales × 55 | ~825 | ⬜ run `seo:seed-wave4 -- --force` after Wave 3 |
+| EN depth sections (108 / sankalpa) | 55 | ✅ all EN have marker |
+| Localized copy (not English with `lang=te`) | 1,210 | 🔄 `seo:relocalize-all` |
+| Festival ops calendar | 8 | ⬜ 0 |
+| **Approx. total learn URLs at full completion** | **~1,265** (55 × 23) | **55** |
 
 ---
 

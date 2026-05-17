@@ -1,0 +1,215 @@
+{
+  "schemaVersion": 1,
+  "pageId": "pushpa-aradhana-guide",
+  "lang": "mai",
+  "slug": "pushpa-aradhana-guide",
+  "deityId": null,
+  "primaryKeyword": "pushpa archana ऑनलाइन फूल अर्पण",
+  "secondaryKeywords": [
+    "डिजिटल पूजा के फूल",
+    "शोदशोपाचर"
+  ],
+  "meta": {
+    "title": "पुष्प आराधना — डिजिटल पुष्प अर्पण | जपम",
+    "description": "जपम मे पुष्प आराधना : देवता पूजा के दौरान डिजिटल फूल अर्पित करब।",
+    "ogImage": "/images/favicon.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "पुष्प आराधना — डिजिटल पुष्प अर्पण"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "पुष्पा (फूल) शोदाशोपचरा पूजाक अंग होइत अछि। जपम केरऽ पुष्प आराधना म॑ देवता केरऽ पर्दा प॑ जाय के समय डिजिटल फूल चढ़ैलऽ जाय सकै छै ।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "घरक पूजाक शैक्षणिक पूरक — मंदिरक प्रतिस्थापन नहि ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "पुस्पा अर्चना की होइत अछि ?"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "फूल अर्पण देवता के प्रति गुण आ सौन्दर्य के समर्पण के प्रतीक अछि | डिजिटल ऑफरिंग सेहो ओही मंशा व्यक्त करैत अछि जखन ताजा फूल उपलब्ध नहि होइत अछि ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपा के लाभ (पारंपरिक दृष्टिकोण) २."
+    },
+    {
+      "type": "ul",
+      "items": [
+        "अर्चना प्रतीकवाद नित्य अभ्यास",
+        "ऐप में मंत्र जपा के साथ जोड़ी",
+        "यात्रा करबा काल उपयोगी",
+        "प्रसाद के पद नाम सीखें"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "108 बार जप कैसे करे |"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "जपम में साइन इन करें",
+        "मेनू स पुष्प आराधना खोलू (प्रमाणीकरण के आवश्यकता अछि)",
+        "देवता आ प्रसाद चुनू",
+        "मनपूर्वक प्रार्थना के साथ सम्पूर्ण"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "कखन जप करब"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "जापा के बाद या एप्प में दैनिक दर्शन दिनचर्या के दौरान।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "108 पुनरावृत्ति कियैक मायने रखैत अछि",
+      "_enrichId": "why-108-enrich"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "108 नंबर एकटा जपा माला पर एकटा फुल राउंड अछि। लगातार पुनरावृत्ति मन के शांत करैत अछि आ मंत्र के अर्थ पर ध्यान गहींर करैत अछि |"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "किछु परंपरा मे 11 या 21 माला निर्धारित कयल गेल अछि — अपन गुरु वा पुरोहित सँ अपन व्रत के अनुकूल गिनती पूछू |"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "टालबाक लेल आम गलती"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "बेसी तेजी स जप करब आ आवाज पर ध्यान नहि देब",
+        "बिना मार्गदर्शन के अनेक देवता व्रत के मिश्रण",
+        "भक्ति आ नैतिक जीवन जीबाक बदला मात्र भौतिक परिणामक अपेक्षा करब"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मंदिर आ घर एक संग अभ्यास"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "घर जपा मंदिर पूजा के समर्थन करैत अछि; दर्शनक स्थान नहि लैत अछि। पावनि-तिहार के दिन या शनि दिन मंदिर के दर्शन करला स पारिवारिक परंपरा के मजबूती भेटैत अछि।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपम के साथ अभ्यास करे |"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "मेनू → पुष्प आराधना (साइन-इन आवश्यक)।"
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start Japa in Japam",
+      "href": "https://japam.digital/?lang=mai&utm_source=google&utm_medium=seo&utm_campaign=pushpa-aradhana-guide&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=mai&try=1&utm_source=google&utm_medium=seo&utm_campaign=pushpa-aradhana-guide&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=mai&utm_source=google&utm_medium=seo&utm_campaign=pushpa-aradhana-guide&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=mai&utm_source=google&utm_medium=seo&utm_campaign=pushpa-aradhana-guide&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "की डिजिटल फूल असली के बराबर अछि?",
+      "answer": "इरादा मायने रखैत अछि; परंपरा जखन संभव हो तखन असली फूल पसंद करैत अछि।"
+    },
+    {
+      "question": "साइन-इन के जरूरत अछि?",
+      "answer": "हाँ — पुष्प आराधना के वर्तमान एप में खाता आवश्यक।"
+    },
+    {
+      "question": "लागत?",
+      "answer": "ऐप मे ऑफर देखू; वैकल्पिक दक्षिणा लागू भ सकैत अछि।"
+    },
+    {
+      "question": "कोन-कोन देवता?",
+      "answer": "पुष्प प्रवाह में उपलब्ध देवता — देखें app."
+    },
+    {
+      "question": "शोदाशोपाचर?",
+      "answer": "अपन पुरोहित सँ पूरा डेग सीखू; जपम पुस्पा पर ध्यान दैत अछि।"
+    }
+  ],
+  "disclaimer": {
+    "text": "ई लेख केवल शैक्षणिक आ भक्ति अभ्यास के लेल अछि | जपम चिकित्सा, कानूनी, या आर्थिक सलाह नहि दैत अछि। परिणाम व्यक्तिगत विश्वास आ लगातार अभ्यास पर निर्भर करैत अछि । ऐप में मंत्र पाठ आ ऑडियो जपा सपोर्ट के लेल अछि; औपचारिक पूजा नियम के लेल अपन परिवार के पुजारी या परंपरा स परामर्श करू।"
+  },
+  "relatedPages": [
+    {
+      "pageId": "online-japa-mantra",
+      "label": "ऑनलाइन जपा"
+    },
+    {
+      "pageId": "ishta-devata-japa",
+      "label": "इष्ट देवता"
+    },
+    {
+      "pageId": "maha-japa-yagna",
+      "label": "महा यज्ञ"
+    }
+  ]
+}

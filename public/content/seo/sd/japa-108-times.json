@@ -1,0 +1,178 @@
+{
+  "schemaVersion": 1,
+  "pageId": "japa-108-times",
+  "lang": "sd",
+  "slug": "japa-108-times",
+  "deityId": null,
+  "primaryKeyword": "108 japa how to count mantra",
+  "secondaryKeywords": [
+    "japa mala 108",
+    "how to count japa",
+    "digital japa counter"
+  ],
+  "meta": {
+    "title": "108 Japa — How to Count Mantra Repetitions | Japam",
+    "description": "Learn why Hindus chant mantras 108 times, mala rules, and how Japam helps you count digital japa.",
+    "ogImage": "/images/favicon.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "108 Japa: How to Count Mantra Repetitions"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "In Hindu practice, "
+        },
+        {
+          "text": "108",
+          "bold": true
+        },
+        {
+          "text": " is a sacred number for mantra japa. One full mala usually has 108 beads — each bead is one repetition of your chosen mantra."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Whether you use a physical rosary or a digital counter, steady rhythm and focused attention matter more than speed."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Why 108?"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Traditions link 108 to cosmic symbolism — 27 nakshatras × 4 padas, 108 Upanishads cited in some lists, and the idea of a complete cycle. Practically, 108 is long enough to settle the mind without being unmanageable for daily sadhana."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Benefits of counted japa"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Builds discipline and measurable daily practice",
+        "Helps withdraw attention from distraction",
+        "Supports vow (sankalpa) completion — e.g. 108 for a deity",
+        "Pairs well with breath awareness in silent japa"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "How to chant 108 times"
+    },
+    {
+      "type": "ol",
+      "items": [
+        "Hold the mala in your right hand; do not cross the meru (guru) bead.",
+        "Start after the meru; move one bead per mantra.",
+        "At 108, you may reverse direction without crossing the meru, or stop per your tradition.",
+        "If you lose count, many restart the round rather than guess."
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "When to chant"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Brahma muhurta, evening sandhya, or deity-specific days (e.g. Monday for Shiva, Saturday for Shani) are common. Choose a time you can repeat daily."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Practice with Japam"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Japam",
+          "bold": true
+        },
+        {
+          "text": " tracks japa during match-3 play with deity mantra audio. Special 108-japa modes help you complete a full round with on-screen counting — useful when you do not have a mala at hand."
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start Japa in Japam",
+      "href": "https://japam.digital/?lang=sd&utm_source=google&utm_medium=seo&utm_campaign=japa-108-times&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=sd&try=1&utm_source=google&utm_medium=seo&utm_campaign=japa-108-times&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=sd&utm_source=google&utm_medium=seo&utm_campaign=japa-108-times&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=sd&utm_source=google&utm_medium=seo&utm_campaign=japa-108-times&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "Can I chant more than 108?",
+      "answer": "Yes — 108 is a standard minimum round. Some sadhakas do 1008 (10 malas) on festivals under guidance."
+    },
+    {
+      "question": "What if I don't have a mala?",
+      "answer": "Use Japam's counter, finger counting, or a written tally. The intention and focus remain the same."
+    },
+    {
+      "question": "Should japa be loud or silent?",
+      "answer": "Both are valid: upamshu (whisper) and manasika (mental) japa are praised for concentration."
+    },
+    {
+      "question": "Does the meru bead count?",
+      "answer": "Usually you do not chant while crossing the meru; you turn back or transfer the mala per your teacher's instruction."
+    },
+    {
+      "question": "Can children do 108 japa?",
+      "answer": "Shorter counts may be better for young children; 108 is common for teens and adults with gentle encouragement."
+    }
+  ],
+  "disclaimer": {
+    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+  },
+  "relatedPages": [
+    {
+      "pageId": "online-japa-mantra",
+      "label": "Online japa with Japam"
+    },
+    {
+      "pageId": "ishta-devata-japa",
+      "label": "Ishta devata japa"
+    }
+  ]
+}

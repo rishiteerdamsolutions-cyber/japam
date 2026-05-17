@@ -1,0 +1,181 @@
+{
+  "schemaVersion": 1,
+  "pageId": "sade-sati-remedies",
+  "lang": "ur",
+  "slug": "sade-sati-remedies",
+  "deityId": "shani",
+  "primaryKeyword": "sade sati remedies mantra",
+  "secondaryKeywords": [
+    "sade sati puja",
+    "shani sade sati pariharam",
+    "sade sati duration"
+  ],
+  "meta": {
+    "title": "Sade Sati Remedies & Mantra Japa | Japam",
+    "description": "Understand Sade Sati and traditional Shani mantra japa for peace — with digital practice in Japam.",
+    "ogImage": "/images/deities/shani.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "Sade Sati Remedies and Shani Mantra Japa"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Sade Sati is the roughly seven-and-a-half-year period when transiting Shani (Saturn) moves through signs near your Moon sign in the birth chart. Many families respond with patience, seva, and japa rather than fear."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "This guide outlines traditional remedies including Shani mantra repetition and how Japam can support steady daily practice."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Meaning of the mantra"
+    },
+    {
+      "type": "blockquote",
+      "runs": [
+        {
+          "text": "Om Shan Shanicharaya Namaha",
+          "bold": true
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Saluting Shanaischara with humility supports graha shanti — planetary peace in the mind and conduct."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Benefits of japa (traditional view)"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Encourages steadiness and acceptance during long phases",
+        "Pairs with Saturday worship and ethical living",
+        "Often combined with Hanuman bhakti in many traditions",
+        "Japa builds focus away from anxiety about the future"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "How to chant 108 times"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Chant 108 times on a mala in a quiet place",
+        "Observe Saturday fast or simple meal if your tradition allows",
+        "Offer charity (seva) when possible — a classic Shani remedy",
+        "Keep count consistently; quality over speed"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "When to chant"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Saturday is primary for Shani. During active Sade Sati, many devotees add a short daily round — ask your priest for personal timing."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Practice with Japam"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "In Japam, select Shani to hear Om Shan Shanicharaya Namaha during match-3 play and track your japa count toward 108. Join Maha Japa Yagnas for community support.",
+          "bold": false
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start شنی Japa in Japam",
+      "href": "https://japam.digital/?lang=ur&deity=shani&utm_source=google&utm_medium=seo&utm_campaign=sade-sati-remedies&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=ur&try=1&utm_source=google&utm_medium=seo&utm_campaign=sade-sati-remedies&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=ur&utm_source=google&utm_medium=seo&utm_campaign=sade-sati-remedies&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=ur&deity=shani&utm_source=google&utm_medium=seo&utm_campaign=sade-sati-remedies&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "How long does Sade Sati last?",
+      "answer": "About 7.5 years in classical reckoning, as Shani transits three signs relative to the Moon. Exact timing is calculated by your astrologer."
+    },
+    {
+      "question": "Is Sade Sati always bad?",
+      "answer": "Traditions teach it as a period of discipline and karmic lessons, not punishment. Japa and dharma steady the mind."
+    },
+    {
+      "question": "Which mantra for Sade Sati?",
+      "answer": "Om Shan Shanicharaya Namaha is widely used; your lineage may prescribe additional stotras."
+    },
+    {
+      "question": "Can I chant without a mala?",
+      "answer": "Yes — use Japam’s digital counter or finger counting with the same sincerity."
+    },
+    {
+      "question": "Does oil abhisheka replace japa?",
+      "answer": "Temple rituals and home japa complement each other; follow your sampradaya."
+    }
+  ],
+  "disclaimer": {
+    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+  },
+  "relatedPages": [
+    {
+      "pageId": "shani-mantra-shanti",
+      "label": "Shani mantra shanti"
+    },
+    {
+      "pageId": "hanuman-mantra-shani",
+      "label": "Hanuman for Shani"
+    },
+    {
+      "pageId": "graha-shanti-mantra",
+      "label": "Graha shanti"
+    }
+  ]
+}

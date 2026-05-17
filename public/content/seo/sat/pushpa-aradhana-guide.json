@@ -1,0 +1,170 @@
+{
+  "schemaVersion": 1,
+  "pageId": "pushpa-aradhana-guide",
+  "lang": "sat",
+  "slug": "pushpa-aradhana-guide",
+  "deityId": null,
+  "primaryKeyword": "pushpa archana online flower offering",
+  "secondaryKeywords": [
+    "digital puja flowers",
+    "shodashopachara"
+  ],
+  "meta": {
+    "title": "Pushpa Aradhana — Digital Flower Offering | Japam",
+    "description": "Pushpa Aradhana in Japam: offer digital flowers during deity worship.",
+    "ogImage": "/images/favicon.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "Pushpa Aradhana — Digital Flower Offering"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Pushpa (flowers) are part of shodashopachara puja. Japam’s Pushpa Aradhana lets you offer digital flowers when visiting the deity screen."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Educational complement to home puja — not a temple replacement."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "What is pushpa archana?"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Offering flowers symbolises surrender of virtues and beauty to the deity. Digital offering expresses the same intent when fresh flowers are unavailable."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Benefits of japa (traditional view)"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Practice archana symbolism daily",
+        "Pairs with mantra japa in app",
+        "Useful when travelling",
+        "Learn pada names of offerings"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "How to chant 108 times"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Sign in to Japam",
+        "Open Pushpa Aradhana from menu (requires auth)",
+        "Select deity and offering",
+        "Complete with mindful prayer"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "When to chant"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "After japa or during daily darshan routine in app."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Practice with Japam"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Menu → Pushpa Aradhana (sign-in required)."
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start Japa in Japam",
+      "href": "https://japam.digital/?lang=sat&utm_source=google&utm_medium=seo&utm_campaign=pushpa-aradhana-guide&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=sat&try=1&utm_source=google&utm_medium=seo&utm_campaign=pushpa-aradhana-guide&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=sat&utm_source=google&utm_medium=seo&utm_campaign=pushpa-aradhana-guide&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=sat&utm_source=google&utm_medium=seo&utm_campaign=pushpa-aradhana-guide&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "Are digital flowers equal to real?",
+      "answer": "Intent matters; traditions prefer real flowers when possible."
+    },
+    {
+      "question": "Need sign-in?",
+      "answer": "Yes — Pushpa Aradhana requires account in current app."
+    },
+    {
+      "question": "Cost?",
+      "answer": "See in-app offerings; optional dakshina may apply."
+    },
+    {
+      "question": "Which deities?",
+      "answer": "Deities available in Pushpa flow — see app."
+    },
+    {
+      "question": "Shodashopachara?",
+      "answer": "Learn full steps from your priest; Japam focuses on pushpa."
+    }
+  ],
+  "disclaimer": {
+    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+  },
+  "relatedPages": [
+    {
+      "pageId": "online-japa-mantra",
+      "label": "Online japa"
+    },
+    {
+      "pageId": "ishta-devata-japa",
+      "label": "Ishta devata"
+    },
+    {
+      "pageId": "maha-japa-yagna",
+      "label": "Maha yagna"
+    }
+  ]
+}

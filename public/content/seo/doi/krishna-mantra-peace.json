@@ -1,0 +1,224 @@
+{
+  "schemaVersion": 1,
+  "pageId": "krishna-mantra-peace",
+  "lang": "doi",
+  "slug": "krishna-mantra-peace",
+  "deityId": "krishna",
+  "primaryKeyword": "कृष्ण मंत्र शांति जपा",
+  "secondaryKeywords": [
+    "वासुदेव मंत्र",
+    "ॐ नमो भगवते"
+  ],
+  "meta": {
+    "title": "शांति के लिए कृष्ण मंत्र | जपम",
+    "description": "शांति ते भक्ति आस्तै कृष्ण मंत्र जपा — जपम अभ्यास।",
+    "ogImage": "/images/deities/krishna.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "शांति ते भक्ति दा कृष्ण मंत्र"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "कृष्ण भक्ति च समर्पण ते आनन्द पर जोर दित्ता जंदा ऐ। वासुदेव मंत्र कई परंपराएं च मन गी बसाई दिंदा ऐ।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "नतीजें दे बारे च चिंता करने दे बजाय प्यार कन्नै जप करो।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मंत्र दा मतलब"
+    },
+    {
+      "type": "blockquote",
+      "runs": [
+        {
+          "text": "Om namo Bhagavathe vaasudevaya",
+          "bold": true
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "विशिष्ट नतीजें दी मंग करने दे बजाय नमस्कार करने दे बजाय शांत दिमाग कन्नै जप करो।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपा (पारंपरिक दृष्टिकोण) दे फायदे"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "त्योहार अनुशासन दा निर्माण करदा ऐ",
+        "देवता भक्ति गी गहरा करदा ऐ",
+        "सामुदायिक यज्ञ मौसम कन्नै तालमेल बनाई सकदे न",
+        "शैक्षिक — नतीजे दी गारंटी नेईं"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "108 बार जप कैसे करें"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "त्योहार अवधि लेई रोजाना 108 संकल्प सेट करो",
+        "अपनी पारिवारिक परंपरा थमां तेज/व्रत नियम बनाई रक्खो",
+        "हो सके तां मंदिर दा दौरा करो",
+        "कम्म/अध्ययन दे बिच्च जपम काउंटर दा इस्तेमाल करो"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "कब जप करना"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "जन्माष्टमी ते गुरुवार; रोज जापा किसी भी समय।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "108 दोहराव क्यों महत्व रखदे न",
+      "_enrichId": "why-108-enrich"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "108 नंबर इक जापा माला पर इक फुल राउंड ऐ। लगातार दोहराव मन गी शांत करदा ऐ ते मंत्र दे अर्थ उप्पर ध्यान गहरा करदा ऐ।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "कुछ परंपराएं च 11 जां 21 माला निर्धारित कीते गेदे न — अपने गुरु जां पुजारी कोला अपनी व्रत दे अनुकूल गिनतरी मंगने दी लोड़ ऐ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "बचे दी आम गलतियां"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "ज्यादा तेजी नाल जप करना ते आवाज़ ते ध्यान खोना",
+        "बिना मार्गदर्शन दे कई देवता व्रत मिलाना",
+        "भक्ति ते नैतिक जीवन जीने दी बजाय सिर्फ भौतिक नतीजें दी उम्मीद करना"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मंदिर ते घर इकट्ठे अभ्यास"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "घर जपा मंदिर पूजा दा समर्थन करदा ऐ; दर्शन दी जगह नेईं लैंदा। त्यौहारें दे दिनें जां शनिवारें मंदर दा दौरा लाने कन्नै पारिवारिक परंपरा गी मजबूती मिलदी ऐ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपम दे नाल अभ्यास करो"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "जपम च कृष्ण मोड इस मंत्र दा इस्तेमाल मैच-3 जप गिनती कन्नै करदा ऐ।"
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start Krishna Japa in Japam",
+      "href": "https://japam.digital/?lang=doi&deity=krishna&utm_source=google&utm_medium=seo&utm_campaign=krishna-mantra-peace&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=doi&try=1&utm_source=google&utm_medium=seo&utm_campaign=krishna-mantra-peace&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=doi&utm_source=google&utm_medium=seo&utm_campaign=krishna-mantra-peace&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=doi&deity=krishna&utm_source=google&utm_medium=seo&utm_campaign=krishna-mantra-peace&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "इस साल त्योहार दी सटीक तारीख?",
+      "answer": "अपने क्षेत्र लेई हिन्दू पंचंग दी जांच करो — अस इस गाइड च इक ग्रेगोरियन साल गी लॉक करने थमां बचने आं।"
+    },
+    {
+      "question": "रोज कितने जापा ?",
+      "answer": "कई व्रतें लेई 108 न्यूनतम; कुछ मार्गदर्शन दे तहत मुख्य दिन 1008 करदे न।"
+    },
+    {
+      "question": "मेहमान मोड ठीक ऐ?",
+      "answer": "हां कोशिश करन वास्ते; त्योहारें दे हफ्तें च प्रगति बचाने लेई साइन इन करो।"
+    },
+    {
+      "question": "मंदिर बदलना ?",
+      "answer": "नहीं — डिजिटल जापा घर दी अभ्यास दा समर्थन करदा ऐ।"
+    },
+    {
+      "question": "सामूहिक यज्ञ च शामल होओ?",
+      "answer": "अभियानें दे दौरान जपम मेनू च महा जप यज्ञ दिक्खो।"
+    }
+  ],
+  "disclaimer": {
+    "text": "एह् लेख सिर्फ शैक्षिक ते भक्ति अभ्यास आस्तै ऐ। जपम मेडिकल, कानूनी, जां माली सलाह नेईं दिंदा ऐ। नतीजे निजी विश्वास ते लगातार अभ्यास उप्पर निर्भर करदे न। ऐप च मंत्र पाठ ते ऑडियो जापा समर्थन आस्तै ऐ; औपचारिक पूजा नियमें लेई अपने परिवार दे पुजारी जां परंपरा कन्नै सलाह लैओ।"
+  },
+  "relatedPages": [
+    {
+      "pageId": "mantra-krishna",
+      "label": "कृष्ण स्तम्भ"
+    },
+    {
+      "pageId": "mantra-hare-krishna",
+      "label": "हरे कृष्णा"
+    },
+    {
+      "pageId": "krishna-janmashtami-japa",
+      "label": "जन्माष्टमी"
+    }
+  ]
+}

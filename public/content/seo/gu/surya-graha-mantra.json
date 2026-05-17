@@ -1,0 +1,224 @@
+{
+  "schemaVersion": 1,
+  "pageId": "surya-graha-mantra",
+  "lang": "gu",
+  "slug": "surya-graha-mantra",
+  "deityId": "surya",
+  "primaryKeyword": "સૂર્ય ગ્રહ મંત્ર સૂર્ય",
+  "secondaryKeywords": [
+    "રવિવાર સૂર્ય પૂજા",
+    "આદિત્ય મંત્ર"
+  ],
+  "meta": {
+    "title": "સૂર્ય ગ્રહ મંત્ર (સૂર્ય) | જપમ",
+    "description": "સૂર્ય સૂર્ય મંત્ર 108 જપ - જપમ ડિજિટલ પ્રેક્ટિસ.",
+    "ogImage": "/images/deities/surya.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "સૂર્ય ગ્રહ મંત્ર"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "સૂર્ય (સૂર્ય) નવગ્રહ પૂજામાં જોમ અને સ્પષ્ટતા દર્શાવે છે."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ઓમ સૂર્યાય નમઃ સાથે રવિવારનો જાપ એ સામાન્ય શિસ્ત છે."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "મંત્રનો અર્થ"
+    },
+    {
+      "type": "blockquote",
+      "runs": [
+        {
+          "text": "Om sooryaya Namaha",
+          "bold": true
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ચોક્કસ પરિણામોની માંગ કરવાને બદલે નમસ્કાર કરીને શાંત ચિત્તે જપ કરો."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "જપના ફાયદા (પરંપરાગત દૃષ્ટિ)"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "તહેવારોની શિસ્ત બનાવે છે",
+        "દેવ ભક્તિને ગહન કરે છે",
+        "સામુદાયિક યજ્ઞો મોસમ સાથે સંરેખિત થઈ શકે છે",
+        "શૈક્ષણિક - પરિણામની ગેરંટી નથી"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "108 વાર કેવી રીતે જપ"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "તહેવારના સમયગાળા માટે દૈનિક 108 સંકલ્પ સેટ કરો",
+        "તમારી પારિવારિક પરંપરામાંથી વ્રત/વ્રતના નિયમો રાખો",
+        "શક્ય હોય ત્યારે મંદિરની મુલાકાત લો",
+        "કામ/અભ્યાસ વચ્ચે જાપમ કાઉન્ટરનો ઉપયોગ કરો"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ક્યારે જપ કરવો"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "રવિવારનો સૂર્યોદય આદર્શ છે; પૂજા કરતા હોય તો જળ (અર્ઘ્ય) ચઢાવો."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "108 વાર શા માટે",
+      "_enrichId": "why-108-enrich"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "108 નંબર એ જપ માલા પરનો એક સંપૂર્ણ રાઉન્ડ છે. સતત પુનરાવર્તન મનને શાંત કરે છે અને મંત્રના અર્થ પર ધ્યાન વધારે છે."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "કેટલીક પરંપરાઓ 11 અથવા 21 માળા સૂચવે છે - તમારા ગુરુ અથવા પૂજારીને તમારા વ્રતને અનુરૂપ ગણતરીઓ માટે પૂછો."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ટાળવા માટે સામાન્ય ભૂલો"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "ખૂબ ઝડપથી જાપ કરવો અને અવાજ પર ધ્યાન ગુમાવવું",
+        "માર્ગદર્શન વિના બહુવિધ દેવી વ્રતોનું મિશ્રણ કરવું",
+        "ભક્તિ અને નૈતિક જીવનને બદલે માત્ર ભૌતિક પરિણામોની અપેક્ષા રાખવી"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "મંદિર અને ઘર એક સાથે પ્રેક્ટિસ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "હોમ જાપ મંદિરની પૂજાને ટેકો આપે છે; તે દર્શનનું સ્થાન લેતું નથી. તહેવારના દિવસોમાં અથવા શનિવારે મંદિરની મુલાકાત લેવાથી પારિવારિક પરંપરા મજબૂત બને છે."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Japam સાથે અભ્યાસ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ઓન-સ્ક્રીન ગણતરી સાથે જપમમાં સૂર્ય જાપનો અભ્યાસ કરો."
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Japam માં જપ શરૂ કરો",
+      "href": "https://japam.digital/?lang=gu&deity=surya&utm_source=google&utm_medium=seo&utm_campaign=surya-graha-mantra&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "લૉગિન વિના અજમાવો",
+      "href": "https://japam.digital/?lang=gu&try=1&utm_source=google&utm_medium=seo&utm_campaign=surya-graha-mantra&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "મહા જપ યજ્ઞમાં જોડાઓ",
+      "href": "https://japam.digital/menu?lang=gu&utm_source=google&utm_medium=seo&utm_campaign=surya-graha-mantra&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Japam ખોલો",
+      "href": "https://japam.digital/?lang=gu&deity=surya&utm_source=google&utm_medium=seo&utm_campaign=surya-graha-mantra&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "આ વર્ષે તહેવારની ચોક્કસ તારીખ?",
+      "answer": "તમારા પ્રદેશ માટે હિન્દુ પંચાંગ તપાસો - અમે આ માર્ગદર્શિકામાં ગ્રેગોરિયન વર્ષ લૉક કરવાનું ટાળીએ છીએ."
+    },
+    {
+      "question": "દરરોજ કેટલા જાપ?",
+      "answer": "ઘણા શપથ માટે 108 લઘુત્તમ; કેટલાક માર્ગદર્શન હેઠળ મુખ્ય દિવસે 1008 કરે છે."
+    },
+    {
+      "question": "ગેસ્ટ મોડ બરાબર છે?",
+      "answer": "હા પ્રયાસ માટે; તહેવારના અઠવાડિયામાં પ્રગતિ બચાવવા માટે સાઇન ઇન કરો."
+    },
+    {
+      "question": "મંદિર બદલો?",
+      "answer": "ના — ડિજિટલ જાપા હોમ પ્રેક્ટિસને સપોર્ટ કરે છે."
+    },
+    {
+      "question": "સામૂહિક યજ્ઞમાં જોડાઓ?",
+      "answer": "ઝુંબેશ દરમિયાન જપમ મેનૂમાં મહા જપ યજ્ઞો જુઓ."
+    }
+  ],
+  "disclaimer": {
+    "text": "આ લેખ ફક્ત શૈક્ષણિક અને ભક્તિ અભ્યાસ માટે છે. Japam તબીબી, કાનૂની અથવા નાણાકીય સલાહ આપતું નથી."
+  },
+  "relatedPages": [
+    {
+      "pageId": "navagraha-mantra",
+      "label": "નવગ્રહ"
+    },
+    {
+      "pageId": "graha-shanti-mantra",
+      "label": "ગ્રહ શાંતિ"
+    },
+    {
+      "pageId": "mantra-surya",
+      "label": "સૂર્યસ્તંભ"
+    }
+  ]
+}

@@ -1,0 +1,226 @@
+{
+  "schemaVersion": 1,
+  "pageId": "mantra-shanmukha-murugan",
+  "lang": "bn",
+  "slug": "mantra-shanmukha-murugan",
+  "deityId": "shanmukha",
+  "primaryKeyword": "মুরুগান সুব্রামণ্য মন্ত্র",
+  "secondaryKeywords": [
+    "ওম সর্বনা ভবায় নমঃ",
+    "স্কন্দ শাস্তি মন্ত্র",
+    "তামিল মুরুগান জাপা"
+  ],
+  "meta": {
+    "title": "মুরুগান (শানমুখ) মন্ত্র জপ | জপম",
+    "description": "সুব্রমণ্য/মুরুগান/স্কন্দ মন্ত্র — ওম সর্বনা ভবায় নমহা — জপমে ১০৮ জপ।",
+    "ogImage": "/images/deities/shanmukha.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "মুরুগান মন্ত্র — ওম সর্বনা ভবায় নমহা"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "লর্ড মুরুগান (শানমুখ, সুব্রমণ্য, স্কন্দ) হলেন সাহস এবং জ্ঞানের তামিল এবং প্যান-ভারতীয় দেবতা। তাঁর মন্ত্র স্কন্দ ষষ্ঠী এবং থাই পূসামের কেন্দ্রীয়।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "জাপাম প্রতিদিনের জাপার জন্য খাঁটি মন্ত্র অডিও সহ মুরুগান অন্তর্ভুক্ত করে।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "মন্ত্রের অর্থ"
+    },
+    {
+      "type": "blockquote",
+      "runs": [
+        {
+          "text": "ওম সারবণ ভাবায় নমহা",
+          "bold": true
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ফলাফলের দাবি না করে শান্ত চিত্তে জপ করুন, অভিবাদন (নামহা) করুন।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "জপের উপকারিতা (ঐতিহ্যগত দৃষ্টি)"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "অভ্যন্তরীণ ভয়ের উপর বিজয় - ঐতিহ্যগত স্কন্দ প্রতীকবাদ",
+        "মঙ্গলবার ও ষষ্ঠীর দিন পবিত্র",
+        "ভেল পূজা এবং কাভাদি ঐতিহ্য জপের পরিপূরক",
+        "শিক্ষার্থীরা স্বচ্ছতা এবং শৃঙ্খলার জন্য প্রার্থনা করে"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "১০৮ বার কীভাবে জপ করবেন"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "ষষ্ঠী বা প্রতিদিন সকালে 108 জপ করুন",
+        "পুজো করলে লাল ফুল অর্পণ করুন",
+        "সম্ভব হলে থাই পুসামে মুরুগান মন্দিরে যান",
+        "যাতায়াতের সময় জাপামে ট্র্যাক রাউন্ডগুলি"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "কখন জপ করবেন"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "স্কন্দ ষষ্ঠী (আইপ্পাসি/তুলাম মাসে ছয় দিন), থাই পুষম এবং মঙ্গলবার।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "১০৮ বার কেন",
+      "_enrichId": "why-108-enrich"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "108 নম্বর হল একটি জপ মালার একটি পূর্ণ রাউন্ড। অবিচলিত পুনরাবৃত্তি মনকে শান্ত করে এবং মন্ত্রের অর্থের প্রতি গভীর মনোযোগ দেয়।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "কিছু ঐতিহ্য 11 বা 21 মালা নির্ধারণ করে — আপনার গুরু বা পুরোহিতকে আপনার ব্রতের উপযুক্ত গণনার জন্য জিজ্ঞাসা করুন।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "এড়াতে সাধারণ ভুল"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "খুব দ্রুত জপ করা এবং শব্দের উপর মনোযোগ হারানো",
+        "নির্দেশনা ছাড়াই একাধিক দেবতার ব্রত মিশ্রিত করা",
+        "ভক্তি ও নৈতিক জীবনযাপনের পরিবর্তে শুধুমাত্র বস্তুগত ফলাফলের আশা করা"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "মন্দির এবং বাড়ির অনুশীলন একসাথে"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "হোম জপ মন্দির পূজা সমর্থন করে; এটা দর্শন প্রতিস্থাপন না. উৎসবের দিন বা শনিবার মন্দিরে যাওয়া পারিবারিক ঐতিহ্যকে শক্তিশালী করে।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Japam-এ অনুশীলন"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ওম সারবণ ভাবায় নমহা-এর জন্য জপমে শানমুখ বেছে নিন — আঞ্চলিক নাম মুরুগান/স্কন্দ সব একই প্রিয় দেবতাকে নির্দেশ করে।",
+          "bold": false
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Japam-এ জপ শুরু করুন",
+      "href": "https://japam.digital/?lang=bn&deity=shanmukha&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "লগইন ছাড়াই চেষ্টা করুন",
+      "href": "https://japam.digital/?lang=bn&try=1&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "মহা জপ যজ্ঞে যোগ দিন",
+      "href": "https://japam.digital/menu?lang=bn&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Japam খুলুন",
+      "href": "https://japam.digital/?lang=bn&deity=shanmukha&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "মুরুগান বনাম সুব্রহ্মণ্য?",
+      "answer": "একই দেবতা - আঞ্চলিক নাম।"
+    },
+    {
+      "question": "তামিল নাকি সংস্কৃত মন্ত্র?",
+      "answer": "মন্ত্র সংস্কৃত; তামিল পদিগামগুলি পৃথক ভক্তি।"
+    },
+    {
+      "question": "কাভাদি আর জপ একসাথে?",
+      "answer": "কাভাদি তীর্থযাত্রার আগে অনেকেই ব্রত জপ করে।"
+    },
+    {
+      "question": "ষষ্ঠী উপবাস?",
+      "answer": "ঐচ্ছিক — মন্দিরের ঐতিহ্য অনুসরণ করুন।"
+    },
+    {
+      "question": "ভেল আইকন প্রয়োজন?",
+      "answer": "পূজায় সহায়ক; মানসিক জপ শুধুমাত্র ফোকাস প্রয়োজন."
+    }
+  ],
+  "disclaimer": {
+    "text": "এই নিবন্ধটি শুধুমাত্র শিক্ষামূলক ও ভক্তিমূলক অনুশীলনের জন্য। Japam চিকিৎসা, আইনি বা আর্থিক পরামর্শ দেয় না।"
+  },
+  "relatedPages": [
+    {
+      "pageId": "skanda-shasti-murugan",
+      "label": "স্কন্দ ষষ্ঠী"
+    },
+    {
+      "pageId": "japa-108-times",
+      "label": "108 জাপা"
+    },
+    {
+      "pageId": "online-japa-mantra",
+      "label": "অনলাইন জাপা"
+    }
+  ]
+}

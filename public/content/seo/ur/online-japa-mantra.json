@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "pageId": "online-japa-mantra",
+  "lang": "ur",
+  "slug": "online-japa-mantra",
+  "deityId": null,
+  "primaryKeyword": "online japa mantra chanting app",
+  "secondaryKeywords": [
+    "digital mantra practice",
+    "mantra app hindu",
+    "chant mantra with audio"
+  ],
+  "meta": {
+    "title": "Online Japa & Mantra Chanting — Japam App | Japam",
+    "description": "Practice Hindu mantra japa online with Japam: match-3 gameplay, deity audio, 108 counting, and community yagnas.",
+    "ogImage": "/images/favicon.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "Online Japa and Digital Mantra Practice"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Japam",
+          "bold": true
+        },
+        {
+          "text": " (japam.digital) is a "
+        },
+        {
+          "text": "digital mantra practice",
+          "bold": true,
+          "underline": true
+        },
+        {
+          "text": " platform: play a match-3 game while hearing authentic deity mantras, track your japa count, and join collective Maha Japa Yagnas — in many Indian languages."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Online japa does not replace temple worship or your family's puja rules; it supports daily repetition when you are travelling, at work breaks, or learning a new mantra."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "What makes Japam different"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Mantra audio tied to gameplay — stay engaged while chanting",
+        "Per-deity boards and japa tallies",
+        "108-japa specials and weekly streaks",
+        "Pushpa Aradhana — digital flower offering",
+        "23+ Indian language UI options"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "How to start"
+    },
+    {
+      "type": "ol",
+      "items": [
+        "Open japam.digital on phone or desktop",
+        "Choose your language",
+        "Pick your ishta devata from the menu",
+        "Play matches; each session adds to your japa count"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Practice with Japam"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Sign in with Google to save progress, or use guest mode to try japa without an account. Explore Maha Yagnas from the menu for community chanting goals."
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start Japa in Japam",
+      "href": "https://japam.digital/?lang=ur&utm_source=google&utm_medium=seo&utm_campaign=online-japa-mantra&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=ur&try=1&utm_source=google&utm_medium=seo&utm_campaign=online-japa-mantra&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=ur&utm_source=google&utm_medium=seo&utm_campaign=online-japa-mantra&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=ur&utm_source=google&utm_medium=seo&utm_campaign=online-japa-mantra&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "Is Japam free?",
+      "answer": "You can try guest play and core japa features; some levels and Pro features may require sign-in or support (dakshina) as shown in the app."
+    },
+    {
+      "question": "Which deities are available?",
+      "answer": "Rama, Shiva, Ganesh, Lakshmi, Hanuman, Venkateswara, Murugan, Navagraha deities, and more — see the in-app deity grid."
+    },
+    {
+      "question": "Do I need headphones?",
+      "answer": "Recommended for mantra audio clarity; respect quiet spaces and others around you."
+    },
+    {
+      "question": "Can I use Japam offline?",
+      "answer": "The PWA can cache some assets after you visit; full features need connectivity for sign-in and leaderboards."
+    },
+    {
+      "question": "Is this an ISKCON-only app?",
+      "answer": "No — Japam includes many sampradayas' deities, including ISKCON (Hare Krishna) as one option among many."
+    }
+  ],
+  "disclaimer": {
+    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+  },
+  "relatedPages": [
+    {
+      "pageId": "japa-108-times",
+      "label": "108 japa guide"
+    },
+    {
+      "pageId": "maha-japa-yagna",
+      "label": "Maha Japa Yagna"
+    }
+  ]
+}

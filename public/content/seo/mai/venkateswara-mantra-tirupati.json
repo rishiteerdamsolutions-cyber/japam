@@ -1,0 +1,226 @@
+{
+  "schemaVersion": 1,
+  "pageId": "venkateswara-mantra-tirupati",
+  "lang": "mai",
+  "slug": "venkateswara-mantra-tirupati",
+  "deityId": "venkateswara",
+  "primaryKeyword": "वेंकटेश्वर तिरुपति बालाजी मंत्र",
+  "secondaryKeywords": [
+    "ॐ नमो वेंकटेशाय",
+    "तिरुपति दर्शन मंत्र",
+    "वेंकटेश्वर जपा"
+  ],
+  "meta": {
+    "title": "वेंकटेश्वर मंत्र — तिरुपति बालाजी जापा | जपम",
+    "description": "ॐ नमो वेंकटेशाय — अर्थ, १०८ जप, एवं जपम में बालाजी भक्ति के लिये डिजिटल अभ्यास |",
+    "ogImage": "/images/deities/venkateswara.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "वेंकटेश्वर मंत्र एवं तिरुपति बालाजी जाप"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "तिरुपतिक भगवान वेंकटेश्वर (बालाजी) सम्पूर्ण दक्षिण भारत आ ओहि सँ आगूक प्रिय छथि | हुनक नाम मंत्रक जप समर्पण आ शुभक लेल कयल जाइत अछि |"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "दर्शन के योजना हो या घर स प्रार्थना, स्थिर जप भक्ति के गहींर करैत अछि |"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मंत्र का अर्थ"
+    },
+    {
+      "type": "blockquote",
+      "runs": [
+        {
+          "text": "Om namo Venkateshaaya",
+          "bold": true
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "परिणामक मांग करबासँ बेसी नमस्कार (नमहा) करैत शान्त मनसँ जप करू।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपा के लाभ (पारंपरिक दृष्टिकोण) २."
+    },
+    {
+      "type": "ul",
+      "items": [
+        "पूर्ण समर्पण व्यक्त करैत अछि (शरणागति) २.",
+        "तिरुपति तीर्थयात्रा से पूर्व लोकप्रिय",
+        "शुक्र आ शनि दिन मंदिरक भारी भीड़ देखबा मे अबैत अछि — घर जपा कहियो",
+        "पारम्परिक पूजा मे तुलासी पात के साथ जोड़ी"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "108 बार जप कैसे करे |"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "यात्रा स पहिने 108 या 1008 बेर व्रत (कंकना) के रूप मे जप करू",
+        "केश टोन्चरिंग केवल मंदिर पर चढ़ाउ जँ से अहाँक संकल्प अछि — जपा लेल आवश्यक नहि",
+        "बालाजी के छवि या फोटो अपने सामने रखे |",
+        "गिनती के साथ मंत्र सुनने के लिये जपम का प्रयोग करे |"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "कखन जप करब"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "कोनो दिन; बहुतो वैकुंता एकादशी आ ब्रह्मोत्सव ऋतु सँ पहिने जप बढ़बैत छथि |"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "108 पुनरावृत्ति कियैक मायने रखैत अछि",
+      "_enrichId": "why-108-enrich"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "108 नंबर एकटा जपा माला पर एकटा फुल राउंड अछि। लगातार पुनरावृत्ति मन के शांत करैत अछि आ मंत्र के अर्थ पर ध्यान गहींर करैत अछि |"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "किछु परंपरा मे 11 या 21 माला निर्धारित कयल गेल अछि — अपन गुरु वा पुरोहित सँ अपन व्रत के अनुकूल गिनती पूछू |"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "टालबाक लेल आम गलती"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "बेसी तेजी स जप करब आ आवाज पर ध्यान नहि देब",
+        "बिना मार्गदर्शन के अनेक देवता व्रत के मिश्रण",
+        "भक्ति आ नैतिक जीवन जीबाक बदला मात्र भौतिक परिणामक अपेक्षा करब"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मंदिर आ घर एक संग अभ्यास"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "घर जपा मंदिर पूजा के समर्थन करैत अछि; दर्शनक स्थान नहि लैत अछि। पावनि-तिहार के दिन या शनि दिन मंदिर के दर्शन करला स पारिवारिक परंपरा के मजबूती भेटैत अछि।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपम के साथ अभ्यास करे |"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "जपम म॑ वेंकटेश्वर मोड म॑ मैच-३ के दौरान ओम नमो वेंकटेशाय के प्रयोग करलऽ जाय छै — जब॑ आपने रोज पहाड़ी मंदिर म॑ नै जाय सकै छियै त॑ सहायक होय छै ।",
+          "bold": false
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start Venkateswara Japa in Japam",
+      "href": "https://japam.digital/?lang=mai&deity=venkateswara&utm_source=google&utm_medium=seo&utm_campaign=venkateswara-mantra-tirupati&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=mai&try=1&utm_source=google&utm_medium=seo&utm_campaign=venkateswara-mantra-tirupati&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=mai&utm_source=google&utm_medium=seo&utm_campaign=venkateswara-mantra-tirupati&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=mai&deity=venkateswara&utm_source=google&utm_medium=seo&utm_campaign=venkateswara-mantra-tirupati&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "वर्तनी वेंकटेशाय?",
+      "answer": "क्षेत्रीय वर्तनी भिन्न-भिन्न होइत अछि; अपन पुरोहितक लिप्यंतरणक पालन करू।"
+    },
+    {
+      "question": "की तिरुपति लड्डू प्रसाद आवश्यक अछि ?",
+      "answer": "घर जप के लिये नहीं — प्रसाद वैकल्पिक भक्ति है |"
+    },
+    {
+      "question": "की हम विवाहक लेल जप क सकैत छी?",
+      "answer": "बहुतो गोटे पारिवारिक आशीर्वादक प्रार्थना करैत छथि; अधिक देवताओं के लिये विवाह विलंब गाइड देखें |"
+    },
+    {
+      "question": "दर्शनसँ कतेक दिन पहिने ?",
+      "answer": "किछु गोटे ११ वा २१ दिनक जप करैत छथि — व्यक्तिगत व्रत ।"
+    },
+    {
+      "question": "की जपम मे वेंकटेश्वर छवि अछि ?",
+      "answer": "हाँ — देवता जाल पर वेंकटेश्वर का चयन करें |"
+    }
+  ],
+  "disclaimer": {
+    "text": "ई लेख केवल शैक्षणिक आ भक्ति अभ्यास के लेल अछि | जपम चिकित्सा, कानूनी, या आर्थिक सलाह नहि दैत अछि। परिणाम व्यक्तिगत विश्वास आ लगातार अभ्यास पर निर्भर करैत अछि । ऐप में मंत्र पाठ आ ऑडियो जपा सपोर्ट के लेल अछि; औपचारिक पूजा नियम के लेल अपन परिवार के पुजारी या परंपरा स परामर्श करू।"
+  },
+  "relatedPages": [
+    {
+      "pageId": "mantra-venkateswara",
+      "label": "वेंकटेश्वर स्तम्भ"
+    },
+    {
+      "pageId": "marriage-delay-mantra",
+      "label": "विवाह मंत्र"
+    },
+    {
+      "pageId": "japa-108-times",
+      "label": "१०८ जपा"
+    }
+  ]
+}

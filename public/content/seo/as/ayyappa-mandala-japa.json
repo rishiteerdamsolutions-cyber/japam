@@ -1,0 +1,225 @@
+{
+  "schemaVersion": 1,
+  "pageId": "ayyappa-mandala-japa",
+  "lang": "as",
+  "slug": "ayyappa-mandala-japa",
+  "deityId": "ayyappan",
+  "primaryKeyword": "অয়্যাপ্পা মণ্ডল জপ মন্ত্ৰ জপ",
+  "secondaryKeywords": [
+    "উৎসৱ জাপা",
+    "১০৮ বাৰ",
+    "জপম"
+  ],
+  "meta": {
+    "title": "অয়্যাপ্পা মণ্ডল জাপা | জাপম",
+    "description": "অয়্যাপ্পা মণ্ডল জপ — মন্ত্ৰ, ১০৮ জপ, জপমৰ সৈতে অভ্যাস।",
+    "ogImage": "/images/deities/ayyappan.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "অয়্যাপ্পা মণ্ডল জাপা"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "সবৰীমালা বতৰৰ আগতে ৪১ দিনীয়া মণ্ডলা ব্ৰত। আগতীয়াকৈ জাপাৰ পৰিকল্পনা কৰক; জাপামে ঋতুৰ সময়ত দৈনিক গণনা কৰাত সহায় কৰে।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "উৎসৱৰ তাৰিখ চন্দ্ৰ কেলেণ্ডাৰ অনুসৰণ কৰে — স্থানীয় পঞ্চাঙৰ সৈতে নিশ্চিত কৰক।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "মন্ত্ৰৰ অৰ্থ"
+    },
+    {
+      "type": "blockquote",
+      "runs": [
+        {
+          "text": "Swamiye Saranam Ayyappa",
+          "bold": true
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "নিৰ্দিষ্ট ফলাফলৰ দাবী নকৰি নমস্কাৰ আগবঢ়াই শান্ত মনেৰে জপ কৰক।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "জাপাৰ উপকাৰীতা (পৰম্পৰাগত দৃষ্টিভংগী)"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "উৎসৱৰ অনুশাসন গঢ়ি তোলে",
+        "দেৱতা ভক্তি গভীৰ কৰে",
+        "সম্প্ৰদায়ৰ যজ্ঞ ঋতুৰ লগত মিলিব পাৰে",
+        "শৈক্ষিক — ফলাফলৰ নিশ্চয়তা নহয়"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "১০৮ বাৰ কেনেকৈ জপ কৰিব"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "উৎসৱৰ সময়ছোৱাৰ বাবে দৈনিক ১০৮ সংকল্প নিৰ্ধাৰণ কৰক",
+        "আপোনাৰ পৰিয়ালৰ পৰম্পৰাৰ পৰা fast/vrat নিয়ম ৰাখক",
+        "সম্ভৱ হ’লে মন্দিৰ ভ্ৰমণ কৰক",
+        "কাম/পঢ়াৰ মাজত জাপাম কাউণ্টাৰ ব্যৱহাৰ কৰক"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "কেতিয়া জপ কৰিব লাগে"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "সবৰীমালা বতৰৰ আগতে ৪১ দিনীয়া মণ্ডলা ব্ৰত।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "১০৮টা পুনৰাবৃত্তি কিয় গুৰুত্বপূৰ্ণ",
+      "_enrichId": "why-108-enrich"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "১০৮ নম্বৰটো এটা জাপা মালাৰ ওপৰত এটা সম্পূৰ্ণ ৰাউণ্ড। অবিৰত পুনৰাবৃত্তিই মনক শান্ত কৰে আৰু মন্ত্ৰৰ অৰ্থৰ প্ৰতি মনোযোগ গভীৰ কৰে।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "কিছুমান পৰম্পৰাত ১১ বা ২১টা মালা নিৰ্ধাৰণ কৰা হৈছে — আপোনাৰ গুৰু বা পুৰোহিতক আপোনাৰ ব্ৰতৰ অনুকূল গণনা বিচাৰিব।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "এৰাই চলিবলগীয়া সাধাৰণ ভুল"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "বেছি বেগেৰে জপ কৰা আৰু শব্দৰ ওপৰত মনোযোগ হেৰুৱাই পেলোৱা",
+        "পথনিৰ্দেশনা অবিহনে একাধিক দেৱতাৰ ব্ৰত মিহলি কৰা",
+        "ভক্তি আৰু নৈতিক জীৱন-যাপনৰ পৰিৱৰ্তে কেৱল বস্তুগত ফলাফলৰ আশা কৰা"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "মন্দিৰ আৰু ঘৰতে একেলগে অনুশীলন"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ঘৰুৱা জাপে মন্দিৰ পূজাক সমৰ্থন কৰে; ই দৰ্শনৰ ঠাই লোৱা নাই। উৎসৱৰ দিন বা শনিবাৰে মন্দিৰ ভ্ৰমণ কৰিলে পাৰিবাৰিক পৰম্পৰা শক্তিশালী হয়।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "জাপামৰ লগত অনুশীলন কৰক"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "মন্ত্ৰ অডিঅ' আৰু জাপা টেলিৰ বাবে উৎসৱৰ বতৰত জাপামত দেৱতাক নিৰ্বাচন কৰক।"
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start Ayyappan Japa in Japam",
+      "href": "https://japam.digital/?lang=as&deity=ayyappan&utm_source=google&utm_medium=seo&utm_campaign=ayyappa-mandala-japa&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=as&try=1&utm_source=google&utm_medium=seo&utm_campaign=ayyappa-mandala-japa&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=as&utm_source=google&utm_medium=seo&utm_campaign=ayyappa-mandala-japa&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=as&deity=ayyappan&utm_source=google&utm_medium=seo&utm_campaign=ayyappa-mandala-japa&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "এই বছৰৰ সঠিক উৎসৱৰ তাৰিখ?",
+      "answer": "আপোনাৰ অঞ্চলৰ বাবে হিন্দু পঞ্চাং পৰীক্ষা কৰক — আমি এই গাইডত এটা গ্ৰেগ'ৰিয়ান বছৰ লক কৰাটো এৰাই চলিছো।"
+    },
+    {
+      "question": "দিনটোত কিমান জাপা?",
+      "answer": "বহু ব্ৰতৰ বাবে নূন্যতম ১০৮; কিছুমানে মূল দিনটোত নিৰ্দেশনাত ১০০৮ কৰে।"
+    },
+    {
+      "question": "অতিথি মোড ঠিক আছে?",
+      "answer": "চেষ্টাৰ বাবে হয়; উৎসৱৰ সপ্তাহসমূহৰ ভিতৰত অগ্ৰগতি ৰক্ষা কৰিবলৈ চাইন ইন কৰক।"
+    },
+    {
+      "question": "মন্দিৰ সলনি কৰিব?",
+      "answer": "নাই — ডিজিটেল জাপাই ঘৰুৱা অনুশীলন সমৰ্থন কৰে।"
+    },
+    {
+      "question": "সামূহিক যজ্ঞত যোগদান কৰক?",
+      "answer": "প্ৰচাৰৰ সময়ত জাপাম মেনুত মহাজপ যজ্ঞ চাওক।"
+    }
+  ],
+  "disclaimer": {
+    "text": "এই লেখাটো কেৱল শৈক্ষিক আৰু ভক্তিমূলক অনুশীলনৰ বাবে। জাপামে চিকিৎসা, আইনী বা আৰ্থিক পৰামৰ্শ নিদিয়ে। ফলাফল নিৰ্ভৰ কৰে ব্যক্তিগত বিশ্বাস আৰু সামঞ্জস্যপূৰ্ণ অনুশীলনৰ ওপৰত। এপটোত থকা মন্ত্ৰৰ লিখনী আৰু অডিঅ’ জাপা সমৰ্থনৰ বাবে; আনুষ্ঠানিক পূজাৰ নিয়মৰ বাবে আপোনাৰ পৰিয়ালৰ পুৰোহিত বা পৰম্পৰাৰ পৰামৰ্শ লওক।"
+  },
+  "relatedPages": [
+    {
+      "pageId": "mantra-ayyappan",
+      "label": "দেৱতা মন্ত্ৰ পথ প্ৰদৰ্শক"
+    },
+    {
+      "pageId": "japa-108-times",
+      "label": "১০৮ জাপা"
+    },
+    {
+      "pageId": "online-japa-mantra",
+      "label": "অনলাইন জাপা"
+    }
+  ]
+}

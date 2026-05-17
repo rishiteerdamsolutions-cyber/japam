@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 1,
+  "pageId": "rama-nam-japa",
+  "lang": "sat",
+  "slug": "rama-nam-japa",
+  "deityId": "rama",
+  "primaryKeyword": "rama nam japa 108",
+  "secondaryKeywords": [
+    "ram mantra",
+    "sitarama"
+  ],
+  "meta": {
+    "title": "Rama Nam Japa — 108 Times | Japam",
+    "description": "Rama nama japa: Ram mantra 108 times in Japam.",
+    "ogImage": "/images/deities/rama.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "Rama Nam Japa"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "The simple name Rama is among the most beloved mantras in North and South India."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Japam uses Ram as the gameplay mantra for Rama bhakti."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Meaning of the mantra"
+    },
+    {
+      "type": "blockquote",
+      "runs": [
+        {
+          "text": "Ram",
+          "bold": true
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Chant with a calm mind, offering salutation rather than demanding specific outcomes."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Benefits of japa (traditional view)"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Builds festival discipline",
+        "Deepens deity bhakti",
+        "Community yagnas may align with season",
+        "Educational — not outcome guarantees"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "How to chant 108 times"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Set daily 108 sankalpa for festival period",
+        "Keep fast/vrat rules from your family tradition",
+        "Visit temple when possible",
+        "Use Japam counter between work/study"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "When to chant"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Rama Navami and daily sandhya; follow your lineage."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Practice with Japam"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Select Rama in Japam for Ram japa with audio and tally."
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start ᱨᱟᱢ Japa in Japam",
+      "href": "https://japam.digital/?lang=sat&deity=rama&utm_source=google&utm_medium=seo&utm_campaign=rama-nam-japa&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=sat&try=1&utm_source=google&utm_medium=seo&utm_campaign=rama-nam-japa&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=sat&utm_source=google&utm_medium=seo&utm_campaign=rama-nam-japa&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=sat&deity=rama&utm_source=google&utm_medium=seo&utm_campaign=rama-nam-japa&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "Exact festival date this year?",
+      "answer": "Check Hindu panchang for your region — we avoid locking a Gregorian year in this guide."
+    },
+    {
+      "question": "How many japas per day?",
+      "answer": "108 minimum for many vows; some do 1008 on main day under guidance."
+    },
+    {
+      "question": "Guest mode OK?",
+      "answer": "Yes for try; sign in to save progress across festival weeks."
+    },
+    {
+      "question": "Replace temple?",
+      "answer": "No — digital japa supports home practice."
+    },
+    {
+      "question": "Join collective yagna?",
+      "answer": "See Maha Japa Yagnas in Japam menu during campaigns."
+    }
+  ],
+  "disclaimer": {
+    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+  },
+  "relatedPages": [
+    {
+      "pageId": "mantra-rama",
+      "label": "Rama pillar"
+    },
+    {
+      "pageId": "rama-navami-japa",
+      "label": "Rama Navami"
+    },
+    {
+      "pageId": "japa-108-times",
+      "label": "108 japa guide"
+    }
+  ]
+}

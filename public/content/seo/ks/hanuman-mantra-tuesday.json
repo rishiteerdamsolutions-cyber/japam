@@ -1,0 +1,226 @@
+{
+  "schemaVersion": 1,
+  "pageId": "hanuman-mantra-tuesday",
+  "lang": "ks",
+  "slug": "hanuman-mantra-tuesday",
+  "deityId": "hanuman",
+  "primaryKeyword": "ہنومان منتر منگل جاپ",
+  "secondaryKeywords": [
+    "اوم سری ہنومتے نامہ",
+    "ہنومان جاپ",
+    "ہنومان چالیسا بمقابلہ منتر"
+  ],
+  "meta": {
+    "title": "منگل جاپ کے لیے ہنومان منتر | جاپم",
+    "description": "منگل ہنومان منتر، 108 جاپ قدم، طاقت اور عقیدت — جاپم آڈیو کے ساتھ مشق کریں۔",
+    "ogImage": "/images/deities/hanuman.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "ہنومان منتر اور منگل جاپ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ہنومان طاقت، خدمت اور رام بھکتی کو مجسم کرتا ہے۔ منگل (منگلوار) پورے ہندوستان میں ان کی عبادت کے لیے وسیع پیمانے پر وقف ہے۔"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "اس گائیڈ میں جاپم میں بنیادی ہنومان منتر اور اسے 108 بار پڑھنے کا طریقہ بتایا گیا ہے۔"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "منتر کا مفہوم"
+    },
+    {
+      "type": "blockquote",
+      "runs": [
+        {
+          "text": "Om Sri Hanumate Namaha",
+          "bold": true
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "پُرسکون ذہن کے ساتھ نعرہ لگائیں، نتائج کا مطالبہ کرنے کی بجائے سلام پیش کریں۔"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "جاپ کے فوائد (روایتی نقطہ نظر)"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "مشکلات میں ہمت اور استقامت",
+        "روایتی لوک عقیدے میں تحفظ - عقیدت کے ساتھ بیان کیا گیا۔",
+        "ان لوگوں کے لئے ہنومان چالیسہ کی تکمیل کرتا ہے جو دونوں کو پڑھتے ہیں۔",
+        "بہت سے خاندانوں میں منگل کا روزہ یا سادہ پوجا"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "108 مرتبہ پڑھنے کا طریقہ"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "مشرق یا دیوتا کی تصویر کا چہرہ؛ ردرکشا یا تلسی مالا پر 108 کا جاپ کریں۔",
+        "اگر آپ کی منت ہے تو اس سے پہلے یا بعد میں ہنومان چالیسہ پڑھیں",
+        "رسمی پوجا کرتے وقت منگل کے دن سینڈور اور تیل کا چراغ چڑھائیں۔",
+        "جاپ کے دوران جسم اور تقریر کو پرسکون رکھیں"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "کب نعرہ لگانا ہے۔"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "منگل کی صبح یا شام؛ کچھ علاقوں میں ہفتہ کو بھی ہنومان کو شانی پریہرام سے جوڑتا ہے۔"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "108 تکرار کیوں اہم ہے۔",
+      "_enrichId": "why-108-enrich"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "نمبر 108 جاپ مالا پر ایک مکمل دور ہے۔ مسلسل تکرار ذہن کو پرسکون کرتی ہے اور منتر کے معنی پر توجہ مرکوز کرتی ہے۔"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "کچھ روایات 11 یا 21 مالوں کی تجویز کرتی ہیں - اپنے گرو یا پجاری سے اپنی منت کے مطابق گنتی کے لیے پوچھیں۔"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "عام غلطیوں سے بچنا ہے۔"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "بہت تیز گانا اور آواز پر توجہ کھو دینا",
+        "ہدایت کے بغیر متعدد دیوتا منتوں کو ملانا",
+        "بھکتی اور اخلاقی زندگی کے بجائے صرف مادی نتائج کی توقع کرنا"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "مندر اور گھر کی مشق ایک ساتھ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ہوم جاپا مندر کی پوجا کی حمایت کرتا ہے۔ یہ درشن کی جگہ نہیں لیتا۔ تہوار کے دنوں یا ہفتہ کے دن مندر جانا خاندانی روایت کو مضبوط کرتا ہے۔"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Japam کے ساتھ مشق کریں۔"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "جب آپ کھیلتے ہیں تو Japam کا ہنومان موڈ Om Sri Hanumate Namaha چلاتا ہے — وقفے کے دوران 108 گننے کے لیے مثالی۔",
+          "bold": false
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start Hanuman Japa in Japam",
+      "href": "https://japam.digital/?lang=ks&deity=hanuman&utm_source=google&utm_medium=seo&utm_campaign=hanuman-mantra-tuesday&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=ks&try=1&utm_source=google&utm_medium=seo&utm_campaign=hanuman-mantra-tuesday&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=ks&utm_source=google&utm_medium=seo&utm_campaign=hanuman-mantra-tuesday&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=ks&deity=hanuman&utm_source=google&utm_medium=seo&utm_campaign=hanuman-mantra-tuesday&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "منتر یا چالیسہ پہلے؟",
+      "answer": "یا تو حکم ٹھیک ہے؛ اپنے خاندانی رواج پر عمل کریں۔"
+    },
+    {
+      "question": "کیا خواتین ہنومان منتر کا جاپ کر سکتی ہیں؟",
+      "answer": "ہاں — زیادہ تر نسبوں میں بڑے پیمانے پر قبول کیا جاتا ہے۔"
+    },
+    {
+      "question": "ہنومان شانی کی مدد کیسے کرتا ہے؟",
+      "answer": "ہفتہ کی مشترکہ مشق کے لیے ہماری ہنومان-شنی گائیڈ دیکھیں۔"
+    },
+    {
+      "question": "منگل کو بہترین وقت؟",
+      "answer": "برہما مہورتا یا غروب آفتاب کے بعد شام عام ہے۔"
+    },
+    {
+      "question": "کیا سنڈور ضروری ہے؟",
+      "answer": "پوجا کے لیے ہاں؛ خاموش جاپ کی ضرورت نہیں ہے۔"
+    }
+  ],
+  "disclaimer": {
+    "text": "یہ مضمون صرف تعلیمی اور عقیدتی مشق کے لیے ہے۔ Japam طبی، قانونی، یا مالی مشورہ فراہم نہیں کرتا ہے۔ نتائج کا انحصار ذاتی ایمان اور مستقل مشق پر ہوتا ہے۔ ایپ میں منتر کا متن اور آڈیو جاپا سپورٹ کے لیے ہیں۔ رسمی پوجا کے قواعد کے لیے اپنے خاندانی پجاری یا روایت سے مشورہ کریں۔"
+  },
+  "relatedPages": [
+    {
+      "pageId": "mantra-hanuman",
+      "label": "ہنومان منتر کا ستون"
+    },
+    {
+      "pageId": "hanuman-mantra-shani",
+      "label": "شانی کے لیے ہنومان"
+    },
+    {
+      "pageId": "hanuman-jayanti-japa",
+      "label": "ہنومان جینتی"
+    }
+  ]
+}

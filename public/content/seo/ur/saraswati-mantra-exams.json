@@ -1,0 +1,179 @@
+{
+  "schemaVersion": 1,
+  "pageId": "saraswati-mantra-exams",
+  "lang": "ur",
+  "slug": "saraswati-mantra-exams",
+  "deityId": "saraswati",
+  "primaryKeyword": "saraswati mantra for exams",
+  "secondaryKeywords": [
+    "vidya mantra",
+    "basant panchami"
+  ],
+  "meta": {
+    "title": "Saraswati Mantra for Students & Exams | Japam",
+    "description": "Saraswati vidya mantra and 108 japa for students — Japam.",
+    "ogImage": "/images/deities/saraswati.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "Saraswati Mantra for Exams and Learning"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Goddess Saraswati blesses learning, music, and speech. Students chant before exams with humility."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Om Saraswatyai Namaha is the form used in Japam."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Meaning of the mantra"
+    },
+    {
+      "type": "blockquote",
+      "runs": [
+        {
+          "text": "Om Saraswatyai Namaha",
+          "bold": true
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Chant with a calm mind, offering salutation rather than demanding specific outcomes."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Benefits of japa (traditional view)"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Builds festival discipline",
+        "Deepens deity bhakti",
+        "Community yagnas may align with season",
+        "Educational — not outcome guarantees"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "How to chant 108 times"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Set daily 108 sankalpa for festival period",
+        "Keep fast/vrat rules from your family tradition",
+        "Visit temple when possible",
+        "Use Japam counter between work/study"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "When to chant"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Basant Panchami and Navratri are peak; daily japa before study helps focus."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Practice with Japam"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Use Saraswati mode in Japam while revising — audio + count toward 108."
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start سرسوتی Japa in Japam",
+      "href": "https://japam.digital/?lang=ur&deity=saraswati&utm_source=google&utm_medium=seo&utm_campaign=saraswati-mantra-exams&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=ur&try=1&utm_source=google&utm_medium=seo&utm_campaign=saraswati-mantra-exams&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=ur&utm_source=google&utm_medium=seo&utm_campaign=saraswati-mantra-exams&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=ur&deity=saraswati&utm_source=google&utm_medium=seo&utm_campaign=saraswati-mantra-exams&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "Exact festival date this year?",
+      "answer": "Check Hindu panchang for your region — we avoid locking a Gregorian year in this guide."
+    },
+    {
+      "question": "How many japas per day?",
+      "answer": "108 minimum for many vows; some do 1008 on main day under guidance."
+    },
+    {
+      "question": "Guest mode OK?",
+      "answer": "Yes for try; sign in to save progress across festival weeks."
+    },
+    {
+      "question": "Replace temple?",
+      "answer": "No — digital japa supports home practice."
+    },
+    {
+      "question": "Join collective yagna?",
+      "answer": "See Maha Japa Yagnas in Japam menu during campaigns."
+    }
+  ],
+  "disclaimer": {
+    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+  },
+  "relatedPages": [
+    {
+      "pageId": "mantra-saraswati",
+      "label": "Saraswati pillar"
+    },
+    {
+      "pageId": "guru-graha-mantra",
+      "label": "Guru graha"
+    },
+    {
+      "pageId": "japa-108-times",
+      "label": "108 japa guide"
+    }
+  ]
+}

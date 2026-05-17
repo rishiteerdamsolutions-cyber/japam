@@ -1,0 +1,181 @@
+{
+  "schemaVersion": 1,
+  "pageId": "mantra-shanmukha-murugan",
+  "lang": "sd",
+  "slug": "mantra-shanmukha-murugan",
+  "deityId": "shanmukha",
+  "primaryKeyword": "murugan subramanya mantra",
+  "secondaryKeywords": [
+    "om saravana bhavaya namaha",
+    "skanda shasti mantra",
+    "tamil murugan japa"
+  ],
+  "meta": {
+    "title": "ڪارتيڪ Mantra — 108 Japa | Japam",
+    "description": "ڪارتيڪ mantra meaning, 108 japa steps, and practice in Japam.",
+    "ogImage": "/images/deities/shanmukha.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "ڪارتيڪ — 108 Japa"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Lord Murugan (Shanmukha, Subramanya, Skanda) is the Tamil and pan-Indian god of courage and wisdom. His mantra is central to Skanda Shasti and Thai Poosam."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Japam includes Murugan with authentic mantra audio for daily japa."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Meaning of the mantra"
+    },
+    {
+      "type": "blockquote",
+      "runs": [
+        {
+          "text": "Om Saravana Bhavaya Namaha",
+          "bold": true
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Chant with a calm mind, offering salutation (Namaha) rather than demanding outcomes."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Benefits of japa (traditional view)"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Victory over inner fear — traditional Skanda symbolism",
+        "Tuesday and Shasti days are sacred",
+        "Vel worship and kavadi traditions complement japa",
+        "Students pray for clarity and discipline"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "How to chant 108 times"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Chant 108 on Shasti or daily morning",
+        "Offer red flowers if doing puja",
+        "Visit Murugan temple on Thai Poosam when possible",
+        "Track rounds in Japam during commute"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "When to chant"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Skanda Shasti (six days in Aippasi/Tulam month), Thai Poosam, and Tuesdays."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Practice with Japam"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Choose Shanmukha in Japam for Om Saravana Bhavaya Namaha — regional names Murugan/Skanda all point to the same beloved deity.",
+          "bold": false
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start ڪارتيڪ Japa in Japam",
+      "href": "https://japam.digital/?lang=sd&deity=shanmukha&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=sd&try=1&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=sd&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=sd&deity=shanmukha&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "Murugan vs Subramanya?",
+      "answer": "Same deity — regional names."
+    },
+    {
+      "question": "Tamil or Sanskrit chant?",
+      "answer": "Mantra is Sanskrit; Tamil padigams are separate devotion."
+    },
+    {
+      "question": "Kavadi and japa together?",
+      "answer": "Many vow japa before kavadi pilgrimage."
+    },
+    {
+      "question": "Shasti fasting?",
+      "answer": "Optional — follow temple tradition."
+    },
+    {
+      "question": "Is vel icon required?",
+      "answer": "Helpful in puja; mental japa needs only focus."
+    }
+  ],
+  "disclaimer": {
+    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+  },
+  "relatedPages": [
+    {
+      "pageId": "skanda-shasti-murugan",
+      "label": "Skanda Shasti"
+    },
+    {
+      "pageId": "japa-108-times",
+      "label": "108 japa guide"
+    },
+    {
+      "pageId": "online-japa-mantra",
+      "label": "Online japa"
+    }
+  ]
+}

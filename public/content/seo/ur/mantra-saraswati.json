@@ -1,0 +1,180 @@
+{
+  "schemaVersion": 1,
+  "pageId": "mantra-saraswati",
+  "lang": "ur",
+  "slug": "mantra-saraswati",
+  "deityId": "saraswati",
+  "primaryKeyword": "saraswati mantra japa 108 times",
+  "secondaryKeywords": [
+    "Saraswati mantra",
+    "Saraswati japa",
+    "108 times mantra"
+  ],
+  "meta": {
+    "title": "سرسوتی Mantra — 108 Japa | Japam",
+    "description": "سرسوتی mantra meaning, 108 japa steps, and practice in Japam.",
+    "ogImage": "/images/deities/saraswati.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "سرسوتی — 108 Japa"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Saraswati bhakti includes steady mantra japa as a foundation of daily practice."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Japam uses the mantra below during match-3 play with counting toward 108."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Meaning of the mantra"
+    },
+    {
+      "type": "blockquote",
+      "runs": [
+        {
+          "text": "Om Saraswatyai Namaha",
+          "bold": true
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Chant with a calm mind, offering salutation rather than demanding specific outcomes."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Benefits of japa (traditional view)"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Builds daily discipline and mental focus",
+        "Deepens bhakti in traditional understanding",
+        "Supports graha or deity vows (sankalpa)",
+        "Complements temple puja — does not replace it"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "How to chant 108 times"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Sit in a quiet place with spine straight",
+        "Chant 108 times on a mala (one round)",
+        "Keep attention on the mantra sound and meaning",
+        "Close with gratitude to your ishta devata"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "When to chant"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Any sincere daily time works; ask your priest for festival or vrat days specific to this deity."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Practice with Japam"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Select Saraswati in Japam to hear the mantra audio and track your japa count."
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start سرسوتی Japa in Japam",
+      "href": "https://japam.digital/?lang=ur&deity=saraswati&utm_source=google&utm_medium=seo&utm_campaign=mantra-saraswati&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=ur&try=1&utm_source=google&utm_medium=seo&utm_campaign=mantra-saraswati&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=ur&utm_source=google&utm_medium=seo&utm_campaign=mantra-saraswati&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=ur&deity=saraswati&utm_source=google&utm_medium=seo&utm_campaign=mantra-saraswati&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "How many times should I chant Saraswati's mantra?",
+      "answer": "108 repetitions (one mala) is the common standard; some do 11 or 21 malas under guidance."
+    },
+    {
+      "question": "Can I use Japam without signing in?",
+      "answer": "Guest try mode is available from the landing page; sign in to save long-term progress."
+    },
+    {
+      "question": "Is this the only mantra for this deity?",
+      "answer": "Your lineage may use stotras or longer mantras; this is the form in the Japam app."
+    },
+    {
+      "question": "Does mantra japa replace puja?",
+      "answer": "No — japa supports home practice; formal puja follows your sampradaya."
+    },
+    {
+      "question": "Which direction should I face?",
+      "answer": "East or north is common; consistency matters more than perfect direction."
+    }
+  ],
+  "disclaimer": {
+    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+  },
+  "relatedPages": [
+    {
+      "pageId": "japa-108-times",
+      "label": "108 japa guide"
+    },
+    {
+      "pageId": "ishta-devata-japa",
+      "label": "Ishta devata japa"
+    },
+    {
+      "pageId": "online-japa-mantra",
+      "label": "Online japa"
+    }
+  ]
+}

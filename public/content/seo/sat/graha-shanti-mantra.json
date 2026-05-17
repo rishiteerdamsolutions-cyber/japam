@@ -1,0 +1,172 @@
+{
+  "schemaVersion": 1,
+  "pageId": "graha-shanti-mantra",
+  "lang": "sat",
+  "slug": "graha-shanti-mantra",
+  "deityId": null,
+  "primaryKeyword": "graha shanti mantra",
+  "secondaryKeywords": [
+    "navagraha shanti",
+    "planetary peace mantra",
+    "graha dosha remedies"
+  ],
+  "meta": {
+    "title": "Graha Shanti Mantra & Planetary Japa | Japam",
+    "description": "Overview of graha shanti, Navagraha worship, and per-planet mantra japa in Japam.",
+    "ogImage": "/images/favicon.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "Graha Shanti Mantra and Planetary Peace"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Graha shanti means pacifying the nine planets (Navagraha) in one’s horoscope through worship, charity, and mantra japa."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Each graha has a bija or name mantra — Japam includes Shani, Rahu, Ketu, Surya, Guru, and deity forms of divine grace."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "What is graha shanti?"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Astrology maps karmic tendencies to planets. Japa does not “erase” karma but steadies the mind and aligns conduct with dharma, which traditions say softens difficult periods."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Benefits of japa (traditional view)"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Holistic approach: multiple planets via Navagraha puja or individual focus",
+        "Combines mantra, fasting, and seva per priest advice",
+        "Supports peace during dasha transitions",
+        "Builds daily spiritual discipline"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "How to chant 108 times"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Identify which graha needs focus with a qualified astrologer",
+        "Chant that planet’s mantra 108 times on its weekday",
+        "Navagraha homam or temple puja for comprehensive shanti",
+        "Use Japam for individual graha/deity mantras"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "When to chant"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Weekdays map to planets — Sunday Surya, Saturday Shani, etc."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Practice with Japam"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Japam lets you practise Shani, Rahu, Ketu, Surya, Guru mantras and deity japa in one app with counting and audio.",
+          "bold": false
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start Japa in Japam",
+      "href": "https://japam.digital/?lang=sat&utm_source=google&utm_medium=seo&utm_campaign=graha-shanti-mantra&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=sat&try=1&utm_source=google&utm_medium=seo&utm_campaign=graha-shanti-mantra&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=sat&utm_source=google&utm_medium=seo&utm_campaign=graha-shanti-mantra&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=sat&utm_source=google&utm_medium=seo&utm_campaign=graha-shanti-mantra&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "One mantra for all planets?",
+      "answer": "Navagraha stotra exists; individual graha mantras target specific needs."
+    },
+    {
+      "question": "Do I need gemstones?",
+      "answer": "Some wear ratna after astrologer advice; japa alone is a complete sadhana for many."
+    },
+    {
+      "question": "Where is Navagraha temple puja?",
+      "answer": "Major temples offer Navagraha shrines; home japa complements visits."
+    },
+    {
+      "question": "Rahu and Ketu same?",
+      "answer": "No — separate mantras; see dedicated guides in this series."
+    },
+    {
+      "question": "Can Japam replace homam?",
+      "answer": "No — homam is priest-led; Japam supports daily japa."
+    }
+  ],
+  "disclaimer": {
+    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+  },
+  "relatedPages": [
+    {
+      "pageId": "navagraha-mantra",
+      "label": "Navagraha mantra"
+    },
+    {
+      "pageId": "shani-mantra-shanti",
+      "label": "Shani shanti"
+    },
+    {
+      "pageId": "rahu-mantra-shanti",
+      "label": "Rahu shanti"
+    }
+  ]
+}

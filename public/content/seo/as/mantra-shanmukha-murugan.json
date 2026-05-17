@@ -1,0 +1,226 @@
+{
+  "schemaVersion": 1,
+  "pageId": "mantra-shanmukha-murugan",
+  "lang": "as",
+  "slug": "mantra-shanmukha-murugan",
+  "deityId": "shanmukha",
+  "primaryKeyword": "মুৰুগন সুব্ৰমণ্য মন্ত্ৰ",
+  "secondaryKeywords": [
+    "ওম সৰৱণ ভাৱয় নমহা",
+    "স্কন্দ শাস্তি মন্ত্ৰ",
+    "তামিল মুৰুগান জাপা"
+  ],
+  "meta": {
+    "title": "মুৰুগন (শনমুখ) মন্ত্ৰ জপ | জাপম",
+    "description": "সুব্ৰমণ্য/মুৰুগন/স্কন্দ মন্ত্ৰ — ওম সৰৱণ ভাৱয় নমহা — জপমত ১০৮ জপ।",
+    "ogImage": "/images/deities/shanmukha.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "মুৰুগন মন্ত্ৰ — ওম সৰৱণ ভাৱয় নমহা"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ভগৱান মুৰুগান (শনমুখ, সুব্ৰমণ্য, স্কন্দ) হৈছে তামিল আৰু সৰ্বভাৰতীয় সাহস আৰু প্ৰজ্ঞাৰ দেৱতা। তেওঁৰ মন্ত্ৰ স্কন্দ শাস্তি আৰু থাই পূছমৰ কেন্দ্ৰীয়।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "জাপামত দৈনিক জাপাৰ বাবে প্ৰামাণিক মন্ত্ৰ অডিঅ'ৰ সৈতে মুৰুগান অন্তৰ্ভুক্ত কৰা হৈছে।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "মন্ত্ৰৰ অৰ্থ"
+    },
+    {
+      "type": "blockquote",
+      "runs": [
+        {
+          "text": "Om Saravana Bhavaya Namaha",
+          "bold": true
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "শান্ত মনেৰে জপ কৰক, ফলাফলৰ দাবী নকৰি প্ৰণাম (নমহা) আগবঢ়াওক।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "জাপাৰ উপকাৰীতা (পৰম্পৰাগত দৃষ্টিভংগী)"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "আভ্যন্তৰীণ ভয়ৰ ওপৰত জয় — পৰম্পৰাগত স্কণ্ড প্ৰতীকবাদ",
+        "মঙলবাৰ আৰু শাস্তিৰ দিন পবিত্ৰ",
+        "ভেল পূজা আৰু কাৱড়ী পৰম্পৰাই জাপৰ পৰিপূৰক",
+        "ছাত্ৰ-ছাত্ৰীসকলে স্পষ্টতা আৰু অনুশাসনৰ বাবে প্ৰাৰ্থনা কৰে"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "১০৮ বাৰ কেনেকৈ জপ কৰিব"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "শাস্তিৰ দিনা বা দৈনিক পুৱা ১০৮ জপ কৰক",
+        "পূজা কৰিলে ৰঙা ফুল আগবঢ়াওক",
+        "সম্ভৱ হ’লে থাই পূছামৰ মুৰুগান মন্দিৰ ভ্ৰমণ কৰক",
+        "যাতায়তৰ সময়ত জাপামত ট্ৰেক ৰাউণ্ড"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "কেতিয়া জপ কৰিব লাগে"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "স্কন্দ শাস্তি (আইপ্পাচি/তুলাম মাহত ছয় দিন), থাই পূছাম, আৰু মঙলবাৰ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "১০৮টা পুনৰাবৃত্তি কিয় গুৰুত্বপূৰ্ণ",
+      "_enrichId": "why-108-enrich"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "১০৮ নম্বৰটো এটা জাপা মালাৰ ওপৰত এটা সম্পূৰ্ণ ৰাউণ্ড। অবিৰত পুনৰাবৃত্তিই মনক শান্ত কৰে আৰু মন্ত্ৰৰ অৰ্থৰ প্ৰতি মনোযোগ গভীৰ কৰে।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "কিছুমান পৰম্পৰাত ১১ বা ২১টা মালা নিৰ্ধাৰণ কৰা হৈছে — আপোনাৰ গুৰু বা পুৰোহিতক আপোনাৰ ব্ৰতৰ অনুকূল গণনা বিচাৰিব।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "এৰাই চলিবলগীয়া সাধাৰণ ভুল"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "বেছি বেগেৰে জপ কৰা আৰু শব্দৰ ওপৰত মনোযোগ হেৰুৱাই পেলোৱা",
+        "পথনিৰ্দেশনা অবিহনে একাধিক দেৱতাৰ ব্ৰত মিহলি কৰা",
+        "ভক্তি আৰু নৈতিক জীৱন-যাপনৰ পৰিৱৰ্তে কেৱল বস্তুগত ফলাফলৰ আশা কৰা"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "মন্দিৰ আৰু ঘৰতে একেলগে অনুশীলন"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ঘৰুৱা জাপে মন্দিৰ পূজাক সমৰ্থন কৰে; ই দৰ্শনৰ ঠাই লোৱা নাই। উৎসৱৰ দিন বা শনিবাৰে মন্দিৰ ভ্ৰমণ কৰিলে পাৰিবাৰিক পৰম্পৰা শক্তিশালী হয়।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "জাপামৰ লগত অনুশীলন কৰক"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ওম সৰৱণ ভৱয় নমহাৰ বাবে জাপামত শনমুখ বাছি লওক — আঞ্চলিক নাম মুৰুগন/স্কণ্ড সকলোৱে একেজন প্ৰিয় দেৱতাক আঙুলিয়াই দিয়ে।",
+          "bold": false
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start Shanmukha Japa in Japam",
+      "href": "https://japam.digital/?lang=as&deity=shanmukha&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=as&try=1&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=as&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=as&deity=shanmukha&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "মুৰুগন বনাম সুব্ৰমণ্য?",
+      "answer": "একে দেৱতা — আঞ্চলিক নাম।"
+    },
+    {
+      "question": "তামিল নে সংস্কৃত জপ?",
+      "answer": "মন্ত্ৰ সংস্কৃত; তামিল পডিগাম পৃথক ভক্তি।"
+    },
+    {
+      "question": "কাৱদী আৰু জাপা একেলগে?",
+      "answer": "বহুতে কাৱদী তীৰ্থযাত্ৰাৰ আগতে জপ ব্ৰত কৰে।"
+    },
+    {
+      "question": "শাস্তিৰ উপবাস?",
+      "answer": "ঐচ্ছিক — মন্দিৰৰ পৰম্পৰা অনুসৰণ কৰক।"
+    },
+    {
+      "question": "vel আইকনৰ প্ৰয়োজন আছেনে?",
+      "answer": "পূজাত সহায়ক; মানসিক জাপাক কেৱল মনোযোগৰ প্ৰয়োজন।"
+    }
+  ],
+  "disclaimer": {
+    "text": "এই লেখাটো কেৱল শৈক্ষিক আৰু ভক্তিমূলক অনুশীলনৰ বাবে। জাপামে চিকিৎসা, আইনী বা আৰ্থিক পৰামৰ্শ নিদিয়ে। ফলাফল নিৰ্ভৰ কৰে ব্যক্তিগত বিশ্বাস আৰু সামঞ্জস্যপূৰ্ণ অনুশীলনৰ ওপৰত। এপটোত থকা মন্ত্ৰৰ লিখনী আৰু অডিঅ’ জাপা সমৰ্থনৰ বাবে; আনুষ্ঠানিক পূজাৰ নিয়মৰ বাবে আপোনাৰ পৰিয়ালৰ পুৰোহিত বা পৰম্পৰাৰ পৰামৰ্শ লওক।"
+  },
+  "relatedPages": [
+    {
+      "pageId": "skanda-shasti-murugan",
+      "label": "স্কন্দ শাস্তি"
+    },
+    {
+      "pageId": "japa-108-times",
+      "label": "১০৮ জাপা"
+    },
+    {
+      "pageId": "online-japa-mantra",
+      "label": "অনলাইন জাপা"
+    }
+  ]
+}

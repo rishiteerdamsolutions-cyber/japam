@@ -5,27 +5,47 @@
   "slug": "online-japa-mantra",
   "deityId": null,
   "primaryKeyword": "online japa mantra chanting app",
-  "secondaryKeywords": ["digital mantra practice", "mantra app hindu", "chant mantra with audio"],
+  "secondaryKeywords": [
+    "digital mantra practice",
+    "mantra app hindu",
+    "chant mantra with audio"
+  ],
   "meta": {
     "title": "Online Japa & Mantra Chanting — Japam App",
     "description": "Practice Hindu mantra japa online with Japam: match-3 gameplay, deity audio, 108 counting, and community yagnas.",
     "ogImage": "/images/favicon.png"
   },
   "blocks": [
-    { "type": "h1", "text": "Online Japa and Digital Mantra Practice" },
+    {
+      "type": "h1",
+      "text": "Online Japa and Digital Mantra Practice"
+    },
     {
       "type": "p",
       "runs": [
-        { "text": "Japam", "bold": true },
-        { "text": " (japam.digital) is a " },
-        { "text": "digital mantra practice", "bold": true, "underline": true },
-        { "text": " platform: play a match-3 game while hearing authentic deity mantras, track your japa count, and join collective Maha Japa Yagnas — in many Indian languages." }
+        {
+          "text": "Japam",
+          "bold": true
+        },
+        {
+          "text": " (japam.digital) is a "
+        },
+        {
+          "text": "digital mantra practice",
+          "bold": true,
+          "underline": true
+        },
+        {
+          "text": " platform: play a match-3 game while hearing authentic deity mantras, track your japa count, and join collective Maha Japa Yagnas — in many Indian languages."
+        }
       ]
     },
     {
       "type": "p",
       "runs": [
-        { "text": "Online japa does not replace temple worship or your family's puja rules; it supports daily repetition when you are travelling, at work breaks, or learning a new mantra." }
+        {
+          "text": "Online japa does not replace temple worship or your family's puja rules; it supports daily repetition when you are travelling, at work breaks, or learning a new mantra."
+        }
       ]
     },
     {
@@ -57,12 +77,60 @@
     },
     {
       "type": "h2",
+      "text": "Why 108 repetitions matter"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "In many sampradayas, 108 is one full mala round — a practical way to close a daily session without losing count. The number is symbolic (cosmic cycles, nadis in some teachings), but the deeper goal is steady attention: one breath, one mantra, one bead at a time."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "If 108 feels heavy at first, begin with 11 or 27 repetitions and grow over weeks. Consistency on ordinary days often matters more than a single intense session."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Common japa mistakes to avoid"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Rushing the mantra to “finish” the count — slow, audible or mental rhythm is better",
+        "Multitasking (scrolling, TV) during the full mala round",
+        "Treating japa as a bargain for instant material results",
+        "Skipping bath / clean space when your tradition recommends it for graha japa",
+        "Stopping after one good week — graha and deity vows are long-term"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Sankalpa and daily discipline"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Before starting, many families set a short sankalpa (intention): name, gotra if applicable, and the purpose of the japa. Keep the same time each day when possible — dawn or evening are common. Combine mantra with honest conduct, charity, or seva where your elders advise it; japa supports character, it does not replace right action."
+        }
+      ]
+    },
+    {
+      "type": "h2",
       "text": "Practice with Japam"
     },
     {
       "type": "p",
       "runs": [
-        { "text": "Sign in with Google to save progress, or use guest mode to try japa without an account. Explore Maha Yagnas from the menu for community chanting goals." }
+        {
+          "text": "Sign in with Google to save progress, or use guest mode to try japa without an account. Explore Maha Yagnas from the menu for community chanting goals."
+        }
       ]
     }
   ],
@@ -122,7 +190,13 @@
     "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice. Results depend on personal faith and consistent practice. Mantra text and audio in the app are for japa support; consult your family priest or tradition for formal puja rules."
   },
   "relatedPages": [
-    { "pageId": "japa-108-times", "label": "108 japa guide" },
-    { "pageId": "maha-japa-yagna", "label": "Maha Japa Yagna" }
+    {
+      "pageId": "japa-108-times",
+      "label": "108 japa guide"
+    },
+    {
+      "pageId": "maha-japa-yagna",
+      "label": "Maha Japa Yagna"
+    }
   ]
 }

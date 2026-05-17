@@ -1,0 +1,226 @@
+{
+  "schemaVersion": 1,
+  "pageId": "mantra-shanmukha-murugan",
+  "lang": "mai",
+  "slug": "mantra-shanmukha-murugan",
+  "deityId": "shanmukha",
+  "primaryKeyword": "मुरुगन सुब्रह्मण्य मंत्र",
+  "secondaryKeywords": [
+    "ॐ सरवन भवाय नमः",
+    "स्कन्द शास्त्री मंत्र",
+    "तमिल मुरुगन जपा"
+  ],
+  "meta": {
+    "title": "मुरुगन (शनमुख) मंत्र जपा | जपम",
+    "description": "सुब्रह्मण्य/मुरुगन/स्कन्द मंत्र — ॐ सरवण भवाय नमः — जपमे १०८ जप।",
+    "ogImage": "/images/deities/shanmukha.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "मुरुगन मंत्र — ॐ सरवण भवाय नमः"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "भगवान मुरुगन (शंमुख, सुब्रह्मण्य, स्कन्द) तमिल आ सर्वभारतीय साहस आ बुद्धि के देवता छैथ | हुनकऽ मंत्र स्कन्द शास्त्री आरू थाई पूसम के केंद्र में छै ।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "जपम में दैनिक जपा के लेल प्रामाणिक मंत्र ऑडियो के संग मुरुगन शामिल अछि |"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मंत्र का अर्थ"
+    },
+    {
+      "type": "blockquote",
+      "runs": [
+        {
+          "text": "Om Saravana Bhavaya Namaha",
+          "bold": true
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "परिणामक मांग करबासँ बेसी नमस्कार (नमहा) करैत शान्त मनसँ जप करू।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपा के लाभ (पारंपरिक दृष्टिकोण) २."
+    },
+    {
+      "type": "ul",
+      "items": [
+        "आन्तरिक भय पर विजय — पारम्परिक स्कन्द प्रतीकात्मकता",
+        "मंगल आ शास्त्री दिन पवित्र अछि",
+        "वेल पूजा आ कवड़ी परम्परा जप के पूरक अछि |",
+        "विद्यार्थी स्पष्टता आ अनुशासन के लेल प्रार्थना करैत छथि"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "108 बार जप कैसे करे |"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "शास्त्री या नित्य भोर १०८ जप",
+        "पूजा करैत छी त लाल फूल चढ़ाउ",
+        "जखन संभव हो त थाई पूसम पर मुरुगन मंदिर के दर्शन करू",
+        "आवागमन के दौरान जापम में ट्रैक राउंड"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "कखन जप करब"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "स्कन्द शास्त्री (ऐप्पासी/तुलम मास मे छह दिन), थाई पूसम, आ मंगल दिन।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "108 पुनरावृत्ति कियैक मायने रखैत अछि",
+      "_enrichId": "why-108-enrich"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "108 नंबर एकटा जपा माला पर एकटा फुल राउंड अछि। लगातार पुनरावृत्ति मन के शांत करैत अछि आ मंत्र के अर्थ पर ध्यान गहींर करैत अछि |"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "किछु परंपरा मे 11 या 21 माला निर्धारित कयल गेल अछि — अपन गुरु वा पुरोहित सँ अपन व्रत के अनुकूल गिनती पूछू |"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "टालबाक लेल आम गलती"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "बेसी तेजी स जप करब आ आवाज पर ध्यान नहि देब",
+        "बिना मार्गदर्शन के अनेक देवता व्रत के मिश्रण",
+        "भक्ति आ नैतिक जीवन जीबाक बदला मात्र भौतिक परिणामक अपेक्षा करब"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मंदिर आ घर एक संग अभ्यास"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "घर जपा मंदिर पूजा के समर्थन करैत अछि; दर्शनक स्थान नहि लैत अछि। पावनि-तिहार के दिन या शनि दिन मंदिर के दर्शन करला स पारिवारिक परंपरा के मजबूती भेटैत अछि।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपम के साथ अभ्यास करे |"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ॐ सरवन भवाय नमह के लिये जपम में शनमुख चुनें — क्षेत्रीय नाम मुरुगन/स्कन्द सब एक ही प्रिय देवता की ओर इशारा करते हैं |",
+          "bold": false
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start Shanmukha Japa in Japam",
+      "href": "https://japam.digital/?lang=mai&deity=shanmukha&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=mai&try=1&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=mai&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=mai&deity=shanmukha&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "मुरुगन बनाम सुब्रह्मण्य?",
+      "answer": "एक ही देवता — क्षेत्रीय नाम।"
+    },
+    {
+      "question": "तमिल या संस्कृत जप?",
+      "answer": "मंत्र संस्कृत अछि; तमिल पडिगम अलग भक्ति अछि।"
+    },
+    {
+      "question": "कावड़ी आ जप एक संग?",
+      "answer": "बहुतो कवड़ी तीर्थयात्रा सँ पहिने जप व्रत करैत छथि ।"
+    },
+    {
+      "question": "शास्त्री व्रत?",
+      "answer": "वैकल्पिक — मंदिर परंपरा का पालन करें।"
+    },
+    {
+      "question": "की vel आइकन आवश्यक अछि ?",
+      "answer": "पूजा मे सहायक; मानसिक जप के मात्र ध्यान देबय के जरूरत अछि."
+    }
+  ],
+  "disclaimer": {
+    "text": "ई लेख केवल शैक्षणिक आ भक्ति अभ्यास के लेल अछि | जपम चिकित्सा, कानूनी, या आर्थिक सलाह नहि दैत अछि। परिणाम व्यक्तिगत विश्वास आ लगातार अभ्यास पर निर्भर करैत अछि । ऐप में मंत्र पाठ आ ऑडियो जपा सपोर्ट के लेल अछि; औपचारिक पूजा नियम के लेल अपन परिवार के पुजारी या परंपरा स परामर्श करू।"
+  },
+  "relatedPages": [
+    {
+      "pageId": "skanda-shasti-murugan",
+      "label": "स्कन्द शास्त्री"
+    },
+    {
+      "pageId": "japa-108-times",
+      "label": "१०८ जपा"
+    },
+    {
+      "pageId": "online-japa-mantra",
+      "label": "ऑनलाइन जपा"
+    }
+  ]
+}

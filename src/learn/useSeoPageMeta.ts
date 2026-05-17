@@ -1,6 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import type { SeoPageContent } from './types';
-import { SEO_LANG_CODES, learnCanonicalUrl, SITE_ORIGIN } from './seoInventory';
+import { learnCanonicalUrl, SITE_ORIGIN } from './seoInventory';
+import { getPublishedLangsForSlug } from './seoManifest';
 
 function setMetaTag(attr: 'name' | 'property', key: string, content: string) {
   let el = document.querySelector(`meta[${attr}="${key}"]`) as HTMLMetaElement | null;
@@ -21,6 +22,13 @@ const DEFAULT_DESCRIPTION =
   'Japam is a digital mantra practice platform. Match gems, complete japas for your favourite deity, and join community Japa Marathons.';
 
 export function useSeoPageMeta(page: SeoPageContent | null, lang: string, slug: string) {
+  const [hreflangLangs, setHreflangLangs] = useState<string[]>(['en']);
+
+  useEffect(() => {
+    if (!slug) return;
+    void getPublishedLangsForSlug(slug).then(setHreflangLangs);
+  }, [slug]);
+
   useEffect(() => {
     if (!page) return;
 
@@ -52,7 +60,7 @@ export function useSeoPageMeta(page: SeoPageContent | null, lang: string, slug: 
     canonicalEl.href = canonical;
 
     removeDynamicSeoTags();
-    for (const code of SEO_LANG_CODES) {
+    for (const code of hreflangLangs) {
       const link = document.createElement('link');
       link.rel = 'alternate';
       link.hreflang = code;
@@ -63,7 +71,7 @@ export function useSeoPageMeta(page: SeoPageContent | null, lang: string, slug: 
     const xDefault = document.createElement('link');
     xDefault.rel = 'alternate';
     xDefault.hreflang = 'x-default';
-    xDefault.href = learnCanonicalUrl('en', slug);
+    xDefault.href = learnCanonicalUrl(hreflangLangs.includes('en') ? 'en' : hreflangLangs[0]!, slug);
     xDefault.setAttribute('data-seo-hreflang', '1');
     document.head.appendChild(xDefault);
 
@@ -78,5 +86,5 @@ export function useSeoPageMeta(page: SeoPageContent | null, lang: string, slug: 
       if (canonicalEl) canonicalEl.remove();
       removeDynamicSeoTags();
     };
-  }, [page, lang, slug]);
+  }, [page, lang, slug, hreflangLangs]);
 }

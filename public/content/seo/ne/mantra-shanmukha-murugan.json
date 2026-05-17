@@ -1,0 +1,226 @@
+{
+  "schemaVersion": 1,
+  "pageId": "mantra-shanmukha-murugan",
+  "lang": "ne",
+  "slug": "mantra-shanmukha-murugan",
+  "deityId": "shanmukha",
+  "primaryKeyword": "मुरुगन सुब्रमण्य मन्त्र",
+  "secondaryKeywords": [
+    "ओम सरवण भवाय नमः",
+    "स्कन्द शास्ती मन्त्र",
+    "तमिल मुरुगन जापा"
+  ],
+  "meta": {
+    "title": "मुरुगन (सन्मुख) मन्त्र जप | जापम",
+    "description": "सुब्रमण्य/मुरुगन/स्कन्द मन्त्र — ओम सर्वाना भवाय नमः — १०८ जप जपमा।",
+    "ogImage": "/images/deities/shanmukha.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "मुरुगन मन्त्र - ओम सर्वाना भवाय नमः"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "भगवान मुरुगन (सन्मुख, सुब्रमण्य, स्कन्द) साहस र बुद्धिको तमिल र पान-भारतीय देवता हुन्। उनको मन्त्र स्कन्द षष्ठी र थाई पूसमको केन्द्रबिन्दु हो।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Japam दैनिक japa को लागि प्रामाणिक मन्त्र अडियो संग मुरुगन समावेश गर्दछ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मन्त्रको अर्थ"
+    },
+    {
+      "type": "blockquote",
+      "runs": [
+        {
+          "text": "Om Saravana Bhavaya Namaha",
+          "bold": true
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "परिणामको माग गर्नुभन्दा शान्त मनले नमः नामजप गर्नुहोस्।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जापको फाइदा (परम्परागत दृष्टिकोण)"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "भित्री डर माथि विजय - परम्परागत स्कन्द प्रतीकवाद",
+        "मंगलबार र षष्ठीका दिनहरू पवित्र छन्",
+        "वेल पूजा र कावडी परम्परा जापको पूरक हो",
+        "विद्यार्थीहरूले स्पष्टता र अनुशासनको लागि प्रार्थना गर्छन्"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "१०८ पटक जप गर्ने तरिका"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "षष्ठी वा दैनिक बिहान १०८ जप गर्नुहोस्",
+        "पूजा गर्दा रातो फूल चढाउनुपर्छ",
+        "सम्भव भएसम्म थाई पूसममा मुरुगन मन्दिरको भ्रमण गर्नुहोस्",
+        "यात्राको समयमा Japam मा ट्र्याक राउन्डहरू"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "कहिले जप गर्ने"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "स्कन्द षष्ठी (ऐप्पासी/तुलम महिनामा छ दिन), थाई पुसम, र मंगलबार।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "किन 108 पुनरावृत्तिहरू महत्त्वपूर्ण छन्",
+      "_enrichId": "why-108-enrich"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "अंक 108 एक जाप माला मा एक पूर्ण राउन्ड हो। स्थिर पुनरावृत्तिले दिमागलाई शान्त बनाउँछ र मन्त्रको अर्थमा ध्यान गहिरो बनाउँछ।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "केही परम्पराहरूले 11 वा 21 मालाहरू लेख्छन् - तपाईंको गुरु वा पुजारीलाई तपाईंको भाकलको लागि उपयुक्त गणनाहरू सोध्नुहोस्।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जोगिनको लागि सामान्य गल्तीहरू"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "धेरै छिटो जप गर्ने र आवाजमा ध्यान गुमाउने",
+        "निर्देशन बिना धेरै देवता भाकल मिश्रण",
+        "भक्ति र नैतिक जीवनको सट्टा केवल भौतिक परिणामको आशा गर्नु"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मन्दिर र घर सँगै अभ्यास"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "गृह जापले मन्दिरको पूजालाई समर्थन गर्दछ; यसले दर्शनलाई प्रतिस्थापन गर्दैन। चाडपर्वको दिन वा शनिबार मन्दिरको दर्शन गर्नाले पारिवारिक परम्परालाई बलियो बनाउँछ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Japam संग अभ्यास"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ओम सर्वाना भवाय नमहको लागि जपममा षणमुख छान्नुहोस् — क्षेत्रीय नामहरू मुरुगन/स्कन्द सबैले एउटै प्रिय देवतालाई संकेत गर्छन्।",
+          "bold": false
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start Shanmukha Japa in Japam",
+      "href": "https://japam.digital/?lang=ne&deity=shanmukha&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=ne&try=1&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=ne&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=ne&deity=shanmukha&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "मुरुगन बनाम सुब्रमण्य ?",
+      "answer": "एउटै देवता - क्षेत्रीय नाम।"
+    },
+    {
+      "question": "तमिल वा संस्कृत भजन?",
+      "answer": "मन्त्र संस्कृत हो; तमिल पदिगामहरू अलग भक्ति हुन्।"
+    },
+    {
+      "question": "कवडी र जाप सँगै ?",
+      "answer": "कवडी तीर्थयात्रा अघि धेरैले जाप गर्ने व्रत गर्छन्।"
+    },
+    {
+      "question": "षष्ठी व्रत ?",
+      "answer": "ऐच्छिक - मन्दिर परम्परा पछ्याउनुहोस्।"
+    },
+    {
+      "question": "vel आइकन आवश्यक छ?",
+      "answer": "पूजामा उपयोगी; मानसिक जापलाई मात्र ध्यान चाहिन्छ।"
+    }
+  ],
+  "disclaimer": {
+    "text": "यो लेख शैक्षिक र भक्ति अभ्यासको लागि मात्र हो। Japam ले चिकित्सा, कानूनी, वा आर्थिक सल्लाह प्रदान गर्दैन। नतिजा व्यक्तिगत विश्वास र लगातार अभ्यास मा निर्भर गर्दछ। अनुप्रयोगमा मन्त्र पाठ र अडियो japa समर्थन को लागी हो; औपचारिक पूजा नियमहरूको लागि आफ्नो पारिवारिक पुजारी वा परम्परासँग परामर्श गर्नुहोस्।"
+  },
+  "relatedPages": [
+    {
+      "pageId": "skanda-shasti-murugan",
+      "label": "स्कन्द षष्ठी"
+    },
+    {
+      "pageId": "japa-108-times",
+      "label": "108 japa"
+    },
+    {
+      "pageId": "online-japa-mantra",
+      "label": "अनलाइन japa"
+    }
+  ]
+}

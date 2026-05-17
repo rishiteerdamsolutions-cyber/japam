@@ -5,7 +5,12 @@
   "slug": "shani-mantra-shanti",
   "deityId": "shani",
   "primaryKeyword": "shani mantra shanti",
-  "secondaryKeywords": ["shani dosha nivaran", "shani pariharam", "saturday shani puja", "shani graha mantra 108"],
+  "secondaryKeywords": [
+    "shani dosha nivaran",
+    "shani pariharam",
+    "saturday shani puja",
+    "shani graha mantra 108"
+  ],
   "meta": {
     "title": "Shani Mantra for Shanti — 108 Japa Guide | Japam",
     "description": "Traditional Shani graha mantra, how to chant 108 times, and digital japa with Japam match-3 and audio.",
@@ -19,16 +24,29 @@
     {
       "type": "p",
       "runs": [
-        { "text": "Lord Shani", "bold": true },
-        { "text": " (Shanaischara) is honoured in Hindu tradition as the graha who teaches patience, discipline, and responsibility. Devotees turn to " },
-        { "text": "japa", "bold": true, "underline": true },
-        { "text": " — repetition of a sacred mantra — for graha shanti (planetary peace), especially when Shani is strong in the chart or during challenging periods." }
+        {
+          "text": "Lord Shani",
+          "bold": true
+        },
+        {
+          "text": " (Shanaischara) is honoured in Hindu tradition as the graha who teaches patience, discipline, and responsibility. Devotees turn to "
+        },
+        {
+          "text": "japa",
+          "bold": true,
+          "underline": true
+        },
+        {
+          "text": " — repetition of a sacred mantra — for graha shanti (planetary peace), especially when Shani is strong in the chart or during challenging periods."
+        }
       ]
     },
     {
       "type": "p",
       "runs": [
-        { "text": "This guide explains the meaning of the Shani mantra used in Japam, how to practise 108 repetitions with a mala, and how to support your practice with the Japam app." }
+        {
+          "text": "This guide explains the meaning of the Shani mantra used in Japam, how to practise 108 repetitions with a mala, and how to support your practice with the Japam app."
+        }
       ]
     },
     {
@@ -38,17 +56,26 @@
     {
       "type": "p",
       "runs": [
-        { "text": "The bija and name mantra commonly chanted for Shanaischara is:" }
+        {
+          "text": "The bija and name mantra commonly chanted for Shanaischara is:"
+        }
       ]
     },
     {
       "type": "blockquote",
-      "runs": [{ "text": "Om Shan Shanicharaya Namaha", "bold": true }]
+      "runs": [
+        {
+          "text": "Om Shan Shanicharaya Namaha",
+          "bold": true
+        }
+      ]
     },
     {
       "type": "p",
       "runs": [
-        { "text": "“Sham” is associated with Shani’s seed sound; “Shanicharaya” addresses the slow-moving lord of Saturn. “Namaha” means salutation — offering the mind to the deity with humility rather than demanding a specific outcome." }
+        {
+          "text": "“Sham” is associated with Shani’s seed sound; “Shanicharaya” addresses the slow-moving lord of Saturn. “Namaha” means salutation — offering the mind to the deity with humility rather than demanding a specific outcome."
+        }
       ]
     },
     {
@@ -58,7 +85,9 @@
     {
       "type": "p",
       "runs": [
-        { "text": "Scriptures and elders describe japa as calming the mind, building steadiness, and aligning one with dharma. Shani worship is often linked to accepting karma with grace, reducing fear, and cultivating discipline. These are spiritual aims, not guaranteed material results — faith and regular practice matter." }
+        {
+          "text": "Scriptures and elders describe japa as calming the mind, building steadiness, and aligning one with dharma. Shani worship is often linked to accepting karma with grace, reducing fear, and cultivating discipline. These are spiritual aims, not guaranteed material results — faith and regular practice matter."
+        }
       ]
     },
     {
@@ -91,7 +120,55 @@
     {
       "type": "p",
       "runs": [
-        { "text": "Saturday (Shanivar) is widely observed for Shani puja and mantra japa. Early morning or evening after sunset are common. During Sade Sati or Shani dasha, some devotees increase regularity — consult your family tradition or priest for personal timing." }
+        {
+          "text": "Saturday (Shanivar) is widely observed for Shani puja and mantra japa. Early morning or evening after sunset are common. During Sade Sati or Shani dasha, some devotees increase regularity — consult your family tradition or priest for personal timing."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Why 108 repetitions matter"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "In many sampradayas, 108 is one full mala round — a practical way to close a daily session without losing count. The number is symbolic (cosmic cycles, nadis in some teachings), but the deeper goal is steady attention: one breath, one mantra, one bead at a time."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "If 108 feels heavy at first, begin with 11 or 27 repetitions and grow over weeks. Consistency on ordinary days often matters more than a single intense session."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Common japa mistakes to avoid"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Rushing the mantra to “finish” the count — slow, audible or mental rhythm is better",
+        "Multitasking (scrolling, TV) during the full mala round",
+        "Treating japa as a bargain for instant material results",
+        "Skipping bath / clean space when your tradition recommends it for graha japa",
+        "Stopping after one good week — graha and deity vows are long-term"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Sankalpa and daily discipline"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Before starting, many families set a short sankalpa (intention): name, gotra if applicable, and the purpose of the japa. Keep the same time each day when possible — dawn or evening are common. Combine mantra with honest conduct, charity, or seva where your elders advise it; japa supports character, it does not replace right action."
+        }
       ]
     },
     {
@@ -101,10 +178,20 @@
     {
       "type": "p",
       "runs": [
-        { "text": "Japam", "bold": true },
-        { "text": " is a digital mantra practice app: match gems on the board while hearing deity mantra audio, with japa counting for each deity. Select Shani to hear " },
-        { "text": "Om Shan Shanicharaya Namaha", "bold": true },
-        { "text": " during play, track your count toward 108, and join community Maha Japa Yagnas when you wish." }
+        {
+          "text": "Japam",
+          "bold": true
+        },
+        {
+          "text": " is a digital mantra practice app: match gems on the board while hearing deity mantra audio, with japa counting for each deity. Select Shani to hear "
+        },
+        {
+          "text": "Om Shan Shanicharaya Namaha",
+          "bold": true
+        },
+        {
+          "text": " during play, track your count toward 108, and join community Maha Japa Yagnas when you wish."
+        }
       ]
     },
     {
@@ -177,8 +264,17 @@
     "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice. Results depend on personal faith and consistent practice. Mantra text and audio in the app are for japa support; consult your family priest or tradition for formal puja rules."
   },
   "relatedPages": [
-    { "pageId": "sade-sati-remedies", "label": "Sade Sati remedies" },
-    { "pageId": "hanuman-mantra-shani", "label": "Hanuman for Shani" },
-    { "pageId": "graha-shanti-mantra", "label": "Graha shanti mantra" }
+    {
+      "pageId": "sade-sati-remedies",
+      "label": "Sade Sati remedies"
+    },
+    {
+      "pageId": "hanuman-mantra-shani",
+      "label": "Hanuman for Shani"
+    },
+    {
+      "pageId": "graha-shanti-mantra",
+      "label": "Graha shanti mantra"
+    }
   ]
 }

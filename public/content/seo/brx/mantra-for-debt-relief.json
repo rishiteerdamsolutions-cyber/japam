@@ -1,0 +1,224 @@
+{
+  "schemaVersion": 1,
+  "pageId": "mantra-for-debt-relief",
+  "lang": "brx",
+  "slug": "mantra-for-debt-relief",
+  "deityId": "lakshmi",
+  "primaryKeyword": "कर्ज मुक्ति का मंत्र",
+  "secondaryKeywords": [
+    "कर्ज़ मुक्ति",
+    "लक्ष्मी मंत्र कर्ज"
+  ],
+  "meta": {
+    "title": "कर्ज की चिंता के लिए मंत्र - लक्ष्मी जप | जपं",
+    "description": "शैक्षिक मार्गदर्शिका: वित्तीय अनुशासन के लिए लक्ष्मी/गणेश जप - ऋण गारंटी नहीं।",
+    "ogImage": "/images/deities/lakshmi.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "वित्तीय कठिनाई के दौरान मंत्र जप"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "कर्ज तनाव लाता है. परंपराएँ लक्ष्मी और गणेश जप को ईमानदार काम और बजट के साथ जोड़ती हैं - चमत्कारिक धन के साथ नहीं।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "जपम आध्यात्मिक सहयोग है, आर्थिक सलाह नहीं।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मंत्र का अर्थ"
+    },
+    {
+      "type": "blockquote",
+      "runs": [
+        {
+          "text": "Om Sri Mahalakshmyai Namaha",
+          "bold": true
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "विशिष्ट परिणाम की मांग करने के बजाय शांत मन से जप करें, नमस्कार करें।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जप के लाभ (पारंपरिक दृष्टिकोण)"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "त्योहार अनुशासन बनाता है",
+        "देव भक्ति को गहरा करता है",
+        "सामुदायिक यज्ञ मौसम के अनुरूप हो सकते हैं",
+        "शैक्षिक - परिणाम की गारंटी नहीं"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "108 बार जाप कैसे करें"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "त्योहार की अवधि के लिए दैनिक 108 संकल्प निर्धारित करें",
+        "व्रत/उपवास के नियम अपनी पारिवारिक परंपरा से ही रखें",
+        "जब संभव हो तो मंदिर जाएँ",
+        "काम/अध्ययन के बीच जपम काउंटर का प्रयोग करें"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "कब जप करना है"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "शुक्रवार लक्ष्मी; नए कार्य या खाते से पहले गणेश जी का जाप करें।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "108 दोहराव क्यों मायने रखते हैं?",
+      "_enrichId": "why-108-enrich"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "जप माला पर 108 की संख्या एक पूर्ण चक्र है। लगातार दोहराव से मन शांत होता है और मंत्र के अर्थ पर ध्यान गहरा होता है।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "कुछ परंपराएँ 11 या 21 मालाएँ निर्धारित करती हैं - अपने गुरु या पुजारी से अपनी मन्नत के अनुकूल गिनती माँगें।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "बचने योग्य सामान्य गलतियाँ"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "बहुत तेजी से जप करना और ध्वनि पर ध्यान खोना",
+        "मार्गदर्शन के बिना अनेक देव व्रतों का मिश्रण करना",
+        "भक्ति और नैतिक जीवन के बजाय केवल भौतिक परिणामों की अपेक्षा करना"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मंदिर और घर एक साथ अभ्यास करें"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "गृह जप मंदिर पूजा का समर्थन करता है; यह दर्शन का स्थान नहीं लेता। त्योहार के दिन या शनिवार को मंदिर जाने से पारिवारिक परंपरा मजबूत होती है।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपम से अभ्यास करें"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "जपम में लक्ष्मी और गणेश मोड का उपयोग करें; ऋण के लिए पेशेवर सलाह लें।"
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start Lakshmi Japa in Japam",
+      "href": "https://japam.digital/?lang=brx&deity=lakshmi&utm_source=google&utm_medium=seo&utm_campaign=mantra-for-debt-relief&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=brx&try=1&utm_source=google&utm_medium=seo&utm_campaign=mantra-for-debt-relief&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=brx&utm_source=google&utm_medium=seo&utm_campaign=mantra-for-debt-relief&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=brx&deity=lakshmi&utm_source=google&utm_medium=seo&utm_campaign=mantra-for-debt-relief&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "इस वर्ष त्योहार की सटीक तारीख?",
+      "answer": "अपने क्षेत्र के लिए हिंदू पंचांग की जाँच करें - हम इस गाइड में ग्रेगोरियन वर्ष को लॉक करने से बचते हैं।"
+    },
+    {
+      "question": "प्रति दिन कितने जप?",
+      "answer": "कई मन्नतों के लिए न्यूनतम 108; कुछ लोग मार्गदर्शन के तहत मुख्य दिन 1008 करते हैं।"
+    },
+    {
+      "question": "अतिथि मोड ठीक है?",
+      "answer": "हाँ प्रयास के लिए; त्यौहार के सप्ताहों में प्रगति को सहेजने के लिए साइन इन करें।"
+    },
+    {
+      "question": "मंदिर बदलें?",
+      "answer": "नहीं - डिजिटल जप घरेलू अभ्यास का समर्थन करता है।"
+    },
+    {
+      "question": "सामूहिक यज्ञ में शामिल हों?",
+      "answer": "अभियानों के दौरान जपम मेनू में महा जप यज्ञ देखें।"
+    }
+  ],
+  "disclaimer": {
+    "text": "यह लेख केवल शैक्षिक एवं भक्ति अभ्यास के लिए है। जपम चिकित्सा, कानूनी या वित्तीय सलाह प्रदान नहीं करता है। परिणाम व्यक्तिगत विश्वास और निरंतर अभ्यास पर निर्भर करते हैं। ऐप में मंत्र पाठ और ऑडियो जप समर्थन के लिए हैं; औपचारिक पूजा नियमों के लिए अपने पारिवारिक पुजारी या परंपरा से परामर्श लें।"
+  },
+  "relatedPages": [
+    {
+      "pageId": "lakshmi-mantra-money",
+      "label": "लक्ष्मी समृद्धि"
+    },
+    {
+      "pageId": "mantra-ganesh",
+      "label": "गणेश मंत्र"
+    },
+    {
+      "pageId": "japa-108-times",
+      "label": "108 जप"
+    }
+  ]
+}

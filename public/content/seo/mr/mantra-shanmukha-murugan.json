@@ -1,0 +1,226 @@
+{
+  "schemaVersion": 1,
+  "pageId": "mantra-shanmukha-murugan",
+  "lang": "mr",
+  "slug": "mantra-shanmukha-murugan",
+  "deityId": "shanmukha",
+  "primaryKeyword": "मुरुगन सुब्रमण्य मंत्र",
+  "secondaryKeywords": [
+    "ओम सर्वाना भवाय नमः",
+    "स्कंद शास्ती मंत्र",
+    "तमिळ मुरुगन जप"
+  ],
+  "meta": {
+    "title": "मुरुगन (षण्मुख) मंत्र जप | जपम",
+    "description": "सुब्रमण्य/मुरुगन/स्कंद मंत्र — ओम सर्वाना भवाय नमः — जपममध्ये १०८ जप.",
+    "ogImage": "/images/deities/shanmukha.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "मुरुगन मंत्र - ओम सर्वाना भवाय नमः"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "भगवान मुरुगन (षण्मुख, सुब्रमण्य, स्कंद) हे धैर्य आणि बुद्धीचे तामिळ आणि संपूर्ण भारतीय देव आहेत. त्याचा मंत्र स्कंद षष्ठी आणि थाई पूसम मध्ये मध्यवर्ती आहे."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "जपममध्ये रोजच्या जपासाठी अस्सल मंत्र ऑडिओसह मुरुगनचा समावेश आहे."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मंत्राचा अर्थ"
+    },
+    {
+      "type": "blockquote",
+      "runs": [
+        {
+          "text": "Om Saravana Bhavaya Namaha",
+          "bold": true
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "परिणामांची मागणी करण्यापेक्षा शांत चित्ताने नमस्कार (नमः) करून जप करा."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपाचे फायदे (पारंपरिक दृष्टी)"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "आंतरिक भीतीवर विजय - पारंपारिक स्कंद प्रतीकवाद",
+        "मंगळवार आणि षष्ठी हे दिवस पवित्र आहेत",
+        "वेल पूजा आणि कवडी परंपरा जपला पूरक आहेत",
+        "विद्यार्थी स्पष्टता आणि शिस्तीसाठी प्रार्थना करतात"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "108 वेळा कसा जप करावा"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "षष्ठीला किंवा रोज सकाळी १०८ चा जप करावा",
+        "पूजा करताना लाल फुले अर्पण करा",
+        "जेव्हा शक्य असेल तेव्हा थाई पूसमवर मुरुगन मंदिराला भेट द्या",
+        "प्रवासादरम्यान जपममधील फेऱ्यांचा मागोवा घ्या"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "कधी जप करावा"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "स्कंद षष्ठी (आयप्पासी/तुलम महिन्यात सहा दिवस), थाई पूसम आणि मंगळवार."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "108 वेळा का",
+      "_enrichId": "why-108-enrich"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "108 हा अंक जपमालावरील एक पूर्ण फेरी आहे. स्थिर पुनरावृत्ती मनाला शांत करते आणि मंत्राच्या अर्थाकडे लक्ष वेधून घेते."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "काही परंपरा 11 किंवा 21 माला लिहून देतात - तुमच्या गुरूला किंवा पुजाऱ्याला तुमच्या व्रतासाठी योग्य मोजणीसाठी विचारा."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "टाळण्यासाठी सामान्य चुका"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "खूप जलद जप करणे आणि आवाजावरील लक्ष गमावणे",
+        "मार्गदर्शनाशिवाय अनेक देवतांच्या नवसांचे मिश्रण करणे",
+        "भक्ती आणि नैतिक जीवनाऐवजी केवळ भौतिक परिणामांची अपेक्षा करणे"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मंदिर आणि घर एकत्र सराव"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "होम जप मंदिर पूजेचे समर्थन; ते दर्शनाची जागा घेत नाही. सणाच्या दिवशी किंवा शनिवारी मंदिराला भेट दिल्याने कौटुंबिक परंपरा मजबूत होते."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Japam सोबत सराव"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ओम सर्वाना भावाय नमहासाठी जपममध्ये षण्मुख निवडा - मुरुगन/स्कंद ही प्रादेशिक नावे सर्व एकाच प्रिय देवतेकडे निर्देश करतात.",
+          "bold": false
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Japam मध्ये जप सुरू करा",
+      "href": "https://japam.digital/?lang=mr&deity=shanmukha&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "लॉगिनशिवाय प्रयत्न करा",
+      "href": "https://japam.digital/?lang=mr&try=1&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "महा जप यज्ञात सामील व्हा",
+      "href": "https://japam.digital/menu?lang=mr&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Japam उघडा",
+      "href": "https://japam.digital/?lang=mr&deity=shanmukha&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "मुरुगन विरुद्ध सुब्रमण्य?",
+      "answer": "समान देवता - प्रादेशिक नावे."
+    },
+    {
+      "question": "तामिळ की संस्कृत जप?",
+      "answer": "मंत्र संस्कृत आहे; तमिळ पडिगम ही वेगळी भक्ती आहे."
+    },
+    {
+      "question": "कवडी आणि जप एकत्र?",
+      "answer": "कावडी तीर्थयात्रेपूर्वी अनेक जण जपाचे व्रत करतात."
+    },
+    {
+      "question": "षष्ठी उपवास?",
+      "answer": "पर्यायी — मंदिराच्या परंपरेचे अनुसरण करा."
+    },
+    {
+      "question": "वेल आयकॉन आवश्यक आहे का?",
+      "answer": "पूजेत उपयुक्त; मानसिक जप फक्त लक्ष केंद्रित करणे आवश्यक आहे."
+    }
+  ],
+  "disclaimer": {
+    "text": "हा लेख फक्त शैक्षणिक आणि भक्ती सरावासाठी आहे. Japam वैद्यकीय, कायदेशीर किंवा आर्थिक सल्ला देत नाही."
+  },
+  "relatedPages": [
+    {
+      "pageId": "skanda-shasti-murugan",
+      "label": "स्कंद षष्ठी"
+    },
+    {
+      "pageId": "japa-108-times",
+      "label": "108 जप"
+    },
+    {
+      "pageId": "online-japa-mantra",
+      "label": "ऑनलाइन जपा"
+    }
+  ]
+}

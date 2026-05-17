@@ -2,12 +2,19 @@ import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { LANGUAGES } from '../i18n';
 import { isSeoLang, learnPagePath } from './seoInventory';
+import { getPublishedLangsForSlug } from './seoManifest';
 
 export function LearnLanguageSwitcher() {
   const { lang = 'en', slug = '' } = useParams<{ lang: string; slug: string }>();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [publishedLangs, setPublishedLangs] = useState<string[]>(['en']);
   const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!slug) return;
+    void getPublishedLangsForSlug(slug).then(setPublishedLangs);
+  }, [slug]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -39,7 +46,7 @@ export function LearnLanguageSwitcher() {
           className="absolute right-0 top-full mt-1 py-2 min-w-[200px] max-h-[70vh] overflow-y-auto rounded-xl bg-[#4a148c]/98 border border-amber-500/30 shadow-xl z-50"
           role="listbox"
         >
-          {LANGUAGES.map((l) => (
+          {LANGUAGES.filter((l) => publishedLangs.includes(l.code)).map((l) => (
             <button
               key={l.code}
               type="button"
@@ -47,7 +54,7 @@ export function LearnLanguageSwitcher() {
               aria-selected={lang === l.code}
               onClick={() => {
                 setOpen(false);
-                if (slug && isSeoLang(l.code)) {
+                if (slug && isSeoLang(l.code) && publishedLangs.includes(l.code)) {
                   navigate(learnPagePath(l.code, slug));
                 }
               }}

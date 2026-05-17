@@ -1,0 +1,181 @@
+{
+  "schemaVersion": 1,
+  "pageId": "hanuman-mantra-tuesday",
+  "lang": "sa",
+  "slug": "hanuman-mantra-tuesday",
+  "deityId": "hanuman",
+  "primaryKeyword": "hanuman mantra tuesday japa",
+  "secondaryKeywords": [
+    "om sri hanumate namah",
+    "hanuman japa",
+    "hanuman chalisa vs mantra"
+  ],
+  "meta": {
+    "title": "Hanuman Mantra for Tuesday Japa | Japam",
+    "description": "Tuesday Hanuman mantra, 108 japa steps, strength and devotion — practise with Japam audio.",
+    "ogImage": "/images/deities/hanuman.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "Hanuman Mantra and Tuesday Japa"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Hanuman embodies strength, service, and Ram bhakti. Tuesday (Mangalvar) is widely dedicated to his worship across India."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "This guide covers the core Hanuman mantra in Japam and how to chant it 108 times."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Meaning of the mantra"
+    },
+    {
+      "type": "blockquote",
+      "runs": [
+        {
+          "text": "Om Sri Hanumate Namaha",
+          "bold": true
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Chant with a calm mind, offering salutation (Namaha) rather than demanding outcomes."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Benefits of japa (traditional view)"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Courage and steadiness in difficulties",
+        "Protection in traditional folk belief — stated devotionally",
+        "Complements Hanuman Chalisa for those who recite both",
+        "Tuesday fasting or simple puja in many families"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "How to chant 108 times"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Face east or the deity image; chant 108 on rudraksha or tulsi mala",
+        "Read Hanuman Chalisa before or after if that is your vow",
+        "Offer sindoor and oil lamp on Tuesday when doing formal puja",
+        "Keep body and speech calm during japa"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "When to chant"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Tuesday mornings or evenings; Saturdays also link Hanuman with Shani pariharam in some regions."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Practice with Japam"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Japam’s Hanuman mode plays Om Sri Hanumate Namaha while you play — ideal for counting 108 during a break.",
+          "bold": false
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start हनुमान् Japa in Japam",
+      "href": "https://japam.digital/?lang=sa&deity=hanuman&utm_source=google&utm_medium=seo&utm_campaign=hanuman-mantra-tuesday&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=sa&try=1&utm_source=google&utm_medium=seo&utm_campaign=hanuman-mantra-tuesday&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=sa&utm_source=google&utm_medium=seo&utm_campaign=hanuman-mantra-tuesday&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=sa&deity=hanuman&utm_source=google&utm_medium=seo&utm_campaign=hanuman-mantra-tuesday&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "Mantra or Chalisa first?",
+      "answer": "Either order is fine; follow your family custom."
+    },
+    {
+      "question": "Can women chant Hanuman mantra?",
+      "answer": "Yes — widely accepted in most lineages."
+    },
+    {
+      "question": "How does Hanuman help Shani?",
+      "answer": "See our Hanuman–Shani guide for combined Saturday practice."
+    },
+    {
+      "question": "Best time on Tuesday?",
+      "answer": "Brahma muhurta or evening after sunset are common."
+    },
+    {
+      "question": "Is sindoor required?",
+      "answer": "For puja yes; silent japa does not require it."
+    }
+  ],
+  "disclaimer": {
+    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+  },
+  "relatedPages": [
+    {
+      "pageId": "mantra-hanuman",
+      "label": "Hanuman mantra pillar"
+    },
+    {
+      "pageId": "hanuman-mantra-shani",
+      "label": "Hanuman for Shani"
+    },
+    {
+      "pageId": "hanuman-jayanti-japa",
+      "label": "Hanuman Jayanti"
+    }
+  ]
+}

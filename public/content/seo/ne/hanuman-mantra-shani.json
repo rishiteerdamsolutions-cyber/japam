@@ -1,0 +1,224 @@
+{
+  "schemaVersion": 1,
+  "pageId": "hanuman-mantra-shani",
+  "lang": "ne",
+  "slug": "hanuman-mantra-shani",
+  "deityId": "hanuman",
+  "primaryKeyword": "शनि परिहारमको लागि हनुमान",
+  "secondaryKeywords": [
+    "शनिबार हनुमान",
+    "शनि समस्याहरू"
+  ],
+  "meta": {
+    "title": "शनिको लागि हनुमान - मन्त्र जप | जापम",
+    "description": "शनि समस्याहरु संगै हनुमान पूजा - शैक्षिक जाप गाइड।",
+    "ogImage": "/images/deities/hanuman.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "शनि समस्याको लागि हनुमानको पूजा"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "धेरै परिवारले शनिबार शनि परिहारम (उपचार) खोज्दा हनुमानको पूजा गर्छन्।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "यो भक्तिपूर्ण समर्थन हो, ग्यारेन्टी होइन - नैतिक जीवन र शनि जापसँग जोड्नुहोस्।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मन्त्रको अर्थ"
+    },
+    {
+      "type": "blockquote",
+      "runs": [
+        {
+          "text": "Om Sri Hanumate Namaha",
+          "bold": true
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "विशेष नतिजाको माग गर्नुको सट्टा नमस्कार गर्दै शान्त मनले जप गर्नुहोस्।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जापको फाइदा (परम्परागत दृष्टिकोण)"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "चाडपर्वको अनुशासन निर्माण गर्छ",
+        "देवता भक्तिलाई गहिरो बनाउँछ",
+        "सामुदायिक यज्ञहरू मौसम अनुसार मिल्न सक्छन्",
+        "शैक्षिक - परिणाम ग्यारेन्टी होइन"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "१०८ पटक जप गर्ने तरिका"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "उत्सव अवधिको लागि दैनिक 108 संकल्प सेट गर्नुहोस्",
+        "आफ्नो पारिवारिक परम्पराबाट व्रत/व्रत नियमहरू राख्नुहोस्",
+        "सम्भव भएसम्म मन्दिरमा जानुहोस्",
+        "काम / अध्ययन बीच Japam काउन्टर प्रयोग गर्नुहोस्"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "कहिले जप गर्ने"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "शनिबार; कोही शनि दर्शन पछि हनुमान मन्दिरको दर्शन गर्छन्।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "किन 108 पुनरावृत्तिहरू महत्त्वपूर्ण छन्",
+      "_enrichId": "why-108-enrich"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "अंक 108 एक जाप माला मा एक पूर्ण राउन्ड हो। स्थिर पुनरावृत्तिले दिमागलाई शान्त बनाउँछ र मन्त्रको अर्थमा ध्यान गहिरो बनाउँछ।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "केही परम्पराहरूले 11 वा 21 मालाहरू लेख्छन् - तपाईंको गुरु वा पुजारीलाई तपाईंको भाकलको लागि उपयुक्त गणनाहरू सोध्नुहोस्।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जोगिनको लागि सामान्य गल्तीहरू"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "धेरै छिटो जप गर्ने र आवाजमा ध्यान गुमाउने",
+        "निर्देशन बिना धेरै देवता भाकल मिश्रण",
+        "भक्ति र नैतिक जीवनको सट्टा केवल भौतिक परिणामको आशा गर्नु"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मन्दिर र घर सँगै अभ्यास"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "गृह जापले मन्दिरको पूजालाई समर्थन गर्दछ; यसले दर्शनलाई प्रतिस्थापन गर्दैन। चाडपर्वको दिन वा शनिबार मन्दिरको दर्शन गर्नाले पारिवारिक परम्परालाई बलियो बनाउँछ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Japam संग अभ्यास"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "हप्ताभरि जापममा वैकल्पिक हनुमान र शनि सत्रहरू।"
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start Hanuman Japa in Japam",
+      "href": "https://japam.digital/?lang=ne&deity=hanuman&utm_source=google&utm_medium=seo&utm_campaign=hanuman-mantra-shani&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=ne&try=1&utm_source=google&utm_medium=seo&utm_campaign=hanuman-mantra-shani&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=ne&utm_source=google&utm_medium=seo&utm_campaign=hanuman-mantra-shani&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=ne&deity=hanuman&utm_source=google&utm_medium=seo&utm_campaign=hanuman-mantra-shani&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "यो वर्ष चाडपर्वको सही मिति?",
+      "answer": "तपाईंको क्षेत्रको लागि हिन्दू पञ्चाङ जाँच गर्नुहोस् — हामी यस गाइडमा ग्रेगोरियन वर्षलाई लक गर्नबाट जोगिँदैनौं।"
+    },
+    {
+      "question": "दिनमा कति जाप?",
+      "answer": "धेरै भाकलहरूको लागि 108 न्यूनतम; केही मार्गदर्शन अन्तर्गत मुख्य दिनमा 1008 गर्छन्।"
+    },
+    {
+      "question": "अतिथि मोड ठीक छ?",
+      "answer": "हो प्रयासको लागि; उत्सव हप्ताहरूमा प्रगति बचत गर्न साइन इन गर्नुहोस्।"
+    },
+    {
+      "question": "मन्दिर बदल्ने ?",
+      "answer": "होइन - डिजिटल जापाले गृह अभ्यासलाई समर्थन गर्दछ।"
+    },
+    {
+      "question": "सामूहिक यज्ञमा सामेल हुनुहोस्?",
+      "answer": "महाजप यज्ञहरू अभियानका क्रममा जपम मेनुमा हेर्नुहोस्।"
+    }
+  ],
+  "disclaimer": {
+    "text": "यो लेख शैक्षिक र भक्ति अभ्यासको लागि मात्र हो। Japam ले चिकित्सा, कानूनी, वा आर्थिक सल्लाह प्रदान गर्दैन। नतिजा व्यक्तिगत विश्वास र लगातार अभ्यास मा निर्भर गर्दछ। अनुप्रयोगमा मन्त्र पाठ र अडियो japa समर्थन को लागी हो; औपचारिक पूजा नियमहरूको लागि आफ्नो पारिवारिक पुजारी वा परम्परासँग परामर्श गर्नुहोस्।"
+  },
+  "relatedPages": [
+    {
+      "pageId": "shani-mantra-shanti",
+      "label": "शनि मन्त्र"
+    },
+    {
+      "pageId": "hanuman-mantra-tuesday",
+      "label": "मंगलबार हनुमान"
+    },
+    {
+      "pageId": "sade-sati-remedies",
+      "label": "सादे सती"
+    }
+  ]
+}

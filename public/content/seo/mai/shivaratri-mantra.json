@@ -1,0 +1,225 @@
+{
+  "schemaVersion": 1,
+  "pageId": "shivaratri-mantra",
+  "lang": "mai",
+  "slug": "shivaratri-mantra",
+  "deityId": "shiva",
+  "primaryKeyword": "महा शिवरात्रि मंत्र मंत्र जप",
+  "secondaryKeywords": [
+    "उत्सव जपा",
+    "१०८ बेर",
+    "जपम"
+  ],
+  "meta": {
+    "title": "महा शिवरात्रि मंत्र | जपम",
+    "description": "महा शिवरात्रि मंत्र — मंत्र, १०८ जप, जपम के साथ अभ्यास।",
+    "ogImage": "/images/deities/shiva.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "महा शिवरात्रि मंत्र"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "शिवरात्रि पर रात्रि या विस्तारित शिव जप। जप के पहिने स योजना बनाउ; जपम मौसम मे रोज गिनती करय मे मदद करैत अछि."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "महोत्सवक तिथि चन्द्रमा कैलेंडरक पालन करैत अछि — स्थानीय पंचांगसँ पुष्टि करू ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मंत्र का अर्थ"
+    },
+    {
+      "type": "blockquote",
+      "runs": [
+        {
+          "text": "Om Namah Shivaya",
+          "bold": true
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "विशिष्ट परिणामक मांग करबासँ बेसी नमस्कार करैत शान्त मोनसँ जप करू ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपा के लाभ (पारंपरिक दृष्टिकोण) २."
+    },
+    {
+      "type": "ul",
+      "items": [
+        "उत्सव अनुशासन के निर्माण करैत अछि",
+        "देवता भक्ति गहींर करैत अछि",
+        "सामुदायिक यज्ञ मौसमक संग संरेखित भ सकैत अछि",
+        "शैक्षिक — परिणामक गारंटी नहि"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "108 बार जप कैसे करे |"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "उत्सव अवधि के लिये दैनिक 108 संकल्प सेट करें",
+        "अपन पारिवारिक परंपरा स तेज/व्रत नियम राखू",
+        "संभव भेला पर मंदिरक दर्शन करू",
+        "काम/अध्ययन के बीच जपम काउंटर का प्रयोग करे |"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "कखन जप करब"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "शिवरात्रि पर रात्रि या विस्तारित शिव जप।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "108 पुनरावृत्ति कियैक मायने रखैत अछि",
+      "_enrichId": "why-108-enrich"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "108 नंबर एकटा जपा माला पर एकटा फुल राउंड अछि। लगातार पुनरावृत्ति मन के शांत करैत अछि आ मंत्र के अर्थ पर ध्यान गहींर करैत अछि |"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "किछु परंपरा मे 11 या 21 माला निर्धारित कयल गेल अछि — अपन गुरु वा पुरोहित सँ अपन व्रत के अनुकूल गिनती पूछू |"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "टालबाक लेल आम गलती"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "बेसी तेजी स जप करब आ आवाज पर ध्यान नहि देब",
+        "बिना मार्गदर्शन के अनेक देवता व्रत के मिश्रण",
+        "भक्ति आ नैतिक जीवन जीबाक बदला मात्र भौतिक परिणामक अपेक्षा करब"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मंदिर आ घर एक संग अभ्यास"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "घर जपा मंदिर पूजा के समर्थन करैत अछि; दर्शनक स्थान नहि लैत अछि। पावनि-तिहार के दिन या शनि दिन मंदिर के दर्शन करला स पारिवारिक परंपरा के मजबूती भेटैत अछि।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपम के साथ अभ्यास करे |"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "मंत्र ऑडियो आ जपा टैली के लेल उत्सव के मौसम में जपम में देवता के चयन करू |"
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start Shiva Japa in Japam",
+      "href": "https://japam.digital/?lang=mai&deity=shiva&utm_source=google&utm_medium=seo&utm_campaign=shivaratri-mantra&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=mai&try=1&utm_source=google&utm_medium=seo&utm_campaign=shivaratri-mantra&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=mai&utm_source=google&utm_medium=seo&utm_campaign=shivaratri-mantra&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=mai&deity=shiva&utm_source=google&utm_medium=seo&utm_campaign=shivaratri-mantra&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "एहि साल सही पावनि के तारीख?",
+      "answer": "अपन क्षेत्र के लेल हिन्दू पंचांग के जांच करू — हम एहि गाइड में ग्रेगोरियन साल के लॉक करय सं बचैत छी."
+    },
+    {
+      "question": "प्रतिदिन कतेक जापा ?",
+      "answer": "अनेक व्रत के लेल 108 न्यूनतम; किछु गोटे मार्गदर्शन मे मुख्य दिन 1008 करैत छथि।"
+    },
+    {
+      "question": "अतिथि मोड ठीक छै?",
+      "answer": "कोशिश के लेल हाँ; महोत्सव सप्ताह भर मे प्रगति बचाबय लेल साइन इन करू."
+    },
+    {
+      "question": "मंदिर बदलब?",
+      "answer": "नहि — डिजिटल जापा घरक अभ्यासक समर्थन करैत अछि ।"
+    },
+    {
+      "question": "सामूहिक यज्ञ में शामिल हो?",
+      "answer": "अभियान के दौरान जापम मेनू में महाजप यज्ञ देखें |"
+    }
+  ],
+  "disclaimer": {
+    "text": "ई लेख केवल शैक्षणिक आ भक्ति अभ्यास के लेल अछि | जपम चिकित्सा, कानूनी, या आर्थिक सलाह नहि दैत अछि। परिणाम व्यक्तिगत विश्वास आ लगातार अभ्यास पर निर्भर करैत अछि । ऐप में मंत्र पाठ आ ऑडियो जपा सपोर्ट के लेल अछि; औपचारिक पूजा नियम के लेल अपन परिवार के पुजारी या परंपरा स परामर्श करू।"
+  },
+  "relatedPages": [
+    {
+      "pageId": "mantra-shiva",
+      "label": "देवता मंत्र मार्गदर्शक"
+    },
+    {
+      "pageId": "japa-108-times",
+      "label": "१०८ जपा"
+    },
+    {
+      "pageId": "online-japa-mantra",
+      "label": "ऑनलाइन जपा"
+    }
+  ]
+}

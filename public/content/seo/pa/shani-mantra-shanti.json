@@ -1,0 +1,234 @@
+{
+  "schemaVersion": 1,
+  "pageId": "shani-mantra-shanti",
+  "lang": "pa",
+  "slug": "shani-mantra-shanti",
+  "deityId": "shani",
+  "primaryKeyword": "shani mantra shanti",
+  "secondaryKeywords": [
+    "shani dosha nivaran",
+    "shani pariharam",
+    "saturday shani puja",
+    "shani graha mantra 108"
+  ],
+  "meta": {
+    "title": "Shani Mantra for Shanti — 108 Japa Guide | Japam",
+    "description": "Traditional Shani graha mantra, how to chant 108 times, and digital japa with Japam match-3 and audio.",
+    "ogImage": "/images/deities/shani.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "Shani Mantra and Graha Shanti"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Lord Shani",
+          "bold": true
+        },
+        {
+          "text": " (Shanaischara) is honoured in Hindu tradition as the graha who teaches patience, discipline, and responsibility. Devotees turn to "
+        },
+        {
+          "text": "japa",
+          "bold": true,
+          "underline": true
+        },
+        {
+          "text": " — repetition of a sacred mantra — for graha shanti (planetary peace), especially when Shani is strong in the chart or during challenging periods."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "This guide explains the meaning of the Shani mantra used in Japam, how to practise 108 repetitions with a mala, and how to support your practice with the Japam app."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Meaning of the mantra"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "The bija and name mantra commonly chanted for Shanaischara is:"
+        }
+      ]
+    },
+    {
+      "type": "blockquote",
+      "runs": [
+        {
+          "text": "Om Shan Shanicharaya Namaha",
+          "bold": true
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "“Sham” is associated with Shani’s seed sound; “Shanicharaya” addresses the slow-moving lord of Saturn. “Namaha” means salutation — offering the mind to the deity with humility rather than demanding a specific outcome."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Benefits of japa (traditional view)"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Scriptures and elders describe japa as calming the mind, building steadiness, and aligning one with dharma. Shani worship is often linked to accepting karma with grace, reducing fear, and cultivating discipline. These are spiritual aims, not guaranteed material results — faith and regular practice matter."
+        }
+      ]
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Supports mental focus and patience during difficult phases",
+        "Traditionally offered on Saturdays for Shani bhakti",
+        "Often combined with charity, honesty, and service (seva)",
+        "May be practised alongside Hanuman worship in many families"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "How to chant 108 times"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Choose a quiet place; face east or north if convenient.",
+        "Sit comfortably; keep the spine straight and breath natural.",
+        "Use a rudraksha or sphatik mala of 108 beads; one round equals 108 japa.",
+        "Chant clearly or mentally; keep attention on the sound and meaning.",
+        "Many begin or end with a short prayer to your ishta devata."
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Best day and time"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Saturday (Shanivar) is widely observed for Shani puja and mantra japa. Early morning or evening after sunset are common. During Sade Sati or Shani dasha, some devotees increase regularity — consult your family tradition or priest for personal timing."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Practice with Japam"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Japam",
+          "bold": true
+        },
+        {
+          "text": " is a digital mantra practice app: match gems on the board while hearing deity mantra audio, with japa counting for each deity. Select Shani to hear "
+        },
+        {
+          "text": "Om Shan Shanicharaya Namaha",
+          "bold": true
+        },
+        {
+          "text": " during play, track your count toward 108, and join community Maha Japa Yagnas when you wish."
+        }
+      ]
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Per-deity japa modes and 108-japa specials",
+        "Mantra audio synced to match-3 gameplay",
+        "Many Indian languages in the app UI",
+        "Optional Pushpa Aradhana (digital flower offering)"
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start ਸ਼ਨੀ Japa in Japam",
+      "href": "https://japam.digital/?lang=pa&deity=shani&utm_source=google&utm_medium=seo&utm_campaign=shani-mantra-shanti&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=pa&try=1&utm_source=google&utm_medium=seo&utm_campaign=shani-mantra-shanti&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=pa&utm_source=google&utm_medium=seo&utm_campaign=shani-mantra-shanti&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=pa&deity=shani&utm_source=google&utm_medium=seo&utm_campaign=shani-mantra-shanti&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "How many times should I chant the Shani mantra?",
+      "answer": "Tradition often recommends 108 repetitions per session (one mala). Some undertake 9, 11, or 21 malas over days under guidance. Consistency matters more than a single extreme session."
+    },
+    {
+      "question": "What is the correct pronunciation?",
+      "answer": "Om Shan Shanicharaya Namaha — stress is gentle; listen to the Japam audio for a steady pace. Your family priest may prefer a slight regional variation."
+    },
+    {
+      "question": "Can Hanuman worship help with Shani troubles?",
+      "answer": "Many devotees worship Hanuman alongside Shani, especially on Saturdays. See our Hanuman–Shani guide for a balanced devotional approach."
+    },
+    {
+      "question": "Is Saturday mandatory?",
+      "answer": "Saturday is customary but not the only day. Daily short japa with sincerity is acceptable in many lineages if your guru or tradition allows."
+    },
+    {
+      "question": "Does Japam replace temple puja?",
+      "answer": "No. Japam supports home japa and counting; formal Shani puja, oil offering, and temple customs should follow your sampradaya and local priest."
+    },
+    {
+      "question": "What is Sade Sati?",
+      "answer": "Sade Sati is the roughly seven-and-a-half-year period when transiting Shani moves through signs near one's Moon sign. Japa and ethical living are traditional responses — not fear-based rituals."
+    }
+  ],
+  "disclaimer": {
+    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+  },
+  "relatedPages": [
+    {
+      "pageId": "sade-sati-remedies",
+      "label": "Sade Sati remedies"
+    },
+    {
+      "pageId": "hanuman-mantra-shani",
+      "label": "Hanuman for Shani"
+    },
+    {
+      "pageId": "graha-shanti-mantra",
+      "label": "Graha shanti mantra"
+    }
+  ]
+}

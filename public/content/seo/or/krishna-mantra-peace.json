@@ -1,0 +1,224 @@
+{
+  "schemaVersion": 1,
+  "pageId": "krishna-mantra-peace",
+  "lang": "or",
+  "slug": "krishna-mantra-peace",
+  "deityId": "krishna",
+  "primaryKeyword": "କୃଷ୍ଣ ମନ୍ତ୍ର ଶାନ୍ତି ଜାପା |",
+  "secondaryKeywords": [
+    "ଭାସୁଦେବ ମନ୍ତ୍ର |",
+    "ଓମ୍ ନାମୋ ଭଗବତ |"
+  ],
+  "meta": {
+    "title": "ଶାନ୍ତି ପାଇଁ କୃଷ୍ଣ ମନ୍ତ୍ର | ଜାପମ୍",
+    "description": "ଶାନ୍ତ ଏବଂ ଭକ୍ତି ପାଇଁ କୃଷ୍ଣ ମନ୍ତ୍ର ଜାପା - ଜାପମ୍ ଅଭ୍ୟାସ |",
+    "ogImage": "/images/deities/krishna.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "ଶାନ୍ତି ଏବଂ ଭକ୍ତି ପାଇଁ କୃଷ୍ଣ ମନ୍ତ୍ର |"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "କୃଷ୍ଣ ଭକ୍ତ ଆତ୍ମସମର୍ପଣ ଏବଂ ଆନନ୍ଦ ଉପରେ ଗୁରୁତ୍ୱ ଦିଅନ୍ତି | ଭାସୁଦେବ ମନ୍ତ୍ର ଅନେକ ପରମ୍ପରାରେ ମନକୁ ସ୍ଥିର କରିଥାଏ |"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ଫଳାଫଳ ବିଷୟରେ ଚିନ୍ତା କରିବା ଅପେକ୍ଷା ପ୍ରେମ ସହିତ ଜପ କରନ୍ତୁ |"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ମନ୍ତ୍ରର ଅର୍ଥ"
+    },
+    {
+      "type": "blockquote",
+      "runs": [
+        {
+          "text": "Om namo Bhagavathe vaasudevaya",
+          "bold": true
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ନିର୍ଦ୍ଦିଷ୍ଟ ଫଳାଫଳ ଦାବି କରିବା ପରିବର୍ତ୍ତେ ନମସ୍କାର ପ୍ରଦାନ କରି ଶାନ୍ତ ମନ ସହିତ ଜପ କରନ୍ତୁ |"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ଜାପର ଲାଭ (ପାରମ୍ପାରିକ ଦୃଶ୍ୟ)"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "ପର୍ବ ଅନୁଶାସନ ଗଠନ କରେ |",
+        "ଦେବତା ଭକ୍ତଙ୍କୁ ଗଭୀର କରେ |",
+        "ସମ୍ପ୍ରଦାୟର ଯାଗା season ତୁ ସହିତ ସମାନ ହୋଇପାରେ |",
+        "ଶିକ୍ଷାଗତ - ଫଳାଫଳ ଗ୍ୟାରେଣ୍ଟି ନୁହେଁ |"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "108 ଥର କିପରି ଜପ କରିବେ |"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "ପର୍ବ ଅବଧି ପାଇଁ ଦ daily ନିକ 108 ସାଙ୍କଲପା ସେଟ୍ କରନ୍ତୁ |",
+        "ତୁମର ପାରିବାରିକ ପରମ୍ପରାରୁ ଦ୍ରୁତ / ଭ୍ରାଟ ନିୟମ ରଖ |",
+        "ସମ୍ଭବ ହେଲେ ମନ୍ଦିର ପରିଦର୍ଶନ କରନ୍ତୁ |",
+        "କାର୍ଯ୍ୟ / ଅଧ୍ୟୟନ ମଧ୍ୟରେ ଜାପାମ କାଉଣ୍ଟର ବ୍ୟବହାର କରନ୍ତୁ |"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "କେତେବେଳେ ଜପ କରିବେ |"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ଜନମାଷ୍ଟମୀ ଏବଂ ଗୁରୁବାର; ଦ daily ନିକ ଜାପା ଯେକ time ଣସି ସମୟରେ |"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "108 ପୁନରାବୃତ୍ତି କାହିଁକି ଗୁରୁତ୍ୱପୂର୍ଣ୍ଣ |",
+      "_enrichId": "why-108-enrich"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "108 ସଂଖ୍ୟା ହେଉଛି ଏକ ଜାପା ମାଲା ଉପରେ ଏକ ପୂର୍ଣ୍ଣ ରାଉଣ୍ଡ | ସ୍ଥିର ପୁନରାବୃତ୍ତି ମନକୁ ଶାନ୍ତ କରେ ଏବଂ ମନ୍ତ୍ରର ଅର୍ଥ ଉପରେ ଧ୍ୟାନକୁ ଗଭୀର କରେ |"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "କେତେକ ପରମ୍ପରା 11 କିମ୍ବା 21 ମଲା ଲେଖାଏ - ତୁମର ଶପଥ ପାଇଁ ଉପଯୁକ୍ତ ଗଣନା ପାଇଁ ତୁମର ଗୁରୁ କିମ୍ବା ପୁରୋହିତଙ୍କୁ ପଚାର |"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ଏଡ଼ାଇବା ପାଇଁ ସାଧାରଣ ତ୍ରୁଟି |"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "ଅତି ଶୀଘ୍ର ଜପ କରିବା ଏବଂ ଧ୍ୱନି ଉପରେ ଧ୍ୟାନ ହରାଇବା |",
+        "ମାର୍ଗଦର୍ଶନ ବିନା ଏକାଧିକ ଦେବତା ଶପଥକୁ ମିଶ୍ରଣ କରିବା |",
+        "ଭକ୍ତି ଏବଂ ନ ical ତିକ ଜୀବନ ବଦଳରେ କେବଳ ବାସ୍ତୁ ଫଳାଫଳ ଆଶା କରିବା |"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ମନ୍ଦିର ଏବଂ ଘର ଏକାଠି ଅଭ୍ୟାସ |"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ଘର ଜାପା ମନ୍ଦିର ପୂଜାକୁ ସମର୍ଥନ କରେ; ଏହା ଦର୍ଶନକୁ ବଦଳାଇବ ନାହିଁ | ପର୍ବ ଦିନ କିମ୍ବା ଶନିବାର ଦିନ ମନ୍ଦିର ପରିଦର୍ଶନ କରିବା ପାରିବାରିକ ପରମ୍ପରାକୁ ମଜବୁତ କରିଥାଏ |"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ଜାପାମ ସହିତ ଅଭ୍ୟାସ କର |"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ଜାପମରେ କୃଷ୍ଣ ମୋଡ୍ ଏହି ମନ୍ତ୍ରକୁ ମ୍ୟାଚ୍ -3 ଜାପା ଗଣନା ସହିତ ବ୍ୟବହାର କରନ୍ତି |"
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start Krishna Japa in Japam",
+      "href": "https://japam.digital/?lang=or&deity=krishna&utm_source=google&utm_medium=seo&utm_campaign=krishna-mantra-peace&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=or&try=1&utm_source=google&utm_medium=seo&utm_campaign=krishna-mantra-peace&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=or&utm_source=google&utm_medium=seo&utm_campaign=krishna-mantra-peace&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=or&deity=krishna&utm_source=google&utm_medium=seo&utm_campaign=krishna-mantra-peace&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "ଚଳିତ ବର୍ଷ ପ୍ରକୃତ ଉତ୍ସବର ତାରିଖ?",
+      "answer": "ଆପଣଙ୍କ ଅଞ୍ଚଳ ପାଇଁ ହିନ୍ଦୁ ପଞ୍ଚାଙ୍ଗ ଯାଞ୍ଚ କରନ୍ତୁ - ଆମେ ଏହି ଗାଇଡ୍ ରେ ଗ୍ରେଗୋରିଆନ୍ ବର୍ଷକୁ ଲକ୍ କରିବା ଠାରୁ ଦୂରେଇ ରହିଥାଉ |"
+    },
+    {
+      "question": "ପ୍ରତିଦିନ କେତେ ଜାପ?",
+      "answer": "ଅନେକ ଶପଥ ପାଇଁ ସର୍ବନିମ୍ନ 108; କେତେକ ମାର୍ଗଦର୍ଶନରେ ମୁଖ୍ୟ ଦିନରେ 1008 କରନ୍ତି |"
+    },
+    {
+      "question": "ଅତିଥି ମୋଡ୍ ଠିକ ଅଛି?",
+      "answer": "ଚେଷ୍ଟା ପାଇଁ ହଁ; ପର୍ବ ସପ୍ତାହଗୁଡିକରେ ପ୍ରଗତି ସଞ୍ଚୟ କରିବାକୁ ସାଇନ୍ ଇନ୍ କରନ୍ତୁ |"
+    },
+    {
+      "question": "ମନ୍ଦିର ବଦଳାନ୍ତୁ?",
+      "answer": "ନା - ଡିଜିଟାଲ୍ ଜାପା ଘର ଅଭ୍ୟାସକୁ ସମର୍ଥନ କରେ |"
+    },
+    {
+      "question": "ସାମୂହିକ ଯାଗାରେ ଯୋଗ ଦିଅନ୍ତୁ?",
+      "answer": "ଅଭିଯାନ ସମୟରେ ଜାପାମ ମେନୁରେ ମହା ଜାପା ଯାଗନା ଦେଖନ୍ତୁ |"
+    }
+  ],
+  "disclaimer": {
+    "text": "ଏହି ପ୍ରବନ୍ଧଟି କେବଳ ଶିକ୍ଷାଗତ ଏବଂ ଭକ୍ତି ଅଭ୍ୟାସ ପାଇଁ | ଜାପାମ ଡାକ୍ତରୀ, ଆଇନଗତ କିମ୍ବା ଆର୍ଥିକ ପରାମର୍ଶ ଦିଅନ୍ତି ନାହିଁ | ଫଳାଫଳ ବ୍ୟକ୍ତିଗତ ବିଶ୍ୱାସ ଏବଂ ସ୍ଥିର ଅଭ୍ୟାସ ଉପରେ ନିର୍ଭର କରେ | ଆପରେ ମନ୍ତ୍ର ପାଠ ଏବଂ ଅଡିଓ ଜାପା ସମର୍ଥନ ପାଇଁ ଅଟେ; ଆନୁଷ୍ଠାନିକ ପୂଜା ନିୟମ ପାଇଁ ତୁମର ପରିବାର ପୁରୋହିତ କିମ୍ବା ପରମ୍ପରା ସହିତ ପରାମର୍ଶ କର |"
+  },
+  "relatedPages": [
+    {
+      "pageId": "mantra-krishna",
+      "label": "କୃଷ୍ଣ ସ୍ତମ୍ଭ"
+    },
+    {
+      "pageId": "mantra-hare-krishna",
+      "label": "ହରେ କୃଷ୍ଣ"
+    },
+    {
+      "pageId": "krishna-janmashtami-japa",
+      "label": "ଜନମାଷ୍ଟମୀ |"
+    }
+  ]
+}

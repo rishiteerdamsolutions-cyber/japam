@@ -1,0 +1,215 @@
+{
+  "schemaVersion": 1,
+  "pageId": "pushpa-aradhana-guide",
+  "lang": "brx",
+  "slug": "pushpa-aradhana-guide",
+  "deityId": null,
+  "primaryKeyword": "पुष्पा अर्चना ऑनलाइन पुष्प अर्पण",
+  "secondaryKeywords": [
+    "डिजिटल पूजा फूल",
+    "Shodashopachara"
+  ],
+  "meta": {
+    "title": "पुष्प आराधना - डिजिटल पुष्प अर्पण | जपं",
+    "description": "जपम में पुष्प आराधना: देवता पूजा के दौरान डिजिटल फूल चढ़ाएं।",
+    "ogImage": "/images/favicon.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "पुष्प आराधना - डिजिटल पुष्प अर्पण"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "पुष्प (फूल) षोडशोपचार पूजा का हिस्सा हैं। जपम की पुष्प आराधना आपको देवता स्क्रीन पर जाकर डिजिटल फूल चढ़ाने की सुविधा देती है।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "घरेलू पूजा का शैक्षिक पूरक - मंदिर का प्रतिस्थापन नहीं।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "पुष्पा अर्चना क्या है?"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "फूल चढ़ाना देवता के प्रति गुणों और सुंदरता के समर्पण का प्रतीक है। जब ताजे फूल उपलब्ध नहीं होते हैं तो डिजिटल पेशकश उसी इरादे को व्यक्त करती है।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जप के लाभ (पारंपरिक दृष्टिकोण)"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "प्रतिदिन अर्चना प्रतीकवाद का अभ्यास करें",
+        "ऐप में मंत्र जप के साथ जोड़ा गया",
+        "यात्रा करते समय उपयोगी",
+        "प्रसाद के पद नाम जानें"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "108 बार जाप कैसे करें"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "जपम में साइन इन करें",
+        "मेनू से पुष्प आराधना खोलें (प्रमाणीकरण की आवश्यकता है)",
+        "देवता और प्रसाद का चयन करें",
+        "ध्यानपूर्ण प्रार्थना से पूर्ण करें"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "कब जप करना है"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "जप के बाद या ऐप में दैनिक दर्शन दिनचर्या के दौरान।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "108 दोहराव क्यों मायने रखते हैं?",
+      "_enrichId": "why-108-enrich"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "जप माला पर 108 की संख्या एक पूर्ण चक्र है। लगातार दोहराव से मन शांत होता है और मंत्र के अर्थ पर ध्यान गहरा होता है।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "कुछ परंपराएँ 11 या 21 मालाएँ निर्धारित करती हैं - अपने गुरु या पुजारी से अपनी मन्नत के अनुकूल गिनती माँगें।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "बचने योग्य सामान्य गलतियाँ"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "बहुत तेजी से जप करना और ध्वनि पर ध्यान खोना",
+        "मार्गदर्शन के बिना अनेक देव व्रतों का मिश्रण करना",
+        "भक्ति और नैतिक जीवन के बजाय केवल भौतिक परिणामों की अपेक्षा करना"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मंदिर और घर एक साथ अभ्यास करें"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "गृह जप मंदिर पूजा का समर्थन करता है; यह दर्शन का स्थान नहीं लेता। त्योहार के दिन या शनिवार को मंदिर जाने से पारिवारिक परंपरा मजबूत होती है।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपम से अभ्यास करें"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "मेनू → पुष्प आराधना (साइन-इन आवश्यक)।"
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start Japa in Japam",
+      "href": "https://japam.digital/?lang=brx&utm_source=google&utm_medium=seo&utm_campaign=pushpa-aradhana-guide&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=brx&try=1&utm_source=google&utm_medium=seo&utm_campaign=pushpa-aradhana-guide&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=brx&utm_source=google&utm_medium=seo&utm_campaign=pushpa-aradhana-guide&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=brx&utm_source=google&utm_medium=seo&utm_campaign=pushpa-aradhana-guide&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "क्या डिजिटल फूल असली के बराबर हैं?",
+      "answer": "इरादा मायने रखता है; जब संभव हो तो परंपराएँ असली फूलों को प्राथमिकता देती हैं।"
+    },
+    {
+      "question": "साइन-इन की आवश्यकता है?",
+      "answer": "हाँ - पुष्पा आराधना को वर्तमान ऐप में खाते की आवश्यकता है।"
+    },
+    {
+      "question": "लागत?",
+      "answer": "इन-ऐप पेशकश देखें; वैकल्पिक दक्षिणा लागू हो सकती है।"
+    },
+    {
+      "question": "कौन से देवता?",
+      "answer": "पुष्प प्रवाह में उपलब्ध देवता - ऐप देखें।"
+    },
+    {
+      "question": "षोडशोपचार?",
+      "answer": "अपने पुजारी से पूर्ण चरण सीखें; जपम का फोकस पुष्पा पर है।"
+    }
+  ],
+  "disclaimer": {
+    "text": "यह लेख केवल शैक्षिक एवं भक्ति अभ्यास के लिए है। जपम चिकित्सा, कानूनी या वित्तीय सलाह प्रदान नहीं करता है। परिणाम व्यक्तिगत विश्वास और निरंतर अभ्यास पर निर्भर करते हैं। ऐप में मंत्र पाठ और ऑडियो जप समर्थन के लिए हैं; औपचारिक पूजा नियमों के लिए अपने पारिवारिक पुजारी या परंपरा से परामर्श लें।"
+  },
+  "relatedPages": [
+    {
+      "pageId": "online-japa-mantra",
+      "label": "ऑनलाइन जापा"
+    },
+    {
+      "pageId": "ishta-devata-japa",
+      "label": "इष्ट देवता"
+    },
+    {
+      "pageId": "maha-japa-yagna",
+      "label": "महायज्ञ"
+    }
+  ]
+}

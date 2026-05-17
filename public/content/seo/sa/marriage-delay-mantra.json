@@ -1,0 +1,171 @@
+{
+  "schemaVersion": 1,
+  "pageId": "marriage-delay-mantra",
+  "lang": "sa",
+  "slug": "marriage-delay-mantra",
+  "deityId": null,
+  "primaryKeyword": "mantra for marriage delay",
+  "secondaryKeywords": [
+    "delayed marriage remedies",
+    "mangal dosha",
+    "katyayani"
+  ],
+  "meta": {
+    "title": "Mantra for Marriage Delay — Devotional Guide | Japam",
+    "description": "Sensitive guide to marriage-delay mantras — Durga, Venkateswara, Rahu/Ketu japa in Japam.",
+    "ogImage": "/images/favicon.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "Mantra Practice When Marriage Is Delayed"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Delayed marriage causes family worry. Traditions suggest patient japa to Durga, Katyayani, Venkateswara, or graha shanti — never coercion or fear."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Japam supports daily japa; matchmaking and astrology need human counsel."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Meaning and approach"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Chant for inner peace and trust in divine timing — not to control another person. Consult elders and astrologers for chart-specific advice."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Benefits of japa (traditional view)"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Calms anxiety while waiting",
+        "Aligns with Durga/Venkateswara bhakti",
+        "Rahu/Ketu japa when nodes affect chart (astrologer-guided)",
+        "Encourages wholesome conduct and seva"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "How to chant 108 times"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Choose one deity focus per vow — avoid mixing without guidance",
+        "Chant 108 daily for 21 or 41 days if that is your sankalpa",
+        "Visit temple when possible; home lamp and flower suffice",
+        "Use Japam to keep count"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "When to chant"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Friday Lakshmi, Tuesday Durga, or astrologer-prescribed graha day."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Practice with Japam"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Try Durga, Venkateswara, or graha modes in Japam — educational support only."
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start Japa in Japam",
+      "href": "https://japam.digital/?lang=sa&utm_source=google&utm_medium=seo&utm_campaign=marriage-delay-mantra&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=sa&try=1&utm_source=google&utm_medium=seo&utm_campaign=marriage-delay-mantra&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=sa&utm_source=google&utm_medium=seo&utm_campaign=marriage-delay-mantra&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=sa&utm_source=google&utm_medium=seo&utm_campaign=marriage-delay-mantra&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "Which mantra is best?",
+      "answer": "Depends on chart and tradition — Katyayani, Venkateswara, and Durga are common; ask your priest."
+    },
+    {
+      "question": "Will japa guarantee marriage by a date?",
+      "answer": "No — Japam does not promise outcomes; practice is for devotion and peace."
+    },
+    {
+      "question": "Mangal dosha?",
+      "answer": "Astrologers assess; japa may be one part of remedies alongside charity and puja."
+    },
+    {
+      "question": "Can parents chant for children?",
+      "answer": "Yes — many parents vow japa for children’s wellbeing."
+    },
+    {
+      "question": "Rahu/Ketu for marriage?",
+      "answer": "Sometimes recommended — only with qualified Jyotisha advice."
+    }
+  ],
+  "disclaimer": {
+    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+  },
+  "relatedPages": [
+    {
+      "pageId": "mantra-durga",
+      "label": "Durga mantra"
+    },
+    {
+      "pageId": "venkateswara-mantra-tirupati",
+      "label": "Venkateswara"
+    },
+    {
+      "pageId": "ketu-mantra-shanti",
+      "label": "Ketu shanti"
+    }
+  ]
+}

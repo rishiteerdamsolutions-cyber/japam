@@ -1,0 +1,180 @@
+{
+  "schemaVersion": 1,
+  "pageId": "diwali-lakshmi-japa",
+  "lang": "ur",
+  "slug": "diwali-lakshmi-japa",
+  "deityId": "lakshmi",
+  "primaryKeyword": "diwali lakshmi japa mantra japa",
+  "secondaryKeywords": [
+    "festival japa",
+    "108 times",
+    "japam"
+  ],
+  "meta": {
+    "title": "Diwali Lakshmi Japa | Japam",
+    "description": "Diwali Lakshmi Japa — mantra, 108 japa, practise with Japam.",
+    "ogImage": "/images/deities/lakshmi.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "Diwali Lakshmi Japa"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Diwali evening Lakshmi puja and mantra japa for auspiciousness. Plan japa in advance; Japam helps you count daily during the season."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Festival dates follow the lunar calendar — confirm with local panchang."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Meaning of the mantra"
+    },
+    {
+      "type": "blockquote",
+      "runs": [
+        {
+          "text": "Om Sri Mahalakshmyai Namaha",
+          "bold": true
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Chant with a calm mind, offering salutation rather than demanding specific outcomes."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Benefits of japa (traditional view)"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Builds festival discipline",
+        "Deepens deity bhakti",
+        "Community yagnas may align with season",
+        "Educational — not outcome guarantees"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "How to chant 108 times"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Set daily 108 sankalpa for festival period",
+        "Keep fast/vrat rules from your family tradition",
+        "Visit temple when possible",
+        "Use Japam counter between work/study"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "When to chant"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Diwali evening Lakshmi puja and mantra japa for auspiciousness."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Practice with Japam"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Select the deity in Japam during the festival season for mantra audio and japa tally."
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start لکشمی Japa in Japam",
+      "href": "https://japam.digital/?lang=ur&deity=lakshmi&utm_source=google&utm_medium=seo&utm_campaign=diwali-lakshmi-japa&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=ur&try=1&utm_source=google&utm_medium=seo&utm_campaign=diwali-lakshmi-japa&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=ur&utm_source=google&utm_medium=seo&utm_campaign=diwali-lakshmi-japa&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=ur&deity=lakshmi&utm_source=google&utm_medium=seo&utm_campaign=diwali-lakshmi-japa&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "Exact festival date this year?",
+      "answer": "Check Hindu panchang for your region — we avoid locking a Gregorian year in this guide."
+    },
+    {
+      "question": "How many japas per day?",
+      "answer": "108 minimum for many vows; some do 1008 on main day under guidance."
+    },
+    {
+      "question": "Guest mode OK?",
+      "answer": "Yes for try; sign in to save progress across festival weeks."
+    },
+    {
+      "question": "Replace temple?",
+      "answer": "No — digital japa supports home practice."
+    },
+    {
+      "question": "Join collective yagna?",
+      "answer": "See Maha Japa Yagnas in Japam menu during campaigns."
+    }
+  ],
+  "disclaimer": {
+    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+  },
+  "relatedPages": [
+    {
+      "pageId": "mantra-lakshmi",
+      "label": "Deity mantra guide"
+    },
+    {
+      "pageId": "japa-108-times",
+      "label": "108 japa guide"
+    },
+    {
+      "pageId": "online-japa-mantra",
+      "label": "Online japa"
+    }
+  ]
+}

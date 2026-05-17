@@ -1,0 +1,225 @@
+{
+  "schemaVersion": 1,
+  "pageId": "ayyappa-mandala-japa",
+  "lang": "mr",
+  "slug": "ayyappa-mandala-japa",
+  "deityId": "ayyappan",
+  "primaryKeyword": "अय्यप्पा मंडला जप मंत्र जप",
+  "secondaryKeywords": [
+    "उत्सव जपा",
+    "108 वेळा",
+    "जपम"
+  ],
+  "meta": {
+    "title": "अय्यप्पा मंडला जपा | जपम",
+    "description": "अयप्पा मंडला जप - मंत्र, 108 जप, जपम सह सराव.",
+    "ogImage": "/images/deities/ayyappan.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "अय्यप्पा मांडला जपा"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "सबरीमाला हंगामापूर्वी ४१ दिवसांचे मंडल व्रत. आगाऊ जपाची योजना करा; जपम तुम्हाला हंगामात दररोज मोजण्यात मदत करते."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "सणाच्या तारखा चंद्र कॅलेंडरचे अनुसरण करतात - स्थानिक पंचांगसह पुष्टी करा."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मंत्राचा अर्थ"
+    },
+    {
+      "type": "blockquote",
+      "runs": [
+        {
+          "text": "Swamiye Saranam Ayyappa",
+          "bold": true
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "विशिष्ट परिणामांची मागणी करण्यापेक्षा नमस्कार करून शांत चित्ताने जप करा."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपाचे फायदे (पारंपरिक दृष्टी)"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "उत्सवाची शिस्त निर्माण करते",
+        "देवभक्ती प्रगल्भ करते",
+        "सामुदायिक यज्ञ ऋतूनुसार होऊ शकतात",
+        "शैक्षणिक - परिणाम हमी नाही"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "108 वेळा कसा जप करावा"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "उत्सव कालावधीसाठी दररोज 108 संकल्प ठेवा",
+        "आपल्या कौटुंबिक परंपरेतील व्रत/व्रताचे नियम पाळा",
+        "शक्य असेल तेव्हा मंदिराला भेट द्या",
+        "काम/अभ्यास दरम्यान जपम काउंटर वापरा"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "कधी जप करावा"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "सबरीमाला हंगामापूर्वी ४१ दिवसांचे मंडल व्रत."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "108 वेळा का",
+      "_enrichId": "why-108-enrich"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "108 हा अंक जपमालावरील एक पूर्ण फेरी आहे. स्थिर पुनरावृत्ती मनाला शांत करते आणि मंत्राच्या अर्थाकडे लक्ष वेधून घेते."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "काही परंपरा 11 किंवा 21 माला लिहून देतात - तुमच्या गुरूला किंवा पुजाऱ्याला तुमच्या व्रतासाठी योग्य मोजणीसाठी विचारा."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "टाळण्यासाठी सामान्य चुका"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "खूप जलद जप करणे आणि आवाजावरील लक्ष गमावणे",
+        "मार्गदर्शनाशिवाय अनेक देवतांच्या नवसांचे मिश्रण करणे",
+        "भक्ती आणि नैतिक जीवनाऐवजी केवळ भौतिक परिणामांची अपेक्षा करणे"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मंदिर आणि घर एकत्र सराव"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "होम जप मंदिर पूजेचे समर्थन; ते दर्शनाची जागा घेत नाही. सणाच्या दिवशी किंवा शनिवारी मंदिराला भेट दिल्याने कौटुंबिक परंपरा मजबूत होते."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Japam सोबत सराव"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "मंत्र ऑडिओ आणि जप टॅलीसाठी उत्सवाच्या काळात जपममधील देवता निवडा."
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Japam मध्ये जप सुरू करा",
+      "href": "https://japam.digital/?lang=mr&deity=ayyappan&utm_source=google&utm_medium=seo&utm_campaign=ayyappa-mandala-japa&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "लॉगिनशिवाय प्रयत्न करा",
+      "href": "https://japam.digital/?lang=mr&try=1&utm_source=google&utm_medium=seo&utm_campaign=ayyappa-mandala-japa&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "महा जप यज्ञात सामील व्हा",
+      "href": "https://japam.digital/menu?lang=mr&utm_source=google&utm_medium=seo&utm_campaign=ayyappa-mandala-japa&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Japam उघडा",
+      "href": "https://japam.digital/?lang=mr&deity=ayyappan&utm_source=google&utm_medium=seo&utm_campaign=ayyappa-mandala-japa&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "या वर्षी सणाची नेमकी तारीख?",
+      "answer": "तुमच्या प्रदेशासाठी हिंदू पंचांग तपासा — आम्ही या मार्गदर्शकामध्ये ग्रेगोरियन वर्ष लॉक करणे टाळतो."
+    },
+    {
+      "question": "दररोज किती जप?",
+      "answer": "अनेक नवसांसाठी 108 किमान; काही मार्गदर्शनाखाली मुख्य दिवशी 1008 करतात."
+    },
+    {
+      "question": "अतिथी मोड ठीक आहे?",
+      "answer": "होय प्रयत्नासाठी; सणासुदीच्या आठवड्यात प्रगती जतन करण्यासाठी साइन इन करा."
+    },
+    {
+      "question": "मंदिर बदलायचे?",
+      "answer": "नाही — डिजिटल जपा घरच्या सरावाला समर्थन देते."
+    },
+    {
+      "question": "सामूहिक यज्ञात सहभागी व्हाल?",
+      "answer": "मोहिमांदरम्यान जपम मेनूमध्ये महाजप यज्ञ पहा."
+    }
+  ],
+  "disclaimer": {
+    "text": "हा लेख फक्त शैक्षणिक आणि भक्ती सरावासाठी आहे. Japam वैद्यकीय, कायदेशीर किंवा आर्थिक सल्ला देत नाही."
+  },
+  "relatedPages": [
+    {
+      "pageId": "mantra-ayyappan",
+      "label": "देवता मंत्र मार्गदर्शक"
+    },
+    {
+      "pageId": "japa-108-times",
+      "label": "108 जप"
+    },
+    {
+      "pageId": "online-japa-mantra",
+      "label": "ऑनलाइन जपा"
+    }
+  ]
+}

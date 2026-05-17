@@ -1,0 +1,170 @@
+{
+  "schemaVersion": 1,
+  "pageId": "ishta-devata-japa",
+  "lang": "sa",
+  "slug": "ishta-devata-japa",
+  "deityId": null,
+  "primaryKeyword": "ishta devata japa",
+  "secondaryKeywords": [
+    "choose your deity",
+    "personal deity chanting"
+  ],
+  "meta": {
+    "title": "Ishta Devata Japa — Choose Your Deity | Japam",
+    "description": "How to choose an ishta devata and practise daily japa in Japam.",
+    "ogImage": "/images/favicon.png"
+  },
+  "blocks": [
+    {
+      "type": "h1",
+      "text": "Ishta Devata Japa — Choosing Your Deity"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Ishta devata is your chosen beloved deity for daily worship. Family tradition, initiation, or inner calling guide the choice."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Japam lets you pick any playable deity on the menu grid for mantra japa."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "How to choose"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Ask elders, respect kuladeivam, or follow the deity you feel drawn to in prayer. Stick with one ishta for steady vows unless your guru directs otherwise."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Benefits of japa (traditional view)"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Deepens single-pointed bhakti",
+        "Simplifies daily routine",
+        "All Japam deities include mantra audio + count",
+        "Switch only with spiritual guidance"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "How to chant 108 times"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Select ishta on Japam menu after sign-in or guest try",
+        "Chant 108 daily at same time",
+        "Combine with simple home lamp offering if desired",
+        "Join yagnas for community sankalpa"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "When to chant"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Daily — morning or evening consistently."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Practice with Japam"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Open Japam menu → choose ishta → play match-3 with mantra."
+        }
+      ]
+    }
+  ],
+  "ctas": [
+    {
+      "id": "start-japa",
+      "position": "above-fold",
+      "label": "Start Japa in Japam",
+      "href": "https://japam.digital/?lang=sa&utm_source=google&utm_medium=seo&utm_campaign=ishta-devata-japa&utm_content=start-japa",
+      "style": "primary"
+    },
+    {
+      "id": "try-free",
+      "position": "after-how-to",
+      "label": "Try Japa without login",
+      "href": "https://japam.digital/?lang=sa&try=1&utm_source=google&utm_medium=seo&utm_campaign=ishta-devata-japa&utm_content=try-free",
+      "style": "secondary"
+    },
+    {
+      "id": "join-yagna",
+      "position": "after-faq",
+      "label": "Join Maha Japa Yagna",
+      "href": "https://japam.digital/menu?lang=sa&utm_source=google&utm_medium=seo&utm_campaign=ishta-devata-japa&utm_content=join-yagna",
+      "style": "secondary"
+    },
+    {
+      "id": "sticky",
+      "position": "sticky-footer",
+      "label": "Open Japam",
+      "href": "https://japam.digital/?lang=sa&utm_source=google&utm_medium=seo&utm_campaign=ishta-devata-japa&utm_content=sticky",
+      "style": "primary"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "Can I change ishta often?",
+      "answer": "Traditions prefer stability; change only with good reason or guru advice."
+    },
+    {
+      "question": "Multiple deities?",
+      "answer": "Many honour Ganesha first then ishta; Japam supports per-deity modes."
+    },
+    {
+      "question": "Guru-hidden deities?",
+      "answer": "Sai Baba and Bramhamgaaru are reserved in app — not in public play grid."
+    },
+    {
+      "question": "Need initiation?",
+      "answer": "Mantra japa is open in many homes; diksha mantras need guru."
+    },
+    {
+      "question": "Guest mode?",
+      "answer": "Yes — try before account creation."
+    }
+  ],
+  "disclaimer": {
+    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+  },
+  "relatedPages": [
+    {
+      "pageId": "online-japa-mantra",
+      "label": "Online japa"
+    },
+    {
+      "pageId": "japa-108-times",
+      "label": "108 japa guide"
+    },
+    {
+      "pageId": "maha-japa-yagna",
+      "label": "Maha yagna"
+    }
+  ]
+}

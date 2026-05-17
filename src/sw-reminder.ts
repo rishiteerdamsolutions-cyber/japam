@@ -4,9 +4,9 @@
 import {
   REMINDER_CACHE_NAME,
   REMINDER_FIRED_URL,
-  REMINDER_SOUND_FALLBACK_URL,
   REMINDER_SOUND_URL,
   buildNotificationText,
+  isWithinReminderFireWindow,
   nextOccurrenceMs,
   readReminderConfig,
   type ReminderConfig,
@@ -15,13 +15,10 @@ import {
 declare let self: ServiceWorkerGlobalScope;
 
 let alarmTimeout: ReturnType<typeof setTimeout> | null = null;
-let pollInterval: ReturnType<typeof setInterval> | null = null;
 
 function clearSchedule() {
   if (alarmTimeout != null) clearTimeout(alarmTimeout);
   alarmTimeout = null;
-  if (pollInterval != null) clearInterval(pollInterval);
-  pollInterval = null;
 }
 
 async function alreadyFiredToday(config: ReminderConfig): Promise<boolean> {
@@ -59,22 +56,14 @@ async function showReminderNotification(config: ReminderConfig): Promise<void> {
     requireInteraction: true,
     silent: false,
     vibrate: [300, 120, 300],
-    data: { soundUrl: REMINDER_SOUND_URL, soundFallbackUrl: REMINDER_SOUND_FALLBACK_URL },
+    data: { soundUrl: REMINDER_SOUND_URL },
   } as NotificationOptions);
 }
 
 async function fireIfDue(): Promise<boolean> {
   const config = await readReminderConfig();
   if (!config?.enabled || !config.time || !config.uid) return false;
-  const m = config.time.match(/^(\d{2}):(\d{2})$/);
-  if (!m) return false;
-
-  const hh = Number(m[1]);
-  const mm = Number(m[2]);
-  const now = new Date();
-  const nowMinutes = now.getHours() * 60 + now.getMinutes();
-  const targetMinutes = hh * 60 + mm;
-  if (nowMinutes < targetMinutes) return false;
+  if (!isWithinReminderFireWindow(config.time)) return false;
   if (await alreadyFiredToday(config)) return false;
 
   await markFiredToday(config);
@@ -98,10 +87,6 @@ export async function scheduleReminderFromCache(): Promise<void> {
       await scheduleReminderFromCache();
     }
   }, delay);
-
-  pollInterval = setInterval(() => {
-    void fireIfDue();
-  }, 60_000);
 }
 
 export function installReminderListeners(sw: ServiceWorkerGlobalScope): void {

@@ -3,9 +3,27 @@ export const REMINDER_CACHE_NAME = 'japam-reminder-v1';
 export const REMINDER_CONFIG_URL = '/__japam_reminder_config__';
 export const REMINDER_FIRED_URL = '/__japam_reminder_fired__';
 
-/** Prefer dedicated file; fallback keeps reminders audible until notification.mp3 is added. */
 export const REMINDER_SOUND_URL = '/sounds/notification.mp3';
-export const REMINDER_SOUND_FALLBACK_URL = '/sounds/3match-sounds/3match-hanuman.mp3';
+
+/** Max ms after HH:MM when a scheduled reminder may fire (no catch-up after this window). */
+export const REMINDER_FIRE_GRACE_MS = 90_000;
+
+/** True only shortly after today's reminder time — not for late app opens or missed alarms. */
+export function isWithinReminderFireWindow(hhmm: string, graceMs = REMINDER_FIRE_GRACE_MS): boolean {
+  const m = hhmm.match(/^(\d{2}):(\d{2})$/);
+  if (!m) return false;
+  const hh = Number(m[1]);
+  const mm = Number(m[2]);
+  if (!Number.isFinite(hh) || !Number.isFinite(mm) || hh < 0 || hh > 23 || mm < 0 || mm > 59) return false;
+
+  const now = new Date();
+  const target = new Date(now);
+  target.setSeconds(0, 0);
+  target.setMilliseconds(0);
+  target.setHours(hh, mm, 0, 0);
+  const delta = now.getTime() - target.getTime();
+  return delta >= 0 && delta <= graceMs;
+}
 
 export type ReminderConfig = {
   enabled: boolean;

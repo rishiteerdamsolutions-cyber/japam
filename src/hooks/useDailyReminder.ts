@@ -4,9 +4,9 @@ import { useReminderStore } from '../store/reminderStore';
 import { useProfileStore } from '../store/profileStore';
 import { shouldSuppressIncidentalAudio } from '../lib/authAudioGuard';
 import {
-  REMINDER_SOUND_FALLBACK_URL,
   REMINDER_SOUND_URL,
   buildNotificationText,
+  isWithinReminderFireWindow,
   nextOccurrenceMs,
   syncReminderScheduleToServiceWorker,
 } from '../lib/reminderSync';
@@ -28,7 +28,7 @@ async function showNotification(title: string, body: string) {
           requireInteraction: true,
           silent: false,
           vibrate: [300, 120, 300],
-          data: { soundUrl: REMINDER_SOUND_URL, soundFallbackUrl: REMINDER_SOUND_FALLBACK_URL },
+          data: { soundUrl: REMINDER_SOUND_URL },
         } as NotificationOptions);
         return;
       }
@@ -45,50 +45,15 @@ async function showNotification(title: string, body: string) {
   }
 }
 
-async function playReminderAudio(): Promise<boolean> {
-  for (const src of [REMINDER_SOUND_URL, REMINDER_SOUND_FALLBACK_URL]) {
-    try {
-      const audio = new Audio(src);
-      audio.preload = 'auto';
-      await audio.play();
-      return true;
-    } catch {
-      // try fallback
-    }
-  }
-  return false;
-}
-
-function playAlarmBeepFallback() {
-  try {
-    const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-    if (!AudioCtx) return;
-    const ctx = new AudioCtx();
-    const now = ctx.currentTime;
-    const gain = ctx.createGain();
-    gain.gain.setValueAtTime(0.0001, now);
-    gain.gain.exponentialRampToValueAtTime(0.25, now + 0.02);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.2);
-    gain.connect(ctx.destination);
-
-    const osc = ctx.createOscillator();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(880, now);
-    osc.connect(gain);
-    osc.start(now);
-    osc.stop(now + 1.25);
-    osc.onended = () => {
-      ctx.close().catch(() => {});
-    };
-  } catch {
-    // ignore
-  }
-}
-
 async function playAlarm() {
   if (shouldSuppressIncidentalAudio()) return;
-  const played = await playReminderAudio();
-  if (!played) playAlarmBeepFallback();
+  try {
+    const audio = new Audio(REMINDER_SOUND_URL);
+    audio.preload = 'auto';
+    await audio.play();
+  } catch {
+    // notification.mp3 only; no substitute if playback fails
+  }
 }
 
 /** In-app fallback scheduler when the tab is open; primary scheduling lives in the service worker. */
@@ -107,7 +72,6 @@ export function useDailyReminder() {
   );
 
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     if (loading) return;
@@ -129,8 +93,6 @@ export function useDailyReminder() {
     const clear = () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
-      if (intervalRef.current) clearInterval(intervalRef.current);
-      intervalRef.current = null;
     };
 
     if (!uid) {
@@ -145,17 +107,10 @@ export function useDailyReminder() {
     /** Per device + time (not per uid) so sign-in does not re-trigger today's alarm audio. */
     const firedStorageKey = `japam-reminder-fired:${reminder.time ?? 'na'}`;
 
-    const maybeFire = () => {
+    const fireAtScheduledTime = () => {
       if (cancelled) return;
       if (!uid || !reminder.enabled || !reminder.time) return;
-      const m = reminder.time.match(/^(\d{2}):(\d{2})$/);
-      if (!m) return;
-      const hh = Number(m[1]);
-      const mm = Number(m[2]);
-      const now = new Date();
-      const nowMinutes = now.getHours() * 60 + now.getMinutes();
-      const targetMinutes = hh * 60 + mm;
-      if (nowMinutes < targetMinutes) return;
+      if (!isWithinReminderFireWindow(reminder.time)) return;
       const today = dayKey();
       if (localStorage.getItem(firedStorageKey) === today) return;
       localStorage.setItem(firedStorageKey, today);
@@ -171,25 +126,15 @@ export function useDailyReminder() {
       if (nextMs == null) return;
       const delay = Math.max(500, nextMs - Date.now());
       timeoutRef.current = setTimeout(() => {
-        if (cancelled) return;
-        const { title, body } = buildNotificationText(displayName);
-        localStorage.setItem(firedStorageKey, dayKey());
-        showNotification(title, body).catch(() => {});
-        void playAlarm();
+        fireAtScheduledTime();
         schedule();
       }, delay);
-      intervalRef.current = setInterval(maybeFire, 60_000);
     };
 
-    const onVisibility = () => {
-      if (document.visibilityState === 'visible') maybeFire();
-    };
-    document.addEventListener('visibilitychange', onVisibility);
     schedule();
 
     return () => {
       cancelled = true;
-      document.removeEventListener('visibilitychange', onVisibility);
       clear();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

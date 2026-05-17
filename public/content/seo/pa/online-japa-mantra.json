@@ -4,39 +4,39 @@
   "lang": "pa",
   "slug": "online-japa-mantra",
   "deityId": null,
-  "primaryKeyword": "online japa mantra chanting app",
+  "primaryKeyword": "ਔਨਲਾਈਨ ਜਪ ਮੰਤਰ ਜਾਪ ਐਪ",
   "secondaryKeywords": [
-    "digital mantra practice",
-    "mantra app hindu",
-    "chant mantra with audio"
+    "ਡਿਜੀਟਲ ਮੰਤਰ ਅਭਿਆਸ",
+    "ਮੰਤਰ ਐਪ ਹਿੰਦੂ",
+    "ਆਡੀਓ ਦੇ ਨਾਲ ਮੰਤਰ ਦਾ ਜਾਪ ਕਰੋ"
   ],
   "meta": {
-    "title": "Online Japa & Mantra Chanting — Japam App | Japam",
-    "description": "Practice Hindu mantra japa online with Japam: match-3 gameplay, deity audio, 108 counting, and community yagnas.",
+    "title": "ਔਨਲਾਈਨ ਜਪ ਅਤੇ ਮੰਤਰ ਜਾਪ - ਜਪਮ ਐਪ",
+    "description": "ਜਪਮ ਦੇ ਨਾਲ ਔਨਲਾਈਨ ਹਿੰਦੂ ਮੰਤਰ ਜਪ ਦਾ ਅਭਿਆਸ ਕਰੋ: ਮੈਚ-3 ਗੇਮਪਲੇ, ਦੇਵਤਾ ਆਡੀਓ, 108 ਗਿਣਤੀ, ਅਤੇ ਭਾਈਚਾਰਕ ਯੱਗ।",
     "ogImage": "/images/favicon.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Online Japa and Digital Mantra Practice"
+      "text": "ਔਨਲਾਈਨ ਜਪਾ ਅਤੇ ਡਿਜੀਟਲ ਮੰਤਰ ਅਭਿਆਸ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Japam",
+          "text": "ਜਪਮ",
           "bold": true
         },
         {
-          "text": " (japam.digital) is a "
+          "text": "(japam.digital) ਹੈ a"
         },
         {
-          "text": "digital mantra practice",
+          "text": "ਡਿਜੀਟਲ ਮੰਤਰ ਅਭਿਆਸ",
           "bold": true,
           "underline": true
         },
         {
-          "text": " platform: play a match-3 game while hearing authentic deity mantras, track your japa count, and join collective Maha Japa Yagnas — in many Indian languages."
+          "text": "ਪਲੇਟਫਾਰਮ: ਪ੍ਰਮਾਣਿਕ ​​ਦੇਵਤਾ ਮੰਤਰ ਸੁਣਦੇ ਹੋਏ ਮੈਚ-3 ਗੇਮ ਖੇਡੋ, ਆਪਣੀ ਜਾਪ ਗਿਣਤੀ ਨੂੰ ਟਰੈਕ ਕਰੋ, ਅਤੇ ਸਮੂਹਿਕ ਮਹਾ ਜਪ ਯੱਗਾਂ ਵਿੱਚ ਸ਼ਾਮਲ ਹੋਵੋ — ਕਈ ਭਾਰਤੀ ਭਾਸ਼ਾਵਾਂ ਵਿੱਚ।"
         }
       ]
     },
@@ -44,46 +44,92 @@
       "type": "p",
       "runs": [
         {
-          "text": "Online japa does not replace temple worship or your family's puja rules; it supports daily repetition when you are travelling, at work breaks, or learning a new mantra."
+          "text": "ਔਨਲਾਈਨ ਜਾਪ ਮੰਦਰ ਦੀ ਪੂਜਾ ਜਾਂ ਤੁਹਾਡੇ ਪਰਿਵਾਰ ਦੇ ਪੂਜਾ ਨਿਯਮਾਂ ਦੀ ਥਾਂ ਨਹੀਂ ਲੈਂਦਾ; ਇਹ ਰੋਜ਼ਾਨਾ ਦੁਹਰਾਓ ਦਾ ਸਮਰਥਨ ਕਰਦਾ ਹੈ ਜਦੋਂ ਤੁਸੀਂ ਯਾਤਰਾ ਕਰ ਰਹੇ ਹੁੰਦੇ ਹੋ, ਕੰਮ ਦੇ ਬਰੇਕ 'ਤੇ, ਜਾਂ ਕੋਈ ਨਵਾਂ ਮੰਤਰ ਸਿੱਖਦੇ ਹੋ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "What makes Japam different"
+      "text": "ਜੋ ਜਪਮ ਨੂੰ ਵੱਖਰਾ ਬਣਾਉਂਦਾ ਹੈ"
     },
     {
       "type": "ul",
       "items": [
-        "Mantra audio tied to gameplay — stay engaged while chanting",
-        "Per-deity boards and japa tallies",
-        "108-japa specials and weekly streaks",
-        "Pushpa Aradhana — digital flower offering",
-        "23+ Indian language UI options"
+        "ਮੰਤਰ ਆਡੀਓ ਗੇਮਪਲੇ ਨਾਲ ਜੁੜਿਆ ਹੋਇਆ ਹੈ — ਜਾਪ ਕਰਦੇ ਸਮੇਂ ਰੁੱਝੇ ਰਹੋ",
+        "ਪ੍ਰਤੀ-ਦੇਵਤਾ ਬੋਰਡ ਅਤੇ ਜਪ ਟਾਲੀਆਂ",
+        "108-ਜਪਾ ਵਿਸ਼ੇਸ਼ ਅਤੇ ਹਫ਼ਤਾਵਾਰੀ ਸਟ੍ਰੀਕਸ",
+        "ਪੁਸ਼ਪਾ ਅਰਾਧਨਾ - ਡਿਜੀਟਲ ਫੁੱਲ ਭੇਟ",
+        "23+ ਭਾਰਤੀ ਭਾਸ਼ਾ UI ਵਿਕਲਪ"
       ]
     },
     {
       "type": "h2",
-      "text": "How to start"
+      "text": "ਕਿਵੇਂ ਸ਼ੁਰੂ ਕਰਨਾ ਹੈ"
     },
     {
       "type": "ol",
       "items": [
-        "Open japam.digital on phone or desktop",
-        "Choose your language",
-        "Pick your ishta devata from the menu",
-        "Play matches; each session adds to your japa count"
+        "ਫ਼ੋਨ ਜਾਂ ਡੈਸਕਟਾਪ 'ਤੇ japam.digital ਖੋਲ੍ਹੋ",
+        "ਆਪਣੀ ਭਾਸ਼ਾ ਚੁਣੋ",
+        "ਮੀਨੂ ਵਿੱਚੋਂ ਆਪਣਾ ਇਸ਼ਟ ਦੇਵਤਾ ਚੁਣੋ",
+        "ਮੈਚ ਖੇਡੋ; ਹਰ ਸੈਸ਼ਨ ਤੁਹਾਡੀ ਜਾਪਾ ਗਿਣਤੀ ਵਿੱਚ ਵਾਧਾ ਕਰਦਾ ਹੈ"
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "108 ਦੁਹਰਾਓ ਮਾਇਨੇ ਕਿਉਂ ਰੱਖਦੇ ਹਨ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Sign in with Google to save progress, or use guest mode to try japa without an account. Explore Maha Yagnas from the menu for community chanting goals."
+          "text": "ਬਹੁਤ ਸਾਰੇ ਸੰਪ੍ਰਦਾਯਾਂ ਵਿੱਚ, 108 ਇੱਕ ਪੂਰਾ ਮਾਲਾ ਦੌਰ ਹੈ - ਗਿਣਤੀ ਗੁਆਏ ਬਿਨਾਂ ਰੋਜ਼ਾਨਾ ਸੈਸ਼ਨ ਨੂੰ ਬੰਦ ਕਰਨ ਦਾ ਇੱਕ ਵਿਹਾਰਕ ਤਰੀਕਾ। ਸੰਖਿਆ ਪ੍ਰਤੀਕਾਤਮਕ ਹੈ (ਕੁਝ ਸਿੱਖਿਆਵਾਂ ਵਿੱਚ ਬ੍ਰਹਿਮੰਡੀ ਚੱਕਰ, ਨਦੀਆਂ), ਪਰ ਡੂੰਘਾ ਟੀਚਾ ਸਥਿਰ ਧਿਆਨ ਹੈ: ਇੱਕ ਸਾਹ, ਇੱਕ ਮੰਤਰ, ਇੱਕ ਸਮੇਂ ਵਿੱਚ ਇੱਕ ਮਣਕੇ।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ਜੇ 108 ਪਹਿਲਾਂ ਭਾਰੀ ਮਹਿਸੂਸ ਕਰਦਾ ਹੈ, ਤਾਂ 11 ਜਾਂ 27 ਦੁਹਰਾਓ ਨਾਲ ਸ਼ੁਰੂ ਕਰੋ ਅਤੇ ਹਫ਼ਤਿਆਂ ਵਿੱਚ ਵਧੋ। ਆਮ ਦਿਨਾਂ 'ਤੇ ਇਕਸਾਰਤਾ ਅਕਸਰ ਇੱਕ ਸਿੰਗਲ ਤੀਬਰ ਸੈਸ਼ਨ ਤੋਂ ਵੱਧ ਮਹੱਤਵ ਰੱਖਦੀ ਹੈ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ਬਚਣ ਲਈ ਆਮ ਜਪ ਗਲਤੀਆਂ"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "ਗਿਣਤੀ ਨੂੰ \"ਮੁਕੰਮਲ\" ਕਰਨ ਲਈ ਮੰਤਰ ਦੀ ਕਾਹਲੀ - ਹੌਲੀ, ਸੁਣਨਯੋਗ ਜਾਂ ਮਾਨਸਿਕ ਤਾਲ ਬਿਹਤਰ ਹੈ",
+        "ਪੂਰੇ ਮਾਲਾ ਦੌਰ ਦੌਰਾਨ ਮਲਟੀਟਾਸਕਿੰਗ (ਸਕ੍ਰੌਲਿੰਗ, ਟੀ.ਵੀ.)",
+        "ਤਤਕਾਲ ਪਦਾਰਥਕ ਨਤੀਜਿਆਂ ਲਈ ਜਾਪ ਨੂੰ ਇੱਕ ਸੌਦੇ ਦੇ ਰੂਪ ਵਿੱਚ ਸਮਝਣਾ",
+        "ਜਦੋਂ ਤੁਹਾਡੀ ਪਰੰਪਰਾ ਗ੍ਰਹਿ ਜਾਪ ਲਈ ਇਸਦੀ ਸਿਫ਼ਾਰਸ਼ ਕਰਦੀ ਹੈ ਤਾਂ ਇਸ਼ਨਾਨ/ਸਾਫ਼ ਥਾਂ ਛੱਡਣਾ",
+        "ਇੱਕ ਚੰਗੇ ਹਫ਼ਤੇ ਦੇ ਬਾਅਦ ਰੁਕਣਾ - ਗ੍ਰਹਿ ਅਤੇ ਦੇਵਤਾ ਸੁੱਖਣਾ ਲੰਬੇ ਸਮੇਂ ਲਈ ਹਨ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ਸੰਕਲਪ ਅਤੇ ਰੋਜ਼ਾਨਾ ਅਨੁਸ਼ਾਸਨ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ਸ਼ੁਰੂ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ, ਬਹੁਤ ਸਾਰੇ ਪਰਿਵਾਰ ਇੱਕ ਛੋਟਾ ਸੰਕਲਪ (ਇਰਾਦਾ) ਨਿਰਧਾਰਤ ਕਰਦੇ ਹਨ: ਨਾਮ, ਗੋਤਰ ਜੇ ਲਾਗੂ ਹੋਵੇ, ਅਤੇ ਜਪ ਦਾ ਉਦੇਸ਼। ਜਦੋਂ ਸੰਭਵ ਹੋਵੇ ਤਾਂ ਹਰ ਰੋਜ਼ ਇੱਕੋ ਸਮਾਂ ਰੱਖੋ - ਸਵੇਰ ਜਾਂ ਸ਼ਾਮ ਆਮ ਹਨ। ਇਮਾਨਦਾਰ ਆਚਰਣ, ਦਾਨ ਜਾਂ ਸੇਵਾ ਦੇ ਨਾਲ ਮੰਤਰ ਨੂੰ ਜੋੜੋ ਜਿੱਥੇ ਤੁਹਾਡੇ ਬਜ਼ੁਰਗ ਇਸਦੀ ਸਲਾਹ ਦਿੰਦੇ ਹਨ; ਜਪਾ ਅੱਖਰ ਦਾ ਸਮਰਥਨ ਕਰਦਾ ਹੈ, ਇਹ ਸਹੀ ਕਿਰਿਆ ਨੂੰ ਨਹੀਂ ਬਦਲਦਾ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ਜਪਮ ਨਾਲ ਅਭਿਆਸ ਕਰੋ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ਪ੍ਰਗਤੀ ਨੂੰ ਬਚਾਉਣ ਲਈ Google ਨਾਲ ਸਾਈਨ ਇਨ ਕਰੋ, ਜਾਂ ਬਿਨਾਂ ਖਾਤੇ ਦੇ ਜਾਪਾ ਅਜ਼ਮਾਉਣ ਲਈ ਮਹਿਮਾਨ ਮੋਡ ਦੀ ਵਰਤੋਂ ਕਰੋ। ਕਮਿਊਨਿਟੀ ਜਪ ਟੀਚਿਆਂ ਲਈ ਮੀਨੂ ਤੋਂ ਮਹਾਂ ਯੱਗਾਂ ਦੀ ਪੜਚੋਲ ਕਰੋ।"
         }
       ]
     }
@@ -99,7 +145,7 @@
     {
       "id": "try-free",
       "position": "after-how-to",
-      "label": "Try Japa without login",
+      "label": "Try without login",
       "href": "https://japam.digital/?lang=pa&try=1&utm_source=google&utm_medium=seo&utm_campaign=online-japa-mantra&utm_content=try-free",
       "style": "secondary"
     },
@@ -111,46 +157,46 @@
       "style": "secondary"
     },
     {
-      "id": "sticky",
+      "id": "try-free",
       "position": "sticky-footer",
-      "label": "Open Japam",
-      "href": "https://japam.digital/?lang=pa&utm_source=google&utm_medium=seo&utm_campaign=online-japa-mantra&utm_content=sticky",
+      "label": "Try Japam free",
+      "href": "https://japam.digital/?lang=pa&try=1&utm_source=google&utm_medium=seo&utm_campaign=online-japa-mantra&utm_content=sticky",
       "style": "primary"
     }
   ],
   "faqs": [
     {
-      "question": "Is Japam free?",
-      "answer": "You can try guest play and core japa features; some levels and Pro features may require sign-in or support (dakshina) as shown in the app."
+      "question": "ਕੀ ਜਪਮ ਮੁਕਤ ਹੈ?",
+      "answer": "ਤੁਸੀਂ ਗੈਸਟ ਪਲੇ ਅਤੇ ਕੋਰ ਜਾਪਾ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰ ਸਕਦੇ ਹੋ; ਐਪ ਵਿੱਚ ਦਰਸਾਏ ਅਨੁਸਾਰ ਕੁਝ ਪੱਧਰਾਂ ਅਤੇ ਪ੍ਰੋ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਲਈ ਸਾਈਨ-ਇਨ ਜਾਂ ਸਹਾਇਤਾ (ਦਕਸ਼ੀਨਾ) ਦੀ ਲੋੜ ਹੋ ਸਕਦੀ ਹੈ।"
     },
     {
-      "question": "Which deities are available?",
-      "answer": "Rama, Shiva, Ganesh, Lakshmi, Hanuman, Venkateswara, Murugan, Navagraha deities, and more — see the in-app deity grid."
+      "question": "ਕਿਹੜੇ ਦੇਵਤੇ ਉਪਲਬਧ ਹਨ?",
+      "answer": "ਰਾਮ, ਸ਼ਿਵ, ਗਣੇਸ਼, ਲਕਸ਼ਮੀ, ਹਨੂਮਾਨ, ਵੈਂਕਟੇਸ਼ਵਰ, ਮੁਰੂਗਨ, ਨਵਗ੍ਰਹਿ ਦੇਵਤੇ, ਅਤੇ ਹੋਰ — ਐਪ-ਵਿੱਚ ਦੇਵਤਾ ਗਰਿੱਡ ਦੇਖੋ।"
     },
     {
-      "question": "Do I need headphones?",
-      "answer": "Recommended for mantra audio clarity; respect quiet spaces and others around you."
+      "question": "ਕੀ ਮੈਨੂੰ ਹੈੱਡਫੋਨ ਦੀ ਲੋੜ ਹੈ?",
+      "answer": "ਮੰਤਰ ਆਡੀਓ ਸਪਸ਼ਟਤਾ ਲਈ ਸਿਫਾਰਸ਼ ਕੀਤੀ; ਸ਼ਾਂਤ ਥਾਵਾਂ ਅਤੇ ਆਪਣੇ ਆਲੇ ਦੁਆਲੇ ਦੇ ਹੋਰ ਲੋਕਾਂ ਦਾ ਸਤਿਕਾਰ ਕਰੋ।"
     },
     {
-      "question": "Can I use Japam offline?",
-      "answer": "The PWA can cache some assets after you visit; full features need connectivity for sign-in and leaderboards."
+      "question": "ਕੀ ਮੈਂ ਜਾਪਮ ਨੂੰ ਔਫਲਾਈਨ ਵਰਤ ਸਕਦਾ ਹਾਂ?",
+      "answer": "ਤੁਹਾਡੇ ਦੌਰੇ ਤੋਂ ਬਾਅਦ PWA ਕੁਝ ਸੰਪਤੀਆਂ ਨੂੰ ਕੈਸ਼ ਕਰ ਸਕਦਾ ਹੈ; ਪੂਰੀ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਨੂੰ ਸਾਈਨ-ਇਨ ਅਤੇ ਲੀਡਰਬੋਰਡਾਂ ਲਈ ਕਨੈਕਟੀਵਿਟੀ ਦੀ ਲੋੜ ਹੁੰਦੀ ਹੈ।"
     },
     {
-      "question": "Is this an ISKCON-only app?",
-      "answer": "No — Japam includes many sampradayas' deities, including ISKCON (Hare Krishna) as one option among many."
+      "question": "ਕੀ ਇਹ ਸਿਰਫ਼-ਇਸਕੋਨ ਐਪ ਹੈ?",
+      "answer": "ਨਹੀਂ — ਜਪਮ ਵਿੱਚ ਬਹੁਤ ਸਾਰੇ ਸੰਪ੍ਰਦਾਯਾਂ ਦੇ ਦੇਵਤਿਆਂ ਨੂੰ ਸ਼ਾਮਲ ਕੀਤਾ ਗਿਆ ਹੈ, ਜਿਸ ਵਿੱਚ ਇਸਕੋਨ (ਹਰੇ ਕ੍ਰਿਸ਼ਨ) ਵੀ ਸ਼ਾਮਲ ਹਨ।"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "ਇਹ ਲੇਖ ਕੇਵਲ ਵਿਦਿਅਕ ਅਤੇ ਭਗਤੀ ਅਭਿਆਸ ਲਈ ਹੈ। Japam ਡਾਕਟਰੀ, ਕਾਨੂੰਨੀ, ਜਾਂ ਵਿੱਤੀ ਸਲਾਹ ਪ੍ਰਦਾਨ ਨਹੀਂ ਕਰਦਾ ਹੈ। ਨਤੀਜੇ ਨਿੱਜੀ ਵਿਸ਼ਵਾਸ ਅਤੇ ਨਿਰੰਤਰ ਅਭਿਆਸ 'ਤੇ ਨਿਰਭਰ ਕਰਦੇ ਹਨ। ਐਪ ਵਿੱਚ ਮੰਤਰ ਪਾਠ ਅਤੇ ਆਡੀਓ ਜਪਾ ਸਮਰਥਨ ਲਈ ਹਨ; ਰਸਮੀ ਪੂਜਾ ਨਿਯਮਾਂ ਲਈ ਆਪਣੇ ਪਰਿਵਾਰਕ ਪੁਜਾਰੀ ਜਾਂ ਪਰੰਪਰਾ ਨਾਲ ਸਲਾਹ ਕਰੋ।"
   },
   "relatedPages": [
     {
       "pageId": "japa-108-times",
-      "label": "108 japa guide"
+      "label": "108 ਜਪ ਗਾਈਡ"
     },
     {
       "pageId": "maha-japa-yagna",
-      "label": "Maha Japa Yagna"
+      "label": "ਮਹਾ ਜਪ ਯੱਗ"
     }
   ]
 }

@@ -4,27 +4,27 @@
   "lang": "ur",
   "slug": "lakshmi-mantra-money",
   "deityId": "lakshmi",
-  "primaryKeyword": "lakshmi mantra for money",
+  "primaryKeyword": "پیسے کے لئے لکشمی منتر",
   "secondaryKeywords": [
-    "mahalakshmi mantra",
-    "friday lakshmi mantra",
-    "wealth mantra 108"
+    "مہالکشمی منتر",
+    "جمعہ لکشمی منتر",
+    "دولت کا منتر 108"
   ],
   "meta": {
-    "title": "Lakshmi Mantra for Prosperity — 108 Japa | Japam",
-    "description": "Mahalakshmi mantra meaning, Friday tradition, and digital japa with Japam — educational, not quick riches.",
+    "title": "خوشحالی کے لیے لکشمی منتر - 108 Japa | جاپم",
+    "description": "مہالکشمی منتر کا مطلب، جمعہ کی روایت، اور Japam کے ساتھ ڈیجیٹل جاپ - تعلیمی، فوری دولت نہیں۔",
     "ogImage": "/images/deities/lakshmi.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Lakshmi Mantra for Prosperity and Gratitude"
+      "text": "خوشحالی اور شکر گزاری کے لیے لکشمی منتر"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Goddess Lakshmi is honoured as the source of auspiciousness, abundance, and dharma-aligned wealth. Devotees chant her mantra with gratitude rather than greed."
+          "text": "دیوی لکشمی کو نیکی، کثرت اور دھرم سے منسلک دولت کے منبع کے طور پر عزت دی جاتی ہے۔ عقیدت مند لالچ کی بجائے شکر گزاری کے ساتھ اس کے منتر کا جاپ کرتے ہیں۔"
         }
       ]
     },
@@ -32,13 +32,13 @@
       "type": "p",
       "runs": [
         {
-          "text": "This guide shares the mantra used in Japam, how to complete 108 japa, and Friday traditions — without promising instant riches."
+          "text": "یہ گائیڈ Japam میں استعمال ہونے والے منتر، 108 japa مکمل کرنے کے طریقے، اور جمعہ کی روایات کا اشتراک کرتی ہے - فوری دولت کا وعدہ کیے بغیر۔"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "منتر کا مفہوم"
     },
     {
       "type": "blockquote",
@@ -53,57 +53,102 @@
       "type": "p",
       "runs": [
         {
-          "text": "Chant with a calm mind, offering salutation (Namaha) rather than demanding outcomes."
+          "text": "پُرسکون ذہن کے ساتھ نعرہ لگائیں، نتائج کا مطالبہ کرنے کی بجائے سلام پیش کریں۔"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "جاپ کے فوائد (روایتی نقطہ نظر)"
     },
     {
       "type": "ul",
       "items": [
-        "Cultivates contentment and generosity alongside material goals",
-        "Friday (Shukravar) is widely observed for Lakshmi worship",
-        "Supports focus before work or business puja",
-        "Pairs with clean home altar and lamp offering in many homes"
+        "مادی اہداف کے ساتھ ساتھ قناعت اور سخاوت پیدا کرتا ہے۔",
+        "جمعہ (شکروار) لکشمی کی پوجا کے لیے بڑے پیمانے پر منایا جاتا ہے۔",
+        "کام یا کاروباری پوجا سے پہلے توجہ مرکوز کرنے کی حمایت کرتا ہے۔",
+        "بہت سے گھروں میں صاف گھر کی قربان گاہ اور چراغ کی پیشکش کے ساتھ جوڑے"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "108 مرتبہ پڑھنے کا طریقہ"
     },
     {
       "type": "ul",
       "items": [
-        "Light a lamp if convenient; sit facing east or north",
-        "Chant 108 times using a lotus-seed or sphatik mala",
-        "Visualise golden light or the deity’s peaceful form",
-        "End with thanks to your ishta devata"
+        "اگر آسان ہو تو چراغ جلائیں۔ مشرق یا شمال کی طرف منہ کر کے بیٹھو",
+        "کمل کے بیج یا اسفتک مالا کا استعمال کرتے ہوئے 108 بار جاپ کریں۔",
+        "سنہری روشنی یا دیوتا کی پرامن شکل کا تصور کریں۔",
+        "اپنے استاذ دیوتا کے شکریہ کے ساتھ ختم کریں۔"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "کب نعرہ لگانا ہے۔"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Friday evening is popular; some chant daily during Navratri or Diwali weeks."
+          "text": "جمعہ کی شام مقبول ہے؛ کچھ نوراتری یا دیوالی کے ہفتوں کے دوران روزانہ جاپ کرتے ہیں۔"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "108 تکرار کیوں اہم ہے۔",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Japam plays Om Sri Mahalakshmyai Namaha as you match gems — a playful way to keep count toward 108. Try guest mode or sign in to save progress.",
+          "text": "نمبر 108 جاپ مالا پر ایک مکمل دور ہے۔ مسلسل تکرار ذہن کو پرسکون کرتی ہے اور منتر کے معنی پر توجہ مرکوز کرتی ہے۔"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "کچھ روایات 11 یا 21 مالوں کی تجویز کرتی ہیں - اپنے گرو یا پجاری سے اپنی منت کے مطابق گنتی کے لیے پوچھیں۔"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "عام غلطیوں سے بچنا ہے۔"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "بہت تیز گانا اور آواز پر توجہ کھو دینا",
+        "ہدایت کے بغیر متعدد دیوتا منتوں کو ملانا",
+        "بھکتی اور اخلاقی زندگی کے بجائے صرف مادی نتائج کی توقع کرنا"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "مندر اور گھر کی مشق ایک ساتھ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ہوم جاپا مندر کی پوجا کی حمایت کرتا ہے۔ یہ درشن کی جگہ نہیں لیتا۔ تہوار کے دنوں یا ہفتہ کے دن مندر جانا خاندانی روایت کو مضبوط کرتا ہے۔"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Japam کے ساتھ مشق کریں۔"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "جب آپ جواہرات سے ملتے ہیں تو Japam Om Sri Mahalakshmyai Namaha چلاتا ہے - 108 تک گنتی رکھنے کا ایک چنچل طریقہ۔ گیسٹ موڈ آزمائیں یا ترقی کو بچانے کے لیے سائن ان کریں۔",
           "bold": false
         }
       ]
@@ -113,7 +158,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start لکشمی Japa in Japam",
+      "label": "Start Lakshmi Japa in Japam",
       "href": "https://japam.digital/?lang=ur&deity=lakshmi&utm_source=google&utm_medium=seo&utm_campaign=lakshmi-mantra-money&utm_content=start-japa",
       "style": "primary"
     },
@@ -141,41 +186,41 @@
   ],
   "faqs": [
     {
-      "question": "Which Lakshmi mantra is best?",
-      "answer": "Om Sri Mahalakshmyai Namaha is common; your family may use Sri Suktam or other stotras."
+      "question": "کون سا لکشمی منتر بہترین ہے؟",
+      "answer": "اوم سری مہالکشمیائی نامہ عام ہے؛ آپ کا خاندان سری سکتم یا دیگر ستوتر استعمال کر سکتا ہے۔"
     },
     {
-      "question": "Will mantra clear debt overnight?",
-      "answer": "Japam does not guarantee financial outcomes. Steady practice and righteous action are the traditional path."
+      "question": "کیا منتر راتوں رات قرض صاف کرے گا؟",
+      "answer": "Japam مالیاتی نتائج کی ضمانت نہیں دیتا۔ ثابت قدمی اور عمل صالح روایتی راستہ ہے۔"
     },
     {
-      "question": "Can men chant Lakshmi mantra?",
-      "answer": "Yes — Lakshmi is worshipped by all devotees."
+      "question": "کیا مرد لکشمی منتر کا جاپ کر سکتے ہیں؟",
+      "answer": "ہاں — لکشمی کی پوجا تمام عقیدت مند کرتے ہیں۔"
     },
     {
-      "question": "How many malas per day?",
-      "answer": "One mala (108) daily is a strong start; festivals may invite more under guidance."
+      "question": "روزانہ کتنے مالے؟",
+      "answer": "روزانہ ایک مالا (108) ایک مضبوط آغاز ہے۔ تہوار رہنمائی کے تحت مزید دعوت دے سکتے ہیں۔"
     },
     {
-      "question": "Is Friday mandatory?",
-      "answer": "Friday is customary; sincere daily japa is also valued."
+      "question": "کیا جمعہ فرض ہے؟",
+      "answer": "جمعہ کا رواج ہے؛ مخلص روزانہ japa بھی قابل قدر ہے."
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "یہ مضمون صرف تعلیمی اور عقیدتی مشق کے لیے ہے۔ Japam طبی، قانونی، یا مالی مشورہ فراہم نہیں کرتا ہے۔ نتائج کا انحصار ذاتی ایمان اور مستقل مشق پر ہوتا ہے۔ ایپ میں منتر کا متن اور آڈیو جاپا سپورٹ کے لیے ہیں۔ رسمی پوجا کے قواعد کے لیے اپنے خاندانی پجاری یا روایت سے مشورہ کریں۔"
   },
   "relatedPages": [
     {
       "pageId": "mantra-lakshmi",
-      "label": "Lakshmi mantra pillar"
+      "label": "لکشمی منتر کا ستون"
     },
     {
       "pageId": "diwali-lakshmi-japa",
-      "label": "Diwali Lakshmi japa"
+      "label": "دیوالی لکشمی جاپا"
     },
     {
       "pageId": "mantra-for-debt-relief",
-      "label": "Debt relief mantra guide"
+      "label": "قرض سے نجات کا منتر گائیڈ"
     }
   ]
 }

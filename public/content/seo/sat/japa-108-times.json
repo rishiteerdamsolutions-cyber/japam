@@ -4,34 +4,34 @@
   "lang": "sat",
   "slug": "japa-108-times",
   "deityId": null,
-  "primaryKeyword": "108 japa how to count mantra",
+  "primaryKeyword": "᱑᱐᱘ ᱡᱟᱯᱟ ᱪᱮᱫ ᱞᱮᱠᱟ ᱢᱟᱱᱛᱨᱚ ᱞᱮᱠᱷᱟᱜᱼᱟ",
   "secondaryKeywords": [
-    "japa mala 108",
-    "how to count japa",
-    "digital japa counter"
+    "ᱡᱟᱯᱟ ᱢᱟᱞᱟ ᱑᱐᱘",
+    "ᱡᱟᱯᱟ ᱪᱮᱫ ᱞᱮᱠᱟ ᱞᱮᱠᱷᱟᱜᱼᱟ",
+    "ᱰᱤᱡᱤᱴᱟᱞ ᱡᱟᱯᱟ ᱠᱟᱣᱩᱱᱴᱟᱨ"
   ],
   "meta": {
-    "title": "108 Japa — How to Count Mantra Repetitions | Japam",
-    "description": "Learn why Hindus chant mantras 108 times, mala rules, and how Japam helps you count digital japa.",
+    "title": "᱑᱐᱘ ᱡᱟᱯᱟ — ᱢᱟᱱᱛᱨᱟ ᱫᱚᱦᱲᱟ ᱪᱮᱫ ᱞᱮᱠᱟ ᱞᱮᱠᱷᱟ ᱦᱩᱭᱩᱜᱼᱟ | ᱡᱟᱯᱟᱢ",
+    "description": "ᱵᱟᱰᱟᱭ ᱢᱮ ᱪᱮᱫᱟᱜ ᱦᱤᱱᱫᱷᱩ ᱠᱚ ᱑᱐᱘ ᱫᱷᱟᱣ ᱢᱟᱱᱛᱨᱚ ᱠᱚ ᱪᱟᱵᱟᱭᱟ, ᱢᱟᱞᱟ ᱱᱤᱭᱚᱢ, ᱟᱨ ᱪᱮᱫ ᱞᱮᱠᱟ ᱡᱟᱯᱟᱢ ᱰᱤᱡᱤᱴᱟᱞ ᱡᱟᱯ ᱞᱮᱠᱷᱟ ᱜᱚᱲᱚ ᱮᱢᱟᱢᱟ᱾",
     "ogImage": "/images/favicon.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "108 Japa: How to Count Mantra Repetitions"
+      "text": "᱑᱐᱘ ᱡᱟᱯᱟ: ᱢᱟᱱᱛᱨᱟ ᱫᱚᱦᱲᱟ ᱪᱮᱫ ᱞᱮᱠᱟ ᱞᱮᱠᱷᱟᱜᱼᱟ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "In Hindu practice, "
+          "text": "ᱦᱤᱱᱫᱷᱩ ᱦᱮᱣᱟ ᱨᱮ,"
         },
         {
-          "text": "108",
+          "text": "᱑᱐᱘",
           "bold": true
         },
         {
-          "text": " is a sacred number for mantra japa. One full mala usually has 108 beads — each bead is one repetition of your chosen mantra."
+          "text": "ᱢᱟᱱᱛᱨᱚ ᱡᱟᱯᱟ ᱞᱟᱹᱜᱤᱫ ᱥᱚᱱᱚᱛ ᱮᱞ ᱠᱟᱱᱟ ᱾ ᱢᱤᱫ ᱯᱩᱨᱟᱹ ᱢᱟᱞᱟ ᱨᱮ ᱑᱐᱘ ᱜᱚᱴᱟᱝ ᱢᱟᱹᱭᱞᱟᱹ ᱛᱟᱦᱮᱱᱟ - ᱥᱟᱱᱟᱢ ᱢᱟᱹᱭᱞᱟᱹ ᱜᱮ ᱟᱢ ᱵᱟᱪᱷᱟᱣ ᱟᱠᱟᱱ ᱢᱟᱱᱛᱨᱚ ᱨᱮᱭᱟᱜ ᱢᱤᱫ ᱫᱚᱦᱲᱟ ᱠᱟᱱᱟ ᱾"
         }
       ]
     },
@@ -39,101 +39,147 @@
       "type": "p",
       "runs": [
         {
-          "text": "Whether you use a physical rosary or a digital counter, steady rhythm and focused attention matter more than speed."
+          "text": "ᱪᱟᱦᱮ ᱟᱢ ᱯᱷᱤᱡᱤᱠᱟᱞ ᱨᱚᱡᱟᱨᱤ ᱥᱮ ᱰᱤᱡᱤᱴᱟᱞ ᱠᱟᱣᱩᱱᱴᱟᱨ ᱵᱮᱵᱷᱟᱨ ᱢᱮ, ᱥᱴᱮᱰᱤ ᱨᱤᱫᱟᱢ ᱟᱨ ᱯᱷᱚᱠᱟᱥᱰ ᱫᱷᱭᱟᱱ ᱫᱚ ᱥᱯᱤᱰ ᱠᱷᱚᱱ ᱵᱟᱹᱲᱛᱤ ᱢᱮᱱᱟᱜᱼᱟ᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Why 108?"
+      "text": "ᱪᱮᱫᱟᱜ ᱑᱐᱘?"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Traditions link 108 to cosmic symbolism — 27 nakshatras × 4 padas, 108 Upanishads cited in some lists, and the idea of a complete cycle. Practically, 108 is long enough to settle the mind without being unmanageable for daily sadhana."
+          "text": "ᱯᱚᱨᱚᱵ ᱠᱚ ᱫᱚ 108 ᱠᱚ ᱵᱨᱚᱢᱤᱠ ᱥᱤᱢᱵᱚᱞ ᱥᱟᱶ ᱡᱚᱲᱟᱣ ᱮᱫᱟ — 27 ᱱᱟᱠᱥᱟᱛ × 4 ᱯᱟᱫᱟ, 108 ᱩᱯᱟᱱᱤᱥ ᱠᱚ ᱫᱚ ᱛᱤᱱᱟᱹᱜ ᱜᱟᱱ ᱥᱩᱪᱤ ᱨᱮ ᱩᱫᱩᱜ ᱟᱠᱟᱱᱟ, ᱟᱨ ᱢᱤᱫ ᱯᱩᱨᱟᱹ ᱪᱟᱠᱨᱟ ᱨᱮᱭᱟᱜ ᱵᱤᱪᱟᱹᱨ᱾ ᱯᱨᱮᱠᱴᱤᱠᱟᱞᱤ ᱞᱮᱠᱟᱛᱮ, ᱑᱐᱘ ᱫᱚ ᱫᱤᱱᱟᱹᱢ ᱥᱟᱫᱷᱟᱱᱟ ᱞᱟᱹᱜᱤᱫ ᱵᱟᱝ ᱵᱮᱵᱷᱟᱨ ᱠᱟᱛᱮ ᱢᱚᱱᱮ ᱛᱷᱟᱯᱚᱱ ᱞᱟᱹᱜᱤᱫ ᱰᱷᱮᱨ ᱜᱮᱭᱟ᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of counted japa"
+      "text": "ᱞᱮᱠᱷᱟ ᱡᱟᱯᱟ ᱨᱮᱭᱟᱜ ᱞᱟᱵᱷ"
     },
     {
       "type": "ul",
       "items": [
-        "Builds discipline and measurable daily practice",
-        "Helps withdraw attention from distraction",
-        "Supports vow (sankalpa) completion — e.g. 108 for a deity",
-        "Pairs well with breath awareness in silent japa"
+        "ᱰᱤᱥᱤᱯᱞᱤᱱ ᱟᱨ ᱡᱚᱠᱷᱟ ᱞᱮᱠᱟᱱ ᱫᱤᱱᱟᱹᱢ ᱦᱮᱣᱟ ᱛᱮᱭᱟᱨ ᱢᱮ",
+        "ᱵᱷᱮᱫᱽᱵᱷᱟᱵᱽ ᱠᱷᱚᱱ ᱫᱷᱭᱟᱱ ᱚᱪᱚᱜ ᱞᱟᱹᱜᱤᱫ ᱜᱚᱲᱚ ᱮᱢᱚᱜ ᱠᱟᱱᱟ",
+        "ᱵᱟᱛᱟᱣ (ᱥᱟᱱᱠᱟᱞᱯᱟ) ᱯᱩᱨᱟᱹᱣ ᱞᱟᱹᱜᱤᱫ ᱜᱚᱲᱚ ᱮᱢᱚᱜ ᱠᱟᱱᱟ — ᱡᱮᱢᱚᱱ ᱾ ᱑᱐᱘ ᱢᱤᱫ ᱵᱚᱝᱜᱟ ᱞᱟᱹᱜᱤᱫ",
+        "ᱡᱤᱞᱤᱧ ᱡᱟᱯᱟ ᱨᱮ ᱥᱟᱦᱮᱫ ᱡᱟᱜᱽᱣᱟᱨ ᱥᱟᱶ ᱱᱟᱯᱟᱭ ᱛᱮ ᱡᱚᱲᱟᱣ ᱢᱮ"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "᱑᱐᱘ ᱫᱷᱟᱣ ᱪᱮᱫ ᱞᱮᱠᱟ ᱥᱮᱨᱮᱧ ᱦᱩᱭᱩᱜ-ᱟ"
     },
     {
       "type": "ol",
       "items": [
-        "Hold the mala in your right hand; do not cross the meru (guru) bead.",
-        "Start after the meru; move one bead per mantra.",
-        "At 108, you may reverse direction without crossing the meru, or stop per your tradition.",
-        "If you lose count, many restart the round rather than guess."
+        "ᱟᱢᱟᱜ ᱡᱚᱡᱚᱢ ᱛᱤ ᱨᱮ ᱢᱟᱞᱟ ᱥᱟᱵ ᱢᱮ; ᱢᱮᱨᱩ (ᱜᱩᱨᱩ) ᱢᱟᱹᱭᱞᱟᱹ ᱟᱞᱚᱢ ᱯᱟᱨᱚᱢᱟ᱾",
+        "ᱢᱮᱨᱩ ᱛᱟᱭᱚᱢ ᱮᱦᱚᱵᱽ ᱢᱮ; ᱢᱟᱱᱛᱨᱚ ᱯᱤᱪᱷᱤ ᱢᱤᱫ ᱢᱟᱹᱭᱞᱟᱹ ᱥᱟᱦᱟᱣ ᱢᱮ᱾",
+        "᱑᱐᱘ ᱨᱮ, ᱟᱢ ᱢᱮᱨᱩ ᱵᱤᱱ ᱯᱟᱨᱚᱢ ᱠᱟᱛᱮ ᱫᱤᱥᱟᱹ ᱩᱞᱴᱟᱹ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ, ᱟᱨᱵᱟᱝ ᱟᱢᱟᱜ ᱥᱮᱨᱣᱟ ᱞᱮᱠᱟᱛᱮ ᱛᱤᱸᱜᱩ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ ᱾",
+        "ᱡᱩᱫᱤ ᱟᱢ ᱞᱮᱠᱷᱟᱢ ᱟᱫ ᱠᱮᱫᱟ, ᱟᱭᱢᱟ ᱦᱚᱲ ᱟᱴᱠᱟᱨ ᱵᱚᱫᱚᱞ ᱛᱮ ᱜᱩᱞᱟᱹᱰ ᱫᱚᱦᱲᱟ ᱠᱚ ᱮᱛᱚᱦᱚᱵᱟ᱾"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "ᱛᱤᱱᱨᱮ ᱥᱮᱨᱮᱧ ᱦᱩᱭᱩᱜ-ᱟ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Brahma muhurta, evening sandhya, or deity-specific days (e.g. Monday for Shiva, Saturday for Shani) are common. Choose a time you can repeat daily."
+          "text": "ᱵᱨᱚᱦᱢᱟ ᱢᱩᱦᱩᱨᱛᱟ, ᱥᱤᱸᱜᱟᱹᱲ ᱥᱟᱱᱫᱷᱭᱟ, ᱥᱮ ᱵᱚᱝᱜᱟ ᱠᱷᱟᱥ ᱫᱤᱱ (ᱡᱮᱞᱠᱟ ᱥᱤᱣᱟ ᱞᱟᱹᱜᱤᱫ ᱚᱛᱮ ᱢᱟᱦᱟ, ᱥᱟᱱᱤ ᱞᱟᱹᱜᱤᱫ ᱧᱩᱦᱩᱢ ᱢᱟᱦᱟ) ᱫᱚ ᱥᱟᱫᱷᱟᱨᱚᱱ ᱜᱮᱭᱟ᱾ ᱢᱤᱫ ᱚᱠᱛᱚ ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱡᱟᱦᱟᱸ ᱟᱢ ᱫᱤᱱᱟᱹᱢ ᱫᱚᱦᱲᱟ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "᱑᱐᱘ ᱫᱚᱦᱲᱟ ᱪᱮᱫᱟᱜ ᱢᱟᱱᱚᱛ ᱢᱮᱱᱟᱜᱼᱟ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Japam",
+          "text": "ᱟᱹᱰᱤ ᱥᱟᱢᱯᱨᱟᱭᱟ ᱨᱮ, 108 ᱫᱚ ᱢᱤᱫ ᱯᱩᱨᱟᱹ ᱢᱟᱞᱟ ᱨᱟᱩᱱᱰ ᱠᱟᱱᱟ — ᱵᱟᱝ ᱞᱮᱠᱷᱟ ᱠᱟᱛᱮ ᱫᱤᱱᱟᱹᱢ ᱥᱮᱥᱚᱱ ᱵᱚᱱᱫᱚ ᱨᱮᱭᱟᱜ ᱯᱨᱮᱠᱴᱤᱠᱟᱞ ᱰᱟᱦᱟᱨ ᱠᱟᱱᱟ᱾ ᱮᱞ ᱫᱚ ᱥᱤᱢᱟᱹ ᱠᱟᱱᱟ (ᱠᱚᱥᱢᱤᱠ ᱥᱟᱭᱠᱟᱞ, ᱟᱫᱚᱢ ᱪᱮᱫ ᱠᱚ ᱨᱮ ᱱᱟᱰᱤᱥ), ᱢᱮᱱᱠᱷᱟᱱ ᱜᱟᱹᱦᱤᱨ ᱡᱚᱥ ᱫᱚ ᱥᱮᱴᱮᱨ ᱫᱷᱭᱟᱱ ᱠᱟᱱᱟ: ᱢᱤᱫ ᱥᱟᱦᱮᱫ, ᱢᱤᱫ ᱢᱟᱱᱛᱨᱚ, ᱢᱤᱫ ᱚᱠᱛᱚ ᱨᱮ ᱢᱤᱫ ᱢᱟᱹᱭᱞᱟᱹ᱾"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱡᱩᱫᱤ ᱑᱐᱘ ᱯᱩᱭᱞᱩ ᱨᱮ ᱦᱟᱢᱟᱞ ᱵᱩᱡᱷᱟᱹᱣᱜ ᱠᱟᱱᱟ, ᱑᱑ ᱵᱟᱝᱠᱷᱟᱱ ᱒᱗ ᱫᱚᱦᱲᱟ ᱛᱮ ᱮᱦᱚᱵᱽ ᱢᱮ ᱟᱨ ᱦᱟᱯᱛᱟ ᱛᱟᱭᱚᱢ ᱵᱟᱹᱲᱛᱤᱜ ᱢᱮ ᱾ ᱥᱟᱫᱷᱟᱨᱚᱱ ᱫᱤᱱ ᱨᱮ ᱞᱮᱛᱟᱲ ᱛᱟᱦᱮᱱ ᱫᱚ ᱢᱤᱫ ᱜᱟᱹᱦᱤᱨ ᱫᱷᱚᱱ ᱠᱷᱚᱱ ᱦᱚᱸ ᱵᱟᱹᱲᱛᱤ ᱢᱟᱱᱚᱛ ᱛᱟᱦᱮᱱᱟ᱾"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱥᱟᱫᱷᱟᱨᱚᱱ ᱡᱟᱯᱟ ᱵᱷᱩᱞ ᱠᱷᱚᱱ ᱥᱟᱦᱟᱜ ᱞᱟᱹᱜᱤᱫ"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "ᱞᱮᱠᱷᱟ \"ᱢᱩᱪᱟᱹᱫ\" ᱞᱟᱹᱜᱤᱫ ᱢᱟᱱᱛᱨᱚ ᱞᱟᱜᱟᱣ ᱢᱮ - ᱵᱟᱹᱭ ᱵᱟᱹᱭ ᱛᱮ, ᱟᱸᱡᱚᱢᱚᱜ ᱥᱮ ᱢᱚᱱᱮ ᱥᱟᱰᱮ ᱵᱮᱥ ᱜᱮᱭᱟ",
+        "ᱯᱩᱨᱟᱹ ᱢᱟᱞᱟ ᱨᱟᱩᱱᱰ ᱚᱠᱛᱚ ᱨᱮ ᱢᱟᱞᱴᱟᱥᱠᱤᱝ (ᱥᱠᱨᱚᱞᱤᱝ, ᱴᱤᱵᱷᱤ)",
+        "ᱨᱚᱠᱟ ᱡᱤᱱᱤᱥ ᱚᱨᱡᱚ ᱞᱟᱹᱜᱤᱫ ᱡᱟᱯᱟ ᱫᱚ ᱥᱟᱣᱫᱟ ᱞᱮᱠᱟᱛᱮ ᱵᱮᱵᱷᱟᱨ ᱢᱮ",
+        "ᱛᱩᱯᱩᱱ ᱵᱟᱹᱜᱤ/ᱥᱟᱯᱷᱟ ᱴᱷᱟᱶ ᱡᱚᱠᱷᱚᱱ ᱟᱢᱟᱜ ᱥᱮᱨᱣᱟ ᱜᱽᱨᱟᱦᱟ ᱡᱟᱯᱟ ᱞᱟᱹᱜᱤᱫ ᱥᱚᱞᱦᱟ ᱮᱢᱟᱭᱟ",
+        "ᱢᱤᱫ ᱵᱷᱟᱜᱮ ᱦᱟᱴ ᱛᱟᱭᱚᱢ ᱛᱷᱤᱨᱚᱜ ᱢᱮ - ᱜᱽᱨᱟᱦᱟ ᱟᱨ ᱵᱚᱝᱜᱟ ᱵᱷᱟᱵᱽᱱᱟ ᱫᱚ ᱟᱹᱰᱤ ᱜᱷᱟᱹᱲᱤᱡ ᱜᱮᱭᱟ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱥᱟᱱᱠᱟᱞᱯᱟ ᱟᱨ ᱫᱤᱱᱟᱹᱢ ᱜᱮ ᱰᱤᱥᱤᱯᱞᱤᱱ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱮᱛᱚᱦᱚᱵ ᱞᱟᱦᱟᱨᱮ, ᱟᱭᱢᱟ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱠᱚ ᱢᱤᱫ ᱠᱷᱟᱴᱚ ᱥᱟᱱᱠᱟᱞᱯᱟ (ᱦᱩᱫᱤᱥ) ᱠᱚ ᱛᱷᱟᱯᱱᱟᱣᱟ: ᱧᱩᱛᱩᱢ, ᱜᱳᱴᱨᱟ ᱡᱩᱫᱤ ᱞᱟᱹᱜᱩᱜ ᱠᱷᱟᱱ, ᱟᱨ ᱡᱟᱯᱟ ᱨᱮᱭᱟᱜ ᱡᱚᱥ᱾ ᱥᱟᱱᱟᱢ ᱫᱤᱱ ᱢᱤᱫ ᱚᱠᱛᱚ ᱫᱚᱦᱚᱭ ᱢᱮ ᱡᱚᱠᱷᱚᱱ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱜ-ᱟ ᱥᱮᱛᱟᱜ ᱵᱟᱝᱠᱷᱟᱱ ᱥᱤᱸᱜᱟᱹᱲ ᱫᱚ ᱥᱟᱫᱷᱟᱨᱚᱱ ᱜᱮᱭᱟ ᱾ ᱢᱟᱱᱛᱨᱚ ᱫᱚ ᱥᱟᱹᱨᱤ ᱵᱮᱵᱚᱦᱟᱨ, ᱫᱟᱱ, ᱥᱮ ᱥᱮᱣᱟ ᱥᱟᱶᱛᱮ ᱢᱤᱞᱟᱹᱣ ᱢᱮ ᱡᱟᱦᱟᱸ ᱨᱮ ᱟᱢ ᱨᱮᱱ ᱢᱟᱨᱟᱝ ᱦᱚᱲ ᱠᱚ ᱥᱚᱞᱦᱟ ᱮᱢᱟ; ᱡᱟᱯᱟ ᱫᱚ ᱪᱟᱹᱨᱤᱛ ᱥᱟᱯᱚᱨᱴ ᱮᱫᱟᱭ, ᱱᱚᱣᱟ ᱫᱚ ᱴᱷᱤᱠ ᱠᱟᱹᱢᱤ ᱵᱟᱭ ᱵᱚᱫᱚᱞᱟ᱾"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱡᱟᱯᱟᱢ ᱥᱟᱶ ᱯᱨᱮᱠᱴᱤᱥ ᱢᱮ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱡᱟᱯᱟᱢ",
           "bold": true
         },
         {
-          "text": " tracks japa during match-3 play with deity mantra audio. Special 108-japa modes help you complete a full round with on-screen counting — useful when you do not have a mala at hand."
+          "text": "ᱢᱮᱪ-᱓ ᱚᱠᱛᱚ ᱨᱮ ᱡᱟᱯᱟ ᱴᱨᱮᱠ ᱠᱟᱛᱮ ᱵᱚᱸᱜᱟ ᱢᱟᱱᱛᱨᱟ ᱚᱰᱤᱭᱳ ᱥᱟᱶ ᱠᱷᱮᱞᱚᱜ ᱠᱟᱱᱟ ᱾ ᱵᱤᱥᱮᱥ 108-ᱡᱟᱯᱟ ᱢᱚᱰ ᱫᱚ ᱟᱢ ᱚᱱᱥᱠᱨᱤᱱ ᱞᱮᱠᱷᱟ ᱥᱟᱶ ᱯᱩᱨᱟᱹ ᱨᱟᱩᱱᱰ ᱯᱩᱨᱟᱹᱣ ᱞᱟᱹᱜᱤᱫ ᱜᱚᱲᱚ ᱮᱢᱟᱢᱟ — ᱡᱚᱠᱷᱚᱱ ᱟᱢᱟᱜ ᱛᱤ ᱨᱮ ᱢᱟᱞᱟ ᱵᱟᱝ ᱛᱟᱦᱮᱱᱟ ᱩᱱ ᱫᱚ ᱞᱟᱹᱠᱛᱤᱭᱟᱱᱟ᱾"
         }
       ]
     }
   ],
   "ctas": [
     {
-      "id": "start-japa",
+      "id": "try-free",
       "position": "above-fold",
-      "label": "Start Japa in Japam",
-      "href": "https://japam.digital/?lang=sat&utm_source=google&utm_medium=seo&utm_campaign=japa-108-times&utm_content=start-japa",
+      "label": "Try 108 Japa free",
+      "href": "https://japam.digital/?lang=sat&try=1&utm_source=google&utm_medium=seo&utm_campaign=japa-108-times&utm_content=try-free",
       "style": "primary"
     },
     {
-      "id": "try-free",
+      "id": "start-japa",
       "position": "after-how-to",
-      "label": "Try Japa without login",
-      "href": "https://japam.digital/?lang=sat&try=1&utm_source=google&utm_medium=seo&utm_campaign=japa-108-times&utm_content=try-free",
+      "label": "Start Japa in Japam",
+      "href": "https://japam.digital/?lang=sat&utm_source=google&utm_medium=seo&utm_campaign=japa-108-times&utm_content=start-japa",
       "style": "secondary"
     },
     {
-      "id": "join-yagna",
+      "id": "all-deities",
       "position": "after-faq",
-      "label": "Join Maha Japa Yagna",
-      "href": "https://japam.digital/menu?lang=sat&utm_source=google&utm_medium=seo&utm_campaign=japa-108-times&utm_content=join-yagna",
+      "label": "Choose your deity",
+      "href": "https://japam.digital/menu?lang=sat&utm_source=google&utm_medium=seo&utm_campaign=japa-108-times&utm_content=all-deities",
       "style": "secondary"
     },
     {
-      "id": "sticky",
+      "id": "start-japa",
       "position": "sticky-footer",
       "label": "Open Japam",
       "href": "https://japam.digital/?lang=sat&utm_source=google&utm_medium=seo&utm_campaign=japa-108-times&utm_content=sticky",
@@ -142,37 +188,37 @@
   ],
   "faqs": [
     {
-      "question": "Can I chant more than 108?",
-      "answer": "Yes — 108 is a standard minimum round. Some sadhakas do 1008 (10 malas) on festivals under guidance."
+      "question": "ᱪᱮᱫ ᱤᱧ ᱑᱐᱘ ᱠᱷᱚᱱ ᱵᱟᱹᱲᱛᱤ ᱥᱮᱨᱮᱧ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ?",
+      "answer": "ᱦᱮᱸ — ᱑᱐᱘ ᱫᱚ ᱢᱤᱫ ᱥᱚᱨᱠᱟᱨᱤ ᱠᱚᱢᱩᱴᱟᱨ ᱜᱩᱞᱟᱹᱰ ᱠᱟᱱᱟ ᱾ ᱛᱤᱱᱟᱹᱜ ᱜᱟᱱ ᱥᱟᱫᱷᱟᱠ ᱑᱐᱐᱘ (᱑᱐ ᱢᱟᱞᱟ) ᱯᱚᱨᱚᱵ ᱨᱮ ᱫᱤᱥᱟᱹ ᱛᱮ ᱠᱚ ᱠᱟᱹᱢᱤᱭᱟ ᱾"
     },
     {
-      "question": "What if I don't have a mala?",
-      "answer": "Use Japam's counter, finger counting, or a written tally. The intention and focus remain the same."
+      "question": "ᱡᱩᱫᱤ ᱤᱧ ᱴᱷᱮᱱ ᱢᱟᱞᱟ ᱵᱟᱝ ᱛᱟᱦᱮᱱ ᱠᱷᱟᱱ ᱫᱚ ᱪᱮᱫ?",
+      "answer": "ᱡᱟᱯᱟᱢ ᱨᱮᱭᱟᱜ ᱠᱟᱣᱩᱱᱴᱟᱨ, ᱠᱟᱹᱴᱩᱵ ᱞᱮᱠᱷᱟ, ᱵᱟᱝᱠᱷᱟᱱ ᱚᱞ ᱟᱠᱟᱱ ᱴᱮᱞᱤ ᱵᱮᱵᱷᱟᱨ ᱢᱮ ᱾ ᱢᱚᱱᱮ ᱟᱨ ᱢᱚᱱᱮ ᱫᱚ ᱥᱚᱢᱟᱱ ᱜᱮ ᱛᱟᱦᱮᱱᱟ ᱾"
     },
     {
-      "question": "Should japa be loud or silent?",
-      "answer": "Both are valid: upamshu (whisper) and manasika (mental) japa are praised for concentration."
+      "question": "ᱡᱟᱯᱟ ᱫᱚ ᱪᱮᱫ ᱟᱹᱰᱤ ᱟᱲᱟᱝ ᱥᱮ ᱛᱷᱤᱨ ᱛᱟᱦᱮᱱ ᱞᱟᱹᱠᱛᱤᱭᱟ?",
+      "answer": "ᱵᱟᱱᱟᱨ ᱜᱮ ᱴᱷᱤᱠ ᱜᱮᱭᱟ: ᱩᱯᱟᱢᱥᱩ (ᱠᱷᱟᱭᱠᱷᱟᱭ) ᱟᱨ ᱢᱟᱱᱟᱥᱤᱠᱟ (ᱢᱚᱱᱥᱤᱠᱟ) ᱡᱟᱯᱟ ᱫᱚ ᱢᱚᱱᱮ ᱞᱟᱹᱜᱤᱫ ᱥᱟᱨᱦᱟᱣ ᱠᱟᱱᱟ᱾"
     },
     {
-      "question": "Does the meru bead count?",
-      "answer": "Usually you do not chant while crossing the meru; you turn back or transfer the mala per your teacher's instruction."
+      "question": "ᱪᱮᱫ ᱢᱮᱨᱩ ᱢᱟᱹᱭᱞᱟᱹ ᱞᱮᱠᱷᱟᱜ ᱠᱟᱱᱟ?",
+      "answer": "ᱟᱢ ᱢᱮᱨᱩ ᱯᱟᱨᱚᱢ ᱚᱠᱛᱮ ᱟᱢ ᱵᱟᱢ ᱥᱮᱨᱮᱧᱟ; ᱟᱢ ᱟᱢ ᱨᱮᱱ ᱢᱟᱪᱮᱛᱟᱜ ᱞᱟᱹᱭ ᱞᱮᱠᱟᱛᱮ ᱢᱟᱞᱟ ᱨᱩᱣᱟᱹᱲ ᱢᱮ ᱵᱟᱝᱠᱷᱟᱱ ᱩᱪᱟᱹᱲ ᱢᱮ ᱾"
     },
     {
-      "question": "Can children do 108 japa?",
-      "answer": "Shorter counts may be better for young children; 108 is common for teens and adults with gentle encouragement."
+      "question": "ᱪᱮᱫ ᱜᱤᱫᱽᱨᱟᱹ ᱠᱚ ᱑᱐᱘ ᱡᱟᱯᱟ ᱠᱚ ᱠᱚᱨᱟᱣ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ?",
+      "answer": "ᱠᱟᱹᱴᱤᱡ ᱜᱤᱫᱽᱨᱟᱹ ᱠᱚ ᱞᱟᱹᱜᱤᱫ ᱠᱷᱟᱴᱚ ᱞᱮᱠᱷᱟ ᱵᱮᱥ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ; ᱑᱐᱘ ᱫᱚ ᱥᱟᱫᱷᱟᱨᱚᱱ ᱜᱮᱭᱟ ᱡᱩᱣᱟᱹᱱ ᱟᱨ ᱦᱟᱲᱟᱢ ᱠᱚ ᱞᱟᱹᱜᱤᱫ ᱞᱮᱵᱽᱲᱮᱡ ᱩᱫᱽᱜᱟᱹᱣ ᱥᱟᱶ ᱾"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "ᱱᱚᱣᱟ ᱚᱱᱚᱞ ᱫᱚ ᱥᱩᱢᱩᱝ ᱥᱮᱪᱮᱫ ᱟᱨ ᱵᱷᱚᱠᱛᱚᱱ ᱦᱮᱣᱟ ᱞᱟᱹᱜᱤᱫ ᱜᱮ ᱾ ᱡᱟᱯᱟᱢ ᱫᱚ ᱪᱤᱠᱤᱥᱟ, ᱟᱹᱭᱤᱱᱤ, ᱟᱨ ᱵᱟᱝ ᱠᱟᱹᱣᱰᱤ ᱥᱚᱞᱦᱟ ᱵᱟᱭ ᱮᱢᱚᱜ ᱠᱟᱱᱟ᱾ ᱚᱨᱡᱚ ᱫᱚ ᱯᱚᱨᱥᱚᱱᱟᱞ ᱯᱟᱹᱛᱭᱟᱹᱣ ᱟᱨ ᱞᱮᱛᱟᱲ ᱦᱮᱣᱟ ᱨᱮ ᱴᱮᱦᱟᱱᱰ ᱢᱮᱱᱟᱜᱼᱟ᱾ ᱮᱯ ᱨᱮ ᱢᱟᱱᱛᱨᱟ ᱚᱱᱚᱞ ᱟᱨ ᱚᱰᱤᱭᱳ ᱫᱚ ᱡᱟᱯᱟ ᱥᱟᱯᱚᱨᱴ ᱞᱟᱹᱜᱤᱫ ᱠᱟᱱᱟ; ᱟᱹᱭᱫᱟᱹᱨᱤ ᱯᱩᱡᱟ ᱟᱹᱨᱤ ᱞᱟᱹᱜᱤᱫ ᱟᱯᱮ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮᱱ ᱯᱟᱭᱡᱤᱴ ᱥᱮ ᱥᱮᱫᱽᱨᱟ ᱥᱚᱞᱦᱟᱭ ᱢᱮ ᱾"
   },
   "relatedPages": [
     {
       "pageId": "online-japa-mantra",
-      "label": "Online japa with Japam"
+      "label": "ᱡᱟᱯᱚᱢ ᱥᱟᱶ ᱚᱱᱞᱟᱭᱤᱱ ᱡᱟᱯᱟ"
     },
     {
       "pageId": "ishta-devata-japa",
-      "label": "Ishta devata japa"
+      "label": "ᱤᱥᱛᱟ ᱫᱮᱣᱟᱛᱟ ᱡᱟᱯᱟ"
     }
   ]
 }

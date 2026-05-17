@@ -4,27 +4,27 @@
   "lang": "pa",
   "slug": "hanuman-jayanti-japa",
   "deityId": "hanuman",
-  "primaryKeyword": "hanuman jayanti japa mantra japa",
+  "primaryKeyword": "ਹਨੂੰਮਾਨ ਜਯੰਤੀ ਜਪ ਮੰਤਰ ਜਪ",
   "secondaryKeywords": [
-    "festival japa",
-    "108 times",
-    "japam"
+    "ਤਿਉਹਾਰ ਜਪਾ",
+    "108 ਵਾਰ",
+    "ਜਾਪਮ"
   ],
   "meta": {
-    "title": "Hanuman Jayanti Japa | Japam",
-    "description": "Hanuman Jayanti Japa — mantra, 108 japa, practise with Japam.",
+    "title": "ਹਨੂੰਮਾਨ ਜੈਅੰਤੀ ਜਪ | ਜਪਮ",
+    "description": "ਹਨੂੰਮਾਨ ਜੈਅੰਤੀ ਜਪ - ਮੰਤਰ, 108 ਜਪ, ਜਪਮ ਨਾਲ ਅਭਿਆਸ ਕਰੋ।",
     "ogImage": "/images/deities/hanuman.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Hanuman Jayanti Japa"
+      "text": "ਹਨੂੰਮਾਨ ਜਯੰਤੀ ਜਪ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Hanuman Jayanti — chant with Ram bhakti. Plan japa in advance; Japam helps you count daily during the season."
+          "text": "ਹਨੂੰਮਾਨ ਜਯੰਤੀ - ਰਾਮ ਭਗਤੀ ਦੇ ਨਾਲ ਜਾਪ ਕਰੋ। ਪਹਿਲਾਂ ਤੋਂ ਜਾਪ ਦੀ ਯੋਜਨਾ ਬਣਾਓ; ਜਾਪਮ ਤੁਹਾਨੂੰ ਸੀਜ਼ਨ ਦੌਰਾਨ ਰੋਜ਼ਾਨਾ ਗਿਣਤੀ ਕਰਨ ਵਿੱਚ ਮਦਦ ਕਰਦਾ ਹੈ।"
         }
       ]
     },
@@ -32,13 +32,13 @@
       "type": "p",
       "runs": [
         {
-          "text": "Festival dates follow the lunar calendar — confirm with local panchang."
+          "text": "ਤਿਉਹਾਰ ਦੀਆਂ ਤਾਰੀਖਾਂ ਚੰਦਰ ਕੈਲੰਡਰ ਦੀ ਪਾਲਣਾ ਕਰਦੀਆਂ ਹਨ - ਸਥਾਨਕ ਪੰਚਾਂਗ ਨਾਲ ਪੁਸ਼ਟੀ ਕਰੋ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "ਮੰਤਰ ਦਾ ਅਰਥ"
     },
     {
       "type": "blockquote",
@@ -53,57 +53,102 @@
       "type": "p",
       "runs": [
         {
-          "text": "Chant with a calm mind, offering salutation rather than demanding specific outcomes."
+          "text": "ਸ਼ਾਂਤ ਮਨ ਨਾਲ ਜਾਪ ਕਰੋ, ਖਾਸ ਨਤੀਜਿਆਂ ਦੀ ਮੰਗ ਕਰਨ ਦੀ ਬਜਾਏ ਨਮਸਕਾਰ ਦੀ ਪੇਸ਼ਕਸ਼ ਕਰੋ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "ਜਪ ਦੇ ਲਾਭ (ਰਵਾਇਤੀ ਵਿਚਾਰ)"
     },
     {
       "type": "ul",
       "items": [
-        "Builds festival discipline",
-        "Deepens deity bhakti",
-        "Community yagnas may align with season",
-        "Educational — not outcome guarantees"
+        "ਤਿਉਹਾਰ ਅਨੁਸ਼ਾਸਨ ਬਣਾਉਂਦਾ ਹੈ",
+        "ਦੇਵੀ ਭਗਤੀ ਨੂੰ ਡੂੰਘਾ ਕਰਦਾ ਹੈ",
+        "ਕਮਿਊਨਿਟੀ ਯੱਗ ਮੌਸਮ ਦੇ ਨਾਲ ਇਕਸਾਰ ਹੋ ਸਕਦੇ ਹਨ",
+        "ਵਿਦਿਅਕ - ਨਤੀਜੇ ਦੀ ਗਰੰਟੀ ਨਹੀਂ"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "108 ਵਾਰ ਜਾਪ ਕਿਵੇਂ ਕਰੀਏ"
     },
     {
       "type": "ul",
       "items": [
-        "Set daily 108 sankalpa for festival period",
-        "Keep fast/vrat rules from your family tradition",
-        "Visit temple when possible",
-        "Use Japam counter between work/study"
+        "ਤਿਉਹਾਰ ਦੀ ਮਿਆਦ ਲਈ ਰੋਜ਼ਾਨਾ 108 ਸੰਕਲਪ ਸੈੱਟ ਕਰੋ",
+        "ਵਰਤ/ਵਰਤ ਦੇ ਨਿਯਮਾਂ ਨੂੰ ਆਪਣੀ ਪਰਿਵਾਰਕ ਪਰੰਪਰਾ ਤੋਂ ਰੱਖੋ",
+        "ਜਦੋਂ ਵੀ ਸੰਭਵ ਹੋਵੇ ਮੰਦਰ ਜਾਓ",
+        "ਕੰਮ/ਪੜ੍ਹਾਈ ਦੇ ਵਿਚਕਾਰ ਜਾਪਮ ਕਾਊਂਟਰ ਦੀ ਵਰਤੋਂ ਕਰੋ"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "ਜਪ ਕਦੋਂ ਕਰਨਾ ਹੈ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Hanuman Jayanti — chant with Ram bhakti."
+          "text": "ਹਨੂੰਮਾਨ ਜਯੰਤੀ - ਰਾਮ ਭਗਤੀ ਦੇ ਨਾਲ ਜਾਪ ਕਰੋ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "108 ਦੁਹਰਾਓ ਮਾਇਨੇ ਕਿਉਂ ਰੱਖਦੇ ਹਨ",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Select the deity in Japam during the festival season for mantra audio and japa tally."
+          "text": "ਸੰਖਿਆ 108 ਜਪ ਮਾਲਾ ਦਾ ਇੱਕ ਪੂਰਾ ਗੇੜ ਹੈ। ਨਿਰੰਤਰ ਦੁਹਰਾਓ ਮਨ ਨੂੰ ਸ਼ਾਂਤ ਕਰਦਾ ਹੈ ਅਤੇ ਮੰਤਰ ਦੇ ਅਰਥਾਂ 'ਤੇ ਧਿਆਨ ਖਿੱਚਦਾ ਹੈ।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ਕੁਝ ਪਰੰਪਰਾਵਾਂ 11 ਜਾਂ 21 ਮਾਲਾ ਨਿਰਧਾਰਤ ਕਰਦੀਆਂ ਹਨ - ਆਪਣੇ ਗੁਰੂ ਜਾਂ ਪੁਜਾਰੀ ਨੂੰ ਤੁਹਾਡੀ ਸੁੱਖਣਾ ਦੇ ਅਨੁਕੂਲ ਗਿਣਤੀ ਲਈ ਪੁੱਛੋ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ਬਚਣ ਲਈ ਆਮ ਗਲਤੀਆਂ"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "ਬਹੁਤ ਤੇਜ਼ੀ ਨਾਲ ਜਾਪ ਕਰਨਾ ਅਤੇ ਆਵਾਜ਼ 'ਤੇ ਧਿਆਨ ਗੁਆਉਣਾ",
+        "ਬਿਨਾਂ ਸੇਧ ਦੇ ਕਈ ਦੇਵਤਿਆਂ ਦੀਆਂ ਸੁੱਖਣਾਂ ਨੂੰ ਮਿਲਾਉਣਾ",
+        "ਭਗਤੀ ਅਤੇ ਨੈਤਿਕ ਜੀਵਨ ਦੀ ਬਜਾਏ ਕੇਵਲ ਭੌਤਿਕ ਨਤੀਜਿਆਂ ਦੀ ਉਮੀਦ ਕਰਨਾ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ਮੰਦਰ ਅਤੇ ਘਰ ਇਕੱਠੇ ਅਭਿਆਸ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ਘਰ ਜਾਪ ਮੰਦਰ ਪੂਜਾ ਦਾ ਸਮਰਥਨ ਕਰਦਾ ਹੈ; ਇਹ ਦਰਸ਼ਨ ਦੀ ਥਾਂ ਨਹੀਂ ਲੈਂਦਾ। ਤਿਉਹਾਰਾਂ ਦੇ ਦਿਨ ਜਾਂ ਸ਼ਨੀਵਾਰ ਨੂੰ ਮੰਦਰ ਜਾਣਾ ਪਰਿਵਾਰਕ ਪਰੰਪਰਾ ਨੂੰ ਮਜ਼ਬੂਤ ​​ਕਰਦਾ ਹੈ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ਜਪਮ ਨਾਲ ਅਭਿਆਸ ਕਰੋ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ਮੰਤਰ ਆਡੀਓ ਅਤੇ ਜਪ ਤਾਲੀ ਲਈ ਤਿਉਹਾਰ ਦੇ ਮੌਸਮ ਵਿੱਚ ਜਪਮ ਵਿੱਚ ਦੇਵਤੇ ਦੀ ਚੋਣ ਕਰੋ।"
         }
       ]
     }
@@ -112,7 +157,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start ਹਨੂਮਾਨ Japa in Japam",
+      "label": "Start Hanuman Japa in Japam",
       "href": "https://japam.digital/?lang=pa&deity=hanuman&utm_source=google&utm_medium=seo&utm_campaign=hanuman-jayanti-japa&utm_content=start-japa",
       "style": "primary"
     },
@@ -140,41 +185,41 @@
   ],
   "faqs": [
     {
-      "question": "Exact festival date this year?",
-      "answer": "Check Hindu panchang for your region — we avoid locking a Gregorian year in this guide."
+      "question": "ਇਸ ਸਾਲ ਤਿਉਹਾਰ ਦੀ ਸਹੀ ਤਾਰੀਖ?",
+      "answer": "ਆਪਣੇ ਖੇਤਰ ਲਈ ਹਿੰਦੂ ਪੰਚਾਂਗ ਦੀ ਜਾਂਚ ਕਰੋ - ਅਸੀਂ ਇਸ ਗਾਈਡ ਵਿੱਚ ਗ੍ਰੇਗੋਰੀਅਨ ਸਾਲ ਨੂੰ ਲਾਕ ਕਰਨ ਤੋਂ ਬਚਦੇ ਹਾਂ।"
     },
     {
-      "question": "How many japas per day?",
-      "answer": "108 minimum for many vows; some do 1008 on main day under guidance."
+      "question": "ਪ੍ਰਤੀ ਦਿਨ ਕਿੰਨੇ ਜਾਪ?",
+      "answer": "108 ਕਈ ਸੁੱਖਣਾ ਲਈ ਘੱਟੋ-ਘੱਟ; ਕੁਝ ਮਾਰਗਦਰਸ਼ਨ ਵਿੱਚ ਮੁੱਖ ਦਿਨ 1008 ਕਰਦੇ ਹਨ।"
     },
     {
-      "question": "Guest mode OK?",
-      "answer": "Yes for try; sign in to save progress across festival weeks."
+      "question": "ਮਹਿਮਾਨ ਮੋਡ ਠੀਕ ਹੈ?",
+      "answer": "ਹਾਂ ਕੋਸ਼ਿਸ਼ ਕਰਨ ਲਈ; ਤਿਉਹਾਰ ਦੇ ਹਫ਼ਤਿਆਂ ਵਿੱਚ ਤਰੱਕੀ ਨੂੰ ਬਚਾਉਣ ਲਈ ਸਾਈਨ ਇਨ ਕਰੋ।"
     },
     {
-      "question": "Replace temple?",
-      "answer": "No — digital japa supports home practice."
+      "question": "ਮੰਦਰ ਬਦਲੋ?",
+      "answer": "ਨਹੀਂ — ਡਿਜੀਟਲ ਜਾਪਾ ਘਰੇਲੂ ਅਭਿਆਸ ਦਾ ਸਮਰਥਨ ਕਰਦਾ ਹੈ।"
     },
     {
-      "question": "Join collective yagna?",
-      "answer": "See Maha Japa Yagnas in Japam menu during campaigns."
+      "question": "ਸਮੂਹਿਕ ਯੱਗ ਵਿੱਚ ਸ਼ਾਮਲ ਹੋਵੋ?",
+      "answer": "ਮੁਹਿੰਮਾਂ ਦੌਰਾਨ ਜਪਮ ਮੀਨੂ ਵਿੱਚ ਮਹਾ ਜਪ ਯੱਗ ਵੇਖੋ।"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "ਇਹ ਲੇਖ ਕੇਵਲ ਵਿਦਿਅਕ ਅਤੇ ਭਗਤੀ ਅਭਿਆਸ ਲਈ ਹੈ। Japam ਡਾਕਟਰੀ, ਕਾਨੂੰਨੀ, ਜਾਂ ਵਿੱਤੀ ਸਲਾਹ ਪ੍ਰਦਾਨ ਨਹੀਂ ਕਰਦਾ ਹੈ। ਨਤੀਜੇ ਨਿੱਜੀ ਵਿਸ਼ਵਾਸ ਅਤੇ ਨਿਰੰਤਰ ਅਭਿਆਸ 'ਤੇ ਨਿਰਭਰ ਕਰਦੇ ਹਨ। ਐਪ ਵਿੱਚ ਮੰਤਰ ਪਾਠ ਅਤੇ ਆਡੀਓ ਜਪਾ ਸਮਰਥਨ ਲਈ ਹਨ; ਰਸਮੀ ਪੂਜਾ ਨਿਯਮਾਂ ਲਈ ਆਪਣੇ ਪਰਿਵਾਰਕ ਪੁਜਾਰੀ ਜਾਂ ਪਰੰਪਰਾ ਨਾਲ ਸਲਾਹ ਕਰੋ।"
   },
   "relatedPages": [
     {
       "pageId": "mantra-hanuman",
-      "label": "Deity mantra guide"
+      "label": "ਦੇਵਤਾ ਮੰਤਰ ਗਾਈਡ"
     },
     {
       "pageId": "japa-108-times",
-      "label": "108 japa guide"
+      "label": "108 ਜਪ"
     },
     {
       "pageId": "online-japa-mantra",
-      "label": "Online japa"
+      "label": "ਆਨਲਾਈਨ ਜਪਾ"
     }
   ]
 }

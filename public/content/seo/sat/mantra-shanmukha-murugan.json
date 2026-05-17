@@ -4,27 +4,27 @@
   "lang": "sat",
   "slug": "mantra-shanmukha-murugan",
   "deityId": "shanmukha",
-  "primaryKeyword": "murugan subramanya mantra",
+  "primaryKeyword": "ᱢᱩᱨᱩᱜᱟᱱ ᱥᱩᱵᱨᱟᱢᱟᱱᱭᱟ ᱢᱟᱱᱛᱨᱚ",
   "secondaryKeywords": [
-    "om saravana bhavaya namaha",
-    "skanda shasti mantra",
-    "tamil murugan japa"
+    "ᱚᱢ ᱥᱟᱨᱟᱵᱟᱱᱟ ᱵᱷᱟᱣᱟᱭᱟ ᱱᱟᱢᱦᱟ",
+    "ᱥᱠᱟᱱᱰᱟ ᱥᱟᱥᱛᱤ ᱢᱟᱱᱛᱨᱚ",
+    "ᱛᱟᱢᱤᱞ ᱢᱩᱨᱩᱜᱟᱱ ᱡᱟᱯᱟ"
   ],
   "meta": {
-    "title": "ᱠᱟᱨᱛᱤᱠ Mantra — 108 Japa | Japam",
-    "description": "ᱠᱟᱨᱛᱤᱠ mantra meaning, 108 japa steps, and practice in Japam.",
+    "title": "ᱢᱩᱨᱩᱜᱟᱱ (ᱥᱟᱱᱢᱩᱠᱟ) ᱢᱟᱱᱛᱨᱟ ᱡᱟᱯᱟ | ᱡᱟᱯᱟᱢ",
+    "description": "ᱥᱩᱵᱨᱟᱢᱟᱱᱭᱟ/ᱢᱩᱨᱩᱜᱟᱱ/ᱥᱠᱟᱱᱰᱟ ᱢᱟᱱᱛᱨᱚ — ᱚᱢ ᱥᱟᱨᱟᱵᱟᱱᱟ ᱵᱷᱟᱣᱟᱭᱟ ᱱᱟᱢᱟᱦᱟ — ᱑᱐᱘ ᱡᱟᱯᱟᱢ ᱨᱮ ᱡᱟᱯᱟ ᱾",
     "ogImage": "/images/deities/shanmukha.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "ᱠᱟᱨᱛᱤᱠ — 108 Japa"
+      "text": "ᱢᱩᱨᱩᱜᱟᱱ ᱢᱟᱱᱛᱨᱚ — ᱚᱢ ᱥᱟᱨᱟᱣᱱᱟ ᱵᱷᱟᱣᱟᱭᱟ ᱱᱟᱢᱟᱦᱟ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Lord Murugan (Shanmukha, Subramanya, Skanda) is the Tamil and pan-Indian god of courage and wisdom. His mantra is central to Skanda Shasti and Thai Poosam."
+          "text": "ᱵᱚᱸᱜᱟ ᱢᱩᱨᱩᱜᱟᱱ (ᱥᱟᱱᱢᱩᱠᱟ, ᱥᱩᱵᱨᱟᱢᱟᱱᱭᱟ, ᱥᱠᱟᱱᱰᱟ) ᱫᱚ ᱛᱟᱢᱤᱞ ᱟᱨ ᱯᱟᱱ-ᱵᱷᱟᱨᱚᱱ ᱥᱟᱦᱚᱥ ᱟᱨ ᱵᱩᱡᱷᱟᱹᱣ ᱨᱮᱱ ᱵᱚᱝᱜᱟ ᱠᱟᱱᱟᱭ᱾ ᱩᱱᱤᱭᱟᱜ ᱢᱟᱱᱛᱨᱚ ᱫᱚ ᱥᱠᱟᱱᱰᱟ ᱥᱟᱥᱛᱤ ᱟᱨ ᱛᱷᱟᱭᱤ ᱯᱩᱥᱚᱢ ᱨᱮ ᱢᱩᱲᱩᱫ ᱢᱮᱱᱟᱜᱼᱟ ᱾"
         }
       ]
     },
@@ -32,13 +32,13 @@
       "type": "p",
       "runs": [
         {
-          "text": "Japam includes Murugan with authentic mantra audio for daily japa."
+          "text": "ᱡᱟᱯᱟᱢ ᱨᱮ ᱫᱤᱱᱟᱹᱢ ᱡᱟᱯᱟ ᱞᱟᱹᱜᱤᱫ ᱯᱨᱚᱢᱟᱱᱴᱤᱠ ᱢᱟᱱᱛᱨᱚ ᱚᱰᱤᱭᱳ ᱥᱟᱶᱛᱮ ᱢᱩᱨᱩᱜᱟᱱ ᱥᱮᱞᱮᱫ ᱢᱮᱱᱟᱜᱼᱟ᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "ᱢᱟᱱᱛᱨᱚ ᱨᱮᱭᱟᱜ ᱢᱮᱱᱮᱛ"
     },
     {
       "type": "blockquote",
@@ -53,57 +53,102 @@
       "type": "p",
       "runs": [
         {
-          "text": "Chant with a calm mind, offering salutation (Namaha) rather than demanding outcomes."
+          "text": "ᱯᱷᱚᱞᱚᱱ ᱠᱚ ᱫᱟᱹᱵᱤ ᱵᱚᱫᱚᱞ ᱠᱟᱛᱮ ᱥᱟᱹᱜᱩᱱ ᱢᱚᱱ ᱛᱮ ᱥᱮᱨᱮᱧ ᱢᱮ, ᱥᱟᱹᱜᱩᱱ ᱮᱢ ᱢᱮ (ᱱᱟᱢᱟᱦᱟ)᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "ᱡᱟᱯᱟ ᱨᱮᱭᱟᱜ ᱞᱟᱵᱷ (ᱯᱚᱨᱚᱢ ᱧᱮᱞᱚᱢ)"
     },
     {
       "type": "ul",
       "items": [
-        "Victory over inner fear — traditional Skanda symbolism",
-        "Tuesday and Shasti days are sacred",
-        "Vel worship and kavadi traditions complement japa",
-        "Students pray for clarity and discipline"
+        "ᱵᱷᱤᱛᱨᱤ ᱵᱚᱛᱚᱨ ᱪᱮᱛᱟᱱ ᱨᱮ ᱡᱤᱛᱠᱟᱹᱨ - ᱥᱮᱫᱽᱨᱟ ᱥᱠᱟᱱᱰᱟ ᱪᱤᱱᱦᱟᱹ",
+        "ᱵᱟᱞᱮ ᱢᱟᱦᱟ ᱟᱨ ᱥᱟᱥᱛᱤ ᱢᱟᱦᱟ ᱫᱚ ᱥᱚᱱᱚᱛ ᱠᱟᱱᱟ",
+        "ᱵᱷᱮᱞ ᱵᱚᱸᱜᱟ ᱟᱨ ᱠᱟᱣᱟᱰᱤ ᱥᱮᱨᱣᱟ ᱠᱚ ᱡᱟᱯᱟ ᱠᱚ ᱯᱩᱨᱟᱹᱣ ᱮᱫᱟ",
+        "ᱯᱟᱹᱴᱷᱩᱣᱟᱹ ᱠᱚ ᱯᱩᱥᱴᱟᱹᱣ ᱟᱨ ᱥᱟᱹᱭᱛᱟᱹᱨ ᱞᱟᱹᱜᱤᱫ ᱠᱚ ᱠᱚᱭᱡᱚᱝᱟ"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "᱑᱐᱘ ᱫᱷᱟᱣ ᱪᱮᱫ ᱞᱮᱠᱟ ᱥᱮᱨᱮᱧ ᱦᱩᱭᱩᱜ-ᱟ"
     },
     {
       "type": "ul",
       "items": [
-        "Chant 108 on Shasti or daily morning",
-        "Offer red flowers if doing puja",
-        "Visit Murugan temple on Thai Poosam when possible",
-        "Track rounds in Japam during commute"
+        "ᱪᱟᱱᱴ ᱑᱐᱘ ᱥᱟᱥᱛᱤ ᱨᱮ ᱵᱟᱝᱠᱷᱟᱱ ᱫᱤᱱᱟᱹᱢ ᱥᱮᱛᱟᱜ",
+        "ᱯᱩᱡᱟ ᱠᱚᱨᱟᱣ ᱠᱷᱟᱱ ᱟᱨᱟᱜ ᱵᱟᱦᱟ ᱮᱢ ᱢᱮ",
+        "ᱡᱚᱠᱷᱚᱱ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ ᱛᱷᱟᱭ ᱯᱩᱥᱟᱢ ᱨᱮ ᱢᱩᱨᱩᱜᱟᱱ ᱢᱟᱱᱫᱤᱨ ᱧᱮᱞ ᱢᱮ",
+        "ᱫᱟᱬᱟ ᱚᱠᱛᱚ ᱨᱮ ᱡᱟᱯᱟᱢ ᱨᱮ ᱴᱨᱟᱠ ᱨᱟᱩᱱᱰ"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "ᱛᱤᱱᱨᱮ ᱥᱮᱨᱮᱧ ᱦᱩᱭᱩᱜ-ᱟ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Skanda Shasti (six days in Aippasi/Tulam month), Thai Poosam, and Tuesdays."
+          "text": "ᱥᱠᱟᱱᱰᱟ ᱥᱟᱥᱛᱤ (ᱟᱭᱯᱯᱟᱥᱤ/ᱛᱩᱞᱟᱢ ᱪᱟᱸᱫᱚ ᱨᱮ ᱛᱩᱨᱩᱭ ᱢᱟᱦᱟᱸ), ᱛᱷᱟᱭᱤ ᱯᱩᱥᱟᱢ, ᱟᱨ ᱵᱟᱞᱮ ᱢᱟᱦᱟ ᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "᱑᱐᱘ ᱫᱚᱦᱲᱟ ᱪᱮᱫᱟᱜ ᱢᱟᱱᱚᱛ ᱢᱮᱱᱟᱜᱼᱟ",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Choose Shanmukha in Japam for Om Saravana Bhavaya Namaha — regional names Murugan/Skanda all point to the same beloved deity.",
+          "text": "᱑᱐᱘ ᱮᱞ ᱫᱚ ᱡᱟᱯᱟ ᱢᱟᱞᱟ ᱨᱮ ᱢᱤᱫ ᱯᱩᱨᱟᱹ ᱜᱩᱞᱟᱹᱭ ᱠᱟᱱᱟ ᱾ ᱛᱷᱤᱨ ᱫᱚᱦᱲᱟ ᱫᱚᱦᱲᱟ ᱛᱮ ᱢᱚᱱᱮ ᱛᱷᱤᱨᱚᱜ ᱟᱨ ᱢᱟᱱᱛᱨᱚ ᱨᱮᱭᱟᱜ ᱢᱮᱱᱮᱛ ᱨᱮ ᱜᱟᱹᱦᱤᱨ ᱫᱷᱭᱟᱱ ᱮᱢᱚᱜ ᱠᱟᱱᱟ᱾"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱛᱤᱱᱟᱹᱜ ᱜᱟᱱ ᱯᱚᱨᱚᱵ ᱑᱑ ᱵᱟᱝᱠᱷᱟᱱ ᱒᱑ ᱢᱟᱞᱟ ᱞᱟᱹᱭ ᱮᱫᱟ - ᱟᱢᱟᱜ ᱜᱩᱨᱩ ᱵᱟᱝᱠᱷᱟᱱ ᱯᱟᱭᱡᱤᱴ ᱴᱷᱮᱱ ᱟᱢᱟᱜ ᱵᱟᱛᱟᱣ ᱞᱮᱠᱟᱱ ᱞᱮᱠᱷᱟ ᱞᱟᱹᱜᱤᱫ ᱠᱩᱞᱤᱭᱮᱢ ᱾"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱥᱟᱫᱷᱟᱨᱚᱱ ᱵᱷᱩᱞ ᱠᱚ ᱠᱷᱚᱱ ᱥᱟᱦᱟᱜ ᱞᱟᱹᱜᱤᱫ"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "ᱟᱹᱰᱤ ᱩᱥᱟᱹᱨᱟ ᱪᱟᱱᱴᱤᱝ ᱟᱨ ᱥᱟᱰᱮ ᱨᱮ ᱯᱷᱚᱠᱟᱥ ᱟᱫ ᱠᱟᱛᱮ",
+        "ᱵᱤᱱ ᱫᱤᱥᱟᱹ ᱛᱮ ᱟᱭᱢᱟ ᱵᱚᱝᱜᱟ ᱠᱚ ᱢᱮᱥᱟᱞ ᱢᱮ",
+        "ᱵᱷᱚᱠᱛᱤ ᱟᱨ ᱱᱮᱭᱟᱱ ᱡᱤᱭᱚᱱ ᱵᱚᱫᱚᱞ ᱠᱟᱛᱮ ᱥᱩᱢᱩᱝ ᱡᱤᱱᱤᱥ ᱚᱨᱡᱚ ᱨᱮᱭᱟᱜ ᱟᱥᱟ ᱢᱮ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱢᱟᱱᱫᱤᱨ ᱟᱨ ᱚᱲᱟᱜ ᱨᱮ ᱢᱤᱫ ᱥᱟᱶᱛᱮ ᱦᱮᱣᱟ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱚᱲᱟᱜ ᱡᱟᱯᱟ ᱢᱟᱱᱫᱤᱨ ᱵᱚᱸᱜᱟ ᱥᱟᱯᱚᱨᱴ ᱮᱫᱟᱭ; ᱱᱚᱣᱟ ᱫᱚ ᱫᱟᱨᱥᱟᱱ ᱵᱟᱭ ᱵᱚᱫᱚᱞᱟ᱾ ᱯᱚᱨᱚᱵ ᱢᱟᱦᱟ ᱥᱮ ᱧᱩᱦᱩᱢ ᱢᱟᱦᱟ ᱦᱤᱞᱚᱜ ᱢᱟᱱᱫᱤᱨ ᱧᱮᱞ ᱛᱮ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮᱭᱟᱜ ᱥᱮᱨᱣᱟ ᱫᱚ ᱠᱮᱴᱮᱡ ᱜᱮᱭᱟ᱾"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱡᱟᱯᱟᱢ ᱥᱟᱶ ᱯᱨᱮᱠᱴᱤᱥ ᱢᱮ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱚᱢ ᱥᱟᱨᱟᱵᱟᱱᱟ ᱵᱷᱟᱣᱟᱭᱟ ᱱᱟᱢᱟᱦᱟ ᱞᱟᱹᱜᱤᱫ ᱡᱟᱯᱟᱢ ᱨᱮ ᱥᱟᱱᱢᱩᱠᱟ ᱵᱟᱪᱷᱟᱣ ᱢᱮ — ᱴᱚᱴᱷᱟ ᱧᱩᱛᱩᱢ ᱢᱩᱨᱩᱜᱟᱱ/ᱥᱠᱟᱱᱰᱟ ᱥᱟᱱᱟᱢ ᱢᱤᱫ ᱫᱩᱞᱟᱹᱲ ᱵᱚᱝᱜᱟ ᱥᱮᱫ ᱩᱫᱩᱜᱟ᱾",
           "bold": false
         }
       ]
@@ -113,7 +158,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start ᱠᱟᱨᱛᱤᱠ Japa in Japam",
+      "label": "Start Shanmukha Japa in Japam",
       "href": "https://japam.digital/?lang=sat&deity=shanmukha&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=start-japa",
       "style": "primary"
     },
@@ -141,41 +186,41 @@
   ],
   "faqs": [
     {
-      "question": "Murugan vs Subramanya?",
-      "answer": "Same deity — regional names."
+      "question": "ᱢᱩᱨᱩᱜᱟᱱ ᱵᱚᱱᱟᱢ ᱥᱩᱵᱨᱟᱢᱟᱱᱭᱟ?",
+      "answer": "ᱢᱤᱫ ᱵᱚᱝᱜᱟ — ᱴᱚᱴᱷᱟᱹᱠᱤᱭᱟᱹ ᱧᱩᱛᱩᱢ ᱠᱚ ᱾"
     },
     {
-      "question": "Tamil or Sanskrit chant?",
-      "answer": "Mantra is Sanskrit; Tamil padigams are separate devotion."
+      "question": "ᱛᱟᱢᱤᱞ ᱥᱮ ᱥᱟᱸᱥᱠᱨᱛ ᱪᱟᱱᱴ?",
+      "answer": "ᱢᱟᱱᱛᱨᱟ ᱫᱚ ᱥᱟᱸᱥᱠᱨᱛ ᱠᱟᱱᱟ; ᱛᱟᱢᱤᱞ ᱯᱟᱰᱤᱜᱟᱢ ᱫᱚ ᱟᱞᱟᱜ ᱵᱷᱚᱨᱠᱚ ᱠᱟᱱᱟ ᱾"
     },
     {
-      "question": "Kavadi and japa together?",
-      "answer": "Many vow japa before kavadi pilgrimage."
+      "question": "ᱠᱟᱣᱟᱰᱤ ᱟᱨ ᱡᱟᱯᱟ ᱢᱤᱫ ᱥᱟᱶᱛᱮ?",
+      "answer": "ᱠᱟᱣᱟᱰᱤ ᱛᱟᱲᱟᱢ ᱥᱟᱸᱜᱷᱟᱨ ᱞᱟᱦᱟᱨᱮ ᱟᱭᱢᱟ ᱦᱚᱲ ᱠᱚ ᱡᱟᱯᱟ ᱠᱚ ᱵᱟᱛᱟᱣᱟ ᱾"
     },
     {
-      "question": "Shasti fasting?",
-      "answer": "Optional — follow temple tradition."
+      "question": "ᱥᱟᱥᱛᱤ ᱩᱥᱟᱹᱨᱟ?",
+      "answer": "ᱚᱯᱥᱚᱱᱟᱞ — ᱢᱟᱱᱫᱤᱨ ᱨᱮᱭᱟᱜ ᱥᱮᱨᱣᱟ ᱯᱟᱧᱡᱟᱭ ᱢᱮ ᱾"
     },
     {
-      "question": "Is vel icon required?",
-      "answer": "Helpful in puja; mental japa needs only focus."
+      "question": "ᱪᱮᱫ ᱣᱮᱞ ᱟᱭᱠᱚᱱ ᱞᱟᱹᱠᱛᱤᱜ ᱠᱟᱱᱟ?",
+      "answer": "ᱯᱩᱡᱟ ᱨᱮ ᱜᱚᱲᱚ; ᱢᱮᱱᱴᱟᱞ ᱡᱟᱯᱟ ᱫᱚ ᱥᱩᱢᱩᱝ ᱯᱷᱚᱠᱟᱥ ᱞᱟᱹᱠᱛᱤ ᱠᱟᱱᱟ ᱾"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "ᱱᱚᱣᱟ ᱚᱱᱚᱞ ᱫᱚ ᱥᱩᱢᱩᱝ ᱥᱮᱪᱮᱫ ᱟᱨ ᱵᱷᱚᱠᱛᱚᱱ ᱦᱮᱣᱟ ᱞᱟᱹᱜᱤᱫ ᱜᱮ ᱾ ᱡᱟᱯᱟᱢ ᱫᱚ ᱪᱤᱠᱤᱥᱟ, ᱟᱹᱭᱤᱱᱤ, ᱟᱨ ᱵᱟᱝ ᱠᱟᱹᱣᱰᱤ ᱥᱚᱞᱦᱟ ᱵᱟᱭ ᱮᱢᱚᱜ ᱠᱟᱱᱟ᱾ ᱚᱨᱡᱚ ᱫᱚ ᱯᱚᱨᱥᱚᱱᱟᱞ ᱯᱟᱹᱛᱭᱟᱹᱣ ᱟᱨ ᱞᱮᱛᱟᱲ ᱦᱮᱣᱟ ᱨᱮ ᱴᱮᱦᱟᱱᱰ ᱢᱮᱱᱟᱜᱼᱟ᱾ ᱮᱯ ᱨᱮ ᱢᱟᱱᱛᱨᱟ ᱚᱱᱚᱞ ᱟᱨ ᱚᱰᱤᱭᱳ ᱫᱚ ᱡᱟᱯᱟ ᱥᱟᱯᱚᱨᱴ ᱞᱟᱹᱜᱤᱫ ᱠᱟᱱᱟ; ᱟᱹᱭᱫᱟᱹᱨᱤ ᱯᱩᱡᱟ ᱟᱹᱨᱤ ᱞᱟᱹᱜᱤᱫ ᱟᱯᱮ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮᱱ ᱯᱟᱭᱡᱤᱴ ᱥᱮ ᱥᱮᱫᱽᱨᱟ ᱥᱚᱞᱦᱟᱭ ᱢᱮ ᱾"
   },
   "relatedPages": [
     {
       "pageId": "skanda-shasti-murugan",
-      "label": "Skanda Shasti"
+      "label": "ᱥᱠᱟᱱᱰᱟ ᱥᱟᱥᱛᱤ"
     },
     {
       "pageId": "japa-108-times",
-      "label": "108 japa guide"
+      "label": "᱑᱐᱘ ᱡᱟᱯᱟ"
     },
     {
       "pageId": "online-japa-mantra",
-      "label": "Online japa"
+      "label": "ᱚᱱᱞᱟᱭᱤᱱ ᱡᱟᱯᱟ"
     }
   ]
 }

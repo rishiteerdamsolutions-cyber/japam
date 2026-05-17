@@ -4,27 +4,27 @@
   "lang": "sd",
   "slug": "ganesh-mantra-success",
   "deityId": "ganesh",
-  "primaryKeyword": "ganesh mantra for success",
+  "primaryKeyword": "ڪاميابي لاء گنيش منتر",
   "secondaryKeywords": [
-    "vinayaka mantra",
-    "om gan ganapataye namah",
-    "obstacle removal mantra"
+    "vinayaka منتر",
+    "اوم گن گنپتائي نم",
+    "رڪاوٽ هٽائڻ جو منتر"
   ],
   "meta": {
-    "title": "Ganesh Mantra for Success & Obstacles | Japam",
-    "description": "Vinayaka/Ganesh mantra for new beginnings, 108 japa method, and practice in Japam.",
+    "title": "ڪاميابي ۽ رڪاوٽن لاءِ گنيش منتر | جپان",
+    "description": "ونائيڪا/گنيش منتر نئين شروعات لاءِ، 108 جپ جو طريقو، ۽ جپم ۾ مشق.",
     "ogImage": "/images/deities/ganesh.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Ganesh Mantra for Success and Obstacle Removal"
+      "text": "ڪاميابي ۽ رڪاوٽ کي ختم ڪرڻ لاء گنيش منتر"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Lord Ganesh (Vinayaka) is invoked at the start of ventures, study, and travel. His mantra clears mental obstacles and invites wisdom."
+          "text": "لارڊ گنيش (ونائيڪا) کي منصوبا، مطالعي ۽ سفر جي شروعات ۾ سڏيو ويندو آهي. هن جو منتر ذهني رڪاوٽون صاف ڪري ٿو ۽ حڪمت کي دعوت ڏئي ٿو."
         }
       ]
     },
@@ -32,13 +32,13 @@
       "type": "p",
       "runs": [
         {
-          "text": "Learn the chant used in Japam and how to practise 108 repetitions with focus."
+          "text": "Japam ۾ استعمال ٿيل راڳ سکو ۽ 108 ورهاڱي کي ڌيان سان ڪيئن مشق ڪجي."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "منتر جي معنيٰ"
     },
     {
       "type": "blockquote",
@@ -53,57 +53,102 @@
       "type": "p",
       "runs": [
         {
-          "text": "Chant with a calm mind, offering salutation (Namaha) rather than demanding outcomes."
+          "text": "پرسڪون ذهن سان گپ ڪريو، نتيجن جو مطالبو ڪرڻ بجاءِ سلام پيش ڪريو (نامها)."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "جاپ جا فائدا (روايتي خيال)"
     },
     {
       "type": "ul",
       "items": [
-        "Traditional first prayer before puja or important work",
-        "Builds confidence and humility together",
-        "Wednesday and Chaturthi are especially sacred",
-        "Students and entrepreneurs alike chant for clarity"
+        "پوجا يا اهم ڪم کان اڳ روايتي پهرين دعا",
+        "اعتماد ۽ عاجزي کي گڏ ڪري ٿو",
+        "اربع ۽ چوٿين خاص طور تي مقدس آهن",
+        "شاگرد ۽ انٽرپرينيوئرز هڪجهڙا وضاحت لاءِ نعرا هڻي رهيا آهن"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "108 ڀيرا ڪيئن ڳايو"
     },
     {
       "type": "ul",
       "items": [
-        "Chant 108 times before beginning a task or after morning bath",
-        "Offer modak or fruit if doing formal puja",
-        "Keep breath steady; pronounce Gaṇapataye clearly",
-        "Use Japam to track count if you lack a mala"
+        "ڪم شروع ڪرڻ کان اڳ يا صبح جو غسل ڪرڻ کان پوءِ 108 ڀيرا ورجايو",
+        "مودڪ يا ميوو پيش ڪريو جيڪڏهن رسمي پوجا ڪري رهيا آهيو",
+        "مسلسل سانس رکو؛ واضح طور تي Gaṇapataye جو تلفظ ڪريو",
+        "ڳڻپ کي ٽريڪ ڪرڻ لاءِ Japam استعمال ڪريو جيڪڏھن توھان وٽ مالا نه آھي"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "جڏهن ڳائڻ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Wednesday, Sankatahara Chaturthi, and Ganesh Chaturthi are key; any sincere morning works."
+          "text": "اربع، Sankatahara Chaturthi، ۽ Ganesh Chaturthi اهم آھن؛ ڪو به مخلص صبح جو ڪم."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "ڇو 108 ورجائي اهميت رکن ٿا",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Select Ganesh in Japam for Om Gan Ganapataye Namah audio during gameplay and japa tally toward 108.",
+          "text": "نمبر 108 جپا مالا تي هڪ مڪمل گول آهي. مسلسل ورهاڱي دماغ کي پرسکون ڪري ٿو ۽ منتر جي معني تي ڌيان ڏئي ٿو."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ڪجھ روايتون 11 يا 21 مالا بيان ڪن ٿيون - پنھنجي گرو يا پادريءَ کان پڇو ته توھان جي واعدي مطابق ڳڻپ لاءِ."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "عام غلطين کان بچڻ لاء"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "آواز تي تمام تيز آواز ۽ ڌيان وڃائڻ",
+        "ھدايت کانسواءِ ڪيترن ئي ديوتائن جون واڳون گڏ ڪرڻ",
+        "ڀڪت ۽ اخلاقي زندگي گذارڻ بدران فقط مادي نتيجن جي اميد رکڻ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "مندر ۽ گهر گڏجي مشق"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "گھر جاپا مندر جي پوڄا جي حمايت ڪري ٿو. اهو درشن کي تبديل نٿو ڪري. عيد جي ڏينهن يا ڇنڇر تي مندر جو دورو ڪرڻ خانداني روايت کي مضبوط ڪري ٿو."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Japam سان مشق ڪريو"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "گيم پلي دوران اوم گان گاناپتي نم جي آڊيو لاءِ جپم ۾ گنيش کي چونڊيو ۽ 108 جي طرف جاپا ٽيلي.",
           "bold": false
         }
       ]
@@ -113,7 +158,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start ڳڻيش Japa in Japam",
+      "label": "Start Ganesh Japa in Japam",
       "href": "https://japam.digital/?lang=sd&deity=ganesh&utm_source=google&utm_medium=seo&utm_campaign=ganesh-mantra-success&utm_content=start-japa",
       "style": "primary"
     },
@@ -141,41 +186,41 @@
   ],
   "faqs": [
     {
-      "question": "Ganesh or Vinayaka — same mantra?",
-      "answer": "Yes — regional names refer to the same deity; mantra form is shared."
+      "question": "گنيش يا ونائيڪا - ساڳيو منتر؟",
+      "answer": "ها - علائقائي نالا هڪ ئي ديوتا ڏانهن اشارو ڪن ٿا؛ منتر فارم ورهايو ويو آهي."
     },
     {
-      "question": "How many times before exam?",
-      "answer": "108 is standard; some chant 11 or 21 rounds under teacher advice."
+      "question": "امتحان کان اڳ ڪيترا ڀيرا؟",
+      "answer": "108 معياري آهي؛ ڪي استادن جي مشوري تحت 11 يا 21 رائونڊ ڪندا آهن."
     },
     {
-      "question": "Can I chant in the evening?",
-      "answer": "Morning is preferred; evening japa is fine with sincerity."
+      "question": "ڇا مان شام جو ڳائي سگهان ٿو؟",
+      "answer": "صبح جو ترجيح ڏني وئي آهي؛ شام جو جپ اخلاص سان ٺيڪ آهي."
     },
     {
-      "question": "Does Japam include Ganesh Chaturthi specials?",
-      "answer": "Check the app specials menu during festival seasons."
+      "question": "ڇا Japam ۾ گنيش چترٿي خاص شامل آهن؟",
+      "answer": "تہوار جي موسمن دوران ايپ خاص مينيو چيڪ ڪريو."
     },
     {
-      "question": "Is modak required?",
-      "answer": "Optional for home japa; festivals often include food offering."
+      "question": "ڇا موڊڪ جي ضرورت آهي؟",
+      "answer": "گھر جي جپا لاء اختياري؛ تہوار اڪثر ڪري کاڌي جي آڇ ۾ شامل آهن."
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "هي مضمون صرف تعليمي ۽ ديني مشق لاءِ آهي. Japam طبي، قانوني، يا مالي صلاح فراهم نٿو ڪري. نتيجن جو دارومدار ذاتي ايمان ۽ مسلسل مشق تي. ايپ ۾ منتر ٽيڪسٽ ۽ آڊيو جاپا سپورٽ لاءِ آهن؛ رسمي پوجا ضابطن لاءِ پنھنجي خانداني پادريءَ يا روايت سان صلاح ڪريو."
   },
   "relatedPages": [
     {
       "pageId": "mantra-ganesh",
-      "label": "Ganesh mantra guide"
+      "label": "گنيش منتر گائيڊ"
     },
     {
       "pageId": "mantra-for-debt-relief",
-      "label": "Financial worries japa"
+      "label": "مالي پريشاني جپان"
     },
     {
       "pageId": "japa-108-times",
-      "label": "108 japa counting"
+      "label": "108 جپان جي ڳڻپ"
     }
   ]
 }

@@ -4,27 +4,27 @@
   "lang": "sa",
   "slug": "mantra-hare-krishna",
   "deityId": "iskcon",
-  "primaryKeyword": "hare krishna mantra japa 108 times",
+  "primaryKeyword": "हरे कृष्ण मंत्र जप 108 बार",
   "secondaryKeywords": [
-    "Hare Krishna mantra",
-    "Hare Krishna japa",
-    "108 times mantra"
+    "हरे कृष्ण मंत्र",
+    "हरे कृष्ण जप",
+    "१०८ गुणा मन्त्र"
   ],
   "meta": {
-    "title": "कृष्णः Mantra — 108 Japa | Japam",
-    "description": "कृष्णः mantra meaning, 108 japa steps, and practice in Japam.",
+    "title": "हरे कृष्ण मंत्र जप 108 बार | जपम्",
+    "description": "हरे कृष्ण मन्त्र अर्थ, १०८ जप चरण, तथा जपम श्रव्य सहित डिजिटल अभ्यास।",
     "ogImage": "/images/deities/iskcon.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "कृष्णः — 108 Japa"
+      "text": "हरे कृष्ण मंत्र तथा १०८ जप"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Hare Krishna bhakti includes steady mantra japa as a foundation of daily practice."
+          "text": "हरे कृष्ण भक्ति में नित्यमभ्यासस्य आधाररूपेण स्थिरमन्त्रजपः अन्तर्भवति।"
         }
       ]
     },
@@ -32,13 +32,13 @@
       "type": "p",
       "runs": [
         {
-          "text": "Japam uses the mantra below during match-3 play with counting toward 108."
+          "text": "जपमः १०८ प्रति गणनेन सह मैच-३ क्रीडायाः समये अधोलिखितस्य मन्त्रस्य उपयोगं करोति ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "मन्त्रार्थः"
     },
     {
       "type": "blockquote",
@@ -53,57 +53,102 @@
       "type": "p",
       "runs": [
         {
-          "text": "Chant with a calm mind, offering salutation rather than demanding specific outcomes."
+          "text": "विशिष्टपरिणामान् आग्रहं न कृत्वा नमस्कारं कृत्वा शान्तचित्तेन जपं कुर्वन्तु।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "जपस्य लाभाः (पारम्परिकदृष्टिकोणः) २."
     },
     {
       "type": "ul",
       "items": [
-        "Builds daily discipline and mental focus",
-        "Deepens bhakti in traditional understanding",
-        "Supports graha or deity vows (sankalpa)",
-        "Complements temple puja — does not replace it"
+        "दैनिकं अनुशासनं मानसिकं ध्यानं च निर्माति",
+        "पारम्परिकबोधे भक्तिं गभीरं करोति",
+        "ग्रहं वा देवव्रतं वा समर्थयति (संकल्पम्) २.",
+        "मन्दिरपूजायाः पूरकः — तस्य स्थाने न भवति"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "१०८ वारं जपं कथं करणीयम्"
     },
     {
       "type": "ul",
       "items": [
-        "Sit in a quiet place with spine straight",
-        "Chant 108 times on a mala (one round)",
-        "Keep attention on the mantra sound and meaning",
-        "Close with gratitude to your ishta devata"
+        "मेरुदण्डं ऋजुं कृत्वा शान्तस्थाने उपविशन्तु",
+        "एकस्मिन् माले (एकं गोलम्) १०८ वारं जपः ।",
+        "मन्त्रध्वनि अर्थे ध्यान रखना",
+        "भवतः इष्टदेवस्य कृतज्ञतापूर्वकं निमील्यताम्"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "कदा जपेत्"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Any sincere daily time works; ask your priest for festival or vrat days specific to this deity."
+          "text": "कोऽपि निष्कपटः दैनन्दिनः समयः कार्यं करोति; अस्य देवस्य विशिष्टं उत्सवं वा व्रतदिनं वा भवतः पुरोहितं पृच्छतु।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "१०८ पुनरावृत्तयः किमर्थं महत्त्वपूर्णाः सन्ति",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Select Hare Krishna in Japam to hear the mantra audio and track your japa count."
+          "text": "१०८ संख्या जपमाले एकः पूर्णगोलः अस्ति । नित्यपुनरावृत्तिः मनः शान्तं करोति, मन्त्रस्य अर्थे ध्यानं गभीरं करोति च ।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "केचन परम्पराः ११ वा २१ वा मालाः विहिताः सन्ति — भवतः गुरुं वा पुरोहितं वा भवतः व्रतस्य अनुकूलानि गणनानि पृच्छन्तु ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "परिहरणीयानि सामान्यानि त्रुटयः"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "अतिशीघ्रं जपं कृत्वा ध्वनिं प्रति ध्यानं नष्टम्",
+        "अनेकदेवव्रतमिश्रणं विना मार्गदर्शनम् |",
+        "भक्ति-नीति-जीवनस्य स्थाने केवलं भौतिक-परिणामस्य अपेक्षा"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मन्दिरं गृहं च एकत्र अभ्यासं कुर्वन्ति"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "गृहं जपः मन्दिरपूजायाः समर्थनं करोति; दर्शनस्य स्थाने न भवति। उत्सवदिनेषु शनिवासरे वा मन्दिरस्य दर्शनं पारिवारिकपरम्परां सुदृढं करोति ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपं सह अभ्यासं कुरुत"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "मन्त्रस्य श्रव्यं श्रुत्वा स्वस्य जपगणनां निरीक्षितुं जपमे हरे कृष्णं चयनं कुर्वन्तु।"
         }
       ]
     }
@@ -112,7 +157,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start कृष्णः Japa in Japam",
+      "label": "Start Iskcon Japa in Japam",
       "href": "https://japam.digital/?lang=sa&deity=iskcon&utm_source=google&utm_medium=seo&utm_campaign=mantra-hare-krishna&utm_content=start-japa",
       "style": "primary"
     },
@@ -140,41 +185,41 @@
   ],
   "faqs": [
     {
-      "question": "How many times should I chant Hare Krishna's mantra?",
-      "answer": "108 repetitions (one mala) is the common standard; some do 11 or 21 malas under guidance."
+      "question": "हरे कृष्णस्य मन्त्रं कतिवारं जपयेत्?",
+      "answer": "१०८ पुनरावृत्तयः (एकः माला) सामान्यः मानकः; केचन मार्गदर्शनेन ११ वा २१ वा मालाः कुर्वन्ति।"
     },
     {
-      "question": "Can I use Japam without signing in?",
-      "answer": "Guest try mode is available from the landing page; sign in to save long-term progress."
+      "question": "किं अहं प्रवेशं विना Japam इत्यस्य उपयोगं कर्तुं शक्नोमि?",
+      "answer": "अतिथिप्रयासविधिः लैण्डिंग् पृष्ठतः उपलभ्यते; दीर्घकालीनप्रगतिः रक्षितुं साइन इन कुर्वन्तु।"
     },
     {
-      "question": "Is this the only mantra for this deity?",
-      "answer": "Your lineage may use stotras or longer mantras; this is the form in the Japam app."
+      "question": "किम् अस्य देवतायाः एकमात्रः मन्त्रः ?",
+      "answer": "भवतः वंशः स्तोत्राणां दीर्घतरमन्त्राणां वा प्रयोगं कर्तुं शक्नोति; एतत् जपम् एप् मध्ये रूपम् अस्ति।"
     },
     {
-      "question": "Does mantra japa replace puja?",
-      "answer": "No — japa supports home practice; formal puja follows your sampradaya."
+      "question": "पूजायाः स्थाने मन्त्रजपः भवति वा ?",
+      "answer": "न — जपः गृहाभ्यासस्य समर्थनं करोति; औपचारिक पूजा भवतः सम्प्रदायम् अनुवर्तते।"
     },
     {
-      "question": "Which direction should I face?",
-      "answer": "East or north is common; consistency matters more than perfect direction."
+      "question": "मया कस्याः दिशि सम्मुखीभवितव्या ?",
+      "answer": "पूर्वोत्तरं वा सामान्यम्; सम्यक् दिशायाः अपेक्षया स्थिरता अधिकं महत्त्वपूर्णा अस्ति।"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "एषः लेखः केवलं शैक्षणिक-भक्ति-अभ्यासार्थम् अस्ति । जपम् चिकित्सा, कानूनी, आर्थिकपरामर्शं न ददाति । परिणामाः व्यक्तिगतविश्वासस्य, निरन्तरं अभ्यासस्य च उपरि निर्भरं भवति। एप् मध्ये मन्त्रपाठः श्रव्यं च जपासमर्थनार्थम् अस्ति; औपचारिकपूजानियमानां कृते स्वपरिवारस्य पुरोहितेन वा परम्परेण वा परामर्शं कुर्वन्तु।"
   },
   "relatedPages": [
     {
       "pageId": "krishna-mantra-peace",
-      "label": "Krishna mantra"
+      "label": "कृष्ण मन्त्र"
     },
     {
       "pageId": "japa-108-times",
-      "label": "108 japa guide"
+      "label": "१०८ जपः"
     },
     {
       "pageId": "online-japa-mantra",
-      "label": "Online japa"
+      "label": "ऑनलाइन जपा"
     }
   ]
 }

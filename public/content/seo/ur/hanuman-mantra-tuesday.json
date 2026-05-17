@@ -4,27 +4,27 @@
   "lang": "ur",
   "slug": "hanuman-mantra-tuesday",
   "deityId": "hanuman",
-  "primaryKeyword": "hanuman mantra tuesday japa",
+  "primaryKeyword": "ہنومان منتر منگل جاپ",
   "secondaryKeywords": [
-    "om sri hanumate namah",
-    "hanuman japa",
-    "hanuman chalisa vs mantra"
+    "اوم سری ہنومتے نامہ",
+    "ہنومان جاپ",
+    "ہنومان چالیسا بمقابلہ منتر"
   ],
   "meta": {
-    "title": "Hanuman Mantra for Tuesday Japa | Japam",
-    "description": "Tuesday Hanuman mantra, 108 japa steps, strength and devotion — practise with Japam audio.",
+    "title": "منگل جاپ کے لیے ہنومان منتر | جاپم",
+    "description": "منگل ہنومان منتر، 108 جاپ قدم، طاقت اور عقیدت — جاپم آڈیو کے ساتھ مشق کریں۔",
     "ogImage": "/images/deities/hanuman.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Hanuman Mantra and Tuesday Japa"
+      "text": "ہنومان منتر اور منگل جاپ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Hanuman embodies strength, service, and Ram bhakti. Tuesday (Mangalvar) is widely dedicated to his worship across India."
+          "text": "ہنومان طاقت، خدمت اور رام بھکتی کو مجسم کرتا ہے۔ منگل (منگلوار) پورے ہندوستان میں ان کی عبادت کے لیے وسیع پیمانے پر وقف ہے۔"
         }
       ]
     },
@@ -32,13 +32,13 @@
       "type": "p",
       "runs": [
         {
-          "text": "This guide covers the core Hanuman mantra in Japam and how to chant it 108 times."
+          "text": "اس گائیڈ میں جاپم میں بنیادی ہنومان منتر اور اسے 108 بار پڑھنے کا طریقہ بتایا گیا ہے۔"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "منتر کا مفہوم"
     },
     {
       "type": "blockquote",
@@ -53,57 +53,102 @@
       "type": "p",
       "runs": [
         {
-          "text": "Chant with a calm mind, offering salutation (Namaha) rather than demanding outcomes."
+          "text": "پُرسکون ذہن کے ساتھ نعرہ لگائیں، نتائج کا مطالبہ کرنے کی بجائے سلام پیش کریں۔"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "جاپ کے فوائد (روایتی نقطہ نظر)"
     },
     {
       "type": "ul",
       "items": [
-        "Courage and steadiness in difficulties",
-        "Protection in traditional folk belief — stated devotionally",
-        "Complements Hanuman Chalisa for those who recite both",
-        "Tuesday fasting or simple puja in many families"
+        "مشکلات میں ہمت اور استقامت",
+        "روایتی لوک عقیدے میں تحفظ - عقیدت کے ساتھ بیان کیا گیا۔",
+        "ان لوگوں کے لئے ہنومان چالیسہ کی تکمیل کرتا ہے جو دونوں کو پڑھتے ہیں۔",
+        "بہت سے خاندانوں میں منگل کا روزہ یا سادہ پوجا"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "108 مرتبہ پڑھنے کا طریقہ"
     },
     {
       "type": "ul",
       "items": [
-        "Face east or the deity image; chant 108 on rudraksha or tulsi mala",
-        "Read Hanuman Chalisa before or after if that is your vow",
-        "Offer sindoor and oil lamp on Tuesday when doing formal puja",
-        "Keep body and speech calm during japa"
+        "مشرق یا دیوتا کی تصویر کا چہرہ؛ ردرکشا یا تلسی مالا پر 108 کا جاپ کریں۔",
+        "اگر آپ کی منت ہے تو اس سے پہلے یا بعد میں ہنومان چالیسہ پڑھیں",
+        "رسمی پوجا کرتے وقت منگل کے دن سینڈور اور تیل کا چراغ چڑھائیں۔",
+        "جاپ کے دوران جسم اور تقریر کو پرسکون رکھیں"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "کب نعرہ لگانا ہے۔"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Tuesday mornings or evenings; Saturdays also link Hanuman with Shani pariharam in some regions."
+          "text": "منگل کی صبح یا شام؛ کچھ علاقوں میں ہفتہ کو بھی ہنومان کو شانی پریہرام سے جوڑتا ہے۔"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "108 تکرار کیوں اہم ہے۔",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Japam’s Hanuman mode plays Om Sri Hanumate Namaha while you play — ideal for counting 108 during a break.",
+          "text": "نمبر 108 جاپ مالا پر ایک مکمل دور ہے۔ مسلسل تکرار ذہن کو پرسکون کرتی ہے اور منتر کے معنی پر توجہ مرکوز کرتی ہے۔"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "کچھ روایات 11 یا 21 مالوں کی تجویز کرتی ہیں - اپنے گرو یا پجاری سے اپنی منت کے مطابق گنتی کے لیے پوچھیں۔"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "عام غلطیوں سے بچنا ہے۔"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "بہت تیز گانا اور آواز پر توجہ کھو دینا",
+        "ہدایت کے بغیر متعدد دیوتا منتوں کو ملانا",
+        "بھکتی اور اخلاقی زندگی کے بجائے صرف مادی نتائج کی توقع کرنا"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "مندر اور گھر کی مشق ایک ساتھ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ہوم جاپا مندر کی پوجا کی حمایت کرتا ہے۔ یہ درشن کی جگہ نہیں لیتا۔ تہوار کے دنوں یا ہفتہ کے دن مندر جانا خاندانی روایت کو مضبوط کرتا ہے۔"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Japam کے ساتھ مشق کریں۔"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "جب آپ کھیلتے ہیں تو Japam کا ہنومان موڈ Om Sri Hanumate Namaha چلاتا ہے — وقفے کے دوران 108 گننے کے لیے مثالی۔",
           "bold": false
         }
       ]
@@ -113,7 +158,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start ہنومان Japa in Japam",
+      "label": "Start Hanuman Japa in Japam",
       "href": "https://japam.digital/?lang=ur&deity=hanuman&utm_source=google&utm_medium=seo&utm_campaign=hanuman-mantra-tuesday&utm_content=start-japa",
       "style": "primary"
     },
@@ -141,41 +186,41 @@
   ],
   "faqs": [
     {
-      "question": "Mantra or Chalisa first?",
-      "answer": "Either order is fine; follow your family custom."
+      "question": "منتر یا چالیسہ پہلے؟",
+      "answer": "یا تو حکم ٹھیک ہے؛ اپنے خاندانی رواج پر عمل کریں۔"
     },
     {
-      "question": "Can women chant Hanuman mantra?",
-      "answer": "Yes — widely accepted in most lineages."
+      "question": "کیا خواتین ہنومان منتر کا جاپ کر سکتی ہیں؟",
+      "answer": "ہاں — زیادہ تر نسبوں میں بڑے پیمانے پر قبول کیا جاتا ہے۔"
     },
     {
-      "question": "How does Hanuman help Shani?",
-      "answer": "See our Hanuman–Shani guide for combined Saturday practice."
+      "question": "ہنومان شانی کی مدد کیسے کرتا ہے؟",
+      "answer": "ہفتہ کی مشترکہ مشق کے لیے ہماری ہنومان-شنی گائیڈ دیکھیں۔"
     },
     {
-      "question": "Best time on Tuesday?",
-      "answer": "Brahma muhurta or evening after sunset are common."
+      "question": "منگل کو بہترین وقت؟",
+      "answer": "برہما مہورتا یا غروب آفتاب کے بعد شام عام ہے۔"
     },
     {
-      "question": "Is sindoor required?",
-      "answer": "For puja yes; silent japa does not require it."
+      "question": "کیا سنڈور ضروری ہے؟",
+      "answer": "پوجا کے لیے ہاں؛ خاموش جاپ کی ضرورت نہیں ہے۔"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "یہ مضمون صرف تعلیمی اور عقیدتی مشق کے لیے ہے۔ Japam طبی، قانونی، یا مالی مشورہ فراہم نہیں کرتا ہے۔ نتائج کا انحصار ذاتی ایمان اور مستقل مشق پر ہوتا ہے۔ ایپ میں منتر کا متن اور آڈیو جاپا سپورٹ کے لیے ہیں۔ رسمی پوجا کے قواعد کے لیے اپنے خاندانی پجاری یا روایت سے مشورہ کریں۔"
   },
   "relatedPages": [
     {
       "pageId": "mantra-hanuman",
-      "label": "Hanuman mantra pillar"
+      "label": "ہنومان منتر کا ستون"
     },
     {
       "pageId": "hanuman-mantra-shani",
-      "label": "Hanuman for Shani"
+      "label": "شانی کے لیے ہنومان"
     },
     {
       "pageId": "hanuman-jayanti-japa",
-      "label": "Hanuman Jayanti"
+      "label": "ہنومان جینتی"
     }
   ]
 }

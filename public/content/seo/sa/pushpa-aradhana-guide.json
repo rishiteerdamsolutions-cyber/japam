@@ -4,26 +4,26 @@
   "lang": "sa",
   "slug": "pushpa-aradhana-guide",
   "deityId": null,
-  "primaryKeyword": "pushpa archana online flower offering",
+  "primaryKeyword": "pushpa archana online पुष्प अर्पण",
   "secondaryKeywords": [
-    "digital puja flowers",
-    "shodashopachara"
+    "डिजिटल पूजा पुष्प",
+    "शोदाशोपाचरः"
   ],
   "meta": {
-    "title": "Pushpa Aradhana — Digital Flower Offering | Japam",
-    "description": "Pushpa Aradhana in Japam: offer digital flowers during deity worship.",
+    "title": "पुष्प आराधना — डिजिटल पुष्प अर्पण | जपम्",
+    "description": "जपमे पुष्पाराधना : देवपूजायाः समये अङ्कीयपुष्पाणि अर्पयन्तु।",
     "ogImage": "/images/favicon.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Pushpa Aradhana — Digital Flower Offering"
+      "text": "पुष्प आराधना — डिजिटल पुष्प अर्पण"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Pushpa (flowers) are part of shodashopachara puja. Japam’s Pushpa Aradhana lets you offer digital flowers when visiting the deity screen."
+          "text": "पुष्पा (पुष्पाणि) शोदशोपाचरपूजायाः भागाः सन्ति। जपमस्य पुष्पाराधना देवतापर्दे गच्छन् डिजिटलपुष्पाणि अर्पयितुं शक्नोति ।"
         }
       ]
     },
@@ -31,69 +31,114 @@
       "type": "p",
       "runs": [
         {
-          "text": "Educational complement to home puja — not a temple replacement."
-        }
-      ]
-    },
-    {
-      "type": "h2",
-      "text": "What is pushpa archana?"
-    },
-    {
-      "type": "p",
-      "runs": [
-        {
-          "text": "Offering flowers symbolises surrender of virtues and beauty to the deity. Digital offering expresses the same intent when fresh flowers are unavailable."
+          "text": "गृहपूजायाः शैक्षिकपूरकम् — न तु मन्दिरप्रतिस्थापनम् ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "पुष्पार्चना इति किम् ?"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "पुष्पार्पणं देवस्य समर्पणस्य गुणसौन्दर्यस्य च प्रतीकम् अस्ति । अङ्कीयप्रस्तावः अपि तथैव अभिप्रायं व्यक्तं करोति यदा ताजाः पुष्पाणि अनुपलब्धाः भवन्ति।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपस्य लाभाः (पारम्परिकदृष्टिकोणः) २."
     },
     {
       "type": "ul",
       "items": [
-        "Practice archana symbolism daily",
-        "Pairs with mantra japa in app",
-        "Useful when travelling",
-        "Learn pada names of offerings"
+        "नित्यं अर्चना प्रतीकवादस्य अभ्यासं कुर्वन्तु",
+        "एप् मध्ये मन्त्र जप सहित युग्म",
+        "यात्रायां उपयोगी भवति",
+        "अर्पणस्य पदनामानि शिक्षन्तु"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "१०८ वारं जपं कथं करणीयम्"
     },
     {
       "type": "ul",
       "items": [
-        "Sign in to Japam",
-        "Open Pushpa Aradhana from menu (requires auth)",
-        "Select deity and offering",
-        "Complete with mindful prayer"
+        "जपम् इत्यत्र प्रवेशं कुर्वन्तु",
+        "मेनूतः पुष्पाराधना उद्घाटयतु (auth आवश्यकम्)",
+        "देवतां च अर्पणं च चयनं कुर्वन्तु",
+        "मनसा प्रार्थना सहित सम्पूर्ण"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "कदा जपेत्"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "After japa or during daily darshan routine in app."
+          "text": "जपस्य अनन्तरं वा नित्यं दर्शनस्य दिनचर्यायाः समये एप्."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "१०८ पुनरावृत्तयः किमर्थं महत्त्वपूर्णाः सन्ति",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Menu → Pushpa Aradhana (sign-in required)."
+          "text": "१०८ संख्या जपमाले एकः पूर्णगोलः अस्ति । नित्यपुनरावृत्तिः मनः शान्तं करोति, मन्त्रस्य अर्थे ध्यानं गभीरं करोति च ।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "केचन परम्पराः ११ वा २१ वा मालाः विहिताः सन्ति — भवतः गुरुं वा पुरोहितं वा भवतः व्रतस्य अनुकूलानि गणनानि पृच्छन्तु ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "परिहरणीयानि सामान्यानि त्रुटयः"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "अतिशीघ्रं जपं कृत्वा ध्वनिं प्रति ध्यानं नष्टम्",
+        "अनेकदेवव्रतमिश्रणं विना मार्गदर्शनम् |",
+        "भक्ति-नीति-जीवनस्य स्थाने केवलं भौतिक-परिणामस्य अपेक्षा"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मन्दिरं गृहं च एकत्र अभ्यासं कुर्वन्ति"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "गृहं जपः मन्दिरपूजायाः समर्थनं करोति; दर्शनस्य स्थाने न भवति। उत्सवदिनेषु शनिवासरे वा मन्दिरस्य दर्शनं पारिवारिकपरम्परां सुदृढं करोति ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपं सह अभ्यासं कुरुत"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "मेनू → पुष्प आराधना (साइन-इन आवश्यक)।"
         }
       ]
     }
@@ -130,41 +175,41 @@
   ],
   "faqs": [
     {
-      "question": "Are digital flowers equal to real?",
-      "answer": "Intent matters; traditions prefer real flowers when possible."
+      "question": "किं अङ्कीयपुष्पाणि वास्तविकस्य समानानि सन्ति ?",
+      "answer": "अभिप्रायः महत्त्वपूर्णः अस्ति; परम्पराः यदा सम्भवं तदा वास्तविकपुष्पाणि प्राधान्येन पश्यन्ति।"
     },
     {
-      "question": "Need sign-in?",
+      "question": "प्रवेशस्य आवश्यकता अस्ति वा ?",
       "answer": "Yes — Pushpa Aradhana requires account in current app."
     },
     {
-      "question": "Cost?",
-      "answer": "See in-app offerings; optional dakshina may apply."
+      "question": "मूल्यम्‌?",
+      "answer": "एप्-अन्तर्गत-प्रस्तावः पश्यन्तु; वैकल्पिकं दक्षिणा प्रयोक्तुं शक्नोति।"
     },
     {
-      "question": "Which deities?",
-      "answer": "Deities available in Pushpa flow — see app."
+      "question": "के देवताः ?",
+      "answer": "पुष्पप्रवाहे उपलब्धाः देवताः — see app."
     },
     {
-      "question": "Shodashopachara?",
-      "answer": "Learn full steps from your priest; Japam focuses on pushpa."
+      "question": "षोडशोपाचर?",
+      "answer": "भवतः पुरोहितः पूर्णानि पदानि शिक्षन्तु; जपमः पुष्पं प्रति केन्द्रितः अस्ति।"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "एषः लेखः केवलं शैक्षणिक-भक्ति-अभ्यासार्थम् अस्ति । जपम् चिकित्सा, कानूनी, आर्थिकपरामर्शं न ददाति । परिणामाः व्यक्तिगतविश्वासस्य, निरन्तरं अभ्यासस्य च उपरि निर्भरं भवति। एप् मध्ये मन्त्रपाठः श्रव्यं च जपासमर्थनार्थम् अस्ति; औपचारिकपूजानियमानां कृते स्वपरिवारस्य पुरोहितेन वा परम्परेण वा परामर्शं कुर्वन्तु।"
   },
   "relatedPages": [
     {
       "pageId": "online-japa-mantra",
-      "label": "Online japa"
+      "label": "ऑनलाइन जपा"
     },
     {
       "pageId": "ishta-devata-japa",
-      "label": "Ishta devata"
+      "label": "इष्ट देवता"
     },
     {
       "pageId": "maha-japa-yagna",
-      "label": "Maha yagna"
+      "label": "महा यज्ञः"
     }
   ]
 }

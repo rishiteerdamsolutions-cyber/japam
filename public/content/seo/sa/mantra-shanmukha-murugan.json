@@ -4,27 +4,27 @@
   "lang": "sa",
   "slug": "mantra-shanmukha-murugan",
   "deityId": "shanmukha",
-  "primaryKeyword": "murugan subramanya mantra",
+  "primaryKeyword": "मुरुगन सुब्रह्मण्य मन्त्र",
   "secondaryKeywords": [
-    "om saravana bhavaya namaha",
-    "skanda shasti mantra",
-    "tamil murugan japa"
+    "ॐ सरवन भवाय नमः",
+    "स्कन्द शत मन्त्र",
+    "तमिल मुरुगन जप"
   ],
   "meta": {
-    "title": "कार्तिकेयः Mantra — 108 Japa | Japam",
-    "description": "कार्तिकेयः mantra meaning, 108 japa steps, and practice in Japam.",
+    "title": "मुरुगन (शंमुख) मंत्र जप | जपम्",
+    "description": "सुब्रह्मण्य/मुरुगन/स्कन्द मंत्र — ॐ सरवण भवाय नमः — 108 japa in Japam.",
     "ogImage": "/images/deities/shanmukha.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "कार्तिकेयः — 108 Japa"
+      "text": "Murugan Mantra — ॐ सरवण भवाय नमः"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Lord Murugan (Shanmukha, Subramanya, Skanda) is the Tamil and pan-Indian god of courage and wisdom. His mantra is central to Skanda Shasti and Thai Poosam."
+          "text": "भगवान् मुरुगनः (शन्मुखः, सुब्रह्मण्यः, स्कन्धः) तमिलः, सर्वभारतीयः च साहसस्य, प्रज्ञायाः च देवः अस्ति । तस्य मन्त्रः स्कन्दशास्त्रस्य, थाई पूसमस्य च केन्द्रम् अस्ति ।"
         }
       ]
     },
@@ -32,13 +32,13 @@
       "type": "p",
       "runs": [
         {
-          "text": "Japam includes Murugan with authentic mantra audio for daily japa."
+          "text": "जपम् दैनिकजपस्य प्रामाणिकमन्त्रश्रव्यसहितं मुरुगनं समावेशयति।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "मन्त्रार्थः"
     },
     {
       "type": "blockquote",
@@ -53,57 +53,102 @@
       "type": "p",
       "runs": [
         {
-          "text": "Chant with a calm mind, offering salutation (Namaha) rather than demanding outcomes."
+          "text": "परिणामान् आग्रहं न कृत्वा नमस्कारं (नमहा) कृत्वा शान्तचित्तेन जपं कुर्वन्तु।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "जपस्य लाभाः (पारम्परिकदृष्टिकोणः) २."
     },
     {
       "type": "ul",
       "items": [
-        "Victory over inner fear — traditional Skanda symbolism",
-        "Tuesday and Shasti days are sacred",
-        "Vel worship and kavadi traditions complement japa",
-        "Students pray for clarity and discipline"
+        "आन्तरिकभयस्य उपरि विजयः — पारम्परिकः स्कन्दप्रतीकवादः",
+        "मङ्गलवासरः शास्तिदिनानि च पवित्राः सन्ति",
+        "वेल पूजा कवडी परम्परा जपं पूरयन्ति",
+        "छात्राः स्पष्टतायाः अनुशासनस्य च प्रार्थनां कुर्वन्ति"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "१०८ वारं जपं कथं करणीयम्"
     },
     {
       "type": "ul",
       "items": [
-        "Chant 108 on Shasti or daily morning",
-        "Offer red flowers if doing puja",
-        "Visit Murugan temple on Thai Poosam when possible",
-        "Track rounds in Japam during commute"
+        "शास्तियां वा नित्यं प्रातः १०८ जप",
+        "पूजां कुर्वन् रक्तपुष्पाणि अर्पयन्तु",
+        "यदा सम्भवं तदा थाई पूसम इत्यत्र मुरुगनमन्दिरं गच्छन्तु",
+        "आवागमनकाले जपमे ट्रैक गोलानि"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "कदा जपेत्"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Skanda Shasti (six days in Aippasi/Tulam month), Thai Poosam, and Tuesdays."
+          "text": "स्कन्द शास्ति (ऐप्पासी/तुलममासे षड्दिनानि), थाई पूसम, मंगलवासरः च।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "१०८ पुनरावृत्तयः किमर्थं महत्त्वपूर्णाः सन्ति",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Choose Shanmukha in Japam for Om Saravana Bhavaya Namaha — regional names Murugan/Skanda all point to the same beloved deity.",
+          "text": "१०८ संख्या जपमाले एकः पूर्णगोलः अस्ति । नित्यपुनरावृत्तिः मनः शान्तं करोति, मन्त्रस्य अर्थे ध्यानं गभीरं करोति च ।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "केचन परम्पराः ११ वा २१ वा मालाः विहिताः सन्ति — भवतः गुरुं वा पुरोहितं वा भवतः व्रतस्य अनुकूलानि गणनानि पृच्छन्तु ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "परिहरणीयानि सामान्यानि त्रुटयः"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "अतिशीघ्रं जपं कृत्वा ध्वनिं प्रति ध्यानं नष्टम्",
+        "अनेकदेवव्रतमिश्रणं विना मार्गदर्शनम् |",
+        "भक्ति-नीति-जीवनस्य स्थाने केवलं भौतिक-परिणामस्य अपेक्षा"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मन्दिरं गृहं च एकत्र अभ्यासं कुर्वन्ति"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "गृहं जपः मन्दिरपूजायाः समर्थनं करोति; दर्शनस्य स्थाने न भवति। उत्सवदिनेषु शनिवासरे वा मन्दिरस्य दर्शनं पारिवारिकपरम्परां सुदृढं करोति ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपं सह अभ्यासं कुरुत"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ॐ सरवणभवाय नमः — प्रादेशिकनाम मुरुगन/स्कन्द सर्वे एकमेव प्रियदेवतां सूचयन्ति ।",
           "bold": false
         }
       ]
@@ -113,7 +158,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start कार्तिकेयः Japa in Japam",
+      "label": "Start Shanmukha Japa in Japam",
       "href": "https://japam.digital/?lang=sa&deity=shanmukha&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=start-japa",
       "style": "primary"
     },
@@ -141,41 +186,41 @@
   ],
   "faqs": [
     {
-      "question": "Murugan vs Subramanya?",
-      "answer": "Same deity — regional names."
+      "question": "मुरुगन बनाम सुब्रह्मण्य?",
+      "answer": "समान देवता — प्रादेशिक नाम।"
     },
     {
-      "question": "Tamil or Sanskrit chant?",
-      "answer": "Mantra is Sanskrit; Tamil padigams are separate devotion."
+      "question": "तमिल वा संस्कृत जप?",
+      "answer": "मन्त्रः संस्कृतम्; तमिल पडिगम् पृथक् भक्तिः ।"
     },
     {
-      "question": "Kavadi and japa together?",
-      "answer": "Many vow japa before kavadi pilgrimage."
+      "question": "कवदी च जपं च मिलित्वा?",
+      "answer": "अनेकाः कवदितीर्थात् पूर्वं जपं व्रतन्ति।"
     },
     {
-      "question": "Shasti fasting?",
-      "answer": "Optional — follow temple tradition."
+      "question": "शास्ति उपवास?",
+      "answer": "वैकल्पिकम् — मन्दिरपरम्परायाः अनुसरणं कुर्वन्तु ।"
     },
     {
-      "question": "Is vel icon required?",
-      "answer": "Helpful in puja; mental japa needs only focus."
+      "question": "vel चिह्नस्य आवश्यकता अस्ति वा ?",
+      "answer": "पूजायां सहायकः; मानसिकजपस्य केवलं ध्यानस्य आवश्यकता वर्तते।"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "एषः लेखः केवलं शैक्षणिक-भक्ति-अभ्यासार्थम् अस्ति । जपम् चिकित्सा, कानूनी, आर्थिकपरामर्शं न ददाति । परिणामाः व्यक्तिगतविश्वासस्य, निरन्तरं अभ्यासस्य च उपरि निर्भरं भवति। एप् मध्ये मन्त्रपाठः श्रव्यं च जपासमर्थनार्थम् अस्ति; औपचारिकपूजानियमानां कृते स्वपरिवारस्य पुरोहितेन वा परम्परेण वा परामर्शं कुर्वन्तु।"
   },
   "relatedPages": [
     {
       "pageId": "skanda-shasti-murugan",
-      "label": "Skanda Shasti"
+      "label": "स्कन्द शतिः"
     },
     {
       "pageId": "japa-108-times",
-      "label": "108 japa guide"
+      "label": "१०८ जपः"
     },
     {
       "pageId": "online-japa-mantra",
-      "label": "Online japa"
+      "label": "ऑनलाइन जपा"
     }
   ]
 }

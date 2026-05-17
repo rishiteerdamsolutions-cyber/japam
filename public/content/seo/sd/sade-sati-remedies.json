@@ -4,27 +4,27 @@
   "lang": "sd",
   "slug": "sade-sati-remedies",
   "deityId": "shani",
-  "primaryKeyword": "sade sati remedies mantra",
+  "primaryKeyword": "ساڊ سٽي علاج جو منتر",
   "secondaryKeywords": [
-    "sade sati puja",
-    "shani sade sati pariharam",
-    "sade sati duration"
+    "ساد ستي پوجا",
+    "شاني سدي ستي پرهرام",
+    "sade sati مدت"
   ],
   "meta": {
-    "title": "Sade Sati Remedies & Mantra Japa | Japam",
-    "description": "Understand Sade Sati and traditional Shani mantra japa for peace — with digital practice in Japam.",
+    "title": "ساد ستي علاج ۽ منتر جاپ | جپان",
+    "description": "سمجھو Sade Sati ۽ روايتي شاني منتر جاپ امن لاءِ - جپم ۾ ڊجيٽل مشق سان.",
     "ogImage": "/images/deities/shani.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Sade Sati Remedies and Shani Mantra Japa"
+      "text": "ساڊ سٽي علاج ۽ شاني منتر جاپ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Sade Sati is the roughly seven-and-a-half-year period when transiting Shani (Saturn) moves through signs near your Moon sign in the birth chart. Many families respond with patience, seva, and japa rather than fear."
+          "text": "سَد سَتي لڳ ڀڳ ساڍا ست سالن جو عرصو آهي جڏهن ڄمڻ واري چارٽ ۾ توهان جي چنڊ جي نشاني جي ويجهو نشانين ذريعي شيني (زحل) جي منتقلي ٿيندي آهي. ڪيترائي خاندان خوف جي بجاءِ صبر، خدمت ۽ جاپ سان جواب ڏين ٿا."
         }
       ]
     },
@@ -32,13 +32,13 @@
       "type": "p",
       "runs": [
         {
-          "text": "This guide outlines traditional remedies including Shani mantra repetition and how Japam can support steady daily practice."
+          "text": "ھي ھدايت بيان ڪري ٿي روايتي علاج سميت شاني منتر ورجائي ۽ ڪيئن جپم مسلسل روزاني مشق جي مدد ڪري سگھي ٿو."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "منتر جي معنيٰ"
     },
     {
       "type": "blockquote",
@@ -53,57 +53,102 @@
       "type": "p",
       "runs": [
         {
-          "text": "Saluting Shanaischara with humility supports graha shanti — planetary peace in the mind and conduct."
+          "text": "شناسچارا کي عاجزي سان سلام ڪرڻ گراه شانتي جي حمايت ڪري ٿو - دماغ ۽ عمل ۾ سيارو امن."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "جاپ جا فائدا (روايتي خيال)"
     },
     {
       "type": "ul",
       "items": [
-        "Encourages steadiness and acceptance during long phases",
-        "Pairs with Saturday worship and ethical living",
-        "Often combined with Hanuman bhakti in many traditions",
-        "Japa builds focus away from anxiety about the future"
+        "ڊگھي مرحلن دوران استحڪام ۽ قبوليت کي حوصلا افزائي ڪري ٿو",
+        "ڇنڇر جي عبادت ۽ اخلاقي زندگي سان گڏ",
+        "گهڻو ڪري ڪيترن ئي روايتن ۾ هنومان ڀڪي سان گڏ",
+        "جاپان مستقبل بابت پريشاني کان پري ڌيان ڏئي ٿو"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "108 ڀيرا ڪيئن ڳايو"
     },
     {
       "type": "ul",
       "items": [
-        "Chant 108 times on a mala in a quiet place",
-        "Observe Saturday fast or simple meal if your tradition allows",
-        "Offer charity (seva) when possible — a classic Shani remedy",
-        "Keep count consistently; quality over speed"
+        "ملاڪا تي 108 دفعا چُپ ڪريو",
+        "جيڪڏهن توهان جي روايت اجازت ڏئي ٿي ته ڇنڇر تي روزو يا سادو کاڌو ڏسو",
+        "خيرات ڏيو (سيوا) جڏهن ممڪن هجي - هڪ شاندار شاني علاج",
+        "مسلسل ڳڻپ رکو؛ معيار تي رفتار"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "جڏهن ڳائڻ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Saturday is primary for Shani. During active Sade Sati, many devotees add a short daily round — ask your priest for personal timing."
+          "text": "ڇنڇر، شاني لاءِ ابتدائي آهي. فعال ساڊ سٽي دوران، ڪيترائي عقيدتمند روزاني مختصر دور شامل ڪندا آهن - ذاتي وقت لاءِ پنهنجي پادريءَ کان پڇو."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "ڇو 108 ورجائي اهميت رکن ٿا",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "In Japam, select Shani to hear Om Shan Shanicharaya Namaha during match-3 play and track your japa count toward 108. Join Maha Japa Yagnas for community support.",
+          "text": "نمبر 108 جپا مالا تي هڪ مڪمل گول آهي. مسلسل ورهاڱي دماغ کي پرسکون ڪري ٿو ۽ منتر جي معني تي ڌيان ڏئي ٿو."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ڪجھ روايتون 11 يا 21 مالا بيان ڪن ٿيون - پنھنجي گرو يا پادريءَ کان پڇو ته توھان جي واعدي مطابق ڳڻپ لاءِ."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "عام غلطين کان بچڻ لاء"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "آواز تي تمام تيز آواز ۽ ڌيان وڃائڻ",
+        "ھدايت کانسواءِ ڪيترن ئي ديوتائن جون واڳون گڏ ڪرڻ",
+        "ڀڪت ۽ اخلاقي زندگي گذارڻ بدران فقط مادي نتيجن جي اميد رکڻ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "مندر ۽ گهر گڏجي مشق"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "گھر جاپا مندر جي پوڄا جي حمايت ڪري ٿو. اهو درشن کي تبديل نٿو ڪري. عيد جي ڏينهن يا ڇنڇر تي مندر جو دورو ڪرڻ خانداني روايت کي مضبوط ڪري ٿو."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Japam سان مشق ڪريو"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Japam ۾، شاني کي چونڊيو اوم شان شنيچارايا نامو ٻڌڻ لاءِ ميچ-3 راند دوران ۽ پنهنجي جاپ جي ڳڻپ کي 108 تائين ٽريڪ ڪريو. ڪميونٽي جي مدد لاءِ مها جپ يگناس ۾ شامل ٿيو.",
           "bold": false
         }
       ]
@@ -113,7 +158,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start شاني Japa in Japam",
+      "label": "Start Shani Japa in Japam",
       "href": "https://japam.digital/?lang=sd&deity=shani&utm_source=google&utm_medium=seo&utm_campaign=sade-sati-remedies&utm_content=start-japa",
       "style": "primary"
     },
@@ -141,41 +186,41 @@
   ],
   "faqs": [
     {
-      "question": "How long does Sade Sati last?",
-      "answer": "About 7.5 years in classical reckoning, as Shani transits three signs relative to the Moon. Exact timing is calculated by your astrologer."
+      "question": "Sade Sati ڪيترو ڊگهو آهي؟",
+      "answer": "تقريباً 7.5 سال ڪلاسيڪل حساب سان، جيئن شاني چنڊ جي نسبت سان ٽن نشانين کي منتقل ڪري ٿو. صحيح وقت توهان جي نجومي طرفان ڳڻيو ويندو آهي."
     },
     {
-      "question": "Is Sade Sati always bad?",
-      "answer": "Traditions teach it as a period of discipline and karmic lessons, not punishment. Japa and dharma steady the mind."
+      "question": "ڇا Sade Sati هميشه خراب آهي؟",
+      "answer": "روايتون ان کي نظم و ضبط ۽ ڪرمڪ سبق جي دور جي طور تي سيکارين ٿيون، نه سزا. جپ ۽ ڌرم ذهن کي مستحڪم ڪن ٿا."
     },
     {
-      "question": "Which mantra for Sade Sati?",
-      "answer": "Om Shan Shanicharaya Namaha is widely used; your lineage may prescribe additional stotras."
+      "question": "ساڊ سٽي لاءِ ڪهڙو منتر؟",
+      "answer": "اوم شان شانيچاريا نامو وڏي پيماني تي استعمال ٿيندو آهي؛ توهان جو نسب شايد اضافي اسٽٽرا پيش ڪري."
     },
     {
-      "question": "Can I chant without a mala?",
-      "answer": "Yes — use Japam’s digital counter or finger counting with the same sincerity."
+      "question": "ڇا مان مالا کان سواءِ ڳائي سگهان ٿو؟",
+      "answer": "ها - استعمال ڪريو Japam جي ڊجيٽل ڪائونٽر يا آڱرين جي ڳڻپ ساڳئي خلوص سان."
     },
     {
-      "question": "Does oil abhisheka replace japa?",
-      "answer": "Temple rituals and home japa complement each other; follow your sampradaya."
+      "question": "ڇا تيل ابشڪا جاپ جي جاءِ وٺي ٿو؟",
+      "answer": "مندر جون رسمون ۽ گهر جاپا هڪ ٻئي کي پورو ڪن ٿا؛ توهان جي sampradaya جي تابعداري ڪريو."
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "هي مضمون صرف تعليمي ۽ ديني مشق لاءِ آهي. Japam طبي، قانوني، يا مالي صلاح فراهم نٿو ڪري. نتيجن جو دارومدار ذاتي ايمان ۽ مسلسل مشق تي. ايپ ۾ منتر ٽيڪسٽ ۽ آڊيو جاپا سپورٽ لاءِ آهن؛ رسمي پوجا ضابطن لاءِ پنھنجي خانداني پادريءَ يا روايت سان صلاح ڪريو."
   },
   "relatedPages": [
     {
       "pageId": "shani-mantra-shanti",
-      "label": "Shani mantra shanti"
+      "label": "شاني منتر شانتي"
     },
     {
       "pageId": "hanuman-mantra-shani",
-      "label": "Hanuman for Shani"
+      "label": "شاني لاءِ حنومان"
     },
     {
       "pageId": "graha-shanti-mantra",
-      "label": "Graha shanti"
+      "label": "گراه شانتي"
     }
   ]
 }

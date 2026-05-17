@@ -4,27 +4,27 @@
   "lang": "sat",
   "slug": "venkateswara-mantra-tirupati",
   "deityId": "venkateswara",
-  "primaryKeyword": "venkateswara tirupati balaji mantra",
+  "primaryKeyword": "ᱵᱷᱮᱱᱠᱟᱴᱮᱥᱣᱟᱨ ᱛᱤᱨᱩᱯᱟᱛᱤ ᱵᱟᱞᱟᱡᱤ ᱢᱟᱱᱛᱨᱚ",
   "secondaryKeywords": [
-    "om namo venkateshaaya",
-    "tirupati darshan mantra",
-    "venkateswara japa"
+    "ᱚᱢ ᱱᱟᱢᱳ ᱵᱷᱮᱱᱠᱟᱴᱮᱥᱟᱭᱟ",
+    "ᱛᱤᱨᱩᱯᱛᱤ ᱫᱟᱨᱥᱚᱱ ᱢᱟᱱᱛᱨᱚ",
+    "ᱵᱷᱮᱱᱠᱮᱴᱮᱥᱣᱟᱨᱟ ᱡᱟᱯᱟ"
   ],
   "meta": {
-    "title": "Venkateswara Mantra — Tirupati Balaji Japa | Japam",
-    "description": "Om Namo Venkateshaaya — meaning, 108 japa, and digital practice for Balaji bhakti in Japam.",
+    "title": "ᱵᱷᱮᱱᱠᱟᱴᱮᱥᱣᱟᱨᱟ ᱢᱟᱱᱛᱨᱟ — ᱛᱤᱨᱩᱯᱟᱛᱤ ᱵᱟᱞᱟᱡᱤ ᱡᱟᱯᱟ | ᱡᱟᱯᱟᱢ",
+    "description": "ᱚᱢ ᱱᱟᱢᱳ ᱵᱷᱮᱱᱠᱟᱴᱮᱥᱟᱭ — ᱢᱮᱱᱮᱛ, ᱑᱐᱘ ᱡᱟᱯᱟ, ᱟᱨ ᱡᱟᱯᱟᱢ ᱨᱮ ᱵᱟᱞᱟᱡᱤ ᱵᱷᱚᱠᱛᱤ ᱞᱟᱹᱜᱤᱫ ᱰᱤᱡᱤᱴᱟᱞ ᱦᱮᱣᱟ ᱾",
     "ogImage": "/images/deities/venkateswara.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Venkateswara Mantra and Tirupati Balaji Japa"
+      "text": "ᱵᱷᱮᱱᱠᱮᱴᱮᱥᱣᱟᱨ ᱢᱟᱱᱛᱨᱚ ᱟᱨ ᱛᱤᱨᱩᱯᱛᱤ ᱵᱟᱞᱟᱡᱤ ᱡᱟᱯᱟ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Lord Venkateswara (Balaji) of Tirupati is beloved across South India and beyond. His name mantra is chanted for surrender and auspiciousness."
+          "text": "ᱛᱤᱨᱩᱯᱟᱴᱤ ᱨᱮᱱ ᱵᱷᱚᱱᱠᱟᱴᱮᱥᱣᱟᱨᱟ (ᱵᱟᱞᱟᱡᱤ) ᱫᱚ ᱜᱚᱴᱟ ᱫᱟᱠᱷᱤᱱ ᱵᱷᱟᱨᱚᱛ ᱟᱨ ᱚᱱᱟ ᱪᱷᱟᱰᱟ ᱨᱮ ᱫᱩᱞᱟᱹᱲ ᱜᱮᱭᱟᱭ ᱾ ᱩᱱᱤᱭᱟᱜ ᱧᱩᱛᱩᱢ ᱢᱟᱱᱛᱨᱚ ᱫᱚ ᱥᱚᱯᱨᱚᱛᱚᱜ ᱟᱨ ᱥᱟᱹᱜᱩᱱ ᱞᱟᱹᱜᱤᱫ ᱠᱚ ᱥᱟᱰᱮᱭᱟ ᱾"
         }
       ]
     },
@@ -32,13 +32,13 @@
       "type": "p",
       "runs": [
         {
-          "text": "Whether you plan a darshan or pray from home, steady japa deepens bhakti."
+          "text": "ᱪᱟᱦᱮ ᱟᱢ ᱫᱟᱨᱥᱟᱱ ᱯᱞᱟᱱ ᱢᱮ ᱥᱮ ᱚᱲᱟᱜ ᱠᱷᱚᱱ ᱮᱢ ᱠᱚᱭᱡᱚᱝ ᱢᱮ, ᱥᱴᱮᱰᱤ ᱡᱟᱯᱟ ᱵᱷᱚᱠᱛᱤ ᱜᱟᱹᱦᱤᱨ ᱪᱷᱚᱭᱟᱭ ᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "ᱢᱟᱱᱛᱨᱚ ᱨᱮᱭᱟᱜ ᱢᱮᱱᱮᱛ"
     },
     {
       "type": "blockquote",
@@ -53,57 +53,102 @@
       "type": "p",
       "runs": [
         {
-          "text": "Chant with a calm mind, offering salutation (Namaha) rather than demanding outcomes."
+          "text": "ᱯᱷᱚᱞᱚᱱ ᱠᱚ ᱫᱟᱹᱵᱤ ᱵᱚᱫᱚᱞ ᱠᱟᱛᱮ ᱥᱟᱹᱜᱩᱱ ᱢᱚᱱ ᱛᱮ ᱥᱮᱨᱮᱧ ᱢᱮ, ᱥᱟᱹᱜᱩᱱ ᱮᱢ ᱢᱮ (ᱱᱟᱢᱟᱦᱟ)᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "ᱡᱟᱯᱟ ᱨᱮᱭᱟᱜ ᱞᱟᱵᱷ (ᱯᱚᱨᱚᱢ ᱧᱮᱞᱚᱢ)"
     },
     {
       "type": "ul",
       "items": [
-        "Expresses complete surrender (Sharanagati)",
-        "Popular before Tirupati pilgrimage",
-        "Friday and Saturdays see heavy temple crowds — home japa anytime",
-        "Pairs with Tulasi leaves in traditional puja"
+        "ᱯᱩᱨᱟᱹ ᱥᱚᱯᱨᱚᱛᱚᱜ ᱥᱚᱫᱚᱨ ᱮᱫᱟᱭ (ᱥᱟᱨᱟᱱᱟᱜᱴᱤ)",
+        "ᱛᱤᱨᱩᱯᱟᱛᱤ ᱛᱟᱲᱟᱢ ᱫᱟᱬᱟ ᱞᱟᱦᱟᱨᱮ ᱯᱚᱥᱟᱨ",
+        "ᱡᱟᱹᱨᱩᱢ ᱢᱟᱦᱟᱸ ᱟᱨ ᱧᱩᱦᱩᱢ ᱢᱟᱦᱟᱸ ᱦᱤᱞᱚᱜ ᱢᱟᱱᱫᱤᱨ ᱨᱮ ᱟᱹᱰᱤ ᱵᱷᱤᱨ ᱧᱮᱞᱚᱜᱼᱟ - ᱚᱲᱟᱜ ᱡᱟᱯᱟ ᱡᱟᱦᱟᱸ ᱚᱠᱛᱚ ᱨᱮᱜᱮ",
+        "ᱥᱮᱫᱽᱨᱟ ᱯᱩᱡᱟ ᱨᱮ ᱛᱩᱞᱟᱥᱤ ᱥᱟᱠᱟᱢ ᱥᱟᱶ ᱡᱚᱲ ᱢᱮ"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "᱑᱐᱘ ᱫᱷᱟᱣ ᱪᱮᱫ ᱞᱮᱠᱟ ᱥᱮᱨᱮᱧ ᱦᱩᱭᱩᱜ-ᱟ"
     },
     {
       "type": "ul",
       "items": [
-        "Chant 108 or 1008 times as vow (kankana) before trip",
-        "Offer hair tonsuring only at temple if that is your sankalpa — not required for japa",
-        "Keep image or photo of Balaji before you",
-        "Use Japam to hear the mantra with counting"
+        "ᱫᱟᱬᱟᱱ ᱢᱟᱲᱟᱝ ᱨᱮ ᱑᱐᱘ ᱵᱟᱝᱠᱷᱟᱱ ᱑᱐᱐᱘ ᱫᱷᱟᱣ ᱵᱟᱛᱟᱣ ᱢᱮ (ᱠᱟᱱᱠᱟᱱᱟ)",
+        "ᱟᱢᱟᱜ ᱥᱟᱱᱠᱟᱞᱯᱟ ᱠᱷᱟᱱ ᱥᱩᱢᱩᱝ ᱢᱟᱱᱫᱤᱨ ᱨᱮ ᱩᱵ ᱴᱚᱱᱥᱚᱨᱤᱝ ᱮᱢ ᱢᱮ - ᱡᱟᱯᱟ ᱞᱟᱹᱜᱤᱫ ᱞᱟᱹᱠᱛᱤ ᱵᱟᱹᱱᱩᱜᱼᱟ",
+        "ᱵᱟᱞᱟᱡᱤ ᱟᱜ ᱪᱤᱛᱟᱹᱨ ᱵᱟᱝᱠᱷᱟᱱ ᱯᱷᱚᱴᱚ ᱟᱢ ᱞᱟᱦᱟᱨᱮ ᱫᱚᱦᱚᱭ ᱢᱮ",
+        "ᱞᱮᱠᱷᱟ ᱥᱟᱶ ᱢᱟᱱᱛᱨᱚ ᱟᱸᱡᱚᱢ ᱞᱟᱹᱜᱤᱫ ᱡᱟᱯᱚᱢ ᱵᱮᱵᱷᱟᱨ ᱢᱮ"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "ᱛᱤᱱᱨᱮ ᱥᱮᱨᱮᱧ ᱦᱩᱭᱩᱜ-ᱟ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Any day; many increase japa before Vaikunta Ekadashi and Brahmotsavam season."
+          "text": "ᱡᱟᱦᱟᱸ ᱫᱤᱱ; ᱵᱟᱭᱠᱩᱱᱛᱟ ᱮᱠᱟᱰᱟᱥᱤ ᱟᱨ ᱵᱨᱚᱦᱢᱚᱴᱥᱟᱣᱢ ᱥᱤᱡᱚᱱ ᱢᱟᱲᱟᱝ ᱨᱮ ᱟᱭᱢᱟ ᱦᱚᱲ ᱡᱟᱯᱟ ᱠᱚ ᱵᱟᱹᱨᱛᱤᱭᱟ ᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "᱑᱐᱘ ᱫᱚᱦᱲᱟ ᱪᱮᱫᱟᱜ ᱢᱟᱱᱚᱛ ᱢᱮᱱᱟᱜᱼᱟ",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Venkateswara mode in Japam uses Om namo Venkateshaaya during match-3 — helpful when you cannot visit the hill temple daily.",
+          "text": "᱑᱐᱘ ᱮᱞ ᱫᱚ ᱡᱟᱯᱟ ᱢᱟᱞᱟ ᱨᱮ ᱢᱤᱫ ᱯᱩᱨᱟᱹ ᱜᱩᱞᱟᱹᱭ ᱠᱟᱱᱟ ᱾ ᱛᱷᱤᱨ ᱫᱚᱦᱲᱟ ᱫᱚᱦᱲᱟ ᱛᱮ ᱢᱚᱱᱮ ᱛᱷᱤᱨᱚᱜ ᱟᱨ ᱢᱟᱱᱛᱨᱚ ᱨᱮᱭᱟᱜ ᱢᱮᱱᱮᱛ ᱨᱮ ᱜᱟᱹᱦᱤᱨ ᱫᱷᱭᱟᱱ ᱮᱢᱚᱜ ᱠᱟᱱᱟ᱾"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱛᱤᱱᱟᱹᱜ ᱜᱟᱱ ᱯᱚᱨᱚᱵ ᱑᱑ ᱵᱟᱝᱠᱷᱟᱱ ᱒᱑ ᱢᱟᱞᱟ ᱞᱟᱹᱭ ᱮᱫᱟ - ᱟᱢᱟᱜ ᱜᱩᱨᱩ ᱵᱟᱝᱠᱷᱟᱱ ᱯᱟᱭᱡᱤᱴ ᱴᱷᱮᱱ ᱟᱢᱟᱜ ᱵᱟᱛᱟᱣ ᱞᱮᱠᱟᱱ ᱞᱮᱠᱷᱟ ᱞᱟᱹᱜᱤᱫ ᱠᱩᱞᱤᱭᱮᱢ ᱾"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱥᱟᱫᱷᱟᱨᱚᱱ ᱵᱷᱩᱞ ᱠᱚ ᱠᱷᱚᱱ ᱥᱟᱦᱟᱜ ᱞᱟᱹᱜᱤᱫ"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "ᱟᱹᱰᱤ ᱩᱥᱟᱹᱨᱟ ᱪᱟᱱᱴᱤᱝ ᱟᱨ ᱥᱟᱰᱮ ᱨᱮ ᱯᱷᱚᱠᱟᱥ ᱟᱫ ᱠᱟᱛᱮ",
+        "ᱵᱤᱱ ᱫᱤᱥᱟᱹ ᱛᱮ ᱟᱭᱢᱟ ᱵᱚᱝᱜᱟ ᱠᱚ ᱢᱮᱥᱟᱞ ᱢᱮ",
+        "ᱵᱷᱚᱠᱛᱤ ᱟᱨ ᱱᱮᱭᱟᱱ ᱡᱤᱭᱚᱱ ᱵᱚᱫᱚᱞ ᱠᱟᱛᱮ ᱥᱩᱢᱩᱝ ᱡᱤᱱᱤᱥ ᱚᱨᱡᱚ ᱨᱮᱭᱟᱜ ᱟᱥᱟ ᱢᱮ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱢᱟᱱᱫᱤᱨ ᱟᱨ ᱚᱲᱟᱜ ᱨᱮ ᱢᱤᱫ ᱥᱟᱶᱛᱮ ᱦᱮᱣᱟ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱚᱲᱟᱜ ᱡᱟᱯᱟ ᱢᱟᱱᱫᱤᱨ ᱵᱚᱸᱜᱟ ᱥᱟᱯᱚᱨᱴ ᱮᱫᱟᱭ; ᱱᱚᱣᱟ ᱫᱚ ᱫᱟᱨᱥᱟᱱ ᱵᱟᱭ ᱵᱚᱫᱚᱞᱟ᱾ ᱯᱚᱨᱚᱵ ᱢᱟᱦᱟ ᱥᱮ ᱧᱩᱦᱩᱢ ᱢᱟᱦᱟ ᱦᱤᱞᱚᱜ ᱢᱟᱱᱫᱤᱨ ᱧᱮᱞ ᱛᱮ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮᱭᱟᱜ ᱥᱮᱨᱣᱟ ᱫᱚ ᱠᱮᱴᱮᱡ ᱜᱮᱭᱟ᱾"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱡᱟᱯᱟᱢ ᱥᱟᱶ ᱯᱨᱮᱠᱴᱤᱥ ᱢᱮ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱡᱟᱯᱟᱢ ᱨᱮ ᱵᱷᱮᱱᱠᱟᱴᱮᱥᱣᱟᱨᱟ ᱢᱚᱰ ᱫᱚ ᱢᱮᱪ-᱓ ᱚᱠᱛᱮ ᱚᱢ ᱱᱟᱢᱚ ᱵᱷᱮᱱᱠᱟᱴᱮᱥᱟᱭᱟ ᱵᱮᱵᱷᱟᱨ ᱮᱫᱟᱭ — ᱜᱚᱲᱚ ᱞᱮᱠᱟ ᱡᱚᱠᱷᱚᱱ ᱟᱢ ᱫᱤᱱᱟᱹᱢ ᱵᱩᱨᱩ ᱢᱟᱱᱫᱤᱨ ᱵᱟᱢ ᱧᱮᱞ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ᱾",
           "bold": false
         }
       ]
@@ -113,7 +158,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start ᱵᱮᱝᱠᱚᱴᱮᱥᱣᱚᱨ Japa in Japam",
+      "label": "Start Venkateswara Japa in Japam",
       "href": "https://japam.digital/?lang=sat&deity=venkateswara&utm_source=google&utm_medium=seo&utm_campaign=venkateswara-mantra-tirupati&utm_content=start-japa",
       "style": "primary"
     },
@@ -141,41 +186,41 @@
   ],
   "faqs": [
     {
-      "question": "Spelling Venkateshaaya?",
-      "answer": "Regional spellings vary; follow your priest’s transliteration."
+      "question": "ᱵᱷᱮᱱᱠᱟᱴᱮᱥᱟᱭᱟ ᱨᱮᱭᱟᱜ ᱵᱟᱱᱫᱷᱟᱣ?",
+      "answer": "ᱴᱚᱴᱷᱟᱹᱠᱤᱭᱟᱹ ᱵᱟᱱᱟᱱ ᱵᱷᱮᱜᱟᱨ ᱜᱮᱭᱟ; ᱟᱢ ᱨᱮᱱ ᱯᱟᱭᱡᱤᱴ ᱟᱜ ᱴᱨᱟᱱᱥᱞᱤᱴᱮᱨᱮᱥᱚᱱ ᱯᱟᱱᱛᱮ ᱢᱮ᱾"
     },
     {
-      "question": "Is Tirupati laddu prasadam required?",
-      "answer": "No for home japa — prasadam is optional devotion."
+      "question": "ᱪᱮᱫ ᱛᱤᱨᱩᱯᱟᱴᱤ ᱞᱟᱰᱰᱩ ᱯᱨᱟᱥᱟᱫᱚᱢ ᱞᱟᱹᱠᱛᱤᱜ ᱠᱟᱱᱟ?",
+      "answer": "ᱚᱲᱟᱜ ᱡᱟᱯᱟ ᱞᱟᱹᱜᱤᱫ ᱵᱟᱝ — ᱯᱨᱟᱥᱟᱫᱚᱢ ᱫᱚ ᱚᱯᱥᱚᱱᱟᱞ ᱵᱷᱚᱨᱠᱚ ᱠᱟᱱᱟ ᱾"
     },
     {
-      "question": "Can I chant for marriage?",
-      "answer": "Many pray for family blessings; see marriage delay guide for more deities."
+      "question": "ᱪᱮᱫ ᱤᱧ ᱵᱟᱯᱞᱟ ᱞᱟᱹᱜᱤᱫ ᱪᱟᱱᱴ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱹᱧ?",
+      "answer": "ᱟᱹᱰᱤ ᱦᱚᱲ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮ ᱛᱷᱩᱢ ᱞᱟᱹᱜᱤᱫ ᱠᱚ ᱠᱚᱭᱡᱚᱝᱟ; ᱵᱟᱹᱲᱛᱤ ᱵᱚᱝᱜᱟ ᱠᱚ ᱞᱟᱹᱜᱤᱫ ᱵᱟᱯᱞᱟ ᱵᱤᱞᱚᱢ ᱜᱟᱭᱤᱰ ᱧᱮᱞ ᱢᱮ᱾"
     },
     {
-      "question": "How many days before darshan?",
-      "answer": "Some chant 11 or 21 days — personal vow."
+      "question": "ᱫᱟᱨᱥᱟᱱ ᱛᱤᱱᱟᱹᱜ ᱢᱟᱦᱟ ᱞᱟᱦᱟᱨᱮ?",
+      "answer": "ᱛᱤᱱᱟᱹᱜ ᱜᱟᱱ ᱦᱚᱲ ᱑᱑ ᱵᱟᱝᱠᱷᱟᱱ ᱒᱑ ᱫᱤᱱ ᱠᱚ ᱥᱮᱨᱮᱧᱟ — ᱯᱚᱨᱥᱚᱱᱟᱞ ᱵᱟᱛᱟᱣ ᱾"
     },
     {
-      "question": "Does Japam have Venkateswara image?",
-      "answer": "Yes — select Venkateswara on the deity grid."
+      "question": "ᱪᱮᱫ ᱡᱟᱯᱟᱢ ᱴᱷᱮᱱ ᱵᱷᱮᱱᱠᱟᱴᱮᱥᱣᱟᱨᱟ ᱪᱤᱛᱟᱹᱨ ᱢᱮᱱᱟᱜᱼᱟ?",
+      "answer": "ᱦᱮᱸ — ᱵᱚᱸᱜᱟ ᱜᱽᱨᱤᱰ ᱨᱮ ᱵᱷᱮᱱᱠᱟᱴᱮᱥᱣᱟᱨᱟ ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱾"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "ᱱᱚᱣᱟ ᱚᱱᱚᱞ ᱫᱚ ᱥᱩᱢᱩᱝ ᱥᱮᱪᱮᱫ ᱟᱨ ᱵᱷᱚᱠᱛᱚᱱ ᱦᱮᱣᱟ ᱞᱟᱹᱜᱤᱫ ᱜᱮ ᱾ ᱡᱟᱯᱟᱢ ᱫᱚ ᱪᱤᱠᱤᱥᱟ, ᱟᱹᱭᱤᱱᱤ, ᱟᱨ ᱵᱟᱝ ᱠᱟᱹᱣᱰᱤ ᱥᱚᱞᱦᱟ ᱵᱟᱭ ᱮᱢᱚᱜ ᱠᱟᱱᱟ᱾ ᱚᱨᱡᱚ ᱫᱚ ᱯᱚᱨᱥᱚᱱᱟᱞ ᱯᱟᱹᱛᱭᱟᱹᱣ ᱟᱨ ᱞᱮᱛᱟᱲ ᱦᱮᱣᱟ ᱨᱮ ᱴᱮᱦᱟᱱᱰ ᱢᱮᱱᱟᱜᱼᱟ᱾ ᱮᱯ ᱨᱮ ᱢᱟᱱᱛᱨᱟ ᱚᱱᱚᱞ ᱟᱨ ᱚᱰᱤᱭᱳ ᱫᱚ ᱡᱟᱯᱟ ᱥᱟᱯᱚᱨᱴ ᱞᱟᱹᱜᱤᱫ ᱠᱟᱱᱟ; ᱟᱹᱭᱫᱟᱹᱨᱤ ᱯᱩᱡᱟ ᱟᱹᱨᱤ ᱞᱟᱹᱜᱤᱫ ᱟᱯᱮ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮᱱ ᱯᱟᱭᱡᱤᱴ ᱥᱮ ᱥᱮᱫᱽᱨᱟ ᱥᱚᱞᱦᱟᱭ ᱢᱮ ᱾"
   },
   "relatedPages": [
     {
       "pageId": "mantra-venkateswara",
-      "label": "Venkateswara pillar"
+      "label": "ᱵᱷᱮᱱᱠᱟᱴᱮᱥᱣᱟᱨᱟ ᱛᱷᱚᱢ"
     },
     {
       "pageId": "marriage-delay-mantra",
-      "label": "Marriage mantras"
+      "label": "ᱵᱟᱯᱞᱟ ᱢᱟᱱᱛᱨᱚ"
     },
     {
       "pageId": "japa-108-times",
-      "label": "108 japa guide"
+      "label": "᱑᱐᱘ ᱡᱟᱯᱟ"
     }
   ]
 }

@@ -4,27 +4,27 @@
   "lang": "sd",
   "slug": "navagraha-mantra",
   "deityId": null,
-  "primaryKeyword": "navagraha mantra",
+  "primaryKeyword": "navagraha منتر",
   "secondaryKeywords": [
-    "navagraha puja",
-    "nine planets mantra",
+    "ناوگراه پوجا",
+    "نو سيارو منتر",
     "navagraha japa"
   ],
   "meta": {
-    "title": "Navagraha Mantra & Nine Planets Japa | Japam",
-    "description": "Nine grahas overview, weekday mantras, and practise Shani/Rahu/Ketu/Surya/Guru in Japam.",
+    "title": "Navagraha منتر ۽ Nine Planets Japa | جپان",
+    "description": "نو گراهن جو جائزو، هفتيوار منتر، ۽ مشق شاني / راهو / ڪيتو / سوريا / گرو جپم ۾.",
     "ogImage": "/images/favicon.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Navagraha Mantra and the Nine Planets"
+      "text": "Navagraha منتر ۽ نو سيارو"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "The Navagraha are Surya, Chandra, Mangala, Budha, Guru, Shukra, Shani, Rahu, and Ketu — each governing karmic themes in Jyotisha."
+          "text": "ناوگراه سوريا، چندر، منگلا، بدھ، گرو، شڪر، شاني، راهو ۽ ڪيتو آهن - هر هڪ جيوتشا ۾ ڪرمڪ موضوعن کي سنڀاليندو آهي."
         }
       ]
     },
@@ -32,69 +32,114 @@
       "type": "p",
       "runs": [
         {
-          "text": "Collective Navagraha puja or individual graha japa both aim at harmony (shanti)."
-        }
-      ]
-    },
-    {
-      "type": "h2",
-      "text": "The nine grahas"
-    },
-    {
-      "type": "p",
-      "runs": [
-        {
-          "text": "Sun (Surya), Moon (Chandra), Mars (Mangala), Mercury (Budha), Jupiter (Guru), Venus (Shukra), Saturn (Shani), and the lunar nodes Rahu and Ketu. Japam offers several graha and deity mantras for daily practice."
+          "text": "اجتماعي نواگراه پوجا يا انفرادي گراه جاپ ٻنهي جو مقصد هم آهنگي (شانتي) آهي."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "نو گراها"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "سج (سوريا)، چنڊ (چندر)، مريخ (منگلا)، پارو (بُڌا)، مشتري (گرو)، وينس (شوڪر)، زحل (شني)، ۽ چندر جا نالا راهو ۽ ڪيتو آهن. Japam روزاني مشق لاءِ ڪيترائي گرها ۽ ديوتا منتر پيش ڪري ٿو."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "جاپ جا فائدا (روايتي خيال)"
     },
     {
       "type": "ul",
       "items": [
-        "Balances worship across planets instead of fearing one dasha",
-        "Temple Navagraha halls rotate circumambulation",
-        "Individual mantras when astrologer pinpoints a graha",
-        "Builds weekly rhythm — planet per weekday"
+        "هڪ دشا کان ڊڄڻ جي بدران سڀني سيارن جي پوڄا توازن",
+        "مندر ناوگراه هال گردش ڪري ٿو",
+        "انفرادي منتر جڏهن نجومي گراه کي نشانو بڻائيندو آهي",
+        "ھفتيوار تال ٺاھي ٿو - سيارو في هفتي ڏينھن"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "108 ڀيرا ڪيئن ڳايو"
     },
     {
       "type": "ul",
       "items": [
-        "Learn each graha’s seed mantra or use Navagraha stotram",
-        "Circumambulate nine planet idols if at temple",
-        "Chant 108 for the graha active in your dasha",
-        "Use Japam modes for Shani, Rahu, Ketu, Surya, Guru"
+        "سکو هر گراها جي ٻج منتر يا استعمال ڪريو Navagraha stotram",
+        "جيڪڏهن مندر ۾ نو سيارو بتن جو طواف ڪريو",
+        "پنھنجي دشا ۾ سرگرم گرھ لاءِ 108 چئو",
+        "شاني، راهو، ڪيتو، سوريا، گرو لاءِ جاپم طريقا استعمال ڪريو"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "جڏهن ڳائڻ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Sunday–Saturday map to Surya through Shani; Rahu/Ketu have special rules — ask priest."
+          "text": "آچر-ڇنڇر جو نقشو سوريا کان شاني تائين؛ راهو/ڪيتو جا خاص قاعدا آهن - پادريءَ کان پڇو."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "ڇو 108 ورجائي اهميت رکن ٿا",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Open Japam’s deity grid for graha-linked mantras and counting — complement with Navagraha homam when advised.",
+          "text": "نمبر 108 جپا مالا تي هڪ مڪمل گول آهي. مسلسل ورهاڱي دماغ کي پرسکون ڪري ٿو ۽ منتر جي معني تي ڌيان ڏئي ٿو."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ڪجھ روايتون 11 يا 21 مالا بيان ڪن ٿيون - پنھنجي گرو يا پادريءَ کان پڇو ته توھان جي واعدي مطابق ڳڻپ لاءِ."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "عام غلطين کان بچڻ لاء"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "آواز تي تمام تيز آواز ۽ ڌيان وڃائڻ",
+        "ھدايت کانسواءِ ڪيترن ئي ديوتائن جون واڳون گڏ ڪرڻ",
+        "ڀڪت ۽ اخلاقي زندگي گذارڻ بدران فقط مادي نتيجن جي اميد رکڻ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "مندر ۽ گهر گڏجي مشق"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "گھر جاپا مندر جي پوڄا جي حمايت ڪري ٿو. اهو درشن کي تبديل نٿو ڪري. عيد جي ڏينهن يا ڇنڇر تي مندر جو دورو ڪرڻ خانداني روايت کي مضبوط ڪري ٿو."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Japam سان مشق ڪريو"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "گراها سان جڙيل منتر ۽ ڳڻپ لاءِ Japam جي ديوي گرڊ کي کوليو - جڏهن صلاح ڏني وئي ته Navagraha homam سان پورو ڪريو.",
           "bold": false
         }
       ]
@@ -132,41 +177,41 @@
   ],
   "faqs": [
     {
-      "question": "Full Navagraha stotra length?",
-      "answer": "Longer than 108; some do one planet per day instead."
+      "question": "مڪمل Navagraha stotra ڊگھائي؟",
+      "answer": "108 کان وڌيڪ؛ ڪجهه هڪ سيارو في ڏينهن بدران."
     },
     {
-      "question": "Are Rahu Ketu planets?",
-      "answer": "They are chaya grahas (shadow nodes) in astrology."
+      "question": "ڇا راهو ڪيتو سيارا آهن؟",
+      "answer": "اهي علم نجوم ۾ چايا گراها (شيڊ نوڊس) آهن."
     },
     {
-      "question": "Chandra mantra in Japam?",
-      "answer": "Deity forms like Shiva/Shakti often cover lunar devotion; ask your tradition."
+      "question": "جپان ۾ چندر منتر؟",
+      "answer": "ديوتا جا روپ جهڙوڪ شيوا / شڪتي اڪثر ڪري چنڊ جي عقيدت کي ڍڪيندا آهن. پنهنجي روايت کان پڇو."
     },
     {
-      "question": "Homam cost?",
-      "answer": "Temple varies; home japa is free and sincere."
+      "question": "هوم قيمت؟",
+      "answer": "مندر مختلف آهي؛ گهر جاپا مفت ۽ مخلص آهي."
     },
     {
-      "question": "Which graha first?",
-      "answer": "Astrologer recommends based on chart — often Shani or active dasha lord."
+      "question": "ڪهڙو گراه پهريون؟",
+      "answer": "Astrologer چارٽ جي بنياد تي سفارش ڪري ٿو - اڪثر ڪري شاني يا فعال دشا رب."
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "هي مضمون صرف تعليمي ۽ ديني مشق لاءِ آهي. Japam طبي، قانوني، يا مالي صلاح فراهم نٿو ڪري. نتيجن جو دارومدار ذاتي ايمان ۽ مسلسل مشق تي. ايپ ۾ منتر ٽيڪسٽ ۽ آڊيو جاپا سپورٽ لاءِ آهن؛ رسمي پوجا ضابطن لاءِ پنھنجي خانداني پادريءَ يا روايت سان صلاح ڪريو."
   },
   "relatedPages": [
     {
       "pageId": "graha-shanti-mantra",
-      "label": "Graha shanti"
+      "label": "گراه شانتي"
     },
     {
       "pageId": "shani-mantra-shanti",
-      "label": "Shani"
+      "label": "شاني"
     },
     {
       "pageId": "guru-graha-mantra",
-      "label": "Guru graha"
+      "label": "گرو گرهه"
     }
   ]
 }

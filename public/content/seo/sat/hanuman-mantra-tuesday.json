@@ -4,27 +4,27 @@
   "lang": "sat",
   "slug": "hanuman-mantra-tuesday",
   "deityId": "hanuman",
-  "primaryKeyword": "hanuman mantra tuesday japa",
+  "primaryKeyword": "ᱦᱟᱱᱩᱢᱟᱱ ᱢᱟᱱᱛᱨᱚ ᱵᱟᱞᱮ ᱢᱟᱦᱟ ᱡᱟᱯᱟ",
   "secondaryKeywords": [
-    "om sri hanumate namah",
-    "hanuman japa",
-    "hanuman chalisa vs mantra"
+    "ᱚᱢ ᱥᱨᱤ ᱦᱟᱱᱩᱢᱮᱴ ᱱᱟᱢᱦ",
+    "ᱦᱟᱱᱩᱢᱟᱱ ᱡᱟᱯᱟ",
+    "ᱦᱟᱱᱩᱢᱟᱱ ᱪᱟᱞᱤᱥᱟ ᱵᱚᱱᱟᱢ ᱢᱟᱱᱛᱨᱟ"
   ],
   "meta": {
-    "title": "Hanuman Mantra for Tuesday Japa | Japam",
-    "description": "Tuesday Hanuman mantra, 108 japa steps, strength and devotion — practise with Japam audio.",
+    "title": "ᱵᱟᱞᱮ ᱢᱟᱦᱟ ᱡᱟᱯᱟ ᱞᱟᱹᱜᱤᱫ ᱦᱟᱱᱩᱢᱟᱱ ᱢᱟᱱᱛᱨᱟ | ᱡᱟᱯᱟᱢ",
+    "description": "ᱵᱟᱞᱮ ᱢᱟᱦᱟ ᱦᱟᱱᱩᱢᱟᱱ ᱢᱟᱱᱛᱨᱚ, ᱑᱐᱘ ᱡᱟᱯᱟ ᱫᱷᱟᱯ, ᱫᱟᱲᱮ ᱟᱨ ᱵᱷᱚᱠᱛᱚ — ᱡᱟᱯᱟᱢ ᱚᱰᱤᱭᱳ ᱥᱟᱶ ᱦᱮᱣᱟᱜ ᱢᱮ᱾",
     "ogImage": "/images/deities/hanuman.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Hanuman Mantra and Tuesday Japa"
+      "text": "ᱦᱟᱱᱩᱢᱟᱱ ᱢᱟᱱᱛᱨᱟ ᱟᱨ ᱵᱟᱞᱮ ᱢᱟᱦᱟ ᱡᱟᱯᱟ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Hanuman embodies strength, service, and Ram bhakti. Tuesday (Mangalvar) is widely dedicated to his worship across India."
+          "text": "ᱦᱟᱱᱩᱢᱟᱱ ᱫᱚ ᱫᱟᱲᱮ, ᱥᱮᱵᱟ ᱟᱨ ᱨᱟᱢ ᱵᱷᱚᱠᱛᱤ ᱮ ᱥᱚᱫᱚᱨ ᱟᱠᱟᱫᱟ᱾ ᱵᱟᱞᱮ ᱢᱟᱦᱟ (ᱢᱟᱝᱜᱟᱞᱵᱟᱨ) ᱫᱚ ᱜᱚᱴᱟ ᱵᱷᱟᱨᱚᱛ ᱨᱮ ᱩᱱᱤᱭᱟᱜ ᱵᱚᱸᱜᱟ ᱵᱚᱸᱜᱟ ᱞᱟᱹᱜᱤᱫ ᱯᱟᱥᱱᱟᱣ ᱞᱮᱠᱟᱛᱮ ᱥᱚᱯᱨᱚᱛ ᱟᱠᱟᱱᱟ ᱾"
         }
       ]
     },
@@ -32,13 +32,13 @@
       "type": "p",
       "runs": [
         {
-          "text": "This guide covers the core Hanuman mantra in Japam and how to chant it 108 times."
+          "text": "ᱱᱚᱣᱟ ᱜᱚᱲᱚᱭᱤᱡ ᱫᱚ ᱡᱟᱯᱟᱢ ᱨᱮᱱᱟᱜ ᱢᱩᱲᱩᱫ ᱦᱟᱱᱩᱢᱟᱱ ᱢᱟᱱᱛᱨᱚ ᱟᱨ ᱱᱚᱣᱟ ᱑᱐᱘ ᱫᱷᱟᱣ ᱪᱮᱫ ᱞᱮᱠᱟ ᱥᱮᱨᱮᱧ ᱦᱩᱭᱩᱜ-ᱟ ᱚᱱᱟ ᱞᱟᱹᱭ ᱟᱠᱟᱫᱟᱭ ᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "ᱢᱟᱱᱛᱨᱚ ᱨᱮᱭᱟᱜ ᱢᱮᱱᱮᱛ"
     },
     {
       "type": "blockquote",
@@ -53,57 +53,102 @@
       "type": "p",
       "runs": [
         {
-          "text": "Chant with a calm mind, offering salutation (Namaha) rather than demanding outcomes."
+          "text": "ᱯᱷᱚᱞᱚᱱ ᱠᱚ ᱫᱟᱹᱵᱤ ᱵᱚᱫᱚᱞ ᱠᱟᱛᱮ ᱥᱟᱹᱜᱩᱱ ᱢᱚᱱ ᱛᱮ ᱥᱮᱨᱮᱧ ᱢᱮ, ᱥᱟᱹᱜᱩᱱ ᱮᱢ ᱢᱮ (ᱱᱟᱢᱟᱦᱟ)᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "ᱡᱟᱯᱟ ᱨᱮᱭᱟᱜ ᱞᱟᱵᱷ (ᱯᱚᱨᱚᱢ ᱧᱮᱞᱚᱢ)"
     },
     {
       "type": "ul",
       "items": [
-        "Courage and steadiness in difficulties",
-        "Protection in traditional folk belief — stated devotionally",
-        "Complements Hanuman Chalisa for those who recite both",
-        "Tuesday fasting or simple puja in many families"
+        "ᱢᱩᱥᱠᱤᱞ ᱨᱮ ᱥᱟᱦᱚᱥ ᱟᱨ ᱛᱷᱤᱨ ᱛᱟᱦᱮᱱ",
+        "ᱥᱮᱫᱽᱨᱟ ᱞᱚᱠ ᱯᱟᱹᱛᱭᱟᱹᱣ ᱨᱮ ᱨᱩᱠᱷᱤᱭᱟᱹ - ᱵᱷᱚᱠᱛᱚᱱ ᱞᱮᱠᱟᱛᱮ ᱢᱮᱱ ᱟᱠᱟᱱᱟ",
+        "ᱡᱟᱦᱟᱸᱭ ᱵᱟᱱᱟᱨ ᱠᱚ ᱯᱟᱲᱦᱟᱣᱟ ᱩᱱᱠᱩ ᱞᱟᱹᱜᱤᱫ ᱦᱟᱱᱩᱢᱟᱱ ᱪᱟᱞᱤᱥᱟ ᱯᱩᱨᱟᱹᱣ ᱢᱮ",
+        "ᱵᱟᱞᱮ ᱢᱟᱦᱟ ᱩᱥᱟᱹᱨᱟ ᱥᱮ ᱥᱟᱫᱷᱟᱨᱚᱱ ᱯᱩᱡᱟ ᱟᱭᱢᱟ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮ"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "᱑᱐᱘ ᱫᱷᱟᱣ ᱪᱮᱫ ᱞᱮᱠᱟ ᱥᱮᱨᱮᱧ ᱦᱩᱭᱩᱜ-ᱟ"
     },
     {
       "type": "ul",
       "items": [
-        "Face east or the deity image; chant 108 on rudraksha or tulsi mala",
-        "Read Hanuman Chalisa before or after if that is your vow",
-        "Offer sindoor and oil lamp on Tuesday when doing formal puja",
-        "Keep body and speech calm during japa"
+        "ᱪᱮᱦᱨᱟ ᱯᱩᱨᱩᱵ ᱥᱮ ᱵᱚᱝᱜᱟ ᱪᱤᱛᱟᱹᱨ; ᱨᱩᱫᱨᱟᱠᱥᱟ ᱵᱟᱝᱠᱷᱟᱱ ᱛᱩᱞᱥᱤ ᱢᱟᱞᱟ ᱨᱮ ᱑᱐᱘ ᱥᱮᱨᱮᱧ ᱢᱮ",
+        "ᱦᱟᱱᱩᱢᱟᱱ ᱪᱟᱞᱤᱥᱟ ᱯᱟᱲᱦᱟᱣ ᱢᱮ ᱢᱟᱲᱟᱝ ᱥᱮ ᱛᱟᱭᱚᱢ ᱡᱩᱫᱤ ᱚᱱᱟ ᱟᱢᱟᱜ ᱵᱟᱛᱟᱣ ᱠᱟᱱᱟ",
+        "ᱵᱟᱞᱮ ᱢᱟᱦᱟ ᱦᱤᱞᱚᱜ ᱯᱷᱚᱨᱢᱟᱞ ᱯᱩᱡᱟ ᱚᱠᱛᱚ ᱥᱤᱱᱰᱩᱨ ᱟᱨ ᱥᱩᱱᱩᱢ ᱞᱮᱢᱯ ᱮᱢᱚᱜ ᱢᱮ",
+        "ᱡᱟᱯᱟ ᱚᱠᱛᱚ ᱨᱮ ᱦᱚᱲᱢᱚ ᱟᱨ ᱟᱲᱟᱝ ᱛᱷᱤᱨ ᱫᱚᱦᱚ ᱠᱟᱜ ᱢᱮ"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "ᱛᱤᱱᱨᱮ ᱥᱮᱨᱮᱧ ᱦᱩᱭᱩᱜ-ᱟ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Tuesday mornings or evenings; Saturdays also link Hanuman with Shani pariharam in some regions."
+          "text": "ᱵᱟᱞᱮ ᱢᱟᱦᱟ ᱥᱮᱛᱟᱜ ᱵᱟᱝᱠᱷᱟᱱ ᱥᱤᱝᱜᱟᱲ; ᱧᱩᱦᱩᱢ ᱢᱟᱦᱟᱸ ᱦᱚᱸ ᱦᱟᱱᱩᱢᱟᱱ ᱥᱟᱱᱤ ᱯᱟᱨᱤᱦᱟᱨᱟᱢ ᱥᱟᱶ ᱛᱤᱱᱟᱹᱜ ᱜᱟᱱ ᱴᱚᱴᱷᱟ ᱨᱮ ᱡᱚᱲᱟᱣ ᱛᱟᱦᱮᱱᱟᱭ ᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "᱑᱐᱘ ᱫᱚᱦᱲᱟ ᱪᱮᱫᱟᱜ ᱢᱟᱱᱚᱛ ᱢᱮᱱᱟᱜᱼᱟ",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Japam’s Hanuman mode plays Om Sri Hanumate Namaha while you play — ideal for counting 108 during a break.",
+          "text": "᱑᱐᱘ ᱮᱞ ᱫᱚ ᱡᱟᱯᱟ ᱢᱟᱞᱟ ᱨᱮ ᱢᱤᱫ ᱯᱩᱨᱟᱹ ᱜᱩᱞᱟᱹᱭ ᱠᱟᱱᱟ ᱾ ᱛᱷᱤᱨ ᱫᱚᱦᱲᱟ ᱫᱚᱦᱲᱟ ᱛᱮ ᱢᱚᱱᱮ ᱛᱷᱤᱨᱚᱜ ᱟᱨ ᱢᱟᱱᱛᱨᱚ ᱨᱮᱭᱟᱜ ᱢᱮᱱᱮᱛ ᱨᱮ ᱜᱟᱹᱦᱤᱨ ᱫᱷᱭᱟᱱ ᱮᱢᱚᱜ ᱠᱟᱱᱟ᱾"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱛᱤᱱᱟᱹᱜ ᱜᱟᱱ ᱯᱚᱨᱚᱵ ᱑᱑ ᱵᱟᱝᱠᱷᱟᱱ ᱒᱑ ᱢᱟᱞᱟ ᱞᱟᱹᱭ ᱮᱫᱟ - ᱟᱢᱟᱜ ᱜᱩᱨᱩ ᱵᱟᱝᱠᱷᱟᱱ ᱯᱟᱭᱡᱤᱴ ᱴᱷᱮᱱ ᱟᱢᱟᱜ ᱵᱟᱛᱟᱣ ᱞᱮᱠᱟᱱ ᱞᱮᱠᱷᱟ ᱞᱟᱹᱜᱤᱫ ᱠᱩᱞᱤᱭᱮᱢ ᱾"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱥᱟᱫᱷᱟᱨᱚᱱ ᱵᱷᱩᱞ ᱠᱚ ᱠᱷᱚᱱ ᱥᱟᱦᱟᱜ ᱞᱟᱹᱜᱤᱫ"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "ᱟᱹᱰᱤ ᱩᱥᱟᱹᱨᱟ ᱪᱟᱱᱴᱤᱝ ᱟᱨ ᱥᱟᱰᱮ ᱨᱮ ᱯᱷᱚᱠᱟᱥ ᱟᱫ ᱠᱟᱛᱮ",
+        "ᱵᱤᱱ ᱫᱤᱥᱟᱹ ᱛᱮ ᱟᱭᱢᱟ ᱵᱚᱝᱜᱟ ᱠᱚ ᱢᱮᱥᱟᱞ ᱢᱮ",
+        "ᱵᱷᱚᱠᱛᱤ ᱟᱨ ᱱᱮᱭᱟᱱ ᱡᱤᱭᱚᱱ ᱵᱚᱫᱚᱞ ᱠᱟᱛᱮ ᱥᱩᱢᱩᱝ ᱡᱤᱱᱤᱥ ᱚᱨᱡᱚ ᱨᱮᱭᱟᱜ ᱟᱥᱟ ᱢᱮ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱢᱟᱱᱫᱤᱨ ᱟᱨ ᱚᱲᱟᱜ ᱨᱮ ᱢᱤᱫ ᱥᱟᱶᱛᱮ ᱦᱮᱣᱟ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱚᱲᱟᱜ ᱡᱟᱯᱟ ᱢᱟᱱᱫᱤᱨ ᱵᱚᱸᱜᱟ ᱥᱟᱯᱚᱨᱴ ᱮᱫᱟᱭ; ᱱᱚᱣᱟ ᱫᱚ ᱫᱟᱨᱥᱟᱱ ᱵᱟᱭ ᱵᱚᱫᱚᱞᱟ᱾ ᱯᱚᱨᱚᱵ ᱢᱟᱦᱟ ᱥᱮ ᱧᱩᱦᱩᱢ ᱢᱟᱦᱟ ᱦᱤᱞᱚᱜ ᱢᱟᱱᱫᱤᱨ ᱧᱮᱞ ᱛᱮ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮᱭᱟᱜ ᱥᱮᱨᱣᱟ ᱫᱚ ᱠᱮᱴᱮᱡ ᱜᱮᱭᱟ᱾"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱡᱟᱯᱟᱢ ᱥᱟᱶ ᱯᱨᱮᱠᱴᱤᱥ ᱢᱮ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱡᱟᱯᱟᱢ ᱨᱮᱱ ᱦᱟᱱᱩᱢᱟᱱ ᱢᱳᱰ ᱚᱢ ᱥᱨᱤ ᱦᱟᱱᱩᱢᱟᱴᱮ ᱱᱟᱢᱟᱦᱟ ᱮᱱᱮᱡ ᱚᱠᱛᱮ ᱟᱢ ᱮᱱᱮᱡ ᱚᱠᱛᱮ - ᱡᱤᱨᱟᱹᱣ ᱚᱠᱛᱚ ᱨᱮ ᱑᱐᱘ ᱞᱮᱠᱷᱟ ᱞᱟᱹᱜᱤᱫ ᱵᱮᱥ ᱜᱮᱭᱟ᱾",
           "bold": false
         }
       ]
@@ -113,7 +158,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start ᱦᱱᱩᱢᱟᱱ Japa in Japam",
+      "label": "Start Hanuman Japa in Japam",
       "href": "https://japam.digital/?lang=sat&deity=hanuman&utm_source=google&utm_medium=seo&utm_campaign=hanuman-mantra-tuesday&utm_content=start-japa",
       "style": "primary"
     },
@@ -141,41 +186,41 @@
   ],
   "faqs": [
     {
-      "question": "Mantra or Chalisa first?",
-      "answer": "Either order is fine; follow your family custom."
+      "question": "ᱢᱟᱱᱛᱨᱟ ᱥᱮ ᱪᱟᱞᱤᱥᱟ ᱯᱩᱭᱞᱩ ᱨᱮ?",
+      "answer": "ᱡᱟᱦᱟᱸ ᱜᱮ ᱚᱰᱚᱨ ᱫᱚ ᱴᱷᱤᱠ ᱜᱮᱭᱟ; ᱟᱯᱮ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮᱱᱟᱜ ᱟᱹᱨᱤ ᱯᱟᱧᱡᱟᱭ ᱢᱮ᱾"
     },
     {
-      "question": "Can women chant Hanuman mantra?",
-      "answer": "Yes — widely accepted in most lineages."
+      "question": "ᱪᱮᱫ ᱛᱤᱨᱞᱟᱹ ᱠᱚ ᱦᱟᱱᱩᱢᱟᱱ ᱢᱟᱱᱛᱨᱟ ᱠᱚ ᱥᱮᱨᱮᱧ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ?",
+      "answer": "ᱦᱮᱸ - ᱯᱟᱥᱱᱟᱣ ᱞᱮᱠᱟᱛᱮ ᱵᱤᱥᱛᱤ ᱵᱚᱥᱛᱟ ᱨᱮ ᱥᱤᱠᱟᱨ ᱟᱠᱟᱱᱟ ᱾"
     },
     {
-      "question": "How does Hanuman help Shani?",
-      "answer": "See our Hanuman–Shani guide for combined Saturday practice."
+      "question": "ᱦᱟᱱᱩᱢᱟᱱ ᱥᱟᱱᱤ ᱪᱮᱫ ᱞᱮᱠᱟᱭ ᱜᱚᱲᱚ ᱟᱭᱟ?",
+      "answer": "ᱧᱩᱦᱩᱢ ᱢᱟᱦᱟ ᱨᱮᱭᱟᱜ ᱡᱚᱯᱚᱲᱟᱣ ᱦᱮᱣᱟ ᱞᱟᱹᱜᱤᱫ ᱟᱞᱮ ᱨᱮᱱ ᱦᱟᱱᱩᱢᱟᱱ-ᱥᱟᱱᱤ ᱜᱟᱭᱤᱰ ᱧᱮᱞ ᱢᱮ ᱾"
     },
     {
-      "question": "Best time on Tuesday?",
-      "answer": "Brahma muhurta or evening after sunset are common."
+      "question": "ᱵᱟᱞᱮ ᱢᱟᱦᱟᱸ ᱦᱤᱞᱚᱜ ᱥᱚᱨᱮᱥ ᱚᱠᱛᱚ?",
+      "answer": "ᱵᱨᱚᱦᱢᱟ ᱢᱩᱦᱩᱨᱛᱟ ᱥᱮ ᱥᱤᱛᱩᱝ ᱧᱩᱨᱩᱜ ᱛᱟᱭᱚᱢ ᱥᱤᱸᱜᱟᱹᱲ ᱫᱚ ᱥᱟᱫᱷᱟᱨᱚᱱ ᱜᱮᱭᱟ ᱾"
     },
     {
-      "question": "Is sindoor required?",
-      "answer": "For puja yes; silent japa does not require it."
+      "question": "ᱪᱮᱫ ᱥᱤᱱᱫᱩᱨ ᱞᱟᱹᱠᱛᱤᱜ ᱠᱟᱱᱟ?",
+      "answer": "ᱯᱩᱡᱟ ᱞᱟᱹᱜᱤᱫ ᱦᱮᱸ; ᱥᱟᱭᱞᱮᱱᱴ ᱡᱟᱯᱟ ᱞᱟᱹᱜᱤᱫ ᱱᱚᱣᱟ ᱞᱟᱹᱠᱛᱤ ᱵᱟᱹᱱᱩᱜᱼᱟ ᱾"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "ᱱᱚᱣᱟ ᱚᱱᱚᱞ ᱫᱚ ᱥᱩᱢᱩᱝ ᱥᱮᱪᱮᱫ ᱟᱨ ᱵᱷᱚᱠᱛᱚᱱ ᱦᱮᱣᱟ ᱞᱟᱹᱜᱤᱫ ᱜᱮ ᱾ ᱡᱟᱯᱟᱢ ᱫᱚ ᱪᱤᱠᱤᱥᱟ, ᱟᱹᱭᱤᱱᱤ, ᱟᱨ ᱵᱟᱝ ᱠᱟᱹᱣᱰᱤ ᱥᱚᱞᱦᱟ ᱵᱟᱭ ᱮᱢᱚᱜ ᱠᱟᱱᱟ᱾ ᱚᱨᱡᱚ ᱫᱚ ᱯᱚᱨᱥᱚᱱᱟᱞ ᱯᱟᱹᱛᱭᱟᱹᱣ ᱟᱨ ᱞᱮᱛᱟᱲ ᱦᱮᱣᱟ ᱨᱮ ᱴᱮᱦᱟᱱᱰ ᱢᱮᱱᱟᱜᱼᱟ᱾ ᱮᱯ ᱨᱮ ᱢᱟᱱᱛᱨᱟ ᱚᱱᱚᱞ ᱟᱨ ᱚᱰᱤᱭᱳ ᱫᱚ ᱡᱟᱯᱟ ᱥᱟᱯᱚᱨᱴ ᱞᱟᱹᱜᱤᱫ ᱠᱟᱱᱟ; ᱟᱹᱭᱫᱟᱹᱨᱤ ᱯᱩᱡᱟ ᱟᱹᱨᱤ ᱞᱟᱹᱜᱤᱫ ᱟᱯᱮ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮᱱ ᱯᱟᱭᱡᱤᱴ ᱥᱮ ᱥᱮᱫᱽᱨᱟ ᱥᱚᱞᱦᱟᱭ ᱢᱮ ᱾"
   },
   "relatedPages": [
     {
       "pageId": "mantra-hanuman",
-      "label": "Hanuman mantra pillar"
+      "label": "ᱦᱟᱱᱩᱢᱟᱱ ᱢᱟᱱᱛᱨᱟ ᱛᱷᱚᱢ"
     },
     {
       "pageId": "hanuman-mantra-shani",
-      "label": "Hanuman for Shani"
+      "label": "ᱥᱟᱱᱤ ᱞᱟᱹᱜᱤᱫ ᱦᱟᱱᱩᱢᱟᱱ"
     },
     {
       "pageId": "hanuman-jayanti-japa",
-      "label": "Hanuman Jayanti"
+      "label": "ᱦᱟᱱᱩᱢᱟᱱ ᱡᱟᱭᱮᱱᱛᱤ"
     }
   ]
 }

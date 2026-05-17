@@ -4,27 +4,27 @@
   "lang": "ur",
   "slug": "mantra-shanmukha-murugan",
   "deityId": "shanmukha",
-  "primaryKeyword": "murugan subramanya mantra",
+  "primaryKeyword": "موروگن سبرامنیا منتر",
   "secondaryKeywords": [
-    "om saravana bhavaya namaha",
-    "skanda shasti mantra",
-    "tamil murugan japa"
+    "اوم سروانا بھاوایا نامہ",
+    "سکند شاستی منتر",
+    "تمل موروگن جاپا"
   ],
   "meta": {
-    "title": "کارتک Mantra — 108 Japa | Japam",
-    "description": "کارتک mantra meaning, 108 japa steps, and practice in Japam.",
+    "title": "موروگن (شنمکھا) منتر جاپ | جاپم",
+    "description": "سبرامنیا/مورگن/سکند منتر — اوم سراوان بھاوایا نامہ — جاپم میں 108 جاپ۔",
     "ogImage": "/images/deities/shanmukha.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "کارتک — 108 Japa"
+      "text": "موروگن منتر - اوم سراوان بھاوایا نامہ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Lord Murugan (Shanmukha, Subramanya, Skanda) is the Tamil and pan-Indian god of courage and wisdom. His mantra is central to Skanda Shasti and Thai Poosam."
+          "text": "لارڈ موروگن (شنمکھا، سبرامنیا، سکندا) ہمت اور حکمت کے تامل اور پین انڈین دیوتا ہیں۔ اس کا منتر سکندا شاستی اور تھائی پوسم میں مرکزی حیثیت رکھتا ہے۔"
         }
       ]
     },
@@ -32,13 +32,13 @@
       "type": "p",
       "runs": [
         {
-          "text": "Japam includes Murugan with authentic mantra audio for daily japa."
+          "text": "جاپم میں روزانہ جاپ کے لیے مستند منتر آڈیو کے ساتھ موروگن شامل ہے۔"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "منتر کا مفہوم"
     },
     {
       "type": "blockquote",
@@ -53,57 +53,102 @@
       "type": "p",
       "runs": [
         {
-          "text": "Chant with a calm mind, offering salutation (Namaha) rather than demanding outcomes."
+          "text": "پُرسکون ذہن کے ساتھ نعرہ لگائیں، نتائج کا مطالبہ کرنے کی بجائے سلام پیش کریں۔"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "جاپ کے فوائد (روایتی نقطہ نظر)"
     },
     {
       "type": "ul",
       "items": [
-        "Victory over inner fear — traditional Skanda symbolism",
-        "Tuesday and Shasti days are sacred",
-        "Vel worship and kavadi traditions complement japa",
-        "Students pray for clarity and discipline"
+        "اندرونی خوف پر فتح - روایتی سکنڈا کی علامت",
+        "منگل اور شاستی کے دن مقدس ہیں۔",
+        "ویل پوجا اور کاوڑی روایات جاپ کی تکمیل کرتی ہیں۔",
+        "طلباء وضاحت اور نظم و ضبط کے لیے دعا کرتے ہیں۔"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "108 مرتبہ پڑھنے کا طریقہ"
     },
     {
       "type": "ul",
       "items": [
-        "Chant 108 on Shasti or daily morning",
-        "Offer red flowers if doing puja",
-        "Visit Murugan temple on Thai Poosam when possible",
-        "Track rounds in Japam during commute"
+        "شاستی یا روزانہ صبح 108 کا جاپ کریں۔",
+        "پوجا کرتے وقت سرخ پھول چڑھائیں۔",
+        "جب ممکن ہو تھائی پوسم پر موروگن مندر کا دورہ کریں۔",
+        "سفر کے دوران Japam میں راؤنڈ ٹریک کریں۔"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "کب نعرہ لگانا ہے۔"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Skanda Shasti (six days in Aippasi/Tulam month), Thai Poosam, and Tuesdays."
+          "text": "سکندا شاستی (ایپاسی/تملم مہینے میں چھ دن)، تھائی پوسم، اور منگل۔"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "108 تکرار کیوں اہم ہے۔",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Choose Shanmukha in Japam for Om Saravana Bhavaya Namaha — regional names Murugan/Skanda all point to the same beloved deity.",
+          "text": "نمبر 108 جاپ مالا پر ایک مکمل دور ہے۔ مسلسل تکرار ذہن کو پرسکون کرتی ہے اور منتر کے معنی پر توجہ مرکوز کرتی ہے۔"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "کچھ روایات 11 یا 21 مالوں کی تجویز کرتی ہیں - اپنے گرو یا پجاری سے اپنی منت کے مطابق گنتی کے لیے پوچھیں۔"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "عام غلطیوں سے بچنا ہے۔"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "بہت تیز گانا اور آواز پر توجہ کھو دینا",
+        "ہدایت کے بغیر متعدد دیوتا منتوں کو ملانا",
+        "بھکتی اور اخلاقی زندگی کے بجائے صرف مادی نتائج کی توقع کرنا"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "مندر اور گھر کی مشق ایک ساتھ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ہوم جاپا مندر کی پوجا کی حمایت کرتا ہے۔ یہ درشن کی جگہ نہیں لیتا۔ تہوار کے دنوں یا ہفتہ کے دن مندر جانا خاندانی روایت کو مضبوط کرتا ہے۔"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Japam کے ساتھ مشق کریں۔"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "اوم سراوان بھاوایا نامہ کے لیے جاپم میں شنمکھا کا انتخاب کریں — علاقائی نام موروگن/سکند سب ایک ہی پیارے دیوتا کی طرف اشارہ کرتے ہیں۔",
           "bold": false
         }
       ]
@@ -113,7 +158,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start کارتک Japa in Japam",
+      "label": "Start Shanmukha Japa in Japam",
       "href": "https://japam.digital/?lang=ur&deity=shanmukha&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=start-japa",
       "style": "primary"
     },
@@ -141,41 +186,41 @@
   ],
   "faqs": [
     {
-      "question": "Murugan vs Subramanya?",
-      "answer": "Same deity — regional names."
+      "question": "موروگن بمقابلہ سبرامنیا؟",
+      "answer": "ایک ہی دیوتا - علاقائی نام۔"
     },
     {
-      "question": "Tamil or Sanskrit chant?",
-      "answer": "Mantra is Sanskrit; Tamil padigams are separate devotion."
+      "question": "تمل یا سنسکرت کا نعرہ؟",
+      "answer": "منتر سنسکرت ہے؛ تمل پاڈیگم الگ عقیدت ہیں۔"
     },
     {
-      "question": "Kavadi and japa together?",
-      "answer": "Many vow japa before kavadi pilgrimage."
+      "question": "کاوڑی اور جاپا ایک ساتھ؟",
+      "answer": "کاوڑی یاترا سے پہلے کئی منتیں جپتے ہیں۔"
     },
     {
-      "question": "Shasti fasting?",
-      "answer": "Optional — follow temple tradition."
+      "question": "شاستی روزہ؟",
+      "answer": "اختیاری - مندر کی روایت کی پیروی کریں۔"
     },
     {
-      "question": "Is vel icon required?",
-      "answer": "Helpful in puja; mental japa needs only focus."
+      "question": "کیا ویل آئیکن کی ضرورت ہے؟",
+      "answer": "پوجا میں مددگار؛ ذہنی جاپ کو صرف توجہ کی ضرورت ہے۔"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "یہ مضمون صرف تعلیمی اور عقیدتی مشق کے لیے ہے۔ Japam طبی، قانونی، یا مالی مشورہ فراہم نہیں کرتا ہے۔ نتائج کا انحصار ذاتی ایمان اور مستقل مشق پر ہوتا ہے۔ ایپ میں منتر کا متن اور آڈیو جاپا سپورٹ کے لیے ہیں۔ رسمی پوجا کے قواعد کے لیے اپنے خاندانی پجاری یا روایت سے مشورہ کریں۔"
   },
   "relatedPages": [
     {
       "pageId": "skanda-shasti-murugan",
-      "label": "Skanda Shasti"
+      "label": "سکند شاستی"
     },
     {
       "pageId": "japa-108-times",
-      "label": "108 japa guide"
+      "label": "108 جاپ"
     },
     {
       "pageId": "online-japa-mantra",
-      "label": "Online japa"
+      "label": "آن لائن جاپا"
     }
   ]
 }

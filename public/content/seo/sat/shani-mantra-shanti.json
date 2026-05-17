@@ -4,40 +4,40 @@
   "lang": "sat",
   "slug": "shani-mantra-shanti",
   "deityId": "shani",
-  "primaryKeyword": "shani mantra shanti",
+  "primaryKeyword": "ᱥᱟᱱᱤ ᱢᱟᱱᱛᱨᱟ ᱥᱟᱱᱛᱤ",
   "secondaryKeywords": [
-    "shani dosha nivaran",
-    "shani pariharam",
-    "saturday shani puja",
-    "shani graha mantra 108"
+    "ᱥᱟᱱᱤ ᱫᱚᱥᱟ ᱱᱤᱣᱟᱨᱟᱱ",
+    "ᱥᱟᱱᱤ ᱯᱟᱨᱤᱦᱟᱨᱟᱢ",
+    "ᱧᱩᱦᱩᱢ ᱢᱟᱦᱟᱸ ᱥᱟᱱᱤ ᱯᱩᱡᱟ",
+    "ᱥᱟᱱᱤ ᱜᱽᱨᱟᱦᱟ ᱢᱟᱱᱛᱨᱚ ᱑᱐᱘"
   ],
   "meta": {
-    "title": "Shani Mantra for Shanti — 108 Japa Guide | Japam",
-    "description": "Traditional Shani graha mantra, how to chant 108 times, and digital japa with Japam match-3 and audio.",
+    "title": "ᱥᱟᱱᱛᱤ ᱞᱟᱹᱜᱤᱫ ᱥᱟᱱᱤ ᱢᱟᱱᱛᱨᱟ — ᱑᱐᱘ ᱡᱟᱯᱟ ᱜᱟᱭᱤᱰ | ᱡᱟᱯᱟᱢ",
+    "description": "ᱯᱚᱨᱚᱢᱟᱱᱟᱜ ᱥᱟᱱᱤ ᱜᱽᱨᱟᱦᱟ ᱢᱟᱱᱛᱨᱚ, ᱑᱐᱘ ᱫᱷᱟᱣ ᱪᱮᱫ ᱞᱮᱠᱟ ᱥᱮᱨᱮᱧ ᱦᱩᱭᱩᱜ-ᱟ, ᱟᱨ ᱡᱟᱯᱟᱢ ᱢᱮᱪ-᱓ ᱟᱨ ᱚᱰᱤᱭᱳ ᱥᱟᱶᱛᱮ ᱰᱤᱡᱤᱴᱟᱞ ᱡᱟᱯᱟ ᱾",
     "ogImage": "/images/deities/shani.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Shani Mantra and Graha Shanti"
+      "text": "ᱥᱟᱱᱤ ᱢᱟᱱᱛᱨᱟ ᱟᱨ ᱜᱽᱨᱟᱦᱟ ᱥᱟᱱᱛᱤ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Lord Shani",
+          "text": "ᱯᱨᱚᱵᱷᱩ ᱥᱟᱱᱤ",
           "bold": true
         },
         {
-          "text": " (Shanaischara) is honoured in Hindu tradition as the graha who teaches patience, discipline, and responsibility. Devotees turn to "
+          "text": "(ᱥᱟᱱᱟᱭᱥᱪᱟᱨ) ᱫᱚ ᱦᱤᱱᱫᱷᱩ ᱥᱮᱨᱣᱟ ᱨᱮ ᱜᱽᱨᱟᱦᱟ ᱞᱮᱠᱟᱛᱮ ᱥᱟᱹᱜᱩᱱ ᱟᱠᱟᱱᱟ ᱚᱠᱚᱭ ᱫᱚ ᱥᱟᱦᱟᱣ ᱫᱟᱲᱮ, ᱥᱟᱹᱭᱛᱟᱹᱨ ᱟᱨ ᱟᱝᱜᱤᱵᱷᱟᱨ ᱪᱮᱫ ᱮᱫᱟᱭ᱾ ᱵᱷᱚᱠᱛᱚ ᱠᱚ ᱥᱮᱫ ᱠᱚ ᱩᱪᱟᱹᱲᱚᱜᱼᱟ"
         },
         {
-          "text": "japa",
+          "text": "ᱡᱟᱯᱟ",
           "bold": true,
           "underline": true
         },
         {
-          "text": " — repetition of a sacred mantra — for graha shanti (planetary peace), especially when Shani is strong in the chart or during challenging periods."
+          "text": "- ᱥᱚᱱᱚᱛ ᱢᱟᱱᱛᱨᱚ ᱨᱮᱭᱟᱜ ᱫᱚᱦᱲᱟ - ᱜᱽᱨᱟᱦᱟ ᱥᱟᱱᱛᱤ (ᱯᱞᱟᱱᱴᱟᱨᱤ ᱯᱤᱥ) ᱞᱟᱹᱜᱤᱫ, ᱠᱷᱟᱥ ᱠᱟᱛᱮ ᱡᱚᱠᱷᱚᱱ ᱥᱟᱱᱤ ᱪᱟᱨᱴ ᱨᱮ ᱥᱮ ᱵᱟᱹᱲᱤᱡ ᱚᱠᱛᱚ ᱨᱮ ᱠᱮᱴᱮᱡ ᱛᱟᱦᱮᱱᱟ᱾"
         }
       ]
     },
@@ -45,19 +45,19 @@
       "type": "p",
       "runs": [
         {
-          "text": "This guide explains the meaning of the Shani mantra used in Japam, how to practise 108 repetitions with a mala, and how to support your practice with the Japam app."
+          "text": "ᱱᱚᱶᱟ ᱜᱟᱭᱤᱰ ᱨᱮ ᱡᱟᱯᱟᱢ ᱨᱮ ᱵᱮᱵᱚᱦᱟᱨᱚᱜ ᱠᱟᱱ ᱥᱟᱱᱤ ᱢᱟᱱᱛᱨᱚ ᱨᱮᱭᱟᱜ ᱢᱮᱱᱮᱛ ᱵᱩᱡᱷᱟᱹᱣ ᱟᱠᱟᱱᱟ, ᱢᱟᱞᱟ ᱥᱟᱶ 108 ᱫᱷᱟᱣ ᱪᱮᱫ ᱞᱮᱠᱟ ᱪᱮᱥᱴᱟ ᱦᱩᱭᱩᱜ-ᱟ, ᱟᱨ ᱡᱟᱯᱟᱢ ᱮᱯ ᱛᱮ ᱟᱢᱟᱜ ᱪᱮᱥᱴᱟ ᱪᱮᱫ ᱞᱮᱠᱟ ᱥᱟᱯᱚᱨᱴ ᱦᱩᱭᱩᱜ-ᱟ᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "ᱢᱟᱱᱛᱨᱚ ᱨᱮᱭᱟᱜ ᱢᱮᱱᱮᱛ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "The bija and name mantra commonly chanted for Shanaischara is:"
+          "text": "ᱵᱤᱡᱟ ᱟᱨ ᱧᱩᱛᱩᱢ ᱢᱟᱱᱛᱨᱚ ᱫᱚ ᱥᱟᱱᱟᱭᱥᱪᱟᱨᱟ ᱞᱟᱹᱜᱤᱫ ᱥᱟᱫᱷᱟᱨᱚᱱ ᱞᱮᱠᱟᱛᱮ ᱠᱚ ᱥᱮᱨᱮᱧᱟ:"
         }
       ]
     },
@@ -74,87 +74,133 @@
       "type": "p",
       "runs": [
         {
-          "text": "“Sham” is associated with Shani’s seed sound; “Shanicharaya” addresses the slow-moving lord of Saturn. “Namaha” means salutation — offering the mind to the deity with humility rather than demanding a specific outcome."
+          "text": "“ᱥᱟᱢ” ᱫᱚ ᱥᱟᱱᱤᱭᱟᱜ ᱥᱤᱰ ᱥᱟᱰᱮ ᱥᱟᱶ ᱡᱚᱲᱟᱣ ᱢᱮᱱᱟᱜᱼᱟ; “ᱥᱟᱱᱤᱪᱟᱨᱟᱭᱟ” ᱫᱚ ᱵᱟᱹᱭ ᱵᱟᱹᱭ ᱛᱮ ᱪᱟᱞᱟᱜ ᱠᱟᱱ ᱧᱩᱱᱩᱢ ᱵᱚᱸᱜᱟ ᱥᱟᱢᱵᱚᱫᱷ᱾ᱛ ᱠᱟᱱᱟᱭ ᱾ “ᱱᱟᱢᱟᱦᱟ” ᱨᱮᱭᱟᱜ ᱢᱮᱱᱮᱛ ᱫᱚ ᱥᱟᱹᱜᱩᱱ - ᱢᱤᱫ ᱴᱮᱱ ᱯᱷᱚᱞᱚᱱ ᱫᱟᱹᱵᱤ ᱠᱟᱛᱮ ᱵᱚᱝᱜᱟ ᱴᱷᱮᱱ ᱢᱚᱱᱮ ᱥᱟᱯᱲᱟᱣ ᱠᱟᱛᱮ ᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "ᱡᱟᱯᱟ ᱨᱮᱭᱟᱜ ᱞᱟᱵᱷ (ᱯᱚᱨᱚᱢ ᱧᱮᱞᱚᱢ)"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Scriptures and elders describe japa as calming the mind, building steadiness, and aligning one with dharma. Shani worship is often linked to accepting karma with grace, reducing fear, and cultivating discipline. These are spiritual aims, not guaranteed material results — faith and regular practice matter."
+          "text": "ᱥᱟᱫᱷᱚᱨᱚᱱ ᱟᱨ ᱦᱟᱲᱟᱢ ᱠᱚ ᱡᱟᱯᱟ ᱫᱚ ᱢᱚᱱᱮ ᱛᱷᱤᱨ, ᱛᱷᱤᱨ ᱛᱮᱭᱟᱨ ᱟᱨ ᱫᱷᱚᱨᱚᱢ ᱥᱟᱶ ᱢᱤᱫ ᱫᱷᱟᱯ ᱨᱮ ᱛᱟᱦᱮᱱ ᱢᱮᱱᱛᱮ ᱠᱚ ᱵᱚᱨᱱᱚᱱ ᱮᱫᱟ᱾ ᱥᱟᱱᱤ ᱵᱚᱸᱜᱟ ᱫᱚ ᱟᱪᱠᱟ ᱫᱟᱭᱟ ᱥᱟᱶᱛᱮ ᱠᱟᱹᱨᱢᱟ ᱟᱝᱜᱚᱪ, ᱵᱚᱛᱚᱨ ᱠᱚᱢᱟᱣ ᱟᱨ ᱥᱟᱹᱭᱛᱟᱱ ᱪᱟᱥ ᱥᱟᱶ ᱡᱚᱲᱟᱣ ᱢᱮᱱᱟᱜ-ᱟ᱾ ᱱᱚᱶᱟ ᱠᱚ ᱫᱚ ᱟᱫᱷᱟᱭᱟᱱ ᱡᱚᱥ ᱠᱟᱱᱟ, ᱜᱮᱨᱮᱱᱴᱤ ᱡᱤᱱᱤᱥ ᱚᱨᱡᱚ ᱫᱚ ᱵᱟᱝ ᱠᱟᱱᱟ - ᱯᱟᱹᱛᱭᱟᱹᱣ ᱟᱨ ᱞᱮᱛᱟᱲ ᱦᱮᱣᱟ ᱫᱚ ᱢᱟᱢᱞᱟ ᱠᱟᱱᱟ ᱾"
         }
       ]
     },
     {
       "type": "ul",
       "items": [
-        "Supports mental focus and patience during difficult phases",
-        "Traditionally offered on Saturdays for Shani bhakti",
-        "Often combined with charity, honesty, and service (seva)",
-        "May be practised alongside Hanuman worship in many families"
+        "ᱢᱩᱥᱠᱤᱞ ᱫᱷᱟᱯ ᱨᱮ ᱢᱚᱱᱮ ᱯᱷᱚᱠᱟᱥ ᱟᱨ ᱥᱟᱦᱟᱣ ᱫᱟᱲᱮ ᱜᱚᱲᱚ ᱮᱢᱟᱭᱟ",
+        "ᱥᱟᱱᱤ ᱵᱷᱚᱠᱛᱤ ᱞᱟᱹᱜᱤᱫ ᱧᱩᱦᱩᱢ ᱢᱟᱦᱟᱸ ᱦᱤᱞᱚᱜ ᱩᱯᱨᱩᱢ ᱞᱮᱠᱟᱛᱮ ᱮᱢᱚᱜ ᱠᱟᱱᱟ",
+        "ᱫᱟᱱ, ᱥᱚᱛᱚᱞ ᱟᱨ ᱥᱮᱵᱟ (ᱥᱮᱣᱟ) ᱥᱟᱶ ᱢᱤᱞᱟᱹᱣ ᱛᱟᱦᱮᱱᱟ",
+        "ᱟᱭᱢᱟ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮ ᱦᱟᱱᱩᱢᱟᱱ ᱵᱚᱸᱜᱟ ᱥᱟᱶ ᱥᱟᱶᱛᱮ ᱪᱮᱥᱴᱟ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "᱑᱐᱘ ᱫᱷᱟᱣ ᱪᱮᱫ ᱞᱮᱠᱟ ᱥᱮᱨᱮᱧ ᱦᱩᱭᱩᱜ-ᱟ"
     },
     {
       "type": "ul",
       "items": [
-        "Choose a quiet place; face east or north if convenient.",
-        "Sit comfortably; keep the spine straight and breath natural.",
-        "Use a rudraksha or sphatik mala of 108 beads; one round equals 108 japa.",
-        "Chant clearly or mentally; keep attention on the sound and meaning.",
-        "Many begin or end with a short prayer to your ishta devata."
+        "ᱢᱤᱫ ᱱᱤᱡᱷᱩ ᱡᱟᱭᱜᱟ ᱵᱟᱪᱷᱟᱣ ᱢᱮ; ᱡᱩᱫᱤ ᱥᱩᱵᱤᱫᱟ ᱠᱷᱟᱱ ᱯᱩᱨᱩᱵ ᱥᱮ ᱩᱛᱚᱨ ᱥᱮᱫ ᱥᱮᱡ ᱢᱮ ᱾",
+        "ᱟᱨᱟᱢ ᱥᱟᱶ ᱫᱩᱲᱩᱵ ᱢᱮ; ᱢᱩᱲᱩᱫ ᱥᱤᱫᱷᱟᱹ ᱫᱚᱦᱚᱭ ᱢᱮ ᱟᱨ ᱥᱟᱦᱮᱫ ᱥᱟᱪᱟᱨᱡᱚᱝ ᱢᱮ ᱾",
+        "᱑᱐᱘ ᱢᱟᱹᱭᱞᱟᱹ ᱨᱮᱭᱟᱜ ᱨᱩᱰᱨᱟᱠᱥᱟ ᱵᱟᱝᱠᱷᱟᱱ ᱥᱯᱷᱟᱴᱤᱠ ᱢᱟᱞᱟ ᱵᱮᱵᱷᱟᱨ ᱢᱮ; ᱢᱤᱫ ᱜᱩᱞᱟᱹᱭ ᱑᱐᱘ ᱡᱟᱯᱟ ᱥᱟᱶ ᱵᱟᱨᱟᱵᱟᱨᱤ ᱜᱮᱭᱟ ᱾",
+        "ᱯᱩᱥᱴᱟᱹᱣ ᱥᱮ ᱦᱩᱫᱤᱥ ᱛᱮ ᱥᱮᱨᱮᱧ ᱢᱮ; ᱥᱟᱰᱮ ᱟᱨ ᱢᱮᱱᱮᱛ ᱨᱮ ᱫᱷᱭᱟᱱ ᱫᱚᱦᱚᱭ ᱢᱮ᱾",
+        "ᱟᱹᱰᱤ ᱦᱚᱲ ᱟᱢᱟᱜ ᱤᱥᱛᱟ ᱫᱮᱣᱟᱛᱟ ᱴᱷᱮᱱ ᱠᱷᱟᱴᱚ ᱱᱮᱦᱚᱨ ᱛᱮ ᱮᱦᱚᱵᱚᱜ ᱟᱨ ᱵᱟᱝ ᱢᱩᱪᱟᱹᱫᱚᱜ ᱟ᱾"
       ]
     },
     {
       "type": "h2",
-      "text": "Best day and time"
+      "text": "ᱥᱚᱨᱮᱥ ᱢᱟᱦᱟᱸ ᱟᱨ ᱚᱠᱛᱚ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Saturday (Shanivar) is widely observed for Shani puja and mantra japa. Early morning or evening after sunset are common. During Sade Sati or Shani dasha, some devotees increase regularity — consult your family tradition or priest for personal timing."
+          "text": "ᱧᱩᱦᱩᱢ ᱢᱟᱦᱟᱸ (ᱥᱟᱱᱤᱵᱚᱨ) ᱫᱚ ᱥᱟᱱᱤ ᱯᱩᱡᱟ ᱟᱨ ᱢᱟᱱᱛᱨᱚ ᱡᱟᱯᱟ ᱞᱟᱹᱜᱤᱫ ᱯᱟᱥᱱᱟᱣ ᱞᱮᱠᱟᱛᱮ ᱢᱟᱱᱟᱣᱚᱜ ᱠᱟᱱᱟ ᱾ ᱥᱤᱛᱩᱝ ᱧᱩᱨᱩᱜ ᱛᱟᱭᱚᱢ ᱥᱮᱛᱟᱜ ᱥᱮ ᱥᱤᱸᱜᱟᱹᱲ ᱥᱟᱫᱷᱟᱨᱚᱱ ᱜᱮᱭᱟ ᱾ ᱥᱟᱰᱮ ᱥᱟᱛᱤ ᱥᱮ ᱥᱟᱱᱤ ᱫᱟᱥᱟ ᱚᱠᱛᱚ ᱨᱮ, ᱠᱤᱪᱷᱩ ᱵᱷᱚᱠᱛᱚ ᱠᱚ ᱫᱚ ᱞᱮᱛᱟᱲ ᱠᱚ ᱵᱟᱹᱲᱛᱤᱭᱟ - ᱟᱯᱮ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮᱱ ᱥᱮᱨᱣᱟ ᱥᱮ ᱯᱟᱹᱭᱨᱤ ᱠᱚ ᱥᱟᱶ ᱥᱚᱞᱦᱟ ᱢᱮ ᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "᱑᱐᱘ ᱫᱚᱦᱲᱟ ᱪᱮᱫᱟᱜ ᱢᱟᱱᱚᱛ ᱢᱮᱱᱟᱜᱼᱟ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Japam",
+          "text": "ᱟᱹᱰᱤ ᱥᱟᱢᱯᱨᱟᱭᱟ ᱨᱮ, 108 ᱫᱚ ᱢᱤᱫ ᱯᱩᱨᱟᱹ ᱢᱟᱞᱟ ᱨᱟᱩᱱᱰ ᱠᱟᱱᱟ — ᱵᱟᱝ ᱞᱮᱠᱷᱟ ᱠᱟᱛᱮ ᱫᱤᱱᱟᱹᱢ ᱥᱮᱥᱚᱱ ᱵᱚᱱᱫᱚ ᱨᱮᱭᱟᱜ ᱯᱨᱮᱠᱴᱤᱠᱟᱞ ᱰᱟᱦᱟᱨ ᱠᱟᱱᱟ᱾ ᱮᱞ ᱫᱚ ᱥᱤᱢᱟᱹ ᱠᱟᱱᱟ (ᱠᱚᱥᱢᱤᱠ ᱥᱟᱭᱠᱟᱞ, ᱟᱫᱚᱢ ᱪᱮᱫ ᱠᱚ ᱨᱮ ᱱᱟᱰᱤᱥ), ᱢᱮᱱᱠᱷᱟᱱ ᱜᱟᱹᱦᱤᱨ ᱡᱚᱥ ᱫᱚ ᱥᱮᱴᱮᱨ ᱫᱷᱭᱟᱱ ᱠᱟᱱᱟ: ᱢᱤᱫ ᱥᱟᱦᱮᱫ, ᱢᱤᱫ ᱢᱟᱱᱛᱨᱚ, ᱢᱤᱫ ᱚᱠᱛᱚ ᱨᱮ ᱢᱤᱫ ᱢᱟᱹᱭᱞᱟᱹ᱾"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱡᱩᱫᱤ ᱑᱐᱘ ᱯᱩᱭᱞᱩ ᱨᱮ ᱦᱟᱢᱟᱞ ᱵᱩᱡᱷᱟᱹᱣᱜ ᱠᱟᱱᱟ, ᱑᱑ ᱵᱟᱝᱠᱷᱟᱱ ᱒᱗ ᱫᱚᱦᱲᱟ ᱛᱮ ᱮᱦᱚᱵᱽ ᱢᱮ ᱟᱨ ᱦᱟᱯᱛᱟ ᱛᱟᱭᱚᱢ ᱵᱟᱹᱲᱛᱤᱜ ᱢᱮ ᱾ ᱥᱟᱫᱷᱟᱨᱚᱱ ᱫᱤᱱ ᱨᱮ ᱞᱮᱛᱟᱲ ᱛᱟᱦᱮᱱ ᱫᱚ ᱢᱤᱫ ᱜᱟᱹᱦᱤᱨ ᱫᱷᱚᱱ ᱠᱷᱚᱱ ᱦᱚᱸ ᱵᱟᱹᱲᱛᱤ ᱢᱟᱱᱚᱛ ᱛᱟᱦᱮᱱᱟ᱾"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱥᱟᱫᱷᱟᱨᱚᱱ ᱡᱟᱯᱟ ᱵᱷᱩᱞ ᱠᱷᱚᱱ ᱥᱟᱦᱟᱜ ᱞᱟᱹᱜᱤᱫ"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "ᱞᱮᱠᱷᱟ \"ᱢᱩᱪᱟᱹᱫ\" ᱞᱟᱹᱜᱤᱫ ᱢᱟᱱᱛᱨᱚ ᱞᱟᱜᱟᱣ ᱢᱮ - ᱵᱟᱹᱭ ᱵᱟᱹᱭ ᱛᱮ, ᱟᱸᱡᱚᱢᱚᱜ ᱥᱮ ᱢᱚᱱᱮ ᱥᱟᱰᱮ ᱵᱮᱥ ᱜᱮᱭᱟ",
+        "ᱯᱩᱨᱟᱹ ᱢᱟᱞᱟ ᱨᱟᱩᱱᱰ ᱚᱠᱛᱚ ᱨᱮ ᱢᱟᱞᱴᱟᱥᱠᱤᱝ (ᱥᱠᱨᱚᱞᱤᱝ, ᱴᱤᱵᱷᱤ)",
+        "ᱨᱚᱠᱟ ᱡᱤᱱᱤᱥ ᱚᱨᱡᱚ ᱞᱟᱹᱜᱤᱫ ᱡᱟᱯᱟ ᱫᱚ ᱥᱟᱣᱫᱟ ᱞᱮᱠᱟᱛᱮ ᱵᱮᱵᱷᱟᱨ ᱢᱮ",
+        "ᱛᱩᱯᱩᱱ ᱵᱟᱹᱜᱤ/ᱥᱟᱯᱷᱟ ᱴᱷᱟᱶ ᱡᱚᱠᱷᱚᱱ ᱟᱢᱟᱜ ᱥᱮᱨᱣᱟ ᱜᱽᱨᱟᱦᱟ ᱡᱟᱯᱟ ᱞᱟᱹᱜᱤᱫ ᱥᱚᱞᱦᱟ ᱮᱢᱟᱭᱟ",
+        "ᱢᱤᱫ ᱵᱷᱟᱜᱮ ᱦᱟᱴ ᱛᱟᱭᱚᱢ ᱛᱷᱤᱨᱚᱜ ᱢᱮ - ᱜᱽᱨᱟᱦᱟ ᱟᱨ ᱵᱚᱝᱜᱟ ᱵᱷᱟᱵᱽᱱᱟ ᱫᱚ ᱟᱹᱰᱤ ᱜᱷᱟᱹᱲᱤᱡ ᱜᱮᱭᱟ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱥᱟᱱᱠᱟᱞᱯᱟ ᱟᱨ ᱫᱤᱱᱟᱹᱢ ᱜᱮ ᱰᱤᱥᱤᱯᱞᱤᱱ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱮᱛᱚᱦᱚᱵ ᱞᱟᱦᱟᱨᱮ, ᱟᱭᱢᱟ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱠᱚ ᱢᱤᱫ ᱠᱷᱟᱴᱚ ᱥᱟᱱᱠᱟᱞᱯᱟ (ᱦᱩᱫᱤᱥ) ᱠᱚ ᱛᱷᱟᱯᱱᱟᱣᱟ: ᱧᱩᱛᱩᱢ, ᱜᱳᱴᱨᱟ ᱡᱩᱫᱤ ᱞᱟᱹᱜᱩᱜ ᱠᱷᱟᱱ, ᱟᱨ ᱡᱟᱯᱟ ᱨᱮᱭᱟᱜ ᱡᱚᱥ᱾ ᱥᱟᱱᱟᱢ ᱫᱤᱱ ᱢᱤᱫ ᱚᱠᱛᱚ ᱫᱚᱦᱚᱭ ᱢᱮ ᱡᱚᱠᱷᱚᱱ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱜ-ᱟ ᱥᱮᱛᱟᱜ ᱵᱟᱝᱠᱷᱟᱱ ᱥᱤᱸᱜᱟᱹᱲ ᱫᱚ ᱥᱟᱫᱷᱟᱨᱚᱱ ᱜᱮᱭᱟ ᱾ ᱢᱟᱱᱛᱨᱚ ᱫᱚ ᱥᱟᱹᱨᱤ ᱵᱮᱵᱚᱦᱟᱨ, ᱫᱟᱱ, ᱥᱮ ᱥᱮᱣᱟ ᱥᱟᱶᱛᱮ ᱢᱤᱞᱟᱹᱣ ᱢᱮ ᱡᱟᱦᱟᱸ ᱨᱮ ᱟᱢ ᱨᱮᱱ ᱢᱟᱨᱟᱝ ᱦᱚᱲ ᱠᱚ ᱥᱚᱞᱦᱟ ᱮᱢᱟ; ᱡᱟᱯᱟ ᱫᱚ ᱪᱟᱹᱨᱤᱛ ᱥᱟᱯᱚᱨᱴ ᱮᱫᱟᱭ, ᱱᱚᱣᱟ ᱫᱚ ᱴᱷᱤᱠ ᱠᱟᱹᱢᱤ ᱵᱟᱭ ᱵᱚᱫᱚᱞᱟ᱾"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱡᱟᱯᱟᱢ ᱥᱟᱶ ᱯᱨᱮᱠᱴᱤᱥ ᱢᱮ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱡᱟᱯᱟᱢ",
           "bold": true
         },
         {
-          "text": " is a digital mantra practice app: match gems on the board while hearing deity mantra audio, with japa counting for each deity. Select Shani to hear "
+          "text": "ᱢᱤᱫ ᱰᱤᱡᱤᱴᱟᱞ ᱢᱟᱱᱛᱨᱟ ᱦᱮᱣᱟ ᱮᱯ ᱠᱟᱱᱟᱺ ᱵᱚᱸᱜᱟ ᱢᱟᱱᱛᱨᱟ ᱚᱰᱤᱭᱳ ᱟᱸᱡᱚᱢ ᱚᱠᱛᱮ ᱵᱚᱨᱰ ᱨᱮ ᱨᱟᱸᱛ ᱢᱮᱪ ᱢᱮ, ᱥᱟᱱᱟᱢ ᱵᱚᱝᱜᱟ ᱞᱟᱹᱜᱤᱫ ᱡᱟᱯᱟ ᱞᱮᱠᱷᱟᱜ ᱠᱟᱱᱟ᱾ ᱟᱸᱡᱚᱢ ᱞᱟᱹᱜᱤᱫ ᱥᱟᱱᱤ ᱵᱟᱪᱷᱟᱣ ᱢᱮ"
         },
         {
-          "text": "Om Shan Shanicharaya Namaha",
+          "text": "ᱚᱢ ᱥᱟᱱ ᱥᱟᱱᱤᱪᱟᱨᱭᱟ ᱱᱟᱢᱟᱦᱟ",
           "bold": true
         },
         {
-          "text": " during play, track your count toward 108, and join community Maha Japa Yagnas when you wish."
+          "text": "ᱠᱷᱮᱞᱚᱸᱰ ᱚᱠᱛᱚ ᱨᱮ, ᱟᱢᱟᱜ ᱞᱮᱠᱷᱟ ᱑᱐᱘ ᱥᱮᱫ ᱴᱨᱟᱠ ᱢᱮ, ᱟᱨ ᱥᱟᱶᱛᱟ ᱢᱟᱦᱟ ᱡᱟᱯᱟ ᱭᱟᱜᱽᱱᱟᱥ ᱨᱮ ᱥᱮᱞᱮᱫᱚᱜ ᱢᱮ ᱡᱚᱠᱷᱚᱱ ᱟᱢᱟᱜ ᱢᱚᱱᱮ ᱢᱮᱱᱟᱜᱼᱟ ᱾"
         }
       ]
     },
     {
       "type": "ul",
       "items": [
-        "Per-deity japa modes and 108-japa specials",
-        "Mantra audio synced to match-3 gameplay",
-        "Many Indian languages in the app UI",
-        "Optional Pushpa Aradhana (digital flower offering)"
+        "ᱯᱟᱨ-ᱵᱚᱸᱜᱟ ᱡᱟᱯᱟ ᱢᱚᱰᱥ ᱟᱨ ᱑᱐᱘-ᱡᱟᱯᱟ ᱥᱯᱮᱥᱟᱞ",
+        "ᱢᱟᱱᱛᱨᱟ ᱚᱰᱤᱭᱳ ᱢᱮᱪ-᱓ ᱜᱮᱢᱯᱞᱮ ᱥᱟᱶ ᱥᱤᱱᱠ ᱟᱠᱟᱱᱟ",
+        "ᱮᱯ UI ᱨᱮ ᱟᱭᱢᱟ ᱵᱷᱟᱨᱚᱛ ᱯᱟᱹᱨᱥᱤ ᱠᱚ",
+        "ᱚᱯᱥᱚᱱᱟᱞ ᱯᱩᱥᱯᱟ ᱟᱨᱟᱫᱷᱟᱱᱟ (ᱰᱤᱡᱤᱴᱟᱞ ᱵᱟᱦᱟ ᱮᱢᱚᱜ)"
       ]
     }
   ],
@@ -162,7 +208,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start ᱥᱟᱱᱤ Japa in Japam",
+      "label": "Start Shani Japa in Japam",
       "href": "https://japam.digital/?lang=sat&deity=shani&utm_source=google&utm_medium=seo&utm_campaign=shani-mantra-shanti&utm_content=start-japa",
       "style": "primary"
     },
@@ -181,54 +227,54 @@
       "style": "secondary"
     },
     {
-      "id": "sticky",
+      "id": "start-japa",
       "position": "sticky-footer",
-      "label": "Open Japam",
+      "label": "Start Shani Japa",
       "href": "https://japam.digital/?lang=sat&deity=shani&utm_source=google&utm_medium=seo&utm_campaign=shani-mantra-shanti&utm_content=sticky",
       "style": "primary"
     }
   ],
   "faqs": [
     {
-      "question": "How many times should I chant the Shani mantra?",
-      "answer": "Tradition often recommends 108 repetitions per session (one mala). Some undertake 9, 11, or 21 malas over days under guidance. Consistency matters more than a single extreme session."
+      "question": "ᱤᱧ ᱛᱤᱱᱟᱹᱜ ᱫᱷᱟᱣ ᱥᱟᱱᱤ ᱢᱟᱱᱛᱨᱚ ᱪᱟᱞ ᱦᱩᱭᱩᱜ ᱛᱤᱧᱟ?",
+      "answer": "ᱥᱮᱫᱽᱨᱟ ᱫᱚ ᱑᱐᱘ ᱫᱚᱦᱲᱟ ᱢᱤᱫ ᱫᱷᱚᱱ (ᱢᱤᱫ ᱢᱟᱞᱟ) ᱨᱮᱭᱟᱜ ᱥᱚᱞᱦᱟ ᱮᱢᱚᱜ ᱠᱟᱱᱟ᱾ ᱛᱤᱱᱟᱹᱜ ᱜᱟᱱ ᱦᱚᱲ ᱫᱚ ᱫᱤᱥᱟᱹ ᱛᱮ ᱙, ᱑᱑, ᱵᱟᱝᱠᱷᱟᱱ ᱒᱑ ᱢᱟᱞᱟ ᱠᱚ ᱦᱟᱛᱟᱣᱟ ᱾ ᱥᱚᱦᱮᱫ ᱫᱚ ᱢᱤᱫ ᱪᱷᱟᱴ ᱫᱷᱚᱱ ᱠᱷᱚᱱ ᱦᱚᱸ ᱵᱟᱹᱲᱛᱤ ᱢᱟᱱᱚᱛ ᱢᱮᱱᱟᱜᱼᱟ ᱾"
     },
     {
-      "question": "What is the correct pronunciation?",
-      "answer": "Om Shan Shanicharaya Namaha — stress is gentle; listen to the Japam audio for a steady pace. Your family priest may prefer a slight regional variation."
+      "question": "ᱴᱷᱤᱠ ᱩᱪᱨᱟᱹᱱ ᱪᱮᱫ ᱠᱟᱱᱟ?",
+      "answer": "ᱚᱢ ᱥᱟᱱ ᱥᱟᱱᱤᱪᱟᱨᱟᱭ ᱱᱟᱢᱟᱦᱟ — ᱫᱟᱵᱟᱣ ᱫᱚ ᱞᱮᱵᱽᱲᱮᱡ ᱜᱮᱭᱟ; ᱢᱤᱫ ᱴᱷᱤᱠ ᱯᱮᱥ ᱞᱟᱹᱜᱤᱫ ᱡᱟᱯᱟᱢ ᱚᱰᱤᱭᱳ ᱟᱸᱡᱚᱢ ᱢᱮ᱾ ᱟᱯᱮ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮᱱ ᱯᱟᱭᱡᱤᱴ ᱫᱚ ᱱᱟᱥᱮ ᱴᱚᱴᱷᱟ ᱵᱷᱮᱜᱟᱨ ᱠᱚ ᱵᱟᱪᱷᱟᱣ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ᱾"
     },
     {
-      "question": "Can Hanuman worship help with Shani troubles?",
-      "answer": "Many devotees worship Hanuman alongside Shani, especially on Saturdays. See our Hanuman–Shani guide for a balanced devotional approach."
+      "question": "ᱪᱮᱫ ᱦᱟᱱᱩᱢᱟᱱ ᱵᱚᱸᱜᱟ ᱥᱟᱱᱤ ᱢᱩᱥᱠᱤᱞ ᱨᱮ ᱜᱚᱲᱚ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱭ?",
+      "answer": "ᱟᱹᱰᱤ ᱜᱟᱱ ᱵᱷᱚᱠᱛᱚ ᱥᱟᱱᱤ ᱥᱟᱶ ᱦᱟᱱᱩᱢᱟᱱ ᱠᱚ ᱵᱚᱸᱜᱟᱭᱟ, ᱠᱷᱟᱥ ᱠᱟᱭᱛᱮ ᱧᱩᱦᱩᱢ ᱢᱟᱦᱟᱸ ᱦᱤᱞᱚᱜ ᱾ ᱥᱚᱢᱟᱱ ᱵᱷᱚᱠᱛᱚ ᱰᱟᱦᱟᱨ ᱞᱟᱹᱜᱤᱫ ᱟᱞᱮᱭᱟᱜ ᱦᱟᱱᱩᱢᱟᱱ-ᱥᱟᱱᱤ ᱜᱟᱭᱤᱰ ᱧᱮᱞ ᱢᱮ ᱾"
     },
     {
-      "question": "Is Saturday mandatory?",
-      "answer": "Saturday is customary but not the only day. Daily short japa with sincerity is acceptable in many lineages if your guru or tradition allows."
+      "question": "ᱪᱮᱫ ᱧᱩᱦᱩᱢ ᱢᱟᱦᱟ ᱫᱚ ᱵᱟᱱᱫᱷᱟᱣ ᱜᱮᱭᱟ?",
+      "answer": "ᱧᱩᱦᱩᱢ ᱢᱟᱦᱟᱸ ᱫᱚ ᱟᱹᱨᱤᱪᱟᱹᱞᱤ ᱠᱟᱱᱟ ᱢᱮᱱᱠᱷᱟᱱ ᱮᱠᱮᱱ ᱢᱟᱦᱟᱸ ᱫᱚ ᱵᱟᱝ ᱠᱟᱱᱟ ᱾ ᱫᱤᱱᱟᱹᱢ ᱠᱷᱟᱴᱚ ᱡᱟᱯᱟ ᱥᱟᱹᱨᱤ ᱛᱮ ᱟᱭᱢᱟ ᱵᱚᱥᱛᱟ ᱨᱮ ᱟᱝᱜᱚᱪᱚᱜ ᱠᱟᱱᱟ ᱡᱩᱫᱤ ᱟᱢ ᱨᱮᱱ ᱜᱩᱨᱩ ᱵᱟᱝᱠᱷᱟᱱ ᱯᱚᱨᱚᱵ ᱮ ᱫᱟᱣ ᱮᱢᱟᱭᱟ ᱾"
     },
     {
-      "question": "Does Japam replace temple puja?",
-      "answer": "No. Japam supports home japa and counting; formal Shani puja, oil offering, and temple customs should follow your sampradaya and local priest."
+      "question": "ᱪᱮᱫ ᱡᱟᱯᱟᱢ ᱫᱚ ᱢᱟᱱᱫᱤᱨ ᱯᱩᱡᱟ ᱨᱮᱭᱟᱜ ᱵᱚᱫᱚᱞ ᱮ ᱦᱟᱛᱟᱣᱟ?",
+      "answer": "ᱵᱟᱝᱟ᱾ ᱡᱟᱯᱟᱢ ᱚᱲᱟᱜ ᱨᱮᱭᱟᱜ ᱡᱟᱯ ᱟᱨ ᱞᱮᱠᱷᱟ ᱥᱟᱯᱚᱨᱴ ᱮᱫᱟᱭ; ᱟᱹᱭᱫᱟᱹᱨᱤ ᱥᱟᱱᱤ ᱯᱩᱡᱟ, ᱥᱩᱱᱩᱢ ᱮᱢᱚᱜ, ᱟᱨ ᱢᱟᱱᱫᱤᱨ ᱨᱮᱭᱟᱜ ᱟᱹᱨᱤ ᱠᱚ ᱫᱚ ᱟᱢ ᱨᱮᱱ ᱥᱟᱢᱯᱨᱟᱫᱟᱭ ᱟᱨ ᱴᱚᱴᱷᱟᱹᱠᱤᱭᱟᱹ ᱯᱟᱭᱡᱤᱴ ᱠᱚ ᱯᱟᱧᱡᱟᱭ ᱞᱟᱹᱠᱛᱤᱭᱟ᱾"
     },
     {
-      "question": "What is Sade Sati?",
-      "answer": "Sade Sati is the roughly seven-and-a-half-year period when transiting Shani moves through signs near one's Moon sign. Japa and ethical living are traditional responses — not fear-based rituals."
+      "question": "ᱥᱟᱰᱮ ᱥᱟᱛᱤ ᱫᱚ ᱪᱮᱫ?",
+      "answer": "ᱥᱟᱰᱮ ᱥᱟᱛᱤ ᱫᱚ ᱢᱚᱴᱟ ᱮᱭᱟᱭ ᱟᱨ ᱥᱟᱫᱷᱟ ᱥᱮᱨᱢᱟ ᱚᱠᱛᱚ ᱠᱟᱱᱟ ᱡᱚᱠᱷᱚᱱ ᱥᱟᱱᱤ ᱫᱚ ᱪᱟᱸᱫᱚ ᱪᱤᱱᱦᱟᱹ ᱥᱩᱨ ᱨᱮ ᱪᱤᱱᱦᱟᱹ ᱠᱚ ᱛᱟᱞᱟ ᱛᱮ ᱞᱟᱦᱟ ᱪᱟᱞᱟᱜ ᱠᱟᱱᱟ᱾ ᱡᱟᱯᱟ ᱟᱨ ᱱᱮᱭᱟᱱ ᱡᱤᱭᱚᱱ ᱫᱚ ᱥᱮᱫᱽᱨᱟ ᱛᱮᱞᱟ ᱠᱟᱱᱟ - ᱵᱚᱛᱚᱨ ᱪᱮᱛᱟᱱ ᱟᱠᱷᱲᱟ ᱫᱚ ᱵᱟᱝ ᱠᱟᱱᱟ ᱾"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "ᱱᱚᱣᱟ ᱚᱱᱚᱞ ᱫᱚ ᱥᱩᱢᱩᱝ ᱥᱮᱪᱮᱫ ᱟᱨ ᱵᱷᱚᱠᱛᱚᱱ ᱦᱮᱣᱟ ᱞᱟᱹᱜᱤᱫ ᱜᱮ ᱾ ᱡᱟᱯᱟᱢ ᱫᱚ ᱪᱤᱠᱤᱥᱟ, ᱟᱹᱭᱤᱱᱤ, ᱟᱨ ᱵᱟᱝ ᱠᱟᱹᱣᱰᱤ ᱥᱚᱞᱦᱟ ᱵᱟᱭ ᱮᱢᱚᱜ ᱠᱟᱱᱟ᱾ ᱚᱨᱡᱚ ᱫᱚ ᱯᱚᱨᱥᱚᱱᱟᱞ ᱯᱟᱹᱛᱭᱟᱹᱣ ᱟᱨ ᱞᱮᱛᱟᱲ ᱦᱮᱣᱟ ᱨᱮ ᱴᱮᱦᱟᱱᱰ ᱢᱮᱱᱟᱜᱼᱟ᱾ ᱮᱯ ᱨᱮ ᱢᱟᱱᱛᱨᱟ ᱚᱱᱚᱞ ᱟᱨ ᱚᱰᱤᱭᱳ ᱫᱚ ᱡᱟᱯᱟ ᱥᱟᱯᱚᱨᱴ ᱞᱟᱹᱜᱤᱫ ᱠᱟᱱᱟ; ᱟᱹᱭᱫᱟᱹᱨᱤ ᱯᱩᱡᱟ ᱟᱹᱨᱤ ᱞᱟᱹᱜᱤᱫ ᱟᱯᱮ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮᱱ ᱯᱟᱭᱡᱤᱴ ᱥᱮ ᱥᱮᱫᱽᱨᱟ ᱥᱚᱞᱦᱟᱭ ᱢᱮ ᱾"
   },
   "relatedPages": [
     {
       "pageId": "sade-sati-remedies",
-      "label": "Sade Sati remedies"
+      "label": "ᱥᱟᱰᱮ ᱥᱟᱛᱤ ᱥᱟᱢᱟᱝ ᱠᱚ"
     },
     {
       "pageId": "hanuman-mantra-shani",
-      "label": "Hanuman for Shani"
+      "label": "ᱥᱟᱱᱤ ᱞᱟᱹᱜᱤᱫ ᱦᱟᱱᱩᱢᱟᱱ"
     },
     {
       "pageId": "graha-shanti-mantra",
-      "label": "Graha shanti mantra"
+      "label": "ᱜᱽᱨᱟᱦᱟ ᱥᱟᱱᱛᱤ ᱢᱟᱱᱛᱨᱚ"
     }
   ]
 }

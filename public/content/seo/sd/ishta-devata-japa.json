@@ -6,24 +6,24 @@
   "deityId": null,
   "primaryKeyword": "ishta devata japa",
   "secondaryKeywords": [
-    "choose your deity",
-    "personal deity chanting"
+    "پنهنجو معبود چونڊيو",
+    "ذاتي ديوتا جو نعرو"
   ],
   "meta": {
-    "title": "Ishta Devata Japa — Choose Your Deity | Japam",
-    "description": "How to choose an ishta devata and practise daily japa in Japam.",
+    "title": "Ishta Devata Japa - پنھنجو ديوتا چونڊيو | جپان",
+    "description": "ايشتا ديوتا کي ڪيئن چونڊيو ۽ جپم ۾ روزانو جپ جي مشق ڪريو.",
     "ogImage": "/images/favicon.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Ishta Devata Japa — Choosing Your Deity"
+      "text": "Ishta Devata Japa - پنھنجي ديوتا کي چونڊڻ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Ishta devata is your chosen beloved deity for daily worship. Family tradition, initiation, or inner calling guide the choice."
+          "text": "ايشتا ديوتا روزاني پوڄا لاءِ توهان جو چونڊيل محبوب ديوتا آهي. خانداني روايت، شروعات، يا اندروني ڪالنگ گائيڊ جي چونڊ."
         }
       ]
     },
@@ -31,69 +31,114 @@
       "type": "p",
       "runs": [
         {
-          "text": "Japam lets you pick any playable deity on the menu grid for mantra japa."
-        }
-      ]
-    },
-    {
-      "type": "h2",
-      "text": "How to choose"
-    },
-    {
-      "type": "p",
-      "runs": [
-        {
-          "text": "Ask elders, respect kuladeivam, or follow the deity you feel drawn to in prayer. Stick with one ishta for steady vows unless your guru directs otherwise."
+          "text": "Japam توهان کي منتر جاپ لاء مينيو گرڊ تي ڪنهن به راند لائق ديوتا چونڊڻ جي اجازت ڏئي ٿي."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "ڪيئن چونڊيو"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "بزرگن کان پڇو، ڪلاديويم جو احترام ڪريو، يا ديوتا جي پيروي ڪريو جنهن کي توهان دعا ۾ متوجه محسوس ڪيو. مسلسل واعدن لاءِ ھڪڙي اسٽا سان گڏ رھو جيستائين توھان جو گرو ٻي صورت ۾ ھدايت نه ڪري."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "جاپ جا فائدا (روايتي خيال)"
     },
     {
       "type": "ul",
       "items": [
-        "Deepens single-pointed bhakti",
-        "Simplifies daily routine",
-        "All Japam deities include mantra audio + count",
-        "Switch only with spiritual guidance"
+        "اڪيلائيءَ واري ڀڪتي کي گہرائي ٿو",
+        "روزاني معمول کي آسان بڻائي ٿو",
+        "سڀ جاپم ديوتا شامل آهن منتر آڊيو + ڳڻپ",
+        "صرف روحاني هدايت سان تبديل ڪريو"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "108 ڀيرا ڪيئن ڳايو"
     },
     {
       "type": "ul",
       "items": [
-        "Select ishta on Japam menu after sign-in or guest try",
-        "Chant 108 daily at same time",
-        "Combine with simple home lamp offering if desired",
-        "Join yagnas for community sankalpa"
+        "سائن ان يا مهمان جي ڪوشش کان پوءِ Japam مينيو تي ishta چونڊيو",
+        "108 روزانو هڪ ئي وقت ۾ ڳايو",
+        "سادو گھر جي چراغ جي پيشڪش سان گڏ ڪريو جيڪڏھن گھربل",
+        "ڪميونٽي سنڪلپ لاءِ يگنا ۾ شامل ٿيو"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "جڏهن ڳائڻ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Daily — morning or evening consistently."
+          "text": "روزانه - صبح جو يا شام جو مسلسل."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "ڇو 108 ورجائي اهميت رکن ٿا",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Open Japam menu → choose ishta → play match-3 with mantra."
+          "text": "نمبر 108 جپا مالا تي هڪ مڪمل گول آهي. مسلسل ورهاڱي دماغ کي پرسکون ڪري ٿو ۽ منتر جي معني تي ڌيان ڏئي ٿو."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ڪجھ روايتون 11 يا 21 مالا بيان ڪن ٿيون - پنھنجي گرو يا پادريءَ کان پڇو ته توھان جي واعدي مطابق ڳڻپ لاءِ."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "عام غلطين کان بچڻ لاء"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "آواز تي تمام تيز آواز ۽ ڌيان وڃائڻ",
+        "ھدايت کانسواءِ ڪيترن ئي ديوتائن جون واڳون گڏ ڪرڻ",
+        "ڀڪت ۽ اخلاقي زندگي گذارڻ بدران فقط مادي نتيجن جي اميد رکڻ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "مندر ۽ گهر گڏجي مشق"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "گھر جاپا مندر جي پوڄا جي حمايت ڪري ٿو. اهو درشن کي تبديل نٿو ڪري. عيد جي ڏينهن يا ڇنڇر تي مندر جو دورو ڪرڻ خانداني روايت کي مضبوط ڪري ٿو."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Japam سان مشق ڪريو"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Japam مينيو کوليو → ishta چونڊيو → منتر سان ميچ-3 کيڏيو."
         }
       ]
     }
@@ -130,41 +175,41 @@
   ],
   "faqs": [
     {
-      "question": "Can I change ishta often?",
-      "answer": "Traditions prefer stability; change only with good reason or guru advice."
+      "question": "ڇا مان اسٽا کي اڪثر تبديل ڪري سگهان ٿو؟",
+      "answer": "روايتون استحڪام کي ترجيح ڏين ٿا. صرف سٺي سبب يا گرو جي صلاح سان تبديل ڪريو."
     },
     {
-      "question": "Multiple deities?",
-      "answer": "Many honour Ganesha first then ishta; Japam supports per-deity modes."
+      "question": "گھڻن ديوتا؟",
+      "answer": "ڪيترائي گنيشا کي پهرين عزت ڏيندا آهن پوءِ ايشتا؛ Japam في ديوي طريقن کي سپورٽ ڪري ٿو."
     },
     {
-      "question": "Guru-hidden deities?",
-      "answer": "Sai Baba and Bramhamgaaru are reserved in app — not in public play grid."
+      "question": "گرو لڪيل ديوتا؟",
+      "answer": "سائي بابا ۽ برهمگارو ايپ ۾ محفوظ آهن - عوامي راند گرڊ ۾ نه."
     },
     {
-      "question": "Need initiation?",
-      "answer": "Mantra japa is open in many homes; diksha mantras need guru."
+      "question": "شروعات جي ضرورت آهي؟",
+      "answer": "منتر جاپ ڪيترن ئي گهرن ۾ کليل آهي. دڪشا منتر کي گرو جي ضرورت آهي."
     },
     {
-      "question": "Guest mode?",
-      "answer": "Yes — try before account creation."
+      "question": "مهمان موڊ؟",
+      "answer": "ها - اڪائونٽ ٺاهڻ کان پهريان ڪوشش ڪريو."
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "هي مضمون صرف تعليمي ۽ ديني مشق لاءِ آهي. Japam طبي، قانوني، يا مالي صلاح فراهم نٿو ڪري. نتيجن جو دارومدار ذاتي ايمان ۽ مسلسل مشق تي. ايپ ۾ منتر ٽيڪسٽ ۽ آڊيو جاپا سپورٽ لاءِ آهن؛ رسمي پوجا ضابطن لاءِ پنھنجي خانداني پادريءَ يا روايت سان صلاح ڪريو."
   },
   "relatedPages": [
     {
       "pageId": "online-japa-mantra",
-      "label": "Online japa"
+      "label": "آن لائن جپان"
     },
     {
       "pageId": "japa-108-times",
-      "label": "108 japa guide"
+      "label": "108 جپان"
     },
     {
       "pageId": "maha-japa-yagna",
-      "label": "Maha yagna"
+      "label": "مها يگنا"
     }
   ]
 }

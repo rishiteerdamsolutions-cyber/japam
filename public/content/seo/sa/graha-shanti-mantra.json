@@ -4,27 +4,27 @@
   "lang": "sa",
   "slug": "graha-shanti-mantra",
   "deityId": null,
-  "primaryKeyword": "graha shanti mantra",
+  "primaryKeyword": "ग्रह शान्ति मन्त्र",
   "secondaryKeywords": [
-    "navagraha shanti",
-    "planetary peace mantra",
-    "graha dosha remedies"
+    "नवग्रह शान्ति",
+    "ग्रहशान्तिमन्त्रः",
+    "ग्रह दोषोपचाराः"
   ],
   "meta": {
-    "title": "Graha Shanti Mantra & Planetary Japa | Japam",
-    "description": "Overview of graha shanti, Navagraha worship, and per-planet mantra japa in Japam.",
+    "title": "ग्रह शांति मंत्र एवं ग्रहजप | जपम्",
+    "description": "जपमे ग्रहशान्ति, नवग्रहार्चना, प्रतिग्रहमन्त्रजपस्य च अवलोकनम्।",
     "ogImage": "/images/favicon.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Graha Shanti Mantra and Planetary Peace"
+      "text": "ग्रह शांति मन्त्र एवं ग्रहशान्ति"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Graha shanti means pacifying the nine planets (Navagraha) in one’s horoscope through worship, charity, and mantra japa."
+          "text": "ग्रह शान्तिः पूजादानेन मन्त्रजपेन च स्वस्य कुण्डलीयां नवग्रहान् (नवग्रहान्) शान्तयितुं इत्यर्थः ।"
         }
       ]
     },
@@ -32,69 +32,114 @@
       "type": "p",
       "runs": [
         {
-          "text": "Each graha has a bija or name mantra — Japam includes Shani, Rahu, Ketu, Surya, Guru, and deity forms of divine grace."
-        }
-      ]
-    },
-    {
-      "type": "h2",
-      "text": "What is graha shanti?"
-    },
-    {
-      "type": "p",
-      "runs": [
-        {
-          "text": "Astrology maps karmic tendencies to planets. Japa does not “erase” karma but steadies the mind and aligns conduct with dharma, which traditions say softens difficult periods."
+          "text": "प्रत्येकं ग्रहस्य बीजः अथवा नाममन्त्रः भवति — जपमे शनिः, राहुः, केतुः, सूर्यः, गुरुः, दिव्यप्रसादस्य देवतारूपाः च सन्ति ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "ग्रह शान्ति इति किम् ?"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ज्योतिषशास्त्रे कर्मप्रवृत्तीनां नक्शाङ्कनं ग्रहेषु भवति । जपः कर्मं न “मेटयति” अपितु मनः स्थिरं करोति, धर्मेण सह आचरणं च संरेखयति, यत् कठिनकालान् मृदु करोति इति परम्पराः वदन्ति।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपस्य लाभाः (पारम्परिकदृष्टिकोणः) २."
     },
     {
       "type": "ul",
       "items": [
-        "Holistic approach: multiple planets via Navagraha puja or individual focus",
-        "Combines mantra, fasting, and seva per priest advice",
-        "Supports peace during dasha transitions",
-        "Builds daily spiritual discipline"
+        "समग्रदृष्टिकोणः नवग्रहपूजा वा व्यक्तिगतकेन्द्रीकरणद्वारा बहुग्रहाः",
+        "मन्त्रं, उपवासं, सेवां च प्रति पुरोहितः उपदेशं संयोजयति",
+        "दशसंक्रमणकाले शान्तिं समर्थयति",
+        "नित्यं आध्यात्मिक अनुशासनं निर्माति"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "१०८ वारं जपं कथं करणीयम्"
     },
     {
       "type": "ul",
       "items": [
-        "Identify which graha needs focus with a qualified astrologer",
-        "Chant that planet’s mantra 108 times on its weekday",
-        "Navagraha homam or temple puja for comprehensive shanti",
-        "Use Japam for individual graha/deity mantras"
+        "योग्येन ज्योतिषेण सह कस्य ग्रहस्य ध्यानं आवश्यकं इति चिनुत",
+        "तस्य ग्रहस्य मन्त्रं तस्य सप्ताहदिने १०८ वारं जपन्तु",
+        "नवग्रह होमं वा मन्दिरपूजा व्यापकशान्तिं कृते",
+        "व्यक्तिगत ग्रह/देवता मन्त्रों के लिये जपम का प्रयोग करें"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "कदा जपेत्"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Weekdays map to planets — Sunday Surya, Saturday Shani, etc."
+          "text": "सप्ताहदिनानां ग्रहाणां नक्शा — रविवासरः सूर्यः, शनिवासरः शनिः इत्यादयः ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "१०८ पुनरावृत्तयः किमर्थं महत्त्वपूर्णाः सन्ति",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Japam lets you practise Shani, Rahu, Ketu, Surya, Guru mantras and deity japa in one app with counting and audio.",
+          "text": "१०८ संख्या जपमाले एकः पूर्णगोलः अस्ति । नित्यपुनरावृत्तिः मनः शान्तं करोति, मन्त्रस्य अर्थे ध्यानं गभीरं करोति च ।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "केचन परम्पराः ११ वा २१ वा मालाः विहिताः सन्ति — भवतः गुरुं वा पुरोहितं वा भवतः व्रतस्य अनुकूलानि गणनानि पृच्छन्तु ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "परिहरणीयानि सामान्यानि त्रुटयः"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "अतिशीघ्रं जपं कृत्वा ध्वनिं प्रति ध्यानं नष्टम्",
+        "अनेकदेवव्रतमिश्रणं विना मार्गदर्शनम् |",
+        "भक्ति-नीति-जीवनस्य स्थाने केवलं भौतिक-परिणामस्य अपेक्षा"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मन्दिरं गृहं च एकत्र अभ्यासं कुर्वन्ति"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "गृहं जपः मन्दिरपूजायाः समर्थनं करोति; दर्शनस्य स्थाने न भवति। उत्सवदिनेषु शनिवासरे वा मन्दिरस्य दर्शनं पारिवारिकपरम्परां सुदृढं करोति ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपं सह अभ्यासं कुरुत"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "जपम् इत्यनेन भवन्तः शनि, राहु, केतु, सूर्य, गुरुमन्त्राः, देवताजपः च एकस्मिन् एप् मध्ये गणनायाः श्रव्यस्य च अभ्यासं कर्तुं शक्नुवन्ति।",
           "bold": false
         }
       ]
@@ -132,41 +177,41 @@
   ],
   "faqs": [
     {
-      "question": "One mantra for all planets?",
-      "answer": "Navagraha stotra exists; individual graha mantras target specific needs."
+      "question": "सर्वेषां ग्रहाणां कृते एकः मन्त्रः?",
+      "answer": "नवग्रह स्तोत्रं वर्तते; व्यक्तिगत ग्रहमन्त्राः विशिष्टानि आवश्यकतानि लक्ष्यन्ते।"
     },
     {
-      "question": "Do I need gemstones?",
-      "answer": "Some wear ratna after astrologer advice; japa alone is a complete sadhana for many."
+      "question": "मम रत्नानाम् आवश्यकता अस्ति वा ?",
+      "answer": "केचन ज्योतिषीपरामर्शानन्तरं रत्नं धारयन्ति; जप एव बहूनां कृते सम्पूर्ण साधना।"
     },
     {
-      "question": "Where is Navagraha temple puja?",
-      "answer": "Major temples offer Navagraha shrines; home japa complements visits."
+      "question": "नवग्रहमन्दिरपूजा कुत्र अस्ति ?",
+      "answer": "प्रमुखमन्दिरेषु नवग्रहतीर्थानि प्राप्यन्ते; home japa पूरयति भ्रमणम्।"
     },
     {
-      "question": "Rahu and Ketu same?",
-      "answer": "No — separate mantras; see dedicated guides in this series."
+      "question": "राहुः केतुश्च समानः?",
+      "answer": "न — पृथक् मन्त्राः; अस्मिन् श्रृङ्खले समर्पितानि मार्गदर्शकानि पश्यन्तु।"
     },
     {
-      "question": "Can Japam replace homam?",
-      "answer": "No — homam is priest-led; Japam supports daily japa."
+      "question": "होमस्य स्थाने जपमः स्थातुं शक्नोति वा ?",
+      "answer": "न — होमं पुरोहित-नेतृत्वेन भवति; जपं नित्यं जपं समर्थयति।"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "एषः लेखः केवलं शैक्षणिक-भक्ति-अभ्यासार्थम् अस्ति । जपम् चिकित्सा, कानूनी, आर्थिकपरामर्शं न ददाति । परिणामाः व्यक्तिगतविश्वासस्य, निरन्तरं अभ्यासस्य च उपरि निर्भरं भवति। एप् मध्ये मन्त्रपाठः श्रव्यं च जपासमर्थनार्थम् अस्ति; औपचारिकपूजानियमानां कृते स्वपरिवारस्य पुरोहितेन वा परम्परेण वा परामर्शं कुर्वन्तु।"
   },
   "relatedPages": [
     {
       "pageId": "navagraha-mantra",
-      "label": "Navagraha mantra"
+      "label": "नवग्रह मन्त्रः"
     },
     {
       "pageId": "shani-mantra-shanti",
-      "label": "Shani shanti"
+      "label": "शनि शान्ति"
     },
     {
       "pageId": "rahu-mantra-shanti",
-      "label": "Rahu shanti"
+      "label": "राहु शान्ति"
     }
   ]
 }

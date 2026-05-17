@@ -4,27 +4,27 @@
   "lang": "pa",
   "slug": "maha-japa-yagna",
   "deityId": null,
-  "primaryKeyword": "maha japa yagna community chanting",
+  "primaryKeyword": "ਮਹਾ ਜਪ ਯੱਗ ਸਮੁਦਾਏ ਦਾ ਜਾਪ",
   "secondaryKeywords": [
-    "collective japa",
-    "online yagna",
-    "sankalpa group"
+    "ਸਮੂਹਿਕ ਜਪ",
+    "ਆਨਲਾਈਨ ਯੱਗ",
+    "ਸੰਕਲਪ ਸਮੂਹ"
   ],
   "meta": {
-    "title": "Maha Japa Yagna — Community Chanting | Japam",
-    "description": "Collective Maha Japa Yagnas in Japam — join community mantra goals.",
+    "title": "ਮਹਾ ਜਪ ਯੱਗ - ਭਾਈਚਾਰਕ ਜਪ | ਜਪਮ",
+    "description": "ਜਪਮ ਵਿੱਚ ਸਮੂਹਿਕ ਮਹਾ ਜਪ ਯੱਗ - ਭਾਈਚਾਰਕ ਮੰਤਰ ਦੇ ਟੀਚਿਆਂ ਵਿੱਚ ਸ਼ਾਮਲ ਹੋਵੋ।",
     "ogImage": "/images/favicon.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Maha Japa Yagna — Community Mantra Chanting"
+      "text": "ਮਹਾ ਜਪ ਯੱਗ - ਭਾਈਚਾਰਕ ਮੰਤਰ ਜਾਪ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "A yagna is sacred offering; Maha Japa Yagnas in Japam are collective chanting goals where many devotees add japa counts."
+          "text": "ਇੱਕ ਯੱਗ ਪਵਿੱਤਰ ਭੇਟ ਹੈ; ਜਪਮ ਵਿੱਚ ਮਹਾਂ ਜਪ ਯੱਗ ਸਮੂਹਿਕ ਜਪ ਟੀਚੇ ਹਨ ਜਿੱਥੇ ਬਹੁਤ ਸਾਰੇ ਸ਼ਰਧਾਲੂ ਜਾਪ ਦੀ ਗਿਣਤੀ ਜੋੜਦੇ ਹਨ।"
         }
       ]
     },
@@ -32,69 +32,114 @@
       "type": "p",
       "runs": [
         {
-          "text": "Join from the menu to participate in sankalpa with others."
-        }
-      ]
-    },
-    {
-      "type": "h2",
-      "text": "What is a Maha Japa Yagna?"
-    },
-    {
-      "type": "p",
-      "runs": [
-        {
-          "text": "Community targets (e.g. lakhs of japas) build shared merit and motivation. Your counts sync when signed in."
+          "text": "ਦੂਜਿਆਂ ਨਾਲ ਸੰਕਲਪ ਵਿੱਚ ਹਿੱਸਾ ਲੈਣ ਲਈ ਮੀਨੂ ਤੋਂ ਸ਼ਾਮਲ ਹੋਵੋ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "ਮਹਾ ਜਪ ਯੱਗ ਕੀ ਹੈ?"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ਭਾਈਚਾਰਕ ਟੀਚੇ (ਜਿਵੇਂ ਕਿ ਲੱਖਾਂ ਜਾਪ) ਸਾਂਝੀ ਯੋਗਤਾ ਅਤੇ ਪ੍ਰੇਰਣਾ ਬਣਾਉਂਦੇ ਹਨ। ਸਾਈਨ ਇਨ ਹੋਣ 'ਤੇ ਤੁਹਾਡੀ ਗਿਣਤੀ ਸਿੰਕ ਹੁੰਦੀ ਹੈ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ਜਪ ਦੇ ਲਾਭ (ਰਵਾਇਤੀ ਵਿਚਾਰ)"
     },
     {
       "type": "ul",
       "items": [
-        "Shared devotional goal",
-        "Visible community progress",
-        "Motivation for daily practice",
-        "Works across regions"
+        "ਸਾਂਝਾ ਭਗਤੀ ਦਾ ਟੀਚਾ",
+        "ਦਿਖਾਈ ਦੇਣ ਵਾਲੀ ਕਮਿਊਨਿਟੀ ਤਰੱਕੀ",
+        "ਰੋਜ਼ਾਨਾ ਅਭਿਆਸ ਲਈ ਪ੍ਰੇਰਣਾ",
+        "ਖੇਤਰਾਂ ਵਿੱਚ ਕੰਮ ਕਰਦਾ ਹੈ"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "108 ਵਾਰ ਜਾਪ ਕਿਵੇਂ ਕਰੀਏ"
     },
     {
       "type": "ul",
       "items": [
-        "Sign in to Japam",
-        "Open Maha Yagnas from menu",
-        "Join active yagna",
-        "Play and chant — counts add to collective total"
+        "ਜਪਮ ਵਿੱਚ ਸਾਈਨ ਇਨ ਕਰੋ",
+        "ਮੀਨੂ ਤੋਂ ਮਹਾਂ ਯੱਗ ਖੋਲ੍ਹੋ",
+        "ਸਰਗਰਮ ਯੱਗ ਵਿੱਚ ਸ਼ਾਮਲ ਹੋਵੋ",
+        "ਚਲਾਓ ਅਤੇ ਜਾਪ ਕਰੋ — ਗਿਣਤੀ ਸਮੂਹਿਕ ਕੁੱਲ ਵਿੱਚ ਜੋੜਦੀ ਹੈ"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "ਜਪ ਕਦੋਂ ਕਰਨਾ ਹੈ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "During yagna window shown in app."
+          "text": "ਐਪ ਵਿੱਚ ਦਿਖਾਈ ਗਈ ਯੱਗ ਵਿੰਡੋ ਦੌਰਾਨ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "108 ਦੁਹਰਾਓ ਮਾਇਨੇ ਕਿਉਂ ਰੱਖਦੇ ਹਨ",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "CTA: Menu → Maha Japa Yagnas — see live counters."
+          "text": "ਸੰਖਿਆ 108 ਜਪ ਮਾਲਾ ਦਾ ਇੱਕ ਪੂਰਾ ਗੇੜ ਹੈ। ਨਿਰੰਤਰ ਦੁਹਰਾਓ ਮਨ ਨੂੰ ਸ਼ਾਂਤ ਕਰਦਾ ਹੈ ਅਤੇ ਮੰਤਰ ਦੇ ਅਰਥਾਂ 'ਤੇ ਧਿਆਨ ਖਿੱਚਦਾ ਹੈ।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ਕੁਝ ਪਰੰਪਰਾਵਾਂ 11 ਜਾਂ 21 ਮਾਲਾ ਨਿਰਧਾਰਤ ਕਰਦੀਆਂ ਹਨ - ਆਪਣੇ ਗੁਰੂ ਜਾਂ ਪੁਜਾਰੀ ਨੂੰ ਤੁਹਾਡੀ ਸੁੱਖਣਾ ਦੇ ਅਨੁਕੂਲ ਗਿਣਤੀ ਲਈ ਪੁੱਛੋ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ਬਚਣ ਲਈ ਆਮ ਗਲਤੀਆਂ"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "ਬਹੁਤ ਤੇਜ਼ੀ ਨਾਲ ਜਾਪ ਕਰਨਾ ਅਤੇ ਆਵਾਜ਼ 'ਤੇ ਧਿਆਨ ਗੁਆਉਣਾ",
+        "ਬਿਨਾਂ ਸੇਧ ਦੇ ਕਈ ਦੇਵਤਿਆਂ ਦੀਆਂ ਸੁੱਖਣਾਂ ਨੂੰ ਮਿਲਾਉਣਾ",
+        "ਭਗਤੀ ਅਤੇ ਨੈਤਿਕ ਜੀਵਨ ਦੀ ਬਜਾਏ ਕੇਵਲ ਭੌਤਿਕ ਨਤੀਜਿਆਂ ਦੀ ਉਮੀਦ ਕਰਨਾ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ਮੰਦਰ ਅਤੇ ਘਰ ਇਕੱਠੇ ਅਭਿਆਸ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ਘਰ ਜਾਪ ਮੰਦਰ ਪੂਜਾ ਦਾ ਸਮਰਥਨ ਕਰਦਾ ਹੈ; ਇਹ ਦਰਸ਼ਨ ਦੀ ਥਾਂ ਨਹੀਂ ਲੈਂਦਾ। ਤਿਉਹਾਰਾਂ ਦੇ ਦਿਨ ਜਾਂ ਸ਼ਨੀਵਾਰ ਨੂੰ ਮੰਦਰ ਜਾਣਾ ਪਰਿਵਾਰਕ ਪਰੰਪਰਾ ਨੂੰ ਮਜ਼ਬੂਤ ​​ਕਰਦਾ ਹੈ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ਜਪਮ ਨਾਲ ਅਭਿਆਸ ਕਰੋ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "CTA: ਮੀਨੂ → ਮਹਾਂ ਜਪ ਯੱਗ - ਲਾਈਵ ਕਾਊਂਟਰ ਦੇਖੋ।"
         }
       ]
     }
@@ -131,41 +176,41 @@
   ],
   "faqs": [
     {
-      "question": "Is login required?",
-      "answer": "Yes for leaderboard-style community totals."
+      "question": "ਕੀ ਲੌਗਇਨ ਦੀ ਲੋੜ ਹੈ?",
+      "answer": "ਲੀਡਰਬੋਰਡ-ਸ਼ੈਲੀ ਦੇ ਭਾਈਚਾਰਕ ਕੁੱਲਾਂ ਲਈ ਹਾਂ।"
     },
     {
-      "question": "Same as temple fire yagna?",
-      "answer": "Digital collective japa — complements, not replaces, priest-led homam."
+      "question": "ਮੰਦਰ ਅਗਨੀ ਯੱਗ ਦੇ ਸਮਾਨ?",
+      "answer": "ਡਿਜੀਟਲ ਸਮੂਹਿਕ ਜਾਪਾ — ਪੂਰਕ, ਬਦਲੇ ਨਹੀਂ, ਪੁਜਾਰੀ ਦੀ ਅਗਵਾਈ ਵਾਲੇ ਹੋਮਮ।"
     },
     {
-      "question": "Which mantra is used?",
-      "answer": "Per yagna deity/theme — read details in app."
+      "question": "ਕਿਹੜਾ ਮੰਤਰ ਵਰਤਿਆ ਜਾਂਦਾ ਹੈ?",
+      "answer": "ਪ੍ਰਤੀ ਯੱਗ ਦੇਵਤਾ/ਥੀਮ — ਐਪ ਵਿੱਚ ਵੇਰਵੇ ਪੜ੍ਹੋ।"
     },
     {
-      "question": "Free to join?",
-      "answer": "Core join is free; app may show optional support (dakshina)."
+      "question": "ਸ਼ਾਮਲ ਹੋਣ ਲਈ ਮੁਫ਼ਤ?",
+      "answer": "ਕੋਰ ਜੁਆਇਨ ਮੁਫ਼ਤ ਹੈ; ਐਪ ਵਿਕਲਪਿਕ ਸਹਾਇਤਾ (ਦਕਸ਼ੀਨਾ) ਦਿਖਾ ਸਕਦੀ ਹੈ।"
     },
     {
-      "question": "How long do yagnas run?",
-      "answer": "Varies — check dates in Maha Yagnas screen."
+      "question": "ਯੱਗ ਕਿੰਨੇ ਸਮੇਂ ਤੱਕ ਚੱਲਦੇ ਹਨ?",
+      "answer": "ਬਦਲਦਾ ਹੈ - ਮਹਾ ਯੱਗਸ ਸਕ੍ਰੀਨ ਵਿੱਚ ਤਾਰੀਖਾਂ ਦੀ ਜਾਂਚ ਕਰੋ।"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "ਇਹ ਲੇਖ ਕੇਵਲ ਵਿਦਿਅਕ ਅਤੇ ਭਗਤੀ ਅਭਿਆਸ ਲਈ ਹੈ। Japam ਡਾਕਟਰੀ, ਕਾਨੂੰਨੀ, ਜਾਂ ਵਿੱਤੀ ਸਲਾਹ ਪ੍ਰਦਾਨ ਨਹੀਂ ਕਰਦਾ ਹੈ। ਨਤੀਜੇ ਨਿੱਜੀ ਵਿਸ਼ਵਾਸ ਅਤੇ ਨਿਰੰਤਰ ਅਭਿਆਸ 'ਤੇ ਨਿਰਭਰ ਕਰਦੇ ਹਨ। ਐਪ ਵਿੱਚ ਮੰਤਰ ਪਾਠ ਅਤੇ ਆਡੀਓ ਜਪਾ ਸਮਰਥਨ ਲਈ ਹਨ; ਰਸਮੀ ਪੂਜਾ ਨਿਯਮਾਂ ਲਈ ਆਪਣੇ ਪਰਿਵਾਰਕ ਪੁਜਾਰੀ ਜਾਂ ਪਰੰਪਰਾ ਨਾਲ ਸਲਾਹ ਕਰੋ।"
   },
   "relatedPages": [
     {
       "pageId": "online-japa-mantra",
-      "label": "Online japa"
+      "label": "ਆਨਲਾਈਨ ਜਪਾ"
     },
     {
       "pageId": "japa-108-times",
-      "label": "108 japa guide"
+      "label": "108 ਜਪ"
     },
     {
       "pageId": "ishta-devata-japa",
-      "label": "Ishta devata"
+      "label": "ਇਸ਼ਟ ਦੇਵਤਾ"
     }
   ]
 }

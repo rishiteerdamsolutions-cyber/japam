@@ -4,26 +4,26 @@
   "lang": "sa",
   "slug": "ishta-devata-japa",
   "deityId": null,
-  "primaryKeyword": "ishta devata japa",
+  "primaryKeyword": "इष्ट देवता जप",
   "secondaryKeywords": [
-    "choose your deity",
-    "personal deity chanting"
+    "भवतः देवतां चिनुत",
+    "व्यक्तिगत देवता जप"
   ],
   "meta": {
-    "title": "Ishta Devata Japa — Choose Your Deity | Japam",
-    "description": "How to choose an ishta devata and practise daily japa in Japam.",
+    "title": "इष्ट देवता जप — तव देवतां चिनोतु | जपम्",
+    "description": "इष्टदेवतां कथं चित्वा जपमे नित्यं जपः करणीयः।",
     "ogImage": "/images/favicon.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Ishta Devata Japa — Choosing Your Deity"
+      "text": "इष्ट देवता जप — तव देवता चयन"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Ishta devata is your chosen beloved deity for daily worship. Family tradition, initiation, or inner calling guide the choice."
+          "text": "इष्टदेवता तव चिता प्रियदेवता नित्यपूजनाय | पारिवारिकपरम्परा, दीक्षा, आन्तरिकं आह्वानं वा विकल्पस्य मार्गदर्शनं करोति।"
         }
       ]
     },
@@ -31,69 +31,114 @@
       "type": "p",
       "runs": [
         {
-          "text": "Japam lets you pick any playable deity on the menu grid for mantra japa."
-        }
-      ]
-    },
-    {
-      "type": "h2",
-      "text": "How to choose"
-    },
-    {
-      "type": "p",
-      "runs": [
-        {
-          "text": "Ask elders, respect kuladeivam, or follow the deity you feel drawn to in prayer. Stick with one ishta for steady vows unless your guru directs otherwise."
+          "text": "जपमः मन्त्रजपस्य कृते मेनूजालपुटे किमपि वाद्यं देवं चिन्वितुं शक्नोति ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "कथं चयनं कर्तव्यम्"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "वृद्धान् पृच्छन्तु, कुलदेवमस्य आदरं कुर्वन्तु, अथवा प्रार्थनायां यस्य देवतायाः प्रति आकृष्टः भवति तस्य अनुसरणं कुर्वन्तु। स्थिरव्रतानां कृते एकेन इष्टेन लप्यताम् यावत् भवतः गुरुः अन्यथा न निर्देशयति।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपस्य लाभाः (पारम्परिकदृष्टिकोणः) २."
     },
     {
       "type": "ul",
       "items": [
-        "Deepens single-pointed bhakti",
-        "Simplifies daily routine",
-        "All Japam deities include mantra audio + count",
-        "Switch only with spiritual guidance"
+        "एकबिन्दु भक्ति गभीर करता",
+        "दैनन्दिनकार्यक्रमं सरलीकरोति",
+        "सर्वेषु जपमदेवतासु मन्त्रश्रव्य + गणना अन्तर्भवति",
+        "केवलं आध्यात्मिकमार्गदर्शनेन एव स्विच कुर्वन्तु"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "१०८ वारं जपं कथं करणीयम्"
     },
     {
       "type": "ul",
       "items": [
-        "Select ishta on Japam menu after sign-in or guest try",
-        "Chant 108 daily at same time",
-        "Combine with simple home lamp offering if desired",
-        "Join yagnas for community sankalpa"
+        "साइन-इन अथवा अतिथिप्रयासेन अनन्तरं Japam मेन्यू इत्यत्र ishta इति चिनोतु",
+        "नित्यं एकस्मिन् समये १०८ जप",
+        "इष्टे सति सरलगृहदीपप्रस्तावेन सह संयोजयन्तु",
+        "सामुदायिक संकल्प हेतु यज्ञसे जुड़ें"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "कदा जपेत्"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Daily — morning or evening consistently."
+          "text": "नित्यं — प्रातः वा सायं वा निरन्तरं ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "१०८ पुनरावृत्तयः किमर्थं महत्त्वपूर्णाः सन्ति",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Open Japam menu → choose ishta → play match-3 with mantra."
+          "text": "१०८ संख्या जपमाले एकः पूर्णगोलः अस्ति । नित्यपुनरावृत्तिः मनः शान्तं करोति, मन्त्रस्य अर्थे ध्यानं गभीरं करोति च ।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "केचन परम्पराः ११ वा २१ वा मालाः विहिताः सन्ति — भवतः गुरुं वा पुरोहितं वा भवतः व्रतस्य अनुकूलानि गणनानि पृच्छन्तु ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "परिहरणीयानि सामान्यानि त्रुटयः"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "अतिशीघ्रं जपं कृत्वा ध्वनिं प्रति ध्यानं नष्टम्",
+        "अनेकदेवव्रतमिश्रणं विना मार्गदर्शनम् |",
+        "भक्ति-नीति-जीवनस्य स्थाने केवलं भौतिक-परिणामस्य अपेक्षा"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मन्दिरं गृहं च एकत्र अभ्यासं कुर्वन्ति"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "गृहं जपः मन्दिरपूजायाः समर्थनं करोति; दर्शनस्य स्थाने न भवति। उत्सवदिनेषु शनिवासरे वा मन्दिरस्य दर्शनं पारिवारिकपरम्परां सुदृढं करोति ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपं सह अभ्यासं कुरुत"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "जपम मेनू उद्घाटयन्तु → इष्टं चिनोतु → मन्त्रेण सह मैच-3 क्रीडन्तु।"
         }
       ]
     }
@@ -130,41 +175,41 @@
   ],
   "faqs": [
     {
-      "question": "Can I change ishta often?",
-      "answer": "Traditions prefer stability; change only with good reason or guru advice."
+      "question": "अहं प्रायः इष्टं परिवर्तयितुं शक्नोमि वा ?",
+      "answer": "परम्पराः स्थिरतां प्राधान्यं ददति; परिवर्तनं केवलं सद्कारणेन वा गुरुपरामर्शेण वा।"
     },
     {
-      "question": "Multiple deities?",
-      "answer": "Many honour Ganesha first then ishta; Japam supports per-deity modes."
+      "question": "बहुदेवता?",
+      "answer": "अनेकाः प्रथमं गणेशं सम्मानयन्ति ततः इष्टम्; जपमः प्रतिदेवतागुणान् समर्थयति ।"
     },
     {
-      "question": "Guru-hidden deities?",
-      "answer": "Sai Baba and Bramhamgaaru are reserved in app — not in public play grid."
+      "question": "गुरुगुप्त देवता?",
+      "answer": "साई बाबा ब्रम्हम्गारू च एप् मध्ये आरक्षिताः सन्ति — सार्वजनिकप्ले ग्रिड् इत्यत्र न।"
     },
     {
-      "question": "Need initiation?",
-      "answer": "Mantra japa is open in many homes; diksha mantras need guru."
+      "question": "दीक्षा आवश्यकी ?",
+      "answer": "मन्त्रजपः अनेकेषु गृहेषु उद्घाटितः अस्ति; दीक्षा मन्त्रों गुरु की आवश्यकता है।"
     },
     {
-      "question": "Guest mode?",
-      "answer": "Yes — try before account creation."
+      "question": "अतिथिविधिः ?",
+      "answer": "आम् — खातानिर्माणात् पूर्वं प्रयतस्व ।"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "एषः लेखः केवलं शैक्षणिक-भक्ति-अभ्यासार्थम् अस्ति । जपम् चिकित्सा, कानूनी, आर्थिकपरामर्शं न ददाति । परिणामाः व्यक्तिगतविश्वासस्य, निरन्तरं अभ्यासस्य च उपरि निर्भरं भवति। एप् मध्ये मन्त्रपाठः श्रव्यं च जपासमर्थनार्थम् अस्ति; औपचारिकपूजानियमानां कृते स्वपरिवारस्य पुरोहितेन वा परम्परेण वा परामर्शं कुर्वन्तु।"
   },
   "relatedPages": [
     {
       "pageId": "online-japa-mantra",
-      "label": "Online japa"
+      "label": "ऑनलाइन जपा"
     },
     {
       "pageId": "japa-108-times",
-      "label": "108 japa guide"
+      "label": "१०८ जपः"
     },
     {
       "pageId": "maha-japa-yagna",
-      "label": "Maha yagna"
+      "label": "महा यज्ञः"
     }
   ]
 }

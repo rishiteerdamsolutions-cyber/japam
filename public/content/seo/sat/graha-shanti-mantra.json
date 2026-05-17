@@ -4,27 +4,27 @@
   "lang": "sat",
   "slug": "graha-shanti-mantra",
   "deityId": null,
-  "primaryKeyword": "graha shanti mantra",
+  "primaryKeyword": "ᱜᱽᱨᱟᱦᱟ ᱥᱟᱱᱛᱤ ᱢᱟᱱᱛᱨᱚ",
   "secondaryKeywords": [
-    "navagraha shanti",
-    "planetary peace mantra",
-    "graha dosha remedies"
+    "ᱱᱟᱣᱟᱜᱨᱟᱦᱟ ᱥᱟᱱᱛᱤ",
+    "ᱜᱷᱟᱨᱚᱸᱡᱽ ᱱᱤᱨᱟᱹᱭ ᱢᱟᱱᱛᱨᱚ",
+    "ᱜᱽᱨᱟᱦᱟ ᱫᱚᱥᱟ ᱥᱟᱢᱟᱝ ᱠᱚ"
   ],
   "meta": {
-    "title": "Graha Shanti Mantra & Planetary Japa | Japam",
-    "description": "Overview of graha shanti, Navagraha worship, and per-planet mantra japa in Japam.",
+    "title": "ᱜᱽᱨᱟᱦᱟ ᱥᱟᱱᱛᱤ ᱢᱟᱱᱛᱨᱟ ᱟᱨ ᱯᱞᱟᱱᱴᱟᱨᱤ ᱡᱟᱯᱟ | ᱡᱟᱯᱟᱢ",
+    "description": "ᱡᱟᱯᱚᱢ ᱨᱮ ᱜᱽᱨᱟᱦᱟ ᱥᱟᱱᱛᱤ, ᱱᱟᱵᱟᱜᱽᱨᱟᱦᱟ ᱵᱚᱸᱜᱟ ᱟᱨ ᱯᱨᱚ-ᱜᱨᱟᱦᱟ ᱢᱟᱱᱛᱨᱚ ᱡᱟᱯᱟ ᱨᱮᱭᱟᱜ ᱢᱤᱫ ᱧᱮᱞ᱾",
     "ogImage": "/images/favicon.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Graha Shanti Mantra and Planetary Peace"
+      "text": "ᱜᱽᱨᱟᱦᱟ ᱥᱟᱱᱛᱤ ᱢᱟᱱᱛᱨᱚ ᱟᱨ ᱜᱷᱟᱨᱚᱸᱡᱽ ᱱᱤᱨᱟᱹᱭ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Graha shanti means pacifying the nine planets (Navagraha) in one’s horoscope through worship, charity, and mantra japa."
+          "text": "ᱜᱽᱨᱟᱦᱟ ᱥᱟᱱᱛᱤ ᱨᱮᱭᱟᱜ ᱢᱮᱱᱮᱛ ᱫᱚ ᱵᱚᱸᱜᱟ, ᱫᱟᱱᱟᱱ ᱟᱨ ᱢᱟᱱᱛᱨᱚ ᱡᱟᱯᱟ ᱦᱚᱛᱮᱛᱮ ᱡᱟᱸᱦᱟᱭ ᱦᱚᱲᱟᱜ ᱡᱟᱱᱟᱢ ᱨᱮ ᱟᱨᱮ ᱜᱽᱨᱚᱦᱚ (ᱱᱟᱵᱟᱜᱽᱨᱟᱦᱟ) ᱠᱚ ᱥᱟᱹᱛᱤᱭᱟᱹᱣ ᱢᱮ᱾"
         }
       ]
     },
@@ -32,69 +32,114 @@
       "type": "p",
       "runs": [
         {
-          "text": "Each graha has a bija or name mantra — Japam includes Shani, Rahu, Ketu, Surya, Guru, and deity forms of divine grace."
-        }
-      ]
-    },
-    {
-      "type": "h2",
-      "text": "What is graha shanti?"
-    },
-    {
-      "type": "p",
-      "runs": [
-        {
-          "text": "Astrology maps karmic tendencies to planets. Japa does not “erase” karma but steadies the mind and aligns conduct with dharma, which traditions say softens difficult periods."
+          "text": "ᱥᱟᱱᱟᱢ ᱜᱽᱨᱟᱦᱟ ᱨᱮ ᱢᱤᱫ ᱵᱤᱡᱟ ᱥᱮ ᱧᱩᱛᱩᱢ ᱢᱟᱱᱛᱨᱚ ᱢᱮᱱᱟᱜᱼᱟ - ᱡᱟᱯᱚᱢ ᱨᱮ ᱥᱟᱱᱤ, ᱨᱟᱦᱩ, ᱠᱮᱴᱩ, ᱥᱩᱨᱭᱟ, ᱜᱩᱨᱩ, ᱟᱨ ᱵᱚᱸᱜᱟ ᱫᱟᱭᱟ ᱨᱮᱭᱟᱜ ᱵᱚᱸᱜᱟ ᱨᱩᱯ ᱠᱚ ᱥᱮᱞᱮᱫ ᱢᱮᱱᱟᱜᱼᱟ᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "ᱜᱽᱨᱟᱦᱟ ᱥᱟᱱᱛᱤ ᱫᱚ ᱪᱮᱫ ᱠᱟᱱᱟ?"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱡᱚᱛᱚᱱ ᱵᱤᱨᱫᱟᱹ ᱜᱽᱨᱚᱦᱚ ᱠᱚ ᱨᱮ ᱠᱟᱨᱢᱤᱠ ᱯᱨᱚᱵᱷᱟᱣᱱᱟ ᱠᱚ ᱢᱮᱯ ᱮᱫᱟᱭ ᱾ ᱡᱟᱯᱟ ᱫᱚ ᱠᱟᱹᱨᱢᱟ ᱵᱟᱭ “ᱢᱮᱴᱟᱣ” ᱮᱫᱟ ᱢᱮᱱᱠᱷᱟᱱ ᱢᱚᱱᱮ ᱫᱚ ᱫᱷᱚᱨᱚᱢ ᱥᱟᱶ ᱥᱟᱹᱭᱛᱟᱹᱣ ᱮᱫᱟ, ᱡᱟᱦᱟᱸ ᱫᱚ ᱯᱚᱨᱚᱵ ᱠᱚ ᱢᱮᱱᱮᱫᱟ ᱡᱮ ᱢᱩᱥᱠᱤᱞ ᱚᱠᱛᱚ ᱠᱚ ᱞᱟᱹᱵᱤᱫ ᱮᱫᱟ᱾"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱡᱟᱯᱟ ᱨᱮᱭᱟᱜ ᱞᱟᱵᱷ (ᱯᱚᱨᱚᱢ ᱧᱮᱞᱚᱢ)"
     },
     {
       "type": "ul",
       "items": [
-        "Holistic approach: multiple planets via Navagraha puja or individual focus",
-        "Combines mantra, fasting, and seva per priest advice",
-        "Supports peace during dasha transitions",
-        "Builds daily spiritual discipline"
+        "ᱦᱚᱞᱤᱥᱴᱤᱠ ᱮᱯᱨᱚᱪ: ᱱᱟᱣᱟᱜᱨᱟᱦᱟ ᱯᱩᱡᱟ ᱥᱮ ᱵᱮᱜᱟᱨ ᱯᱷᱚᱠᱟᱥ ᱦᱚᱛᱮᱛᱮ ᱟᱭᱢᱟ ᱜᱽᱨᱚᱦᱚᱲ",
+        "ᱯᱟᱭᱡᱤᱴ ᱥᱚᱞᱦᱟ ᱞᱮᱠᱟᱛᱮ ᱢᱟᱱᱛᱨᱚ, ᱩᱥᱟᱹᱨᱟ ᱟᱨ ᱥᱮᱣᱟ ᱢᱤᱫ ᱢᱮ",
+        "ᱫᱟᱥᱟ ᱩᱪᱟᱹᱲ ᱚᱠᱛᱚ ᱨᱮ ᱱᱤᱨᱟᱹᱭ ᱜᱚᱲᱚ ᱮᱢᱟᱭᱟ",
+        "ᱫᱤᱱᱟᱹᱢ ᱟᱛᱢᱟᱛᱤ ᱰᱤᱥᱤᱯᱞᱤᱱ ᱛᱮᱭᱟᱨ ᱢᱮ"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "᱑᱐᱘ ᱫᱷᱟᱣ ᱪᱮᱫ ᱞᱮᱠᱟ ᱥᱮᱨᱮᱧ ᱦᱩᱭᱩᱜ-ᱟ"
     },
     {
       "type": "ul",
       "items": [
-        "Identify which graha needs focus with a qualified astrologer",
-        "Chant that planet’s mantra 108 times on its weekday",
-        "Navagraha homam or temple puja for comprehensive shanti",
-        "Use Japam for individual graha/deity mantras"
+        "ᱩᱨᱩᱢ ᱢᱮ ᱚᱠᱟ ᱜᱽᱨᱟᱦᱟ ᱨᱮ ᱢᱤᱫ ᱞᱮᱠᱢᱟᱱ ᱡᱚᱛᱚᱱ ᱵᱤᱨᱫᱟᱹ ᱥᱟᱶ ᱯᱷᱚᱠᱟᱥ ᱞᱟᱹᱠᱛᱤᱜ ᱠᱟᱱᱟ",
+        "ᱚᱱᱟ ᱜᱷᱟᱨᱚᱸᱡᱽ ᱨᱮᱭᱟᱜ ᱢᱟᱱᱛᱨᱚ ᱑᱐᱘ ᱫᱷᱟᱣ ᱦᱟᱯᱛᱟ ᱨᱮᱭᱟᱜ ᱢᱟᱦᱟᱸ ᱦᱤᱞᱚᱜ ᱥᱮᱨᱮᱧ ᱢᱮ",
+        "ᱵᱽᱭᱟᱯᱟᱠ ᱥᱟᱱᱛᱤ ᱞᱟᱹᱜᱤᱫ ᱱᱟᱣᱟᱜᱨᱟᱦᱟ ᱦᱚᱢᱚᱢ ᱥᱮ ᱢᱟᱱᱫᱤᱨ ᱯᱩᱡᱟ",
+        "ᱯᱷᱩᱨᱜᱟᱹᱞ ᱜᱽᱨᱟᱦᱟ/ᱵᱚᱝᱜᱟ ᱢᱟᱱᱛᱨᱚ ᱞᱟᱹᱜᱤᱫ ᱡᱟᱯᱚᱢ ᱵᱮᱵᱷᱟᱨ ᱢᱮ"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "ᱛᱤᱱᱨᱮ ᱥᱮᱨᱮᱧ ᱦᱩᱭᱩᱜ-ᱟ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Weekdays map to planets — Sunday Surya, Saturday Shani, etc."
+          "text": "ᱦᱟᱯᱛᱟ ᱢᱟᱦᱟᱸ ᱜᱽᱨᱚᱦᱚ ᱨᱮᱭᱟᱜ ᱱᱟᱠᱥᱟ - ᱥᱤᱸᱜᱤ ᱢᱟᱦᱟ ᱥᱩᱨᱭᱟ, ᱧᱩᱦᱩᱢ ᱢᱟᱦᱟ ᱥᱟᱱᱤ, ᱮᱢᱟᱱ ᱠᱚ ᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "᱑᱐᱘ ᱫᱚᱦᱲᱟ ᱪᱮᱫᱟᱜ ᱢᱟᱱᱚᱛ ᱢᱮᱱᱟᱜᱼᱟ",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Japam lets you practise Shani, Rahu, Ketu, Surya, Guru mantras and deity japa in one app with counting and audio.",
+          "text": "᱑᱐᱘ ᱮᱞ ᱫᱚ ᱡᱟᱯᱟ ᱢᱟᱞᱟ ᱨᱮ ᱢᱤᱫ ᱯᱩᱨᱟᱹ ᱜᱩᱞᱟᱹᱭ ᱠᱟᱱᱟ ᱾ ᱛᱷᱤᱨ ᱫᱚᱦᱲᱟ ᱫᱚᱦᱲᱟ ᱛᱮ ᱢᱚᱱᱮ ᱛᱷᱤᱨᱚᱜ ᱟᱨ ᱢᱟᱱᱛᱨᱚ ᱨᱮᱭᱟᱜ ᱢᱮᱱᱮᱛ ᱨᱮ ᱜᱟᱹᱦᱤᱨ ᱫᱷᱭᱟᱱ ᱮᱢᱚᱜ ᱠᱟᱱᱟ᱾"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱛᱤᱱᱟᱹᱜ ᱜᱟᱱ ᱯᱚᱨᱚᱵ ᱑᱑ ᱵᱟᱝᱠᱷᱟᱱ ᱒᱑ ᱢᱟᱞᱟ ᱞᱟᱹᱭ ᱮᱫᱟ - ᱟᱢᱟᱜ ᱜᱩᱨᱩ ᱵᱟᱝᱠᱷᱟᱱ ᱯᱟᱭᱡᱤᱴ ᱴᱷᱮᱱ ᱟᱢᱟᱜ ᱵᱟᱛᱟᱣ ᱞᱮᱠᱟᱱ ᱞᱮᱠᱷᱟ ᱞᱟᱹᱜᱤᱫ ᱠᱩᱞᱤᱭᱮᱢ ᱾"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱥᱟᱫᱷᱟᱨᱚᱱ ᱵᱷᱩᱞ ᱠᱚ ᱠᱷᱚᱱ ᱥᱟᱦᱟᱜ ᱞᱟᱹᱜᱤᱫ"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "ᱟᱹᱰᱤ ᱩᱥᱟᱹᱨᱟ ᱪᱟᱱᱴᱤᱝ ᱟᱨ ᱥᱟᱰᱮ ᱨᱮ ᱯᱷᱚᱠᱟᱥ ᱟᱫ ᱠᱟᱛᱮ",
+        "ᱵᱤᱱ ᱫᱤᱥᱟᱹ ᱛᱮ ᱟᱭᱢᱟ ᱵᱚᱝᱜᱟ ᱠᱚ ᱢᱮᱥᱟᱞ ᱢᱮ",
+        "ᱵᱷᱚᱠᱛᱤ ᱟᱨ ᱱᱮᱭᱟᱱ ᱡᱤᱭᱚᱱ ᱵᱚᱫᱚᱞ ᱠᱟᱛᱮ ᱥᱩᱢᱩᱝ ᱡᱤᱱᱤᱥ ᱚᱨᱡᱚ ᱨᱮᱭᱟᱜ ᱟᱥᱟ ᱢᱮ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱢᱟᱱᱫᱤᱨ ᱟᱨ ᱚᱲᱟᱜ ᱨᱮ ᱢᱤᱫ ᱥᱟᱶᱛᱮ ᱦᱮᱣᱟ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱚᱲᱟᱜ ᱡᱟᱯᱟ ᱢᱟᱱᱫᱤᱨ ᱵᱚᱸᱜᱟ ᱥᱟᱯᱚᱨᱴ ᱮᱫᱟᱭ; ᱱᱚᱣᱟ ᱫᱚ ᱫᱟᱨᱥᱟᱱ ᱵᱟᱭ ᱵᱚᱫᱚᱞᱟ᱾ ᱯᱚᱨᱚᱵ ᱢᱟᱦᱟ ᱥᱮ ᱧᱩᱦᱩᱢ ᱢᱟᱦᱟ ᱦᱤᱞᱚᱜ ᱢᱟᱱᱫᱤᱨ ᱧᱮᱞ ᱛᱮ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮᱭᱟᱜ ᱥᱮᱨᱣᱟ ᱫᱚ ᱠᱮᱴᱮᱡ ᱜᱮᱭᱟ᱾"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱡᱟᱯᱟᱢ ᱥᱟᱶ ᱯᱨᱮᱠᱴᱤᱥ ᱢᱮ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱡᱟᱯᱚᱢ ᱟᱢ ᱥᱟᱱᱤ, ᱨᱟᱦᱩ, ᱠᱮᱴᱩ, ᱥᱩᱨᱭᱟ, ᱜᱩᱨᱩ ᱢᱟᱱᱛᱨᱚ ᱟᱨ ᱵᱚᱝᱜᱟ ᱡᱟᱯᱟ ᱢᱤᱫ ᱮᱯ ᱨᱮ ᱞᱮᱠᱷᱟ ᱟᱨ ᱚᱰᱤᱭᱳ ᱥᱟᱶᱛᱮ ᱦᱮᱣᱟ ᱫᱟᱲᱮᱭᱟᱢᱟ᱾",
           "bold": false
         }
       ]
@@ -132,41 +177,41 @@
   ],
   "faqs": [
     {
-      "question": "One mantra for all planets?",
-      "answer": "Navagraha stotra exists; individual graha mantras target specific needs."
+      "question": "ᱥᱟᱱᱟᱢ ᱜᱽᱨᱚᱦᱚ ᱞᱟᱹᱜᱤᱫ ᱢᱤᱫ ᱢᱟᱱᱛᱨᱚ ?",
+      "answer": "ᱱᱟᱣᱟᱜᱽᱨᱟᱦᱟ ᱥᱴᱚᱴᱨᱟ ᱢᱮᱱᱟᱜᱼᱟ; ᱢᱤᱫ ᱜᱽᱨᱟᱦᱟ ᱢᱟᱱᱛᱨᱚ ᱫᱚ ᱠᱷᱟᱥ ᱞᱟᱹᱠᱛᱤ ᱠᱚ ᱡᱚᱥ ᱟᱠᱟᱫᱟ ᱾"
     },
     {
-      "question": "Do I need gemstones?",
-      "answer": "Some wear ratna after astrologer advice; japa alone is a complete sadhana for many."
+      "question": "ᱪᱮᱫ ᱤᱧ ᱨᱮᱢᱚ ᱫᱷᱤᱨᱤ ᱞᱟᱹᱠᱛᱤᱭᱟᱹᱧᱟ?",
+      "answer": "ᱛᱤᱱᱟᱹᱜ ᱜᱟᱱ ᱦᱚᱲ ᱡᱮᱛᱮᱛ ᱥᱚᱞᱦᱟ ᱛᱟᱭᱚᱢ ᱨᱟᱛᱱᱟ ᱠᱚ ᱦᱚᱨᱚᱜ ᱮᱫᱟ; ᱡᱟᱯᱟ ᱮᱥᱠᱟᱨ ᱜᱮ ᱟᱭᱢᱟ ᱦᱚᱲ ᱞᱟᱹᱜᱤᱫ ᱯᱩᱨᱟᱹ ᱥᱟᱫᱷᱟᱱᱟ ᱠᱟᱱᱟ ᱾"
     },
     {
-      "question": "Where is Navagraha temple puja?",
-      "answer": "Major temples offer Navagraha shrines; home japa complements visits."
+      "question": "ᱱᱟᱣᱟᱜᱨᱟᱦᱟ ᱢᱟᱱᱫᱤᱨ ᱯᱩᱡᱟ ᱚᱠᱟᱨᱮ ᱢᱮᱱᱟᱜᱼᱟ?",
+      "answer": "ᱢᱟᱨᱟᱝ ᱢᱟᱱᱫᱤᱨ ᱠᱚ ᱨᱮ ᱱᱟᱣᱟᱜᱽᱨᱟᱦᱟ ᱫᱷᱚᱱ ᱠᱚ ᱮᱢᱚᱜ ᱠᱟᱱᱟ; ᱚᱲᱟᱜ ᱡᱟᱯᱟ ᱧᱮᱞ ᱯᱩᱨᱟᱹᱣ ᱮᱫᱟᱭ ᱾"
     },
     {
-      "question": "Rahu and Ketu same?",
-      "answer": "No — separate mantras; see dedicated guides in this series."
+      "question": "ᱨᱟᱦᱩ ᱟᱨ ᱠᱮᱴᱩ ᱢᱤᱫ ᱜᱮ?",
+      "answer": "ᱵᱟᱝ — ᱡᱩᱫᱟᱹ ᱡᱩᱫᱟᱹ ᱢᱟᱱᱛᱨᱚ; ᱱᱚᱣᱟ ᱥᱮᱨᱤᱡᱽ ᱨᱮ ᱥᱩᱯᱨᱩᱛ ᱜᱟᱭᱤᱰ ᱧᱮᱞ ᱢᱮ᱾"
     },
     {
-      "question": "Can Japam replace homam?",
-      "answer": "No — homam is priest-led; Japam supports daily japa."
+      "question": "ᱪᱮᱫ ᱡᱟᱯᱟᱢ ᱦᱚᱢᱟᱢ ᱵᱚᱫᱚᱞ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱭ?",
+      "answer": "ᱵᱟᱝ — ᱦᱚᱢᱟᱢ ᱫᱚ ᱯᱟᱭᱡᱤᱴ-ᱞᱮᱰ ᱠᱟᱱᱟᱭ; ᱡᱟᱯᱟᱢ ᱫᱤᱱᱟᱹᱢ ᱡᱟᱯᱟ ᱥᱟᱯᱚᱨᱴ ᱮᱫᱟᱭ ᱾"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "ᱱᱚᱣᱟ ᱚᱱᱚᱞ ᱫᱚ ᱥᱩᱢᱩᱝ ᱥᱮᱪᱮᱫ ᱟᱨ ᱵᱷᱚᱠᱛᱚᱱ ᱦᱮᱣᱟ ᱞᱟᱹᱜᱤᱫ ᱜᱮ ᱾ ᱡᱟᱯᱟᱢ ᱫᱚ ᱪᱤᱠᱤᱥᱟ, ᱟᱹᱭᱤᱱᱤ, ᱟᱨ ᱵᱟᱝ ᱠᱟᱹᱣᱰᱤ ᱥᱚᱞᱦᱟ ᱵᱟᱭ ᱮᱢᱚᱜ ᱠᱟᱱᱟ᱾ ᱚᱨᱡᱚ ᱫᱚ ᱯᱚᱨᱥᱚᱱᱟᱞ ᱯᱟᱹᱛᱭᱟᱹᱣ ᱟᱨ ᱞᱮᱛᱟᱲ ᱦᱮᱣᱟ ᱨᱮ ᱴᱮᱦᱟᱱᱰ ᱢᱮᱱᱟᱜᱼᱟ᱾ ᱮᱯ ᱨᱮ ᱢᱟᱱᱛᱨᱟ ᱚᱱᱚᱞ ᱟᱨ ᱚᱰᱤᱭᱳ ᱫᱚ ᱡᱟᱯᱟ ᱥᱟᱯᱚᱨᱴ ᱞᱟᱹᱜᱤᱫ ᱠᱟᱱᱟ; ᱟᱹᱭᱫᱟᱹᱨᱤ ᱯᱩᱡᱟ ᱟᱹᱨᱤ ᱞᱟᱹᱜᱤᱫ ᱟᱯᱮ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮᱱ ᱯᱟᱭᱡᱤᱴ ᱥᱮ ᱥᱮᱫᱽᱨᱟ ᱥᱚᱞᱦᱟᱭ ᱢᱮ ᱾"
   },
   "relatedPages": [
     {
       "pageId": "navagraha-mantra",
-      "label": "Navagraha mantra"
+      "label": "ᱱᱟᱣᱟᱜᱨᱟᱦᱟ ᱢᱟᱱᱛᱨᱚ"
     },
     {
       "pageId": "shani-mantra-shanti",
-      "label": "Shani shanti"
+      "label": "ᱥᱟᱱᱤ ᱥᱟᱱᱛᱤ"
     },
     {
       "pageId": "rahu-mantra-shanti",
-      "label": "Rahu shanti"
+      "label": "ᱨᱟᱦᱩ ᱥᱟᱱᱛᱤ"
     }
   ]
 }

@@ -4,27 +4,27 @@
   "lang": "sd",
   "slug": "marriage-delay-mantra",
   "deityId": null,
-  "primaryKeyword": "mantra for marriage delay",
+  "primaryKeyword": "شادي جي دير لاء منتر",
   "secondaryKeywords": [
-    "delayed marriage remedies",
-    "mangal dosha",
-    "katyayani"
+    "دير سان شادي جي علاج",
+    "منگل دوشا",
+    "کٽياني"
   ],
   "meta": {
-    "title": "Mantra for Marriage Delay — Devotional Guide | Japam",
-    "description": "Sensitive guide to marriage-delay mantras — Durga, Venkateswara, Rahu/Ketu japa in Japam.",
+    "title": "شادي جي دير لاء منتر - ديواني گائيڊ | جپان",
+    "description": "شاديءَ جي دير واري منترن لاءِ حساس گائيڊ - درگا، وينڪيشورا، راهو/ڪيتو جپم ۾.",
     "ogImage": "/images/favicon.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Mantra Practice When Marriage Is Delayed"
+      "text": "منتر جي مشق جڏهن شادي ۾ دير ٿئي ٿي"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Delayed marriage causes family worry. Traditions suggest patient japa to Durga, Katyayani, Venkateswara, or graha shanti — never coercion or fear."
+          "text": "شاديءَ ۾ دير گهريلو پريشانين جو سبب بڻجي ٿي. روايتون مريض کي جپ ڪرڻ جي صلاح ڏين ٿا درگا، کٽياني، وينڪيشورا، يا گراه شانتي - ڪڏهن به زبردستي يا خوف نه ڪريو."
         }
       ]
     },
@@ -32,69 +32,114 @@
       "type": "p",
       "runs": [
         {
-          "text": "Japam supports daily japa; matchmaking and astrology need human counsel."
-        }
-      ]
-    },
-    {
-      "type": "h2",
-      "text": "Meaning and approach"
-    },
-    {
-      "type": "p",
-      "runs": [
-        {
-          "text": "Chant for inner peace and trust in divine timing — not to control another person. Consult elders and astrologers for chart-specific advice."
+          "text": "Japam روزاني جاپ جي حمايت ڪري ٿو؛ ميلاپ ۽ علم نجوم کي انساني صلاح جي ضرورت آهي."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "حساسيت سان رجوع ڪريو"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "اندروني امن لاءِ منٿ ڪريو ۽ خدائي وقت تي ڀروسو ڪريو - ٻئي شخص کي سنڀالڻ لاءِ نه. چارٽ-مخصوص مشوري لاءِ بزرگن ۽ نجومي سان صلاح ڪريو."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "جاپ جا فائدا (روايتي خيال)"
     },
     {
       "type": "ul",
       "items": [
-        "Calms anxiety while waiting",
-        "Aligns with Durga/Venkateswara bhakti",
-        "Rahu/Ketu japa when nodes affect chart (astrologer-guided)",
-        "Encourages wholesome conduct and seva"
+        "انتظار ڪرڻ دوران پريشاني کي آرام",
+        "Durga/Venkateswara bhakti سان ٺهڪي اچي ٿي",
+        "راهو / ڪيتو جپ جڏهن نوڊس چارٽ کي متاثر ڪن ٿا",
+        "سٺي اخلاق ۽ خدمت جي حوصلا افزائي ڪري ٿو"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "108 ڀيرا ڪيئن ڳايو"
     },
     {
       "type": "ul",
       "items": [
-        "Choose one deity focus per vow — avoid mixing without guidance",
-        "Chant 108 daily for 21 or 41 days if that is your sankalpa",
-        "Visit temple when possible; home lamp and flower suffice",
-        "Use Japam to keep count"
+        "هڪ ديوتا فوڪس في وَر چونڊيو - هدايت کان سواءِ ملائڻ کان پاسو ڪريو",
+        "21 يا 41 ڏينهن تائين روزانو 108 جاپ ڪريو جيڪڏهن اهو توهان جو سنڪلپ آهي",
+        "جڏهن ممڪن هجي مندر جو دورو ڪريو؛ گھر جي چراغ ۽ گل ڪافي",
+        "شمار رکڻ لاءِ Japam استعمال ڪريو"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "جڏهن ڳائڻ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Friday Lakshmi, Tuesday Durga, or astrologer-prescribed graha day."
+          "text": "جمعو لکشمي، اڱارو درگا، يا نجومي طرفان مقرر ڪيل گرها ڏينهن."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "ڇو 108 ورجائي اهميت رکن ٿا",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Try Durga, Venkateswara, or graha modes in Japam — educational support only."
+          "text": "نمبر 108 جپا مالا تي هڪ مڪمل گول آهي. مسلسل ورهاڱي دماغ کي پرسکون ڪري ٿو ۽ منتر جي معني تي ڌيان ڏئي ٿو."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ڪجھ روايتون 11 يا 21 مالا بيان ڪن ٿيون - پنھنجي گرو يا پادريءَ کان پڇو ته توھان جي واعدي مطابق ڳڻپ لاءِ."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "عام غلطين کان بچڻ لاء"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "آواز تي تمام تيز آواز ۽ ڌيان وڃائڻ",
+        "ھدايت کانسواءِ ڪيترن ئي ديوتائن جون واڳون گڏ ڪرڻ",
+        "ڀڪت ۽ اخلاقي زندگي گذارڻ بدران فقط مادي نتيجن جي اميد رکڻ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "مندر ۽ گهر گڏجي مشق"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "گھر جاپا مندر جي پوڄا جي حمايت ڪري ٿو. اهو درشن کي تبديل نٿو ڪري. عيد جي ڏينهن يا ڇنڇر تي مندر جو دورو ڪرڻ خانداني روايت کي مضبوط ڪري ٿو."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Japam سان مشق ڪريو"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ڪوشش ڪريو Durga، Venkateswara، يا graha modes in Japam - صرف تعليمي مدد."
         }
       ]
     }
@@ -131,41 +176,41 @@
   ],
   "faqs": [
     {
-      "question": "Which mantra is best?",
-      "answer": "Depends on chart and tradition — Katyayani, Venkateswara, and Durga are common; ask your priest."
+      "question": "ڪهڙو منتر بهترين آهي؟",
+      "answer": "چارٽ ۽ روايت تي منحصر آهي - کٽياني، وينڪيشورا ۽ درگا عام آهن. پنهنجي پادري کان پڇو."
     },
     {
-      "question": "Will japa guarantee marriage by a date?",
-      "answer": "No — Japam does not promise outcomes; practice is for devotion and peace."
+      "question": "ڇا جاپا شادي جي تاريخ جي ضمانت ڏيندو؟",
+      "answer": "نه - Japam نتيجن جو واعدو نٿو ڪري؛ مشق عقيدت ۽ امن لاء آهي."
     },
     {
-      "question": "Mangal dosha?",
-      "answer": "Astrologers assess; japa may be one part of remedies alongside charity and puja."
+      "question": "منگل دوشا؟",
+      "answer": "Astrologers جو اندازو لڳايو؛ japa خيرات ۽ پوجا سان گڏ علاج جو هڪ حصو ٿي سگهي ٿو."
     },
     {
-      "question": "Can parents chant for children?",
-      "answer": "Yes — many parents vow japa for children’s wellbeing."
+      "question": "ڇا والدين ٻارن لاء گيت ڪري سگهن ٿا؟",
+      "answer": "ها - ڪيترائي والدين ٻارن جي ڀلائي لاءِ جاپ جو واعدو ڪن ٿا."
     },
     {
-      "question": "Rahu/Ketu for marriage?",
-      "answer": "Sometimes recommended — only with qualified Jyotisha advice."
+      "question": "راهو/ڪيتو شادي لاءِ؟",
+      "answer": "ڪڏهن ڪڏهن سفارش ڪئي وئي - صرف قابليت جيوتشا جي صلاح سان."
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "هي مضمون صرف تعليمي ۽ ديني مشق لاءِ آهي. Japam طبي، قانوني، يا مالي صلاح فراهم نٿو ڪري. نتيجن جو دارومدار ذاتي ايمان ۽ مسلسل مشق تي. ايپ ۾ منتر ٽيڪسٽ ۽ آڊيو جاپا سپورٽ لاءِ آهن؛ رسمي پوجا ضابطن لاءِ پنھنجي خانداني پادريءَ يا روايت سان صلاح ڪريو."
   },
   "relatedPages": [
     {
       "pageId": "mantra-durga",
-      "label": "Durga mantra"
+      "label": "درگا منتر"
     },
     {
       "pageId": "venkateswara-mantra-tirupati",
-      "label": "Venkateswara"
+      "label": "وينڪاٽيشورا"
     },
     {
       "pageId": "ketu-mantra-shanti",
-      "label": "Ketu shanti"
+      "label": "ڪيتو شانتي"
     }
   ]
 }

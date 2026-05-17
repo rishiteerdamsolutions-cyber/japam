@@ -4,26 +4,26 @@
   "lang": "sat",
   "slug": "hanuman-mantra-shani",
   "deityId": "hanuman",
-  "primaryKeyword": "hanuman for shani pariharam",
+  "primaryKeyword": "ᱥᱟᱱᱤ ᱯᱟᱨᱤᱦᱟᱨᱟᱢ ᱞᱟᱹᱜᱤᱫ ᱦᱟᱱᱩᱢᱟᱱ",
   "secondaryKeywords": [
-    "saturday hanuman",
-    "shani troubles"
+    "ᱧᱩᱦᱩᱢ ᱢᱟᱦᱟᱸ ᱦᱟᱱᱩᱢᱟᱱ",
+    "ᱥᱟᱱᱤ ᱢᱩᱥᱠᱤᱞ ᱠᱚ"
   ],
   "meta": {
-    "title": "Hanuman for Shani — Mantra Japa | Japam",
-    "description": "Hanuman worship alongside Shani troubles — educational japa guide.",
+    "title": "ᱥᱟᱱᱤ ᱞᱟᱹᱜᱤᱫ ᱦᱟᱱᱩᱢᱟᱱ — ᱢᱟᱱᱛᱨᱟ ᱡᱟᱯᱟ | ᱡᱟᱯᱟᱢ",
+    "description": "ᱥᱟᱱᱤ ᱢᱩᱥᱠᱤᱞ ᱥᱟᱶ ᱦᱟᱱᱩᱢᱟᱱ ᱵᱚᱸᱜᱟ ᱵᱚᱸᱜᱟ - ᱥᱮᱪᱮᱫ ᱡᱟᱯᱟ ᱜᱟᱭᱤᱰ ᱾",
     "ogImage": "/images/deities/hanuman.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Hanuman Worship for Shani Troubles"
+      "text": "ᱥᱟᱱᱤ ᱢᱩᱥᱠᱤᱞ ᱠᱚ ᱞᱟᱹᱜᱤᱫ ᱦᱟᱱᱩᱢᱟᱱ ᱵᱚᱸᱜᱟ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Many families worship Hanuman on Saturdays when seeking Shani pariharam (remedies)."
+          "text": "ᱟᱹᱰᱤ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱦᱚᱲ ᱠᱚ ᱧᱩᱦᱩᱢ ᱢᱟᱦᱟᱸ ᱦᱤᱞᱚᱜ ᱦᱟᱱᱩᱢᱟᱱ ᱠᱚ ᱵᱚᱸᱜᱟᱭᱟ ᱛᱤᱱ ᱨᱮ ᱥᱟᱱᱤ ᱯᱟᱨᱤᱦᱟᱨᱟᱢ (ᱥᱟᱫᱷᱟᱨ) ᱠᱚ ᱠᱷᱚᱡᱚᱜ ᱠᱟᱱᱟ ᱾"
         }
       ]
     },
@@ -31,13 +31,13 @@
       "type": "p",
       "runs": [
         {
-          "text": "This is devotional support, not a guarantee — combine with ethical living and Shani japa."
+          "text": "ᱱᱚᱣᱟ ᱫᱚ ᱵᱷᱚᱠᱛᱚᱱ ᱜᱚᱲᱚ ᱠᱟᱱᱟ, ᱜᱮᱨᱮᱱᱴᱤ ᱫᱚ ᱵᱟᱝ ᱠᱟᱱᱟ - ᱱᱮᱭᱟᱱ ᱡᱤᱭᱚᱱ ᱟᱨ ᱥᱟᱱᱤ ᱡᱟᱯᱟ ᱥᱟᱶ ᱢᱤᱞᱟᱹᱣ ᱢᱮ ᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "ᱢᱟᱱᱛᱨᱚ ᱨᱮᱭᱟᱜ ᱢᱮᱱᱮᱛ"
     },
     {
       "type": "blockquote",
@@ -52,57 +52,102 @@
       "type": "p",
       "runs": [
         {
-          "text": "Chant with a calm mind, offering salutation rather than demanding specific outcomes."
+          "text": "ᱛᱷᱤᱨ ᱢᱚᱱ ᱥᱟᱶᱛᱮ ᱥᱮᱨᱮᱧ ᱢᱮ, ᱠᱷᱟᱥ ᱯᱷᱚᱞᱚᱱ ᱠᱚ ᱫᱟᱹᱵᱤ ᱵᱚᱫᱚᱞ ᱛᱮ ᱥᱟᱹᱜᱩᱱ ᱮᱢ ᱢᱮ᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "ᱡᱟᱯᱟ ᱨᱮᱭᱟᱜ ᱞᱟᱵᱷ (ᱯᱚᱨᱚᱢ ᱧᱮᱞᱚᱢ)"
     },
     {
       "type": "ul",
       "items": [
-        "Builds festival discipline",
-        "Deepens deity bhakti",
-        "Community yagnas may align with season",
-        "Educational — not outcome guarantees"
+        "ᱯᱚᱨᱚᱵ ᱰᱤᱥᱤᱯᱞᱤᱱ ᱛᱮᱭᱟᱨ ᱢᱮ",
+        "ᱵᱚᱸᱜᱟ ᱵᱷᱚᱠᱛᱤ ᱜᱟᱹᱦᱤᱨ ᱢᱮ",
+        "ᱥᱟᱶᱛᱟ ᱭᱟᱜᱽᱱᱟᱥ ᱫᱚ ᱥᱤᱡᱚᱱ ᱥᱟᱶ ᱛᱷᱟᱨ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ",
+        "ᱥᱮᱪᱮᱫ — ᱚᱨᱡᱚ ᱜᱮᱨᱮᱱᱴᱤ ᱵᱟᱝ"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "᱑᱐᱘ ᱫᱷᱟᱣ ᱪᱮᱫ ᱞᱮᱠᱟ ᱥᱮᱨᱮᱧ ᱦᱩᱭᱩᱜ-ᱟ"
     },
     {
       "type": "ul",
       "items": [
-        "Set daily 108 sankalpa for festival period",
-        "Keep fast/vrat rules from your family tradition",
-        "Visit temple when possible",
-        "Use Japam counter between work/study"
+        "ᱯᱚᱨᱚᱵ ᱚᱠᱛᱚ ᱞᱟᱹᱜᱤᱫ ᱫᱤᱱᱟᱹᱢ ᱑᱐᱘ ᱥᱟᱱᱠᱟᱞᱯᱟ ᱥᱮᱴ ᱢᱮ",
+        "ᱟᱢᱟᱜ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮᱱᱟᱜ ᱥᱮᱨᱣᱟ ᱠᱷᱚᱱ ᱩᱥᱟᱹᱨᱟ/ᱵᱷᱨᱟᱴ ᱱᱤᱭᱚᱢ ᱫᱚᱦᱚᱭ ᱢᱮ",
+        "ᱡᱚᱠᱷᱚᱱ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱜ-ᱟ ᱢᱟᱱᱫᱤᱨ ᱧᱮᱞ ᱢᱮ",
+        "ᱠᱟᱹᱢᱤ/ᱯᱟᱲᱦᱟᱣ ᱛᱟᱞᱟ ᱨᱮ ᱡᱟᱯᱟᱢ ᱠᱟᱣᱩᱱᱴᱟᱨ ᱵᱮᱵᱷᱟᱨ ᱢᱮ"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "ᱛᱤᱱᱨᱮ ᱥᱮᱨᱮᱧ ᱦᱩᱭᱩᱜ-ᱟ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Saturday; some visit Hanuman temples after Shani darshan."
+          "text": "ᱧᱩᱢᱩᱢ ᱢᱟᱦᱟ; ᱥᱟᱱᱤ ᱫᱟᱨᱥᱟᱱ ᱛᱟᱭᱚᱢ ᱟᱫᱚᱢ ᱦᱚᱲ ᱦᱟᱱᱩᱢᱟᱱ ᱢᱟᱱᱫᱤᱨ ᱠᱚ ᱧᱮᱞᱟ ᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "᱑᱐᱘ ᱫᱚᱦᱲᱟ ᱪᱮᱫᱟᱜ ᱢᱟᱱᱚᱛ ᱢᱮᱱᱟᱜᱼᱟ",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Alternate Hanuman and Shani sessions in Japam across the week."
+          "text": "᱑᱐᱘ ᱮᱞ ᱫᱚ ᱡᱟᱯᱟ ᱢᱟᱞᱟ ᱨᱮ ᱢᱤᱫ ᱯᱩᱨᱟᱹ ᱜᱩᱞᱟᱹᱭ ᱠᱟᱱᱟ ᱾ ᱛᱷᱤᱨ ᱫᱚᱦᱲᱟ ᱫᱚᱦᱲᱟ ᱛᱮ ᱢᱚᱱᱮ ᱛᱷᱤᱨᱚᱜ ᱟᱨ ᱢᱟᱱᱛᱨᱚ ᱨᱮᱭᱟᱜ ᱢᱮᱱᱮᱛ ᱨᱮ ᱜᱟᱹᱦᱤᱨ ᱫᱷᱭᱟᱱ ᱮᱢᱚᱜ ᱠᱟᱱᱟ᱾"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱛᱤᱱᱟᱹᱜ ᱜᱟᱱ ᱯᱚᱨᱚᱵ ᱑᱑ ᱵᱟᱝᱠᱷᱟᱱ ᱒᱑ ᱢᱟᱞᱟ ᱞᱟᱹᱭ ᱮᱫᱟ - ᱟᱢᱟᱜ ᱜᱩᱨᱩ ᱵᱟᱝᱠᱷᱟᱱ ᱯᱟᱭᱡᱤᱴ ᱴᱷᱮᱱ ᱟᱢᱟᱜ ᱵᱟᱛᱟᱣ ᱞᱮᱠᱟᱱ ᱞᱮᱠᱷᱟ ᱞᱟᱹᱜᱤᱫ ᱠᱩᱞᱤᱭᱮᱢ ᱾"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱥᱟᱫᱷᱟᱨᱚᱱ ᱵᱷᱩᱞ ᱠᱚ ᱠᱷᱚᱱ ᱥᱟᱦᱟᱜ ᱞᱟᱹᱜᱤᱫ"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "ᱟᱹᱰᱤ ᱩᱥᱟᱹᱨᱟ ᱪᱟᱱᱴᱤᱝ ᱟᱨ ᱥᱟᱰᱮ ᱨᱮ ᱯᱷᱚᱠᱟᱥ ᱟᱫ ᱠᱟᱛᱮ",
+        "ᱵᱤᱱ ᱫᱤᱥᱟᱹ ᱛᱮ ᱟᱭᱢᱟ ᱵᱚᱝᱜᱟ ᱠᱚ ᱢᱮᱥᱟᱞ ᱢᱮ",
+        "ᱵᱷᱚᱠᱛᱤ ᱟᱨ ᱱᱮᱭᱟᱱ ᱡᱤᱭᱚᱱ ᱵᱚᱫᱚᱞ ᱠᱟᱛᱮ ᱥᱩᱢᱩᱝ ᱡᱤᱱᱤᱥ ᱚᱨᱡᱚ ᱨᱮᱭᱟᱜ ᱟᱥᱟ ᱢᱮ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱢᱟᱱᱫᱤᱨ ᱟᱨ ᱚᱲᱟᱜ ᱨᱮ ᱢᱤᱫ ᱥᱟᱶᱛᱮ ᱦᱮᱣᱟ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱚᱲᱟᱜ ᱡᱟᱯᱟ ᱢᱟᱱᱫᱤᱨ ᱵᱚᱸᱜᱟ ᱥᱟᱯᱚᱨᱴ ᱮᱫᱟᱭ; ᱱᱚᱣᱟ ᱫᱚ ᱫᱟᱨᱥᱟᱱ ᱵᱟᱭ ᱵᱚᱫᱚᱞᱟ᱾ ᱯᱚᱨᱚᱵ ᱢᱟᱦᱟ ᱥᱮ ᱧᱩᱦᱩᱢ ᱢᱟᱦᱟ ᱦᱤᱞᱚᱜ ᱢᱟᱱᱫᱤᱨ ᱧᱮᱞ ᱛᱮ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮᱭᱟᱜ ᱥᱮᱨᱣᱟ ᱫᱚ ᱠᱮᱴᱮᱡ ᱜᱮᱭᱟ᱾"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱡᱟᱯᱟᱢ ᱥᱟᱶ ᱯᱨᱮᱠᱴᱤᱥ ᱢᱮ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱯᱩᱨᱟᱹ ᱦᱟᱴ ᱡᱟᱯᱟᱢ ᱨᱮ ᱵᱤᱠᱚᱞᱯᱚ ᱦᱟᱱᱩᱢᱟᱱ ᱟᱨ ᱥᱟᱱᱤ ᱥᱮᱥᱚᱱ ᱠᱚ ᱾"
         }
       ]
     }
@@ -111,7 +156,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start ᱦᱱᱩᱢᱟᱱ Japa in Japam",
+      "label": "Start Hanuman Japa in Japam",
       "href": "https://japam.digital/?lang=sat&deity=hanuman&utm_source=google&utm_medium=seo&utm_campaign=hanuman-mantra-shani&utm_content=start-japa",
       "style": "primary"
     },
@@ -139,41 +184,41 @@
   ],
   "faqs": [
     {
-      "question": "Exact festival date this year?",
-      "answer": "Check Hindu panchang for your region — we avoid locking a Gregorian year in this guide."
+      "question": "ᱱᱤᱭᱟᱹ ᱥᱮᱨᱢᱟ ᱨᱮᱭᱟᱜ ᱴᱷᱟᱹᱣᱠᱟᱹ ᱯᱚᱨᱚᱵ ᱢᱟᱹᱦᱤᱛ?",
+      "answer": "ᱟᱯᱮ ᱴᱚᱴᱷᱟ ᱞᱟᱹᱜᱤᱫ ᱦᱤᱱᱫᱷᱩ ᱯᱟᱱᱪᱟᱝ ᱧᱮᱞ ᱢᱮ - ᱟᱞᱮ ᱱᱚᱣᱟ ᱜᱚᱲᱚ ᱨᱮ ᱜᱽᱨᱮᱜᱚᱨᱤᱭᱟᱱ ᱥᱮᱨᱢᱟ ᱞᱚᱠ ᱠᱷᱚᱱ ᱞᱮ ᱥᱟᱦᱟᱨᱚᱜᱼᱟ ᱾"
     },
     {
-      "question": "How many japas per day?",
-      "answer": "108 minimum for many vows; some do 1008 on main day under guidance."
+      "question": "ᱢᱤᱫ ᱫᱤᱱ ᱨᱮ ᱛᱤᱱᱟᱹᱜ ᱡᱟᱯᱟᱥ?",
+      "answer": "ᱟᱭᱢᱟ ᱵᱟᱛᱟᱣ ᱠᱚ ᱞᱟᱹᱜᱤᱫ ᱠᱚᱢᱥᱮ ᱑᱐᱘; ᱛᱤᱱᱟᱹᱜ ᱜᱟᱱ ᱦᱚᱲ ᱑᱐᱐᱘ ᱢᱩᱬ ᱢᱟᱦᱟᱸ ᱦᱤᱞᱚᱜ ᱫᱤᱥᱟᱹ ᱛᱮ ᱠᱚ ᱠᱟᱹᱢᱤᱭᱟ ᱾"
     },
     {
-      "question": "Guest mode OK?",
-      "answer": "Yes for try; sign in to save progress across festival weeks."
+      "question": "ᱯᱮᱲᱟ ᱢᱚᱰ ᱴᱷᱤᱠ ᱜᱮᱭᱟ?",
+      "answer": "ᱪᱮᱥᱴᱟ ᱞᱟᱹᱜᱤᱫ ᱦᱮᱸ; ᱯᱚᱨᱚᱵ ᱦᱟᱯᱛᱟ ᱨᱮ ᱞᱟᱦᱟᱱᱛᱤ ᱵᱟᱧᱪᱟᱣ ᱞᱟᱹᱜᱤᱫ ᱥᱟᱭᱤᱱ ᱤᱱ ᱢᱮ ᱾"
     },
     {
-      "question": "Replace temple?",
-      "answer": "No — digital japa supports home practice."
+      "question": "ᱢᱟᱱᱫᱤᱨ ᱵᱚᱫᱚᱞ ᱢᱮ?",
+      "answer": "ᱵᱟᱝ — ᱰᱤᱡᱤᱴᱟᱞ ᱡᱟᱯᱟ ᱚᱲᱟᱜ ᱨᱮ ᱦᱮᱣᱟ ᱥᱟᱯᱚᱨᱴ ᱮᱫᱟᱭ ᱾"
     },
     {
-      "question": "Join collective yagna?",
-      "answer": "See Maha Japa Yagnas in Japam menu during campaigns."
+      "question": "ᱥᱟᱢᱴᱟᱣ ᱭᱟᱜᱽᱱᱟ ᱨᱮ ᱥᱮᱞᱮᱫᱚᱜ ᱢᱮ?",
+      "answer": "ᱯᱨᱚᱪᱟᱨ ᱚᱠᱛᱚ ᱨᱮ ᱡᱟᱯᱟᱢ ᱢᱮᱱᱩ ᱨᱮ ᱢᱟᱦᱟ ᱡᱟᱯᱟ ᱭᱟᱜᱽᱱᱟᱥ ᱧᱮᱞ ᱢᱮ ᱾"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "ᱱᱚᱣᱟ ᱚᱱᱚᱞ ᱫᱚ ᱥᱩᱢᱩᱝ ᱥᱮᱪᱮᱫ ᱟᱨ ᱵᱷᱚᱠᱛᱚᱱ ᱦᱮᱣᱟ ᱞᱟᱹᱜᱤᱫ ᱜᱮ ᱾ ᱡᱟᱯᱟᱢ ᱫᱚ ᱪᱤᱠᱤᱥᱟ, ᱟᱹᱭᱤᱱᱤ, ᱟᱨ ᱵᱟᱝ ᱠᱟᱹᱣᱰᱤ ᱥᱚᱞᱦᱟ ᱵᱟᱭ ᱮᱢᱚᱜ ᱠᱟᱱᱟ᱾ ᱚᱨᱡᱚ ᱫᱚ ᱯᱚᱨᱥᱚᱱᱟᱞ ᱯᱟᱹᱛᱭᱟᱹᱣ ᱟᱨ ᱞᱮᱛᱟᱲ ᱦᱮᱣᱟ ᱨᱮ ᱴᱮᱦᱟᱱᱰ ᱢᱮᱱᱟᱜᱼᱟ᱾ ᱮᱯ ᱨᱮ ᱢᱟᱱᱛᱨᱟ ᱚᱱᱚᱞ ᱟᱨ ᱚᱰᱤᱭᱳ ᱫᱚ ᱡᱟᱯᱟ ᱥᱟᱯᱚᱨᱴ ᱞᱟᱹᱜᱤᱫ ᱠᱟᱱᱟ; ᱟᱹᱭᱫᱟᱹᱨᱤ ᱯᱩᱡᱟ ᱟᱹᱨᱤ ᱞᱟᱹᱜᱤᱫ ᱟᱯᱮ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮᱱ ᱯᱟᱭᱡᱤᱴ ᱥᱮ ᱥᱮᱫᱽᱨᱟ ᱥᱚᱞᱦᱟᱭ ᱢᱮ ᱾"
   },
   "relatedPages": [
     {
       "pageId": "shani-mantra-shanti",
-      "label": "Shani mantra"
+      "label": "ᱥᱟᱱᱤ ᱢᱟᱱᱛᱨᱟ"
     },
     {
       "pageId": "hanuman-mantra-tuesday",
-      "label": "Tuesday Hanuman"
+      "label": "ᱵᱟᱞᱮ ᱢᱟᱦᱟ ᱦᱟᱱᱩᱢᱟᱱ"
     },
     {
       "pageId": "sade-sati-remedies",
-      "label": "Sade Sati"
+      "label": "ᱥᱟᱰᱮ ᱥᱟᱛᱤ"
     }
   ]
 }

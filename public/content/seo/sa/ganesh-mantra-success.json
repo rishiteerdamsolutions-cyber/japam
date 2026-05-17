@@ -4,27 +4,27 @@
   "lang": "sa",
   "slug": "ganesh-mantra-success",
   "deityId": "ganesh",
-  "primaryKeyword": "ganesh mantra for success",
+  "primaryKeyword": "गणेश मन्त्र सफलता के लिये",
   "secondaryKeywords": [
-    "vinayaka mantra",
-    "om gan ganapataye namah",
-    "obstacle removal mantra"
+    "विनायक मन्त्रः",
+    "ॐ गं गणपतये नमः",
+    "विघ्नहरणमन्त्रः"
   ],
   "meta": {
-    "title": "Ganesh Mantra for Success & Obstacles | Japam",
-    "description": "Vinayaka/Ganesh mantra for new beginnings, 108 japa method, and practice in Japam.",
+    "title": "सफलता एवं बाधाओं के लिये गणेश मंत्र | जपम्",
+    "description": "विनायक/गणेश मन्त्र नव आरम्भ, १०८ जप विधि, तथा जपमे अभ्यास।",
     "ogImage": "/images/deities/ganesh.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Ganesh Mantra for Success and Obstacle Removal"
+      "text": "सफलता एवं विघ्न निवारण हेतु गणेश मन्त्र"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Lord Ganesh (Vinayaka) is invoked at the start of ventures, study, and travel. His mantra clears mental obstacles and invites wisdom."
+          "text": "उद्यमानाम्, अध्ययनस्य, यात्रायाः च आरम्भे भगवान् गणेशः (विनयकः) आह्वयति । तस्य मन्त्रः मानसिकविघ्नविच्छेदं प्रज्ञां आमन्त्रयति च।"
         }
       ]
     },
@@ -32,13 +32,13 @@
       "type": "p",
       "runs": [
         {
-          "text": "Learn the chant used in Japam and how to practise 108 repetitions with focus."
+          "text": "जपमे प्रयुक्तं जपं ज्ञात्वा १०८ पुनरावृत्तयः कथं ध्यानेन अभ्यासः करणीयः इति।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "मन्त्रार्थः"
     },
     {
       "type": "blockquote",
@@ -53,57 +53,102 @@
       "type": "p",
       "runs": [
         {
-          "text": "Chant with a calm mind, offering salutation (Namaha) rather than demanding outcomes."
+          "text": "परिणामान् आग्रहं न कृत्वा नमस्कारं (नमहा) कृत्वा शान्तचित्तेन जपं कुर्वन्तु।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "जपस्य लाभाः (पारम्परिकदृष्टिकोणः) २."
     },
     {
       "type": "ul",
       "items": [
-        "Traditional first prayer before puja or important work",
-        "Builds confidence and humility together",
-        "Wednesday and Chaturthi are especially sacred",
-        "Students and entrepreneurs alike chant for clarity"
+        "पूजा या महत्वपूर्ण कार्य से पूर्व पारम्परिक प्रथम प्रार्थना",
+        "एकत्र आत्मविश्वासं विनयं च निर्माति",
+        "बुधवासरः चतुर्थी च विशेषतया पवित्राः सन्ति",
+        "छात्राः उद्यमिनः च स्पष्टतायाः कृते जपं कुर्वन्ति"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "१०८ वारं जपं कथं करणीयम्"
     },
     {
       "type": "ul",
       "items": [
-        "Chant 108 times before beginning a task or after morning bath",
-        "Offer modak or fruit if doing formal puja",
-        "Keep breath steady; pronounce Gaṇapataye clearly",
-        "Use Japam to track count if you lack a mala"
+        "कार्यस्य आरम्भात् पूर्वं प्रातः स्नानानन्तरं वा १०८ वारं जपं कुर्वन्तु",
+        "औपचारिक पूजा करते हुए मोदक या फल अर्पित करें",
+        "निःश्वासं स्थिरं कुर्वन्तु; गणपतये स्पष्टतया उच्चारणं कुर्वन्तु",
+        "यदि भवतः माला अभावः अस्ति तर्हि गणनां निरीक्षितुं जपम् इत्यस्य उपयोगं कुर्वन्तु"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "कदा जपेत्"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Wednesday, Sankatahara Chaturthi, and Ganesh Chaturthi are key; any sincere morning works."
+          "text": "बुधवासरः संकटहारचतुर्थी, गणेशचतुर्थी च प्रमुखाः सन्ति; कोऽपि निश्छलः प्रातःकाले कार्यं करोति।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "१०८ पुनरावृत्तयः किमर्थं महत्त्वपूर्णाः सन्ति",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Select Ganesh in Japam for Om Gan Ganapataye Namah audio during gameplay and japa tally toward 108.",
+          "text": "१०८ संख्या जपमाले एकः पूर्णगोलः अस्ति । नित्यपुनरावृत्तिः मनः शान्तं करोति, मन्त्रस्य अर्थे ध्यानं गभीरं करोति च ।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "केचन परम्पराः ११ वा २१ वा मालाः विहिताः सन्ति — भवतः गुरुं वा पुरोहितं वा भवतः व्रतस्य अनुकूलानि गणनानि पृच्छन्तु ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "परिहरणीयानि सामान्यानि त्रुटयः"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "अतिशीघ्रं जपं कृत्वा ध्वनिं प्रति ध्यानं नष्टम्",
+        "अनेकदेवव्रतमिश्रणं विना मार्गदर्शनम् |",
+        "भक्ति-नीति-जीवनस्य स्थाने केवलं भौतिक-परिणामस्य अपेक्षा"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मन्दिरं गृहं च एकत्र अभ्यासं कुर्वन्ति"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "गृहं जपः मन्दिरपूजायाः समर्थनं करोति; दर्शनस्य स्थाने न भवति। उत्सवदिनेषु शनिवासरे वा मन्दिरस्य दर्शनं पारिवारिकपरम्परां सुदृढं करोति ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपं सह अभ्यासं कुरुत"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "गेमप्ले के दौरान ओम गण गणपतये नमः ऑडियो कृते जपमे गणेशं चयनं कुर्वन्तु तथा च 108 प्रति जपा टैली।",
           "bold": false
         }
       ]
@@ -113,7 +158,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start गणेशः Japa in Japam",
+      "label": "Start Ganesh Japa in Japam",
       "href": "https://japam.digital/?lang=sa&deity=ganesh&utm_source=google&utm_medium=seo&utm_campaign=ganesh-mantra-success&utm_content=start-japa",
       "style": "primary"
     },
@@ -141,41 +186,41 @@
   ],
   "faqs": [
     {
-      "question": "Ganesh or Vinayaka — same mantra?",
-      "answer": "Yes — regional names refer to the same deity; mantra form is shared."
+      "question": "गणेशः वा विनायकः — समानः मन्त्रः ?",
+      "answer": "आम् — प्रादेशिकनामानि एकमेव देवतां निर्दिशन्ति; मन्त्ररूपं भागं भवति।"
     },
     {
-      "question": "How many times before exam?",
-      "answer": "108 is standard; some chant 11 or 21 rounds under teacher advice."
+      "question": "परीक्षायाः पूर्वं कतिवारं ?",
+      "answer": "१०८ मानकम् अस्ति; केचन शिक्षकपरामर्शेण ११ वा २१ वा गोलानि जपन्ति।"
     },
     {
-      "question": "Can I chant in the evening?",
-      "answer": "Morning is preferred; evening japa is fine with sincerity."
+      "question": "सायंकाले जपं कर्तुं शक्नोमि वा ?",
+      "answer": "प्रातःकाले एव प्राधान्यं भवति; सायं जपः निष्कपटतायाः सह सुष्ठु अस्ति।"
     },
     {
-      "question": "Does Japam include Ganesh Chaturthi specials?",
-      "answer": "Check the app specials menu during festival seasons."
+      "question": "किं जपमे गणेशचतुर्थी विशेषाणि सन्ति ?",
+      "answer": "उत्सवस्य ऋतुषु एप् स्पेशल्स् मेन्यू पश्यन्तु।"
     },
     {
-      "question": "Is modak required?",
-      "answer": "Optional for home japa; festivals often include food offering."
+      "question": "किं मोदक् आवश्यकम् ?",
+      "answer": "गृहस्य जपस्य कृते वैकल्पिकम्; उत्सवेषु प्रायः अन्नप्रदानं भवति ।"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "एषः लेखः केवलं शैक्षणिक-भक्ति-अभ्यासार्थम् अस्ति । जपम् चिकित्सा, कानूनी, आर्थिकपरामर्शं न ददाति । परिणामाः व्यक्तिगतविश्वासस्य, निरन्तरं अभ्यासस्य च उपरि निर्भरं भवति। एप् मध्ये मन्त्रपाठः श्रव्यं च जपासमर्थनार्थम् अस्ति; औपचारिकपूजानियमानां कृते स्वपरिवारस्य पुरोहितेन वा परम्परेण वा परामर्शं कुर्वन्तु।"
   },
   "relatedPages": [
     {
       "pageId": "mantra-ganesh",
-      "label": "Ganesh mantra guide"
+      "label": "गणेश मन्त्र मार्गदर्शक"
     },
     {
       "pageId": "mantra-for-debt-relief",
-      "label": "Financial worries japa"
+      "label": "आर्थिक चिन्ता जपा"
     },
     {
       "pageId": "japa-108-times",
-      "label": "108 japa counting"
+      "label": "१०८ जपगणना"
     }
   ]
 }

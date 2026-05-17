@@ -4,26 +4,26 @@
   "lang": "sd",
   "slug": "narasimha-mantra-protection",
   "deityId": "narasimha",
-  "primaryKeyword": "narasimha protection mantra",
+  "primaryKeyword": "نراسيما جي حفاظت جو منتر",
   "secondaryKeywords": [
-    "om namo narasimhaya",
-    "fear removal mantra"
+    "اوم نمو نارسيميا",
+    "خوف ختم ڪرڻ جو منتر"
   ],
   "meta": {
-    "title": "Narasimha Protection Mantra | Japam",
-    "description": "Narasimha mantra for courage and protection — 108 japa in Japam.",
+    "title": "Narasimha تحفظ منتر | جپان",
+    "description": "جرئت ۽ تحفظ لاءِ نرسما منتر - جپم ۾ 108 جپ.",
     "ogImage": "/images/deities/narasimha.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Narasimha Mantra for Protection"
+      "text": "Narasimha منتر تحفظ لاء"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Lord Narasimha protects devotees from harm and inner fear in Vaishnava tradition."
+          "text": "لارڊ نرسيما وشنو روايت ۾ عقيدن کي نقصان ۽ اندروني خوف کان بچائيندو آهي."
         }
       ]
     },
@@ -31,13 +31,13 @@
       "type": "p",
       "runs": [
         {
-          "text": "Chant Om Namo Narasimhaya with faith, not aggression toward others."
+          "text": "اوم نمو نرسميهيا کي ايمان سان ڳايو، ٻين تي جارحيت نه."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "منتر جي معنيٰ"
     },
     {
       "type": "blockquote",
@@ -52,57 +52,102 @@
       "type": "p",
       "runs": [
         {
-          "text": "Chant with a calm mind, offering salutation rather than demanding specific outcomes."
+          "text": "پرسڪون ذهن سان ڳايو، خاص نتيجن جي طلب ڪرڻ بجاءِ سلام پيش ڪرڻ."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "جاپ جا فائدا (روايتي خيال)"
     },
     {
       "type": "ul",
       "items": [
-        "Builds festival discipline",
-        "Deepens deity bhakti",
-        "Community yagnas may align with season",
-        "Educational — not outcome guarantees"
+        "تہوار نظم و ضبط ٺاھي ٿو",
+        "ديوتا ڀڪت کي گہرا ڪري ٿو",
+        "ڪميونٽي يگنا شايد موسم سان ترتيب ڏيو",
+        "تعليمي - نتيجن جي ضمانت نه آهي"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "108 ڀيرا ڪيئن ڳايو"
     },
     {
       "type": "ul",
       "items": [
-        "Set daily 108 sankalpa for festival period",
-        "Keep fast/vrat rules from your family tradition",
-        "Visit temple when possible",
-        "Use Japam counter between work/study"
+        "تہوار جي مدت لاء روزانو 108 سنڪلپ مقرر ڪريو",
+        "پنهنجي خانداني روايت کان روزو/ ويرات جا ضابطا رکو",
+        "جڏهن ممڪن هجي مندر جو دورو ڪريو",
+        "ڪم / مطالعي جي وچ ۾ Japam انسداد استعمال ڪريو"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "جڏهن ڳائڻ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Twilight (sandhya) is sacred for Narasimha in some lineages."
+          "text": "گودھولي (سنڌيا) ڪجھ نسب ۾ نرسيما لاء مقدس آھي."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "ڇو 108 ورجائي اهميت رکن ٿا",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Narasimha mode in Japam includes mantra audio and japa count."
+          "text": "نمبر 108 جپا مالا تي هڪ مڪمل گول آهي. مسلسل ورهاڱي دماغ کي پرسکون ڪري ٿو ۽ منتر جي معني تي ڌيان ڏئي ٿو."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ڪجھ روايتون 11 يا 21 مالا بيان ڪن ٿيون - پنھنجي گرو يا پادريءَ کان پڇو ته توھان جي واعدي مطابق ڳڻپ لاءِ."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "عام غلطين کان بچڻ لاء"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "آواز تي تمام تيز آواز ۽ ڌيان وڃائڻ",
+        "ھدايت کانسواءِ ڪيترن ئي ديوتائن جون واڳون گڏ ڪرڻ",
+        "ڀڪت ۽ اخلاقي زندگي گذارڻ بدران فقط مادي نتيجن جي اميد رکڻ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "مندر ۽ گهر گڏجي مشق"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "گھر جاپا مندر جي پوڄا جي حمايت ڪري ٿو. اهو درشن کي تبديل نٿو ڪري. عيد جي ڏينهن يا ڇنڇر تي مندر جو دورو ڪرڻ خانداني روايت کي مضبوط ڪري ٿو."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Japam سان مشق ڪريو"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Japam ۾ Narasimha موڊ ۾ منتر آڊيو ۽ جاپ ڳڻپ شامل آهن."
         }
       ]
     }
@@ -111,7 +156,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start نرسنگهه Japa in Japam",
+      "label": "Start Narasimha Japa in Japam",
       "href": "https://japam.digital/?lang=sd&deity=narasimha&utm_source=google&utm_medium=seo&utm_campaign=narasimha-mantra-protection&utm_content=start-japa",
       "style": "primary"
     },
@@ -139,41 +184,41 @@
   ],
   "faqs": [
     {
-      "question": "Exact festival date this year?",
-      "answer": "Check Hindu panchang for your region — we avoid locking a Gregorian year in this guide."
+      "question": "هن سال فيشن جي صحيح تاريخ؟",
+      "answer": "پنهنجي علائقي لاءِ هندو پنچانگ چيڪ ڪريو - اسان هن گائيڊ ۾ گريگورين سال کي بند ڪرڻ کان بچون ٿا."
     },
     {
-      "question": "How many japas per day?",
-      "answer": "108 minimum for many vows; some do 1008 on main day under guidance."
+      "question": "روزانو ڪيترا جپسي؟",
+      "answer": "108 گھڻن واعدن لاءِ گھٽ ۾ گھٽ؛ ڪجهه ڪن ٿا 1008 مکيه ڏينهن تي هدايت جي تحت."
     },
     {
-      "question": "Guest mode OK?",
-      "answer": "Yes for try; sign in to save progress across festival weeks."
+      "question": "مهمان موڊ ٺيڪ آهي؟",
+      "answer": "ها ڪوشش لاءِ؛ فيسٽيول هفتي ۾ ترقي بچائڻ لاءِ سائن ان ڪريو."
     },
     {
-      "question": "Replace temple?",
-      "answer": "No — digital japa supports home practice."
+      "question": "مندر مٽايو؟",
+      "answer": "نه - ڊجيٽل جاپا گهر جي مشق کي سپورٽ ڪري ٿو."
     },
     {
-      "question": "Join collective yagna?",
-      "answer": "See Maha Japa Yagnas in Japam menu during campaigns."
+      "question": "اجتماعي يگنا ۾ شامل ٿيو؟",
+      "answer": "مهمن دوران Japam مينيو ۾ Maha Japa Yagnas ڏسو."
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "هي مضمون صرف تعليمي ۽ ديني مشق لاءِ آهي. Japam طبي، قانوني، يا مالي صلاح فراهم نٿو ڪري. نتيجن جو دارومدار ذاتي ايمان ۽ مسلسل مشق تي. ايپ ۾ منتر ٽيڪسٽ ۽ آڊيو جاپا سپورٽ لاءِ آهن؛ رسمي پوجا ضابطن لاءِ پنھنجي خانداني پادريءَ يا روايت سان صلاح ڪريو."
   },
   "relatedPages": [
     {
       "pageId": "mantra-narasimha",
-      "label": "Narasimha pillar"
+      "label": "نارسيما ستون"
     },
     {
       "pageId": "mantra-narayana",
-      "label": "Narayana"
+      "label": "نارائڻ"
     },
     {
       "pageId": "japa-108-times",
-      "label": "108 japa guide"
+      "label": "108 جپان"
     }
   ]
 }

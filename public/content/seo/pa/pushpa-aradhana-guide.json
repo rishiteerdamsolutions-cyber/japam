@@ -4,26 +4,26 @@
   "lang": "pa",
   "slug": "pushpa-aradhana-guide",
   "deityId": null,
-  "primaryKeyword": "pushpa archana online flower offering",
+  "primaryKeyword": "ਪੁਸ਼ਪਾ ਅਰਚਨਾ ਆਨਲਾਈਨ ਫੁੱਲ ਭੇਟ",
   "secondaryKeywords": [
-    "digital puja flowers",
-    "shodashopachara"
+    "ਡਿਜੀਟਲ ਪੂਜਾ ਦੇ ਫੁੱਲ",
+    "ਸ਼ੋਡਸ਼ੋਪਚਾਰਾ"
   ],
   "meta": {
-    "title": "Pushpa Aradhana — Digital Flower Offering | Japam",
-    "description": "Pushpa Aradhana in Japam: offer digital flowers during deity worship.",
+    "title": "ਪੁਸ਼ਪਾ ਅਰਾਧਨਾ - ਡਿਜੀਟਲ ਫਲਾਵਰ ਆਫਰਿੰਗ | ਜਪਮ",
+    "description": "ਜਪਮ ਵਿੱਚ ਪੁਸ਼ਪਾ ਅਰਾਧਨਾ: ਦੇਵਤਾ ਦੀ ਪੂਜਾ ਦੌਰਾਨ ਡਿਜੀਟਲ ਫੁੱਲ ਚੜ੍ਹਾਓ।",
     "ogImage": "/images/favicon.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Pushpa Aradhana — Digital Flower Offering"
+      "text": "ਪੁਸ਼ਪਾ ਅਰਾਧਨਾ - ਡਿਜੀਟਲ ਫਲਾਵਰ ਆਫਰਿੰਗ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Pushpa (flowers) are part of shodashopachara puja. Japam’s Pushpa Aradhana lets you offer digital flowers when visiting the deity screen."
+          "text": "ਪੁਸ਼ਪਾ (ਫੁੱਲ) ਸ਼ੋਡਸ਼ੋਪਚਾਰ ਪੂਜਾ ਦਾ ਹਿੱਸਾ ਹਨ। ਜਪਮ ਦੀ ਪੁਸ਼ਪਾ ਅਰਾਧਨਾ ਤੁਹਾਨੂੰ ਦੇਵਤਾ ਸਕ੍ਰੀਨ 'ਤੇ ਜਾਣ ਵੇਲੇ ਡਿਜੀਟਲ ਫੁੱਲ ਭੇਟ ਕਰਨ ਦਿੰਦੀ ਹੈ।"
         }
       ]
     },
@@ -31,69 +31,114 @@
       "type": "p",
       "runs": [
         {
-          "text": "Educational complement to home puja — not a temple replacement."
-        }
-      ]
-    },
-    {
-      "type": "h2",
-      "text": "What is pushpa archana?"
-    },
-    {
-      "type": "p",
-      "runs": [
-        {
-          "text": "Offering flowers symbolises surrender of virtues and beauty to the deity. Digital offering expresses the same intent when fresh flowers are unavailable."
+          "text": "ਘਰੇਲੂ ਪੂਜਾ ਲਈ ਵਿਦਿਅਕ ਪੂਰਕ - ਮੰਦਰ ਦੀ ਥਾਂ ਨਹੀਂ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "ਪੁਸ਼ਪਾ ਅਰਚਨਾ ਕੀ ਹੈ?"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ਫੁੱਲ ਚੜ੍ਹਾਉਣਾ ਦੇਵਤੇ ਨੂੰ ਗੁਣਾਂ ਅਤੇ ਸੁੰਦਰਤਾ ਦੇ ਸਮਰਪਣ ਦਾ ਪ੍ਰਤੀਕ ਹੈ। ਤਾਜ਼ੇ ਫੁੱਲ ਉਪਲਬਧ ਨਾ ਹੋਣ 'ਤੇ ਡਿਜੀਟਲ ਪੇਸ਼ਕਸ਼ ਉਸੇ ਇਰਾਦੇ ਨੂੰ ਦਰਸਾਉਂਦੀ ਹੈ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ਜਪ ਦੇ ਲਾਭ (ਰਵਾਇਤੀ ਵਿਚਾਰ)"
     },
     {
       "type": "ul",
       "items": [
-        "Practice archana symbolism daily",
-        "Pairs with mantra japa in app",
-        "Useful when travelling",
-        "Learn pada names of offerings"
+        "ਰੋਜ਼ਾਨਾ ਅਰਚਨਾ ਪ੍ਰਤੀਕਵਾਦ ਦਾ ਅਭਿਆਸ ਕਰੋ",
+        "ਐਪ ਵਿੱਚ ਮੰਤਰ ਜਾਪ ਨਾਲ ਜੋੜੀ",
+        "ਯਾਤਰਾ ਕਰਨ ਵੇਲੇ ਲਾਭਦਾਇਕ",
+        "ਭੇਟਾ ਦੇ ਪਾਡਾ ਨਾਮ ਸਿੱਖੋ"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "108 ਵਾਰ ਜਾਪ ਕਿਵੇਂ ਕਰੀਏ"
     },
     {
       "type": "ul",
       "items": [
-        "Sign in to Japam",
-        "Open Pushpa Aradhana from menu (requires auth)",
-        "Select deity and offering",
-        "Complete with mindful prayer"
+        "ਜਪਮ ਵਿੱਚ ਸਾਈਨ ਇਨ ਕਰੋ",
+        "ਮੀਨੂ ਤੋਂ ਪੁਸ਼ਪਾ ਅਰਾਧਨਾ ਖੋਲ੍ਹੋ (ਪ੍ਰਮਾਣੀਕਰਨ ਦੀ ਲੋੜ ਹੈ)",
+        "ਦੇਵਤਾ ਅਤੇ ਭੇਟ ਚੁਣੋ",
+        "ਧਿਆਨ ਨਾਲ ਪ੍ਰਾਰਥਨਾ ਨਾਲ ਪੂਰਾ ਕਰੋ"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "ਜਪ ਕਦੋਂ ਕਰਨਾ ਹੈ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "After japa or during daily darshan routine in app."
+          "text": "ਜਾਪ ਤੋਂ ਬਾਅਦ ਜਾਂ ਐਪ ਵਿੱਚ ਰੋਜ਼ਾਨਾ ਦਰਸ਼ਨ ਰੁਟੀਨ ਦੌਰਾਨ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "108 ਦੁਹਰਾਓ ਮਾਇਨੇ ਕਿਉਂ ਰੱਖਦੇ ਹਨ",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Menu → Pushpa Aradhana (sign-in required)."
+          "text": "ਸੰਖਿਆ 108 ਜਪ ਮਾਲਾ ਦਾ ਇੱਕ ਪੂਰਾ ਗੇੜ ਹੈ। ਨਿਰੰਤਰ ਦੁਹਰਾਓ ਮਨ ਨੂੰ ਸ਼ਾਂਤ ਕਰਦਾ ਹੈ ਅਤੇ ਮੰਤਰ ਦੇ ਅਰਥਾਂ 'ਤੇ ਧਿਆਨ ਖਿੱਚਦਾ ਹੈ।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ਕੁਝ ਪਰੰਪਰਾਵਾਂ 11 ਜਾਂ 21 ਮਾਲਾ ਨਿਰਧਾਰਤ ਕਰਦੀਆਂ ਹਨ - ਆਪਣੇ ਗੁਰੂ ਜਾਂ ਪੁਜਾਰੀ ਨੂੰ ਤੁਹਾਡੀ ਸੁੱਖਣਾ ਦੇ ਅਨੁਕੂਲ ਗਿਣਤੀ ਲਈ ਪੁੱਛੋ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ਬਚਣ ਲਈ ਆਮ ਗਲਤੀਆਂ"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "ਬਹੁਤ ਤੇਜ਼ੀ ਨਾਲ ਜਾਪ ਕਰਨਾ ਅਤੇ ਆਵਾਜ਼ 'ਤੇ ਧਿਆਨ ਗੁਆਉਣਾ",
+        "ਬਿਨਾਂ ਸੇਧ ਦੇ ਕਈ ਦੇਵਤਿਆਂ ਦੀਆਂ ਸੁੱਖਣਾਂ ਨੂੰ ਮਿਲਾਉਣਾ",
+        "ਭਗਤੀ ਅਤੇ ਨੈਤਿਕ ਜੀਵਨ ਦੀ ਬਜਾਏ ਕੇਵਲ ਭੌਤਿਕ ਨਤੀਜਿਆਂ ਦੀ ਉਮੀਦ ਕਰਨਾ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ਮੰਦਰ ਅਤੇ ਘਰ ਇਕੱਠੇ ਅਭਿਆਸ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ਘਰ ਜਾਪ ਮੰਦਰ ਪੂਜਾ ਦਾ ਸਮਰਥਨ ਕਰਦਾ ਹੈ; ਇਹ ਦਰਸ਼ਨ ਦੀ ਥਾਂ ਨਹੀਂ ਲੈਂਦਾ। ਤਿਉਹਾਰਾਂ ਦੇ ਦਿਨ ਜਾਂ ਸ਼ਨੀਵਾਰ ਨੂੰ ਮੰਦਰ ਜਾਣਾ ਪਰਿਵਾਰਕ ਪਰੰਪਰਾ ਨੂੰ ਮਜ਼ਬੂਤ ​​ਕਰਦਾ ਹੈ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ਜਪਮ ਨਾਲ ਅਭਿਆਸ ਕਰੋ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ਮੀਨੂ → ਪੁਸ਼ਪਾ ਅਰਾਧਨਾ (ਸਾਈਨ-ਇਨ ਲੋੜੀਂਦਾ)।"
         }
       ]
     }
@@ -130,41 +175,41 @@
   ],
   "faqs": [
     {
-      "question": "Are digital flowers equal to real?",
-      "answer": "Intent matters; traditions prefer real flowers when possible."
+      "question": "ਕੀ ਡਿਜੀਟਲ ਫੁੱਲ ਅਸਲ ਦੇ ਬਰਾਬਰ ਹਨ?",
+      "answer": "ਇਰਾਦੇ ਦੇ ਮਾਮਲੇ; ਜਦੋਂ ਵੀ ਸੰਭਵ ਹੋਵੇ ਪਰੰਪਰਾਵਾਂ ਅਸਲੀ ਫੁੱਲਾਂ ਨੂੰ ਤਰਜੀਹ ਦਿੰਦੀਆਂ ਹਨ।"
     },
     {
-      "question": "Need sign-in?",
-      "answer": "Yes — Pushpa Aradhana requires account in current app."
+      "question": "ਸਾਈਨ-ਇਨ ਦੀ ਲੋੜ ਹੈ?",
+      "answer": "ਹਾਂ — ਪੁਸ਼ਪਾ ਅਰਾਧਨਾ ਨੂੰ ਮੌਜੂਦਾ ਐਪ ਵਿੱਚ ਖਾਤੇ ਦੀ ਲੋੜ ਹੈ।"
     },
     {
-      "question": "Cost?",
-      "answer": "See in-app offerings; optional dakshina may apply."
+      "question": "ਲਾਗਤ?",
+      "answer": "ਇਨ-ਐਪ ਪੇਸ਼ਕਸ਼ਾਂ ਦੇਖੋ; ਵਿਕਲਪਿਕ ਦਕਸ਼ਿਨਾ ਲਾਗੂ ਹੋ ਸਕਦੀ ਹੈ।"
     },
     {
-      "question": "Which deities?",
-      "answer": "Deities available in Pushpa flow — see app."
+      "question": "ਕਿਹੜੇ ਦੇਵਤੇ?",
+      "answer": "ਪੁਸ਼ਪਾ ਪ੍ਰਵਾਹ ਵਿੱਚ ਦੇਵਤੇ ਉਪਲਬਧ ਹਨ — ਐਪ ਦੇਖੋ।"
     },
     {
-      "question": "Shodashopachara?",
-      "answer": "Learn full steps from your priest; Japam focuses on pushpa."
+      "question": "ਸ਼ੋਡਸ਼ੋਪਚਾਰਾ?",
+      "answer": "ਆਪਣੇ ਪੁਜਾਰੀ ਤੋਂ ਪੂਰੇ ਕਦਮ ਸਿੱਖੋ; ਜਪਮ ਪੁਸ਼ਪਾ 'ਤੇ ਧਿਆਨ ਦਿੰਦਾ ਹੈ।"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "ਇਹ ਲੇਖ ਕੇਵਲ ਵਿਦਿਅਕ ਅਤੇ ਭਗਤੀ ਅਭਿਆਸ ਲਈ ਹੈ। Japam ਡਾਕਟਰੀ, ਕਾਨੂੰਨੀ, ਜਾਂ ਵਿੱਤੀ ਸਲਾਹ ਪ੍ਰਦਾਨ ਨਹੀਂ ਕਰਦਾ ਹੈ। ਨਤੀਜੇ ਨਿੱਜੀ ਵਿਸ਼ਵਾਸ ਅਤੇ ਨਿਰੰਤਰ ਅਭਿਆਸ 'ਤੇ ਨਿਰਭਰ ਕਰਦੇ ਹਨ। ਐਪ ਵਿੱਚ ਮੰਤਰ ਪਾਠ ਅਤੇ ਆਡੀਓ ਜਪਾ ਸਮਰਥਨ ਲਈ ਹਨ; ਰਸਮੀ ਪੂਜਾ ਨਿਯਮਾਂ ਲਈ ਆਪਣੇ ਪਰਿਵਾਰਕ ਪੁਜਾਰੀ ਜਾਂ ਪਰੰਪਰਾ ਨਾਲ ਸਲਾਹ ਕਰੋ।"
   },
   "relatedPages": [
     {
       "pageId": "online-japa-mantra",
-      "label": "Online japa"
+      "label": "ਆਨਲਾਈਨ ਜਪਾ"
     },
     {
       "pageId": "ishta-devata-japa",
-      "label": "Ishta devata"
+      "label": "ਇਸ਼ਟ ਦੇਵਤਾ"
     },
     {
       "pageId": "maha-japa-yagna",
-      "label": "Maha yagna"
+      "label": "ਮਹਾ ਯੱਗ"
     }
   ]
 }

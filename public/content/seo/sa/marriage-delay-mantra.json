@@ -4,27 +4,27 @@
   "lang": "sa",
   "slug": "marriage-delay-mantra",
   "deityId": null,
-  "primaryKeyword": "mantra for marriage delay",
+  "primaryKeyword": "विवाहविलम्बस्य मन्त्रः",
   "secondaryKeywords": [
-    "delayed marriage remedies",
-    "mangal dosha",
-    "katyayani"
+    "विलम्बित विवाह उपाय",
+    "मंगल दोष",
+    "कात्यायनि"
   ],
   "meta": {
-    "title": "Mantra for Marriage Delay — Devotional Guide | Japam",
-    "description": "Sensitive guide to marriage-delay mantras — Durga, Venkateswara, Rahu/Ketu japa in Japam.",
+    "title": "विवाह विलम्ब का मंत्र — भक्ति मार्गदर्शिका | जपम्",
+    "description": "विवाह-विलम्ब मंत्रों के प्रति संवेदनशील मार्गदर्शक — जापम में दुर्गा, वेंकटेश्वर, राहु/केतु जप।",
     "ogImage": "/images/favicon.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Mantra Practice When Marriage Is Delayed"
+      "text": "विवाहे विलम्बते मन्त्राभ्यास"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Delayed marriage causes family worry. Traditions suggest patient japa to Durga, Katyayani, Venkateswara, or graha shanti — never coercion or fear."
+          "text": "विवाहविलम्बेन पारिवारिकचिन्ता भवति। परम्पराः दुर्गा, कात्यायनी, वेङ्कटेश्वर, अथवा ग्रहशान्तिं प्रति धैर्यजपं सूचयन्ति — कदापि बाध्यता वा भयं वा न ।"
         }
       ]
     },
@@ -32,69 +32,114 @@
       "type": "p",
       "runs": [
         {
-          "text": "Japam supports daily japa; matchmaking and astrology need human counsel."
-        }
-      ]
-    },
-    {
-      "type": "h2",
-      "text": "Meaning and approach"
-    },
-    {
-      "type": "p",
-      "runs": [
-        {
-          "text": "Chant for inner peace and trust in divine timing — not to control another person. Consult elders and astrologers for chart-specific advice."
+          "text": "जपं नित्यं जपं समर्थयति; मेलनं ज्योतिषं च मानवीयपरामर्शस्य आवश्यकता वर्तते।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "संवेदनशीलतायाः सह उपसर्गं कुर्वन्तु"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "आन्तरिकशान्तिं जपन्तु, दिव्यसमये विश्वासं कुर्वन्तु — न तु अन्यस्य व्यक्तिस्य नियन्त्रणार्थम् । चार्टविशिष्टपरामर्शार्थं वृद्धानां ज्योतिषीणां च परामर्शं कुर्वन्तु।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपस्य लाभाः (पारम्परिकदृष्टिकोणः) २."
     },
     {
       "type": "ul",
       "items": [
-        "Calms anxiety while waiting",
-        "Aligns with Durga/Venkateswara bhakti",
-        "Rahu/Ketu japa when nodes affect chart (astrologer-guided)",
-        "Encourages wholesome conduct and seva"
+        "प्रतीक्षमाणः चिन्ताम् शान्तयति",
+        "दुर्गा/वेङ्कटेश्वर भक्ति सह संरेखति",
+        "राहु/केतु जप यदा नोड्स चार्टं प्रभावितं कुर्वन्ति (ज्योतिषी-निर्देशित)",
+        "हितकरं आचरणं सेवां च प्रोत्साहयति"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "१०८ वारं जपं कथं करणीयम्"
     },
     {
       "type": "ul",
       "items": [
-        "Choose one deity focus per vow — avoid mixing without guidance",
-        "Chant 108 daily for 21 or 41 days if that is your sankalpa",
-        "Visit temple when possible; home lamp and flower suffice",
-        "Use Japam to keep count"
+        "प्रतिव्रतं एकं देवताकेन्द्रीकरणं चिनुत — मार्गदर्शनं विना मिश्रणं परिहरन्तु",
+        "१०८ जप नित्यं २१ वा ४१ वा यदि तत् भवतः संकल्पः",
+        "यदा सम्भवं तदा मन्दिरं गच्छन्तु; गृहदीपः पुष्पं च पर्याप्तम्",
+        "गणनां स्थापयितुं जपम् इत्यस्य उपयोगं कुर्वन्तु"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "कदा जपेत्"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Friday Lakshmi, Tuesday Durga, or astrologer-prescribed graha day."
+          "text": "शुक्रवार लक्ष्मी, मंगलवार दुर्गा, ज्योतिषी विहित ग्रह दिवस।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "१०८ पुनरावृत्तयः किमर्थं महत्त्वपूर्णाः सन्ति",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Try Durga, Venkateswara, or graha modes in Japam — educational support only."
+          "text": "१०८ संख्या जपमाले एकः पूर्णगोलः अस्ति । नित्यपुनरावृत्तिः मनः शान्तं करोति, मन्त्रस्य अर्थे ध्यानं गभीरं करोति च ।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "केचन परम्पराः ११ वा २१ वा मालाः विहिताः सन्ति — भवतः गुरुं वा पुरोहितं वा भवतः व्रतस्य अनुकूलानि गणनानि पृच्छन्तु ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "परिहरणीयानि सामान्यानि त्रुटयः"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "अतिशीघ्रं जपं कृत्वा ध्वनिं प्रति ध्यानं नष्टम्",
+        "अनेकदेवव्रतमिश्रणं विना मार्गदर्शनम् |",
+        "भक्ति-नीति-जीवनस्य स्थाने केवलं भौतिक-परिणामस्य अपेक्षा"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मन्दिरं गृहं च एकत्र अभ्यासं कुर्वन्ति"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "गृहं जपः मन्दिरपूजायाः समर्थनं करोति; दर्शनस्य स्थाने न भवति। उत्सवदिनेषु शनिवासरे वा मन्दिरस्य दर्शनं पारिवारिकपरम्परां सुदृढं करोति ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपं सह अभ्यासं कुरुत"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "जापमे दुर्गा, वेङ्कटेश्वर, अथवा ग्रहगुणान् प्रयतस्व — केवलं शैक्षिकसमर्थनम् ।"
         }
       ]
     }
@@ -131,41 +176,41 @@
   ],
   "faqs": [
     {
-      "question": "Which mantra is best?",
-      "answer": "Depends on chart and tradition — Katyayani, Venkateswara, and Durga are common; ask your priest."
+      "question": "कः मन्त्रः श्रेष्ठः ?",
+      "answer": "चार्ट-परम्परा-आश्रितः — कात्यायनी, वेङ्कटेश्वरः, दुर्गा च सामान्याः सन्ति; भवतः पुरोहितं पृच्छतु।"
     },
     {
-      "question": "Will japa guarantee marriage by a date?",
-      "answer": "No — Japam does not promise outcomes; practice is for devotion and peace."
+      "question": "किं जपः तिथिपर्यन्तं विवाहस्य गारण्टीं दास्यति ?",
+      "answer": "न — जपमः परिणामान् न प्रतिज्ञायते; अभ्यासः भक्तिः शान्तिः च भवति।"
     },
     {
-      "question": "Mangal dosha?",
-      "answer": "Astrologers assess; japa may be one part of remedies alongside charity and puja."
+      "question": "मंगल दोष?",
+      "answer": "ज्योतिषिणः मूल्याङ्कनं कुर्वन्ति; जपः दानस्य पूजायाः पार्श्वे उपायानां एकः भागः भवेत्।"
     },
     {
-      "question": "Can parents chant for children?",
-      "answer": "Yes — many parents vow japa for children’s wellbeing."
+      "question": "मातापितरौ बालकानां कृते जपं कर्तुं शक्नुवन्ति वा ?",
+      "answer": "आम् — बहवः मातापितरः बालहिताय जपं प्रतिज्ञां कुर्वन्ति ।"
     },
     {
-      "question": "Rahu/Ketu for marriage?",
-      "answer": "Sometimes recommended — only with qualified Jyotisha advice."
+      "question": "विवाहाय राहु/केतुः?",
+      "answer": "कदाचित् अनुशंसितम् — योग्यज्योतिषपरामर्शमात्रेण ।"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "एषः लेखः केवलं शैक्षणिक-भक्ति-अभ्यासार्थम् अस्ति । जपम् चिकित्सा, कानूनी, आर्थिकपरामर्शं न ददाति । परिणामाः व्यक्तिगतविश्वासस्य, निरन्तरं अभ्यासस्य च उपरि निर्भरं भवति। एप् मध्ये मन्त्रपाठः श्रव्यं च जपासमर्थनार्थम् अस्ति; औपचारिकपूजानियमानां कृते स्वपरिवारस्य पुरोहितेन वा परम्परेण वा परामर्शं कुर्वन्तु।"
   },
   "relatedPages": [
     {
       "pageId": "mantra-durga",
-      "label": "Durga mantra"
+      "label": "दुर्गा मन्त्रः"
     },
     {
       "pageId": "venkateswara-mantra-tirupati",
-      "label": "Venkateswara"
+      "label": "वेङ्कटेश्वरः"
     },
     {
       "pageId": "ketu-mantra-shanti",
-      "label": "Ketu shanti"
+      "label": "केतु शान्ति"
     }
   ]
 }

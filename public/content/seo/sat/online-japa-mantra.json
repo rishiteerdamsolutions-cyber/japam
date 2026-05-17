@@ -4,39 +4,39 @@
   "lang": "sat",
   "slug": "online-japa-mantra",
   "deityId": null,
-  "primaryKeyword": "online japa mantra chanting app",
+  "primaryKeyword": "ᱚᱱᱞᱟᱭᱤᱱ ᱡᱟᱯᱟ ᱢᱟᱱᱛᱨᱟ ᱪᱟᱱᱴᱤᱝ ᱮᱯ",
   "secondaryKeywords": [
-    "digital mantra practice",
-    "mantra app hindu",
-    "chant mantra with audio"
+    "ᱰᱤᱡᱤᱴᱟᱞ ᱢᱟᱱᱛᱨᱟ ᱦᱮᱣᱟ",
+    "ᱢᱟᱱᱛᱨᱟ ᱮᱯ ᱦᱤᱱᱫᱩ",
+    "ᱚᱰᱤᱭᱚ ᱥᱟᱶ ᱢᱟᱱᱛᱨᱚ ᱥᱮᱨᱮᱧ ᱢᱮ"
   ],
   "meta": {
-    "title": "Online Japa & Mantra Chanting — Japam App | Japam",
-    "description": "Practice Hindu mantra japa online with Japam: match-3 gameplay, deity audio, 108 counting, and community yagnas.",
+    "title": "ᱚᱱᱞᱟᱭᱤᱱ ᱡᱟᱯᱟ ᱟᱨ ᱢᱟᱱᱛᱨᱟ ᱪᱟᱱᱴᱤᱝ — ᱡᱟᱯᱟᱢ ᱮᱯ",
+    "description": "ᱡᱟᱯᱚᱢ ᱥᱟᱶᱛᱮ ᱚᱱᱞᱟᱭᱤᱱ ᱦᱤᱱᱫᱷᱩ ᱢᱟᱱᱛᱨᱚ ᱡᱟᱯᱟ ᱪᱮᱥᱴᱟᱭ ᱢᱮ: ᱢᱮᱪ-᱓ ᱜᱮᱢᱯᱞᱮ, ᱵᱚᱝᱜᱟ ᱚᱰᱤᱭᱳ, ᱑᱐᱘ ᱞᱮᱠᱷᱟ, ᱟᱨ ᱥᱟᱶᱛᱟ ᱭᱟᱜᱽᱱᱟᱥ᱾",
     "ogImage": "/images/favicon.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Online Japa and Digital Mantra Practice"
+      "text": "ᱚᱱᱞᱟᱭᱤᱱ ᱡᱟᱯᱟ ᱟᱨ ᱰᱤᱡᱤᱴᱟᱞ ᱢᱟᱱᱛᱨᱚ ᱦᱮᱣᱟ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Japam",
+          "text": "ᱡᱟᱯᱟᱢ",
           "bold": true
         },
         {
-          "text": " (japam.digital) is a "
+          "text": "(ᱡᱟᱯᱟᱢ.ᱰᱤᱡᱤᱴᱟᱞ) ᱫᱚ ᱢᱤᱫ"
         },
         {
-          "text": "digital mantra practice",
+          "text": "ᱰᱤᱡᱤᱴᱟᱞ ᱢᱟᱱᱛᱨᱟ ᱦᱮᱣᱟ",
           "bold": true,
           "underline": true
         },
         {
-          "text": " platform: play a match-3 game while hearing authentic deity mantras, track your japa count, and join collective Maha Japa Yagnas — in many Indian languages."
+          "text": "ᱯᱞᱮᱴᱯᱷᱚᱨᱢ: ᱯᱨᱚᱢᱟᱱᱴᱤᱠ ᱵᱚᱝᱜᱟ ᱢᱟᱱᱛᱨᱚ ᱟᱧᱡᱚᱢ ᱚᱠᱛᱮ ᱢᱤᱫ ᱢᱮᱪ-᱓ ᱠᱷᱮᱞ ᱠᱷᱮᱞ ᱢᱮ, ᱟᱢᱟᱜ ᱡᱟᱯᱟ ᱞᱮᱠᱷᱟ ᱴᱨᱟᱠ ᱢᱮ, ᱟᱨ ᱥᱟᱢᱴᱟᱣ ᱢᱟᱦᱟ ᱡᱟᱯᱟ ᱭᱟᱜᱽᱱᱟᱥ ᱨᱮ ᱥᱮᱞᱮᱫᱚᱜ ᱢᱮ — ᱟᱭᱢᱟ ᱵᱷᱟᱨᱚᱱ ᱯᱟᱹᱨᱥᱤ ᱨᱮ᱾"
         }
       ]
     },
@@ -44,46 +44,92 @@
       "type": "p",
       "runs": [
         {
-          "text": "Online japa does not replace temple worship or your family's puja rules; it supports daily repetition when you are travelling, at work breaks, or learning a new mantra."
+          "text": "ᱚᱱᱞᱟᱭᱤᱱ ᱡᱟᱯᱟ ᱫᱚ ᱢᱟᱱᱫᱤᱨ ᱵᱚᱸᱜᱟ ᱥᱮ ᱟᱯᱮ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮᱱᱟᱜ ᱯᱩᱡᱟ ᱱᱤᱭᱚᱢ ᱵᱟᱭ ᱵᱚᱫᱚᱞᱟ; ᱱᱚᱣᱟ ᱫᱚ ᱫᱤᱱᱟᱹᱢ ᱫᱚᱦᱲᱟ ᱥᱟᱯᱚᱨᱴ ᱮᱢᱟᱭᱟ ᱡᱚᱠᱷᱚᱱ ᱟᱢ ᱫᱟᱬᱟᱱ ᱠᱟᱱᱟᱢ, ᱠᱟᱹᱢᱤ ᱨᱮ ᱡᱤᱨᱟᱹᱣ ᱠᱟᱛᱮ, ᱥᱮ ᱱᱟᱶᱟ ᱢᱟᱱᱛᱨᱚ ᱪᱮᱫᱚᱜ ᱠᱟᱱᱟᱢ᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "What makes Japam different"
+      "text": "ᱪᱮᱫ ᱡᱤᱱᱤᱥ ᱡᱟᱯᱟᱢ ᱮ ᱵᱷᱮᱜᱟᱨ ᱮ ᱵᱮᱱᱟᱣᱟ"
     },
     {
       "type": "ul",
       "items": [
-        "Mantra audio tied to gameplay — stay engaged while chanting",
-        "Per-deity boards and japa tallies",
-        "108-japa specials and weekly streaks",
-        "Pushpa Aradhana — digital flower offering",
-        "23+ Indian language UI options"
+        "ᱢᱟᱱᱛᱨᱟ ᱚᱰᱤᱭᱳ ᱜᱮᱢᱯᱞᱮ ᱥᱟᱶ ᱛᱚᱞ ᱟᱠᱟᱱᱟ — ᱪᱟᱱᱴᱤᱝ ᱚᱠᱛᱮ ᱞᱟᱜᱟᱣ ᱛᱟᱦᱮᱱ ᱢᱮ",
+        "ᱯᱚᱨ-ᱵᱚᱝᱜᱟ ᱵᱚᱨᱰ ᱟᱨ ᱡᱟᱯᱟ ᱴᱮᱞᱤᱡᱽ",
+        "᱑᱐᱘-ᱡᱟᱯᱟ ᱵᱤᱥᱮᱥ ᱟᱨ ᱦᱟᱯᱛᱟᱠᱤᱭᱟᱹ ᱥᱴᱨᱤᱠ",
+        "ᱯᱩᱥᱯᱟ ᱟᱨᱟᱫᱷᱟᱱᱟ — ᱰᱤᱡᱤᱴᱟᱞ ᱵᱟᱦᱟ ᱮᱢᱚᱜ",
+        "᱒᱓+ ᱵᱷᱟᱨᱚᱛ ᱯᱟᱹᱨᱥᱤ UI ᱣᱤᱠᱟᱞᱯ"
       ]
     },
     {
       "type": "h2",
-      "text": "How to start"
+      "text": "ᱪᱮᱫ ᱞᱮᱠᱟ ᱛᱮ ᱮᱦᱚᱵᱚᱜᱼᱟ"
     },
     {
       "type": "ol",
       "items": [
-        "Open japam.digital on phone or desktop",
-        "Choose your language",
-        "Pick your ishta devata from the menu",
-        "Play matches; each session adds to your japa count"
+        "ᱯᱷᱚᱱ ᱟᱨ ᱵᱟᱝ ᱰᱮᱥᱠᱴᱚᱯ ᱨᱮ japam.digital ᱡᱷᱤᱡᱽ ᱢᱮ",
+        "ᱟᱢᱟᱜ ᱯᱟᱹᱨᱥᱤ ᱵᱟᱪᱷᱟᱣ ᱢᱮ",
+        "ᱢᱮᱱᱩ ᱠᱷᱚᱱ ᱟᱢᱟᱜ ᱤᱥᱛᱟ ᱫᱮᱣᱟᱛᱟ ᱵᱟᱪᱷᱟᱣ ᱢᱮ",
+        "ᱢᱮᱪ ᱠᱚ ᱠᱷᱮᱞᱚᱜ ᱢᱮ; ᱥᱟᱱᱟᱢ ᱫᱷᱚᱱ ᱜᱮ ᱟᱢᱟᱜ ᱡᱟᱯᱟ ᱞᱮᱠᱷᱟ ᱨᱮ ᱥᱮᱞᱮᱫᱚᱜ ᱠᱟᱱᱟ"
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "᱑᱐᱘ ᱫᱚᱦᱲᱟ ᱪᱮᱫᱟᱜ ᱢᱟᱱᱚᱛ ᱢᱮᱱᱟᱜᱼᱟ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Sign in with Google to save progress, or use guest mode to try japa without an account. Explore Maha Yagnas from the menu for community chanting goals."
+          "text": "ᱟᱹᱰᱤ ᱥᱟᱢᱯᱨᱟᱭᱟ ᱨᱮ, 108 ᱫᱚ ᱢᱤᱫ ᱯᱩᱨᱟᱹ ᱢᱟᱞᱟ ᱨᱟᱩᱱᱰ ᱠᱟᱱᱟ — ᱵᱟᱝ ᱞᱮᱠᱷᱟ ᱠᱟᱛᱮ ᱫᱤᱱᱟᱹᱢ ᱥᱮᱥᱚᱱ ᱵᱚᱱᱫᱚ ᱨᱮᱭᱟᱜ ᱯᱨᱮᱠᱴᱤᱠᱟᱞ ᱰᱟᱦᱟᱨ ᱠᱟᱱᱟ᱾ ᱮᱞ ᱫᱚ ᱥᱤᱢᱟᱹ ᱠᱟᱱᱟ (ᱠᱚᱥᱢᱤᱠ ᱥᱟᱭᱠᱟᱞ, ᱟᱫᱚᱢ ᱪᱮᱫ ᱠᱚ ᱨᱮ ᱱᱟᱰᱤᱥ), ᱢᱮᱱᱠᱷᱟᱱ ᱜᱟᱹᱦᱤᱨ ᱡᱚᱥ ᱫᱚ ᱥᱮᱴᱮᱨ ᱫᱷᱭᱟᱱ ᱠᱟᱱᱟ: ᱢᱤᱫ ᱥᱟᱦᱮᱫ, ᱢᱤᱫ ᱢᱟᱱᱛᱨᱚ, ᱢᱤᱫ ᱚᱠᱛᱚ ᱨᱮ ᱢᱤᱫ ᱢᱟᱹᱭᱞᱟᱹ᱾"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱡᱩᱫᱤ ᱑᱐᱘ ᱯᱩᱭᱞᱩ ᱨᱮ ᱦᱟᱢᱟᱞ ᱵᱩᱡᱷᱟᱹᱣᱜ ᱠᱟᱱᱟ, ᱑᱑ ᱵᱟᱝᱠᱷᱟᱱ ᱒᱗ ᱫᱚᱦᱲᱟ ᱛᱮ ᱮᱦᱚᱵᱽ ᱢᱮ ᱟᱨ ᱦᱟᱯᱛᱟ ᱛᱟᱭᱚᱢ ᱵᱟᱹᱲᱛᱤᱜ ᱢᱮ ᱾ ᱥᱟᱫᱷᱟᱨᱚᱱ ᱫᱤᱱ ᱨᱮ ᱞᱮᱛᱟᱲ ᱛᱟᱦᱮᱱ ᱫᱚ ᱢᱤᱫ ᱜᱟᱹᱦᱤᱨ ᱫᱷᱚᱱ ᱠᱷᱚᱱ ᱦᱚᱸ ᱵᱟᱹᱲᱛᱤ ᱢᱟᱱᱚᱛ ᱛᱟᱦᱮᱱᱟ᱾"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱥᱟᱫᱷᱟᱨᱚᱱ ᱡᱟᱯᱟ ᱵᱷᱩᱞ ᱠᱷᱚᱱ ᱥᱟᱦᱟᱜ ᱞᱟᱹᱜᱤᱫ"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "ᱞᱮᱠᱷᱟ \"ᱢᱩᱪᱟᱹᱫ\" ᱞᱟᱹᱜᱤᱫ ᱢᱟᱱᱛᱨᱚ ᱞᱟᱜᱟᱣ ᱢᱮ - ᱵᱟᱹᱭ ᱵᱟᱹᱭ ᱛᱮ, ᱟᱸᱡᱚᱢᱚᱜ ᱥᱮ ᱢᱚᱱᱮ ᱥᱟᱰᱮ ᱵᱮᱥ ᱜᱮᱭᱟ",
+        "ᱯᱩᱨᱟᱹ ᱢᱟᱞᱟ ᱨᱟᱩᱱᱰ ᱚᱠᱛᱚ ᱨᱮ ᱢᱟᱞᱴᱟᱥᱠᱤᱝ (ᱥᱠᱨᱚᱞᱤᱝ, ᱴᱤᱵᱷᱤ)",
+        "ᱨᱚᱠᱟ ᱡᱤᱱᱤᱥ ᱚᱨᱡᱚ ᱞᱟᱹᱜᱤᱫ ᱡᱟᱯᱟ ᱫᱚ ᱥᱟᱣᱫᱟ ᱞᱮᱠᱟᱛᱮ ᱵᱮᱵᱷᱟᱨ ᱢᱮ",
+        "ᱛᱩᱯᱩᱱ ᱵᱟᱹᱜᱤ/ᱥᱟᱯᱷᱟ ᱴᱷᱟᱶ ᱡᱚᱠᱷᱚᱱ ᱟᱢᱟᱜ ᱥᱮᱨᱣᱟ ᱜᱽᱨᱟᱦᱟ ᱡᱟᱯᱟ ᱞᱟᱹᱜᱤᱫ ᱥᱚᱞᱦᱟ ᱮᱢᱟᱭᱟ",
+        "ᱢᱤᱫ ᱵᱷᱟᱜᱮ ᱦᱟᱴ ᱛᱟᱭᱚᱢ ᱛᱷᱤᱨᱚᱜ ᱢᱮ - ᱜᱽᱨᱟᱦᱟ ᱟᱨ ᱵᱚᱝᱜᱟ ᱵᱷᱟᱵᱽᱱᱟ ᱫᱚ ᱟᱹᱰᱤ ᱜᱷᱟᱹᱲᱤᱡ ᱜᱮᱭᱟ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱥᱟᱱᱠᱟᱞᱯᱟ ᱟᱨ ᱫᱤᱱᱟᱹᱢ ᱜᱮ ᱰᱤᱥᱤᱯᱞᱤᱱ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱮᱛᱚᱦᱚᱵ ᱞᱟᱦᱟᱨᱮ, ᱟᱭᱢᱟ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱠᱚ ᱢᱤᱫ ᱠᱷᱟᱴᱚ ᱥᱟᱱᱠᱟᱞᱯᱟ (ᱦᱩᱫᱤᱥ) ᱠᱚ ᱛᱷᱟᱯᱱᱟᱣᱟ: ᱧᱩᱛᱩᱢ, ᱜᱳᱴᱨᱟ ᱡᱩᱫᱤ ᱞᱟᱹᱜᱩᱜ ᱠᱷᱟᱱ, ᱟᱨ ᱡᱟᱯᱟ ᱨᱮᱭᱟᱜ ᱡᱚᱥ᱾ ᱥᱟᱱᱟᱢ ᱫᱤᱱ ᱢᱤᱫ ᱚᱠᱛᱚ ᱫᱚᱦᱚᱭ ᱢᱮ ᱡᱚᱠᱷᱚᱱ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱜ-ᱟ ᱥᱮᱛᱟᱜ ᱵᱟᱝᱠᱷᱟᱱ ᱥᱤᱸᱜᱟᱹᱲ ᱫᱚ ᱥᱟᱫᱷᱟᱨᱚᱱ ᱜᱮᱭᱟ ᱾ ᱢᱟᱱᱛᱨᱚ ᱫᱚ ᱥᱟᱹᱨᱤ ᱵᱮᱵᱚᱦᱟᱨ, ᱫᱟᱱ, ᱥᱮ ᱥᱮᱣᱟ ᱥᱟᱶᱛᱮ ᱢᱤᱞᱟᱹᱣ ᱢᱮ ᱡᱟᱦᱟᱸ ᱨᱮ ᱟᱢ ᱨᱮᱱ ᱢᱟᱨᱟᱝ ᱦᱚᱲ ᱠᱚ ᱥᱚᱞᱦᱟ ᱮᱢᱟ; ᱡᱟᱯᱟ ᱫᱚ ᱪᱟᱹᱨᱤᱛ ᱥᱟᱯᱚᱨᱴ ᱮᱫᱟᱭ, ᱱᱚᱣᱟ ᱫᱚ ᱴᱷᱤᱠ ᱠᱟᱹᱢᱤ ᱵᱟᱭ ᱵᱚᱫᱚᱞᱟ᱾"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱡᱟᱯᱟᱢ ᱥᱟᱶ ᱯᱨᱮᱠᱴᱤᱥ ᱢᱮ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱞᱟᱦᱟᱱᱛᱤ ᱵᱟᱧᱪᱟᱣ ᱞᱟᱹᱜᱤᱫ ᱜᱩᱜᱚᱞ ᱥᱟᱶ ᱥᱟᱭᱤᱱ ᱤᱱ ᱢᱮ, ᱟᱨᱵᱟᱝ ᱵᱮᱜᱚᱨ ᱮᱠᱟᱣᱩᱱᱴ ᱛᱮ ᱡᱟᱯᱟ ᱵᱤᱰᱟᱹᱣ ᱞᱟᱹᱜᱤᱫ ᱯᱮᱲᱟ ᱢᱚᱰ ᱵᱮᱵᱷᱟᱨ ᱢᱮ᱾ ᱥᱟᱶᱛᱟ ᱪᱟᱱᱴᱤᱝ ᱡᱚᱥ ᱠᱚ ᱞᱟᱹᱜᱤᱫ ᱢᱮᱱᱩ ᱠᱷᱚᱱ ᱢᱟᱦᱟ ᱭᱟᱜᱽᱱᱟᱥ ᱯᱟᱱᱛᱮ ᱢᱮ ᱾"
         }
       ]
     }
@@ -99,7 +145,7 @@
     {
       "id": "try-free",
       "position": "after-how-to",
-      "label": "Try Japa without login",
+      "label": "Try without login",
       "href": "https://japam.digital/?lang=sat&try=1&utm_source=google&utm_medium=seo&utm_campaign=online-japa-mantra&utm_content=try-free",
       "style": "secondary"
     },
@@ -111,46 +157,46 @@
       "style": "secondary"
     },
     {
-      "id": "sticky",
+      "id": "try-free",
       "position": "sticky-footer",
-      "label": "Open Japam",
-      "href": "https://japam.digital/?lang=sat&utm_source=google&utm_medium=seo&utm_campaign=online-japa-mantra&utm_content=sticky",
+      "label": "Try Japam free",
+      "href": "https://japam.digital/?lang=sat&try=1&utm_source=google&utm_medium=seo&utm_campaign=online-japa-mantra&utm_content=sticky",
       "style": "primary"
     }
   ],
   "faqs": [
     {
-      "question": "Is Japam free?",
-      "answer": "You can try guest play and core japa features; some levels and Pro features may require sign-in or support (dakshina) as shown in the app."
+      "question": "ᱪᱮᱫ ᱡᱟᱯᱟᱢ ᱯᱷᱨᱤ ᱜᱮᱭᱟ?",
+      "answer": "ᱟᱢ ᱯᱮᱲᱟ ᱠᱷᱮᱞ ᱟᱨ ᱠᱚᱨ ᱡᱟᱯᱟ ᱯᱷᱤᱪᱟᱨ ᱠᱚ ᱵᱤᱰᱟᱹᱣ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ; ᱮᱯ ᱨᱮ ᱩᱫᱩᱜ ᱟᱠᱟᱱ ᱞᱮᱠᱟ ᱛᱤᱱᱟᱹᱜ ᱜᱟᱱ ᱞᱮᱵᱮᱞ ᱟᱨ ᱯᱨᱚ ᱯᱷᱤᱪᱟᱨ ᱠᱚ ᱞᱟᱹᱜᱤᱫ ᱥᱟᱭᱤᱱ-ᱤᱱ ᱵᱟᱝᱠᱷᱟᱱ ᱥᱟᱯᱚᱨᱴ (ᱰᱟᱠᱥᱤᱱᱟ) ᱨᱮᱭᱟᱜ ᱞᱟᱹᱠᱛᱤ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ᱾"
     },
     {
-      "question": "Which deities are available?",
-      "answer": "Rama, Shiva, Ganesh, Lakshmi, Hanuman, Venkateswara, Murugan, Navagraha deities, and more — see the in-app deity grid."
+      "question": "ᱚᱠᱟ ᱵᱚᱝᱜᱟ ᱠᱚ ᱢᱮᱱᱟᱜ ᱠᱚᱣᱟ?",
+      "answer": "ᱨᱟᱢᱟ, ᱥᱤᱣᱟ, ᱜᱟᱱᱮᱥ, ᱞᱟᱠᱥᱢᱤ, ᱦᱟᱱᱩᱢᱟᱱ, ᱵᱷᱮᱱᱠᱟᱴᱮᱥᱣᱟᱨᱟ, ᱢᱩᱨᱩᱜᱟᱱ, ᱱᱟᱣᱟᱜᱽᱨᱟᱦᱟ ᱵᱚᱝᱜᱟ, ᱟᱨ ᱟᱭᱢᱟ — ᱤᱱ-ᱮᱯ ᱵᱚᱝᱜᱟ ᱜᱽᱨᱤᱰ ᱧᱮᱞ ᱢᱮ᱾"
     },
     {
-      "question": "Do I need headphones?",
-      "answer": "Recommended for mantra audio clarity; respect quiet spaces and others around you."
+      "question": "ᱪᱮᱫ ᱤᱧ ᱦᱮᱰᱯᱷᱚᱱ ᱞᱟᱹᱠᱛᱤᱭᱟᱹᱧᱟ?",
+      "answer": "ᱢᱟᱱᱛᱨᱟ ᱚᱰᱤᱭᱚ ᱯᱩᱥᱴᱟᱹᱣ ᱞᱟᱹᱜᱤᱫ ᱥᱚᱞᱦᱟ ᱮᱢ ᱟᱠᱟᱱᱟ; ᱟᱢ ᱟᱲᱮ ᱟᱲᱮ ᱨᱮ ᱢᱮᱱᱟᱜ ᱠᱚ ᱟᱨ ᱱᱤᱡᱷᱩ ᱴᱷᱟᱶ ᱠᱚ ᱢᱟᱹᱱ ᱠᱚᱢ᱾"
     },
     {
-      "question": "Can I use Japam offline?",
-      "answer": "The PWA can cache some assets after you visit; full features need connectivity for sign-in and leaderboards."
+      "question": "ᱪᱮᱫ ᱤᱧ ᱡᱟᱯᱟᱢ ᱚᱯᱷᱞᱟᱭᱤᱱ ᱵᱮᱵᱷᱟᱨ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱹᱧ ᱥᱮ?",
+      "answer": "ᱟᱢ ᱧᱮᱞ ᱛᱟᱭᱚᱢ PWA ᱫᱚ ᱛᱤᱱᱟᱹᱜ ᱜᱟᱱ ᱡᱤᱱᱤᱥ ᱠᱮᱪ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱭ; ᱥᱟᱭᱤᱱ ᱤᱱ ᱟᱨ ᱞᱤᱰᱟᱨᱵᱚᱨᱰ ᱞᱟᱹᱜᱤᱫ ᱯᱩᱨᱟᱹ ᱯᱷᱤᱪᱟᱨ ᱠᱚ ᱡᱚᱯᱲᱟᱣ ᱞᱟᱹᱠᱛᱤᱜ ᱠᱟᱱᱟ ᱾"
     },
     {
-      "question": "Is this an ISKCON-only app?",
-      "answer": "No — Japam includes many sampradayas' deities, including ISKCON (Hare Krishna) as one option among many."
+      "question": "ᱪᱮᱫ ᱱᱚᱣᱟ ᱫᱚ ᱤᱥᱠᱚᱱ-ᱥᱩᱢᱩᱝ ᱮᱯ ᱠᱟᱱᱟ?",
+      "answer": "ᱵᱟᱝ — ᱡᱟᱯᱟᱢ ᱨᱮ ᱟᱭᱢᱟ ᱥᱟᱢᱯᱨᱟᱭᱟᱥ ᱵᱚᱝᱜᱟ ᱠᱚ ᱥᱮᱞᱮᱫ ᱢᱮᱱᱟᱜ ᱠᱚᱣᱟ, ᱟᱭᱢᱟ ᱠᱚ ᱢᱩᱫᱽ ᱨᱮ ᱢᱤᱫ ᱵᱤᱠᱚᱞᱯ ᱞᱮᱠᱟ ᱤᱥᱠᱚᱱ (ᱦᱟᱨᱮ ᱠᱨᱤᱥᱱᱟ) ᱦᱚᱸ ᱢᱮᱱᱟᱜ ᱠᱚᱣᱟ᱾"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "ᱱᱚᱣᱟ ᱚᱱᱚᱞ ᱫᱚ ᱥᱩᱢᱩᱝ ᱥᱮᱪᱮᱫ ᱟᱨ ᱵᱷᱚᱠᱛᱚᱱ ᱦᱮᱣᱟ ᱞᱟᱹᱜᱤᱫ ᱜᱮ ᱾ ᱡᱟᱯᱟᱢ ᱫᱚ ᱪᱤᱠᱤᱥᱟ, ᱟᱹᱭᱤᱱᱤ, ᱟᱨ ᱵᱟᱝ ᱠᱟᱹᱣᱰᱤ ᱥᱚᱞᱦᱟ ᱵᱟᱭ ᱮᱢᱚᱜ ᱠᱟᱱᱟ᱾ ᱚᱨᱡᱚ ᱫᱚ ᱯᱚᱨᱥᱚᱱᱟᱞ ᱯᱟᱹᱛᱭᱟᱹᱣ ᱟᱨ ᱞᱮᱛᱟᱲ ᱦᱮᱣᱟ ᱨᱮ ᱴᱮᱦᱟᱱᱰ ᱢᱮᱱᱟᱜᱼᱟ᱾ ᱮᱯ ᱨᱮ ᱢᱟᱱᱛᱨᱟ ᱚᱱᱚᱞ ᱟᱨ ᱚᱰᱤᱭᱳ ᱫᱚ ᱡᱟᱯᱟ ᱥᱟᱯᱚᱨᱴ ᱞᱟᱹᱜᱤᱫ ᱠᱟᱱᱟ; ᱟᱹᱭᱫᱟᱹᱨᱤ ᱯᱩᱡᱟ ᱟᱹᱨᱤ ᱞᱟᱹᱜᱤᱫ ᱟᱯᱮ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮᱱ ᱯᱟᱭᱡᱤᱴ ᱥᱮ ᱥᱮᱫᱽᱨᱟ ᱥᱚᱞᱦᱟᱭ ᱢᱮ ᱾"
   },
   "relatedPages": [
     {
       "pageId": "japa-108-times",
-      "label": "108 japa guide"
+      "label": "᱑᱐᱘ ᱡᱟᱯᱟ ᱜᱟᱭᱤᱰ"
     },
     {
       "pageId": "maha-japa-yagna",
-      "label": "Maha Japa Yagna"
+      "label": "ᱢᱟᱦᱟ ᱡᱟᱯᱟ ᱭᱟᱜᱽᱱᱟ"
     }
   ]
 }

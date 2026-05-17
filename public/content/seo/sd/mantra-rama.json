@@ -4,27 +4,27 @@
   "lang": "sd",
   "slug": "mantra-rama",
   "deityId": "rama",
-  "primaryKeyword": "rama mantra japa 108 times",
+  "primaryKeyword": "رام منتر جاپ 108 ڀيرا",
   "secondaryKeywords": [
-    "Rama mantra",
-    "Rama japa",
-    "108 times mantra"
+    "راما منتر",
+    "راما جپ",
+    "108 ڀيرا منتر"
   ],
   "meta": {
-    "title": "رام Mantra — 108 Japa | Japam",
-    "description": "رام mantra meaning, 108 japa steps, and practice in Japam.",
+    "title": "راما منتر جپ 108 ڀيرا | جپان",
+    "description": "راما منتر جي معنيٰ، 108 جاپا مرحلا، ۽ ڊجيٽل مشق جاپم آڊيو سان.",
     "ogImage": "/images/deities/rama.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "رام — 108 Japa"
+      "text": "رام منتر ۽ 108 جپ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Rama bhakti includes steady mantra japa as a foundation of daily practice."
+          "text": "راما ڀڪتي ۾ شامل آهي مستحڪم منتر جاپ روزاني مشق جو بنياد."
         }
       ]
     },
@@ -32,13 +32,13 @@
       "type": "p",
       "runs": [
         {
-          "text": "Japam uses the mantra below during match-3 play with counting toward 108."
+          "text": "Japam 108 جي ڳڻپ سان ميچ-3 راند دوران هيٺ ڏنل منتر استعمال ڪري ٿو."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "منتر جي معنيٰ"
     },
     {
       "type": "blockquote",
@@ -53,57 +53,102 @@
       "type": "p",
       "runs": [
         {
-          "text": "Chant with a calm mind, offering salutation rather than demanding specific outcomes."
+          "text": "پرسڪون ذهن سان ڳايو، خاص نتيجن جي طلب ڪرڻ بجاءِ سلام پيش ڪرڻ."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "جاپ جا فائدا (روايتي خيال)"
     },
     {
       "type": "ul",
       "items": [
-        "Builds daily discipline and mental focus",
-        "Deepens bhakti in traditional understanding",
-        "Supports graha or deity vows (sankalpa)",
-        "Complements temple puja — does not replace it"
+        "روزاني نظم و ضبط ۽ ذهني توجهه ٺاهي ٿو",
+        "روايتي سمجھ ۾ ڀڪتي کي وڌيڪ مضبوط ڪري ٿو",
+        "گراها يا ديوتا واعدن جي حمايت ڪري ٿو (سنڪلپا)",
+        "مندر جي پوجا کي پورو ڪري ٿو - ان کي تبديل نٿو ڪري"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "108 ڀيرا ڪيئن ڳايو"
     },
     {
       "type": "ul",
       "items": [
-        "Sit in a quiet place with spine straight",
-        "Chant 108 times on a mala (one round)",
-        "Keep attention on the mantra sound and meaning",
-        "Close with gratitude to your ishta devata"
+        "آرام واري جاءِ تي ويھي رڙ سڌو سنئون",
+        "مالا تي 108 ڀيرا ڳايو (هڪ گول)",
+        "منتر جي آواز ۽ معنيٰ تي ڌيان ڏيو",
+        "توهان جي ishta ديوتا جي شڪرگذاري سان بند ڪريو"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "جڏهن ڳائڻ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Any sincere daily time works; ask your priest for festival or vrat days specific to this deity."
+          "text": "ڪو به مخلص روزاني وقت ڪم؛ پنهنجي پادريءَ کان پڇو ته هن ديوتا لاءِ مخصوص عيد يا ورات ڏينهن."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "ڇو 108 ورجائي اهميت رکن ٿا",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Select Rama in Japam to hear the mantra audio and track your japa count."
+          "text": "نمبر 108 جپا مالا تي هڪ مڪمل گول آهي. مسلسل ورهاڱي دماغ کي پرسکون ڪري ٿو ۽ منتر جي معني تي ڌيان ڏئي ٿو."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ڪجھ روايتون 11 يا 21 مالا بيان ڪن ٿيون - پنھنجي گرو يا پادريءَ کان پڇو ته توھان جي واعدي مطابق ڳڻپ لاءِ."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "عام غلطين کان بچڻ لاء"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "آواز تي تمام تيز آواز ۽ ڌيان وڃائڻ",
+        "ھدايت کانسواءِ ڪيترن ئي ديوتائن جون واڳون گڏ ڪرڻ",
+        "ڀڪت ۽ اخلاقي زندگي گذارڻ بدران فقط مادي نتيجن جي اميد رکڻ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "مندر ۽ گهر گڏجي مشق"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "گھر جاپا مندر جي پوڄا جي حمايت ڪري ٿو. اهو درشن کي تبديل نٿو ڪري. عيد جي ڏينهن يا ڇنڇر تي مندر جو دورو ڪرڻ خانداني روايت کي مضبوط ڪري ٿو."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Japam سان مشق ڪريو"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "منتر آڊيو ٻڌڻ لاءِ Japam ۾ راما کي منتخب ڪريو ۽ پنھنجي جاپ جي ڳڻپ کي ٽريڪ ڪريو."
         }
       ]
     }
@@ -112,7 +157,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start رام Japa in Japam",
+      "label": "Start Rama Japa in Japam",
       "href": "https://japam.digital/?lang=sd&deity=rama&utm_source=google&utm_medium=seo&utm_campaign=mantra-rama&utm_content=start-japa",
       "style": "primary"
     },
@@ -140,41 +185,41 @@
   ],
   "faqs": [
     {
-      "question": "How many times should I chant Rama's mantra?",
-      "answer": "108 repetitions (one mala) is the common standard; some do 11 or 21 malas under guidance."
+      "question": "مون کي ڪيترا ڀيرا رام جي منتر کي ٻڌائڻ گهرجي؟",
+      "answer": "108 ورجائي (هڪ مالا) عام معيار آهي؛ ڪي 11 يا 21 ملاڪا ڪندا رهن ٿا."
     },
     {
-      "question": "Can I use Japam without signing in?",
-      "answer": "Guest try mode is available from the landing page; sign in to save long-term progress."
+      "question": "ڇا مان سائن ان ٿيڻ کان سواءِ Japam استعمال ڪري سگهان ٿو؟",
+      "answer": "مهمان ڪوشش موڊ موجود آهي لينڊنگ پيج تان؛ ڊگھي مدت جي ترقي کي بچائڻ لاء سائن ان ڪريو."
     },
     {
-      "question": "Is this the only mantra for this deity?",
-      "answer": "Your lineage may use stotras or longer mantras; this is the form in the Japam app."
+      "question": "ڇا اهو ئي منتر آهي هن ديوتا لاءِ؟",
+      "answer": "توھان جو نسب شايد اسٽوٽرا يا ڊگھو منتر استعمال ڪري سگھن ٿا. هي فارم آهي Japam ايپ ۾."
     },
     {
-      "question": "Does mantra japa replace puja?",
-      "answer": "No — japa supports home practice; formal puja follows your sampradaya."
+      "question": "ڇا منتر جاپ پوجا کي تبديل ڪري ٿو؟",
+      "answer": "نه - japa گھر جي مشق جي حمايت ڪري ٿو؛ رسمي پوجا توهان جي سمپرديا جي پٺيان آهي."
     },
     {
-      "question": "Which direction should I face?",
-      "answer": "East or north is common; consistency matters more than perfect direction."
+      "question": "مون کي ڪهڙي طرف منهن ڏيڻ گهرجي؟",
+      "answer": "اوڀر يا اتر عام آهي. مطابقت صحيح هدايت کان وڌيڪ اهم آهي."
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "هي مضمون صرف تعليمي ۽ ديني مشق لاءِ آهي. Japam طبي، قانوني، يا مالي صلاح فراهم نٿو ڪري. نتيجن جو دارومدار ذاتي ايمان ۽ مسلسل مشق تي. ايپ ۾ منتر ٽيڪسٽ ۽ آڊيو جاپا سپورٽ لاءِ آهن؛ رسمي پوجا ضابطن لاءِ پنھنجي خانداني پادريءَ يا روايت سان صلاح ڪريو."
   },
   "relatedPages": [
     {
       "pageId": "japa-108-times",
-      "label": "108 japa guide"
+      "label": "108 جپان گائيڊ"
     },
     {
       "pageId": "ishta-devata-japa",
-      "label": "Ishta devata japa"
+      "label": "ايشتا ديوتا جپ"
     },
     {
       "pageId": "online-japa-mantra",
-      "label": "Online japa"
+      "label": "آن لائن جپان"
     }
   ]
 }

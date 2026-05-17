@@ -4,27 +4,27 @@
   "lang": "sa",
   "slug": "maha-japa-yagna",
   "deityId": null,
-  "primaryKeyword": "maha japa yagna community chanting",
+  "primaryKeyword": "महा जप यज्ञ समुदाय जप",
   "secondaryKeywords": [
-    "collective japa",
-    "online yagna",
-    "sankalpa group"
+    "सामूहिक जप",
+    "ऑनलाइन यज्ञ",
+    "संकल्प समूहः"
   ],
   "meta": {
-    "title": "Maha Japa Yagna — Community Chanting | Japam",
-    "description": "Collective Maha Japa Yagnas in Japam — join community mantra goals.",
+    "title": "महा जप यज्ञ — सामुदायिक जप | जपम्",
+    "description": "जपम में सामूहिक महाजप यज्ञ — सामुदायिक मन्त्र लक्ष्य में सम्मिलित हुए।",
     "ogImage": "/images/favicon.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Maha Japa Yagna — Community Mantra Chanting"
+      "text": "महा जप यज्ञ — सामुदायिक मन्त्र जप"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "A yagna is sacred offering; Maha Japa Yagnas in Japam are collective chanting goals where many devotees add japa counts."
+          "text": "यज्ञं पवित्रं नैवेद्यम्; जपमे महाजपयज्ञाः सामूहिकजपलक्ष्याः सन्ति यत्र बहवः भक्ताः जपगणनाः योजयन्ति।"
         }
       ]
     },
@@ -32,69 +32,114 @@
       "type": "p",
       "runs": [
         {
-          "text": "Join from the menu to participate in sankalpa with others."
-        }
-      ]
-    },
-    {
-      "type": "h2",
-      "text": "What is a Maha Japa Yagna?"
-    },
-    {
-      "type": "p",
-      "runs": [
-        {
-          "text": "Community targets (e.g. lakhs of japas) build shared merit and motivation. Your counts sync when signed in."
+          "text": "अन्यैः सह संकल्पे भागं ग्रहीतुं मेनूतः सम्मिलिताः भवन्तु।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "महाजपयज्ञः किम् ?"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "सामुदायिकलक्ष्याणि (उदा. लक्षशः जापाः) साझां योग्यतां प्रेरणाञ्च निर्मान्ति । प्रवेशे भवतः गणनाः समन्वययन्ति ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपस्य लाभाः (पारम्परिकदृष्टिकोणः) २."
     },
     {
       "type": "ul",
       "items": [
-        "Shared devotional goal",
-        "Visible community progress",
-        "Motivation for daily practice",
-        "Works across regions"
+        "साझा भक्ति लक्ष्य",
+        "दृश्यमानसमुदायप्रगतिः",
+        "नित्याभ्यासस्य प्रेरणा",
+        "क्षेत्रेषु कार्यं करोति"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "१०८ वारं जपं कथं करणीयम्"
     },
     {
       "type": "ul",
       "items": [
-        "Sign in to Japam",
-        "Open Maha Yagnas from menu",
-        "Join active yagna",
-        "Play and chant — counts add to collective total"
+        "जपम् इत्यत्र प्रवेशं कुर्वन्तु",
+        "मेनूतः महायज्ञं उद्घाटयन्तु",
+        "सक्रिययज्ञं सम्मिलितं कुरुत",
+        "क्रीडन्तु जपं च — गणनाः सामूहिककुलं योजयन्ति"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "कदा जपेत्"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "During yagna window shown in app."
+          "text": "एप् मध्ये दर्शितस्य यज्ञविण्डो इत्यस्य समये।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "१०८ पुनरावृत्तयः किमर्थं महत्त्वपूर्णाः सन्ति",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "CTA: Menu → Maha Japa Yagnas — see live counters."
+          "text": "१०८ संख्या जपमाले एकः पूर्णगोलः अस्ति । नित्यपुनरावृत्तिः मनः शान्तं करोति, मन्त्रस्य अर्थे ध्यानं गभीरं करोति च ।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "केचन परम्पराः ११ वा २१ वा मालाः विहिताः सन्ति — भवतः गुरुं वा पुरोहितं वा भवतः व्रतस्य अनुकूलानि गणनानि पृच्छन्तु ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "परिहरणीयानि सामान्यानि त्रुटयः"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "अतिशीघ्रं जपं कृत्वा ध्वनिं प्रति ध्यानं नष्टम्",
+        "अनेकदेवव्रतमिश्रणं विना मार्गदर्शनम् |",
+        "भक्ति-नीति-जीवनस्य स्थाने केवलं भौतिक-परिणामस्य अपेक्षा"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मन्दिरं गृहं च एकत्र अभ्यासं कुर्वन्ति"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "गृहं जपः मन्दिरपूजायाः समर्थनं करोति; दर्शनस्य स्थाने न भवति। उत्सवदिनेषु शनिवासरे वा मन्दिरस्य दर्शनं पारिवारिकपरम्परां सुदृढं करोति ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपं सह अभ्यासं कुरुत"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "CTA: मेनू → महा जप यज्ञः — लाइव काउण्टर देखें।"
         }
       ]
     }
@@ -131,41 +176,41 @@
   ],
   "faqs": [
     {
-      "question": "Is login required?",
-      "answer": "Yes for leaderboard-style community totals."
+      "question": "प्रवेशः आवश्यकः वा ?",
+      "answer": "लीडरबोर्ड-शैल्याः समुदायस्य कुलस्य कृते हाँ।"
     },
     {
-      "question": "Same as temple fire yagna?",
-      "answer": "Digital collective japa — complements, not replaces, priest-led homam."
+      "question": "मन्दिरग्नियज्ञस्य समानम्?",
+      "answer": "अङ्कीयसामूहिकजपः — पुरोहित-नेतृत्व-होमं पूरयति, न प्रतिस्थापयति ।"
     },
     {
-      "question": "Which mantra is used?",
-      "answer": "Per yagna deity/theme — read details in app."
+      "question": "कः मन्त्रः प्रयुक्तः ?",
+      "answer": "प्रति यज्ञदेवता/विषय — एप् मध्ये विवरणं पठन्तु।"
     },
     {
-      "question": "Free to join?",
-      "answer": "Core join is free; app may show optional support (dakshina)."
+      "question": "सम्मिलितुं स्वतन्त्रः?",
+      "answer": "कोर जॉइन् निःशुल्कम् अस्ति; app वैकल्पिकं समर्थनं (daksina) दर्शयितुं शक्नोति।"
     },
     {
-      "question": "How long do yagnas run?",
-      "answer": "Varies — check dates in Maha Yagnas screen."
+      "question": "यज्ञाः कियत्कालं यावत् धावन्ति ?",
+      "answer": "भिद्यते — महायज्ञपर्दे तिथयः पश्यन्तु ।"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "एषः लेखः केवलं शैक्षणिक-भक्ति-अभ्यासार्थम् अस्ति । जपम् चिकित्सा, कानूनी, आर्थिकपरामर्शं न ददाति । परिणामाः व्यक्तिगतविश्वासस्य, निरन्तरं अभ्यासस्य च उपरि निर्भरं भवति। एप् मध्ये मन्त्रपाठः श्रव्यं च जपासमर्थनार्थम् अस्ति; औपचारिकपूजानियमानां कृते स्वपरिवारस्य पुरोहितेन वा परम्परेण वा परामर्शं कुर्वन्तु।"
   },
   "relatedPages": [
     {
       "pageId": "online-japa-mantra",
-      "label": "Online japa"
+      "label": "ऑनलाइन जपा"
     },
     {
       "pageId": "japa-108-times",
-      "label": "108 japa guide"
+      "label": "१०८ जपः"
     },
     {
       "pageId": "ishta-devata-japa",
-      "label": "Ishta devata"
+      "label": "इष्ट देवता"
     }
   ]
 }

@@ -4,26 +4,26 @@
   "lang": "sat",
   "slug": "ketu-mantra-shanti",
   "deityId": "ketu",
-  "primaryKeyword": "ketu mantra shanti",
+  "primaryKeyword": "ᱠᱮᱴᱩ ᱢᱟᱱᱛᱨᱚ ᱥᱟᱱᱛᱤ",
   "secondaryKeywords": [
-    "ketu dosha",
-    "om kem ketave namah"
+    "ᱠᱮᱴᱩ ᱫᱚᱥᱟ",
+    "ᱚᱢ ᱠᱮᱢ ᱠᱮᱛᱟᱣᱮ ᱱᱟᱢᱦ"
   ],
   "meta": {
-    "title": "Ketu Mantra for Shanti | Japam",
-    "description": "Ketu graha mantra japa 108 times with Japam.",
+    "title": "ᱥᱟᱱᱛᱤ ᱞᱟᱹᱜᱤᱫ ᱠᱮᱴᱩ ᱢᱟᱱᱛᱨᱟ | ᱡᱟᱯᱟᱢ",
+    "description": "ᱠᱮᱴᱩ ᱜᱽᱨᱟᱦᱟ ᱢᱟᱱᱛᱨᱚ ᱡᱟᱯᱟ ᱑᱐᱘ ᱫᱷᱟᱣ ᱡᱟᱯᱟᱢ ᱥᱟᱶ ᱾",
     "ogImage": "/images/deities/ketu.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Ketu Mantra and Graha Shanti"
+      "text": "ᱠᱮᱴᱩ ᱢᱟᱱᱛᱨᱟ ᱟᱨ ᱜᱽᱨᱟᱦᱟ ᱥᱟᱱᱛᱤ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Ketu represents moksha-oriented karma and spiritual detachment in chart analysis."
+          "text": "ᱠᱮᱴᱩ ᱫᱚ ᱪᱟᱨᱴ ᱵᱤᱥᱲᱤ ᱨᱮ ᱢᱚᱠᱥᱟ ᱞᱮᱠᱟᱱ ᱠᱟᱹᱢᱤ ᱟᱨ ᱟᱫᱷᱭᱟᱱ ᱵᱮᱜᱟᱨ ᱨᱮᱭᱟᱜ ᱩᱫᱩᱜ ᱮᱢᱚᱜ ᱠᱟᱱᱟ᱾"
         }
       ]
     },
@@ -31,13 +31,13 @@
       "type": "p",
       "runs": [
         {
-          "text": "Chant Om Kem Ketave Namaha for traditional graha peace practice."
+          "text": "ᱯᱚᱨᱚᱢ ᱜᱽᱨᱟᱦᱟ ᱱᱤᱨᱟᱹᱭ ᱦᱮᱣᱟ ᱞᱟᱹᱜᱤᱫ ᱪᱟᱱᱴ ᱚᱢ ᱠᱮᱢ ᱠᱮᱴᱟᱣ ᱱᱟᱢᱟᱦᱟ ᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "ᱢᱟᱱᱛᱨᱚ ᱨᱮᱭᱟᱜ ᱢᱮᱱᱮᱛ"
     },
     {
       "type": "blockquote",
@@ -52,57 +52,102 @@
       "type": "p",
       "runs": [
         {
-          "text": "Chant with a calm mind, offering salutation rather than demanding specific outcomes."
+          "text": "ᱛᱷᱤᱨ ᱢᱚᱱ ᱥᱟᱶᱛᱮ ᱥᱮᱨᱮᱧ ᱢᱮ, ᱠᱷᱟᱥ ᱯᱷᱚᱞᱚᱱ ᱠᱚ ᱫᱟᱹᱵᱤ ᱵᱚᱫᱚᱞ ᱛᱮ ᱥᱟᱹᱜᱩᱱ ᱮᱢ ᱢᱮ᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "ᱡᱟᱯᱟ ᱨᱮᱭᱟᱜ ᱞᱟᱵᱷ (ᱯᱚᱨᱚᱢ ᱧᱮᱞᱚᱢ)"
     },
     {
       "type": "ul",
       "items": [
-        "Builds festival discipline",
-        "Deepens deity bhakti",
-        "Community yagnas may align with season",
-        "Educational — not outcome guarantees"
+        "ᱯᱚᱨᱚᱵ ᱰᱤᱥᱤᱯᱞᱤᱱ ᱛᱮᱭᱟᱨ ᱢᱮ",
+        "ᱵᱚᱸᱜᱟ ᱵᱷᱚᱠᱛᱤ ᱜᱟᱹᱦᱤᱨ ᱢᱮ",
+        "ᱥᱟᱶᱛᱟ ᱭᱟᱜᱽᱱᱟᱥ ᱫᱚ ᱥᱤᱡᱚᱱ ᱥᱟᱶ ᱛᱷᱟᱨ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ",
+        "ᱥᱮᱪᱮᱫ — ᱚᱨᱡᱚ ᱜᱮᱨᱮᱱᱴᱤ ᱵᱟᱝ"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "᱑᱐᱘ ᱫᱷᱟᱣ ᱪᱮᱫ ᱞᱮᱠᱟ ᱥᱮᱨᱮᱧ ᱦᱩᱭᱩᱜ-ᱟ"
     },
     {
       "type": "ul",
       "items": [
-        "Set daily 108 sankalpa for festival period",
-        "Keep fast/vrat rules from your family tradition",
-        "Visit temple when possible",
-        "Use Japam counter between work/study"
+        "ᱯᱚᱨᱚᱵ ᱚᱠᱛᱚ ᱞᱟᱹᱜᱤᱫ ᱫᱤᱱᱟᱹᱢ ᱑᱐᱘ ᱥᱟᱱᱠᱟᱞᱯᱟ ᱥᱮᱴ ᱢᱮ",
+        "ᱟᱢᱟᱜ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮᱱᱟᱜ ᱥᱮᱨᱣᱟ ᱠᱷᱚᱱ ᱩᱥᱟᱹᱨᱟ/ᱵᱷᱨᱟᱴ ᱱᱤᱭᱚᱢ ᱫᱚᱦᱚᱭ ᱢᱮ",
+        "ᱡᱚᱠᱷᱚᱱ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱜ-ᱟ ᱢᱟᱱᱫᱤᱨ ᱧᱮᱞ ᱢᱮ",
+        "ᱠᱟᱹᱢᱤ/ᱯᱟᱲᱦᱟᱣ ᱛᱟᱞᱟ ᱨᱮ ᱡᱟᱯᱟᱢ ᱠᱟᱣᱩᱱᱴᱟᱨ ᱵᱮᱵᱷᱟᱨ ᱢᱮ"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "ᱛᱤᱱᱨᱮ ᱥᱮᱨᱮᱧ ᱦᱩᱭᱩᱜ-ᱟ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Tuesday or Thursday practices appear in some lineages; follow your priest."
+          "text": "ᱵᱟᱞᱮ ᱢᱟᱦᱟ ᱥᱮ ᱥᱟᱹᱨᱫᱤ ᱢᱟᱦᱟ ᱨᱮᱭᱟᱜ ᱦᱮᱣᱟ ᱠᱚ ᱛᱤᱱᱟᱹᱜ ᱜᱟᱱ ᱵᱚᱥᱛᱟ ᱨᱮ ᱧᱮᱞᱚᱜᱼᱟ; ᱟᱢ ᱨᱮᱱ ᱯᱟᱭᱡᱤᱴ ᱯᱟᱧᱡᱟᱭ ᱢᱮ᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "᱑᱐᱘ ᱫᱚᱦᱲᱟ ᱪᱮᱫᱟᱜ ᱢᱟᱱᱚᱛ ᱢᱮᱱᱟᱜᱼᱟ",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Select Ketu in Japam for the app mantra and counter."
+          "text": "᱑᱐᱘ ᱮᱞ ᱫᱚ ᱡᱟᱯᱟ ᱢᱟᱞᱟ ᱨᱮ ᱢᱤᱫ ᱯᱩᱨᱟᱹ ᱜᱩᱞᱟᱹᱭ ᱠᱟᱱᱟ ᱾ ᱛᱷᱤᱨ ᱫᱚᱦᱲᱟ ᱫᱚᱦᱲᱟ ᱛᱮ ᱢᱚᱱᱮ ᱛᱷᱤᱨᱚᱜ ᱟᱨ ᱢᱟᱱᱛᱨᱚ ᱨᱮᱭᱟᱜ ᱢᱮᱱᱮᱛ ᱨᱮ ᱜᱟᱹᱦᱤᱨ ᱫᱷᱭᱟᱱ ᱮᱢᱚᱜ ᱠᱟᱱᱟ᱾"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱛᱤᱱᱟᱹᱜ ᱜᱟᱱ ᱯᱚᱨᱚᱵ ᱑᱑ ᱵᱟᱝᱠᱷᱟᱱ ᱒᱑ ᱢᱟᱞᱟ ᱞᱟᱹᱭ ᱮᱫᱟ - ᱟᱢᱟᱜ ᱜᱩᱨᱩ ᱵᱟᱝᱠᱷᱟᱱ ᱯᱟᱭᱡᱤᱴ ᱴᱷᱮᱱ ᱟᱢᱟᱜ ᱵᱟᱛᱟᱣ ᱞᱮᱠᱟᱱ ᱞᱮᱠᱷᱟ ᱞᱟᱹᱜᱤᱫ ᱠᱩᱞᱤᱭᱮᱢ ᱾"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱥᱟᱫᱷᱟᱨᱚᱱ ᱵᱷᱩᱞ ᱠᱚ ᱠᱷᱚᱱ ᱥᱟᱦᱟᱜ ᱞᱟᱹᱜᱤᱫ"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "ᱟᱹᱰᱤ ᱩᱥᱟᱹᱨᱟ ᱪᱟᱱᱴᱤᱝ ᱟᱨ ᱥᱟᱰᱮ ᱨᱮ ᱯᱷᱚᱠᱟᱥ ᱟᱫ ᱠᱟᱛᱮ",
+        "ᱵᱤᱱ ᱫᱤᱥᱟᱹ ᱛᱮ ᱟᱭᱢᱟ ᱵᱚᱝᱜᱟ ᱠᱚ ᱢᱮᱥᱟᱞ ᱢᱮ",
+        "ᱵᱷᱚᱠᱛᱤ ᱟᱨ ᱱᱮᱭᱟᱱ ᱡᱤᱭᱚᱱ ᱵᱚᱫᱚᱞ ᱠᱟᱛᱮ ᱥᱩᱢᱩᱝ ᱡᱤᱱᱤᱥ ᱚᱨᱡᱚ ᱨᱮᱭᱟᱜ ᱟᱥᱟ ᱢᱮ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱢᱟᱱᱫᱤᱨ ᱟᱨ ᱚᱲᱟᱜ ᱨᱮ ᱢᱤᱫ ᱥᱟᱶᱛᱮ ᱦᱮᱣᱟ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱚᱲᱟᱜ ᱡᱟᱯᱟ ᱢᱟᱱᱫᱤᱨ ᱵᱚᱸᱜᱟ ᱥᱟᱯᱚᱨᱴ ᱮᱫᱟᱭ; ᱱᱚᱣᱟ ᱫᱚ ᱫᱟᱨᱥᱟᱱ ᱵᱟᱭ ᱵᱚᱫᱚᱞᱟ᱾ ᱯᱚᱨᱚᱵ ᱢᱟᱦᱟ ᱥᱮ ᱧᱩᱦᱩᱢ ᱢᱟᱦᱟ ᱦᱤᱞᱚᱜ ᱢᱟᱱᱫᱤᱨ ᱧᱮᱞ ᱛᱮ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮᱭᱟᱜ ᱥᱮᱨᱣᱟ ᱫᱚ ᱠᱮᱴᱮᱡ ᱜᱮᱭᱟ᱾"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱡᱟᱯᱟᱢ ᱥᱟᱶ ᱯᱨᱮᱠᱴᱤᱥ ᱢᱮ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱮᱯ ᱢᱟᱱᱛᱨᱚ ᱟᱨ ᱠᱟᱣᱩᱱᱴᱟᱨ ᱞᱟᱹᱜᱤᱫ ᱡᱟᱯᱟᱢ ᱨᱮ ᱠᱮᱴᱩ ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱾"
         }
       ]
     }
@@ -111,7 +156,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start ᱠᱮᱛᱩ Japa in Japam",
+      "label": "Start Ketu Japa in Japam",
       "href": "https://japam.digital/?lang=sat&deity=ketu&utm_source=google&utm_medium=seo&utm_campaign=ketu-mantra-shanti&utm_content=start-japa",
       "style": "primary"
     },
@@ -139,41 +184,41 @@
   ],
   "faqs": [
     {
-      "question": "Exact festival date this year?",
-      "answer": "Check Hindu panchang for your region — we avoid locking a Gregorian year in this guide."
+      "question": "ᱱᱤᱭᱟᱹ ᱥᱮᱨᱢᱟ ᱨᱮᱭᱟᱜ ᱴᱷᱟᱹᱣᱠᱟᱹ ᱯᱚᱨᱚᱵ ᱢᱟᱹᱦᱤᱛ?",
+      "answer": "ᱟᱯᱮ ᱴᱚᱴᱷᱟ ᱞᱟᱹᱜᱤᱫ ᱦᱤᱱᱫᱷᱩ ᱯᱟᱱᱪᱟᱝ ᱧᱮᱞ ᱢᱮ - ᱟᱞᱮ ᱱᱚᱣᱟ ᱜᱚᱲᱚ ᱨᱮ ᱜᱽᱨᱮᱜᱚᱨᱤᱭᱟᱱ ᱥᱮᱨᱢᱟ ᱞᱚᱠ ᱠᱷᱚᱱ ᱞᱮ ᱥᱟᱦᱟᱨᱚᱜᱼᱟ ᱾"
     },
     {
-      "question": "How many japas per day?",
-      "answer": "108 minimum for many vows; some do 1008 on main day under guidance."
+      "question": "ᱢᱤᱫ ᱫᱤᱱ ᱨᱮ ᱛᱤᱱᱟᱹᱜ ᱡᱟᱯᱟᱥ?",
+      "answer": "ᱟᱭᱢᱟ ᱵᱟᱛᱟᱣ ᱠᱚ ᱞᱟᱹᱜᱤᱫ ᱠᱚᱢᱥᱮ ᱑᱐᱘; ᱛᱤᱱᱟᱹᱜ ᱜᱟᱱ ᱦᱚᱲ ᱑᱐᱐᱘ ᱢᱩᱬ ᱢᱟᱦᱟᱸ ᱦᱤᱞᱚᱜ ᱫᱤᱥᱟᱹ ᱛᱮ ᱠᱚ ᱠᱟᱹᱢᱤᱭᱟ ᱾"
     },
     {
-      "question": "Guest mode OK?",
-      "answer": "Yes for try; sign in to save progress across festival weeks."
+      "question": "ᱯᱮᱲᱟ ᱢᱚᱰ ᱴᱷᱤᱠ ᱜᱮᱭᱟ?",
+      "answer": "ᱪᱮᱥᱴᱟ ᱞᱟᱹᱜᱤᱫ ᱦᱮᱸ; ᱯᱚᱨᱚᱵ ᱦᱟᱯᱛᱟ ᱨᱮ ᱞᱟᱦᱟᱱᱛᱤ ᱵᱟᱧᱪᱟᱣ ᱞᱟᱹᱜᱤᱫ ᱥᱟᱭᱤᱱ ᱤᱱ ᱢᱮ ᱾"
     },
     {
-      "question": "Replace temple?",
-      "answer": "No — digital japa supports home practice."
+      "question": "ᱢᱟᱱᱫᱤᱨ ᱵᱚᱫᱚᱞ ᱢᱮ?",
+      "answer": "ᱵᱟᱝ — ᱰᱤᱡᱤᱴᱟᱞ ᱡᱟᱯᱟ ᱚᱲᱟᱜ ᱨᱮ ᱦᱮᱣᱟ ᱥᱟᱯᱚᱨᱴ ᱮᱫᱟᱭ ᱾"
     },
     {
-      "question": "Join collective yagna?",
-      "answer": "See Maha Japa Yagnas in Japam menu during campaigns."
+      "question": "ᱥᱟᱢᱴᱟᱣ ᱭᱟᱜᱽᱱᱟ ᱨᱮ ᱥᱮᱞᱮᱫᱚᱜ ᱢᱮ?",
+      "answer": "ᱯᱨᱚᱪᱟᱨ ᱚᱠᱛᱚ ᱨᱮ ᱡᱟᱯᱟᱢ ᱢᱮᱱᱩ ᱨᱮ ᱢᱟᱦᱟ ᱡᱟᱯᱟ ᱭᱟᱜᱽᱱᱟᱥ ᱧᱮᱞ ᱢᱮ ᱾"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "ᱱᱚᱣᱟ ᱚᱱᱚᱞ ᱫᱚ ᱥᱩᱢᱩᱝ ᱥᱮᱪᱮᱫ ᱟᱨ ᱵᱷᱚᱠᱛᱚᱱ ᱦᱮᱣᱟ ᱞᱟᱹᱜᱤᱫ ᱜᱮ ᱾ ᱡᱟᱯᱟᱢ ᱫᱚ ᱪᱤᱠᱤᱥᱟ, ᱟᱹᱭᱤᱱᱤ, ᱟᱨ ᱵᱟᱝ ᱠᱟᱹᱣᱰᱤ ᱥᱚᱞᱦᱟ ᱵᱟᱭ ᱮᱢᱚᱜ ᱠᱟᱱᱟ᱾ ᱚᱨᱡᱚ ᱫᱚ ᱯᱚᱨᱥᱚᱱᱟᱞ ᱯᱟᱹᱛᱭᱟᱹᱣ ᱟᱨ ᱞᱮᱛᱟᱲ ᱦᱮᱣᱟ ᱨᱮ ᱴᱮᱦᱟᱱᱰ ᱢᱮᱱᱟᱜᱼᱟ᱾ ᱮᱯ ᱨᱮ ᱢᱟᱱᱛᱨᱟ ᱚᱱᱚᱞ ᱟᱨ ᱚᱰᱤᱭᱳ ᱫᱚ ᱡᱟᱯᱟ ᱥᱟᱯᱚᱨᱴ ᱞᱟᱹᱜᱤᱫ ᱠᱟᱱᱟ; ᱟᱹᱭᱫᱟᱹᱨᱤ ᱯᱩᱡᱟ ᱟᱹᱨᱤ ᱞᱟᱹᱜᱤᱫ ᱟᱯᱮ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮᱱ ᱯᱟᱭᱡᱤᱴ ᱥᱮ ᱥᱮᱫᱽᱨᱟ ᱥᱚᱞᱦᱟᱭ ᱢᱮ ᱾"
   },
   "relatedPages": [
     {
       "pageId": "rahu-mantra-shanti",
-      "label": "Rahu shanti"
+      "label": "ᱨᱟᱦᱩ ᱥᱟᱱᱛᱤ"
     },
     {
       "pageId": "marriage-delay-mantra",
-      "label": "Marriage mantras"
+      "label": "ᱵᱟᱯᱞᱟ ᱢᱟᱱᱛᱨᱚ"
     },
     {
       "pageId": "navagraha-mantra",
-      "label": "Navagraha"
+      "label": "ᱱᱟᱣᱟᱜᱨᱟᱦᱟ"
     }
   ]
 }

@@ -4,26 +4,26 @@
   "lang": "sa",
   "slug": "rahu-mantra-shanti",
   "deityId": "rahu",
-  "primaryKeyword": "rahu mantra shanti",
+  "primaryKeyword": "राहु मन्त्र शान्ति",
   "secondaryKeywords": [
-    "rahu dosha remedies",
-    "om raam rahave namah"
+    "राहु दोष उपाय",
+    "ॐ राम रहवे नमः"
   ],
   "meta": {
-    "title": "Rahu Mantra for Shanti | Japam",
-    "description": "Rahu graha mantra, 108 japa, and digital practice in Japam.",
+    "title": "शान्तिं कृते राहुमन्त्रः | जपम्",
+    "description": "राहुग्रहमन्त्रः, १०८ जपः, जपमे च अङ्कीयः अभ्यासः।",
     "ogImage": "/images/deities/rahu.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Rahu Mantra and Graha Shanti"
+      "text": "राहुमन्त्रश्च ग्रहशान्तिश्च"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Rahu, the north lunar node, is associated with intensity and sudden change in Jyotisha. Mantra japa is a traditional response for graha shanti."
+          "text": "राहुः उत्तरचन्द्रग्रन्थिः ज्योतिषे तीव्रतायां आकस्मिकपरिवर्तनेन च सम्बद्धः अस्ति । मन्त्रजपः ग्रहशान्तिस्य पारम्परिकप्रतिक्रिया अस्ति ।"
         }
       ]
     },
@@ -31,13 +31,13 @@
       "type": "p",
       "runs": [
         {
-          "text": "Use Om Raam Rahave Namaha with steady discipline — not fear."
+          "text": "ॐ राम रहवे नमः स्थिर अनुशासनपूर्वक प्रयोग करें — न भय।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "मन्त्रार्थः"
     },
     {
       "type": "blockquote",
@@ -52,57 +52,102 @@
       "type": "p",
       "runs": [
         {
-          "text": "Chant with a calm mind, offering salutation rather than demanding specific outcomes."
+          "text": "विशिष्टपरिणामान् आग्रहं न कृत्वा नमस्कारं कृत्वा शान्तचित्तेन जपं कुर्वन्तु।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "जपस्य लाभाः (पारम्परिकदृष्टिकोणः) २."
     },
     {
       "type": "ul",
       "items": [
-        "Builds festival discipline",
-        "Deepens deity bhakti",
-        "Community yagnas may align with season",
-        "Educational — not outcome guarantees"
+        "उत्सव अनुशासनं निर्माति",
+        "देवता भक्ति गभीर करता",
+        "सामुदायिकयज्ञाः ऋतुना सह संरेखिताः भवेयुः",
+        "शैक्षिक — न तु परिणामस्य गारण्टी"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "१०८ वारं जपं कथं करणीयम्"
     },
     {
       "type": "ul",
       "items": [
-        "Set daily 108 sankalpa for festival period",
-        "Keep fast/vrat rules from your family tradition",
-        "Visit temple when possible",
-        "Use Japam counter between work/study"
+        "उत्सवकालस्य कृते नित्यं १०८ संकल्पं स्थापयतु",
+        "स्वस्य पारिवारिकपरम्परातः द्रुत/व्रत नियमाः रक्षन्तु",
+        "यदा सम्भवं तदा मन्दिरं गच्छन्तु",
+        "कार्य/अध्ययनयोः मध्ये जपम् काउण्टरस्य उपयोगं कुर्वन्तु"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "कदा जपेत्"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Saturday or Rahu kaal rules vary by region — consult your astrologer."
+          "text": "शनिवासरस्य वा राहुकालस्य वा नियमाः प्रदेशानुसारं भिन्नाः भवन्ति — स्वस्य ज्योतिषिणः परामर्शं कुर्वन्तु ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "१०८ पुनरावृत्तयः किमर्थं महत्त्वपूर्णाः सन्ति",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Japam includes Rahu with mantra audio and japa counting during gameplay."
+          "text": "१०८ संख्या जपमाले एकः पूर्णगोलः अस्ति । नित्यपुनरावृत्तिः मनः शान्तं करोति, मन्त्रस्य अर्थे ध्यानं गभीरं करोति च ।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "केचन परम्पराः ११ वा २१ वा मालाः विहिताः सन्ति — भवतः गुरुं वा पुरोहितं वा भवतः व्रतस्य अनुकूलानि गणनानि पृच्छन्तु ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "परिहरणीयानि सामान्यानि त्रुटयः"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "अतिशीघ्रं जपं कृत्वा ध्वनिं प्रति ध्यानं नष्टम्",
+        "अनेकदेवव्रतमिश्रणं विना मार्गदर्शनम् |",
+        "भक्ति-नीति-जीवनस्य स्थाने केवलं भौतिक-परिणामस्य अपेक्षा"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मन्दिरं गृहं च एकत्र अभ्यासं कुर्वन्ति"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "गृहं जपः मन्दिरपूजायाः समर्थनं करोति; दर्शनस्य स्थाने न भवति। उत्सवदिनेषु शनिवासरे वा मन्दिरस्य दर्शनं पारिवारिकपरम्परां सुदृढं करोति ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपं सह अभ्यासं कुरुत"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "जपम् इत्यत्र गेमप्ले इत्यस्य समये मन्त्रश्रव्यं, जपगणना च सह राहुः अन्तर्भवति ।"
         }
       ]
     }
@@ -111,7 +156,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start राहुः Japa in Japam",
+      "label": "Start Rahu Japa in Japam",
       "href": "https://japam.digital/?lang=sa&deity=rahu&utm_source=google&utm_medium=seo&utm_campaign=rahu-mantra-shanti&utm_content=start-japa",
       "style": "primary"
     },
@@ -139,41 +184,41 @@
   ],
   "faqs": [
     {
-      "question": "Exact festival date this year?",
-      "answer": "Check Hindu panchang for your region — we avoid locking a Gregorian year in this guide."
+      "question": "अस्मिन् वर्षे उत्सवस्य सटीकतिथिः ?",
+      "answer": "स्वक्षेत्रस्य कृते हिन्दुपञ्चाङ्गं पश्यन्तु — अस्मिन् मार्गदर्शके वयं ग्रेगोरीवर्षं ताडयितुं परिहरामः ।"
     },
     {
-      "question": "How many japas per day?",
-      "answer": "108 minimum for many vows; some do 1008 on main day under guidance."
+      "question": "प्रतिदिनं कति जपाः ?",
+      "answer": "१०८ न्यूनतमं बहुव्रतानां कृते; केचन मुख्यदिने मार्गदर्शनेन १००८ कुर्वन्ति।"
     },
     {
-      "question": "Guest mode OK?",
-      "answer": "Yes for try; sign in to save progress across festival weeks."
+      "question": "अतिथिविधिः ठीकम्?",
+      "answer": "आम् प्रयासाय; उत्सवसप्ताहेषु प्रगतिः रक्षितुं साइन इन कुर्वन्तु।"
     },
     {
-      "question": "Replace temple?",
-      "answer": "No — digital japa supports home practice."
+      "question": "मन्दिरस्य स्थाने?",
+      "answer": "न — अङ्कीयजापा गृहाभ्यासस्य समर्थनं करोति ।"
     },
     {
-      "question": "Join collective yagna?",
-      "answer": "See Maha Japa Yagnas in Japam menu during campaigns."
+      "question": "सामूहिक यज्ञ में सम्मिलित हो?",
+      "answer": "अभियानानां समये जपम मेनू मध्ये महाजपयज्ञं पश्यन्तु।"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "एषः लेखः केवलं शैक्षणिक-भक्ति-अभ्यासार्थम् अस्ति । जपम् चिकित्सा, कानूनी, आर्थिकपरामर्शं न ददाति । परिणामाः व्यक्तिगतविश्वासस्य, निरन्तरं अभ्यासस्य च उपरि निर्भरं भवति। एप् मध्ये मन्त्रपाठः श्रव्यं च जपासमर्थनार्थम् अस्ति; औपचारिकपूजानियमानां कृते स्वपरिवारस्य पुरोहितेन वा परम्परेण वा परामर्शं कुर्वन्तु।"
   },
   "relatedPages": [
     {
       "pageId": "ketu-mantra-shanti",
-      "label": "Ketu shanti"
+      "label": "केतु शान्ति"
     },
     {
       "pageId": "navagraha-mantra",
-      "label": "Navagraha"
+      "label": "नवग्रहः"
     },
     {
       "pageId": "graha-shanti-mantra",
-      "label": "Graha shanti"
+      "label": "ग्रह शान्ति"
     }
   ]
 }

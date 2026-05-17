@@ -4,27 +4,27 @@
   "lang": "sd",
   "slug": "graha-shanti-mantra",
   "deityId": null,
-  "primaryKeyword": "graha shanti mantra",
+  "primaryKeyword": "گراه شانتي منتر",
   "secondaryKeywords": [
     "navagraha shanti",
-    "planetary peace mantra",
-    "graha dosha remedies"
+    "سيارو امن منتر",
+    "graha dosha علاج"
   ],
   "meta": {
-    "title": "Graha Shanti Mantra & Planetary Japa | Japam",
-    "description": "Overview of graha shanti, Navagraha worship, and per-planet mantra japa in Japam.",
+    "title": "گراه شانتي منتر ۽ سيارو جپ | جپان",
+    "description": "جاپم ۾ گراه شانتي، نواگراه پوڄا، ۽ في-سيارو منتر جاپ جو جائزو.",
     "ogImage": "/images/favicon.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Graha Shanti Mantra and Planetary Peace"
+      "text": "گراها شانتي منتر ۽ ڌرتي امن"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Graha shanti means pacifying the nine planets (Navagraha) in one’s horoscope through worship, charity, and mantra japa."
+          "text": "گراها شانتي جو مطلب آهي نون سيارن (نواگراه) کي ڪنهن جي زائڪ ۾ پوڄا، خيرات، ۽ منتر جپ ذريعي."
         }
       ]
     },
@@ -32,69 +32,114 @@
       "type": "p",
       "runs": [
         {
-          "text": "Each graha has a bija or name mantra — Japam includes Shani, Rahu, Ketu, Surya, Guru, and deity forms of divine grace."
-        }
-      ]
-    },
-    {
-      "type": "h2",
-      "text": "What is graha shanti?"
-    },
-    {
-      "type": "p",
-      "runs": [
-        {
-          "text": "Astrology maps karmic tendencies to planets. Japa does not “erase” karma but steadies the mind and aligns conduct with dharma, which traditions say softens difficult periods."
+          "text": "هر گراه ۾ هڪ بيجا يا نالي منتر آهي - جپم ۾ شاني، راهو، ڪيتو، سوريا، گرو، ۽ ديوي فضل جي ديوي شڪل شامل آهن."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "گراه شانتي ڇا آهي؟"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "علم نجوم سيارن کي ڪرم جي رجحانن جو نقشو ٺاهي ٿو. جپا ڪرما کي ”ختم“ نٿو ڪري پر دماغ کي مستحڪم ڪري ٿو ۽ ڌرم سان گڏ ڪم ڪري ٿو، جنهن کي روايتون چون ٿيون ته مشڪل دورن کي نرم ڪري ٿو."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "جاپ جا فائدا (روايتي خيال)"
     },
     {
       "type": "ul",
       "items": [
-        "Holistic approach: multiple planets via Navagraha puja or individual focus",
-        "Combines mantra, fasting, and seva per priest advice",
-        "Supports peace during dasha transitions",
-        "Builds daily spiritual discipline"
+        "هولسٽڪ طريقه: ڪيترن ئي سيٽن ذريعي نيواگرا پوجا يا انفرادي توجه",
+        "ملائي ٿو منتر، روزو رکڻ، ۽ سيوا في پادريءَ جي صلاح",
+        "ڊشا جي منتقلي دوران امن جي حمايت ڪري ٿي",
+        "روزاني روحاني نظم و ضبط ٺاهي ٿو"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "108 ڀيرا ڪيئن ڳايو"
     },
     {
       "type": "ul",
       "items": [
-        "Identify which graha needs focus with a qualified astrologer",
-        "Chant that planet’s mantra 108 times on its weekday",
-        "Navagraha homam or temple puja for comprehensive shanti",
-        "Use Japam for individual graha/deity mantras"
+        "سڃاڻپ ڪريو ته ڪهڙي گراه کي ڪنهن قابل نجومي سان ڌيان ڏيڻ جي ضرورت آهي",
+        "هن ڌرتيءَ جو منتر 108 ڀيرا ان جي هفتيوار ڏينهن ۾ ڳايو",
+        "جامع شانتي لاءِ ناوگراه هوم يا مندر جي پوجا",
+        "انفرادي گراها / ديوتا منتر لاء Japam استعمال ڪريو"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "جڏهن ڳائڻ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Weekdays map to planets — Sunday Surya, Saturday Shani, etc."
+          "text": "ھفتيوار ڏينھن جو نقشو سيارن ڏانھن - آچر سوريا، ڇنڇر شني، وغيره."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "ڇو 108 ورجائي اهميت رکن ٿا",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Japam lets you practise Shani, Rahu, Ketu, Surya, Guru mantras and deity japa in one app with counting and audio.",
+          "text": "نمبر 108 جپا مالا تي هڪ مڪمل گول آهي. مسلسل ورهاڱي دماغ کي پرسکون ڪري ٿو ۽ منتر جي معني تي ڌيان ڏئي ٿو."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ڪجھ روايتون 11 يا 21 مالا بيان ڪن ٿيون - پنھنجي گرو يا پادريءَ کان پڇو ته توھان جي واعدي مطابق ڳڻپ لاءِ."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "عام غلطين کان بچڻ لاء"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "آواز تي تمام تيز آواز ۽ ڌيان وڃائڻ",
+        "ھدايت کانسواءِ ڪيترن ئي ديوتائن جون واڳون گڏ ڪرڻ",
+        "ڀڪت ۽ اخلاقي زندگي گذارڻ بدران فقط مادي نتيجن جي اميد رکڻ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "مندر ۽ گهر گڏجي مشق"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "گھر جاپا مندر جي پوڄا جي حمايت ڪري ٿو. اهو درشن کي تبديل نٿو ڪري. عيد جي ڏينهن يا ڇنڇر تي مندر جو دورو ڪرڻ خانداني روايت کي مضبوط ڪري ٿو."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Japam سان مشق ڪريو"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Japam توهان کي ڳڻپ ۽ آڊيو سان گڏ هڪ ايپ ۾ شاني، راهو، ڪيتو، سوريا، گرو منتر ۽ ديوتا جاپ جي مشق ڪرڻ جي اجازت ڏئي ٿي.",
           "bold": false
         }
       ]
@@ -132,41 +177,41 @@
   ],
   "faqs": [
     {
-      "question": "One mantra for all planets?",
-      "answer": "Navagraha stotra exists; individual graha mantras target specific needs."
+      "question": "سڀني سيٽن لاء هڪ منتر؟",
+      "answer": "Navagraha stotra موجود آهي؛ انفرادي گراه منتر خاص ضرورتن کي ھدف ڪن ٿا."
     },
     {
-      "question": "Do I need gemstones?",
-      "answer": "Some wear ratna after astrologer advice; japa alone is a complete sadhana for many."
+      "question": "ڇا مون کي قيمتي پٿرن جي ضرورت آهي؟",
+      "answer": "ڪي نجومي جي مشوري کان پوءِ رتنا پائيندا آهن. جپ اڪيلو ڪيترن ئي لاء هڪ مڪمل ساڌنا آهي."
     },
     {
-      "question": "Where is Navagraha temple puja?",
-      "answer": "Major temples offer Navagraha shrines; home japa complements visits."
+      "question": "ڪٿي آهي Navagraha مندر پوجا؟",
+      "answer": "وڏن مندرن ۾ نواگراه جي مزار پيش ڪن ٿا؛ گھر جا جپا دورو مڪمل ڪري ٿو."
     },
     {
-      "question": "Rahu and Ketu same?",
-      "answer": "No — separate mantras; see dedicated guides in this series."
+      "question": "راهو ۽ ڪيتو هڪجهڙا؟",
+      "answer": "نه - الڳ منتر؛ ھن سلسلي ۾ وقف ھدايتون ڏسو."
     },
     {
-      "question": "Can Japam replace homam?",
-      "answer": "No — homam is priest-led; Japam supports daily japa."
+      "question": "ڇا Japam homam کي تبديل ڪري سگھي ٿو؟",
+      "answer": "نه - هومام پادريء جي اڳواڻي ۾ آهي؛ Japam روزاني جاپ کي سپورٽ ڪري ٿو."
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "هي مضمون صرف تعليمي ۽ ديني مشق لاءِ آهي. Japam طبي، قانوني، يا مالي صلاح فراهم نٿو ڪري. نتيجن جو دارومدار ذاتي ايمان ۽ مسلسل مشق تي. ايپ ۾ منتر ٽيڪسٽ ۽ آڊيو جاپا سپورٽ لاءِ آهن؛ رسمي پوجا ضابطن لاءِ پنھنجي خانداني پادريءَ يا روايت سان صلاح ڪريو."
   },
   "relatedPages": [
     {
       "pageId": "navagraha-mantra",
-      "label": "Navagraha mantra"
+      "label": "ناوگراه منتر"
     },
     {
       "pageId": "shani-mantra-shanti",
-      "label": "Shani shanti"
+      "label": "شانتي"
     },
     {
       "pageId": "rahu-mantra-shanti",
-      "label": "Rahu shanti"
+      "label": "راهو شانتي"
     }
   ]
 }

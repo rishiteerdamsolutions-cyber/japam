@@ -4,27 +4,27 @@
   "lang": "pa",
   "slug": "mantra-hanuman",
   "deityId": "hanuman",
-  "primaryKeyword": "hanuman mantra japa 108 times",
+  "primaryKeyword": "ਹਨੂੰਮਾਨ ਮੰਤਰ ਦਾ 108 ਵਾਰ ਜਾਪ ਕਰੋ",
   "secondaryKeywords": [
-    "Hanuman mantra",
-    "Hanuman japa",
-    "108 times mantra"
+    "ਹਨੂੰਮਾਨ ਮੰਤਰ",
+    "ਹਨੂੰਮਾਨ ਜਾਪ",
+    "108 ਵਾਰ ਮੰਤਰ"
   ],
   "meta": {
-    "title": "ਹਨੂਮਾਨ Mantra — 108 Japa | Japam",
-    "description": "ਹਨੂਮਾਨ mantra meaning, 108 japa steps, and practice in Japam.",
+    "title": "ਹਨੂੰਮਾਨ ਮੰਤਰ ਜਾਪ 108 ਵਾਰ | ਜਪਮ",
+    "description": "ਹਨੂੰਮਾਨ ਮੰਤਰ ਦਾ ਅਰਥ, 108 ਜਾਪ ਕਦਮ, ਅਤੇ ਜਪਮ ਆਡੀਓ ਦੇ ਨਾਲ ਡਿਜੀਟਲ ਅਭਿਆਸ।",
     "ogImage": "/images/deities/hanuman.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "ਹਨੂਮਾਨ — 108 Japa"
+      "text": "ਹਨੂੰਮਾਨ ਮੰਤਰ ਅਤੇ 108 ਜਾਪ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Hanuman bhakti includes steady mantra japa as a foundation of daily practice."
+          "text": "ਹਨੂੰਮਾਨ ਭਗਤੀ ਵਿੱਚ ਰੋਜ਼ਾਨਾ ਅਭਿਆਸ ਦੀ ਬੁਨਿਆਦ ਵਜੋਂ ਸਥਿਰ ਮੰਤਰ ਜਾਪ ਸ਼ਾਮਲ ਹੈ।"
         }
       ]
     },
@@ -32,13 +32,13 @@
       "type": "p",
       "runs": [
         {
-          "text": "Japam uses the mantra below during match-3 play with counting toward 108."
+          "text": "ਜਪਮ 108 ਦੀ ਗਿਣਤੀ ਦੇ ਨਾਲ ਮੈਚ-3 ਖੇਡ ਦੌਰਾਨ ਹੇਠਾਂ ਦਿੱਤੇ ਮੰਤਰ ਦੀ ਵਰਤੋਂ ਕਰਦਾ ਹੈ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "ਮੰਤਰ ਦਾ ਅਰਥ"
     },
     {
       "type": "blockquote",
@@ -53,57 +53,102 @@
       "type": "p",
       "runs": [
         {
-          "text": "Chant with a calm mind, offering salutation rather than demanding specific outcomes."
+          "text": "ਸ਼ਾਂਤ ਮਨ ਨਾਲ ਜਾਪ ਕਰੋ, ਖਾਸ ਨਤੀਜਿਆਂ ਦੀ ਮੰਗ ਕਰਨ ਦੀ ਬਜਾਏ ਨਮਸਕਾਰ ਦੀ ਪੇਸ਼ਕਸ਼ ਕਰੋ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "ਜਪ ਦੇ ਲਾਭ (ਰਵਾਇਤੀ ਵਿਚਾਰ)"
     },
     {
       "type": "ul",
       "items": [
-        "Builds daily discipline and mental focus",
-        "Deepens bhakti in traditional understanding",
-        "Supports graha or deity vows (sankalpa)",
-        "Complements temple puja — does not replace it"
+        "ਰੋਜ਼ਾਨਾ ਅਨੁਸ਼ਾਸਨ ਅਤੇ ਮਾਨਸਿਕ ਫੋਕਸ ਬਣਾਉਂਦਾ ਹੈ",
+        "ਪਰੰਪਰਾਗਤ ਸਮਝ ਵਿੱਚ ਭਗਤੀ ਨੂੰ ਡੂੰਘਾ ਕਰਦਾ ਹੈ",
+        "ਗ੍ਰਹਿ ਜਾਂ ਦੇਵਤਾ ਸੁੱਖਣਾ (ਸੰਕਲਪ) ਦਾ ਸਮਰਥਨ ਕਰਦਾ ਹੈ",
+        "ਮੰਦਰ ਦੀ ਪੂਜਾ ਨੂੰ ਪੂਰਾ ਕਰਦਾ ਹੈ - ਇਸਦੀ ਥਾਂ ਨਹੀਂ ਲੈਂਦਾ"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "108 ਵਾਰ ਜਾਪ ਕਿਵੇਂ ਕਰੀਏ"
     },
     {
       "type": "ul",
       "items": [
-        "Sit in a quiet place with spine straight",
-        "Chant 108 times on a mala (one round)",
-        "Keep attention on the mantra sound and meaning",
-        "Close with gratitude to your ishta devata"
+        "ਸ਼ਾਂਤ ਜਗ੍ਹਾ 'ਤੇ ਰੀੜ੍ਹ ਦੀ ਹੱਡੀ ਨੂੰ ਸਿੱਧਾ ਕਰਕੇ ਬੈਠੋ",
+        "ਮਾਲਾ (ਇੱਕ ਗੇੜ) ਉੱਤੇ 108 ਵਾਰ ਜਾਪ ਕਰੋ।",
+        "ਮੰਤਰ ਦੀ ਧੁਨੀ ਅਤੇ ਅਰਥ 'ਤੇ ਧਿਆਨ ਰੱਖੋ",
+        "ਆਪਣੇ ਇਸ਼ਟ ਦੇਵਤਾ ਦੇ ਸ਼ੁਕਰਗੁਜ਼ਾਰ ਨਾਲ ਬੰਦ ਕਰੋ"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "ਜਪ ਕਦੋਂ ਕਰਨਾ ਹੈ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Any sincere daily time works; ask your priest for festival or vrat days specific to this deity."
+          "text": "ਕੋਈ ਵੀ ਇਮਾਨਦਾਰ ਰੋਜ਼ਾਨਾ ਸਮਾਂ ਕੰਮ ਕਰਦਾ ਹੈ; ਆਪਣੇ ਪੁਜਾਰੀ ਨੂੰ ਇਸ ਦੇਵਤੇ ਲਈ ਤਿਉਹਾਰ ਜਾਂ ਵਰਾਤ ਦੇ ਦਿਨਾਂ ਲਈ ਪੁੱਛੋ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "108 ਦੁਹਰਾਓ ਮਾਇਨੇ ਕਿਉਂ ਰੱਖਦੇ ਹਨ",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Select Hanuman in Japam to hear the mantra audio and track your japa count."
+          "text": "ਸੰਖਿਆ 108 ਜਪ ਮਾਲਾ ਦਾ ਇੱਕ ਪੂਰਾ ਗੇੜ ਹੈ। ਨਿਰੰਤਰ ਦੁਹਰਾਓ ਮਨ ਨੂੰ ਸ਼ਾਂਤ ਕਰਦਾ ਹੈ ਅਤੇ ਮੰਤਰ ਦੇ ਅਰਥਾਂ 'ਤੇ ਧਿਆਨ ਖਿੱਚਦਾ ਹੈ।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ਕੁਝ ਪਰੰਪਰਾਵਾਂ 11 ਜਾਂ 21 ਮਾਲਾ ਨਿਰਧਾਰਤ ਕਰਦੀਆਂ ਹਨ - ਆਪਣੇ ਗੁਰੂ ਜਾਂ ਪੁਜਾਰੀ ਨੂੰ ਤੁਹਾਡੀ ਸੁੱਖਣਾ ਦੇ ਅਨੁਕੂਲ ਗਿਣਤੀ ਲਈ ਪੁੱਛੋ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ਬਚਣ ਲਈ ਆਮ ਗਲਤੀਆਂ"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "ਬਹੁਤ ਤੇਜ਼ੀ ਨਾਲ ਜਾਪ ਕਰਨਾ ਅਤੇ ਆਵਾਜ਼ 'ਤੇ ਧਿਆਨ ਗੁਆਉਣਾ",
+        "ਬਿਨਾਂ ਸੇਧ ਦੇ ਕਈ ਦੇਵਤਿਆਂ ਦੀਆਂ ਸੁੱਖਣਾਂ ਨੂੰ ਮਿਲਾਉਣਾ",
+        "ਭਗਤੀ ਅਤੇ ਨੈਤਿਕ ਜੀਵਨ ਦੀ ਬਜਾਏ ਕੇਵਲ ਭੌਤਿਕ ਨਤੀਜਿਆਂ ਦੀ ਉਮੀਦ ਕਰਨਾ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ਮੰਦਰ ਅਤੇ ਘਰ ਇਕੱਠੇ ਅਭਿਆਸ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ਘਰ ਜਾਪ ਮੰਦਰ ਪੂਜਾ ਦਾ ਸਮਰਥਨ ਕਰਦਾ ਹੈ; ਇਹ ਦਰਸ਼ਨ ਦੀ ਥਾਂ ਨਹੀਂ ਲੈਂਦਾ। ਤਿਉਹਾਰਾਂ ਦੇ ਦਿਨ ਜਾਂ ਸ਼ਨੀਵਾਰ ਨੂੰ ਮੰਦਰ ਜਾਣਾ ਪਰਿਵਾਰਕ ਪਰੰਪਰਾ ਨੂੰ ਮਜ਼ਬੂਤ ​​ਕਰਦਾ ਹੈ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ਜਪਮ ਨਾਲ ਅਭਿਆਸ ਕਰੋ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ਮੰਤਰ ਆਡੀਓ ਸੁਣਨ ਲਈ ਜਪਮ ਵਿੱਚ ਹਨੂੰਮਾਨ ਦੀ ਚੋਣ ਕਰੋ ਅਤੇ ਆਪਣੀ ਜਪ ਗਿਣਤੀ ਨੂੰ ਟਰੈਕ ਕਰੋ।"
         }
       ]
     }
@@ -112,7 +157,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start ਹਨੂਮਾਨ Japa in Japam",
+      "label": "Start Hanuman Japa in Japam",
       "href": "https://japam.digital/?lang=pa&deity=hanuman&utm_source=google&utm_medium=seo&utm_campaign=mantra-hanuman&utm_content=start-japa",
       "style": "primary"
     },
@@ -140,41 +185,41 @@
   ],
   "faqs": [
     {
-      "question": "How many times should I chant Hanuman's mantra?",
-      "answer": "108 repetitions (one mala) is the common standard; some do 11 or 21 malas under guidance."
+      "question": "ਮੈਨੂੰ ਹਨੂੰਮਾਨ ਦੇ ਮੰਤਰ ਦਾ ਜਾਪ ਕਿੰਨੀ ਵਾਰ ਕਰਨਾ ਚਾਹੀਦਾ ਹੈ?",
+      "answer": "108 ਦੁਹਰਾਓ (ਇੱਕ ਮਾਲਾ) ਆਮ ਮਿਆਰ ਹੈ; ਕੁਝ ਮਾਰਗਦਰਸ਼ਨ ਵਿੱਚ 11 ਜਾਂ 21 ਮਾਲਾ ਕਰਦੇ ਹਨ।"
     },
     {
-      "question": "Can I use Japam without signing in?",
-      "answer": "Guest try mode is available from the landing page; sign in to save long-term progress."
+      "question": "ਕੀ ਮੈਂ ਸਾਈਨ ਇਨ ਕੀਤੇ ਬਿਨਾਂ ਜਾਪਮ ਦੀ ਵਰਤੋਂ ਕਰ ਸਕਦਾ ਹਾਂ?",
+      "answer": "ਮਹਿਮਾਨ ਕੋਸ਼ਿਸ਼ ਮੋਡ ਲੈਂਡਿੰਗ ਪੰਨੇ ਤੋਂ ਉਪਲਬਧ ਹੈ; ਲੰਬੇ ਸਮੇਂ ਦੀ ਤਰੱਕੀ ਨੂੰ ਬਚਾਉਣ ਲਈ ਸਾਈਨ ਇਨ ਕਰੋ।"
     },
     {
-      "question": "Is this the only mantra for this deity?",
-      "answer": "Your lineage may use stotras or longer mantras; this is the form in the Japam app."
+      "question": "ਕੀ ਇਸ ਦੇਵਤੇ ਦਾ ਇਹੀ ਮੰਤਰ ਹੈ?",
+      "answer": "ਤੁਹਾਡਾ ਵੰਸ਼ ਸਟੋਤਰ ਜਾਂ ਲੰਬੇ ਮੰਤਰਾਂ ਦੀ ਵਰਤੋਂ ਕਰ ਸਕਦਾ ਹੈ; ਇਹ ਜਾਪਮ ਐਪ ਵਿੱਚ ਫਾਰਮ ਹੈ।"
     },
     {
-      "question": "Does mantra japa replace puja?",
-      "answer": "No — japa supports home practice; formal puja follows your sampradaya."
+      "question": "ਕੀ ਮੰਤਰ ਜਾਪ ਪੂਜਾ ਦੀ ਥਾਂ ਲੈਂਦਾ ਹੈ?",
+      "answer": "ਨਹੀਂ — ਜਪਾ ਘਰੇਲੂ ਅਭਿਆਸ ਦਾ ਸਮਰਥਨ ਕਰਦਾ ਹੈ; ਰਸਮੀ ਪੂਜਾ ਤੁਹਾਡੇ ਸੰਪ੍ਰਦਾਇ ਦੀ ਪਾਲਣਾ ਕਰਦੀ ਹੈ।"
     },
     {
-      "question": "Which direction should I face?",
-      "answer": "East or north is common; consistency matters more than perfect direction."
+      "question": "ਮੈਨੂੰ ਕਿਸ ਦਿਸ਼ਾ ਵੱਲ ਮੂੰਹ ਕਰਨਾ ਚਾਹੀਦਾ ਹੈ?",
+      "answer": "ਪੂਰਬ ਜਾਂ ਉੱਤਰ ਆਮ ਹੈ; ਇਕਸਾਰਤਾ ਸੰਪੂਰਣ ਦਿਸ਼ਾ ਤੋਂ ਵੱਧ ਮਹੱਤਵਪੂਰਨ ਹੈ।"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "ਇਹ ਲੇਖ ਕੇਵਲ ਵਿਦਿਅਕ ਅਤੇ ਭਗਤੀ ਅਭਿਆਸ ਲਈ ਹੈ। Japam ਡਾਕਟਰੀ, ਕਾਨੂੰਨੀ, ਜਾਂ ਵਿੱਤੀ ਸਲਾਹ ਪ੍ਰਦਾਨ ਨਹੀਂ ਕਰਦਾ ਹੈ। ਨਤੀਜੇ ਨਿੱਜੀ ਵਿਸ਼ਵਾਸ ਅਤੇ ਨਿਰੰਤਰ ਅਭਿਆਸ 'ਤੇ ਨਿਰਭਰ ਕਰਦੇ ਹਨ। ਐਪ ਵਿੱਚ ਮੰਤਰ ਪਾਠ ਅਤੇ ਆਡੀਓ ਜਪਾ ਸਮਰਥਨ ਲਈ ਹਨ; ਰਸਮੀ ਪੂਜਾ ਨਿਯਮਾਂ ਲਈ ਆਪਣੇ ਪਰਿਵਾਰਕ ਪੁਜਾਰੀ ਜਾਂ ਪਰੰਪਰਾ ਨਾਲ ਸਲਾਹ ਕਰੋ।"
   },
   "relatedPages": [
     {
       "pageId": "japa-108-times",
-      "label": "108 japa guide"
+      "label": "108 ਜਪ ਗਾਈਡ"
     },
     {
       "pageId": "ishta-devata-japa",
-      "label": "Ishta devata japa"
+      "label": "ਇਸ਼ਟ ਦੇਵਤਾ ਜਪ"
     },
     {
       "pageId": "online-japa-mantra",
-      "label": "Online japa"
+      "label": "ਆਨਲਾਈਨ ਜਪਾ"
     }
   ]
 }

@@ -4,32 +4,32 @@
   "lang": "ur",
   "slug": "shani-mantra-shanti",
   "deityId": "shani",
-  "primaryKeyword": "shani mantra shanti",
+  "primaryKeyword": "شانی منتر شانتی",
   "secondaryKeywords": [
-    "shani dosha nivaran",
-    "shani pariharam",
-    "saturday shani puja",
-    "shani graha mantra 108"
+    "شانی دوشا نیوارن",
+    "شانی پریہرام",
+    "سنی کی پوجا",
+    "شانی گرہ منتر 108"
   ],
   "meta": {
-    "title": "Shani Mantra for Shanti — 108 Japa Guide | Japam",
-    "description": "Traditional Shani graha mantra, how to chant 108 times, and digital japa with Japam match-3 and audio.",
+    "title": "شانتی کے لیے شانی منتر - 108 جاپ گائیڈ | جاپم",
+    "description": "روایتی شانی گرہ منتر، 108 بار کیسے جاپ کریں، اور جاپم میچ 3 اور آڈیو کے ساتھ ڈیجیٹل جاپ۔",
     "ogImage": "/images/deities/shani.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Shani Mantra and Graha Shanti"
+      "text": "شانی منتر اور گرہ شانتی"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Lord Shani",
+          "text": "شانی بھگوان",
           "bold": true
         },
         {
-          "text": " (Shanaischara) is honoured in Hindu tradition as the graha who teaches patience, discipline, and responsibility. Devotees turn to "
+          "text": "(شناسچارا) کو ہندو روایت میں گرہ کے طور پر اعزاز دیا جاتا ہے جو صبر، نظم و ضبط اور ذمہ داری کا درس دیتا ہے۔ عقیدت مندوں نے رجوع کیا۔"
         },
         {
           "text": "japa",
@@ -37,7 +37,7 @@
           "underline": true
         },
         {
-          "text": " — repetition of a sacred mantra — for graha shanti (planetary peace), especially when Shani is strong in the chart or during challenging periods."
+          "text": "- ایک مقدس منتر کی تکرار - گرہ شانتی (سیاروں کی امن) کے لئے، خاص طور پر جب شانی چارٹ میں مضبوط ہو یا مشکل ادوار کے دوران۔"
         }
       ]
     },
@@ -45,19 +45,19 @@
       "type": "p",
       "runs": [
         {
-          "text": "This guide explains the meaning of the Shani mantra used in Japam, how to practise 108 repetitions with a mala, and how to support your practice with the Japam app."
+          "text": "یہ گائیڈ جاپم میں استعمال ہونے والے شانی منتر کے معنی کی وضاحت کرتا ہے، مالا کے ساتھ 108 تکرار کی مشق کیسے کی جائے، اور جاپم ایپ کے ساتھ آپ کی مشق کی حمایت کیسے کی جائے۔"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "منتر کا مفہوم"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "The bija and name mantra commonly chanted for Shanaischara is:"
+          "text": "بیجا اور نام کا منتر جو عام طور پر شناسچارا کے لیے بولا جاتا ہے وہ ہے:"
         }
       ]
     },
@@ -74,87 +74,133 @@
       "type": "p",
       "runs": [
         {
-          "text": "“Sham” is associated with Shani’s seed sound; “Shanicharaya” addresses the slow-moving lord of Saturn. “Namaha” means salutation — offering the mind to the deity with humility rather than demanding a specific outcome."
+          "text": "\"شام\" شانی کے بیج کی آواز سے وابستہ ہے۔ \"شنیچرایا\" زحل کے آہستہ چلنے والے رب کو مخاطب کرتا ہے۔ \"نماہ\" کا مطلب ہے سلام - کسی خاص نتیجہ کا مطالبہ کرنے کے بجائے عاجزی کے ساتھ دیوتا کو دماغ پیش کرنا۔"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "جاپ کے فوائد (روایتی نقطہ نظر)"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Scriptures and elders describe japa as calming the mind, building steadiness, and aligning one with dharma. Shani worship is often linked to accepting karma with grace, reducing fear, and cultivating discipline. These are spiritual aims, not guaranteed material results — faith and regular practice matter."
+          "text": "صحیفے اور بزرگ جاپ کو ذہن کو پرسکون کرنے، استقامت پیدا کرنے اور دھرم کے ساتھ ہم آہنگ کرنے کے طور پر بیان کرتے ہیں۔ شانی کی عبادت کا تعلق اکثر کرم کے ساتھ کرم کو قبول کرنے، خوف کو کم کرنے اور نظم و ضبط کو فروغ دینے سے ہوتا ہے۔ یہ روحانی مقاصد ہیں، مادی نتائج کی ضمانت نہیں - ایمان اور باقاعدہ مشق کا معاملہ۔"
         }
       ]
     },
     {
       "type": "ul",
       "items": [
-        "Supports mental focus and patience during difficult phases",
-        "Traditionally offered on Saturdays for Shani bhakti",
-        "Often combined with charity, honesty, and service (seva)",
-        "May be practised alongside Hanuman worship in many families"
+        "مشکل مراحل کے دوران ذہنی توجہ اور صبر کی حمایت کرتا ہے۔",
+        "شانی بھکتی کے لیے روایتی طور پر ہفتہ کو پیش کیا جاتا ہے۔",
+        "اکثر صدقہ، ایمانداری، اور خدمت (سیوا) کے ساتھ مل کر",
+        "بہت سے خاندانوں میں ہنومان کی پوجا کے ساتھ مشق کی جا سکتی ہے۔"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "108 مرتبہ پڑھنے کا طریقہ"
     },
     {
       "type": "ul",
       "items": [
-        "Choose a quiet place; face east or north if convenient.",
-        "Sit comfortably; keep the spine straight and breath natural.",
-        "Use a rudraksha or sphatik mala of 108 beads; one round equals 108 japa.",
-        "Chant clearly or mentally; keep attention on the sound and meaning.",
-        "Many begin or end with a short prayer to your ishta devata."
+        "ایک پرسکون جگہ کا انتخاب کریں؛ اگر آسان ہو تو مشرق یا شمال کا رخ کریں۔",
+        "آرام سے بیٹھو؛ ریڑھ کی ہڈی کو سیدھا رکھیں اور قدرتی سانس لیں۔",
+        "108 موتیوں کی رودرکش یا اسفٹک مالا استعمال کریں۔ ایک راؤنڈ 108 جاپا کے برابر ہے۔",
+        "واضح طور پر یا ذہنی طور پر نعرہ لگائیں؛ آواز اور معنی پر توجہ دیں۔",
+        "بہت سے لوگ آپ کی استا دیوتا کی مختصر دعا کے ساتھ شروع یا ختم کرتے ہیں۔"
       ]
     },
     {
       "type": "h2",
-      "text": "Best day and time"
+      "text": "بہترین دن اور وقت"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Saturday (Shanivar) is widely observed for Shani puja and mantra japa. Early morning or evening after sunset are common. During Sade Sati or Shani dasha, some devotees increase regularity — consult your family tradition or priest for personal timing."
+          "text": "ہفتہ (شنیوار) شانی پوجا اور منتر جاپ کے لیے بڑے پیمانے پر منایا جاتا ہے۔ سورج غروب ہونے کے بعد صبح سویرے یا شام کا معمول ہے۔ سادے ستی یا شانی دشا کے دوران، کچھ عقیدت مند باقاعدگی میں اضافہ کرتے ہیں - ذاتی وقت کے لیے اپنی خاندانی روایت یا پجاری سے مشورہ کریں۔"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "108 تکرار کیوں اہم ہے۔"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Japam",
+          "text": "بہت سے سمپرادیوں میں، 108 ایک مکمل مالا راؤنڈ ہے - شمار کھونے کے بغیر روزانہ سیشن کو بند کرنے کا ایک عملی طریقہ۔ نمبر علامتی ہے (کائناتی چکر، کچھ تعلیمات میں نادیاں)، لیکن گہرا مقصد مستقل توجہ ہے: ایک سانس، ایک منتر، ایک وقت میں ایک مالا۔"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "اگر 108 سب سے پہلے بھاری محسوس ہوتا ہے، تو 11 یا 27 تکرار کے ساتھ شروع کریں اور ہفتوں میں بڑھیں. عام دنوں میں مستقل مزاجی اکثر ایک شدید سیشن سے زیادہ اہمیت رکھتی ہے۔"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "عام جاپانی غلطیوں سے بچنے کے لیے"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "گنتی کو \"ختم\" کرنے کے لیے منتر کو تیز کرنا - سست، سنائی دینے والی یا ذہنی تال بہتر ہے۔",
+        "مکمل مالا راؤنڈ کے دوران ملٹی ٹاسکنگ (اسکرولنگ، ٹی وی)",
+        "فوری مادی نتائج کے لیے جاپا کو سودا سمجھنا",
+        "جب آپ کی روایت گرہ جاپ کے لیے تجویز کرتی ہے تو غسل/صاف جگہ کو چھوڑنا",
+        "ایک اچھے ہفتے کے بعد رکنا - گرہ اور دیوتا کی قسمیں طویل مدتی ہیں۔"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "سنکلپا اور روزانہ کا نظم و ضبط"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "شروع کرنے سے پہلے، بہت سے خاندانوں نے ایک مختصر سنکلپا (ارادہ) مقرر کیا: نام، اگر قابل اطلاق ہو تو گوتر، اور جاپ کا مقصد۔ جب ممکن ہو ہر روز ایک ہی وقت رکھیں — صبح یا شام عام ہیں۔ منتر کو ایماندارانہ طرز عمل، خیرات، یا خدمت کے ساتھ جوڑیں جہاں آپ کے بزرگ اسے مشورہ دیتے ہیں۔ japa کردار کی حمایت کرتا ہے، یہ صحیح عمل کی جگہ نہیں لیتا ہے۔"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Japam کے ساتھ مشق کریں۔"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "جاپم",
           "bold": true
         },
         {
-          "text": " is a digital mantra practice app: match gems on the board while hearing deity mantra audio, with japa counting for each deity. Select Shani to hear "
+          "text": "ایک ڈیجیٹل منتر پریکٹس ایپ ہے: دیوتا منتر آڈیو سنتے ہوئے بورڈ پر جواہرات سے میچ کریں، ہر دیوتا کے لیے جاپ گنتی کے ساتھ۔ سننے کے لیے شانی کو منتخب کریں۔"
         },
         {
-          "text": "Om Shan Shanicharaya Namaha",
+          "text": "اوم شان شانی چارایا نامہ",
           "bold": true
         },
         {
-          "text": " during play, track your count toward 108, and join community Maha Japa Yagnas when you wish."
+          "text": "کھیل کے دوران، 108 تک اپنی گنتی کو ٹریک کریں، اور جب آپ چاہیں کمیونٹی مہا جپ یگناس میں شامل ہوں۔"
         }
       ]
     },
     {
       "type": "ul",
       "items": [
-        "Per-deity japa modes and 108-japa specials",
-        "Mantra audio synced to match-3 gameplay",
-        "Many Indian languages in the app UI",
-        "Optional Pushpa Aradhana (digital flower offering)"
+        "فی دیوتا جاپا طریقوں اور 108-جاپا خصوصی",
+        "منتر آڈیو میچ 3 گیم پلے میں مطابقت پذیر ہے۔",
+        "ایپ UI میں بہت سی ہندوستانی زبانیں۔",
+        "اختیاری پشپا آرادھنا (ڈیجیٹل پھول کی پیشکش)"
       ]
     }
   ],
@@ -162,7 +208,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start شنی Japa in Japam",
+      "label": "Start Shani Japa in Japam",
       "href": "https://japam.digital/?lang=ur&deity=shani&utm_source=google&utm_medium=seo&utm_campaign=shani-mantra-shanti&utm_content=start-japa",
       "style": "primary"
     },
@@ -181,54 +227,54 @@
       "style": "secondary"
     },
     {
-      "id": "sticky",
+      "id": "start-japa",
       "position": "sticky-footer",
-      "label": "Open Japam",
+      "label": "Start Shani Japa",
       "href": "https://japam.digital/?lang=ur&deity=shani&utm_source=google&utm_medium=seo&utm_campaign=shani-mantra-shanti&utm_content=sticky",
       "style": "primary"
     }
   ],
   "faqs": [
     {
-      "question": "How many times should I chant the Shani mantra?",
-      "answer": "Tradition often recommends 108 repetitions per session (one mala). Some undertake 9, 11, or 21 malas over days under guidance. Consistency matters more than a single extreme session."
+      "question": "میں کتنی بار شانی منتر کا جاپ کروں؟",
+      "answer": "روایت اکثر فی سیشن (ایک مالا) 108 تکرار کی سفارش کرتی ہے۔ کچھ رہنمائی کے تحت دنوں میں 9، 11، یا 21 مالاس کرتے ہیں۔ مستقل مزاجی ایک انتہائی سیشن سے زیادہ اہمیت رکھتی ہے۔"
     },
     {
-      "question": "What is the correct pronunciation?",
-      "answer": "Om Shan Shanicharaya Namaha — stress is gentle; listen to the Japam audio for a steady pace. Your family priest may prefer a slight regional variation."
+      "question": "صحیح تلفظ کیا ہے؟",
+      "answer": "اوم شان شانی چارایا نامہ — تناؤ نرم ہے۔ ایک مستحکم رفتار کے لیے Japam آڈیو سنیں۔ آپ کا خاندانی پادری تھوڑا سا علاقائی تغیر کو ترجیح دے سکتا ہے۔"
     },
     {
-      "question": "Can Hanuman worship help with Shani troubles?",
-      "answer": "Many devotees worship Hanuman alongside Shani, especially on Saturdays. See our Hanuman–Shani guide for a balanced devotional approach."
+      "question": "کیا ہنومان کی عبادت شانی کی پریشانیوں میں مدد کر سکتی ہے؟",
+      "answer": "بہت سے عقیدت مند شانی کے ساتھ ہنومان کی پوجا کرتے ہیں، خاص طور پر ہفتہ کے دن۔ متوازن عقیدت مندانہ انداز کے لیے ہماری ہنومان-شنی گائیڈ دیکھیں۔"
     },
     {
-      "question": "Is Saturday mandatory?",
-      "answer": "Saturday is customary but not the only day. Daily short japa with sincerity is acceptable in many lineages if your guru or tradition allows."
+      "question": "کیا ہفتہ لازمی ہے؟",
+      "answer": "ہفتہ کا رواج ہے لیکن واحد دن نہیں۔ اگر آپ کا گرو یا روایت اجازت دے تو اخلاص کے ساتھ روزانہ مختصر جاپ بہت سے نسبوں میں قابل قبول ہے۔"
     },
     {
-      "question": "Does Japam replace temple puja?",
-      "answer": "No. Japam supports home japa and counting; formal Shani puja, oil offering, and temple customs should follow your sampradaya and local priest."
+      "question": "کیا جاپم مندر کی پوجا کی جگہ لے لیتا ہے؟",
+      "answer": "نمبر۔ جاپام ہوم جاپ اور گنتی کی حمایت کرتا ہے۔ رسمی شانی پوجا، تیل کی پیشکش، اور مندر کے رسم و رواج کو آپ کے سمپردایہ اور مقامی پجاری کی پیروی کرنی چاہیے۔"
     },
     {
-      "question": "What is Sade Sati?",
-      "answer": "Sade Sati is the roughly seven-and-a-half-year period when transiting Shani moves through signs near one's Moon sign. Japa and ethical living are traditional responses — not fear-based rituals."
+      "question": "ساڈے ستی کیا ہے؟",
+      "answer": "ساڈے ستی تقریباً ساڑھے سات سال کا عرصہ ہے جب شانی کی منتقلی کسی کے چاند کے نشان کے قریب نشانیوں سے ہوتی ہے۔ جاپان اور اخلاقی زندگی روایتی ردعمل ہیں — خوف پر مبنی رسومات نہیں۔"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "یہ مضمون صرف تعلیمی اور عقیدتی مشق کے لیے ہے۔ Japam طبی، قانونی، یا مالی مشورہ فراہم نہیں کرتا ہے۔ نتائج کا انحصار ذاتی ایمان اور مستقل مشق پر ہوتا ہے۔ ایپ میں منتر کا متن اور آڈیو جاپا سپورٹ کے لیے ہیں۔ رسمی پوجا کے قواعد کے لیے اپنے خاندانی پجاری یا روایت سے مشورہ کریں۔"
   },
   "relatedPages": [
     {
       "pageId": "sade-sati-remedies",
-      "label": "Sade Sati remedies"
+      "label": "ساڈے ستی کا علاج"
     },
     {
       "pageId": "hanuman-mantra-shani",
-      "label": "Hanuman for Shani"
+      "label": "شانی کے لیے ہنومان"
     },
     {
       "pageId": "graha-shanti-mantra",
-      "label": "Graha shanti mantra"
+      "label": "گرہ شانتی منتر"
     }
   ]
 }

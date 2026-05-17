@@ -4,27 +4,27 @@
   "lang": "sa",
   "slug": "venkateswara-mantra-tirupati",
   "deityId": "venkateswara",
-  "primaryKeyword": "venkateswara tirupati balaji mantra",
+  "primaryKeyword": "वेंकटेश्वर तिरुपति बालाजी मंत्र",
   "secondaryKeywords": [
-    "om namo venkateshaaya",
-    "tirupati darshan mantra",
-    "venkateswara japa"
+    "ॐ नमो वेङ्कटेशाय",
+    "तिरुपति दर्शन मन्त्र",
+    "वेङ्कटेश्वर जप"
   ],
   "meta": {
-    "title": "Venkateswara Mantra — Tirupati Balaji Japa | Japam",
-    "description": "Om Namo Venkateshaaya — meaning, 108 japa, and digital practice for Balaji bhakti in Japam.",
+    "title": "वेंकटेश्वर मंत्र — तिरुपति बालाजी जप | जपम्",
+    "description": "ॐ नमो वेङ्कटेशाय — अर्थ, १०८ जप, तथा जपमे बालाजी भक्ति हेतु अङ्कीय अभ्यास।",
     "ogImage": "/images/deities/venkateswara.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Venkateswara Mantra and Tirupati Balaji Japa"
+      "text": "वेङ्कटेश्वर मन्त्र तथा तिरुपति बालाजी जप"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Lord Venkateswara (Balaji) of Tirupati is beloved across South India and beyond. His name mantra is chanted for surrender and auspiciousness."
+          "text": "तिरुपतिः वेङ्कटेश्वरः (बालाजी) सम्पूर्णे दक्षिणभारते परे च प्रियः अस्ति । तस्य नाममन्त्रः समर्पणाय शुभाय च जपेत् |"
         }
       ]
     },
@@ -32,13 +32,13 @@
       "type": "p",
       "runs": [
         {
-          "text": "Whether you plan a darshan or pray from home, steady japa deepens bhakti."
+          "text": "दर्शनस्य योजना वा गृहात् प्रार्थना वा स्थिरजपः भक्तिं गभीरं करोति।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "मन्त्रार्थः"
     },
     {
       "type": "blockquote",
@@ -53,57 +53,102 @@
       "type": "p",
       "runs": [
         {
-          "text": "Chant with a calm mind, offering salutation (Namaha) rather than demanding outcomes."
+          "text": "परिणामान् आग्रहं न कृत्वा नमस्कारं (नमहा) कृत्वा शान्तचित्तेन जपं कुर्वन्तु।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "जपस्य लाभाः (पारम्परिकदृष्टिकोणः) २."
     },
     {
       "type": "ul",
       "items": [
-        "Expresses complete surrender (Sharanagati)",
-        "Popular before Tirupati pilgrimage",
-        "Friday and Saturdays see heavy temple crowds — home japa anytime",
-        "Pairs with Tulasi leaves in traditional puja"
+        "पूर्णसमर्पणं अभिव्यञ्जयति (शरणागतिः) २.",
+        "तिरुपतितीर्थयात्रापूर्वं लोकप्रियम्",
+        "शुक्रवासरे शनिवासरे च मन्दिरस्य प्रचण्डजनसमूहः दृश्यते — home japa anytime",
+        "पारम्परिकपूजायां तुलासीपत्रैः सह युग्मम्"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "१०८ वारं जपं कथं करणीयम्"
     },
     {
       "type": "ul",
       "items": [
-        "Chant 108 or 1008 times as vow (kankana) before trip",
-        "Offer hair tonsuring only at temple if that is your sankalpa — not required for japa",
-        "Keep image or photo of Balaji before you",
-        "Use Japam to hear the mantra with counting"
+        "यात्रापूर्वं १०८ वा १००८ वारं व्रतरूपेण (कङ्कणः) जपन्तु",
+        "मन्दिरे एव केश-टोन्सर-करणं समर्पयन्तु यदि तत् भवतः संकल्पम् अस्ति — जपस्य कृते न आवश्यकम्",
+        "बालाजी इत्यस्य चित्रं वा फोटो वा स्वस्य पुरतः स्थापयन्तु",
+        "गणनेन सह मन्त्रं श्रोतुं जपं प्रयुञ्जीत |"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "कदा जपेत्"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Any day; many increase japa before Vaikunta Ekadashi and Brahmotsavam season."
+          "text": "कस्मिन् अपि दिने; वैकुण्ता एकादशी ब्रह्मोत्सवस्य ऋतुपूर्वं बहवः जपं वर्धयन्ति।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "१०८ पुनरावृत्तयः किमर्थं महत्त्वपूर्णाः सन्ति",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Venkateswara mode in Japam uses Om namo Venkateshaaya during match-3 — helpful when you cannot visit the hill temple daily.",
+          "text": "१०८ संख्या जपमाले एकः पूर्णगोलः अस्ति । नित्यपुनरावृत्तिः मनः शान्तं करोति, मन्त्रस्य अर्थे ध्यानं गभीरं करोति च ।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "केचन परम्पराः ११ वा २१ वा मालाः विहिताः सन्ति — भवतः गुरुं वा पुरोहितं वा भवतः व्रतस्य अनुकूलानि गणनानि पृच्छन्तु ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "परिहरणीयानि सामान्यानि त्रुटयः"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "अतिशीघ्रं जपं कृत्वा ध्वनिं प्रति ध्यानं नष्टम्",
+        "अनेकदेवव्रतमिश्रणं विना मार्गदर्शनम् |",
+        "भक्ति-नीति-जीवनस्य स्थाने केवलं भौतिक-परिणामस्य अपेक्षा"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मन्दिरं गृहं च एकत्र अभ्यासं कुर्वन्ति"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "गृहं जपः मन्दिरपूजायाः समर्थनं करोति; दर्शनस्य स्थाने न भवति। उत्सवदिनेषु शनिवासरे वा मन्दिरस्य दर्शनं पारिवारिकपरम्परां सुदृढं करोति ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपं सह अभ्यासं कुरुत"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "जपमे वेङ्कटेश्वर मोड् मेच-३ इत्यस्य समये ॐ नमो वेङ्कटेशायस्य उपयोगं करोति — यदा भवन्तः प्रतिदिनं पर्वतमन्दिरं गन्तुं न शक्नुवन्ति तदा सहायकं भवति ।",
           "bold": false
         }
       ]
@@ -113,7 +158,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start वेङ्कटेश्वरः Japa in Japam",
+      "label": "Start Venkateswara Japa in Japam",
       "href": "https://japam.digital/?lang=sa&deity=venkateswara&utm_source=google&utm_medium=seo&utm_campaign=venkateswara-mantra-tirupati&utm_content=start-japa",
       "style": "primary"
     },
@@ -141,41 +186,41 @@
   ],
   "faqs": [
     {
-      "question": "Spelling Venkateshaaya?",
-      "answer": "Regional spellings vary; follow your priest’s transliteration."
+      "question": "वर्तनी वेङ्कटेशाय?",
+      "answer": "प्रादेशिकवर्तनीषु भिन्नता भवति; भवतः पुरोहितस्य लिप्यन्तरं अनुसृत्य ।"
     },
     {
-      "question": "Is Tirupati laddu prasadam required?",
-      "answer": "No for home japa — prasadam is optional devotion."
+      "question": "तिरुपति लड्डू प्रसादः आवश्यकः वा ?",
+      "answer": "गृहजपाय न — प्रसादं वैकल्पिकभक्तिः ।"
     },
     {
-      "question": "Can I chant for marriage?",
-      "answer": "Many pray for family blessings; see marriage delay guide for more deities."
+      "question": "विवाहार्थं जपं कर्तुं शक्नोमि वा ?",
+      "answer": "बहवः पारिवारिक आशीर्वादं प्रार्थयन्ति; अधिकदेवतानां कृते विवाहविलम्बमार्गदर्शिकां पश्यन्तु।"
     },
     {
-      "question": "How many days before darshan?",
-      "answer": "Some chant 11 or 21 days — personal vow."
+      "question": "दर्शनात् पूर्वं कति दिवसाः ?",
+      "answer": "केचित् ११ वा २१ वा दिवसान् जपन्ति — व्यक्तिगतव्रतम् ।"
     },
     {
-      "question": "Does Japam have Venkateswara image?",
-      "answer": "Yes — select Venkateswara on the deity grid."
+      "question": "जपस्य वेङ्कटेश्वरप्रतिमा अस्ति वा ?",
+      "answer": "आम् — देवताजालस्य वेङ्कटेश्वरं चिनोतु ।"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "एषः लेखः केवलं शैक्षणिक-भक्ति-अभ्यासार्थम् अस्ति । जपम् चिकित्सा, कानूनी, आर्थिकपरामर्शं न ददाति । परिणामाः व्यक्तिगतविश्वासस्य, निरन्तरं अभ्यासस्य च उपरि निर्भरं भवति। एप् मध्ये मन्त्रपाठः श्रव्यं च जपासमर्थनार्थम् अस्ति; औपचारिकपूजानियमानां कृते स्वपरिवारस्य पुरोहितेन वा परम्परेण वा परामर्शं कुर्वन्तु।"
   },
   "relatedPages": [
     {
       "pageId": "mantra-venkateswara",
-      "label": "Venkateswara pillar"
+      "label": "वेङ्कटेश्वरस्तम्भः"
     },
     {
       "pageId": "marriage-delay-mantra",
-      "label": "Marriage mantras"
+      "label": "विवाह मन्त्र"
     },
     {
       "pageId": "japa-108-times",
-      "label": "108 japa guide"
+      "label": "१०८ जपः"
     }
   ]
 }

@@ -4,26 +4,26 @@
   "lang": "sd",
   "slug": "pushpa-aradhana-guide",
   "deityId": null,
-  "primaryKeyword": "pushpa archana online flower offering",
+  "primaryKeyword": "پشپا ارچنا آن لائن گلن جي آڇ",
   "secondaryKeywords": [
-    "digital puja flowers",
-    "shodashopachara"
+    "ڊجيٽل پوجا گلن",
+    "شوڊاشوپچارا"
   ],
   "meta": {
-    "title": "Pushpa Aradhana — Digital Flower Offering | Japam",
-    "description": "Pushpa Aradhana in Japam: offer digital flowers during deity worship.",
+    "title": "Pushpa Aradhana - ڊجيٽل گلن جي آڇ | جپان",
+    "description": "Japam ۾ Pushpa Aradhana: ديوتا جي پوڄا دوران ڊجيٽل گلن کي پيش ڪريو.",
     "ogImage": "/images/favicon.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Pushpa Aradhana — Digital Flower Offering"
+      "text": "Pushpa Aradhana - ڊجيٽل گلن جي آڇ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Pushpa (flowers) are part of shodashopachara puja. Japam’s Pushpa Aradhana lets you offer digital flowers when visiting the deity screen."
+          "text": "پشپا (گل) شوڊاشوپچارا پوجا جو حصو آهن. Japam جي Pushpa Aradhana توهان کي ڊجيٽل گلن کي پيش ڪرڻ جي اجازت ڏئي ٿي جڏهن ديوتا اسڪرين جو دورو ڪريو."
         }
       ]
     },
@@ -31,69 +31,114 @@
       "type": "p",
       "runs": [
         {
-          "text": "Educational complement to home puja — not a temple replacement."
-        }
-      ]
-    },
-    {
-      "type": "h2",
-      "text": "What is pushpa archana?"
-    },
-    {
-      "type": "p",
-      "runs": [
-        {
-          "text": "Offering flowers symbolises surrender of virtues and beauty to the deity. Digital offering expresses the same intent when fresh flowers are unavailable."
+          "text": "گھر جي پوڄا لاءِ تعليمي مڪمل ڪرڻ - مندر جو متبادل نه."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "پشپا ارچنا ڇا آهي؟"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "گلن جو نذرانو ديوتا ڏانهن فضيلت ۽ حسن جي تسليم ڪرڻ جي علامت آهي. ڊجيٽل پيشڪش ساڳئي ارادي جو اظهار ڪري ٿو جڏهن تازو گلن موجود نه آهن."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "جاپ جا فائدا (روايتي خيال)"
     },
     {
       "type": "ul",
       "items": [
-        "Practice archana symbolism daily",
-        "Pairs with mantra japa in app",
-        "Useful when travelling",
-        "Learn pada names of offerings"
+        "روزانو ارچنا علامتي مشق ڪريو",
+        "ايپ ۾ منتر جاپ سان گڏ",
+        "سفر دوران مفيد",
+        "پرساد جا نالا سکو"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "108 ڀيرا ڪيئن ڳايو"
     },
     {
       "type": "ul",
       "items": [
-        "Sign in to Japam",
-        "Open Pushpa Aradhana from menu (requires auth)",
-        "Select deity and offering",
-        "Complete with mindful prayer"
+        "Japam ۾ سائن ان ڪريو",
+        "مينيو مان پشپا آرادانا کوليو (تصوير جي ضرورت آهي)",
+        "ديوتا ۽ پيشڪش چونڊيو",
+        "ذهن جي نماز سان مڪمل ڪريو"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "جڏهن ڳائڻ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "After japa or during daily darshan routine in app."
+          "text": "جپ کان پوءِ يا ايپ ۾ روزاني درشن جي دوران."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "ڇو 108 ورجائي اهميت رکن ٿا",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Menu → Pushpa Aradhana (sign-in required)."
+          "text": "نمبر 108 جپا مالا تي هڪ مڪمل گول آهي. مسلسل ورهاڱي دماغ کي پرسکون ڪري ٿو ۽ منتر جي معني تي ڌيان ڏئي ٿو."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ڪجھ روايتون 11 يا 21 مالا بيان ڪن ٿيون - پنھنجي گرو يا پادريءَ کان پڇو ته توھان جي واعدي مطابق ڳڻپ لاءِ."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "عام غلطين کان بچڻ لاء"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "آواز تي تمام تيز آواز ۽ ڌيان وڃائڻ",
+        "ھدايت کانسواءِ ڪيترن ئي ديوتائن جون واڳون گڏ ڪرڻ",
+        "ڀڪت ۽ اخلاقي زندگي گذارڻ بدران فقط مادي نتيجن جي اميد رکڻ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "مندر ۽ گهر گڏجي مشق"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "گھر جاپا مندر جي پوڄا جي حمايت ڪري ٿو. اهو درشن کي تبديل نٿو ڪري. عيد جي ڏينهن يا ڇنڇر تي مندر جو دورو ڪرڻ خانداني روايت کي مضبوط ڪري ٿو."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Japam سان مشق ڪريو"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "مينيو → پشپا آراڌنا (سائن ان گهربل)."
         }
       ]
     }
@@ -130,41 +175,41 @@
   ],
   "faqs": [
     {
-      "question": "Are digital flowers equal to real?",
-      "answer": "Intent matters; traditions prefer real flowers when possible."
+      "question": "ڇا ڊجيٽل گلن حقيقي برابر آهن؟",
+      "answer": "ارادي جي اهميت؛ روايتون حقيقي گلن کي ترجيح ڏين ٿيون جڏهن ممڪن هجي."
     },
     {
-      "question": "Need sign-in?",
-      "answer": "Yes — Pushpa Aradhana requires account in current app."
+      "question": "سائن ان جي ضرورت آهي؟",
+      "answer": "ها - پشپا آرادانا کي موجوده ايپ ۾ اڪائونٽ جي ضرورت آهي."
     },
     {
-      "question": "Cost?",
-      "answer": "See in-app offerings; optional dakshina may apply."
+      "question": "قيمت؟",
+      "answer": "ڏسو ان-ايپ پيشڪش؛ اختياري dakshina لاڳو ٿي سگھي ٿو."
     },
     {
-      "question": "Which deities?",
-      "answer": "Deities available in Pushpa flow — see app."
+      "question": "ڪھڙا ديوتا؟",
+      "answer": "پشپا جي وهڪري ۾ ديوتا موجود آهن - ايپ ڏسو."
     },
     {
-      "question": "Shodashopachara?",
-      "answer": "Learn full steps from your priest; Japam focuses on pushpa."
+      "question": "شوڊاشوپچارا؟",
+      "answer": "توهان جي پادريء کان مڪمل قدم سکو؛ Japam pushpa تي ڌيان ڏئي ٿو."
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "هي مضمون صرف تعليمي ۽ ديني مشق لاءِ آهي. Japam طبي، قانوني، يا مالي صلاح فراهم نٿو ڪري. نتيجن جو دارومدار ذاتي ايمان ۽ مسلسل مشق تي. ايپ ۾ منتر ٽيڪسٽ ۽ آڊيو جاپا سپورٽ لاءِ آهن؛ رسمي پوجا ضابطن لاءِ پنھنجي خانداني پادريءَ يا روايت سان صلاح ڪريو."
   },
   "relatedPages": [
     {
       "pageId": "online-japa-mantra",
-      "label": "Online japa"
+      "label": "آن لائن جپان"
     },
     {
       "pageId": "ishta-devata-japa",
-      "label": "Ishta devata"
+      "label": "ايشتا ديوتا"
     },
     {
       "pageId": "maha-japa-yagna",
-      "label": "Maha yagna"
+      "label": "مها يگنا"
     }
   ]
 }

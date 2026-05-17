@@ -4,27 +4,27 @@
   "lang": "pa",
   "slug": "navagraha-mantra",
   "deityId": null,
-  "primaryKeyword": "navagraha mantra",
+  "primaryKeyword": "ਨਵਗ੍ਰਹ ਮੰਤਰ",
   "secondaryKeywords": [
-    "navagraha puja",
-    "nine planets mantra",
-    "navagraha japa"
+    "ਨਵਗ੍ਰਹਿ ਪੂਜਾ",
+    "ਨੌ ਗ੍ਰਹਿ ਮੰਤਰ",
+    "ਨਵਗ੍ਰਹ ਜਪ"
   ],
   "meta": {
-    "title": "Navagraha Mantra & Nine Planets Japa | Japam",
-    "description": "Nine grahas overview, weekday mantras, and practise Shani/Rahu/Ketu/Surya/Guru in Japam.",
+    "title": "ਨਵਗ੍ਰਹਿ ਮੰਤਰ ਅਤੇ ਨੌਂ ਗ੍ਰਹਿ ਜਪ | ਜਪਮ",
+    "description": "ਨੌ ਗ੍ਰਹਿਆਂ ਦੀ ਸੰਖੇਪ ਜਾਣਕਾਰੀ, ਹਫ਼ਤੇ ਦੇ ਦਿਨ ਦੇ ਮੰਤਰ, ਅਤੇ ਜਪਮ ਵਿੱਚ ਸ਼ਨੀ/ਰਾਹੂ/ਕੇਤੂ/ਸੂਰਿਆ/ਗੁਰੂ ਦਾ ਅਭਿਆਸ ਕਰੋ।",
     "ogImage": "/images/favicon.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Navagraha Mantra and the Nine Planets"
+      "text": "ਨਵਗ੍ਰਹਿ ਮੰਤਰ ਅਤੇ ਨੌਂ ਗ੍ਰਹਿ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "The Navagraha are Surya, Chandra, Mangala, Budha, Guru, Shukra, Shani, Rahu, and Ketu — each governing karmic themes in Jyotisha."
+          "text": "ਨਵਗ੍ਰਹਿ ਸੂਰਜ, ਚੰਦਰ, ਮੰਗਲਾ, ਬੁਧ, ਗੁਰੂ, ਸ਼ੁਕਰ, ਸ਼ਨੀ, ਰਾਹੂ ਅਤੇ ਕੇਤੂ ਹਨ - ਜੋਤੀਸ਼ਾ ਵਿੱਚ ਹਰ ਇੱਕ ਕਰਮ ਥੀਮਾਂ ਨੂੰ ਨਿਯੰਤਰਿਤ ਕਰਦਾ ਹੈ।"
         }
       ]
     },
@@ -32,69 +32,114 @@
       "type": "p",
       "runs": [
         {
-          "text": "Collective Navagraha puja or individual graha japa both aim at harmony (shanti)."
-        }
-      ]
-    },
-    {
-      "type": "h2",
-      "text": "The nine grahas"
-    },
-    {
-      "type": "p",
-      "runs": [
-        {
-          "text": "Sun (Surya), Moon (Chandra), Mars (Mangala), Mercury (Budha), Jupiter (Guru), Venus (Shukra), Saturn (Shani), and the lunar nodes Rahu and Ketu. Japam offers several graha and deity mantras for daily practice."
+          "text": "ਸਮੂਹਿਕ ਨਵਗ੍ਰਹਿ ਪੂਜਾ ਜਾਂ ਵਿਅਕਤੀਗਤ ਗ੍ਰਹਿ ਜਪ ਦੋਵਾਂ ਦਾ ਉਦੇਸ਼ ਇਕਸੁਰਤਾ (ਸ਼ਾਂਤੀ) ਹੈ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "ਨੌ ਗ੍ਰਹਿ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ਸੂਰਜ (ਸੂਰਿਆ), ਚੰਦਰਮਾ (ਚੰਦਰ), ਮੰਗਲ (ਮੰਗਲਾ), ਬੁਧ (ਬੁੱਧ), ਜੁਪੀਟਰ (ਗੁਰੂ), ਸ਼ੁੱਕਰ (ਸ਼ੁਕਰ), ਸ਼ਨੀ (ਸ਼ਨੀ), ਅਤੇ ਚੰਦਰਮਾ ਰਾਹੂ ਅਤੇ ਕੇਤੂ। ਜਪਮ ਰੋਜ਼ਾਨਾ ਅਭਿਆਸ ਲਈ ਕਈ ਗ੍ਰਹਿ ਅਤੇ ਦੇਵਤਾ ਮੰਤਰ ਪੇਸ਼ ਕਰਦਾ ਹੈ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ਜਪ ਦੇ ਲਾਭ (ਰਵਾਇਤੀ ਵਿਚਾਰ)"
     },
     {
       "type": "ul",
       "items": [
-        "Balances worship across planets instead of fearing one dasha",
-        "Temple Navagraha halls rotate circumambulation",
-        "Individual mantras when astrologer pinpoints a graha",
-        "Builds weekly rhythm — planet per weekday"
+        "ਇੱਕ ਦਸ਼ਾ ਤੋਂ ਡਰਨ ਦੀ ਬਜਾਏ ਸਾਰੇ ਗ੍ਰਹਿਆਂ ਦੀ ਪੂਜਾ ਨੂੰ ਸੰਤੁਲਿਤ ਕਰਦਾ ਹੈ",
+        "ਮੰਦਿਰ ਨਵਗ੍ਰਹਿ ਹਾਲ ਪਰਿਕਰਮਾ ਕਰਦੇ ਹਨ",
+        "ਵਿਅਕਤੀਗਤ ਮੰਤਰ ਜਦੋਂ ਜੋਤਸ਼ੀ ਗ੍ਰਹਿ ਨੂੰ ਦਰਸਾਉਂਦਾ ਹੈ",
+        "ਹਫਤਾਵਾਰੀ ਤਾਲ ਬਣਾਉਂਦਾ ਹੈ — ਗ੍ਰਹਿ ਪ੍ਰਤੀ ਹਫਤੇ ਦੇ ਦਿਨ"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "108 ਵਾਰ ਜਾਪ ਕਿਵੇਂ ਕਰੀਏ"
     },
     {
       "type": "ul",
       "items": [
-        "Learn each graha’s seed mantra or use Navagraha stotram",
-        "Circumambulate nine planet idols if at temple",
-        "Chant 108 for the graha active in your dasha",
-        "Use Japam modes for Shani, Rahu, Ketu, Surya, Guru"
+        "ਹਰੇਕ ਗ੍ਰਹਿ ਦੇ ਬੀਜ ਮੰਤਰ ਨੂੰ ਸਿੱਖੋ ਜਾਂ ਨਵਗ੍ਰਹਿ ਸ੍ਤੋਤ੍ਰਮ ਦੀ ਵਰਤੋਂ ਕਰੋ",
+        "ਮੰਦਰ ਵਿੱਚ ਜੇ ਨੌਂ ਗ੍ਰਹਿਆਂ ਦੀਆਂ ਮੂਰਤੀਆਂ ਦਾ ਚੱਕਰ ਲਗਾਓ",
+        "ਆਪਣੀ ਦਸ਼ਾ ਵਿੱਚ ਕਾਰਜਸ਼ੀਲ ਗ੍ਰਹਿ ਲਈ 108 ਦਾ ਜਾਪ ਕਰੋ",
+        "ਸ਼ਨੀ, ਰਾਹੂ, ਕੇਤੂ, ਸੂਰਜ, ਗੁਰੂ ਲਈ ਜਪਮ ਵਿਧੀਆਂ ਦੀ ਵਰਤੋਂ ਕਰੋ"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "ਜਪ ਕਦੋਂ ਕਰਨਾ ਹੈ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Sunday–Saturday map to Surya through Shani; Rahu/Ketu have special rules — ask priest."
+          "text": "ਸ਼ਨੀ ਦੁਆਰਾ ਸੂਰਜ ਦਾ ਐਤਵਾਰ-ਸ਼ਨੀਵਾਰ ਦਾ ਨਕਸ਼ਾ; ਰਾਹੂ/ਕੇਤੂ ਦੇ ਵਿਸ਼ੇਸ਼ ਨਿਯਮ ਹਨ - ਪੁਜਾਰੀ ਨੂੰ ਪੁੱਛੋ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "108 ਦੁਹਰਾਓ ਮਾਇਨੇ ਕਿਉਂ ਰੱਖਦੇ ਹਨ",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Open Japam’s deity grid for graha-linked mantras and counting — complement with Navagraha homam when advised.",
+          "text": "ਸੰਖਿਆ 108 ਜਪ ਮਾਲਾ ਦਾ ਇੱਕ ਪੂਰਾ ਗੇੜ ਹੈ। ਨਿਰੰਤਰ ਦੁਹਰਾਓ ਮਨ ਨੂੰ ਸ਼ਾਂਤ ਕਰਦਾ ਹੈ ਅਤੇ ਮੰਤਰ ਦੇ ਅਰਥਾਂ 'ਤੇ ਧਿਆਨ ਖਿੱਚਦਾ ਹੈ।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ਕੁਝ ਪਰੰਪਰਾਵਾਂ 11 ਜਾਂ 21 ਮਾਲਾ ਨਿਰਧਾਰਤ ਕਰਦੀਆਂ ਹਨ - ਆਪਣੇ ਗੁਰੂ ਜਾਂ ਪੁਜਾਰੀ ਨੂੰ ਤੁਹਾਡੀ ਸੁੱਖਣਾ ਦੇ ਅਨੁਕੂਲ ਗਿਣਤੀ ਲਈ ਪੁੱਛੋ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ਬਚਣ ਲਈ ਆਮ ਗਲਤੀਆਂ"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "ਬਹੁਤ ਤੇਜ਼ੀ ਨਾਲ ਜਾਪ ਕਰਨਾ ਅਤੇ ਆਵਾਜ਼ 'ਤੇ ਧਿਆਨ ਗੁਆਉਣਾ",
+        "ਬਿਨਾਂ ਸੇਧ ਦੇ ਕਈ ਦੇਵਤਿਆਂ ਦੀਆਂ ਸੁੱਖਣਾਂ ਨੂੰ ਮਿਲਾਉਣਾ",
+        "ਭਗਤੀ ਅਤੇ ਨੈਤਿਕ ਜੀਵਨ ਦੀ ਬਜਾਏ ਕੇਵਲ ਭੌਤਿਕ ਨਤੀਜਿਆਂ ਦੀ ਉਮੀਦ ਕਰਨਾ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ਮੰਦਰ ਅਤੇ ਘਰ ਇਕੱਠੇ ਅਭਿਆਸ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ਘਰ ਜਾਪ ਮੰਦਰ ਪੂਜਾ ਦਾ ਸਮਰਥਨ ਕਰਦਾ ਹੈ; ਇਹ ਦਰਸ਼ਨ ਦੀ ਥਾਂ ਨਹੀਂ ਲੈਂਦਾ। ਤਿਉਹਾਰਾਂ ਦੇ ਦਿਨ ਜਾਂ ਸ਼ਨੀਵਾਰ ਨੂੰ ਮੰਦਰ ਜਾਣਾ ਪਰਿਵਾਰਕ ਪਰੰਪਰਾ ਨੂੰ ਮਜ਼ਬੂਤ ​​ਕਰਦਾ ਹੈ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ਜਪਮ ਨਾਲ ਅਭਿਆਸ ਕਰੋ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ਗ੍ਰਹਿ-ਸੰਬੰਧਿਤ ਮੰਤਰਾਂ ਅਤੇ ਗਿਣਤੀ ਲਈ ਜਾਪਮ ਦੇ ਦੇਵਤਾ ਗਰਿੱਡ ਨੂੰ ਖੋਲ੍ਹੋ — ਸਲਾਹ ਦਿੱਤੇ ਜਾਣ 'ਤੇ ਨਵਗ੍ਰਹਿ ਹੋਮਮ ਨਾਲ ਪੂਰਕ ਕਰੋ।",
           "bold": false
         }
       ]
@@ -132,41 +177,41 @@
   ],
   "faqs": [
     {
-      "question": "Full Navagraha stotra length?",
-      "answer": "Longer than 108; some do one planet per day instead."
+      "question": "ਪੂਰਨ ਨਵਗ੍ਰਹ ਸਤੋਤ੍ਰ ਦੀ ਲੰਬਾਈ?",
+      "answer": "108 ਤੋਂ ਲੰਬਾ; ਕੁਝ ਇਸ ਦੀ ਬਜਾਏ ਪ੍ਰਤੀ ਦਿਨ ਇੱਕ ਗ੍ਰਹਿ ਕਰਦੇ ਹਨ।"
     },
     {
-      "question": "Are Rahu Ketu planets?",
-      "answer": "They are chaya grahas (shadow nodes) in astrology."
+      "question": "ਕੀ ਰਾਹੂ ਕੇਤੂ ਗ੍ਰਹਿ ਹਨ?",
+      "answer": "ਉਹ ਜੋਤਿਸ਼ ਵਿੱਚ ਛਾਇਆ ਗ੍ਰਹਿ (ਸ਼ੈਡੋ ਨੋਡਸ) ਹਨ।"
     },
     {
-      "question": "Chandra mantra in Japam?",
-      "answer": "Deity forms like Shiva/Shakti often cover lunar devotion; ask your tradition."
+      "question": "ਜਪਮ ਵਿੱਚ ਚੰਦਰ ਮੰਤਰ?",
+      "answer": "ਸ਼ਿਵ/ਸ਼ਕਤੀ ਵਰਗੇ ਦੇਵਤਾ ਰੂਪ ਅਕਸਰ ਚੰਦਰਮਾ ਦੀ ਭਗਤੀ ਨੂੰ ਕਵਰ ਕਰਦੇ ਹਨ; ਆਪਣੀ ਪਰੰਪਰਾ ਨੂੰ ਪੁੱਛੋ।"
     },
     {
-      "question": "Homam cost?",
-      "answer": "Temple varies; home japa is free and sincere."
+      "question": "ਹੋਮਮ ਦੀ ਕੀਮਤ?",
+      "answer": "ਮੰਦਰ ਬਦਲਦਾ ਹੈ; ਘਰ ਦਾ ਜਾਪ ਮੁਫ਼ਤ ਅਤੇ ਸੁਹਿਰਦ ਹੈ।"
     },
     {
-      "question": "Which graha first?",
-      "answer": "Astrologer recommends based on chart — often Shani or active dasha lord."
+      "question": "ਕਿਹੜਾ ਗ੍ਰਹਿ ਪਹਿਲਾਂ?",
+      "answer": "ਜੋਤਸ਼ੀ ਚਾਰਟ ਦੇ ਆਧਾਰ 'ਤੇ ਸਿਫ਼ਾਰਸ਼ ਕਰਦੇ ਹਨ — ਅਕਸਰ ਸ਼ਨੀ ਜਾਂ ਸਰਗਰਮ ਦਸ਼ਾ ਪ੍ਰਭੂ।"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "ਇਹ ਲੇਖ ਕੇਵਲ ਵਿਦਿਅਕ ਅਤੇ ਭਗਤੀ ਅਭਿਆਸ ਲਈ ਹੈ। Japam ਡਾਕਟਰੀ, ਕਾਨੂੰਨੀ, ਜਾਂ ਵਿੱਤੀ ਸਲਾਹ ਪ੍ਰਦਾਨ ਨਹੀਂ ਕਰਦਾ ਹੈ। ਨਤੀਜੇ ਨਿੱਜੀ ਵਿਸ਼ਵਾਸ ਅਤੇ ਨਿਰੰਤਰ ਅਭਿਆਸ 'ਤੇ ਨਿਰਭਰ ਕਰਦੇ ਹਨ। ਐਪ ਵਿੱਚ ਮੰਤਰ ਪਾਠ ਅਤੇ ਆਡੀਓ ਜਪਾ ਸਮਰਥਨ ਲਈ ਹਨ; ਰਸਮੀ ਪੂਜਾ ਨਿਯਮਾਂ ਲਈ ਆਪਣੇ ਪਰਿਵਾਰਕ ਪੁਜਾਰੀ ਜਾਂ ਪਰੰਪਰਾ ਨਾਲ ਸਲਾਹ ਕਰੋ।"
   },
   "relatedPages": [
     {
       "pageId": "graha-shanti-mantra",
-      "label": "Graha shanti"
+      "label": "ਗ੍ਰਹਿ ਸ਼ਾਂਤੀ"
     },
     {
       "pageId": "shani-mantra-shanti",
-      "label": "Shani"
+      "label": "ਸ਼ਨੀ"
     },
     {
       "pageId": "guru-graha-mantra",
-      "label": "Guru graha"
+      "label": "ਗੁਰੂ ਘਰ"
     }
   ]
 }

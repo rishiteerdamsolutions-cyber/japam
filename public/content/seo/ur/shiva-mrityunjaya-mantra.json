@@ -4,27 +4,27 @@
   "lang": "ur",
   "slug": "shiva-mrityunjaya-mantra",
   "deityId": "shiva",
-  "primaryKeyword": "mahamrityunjaya mantra japa",
+  "primaryKeyword": "mahamrityunjaya منتر japa",
   "secondaryKeywords": [
-    "om namah shivaya",
-    "shiva mantra health",
-    "monday shiva vrat"
+    "اوم نامہ شیوایا",
+    "شیو منتر صحت",
+    "پیر کی شیوا ورات"
   ],
   "meta": {
-    "title": "Shiva & Mrityunjaya Mantra Japa | Japam",
-    "description": "Om Namah Shivaya in Japam; Maha Mrityunjaya tradition, Monday vrat, and 108 japa guide.",
+    "title": "شیو اور موتنجایا منتر جاپ | جاپم",
+    "description": "جاپم میں اوم نامہ شیوایا؛ مہا موتنجیا روایت، پیر کی ورات، اور 108 جاپ گائیڈ۔",
     "ogImage": "/images/deities/shiva.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Shiva Mantra: Om Namah Shivaya and Mrityunjaya Tradition"
+      "text": "شیو منتر: اوم نمہ شیوایا اور موتنجیا روایت"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Lord Shiva is the destroyer of ignorance and the lord of meditation. Japam uses Om Namah Shivaya as the primary gameplay mantra."
+          "text": "بھگوان شیو جہالت کو ختم کرنے والا اور مراقبہ کا مالک ہے۔ جاپم اوم نمہ شیوایا کو بنیادی گیم پلے منتر کے طور پر استعمال کرتا ہے۔"
         }
       ]
     },
@@ -32,13 +32,13 @@
       "type": "p",
       "runs": [
         {
-          "text": "The Maha Mrityunjaya mantra is a related powerful chant for health and protection — often discussed alongside Panchakshari japa."
+          "text": "مہا موتنجیا منتر صحت اور تحفظ کے لیے ایک متعلقہ طاقتور منتر ہے - جس پر اکثر پنچکشری جاپ کے ساتھ تبادلہ خیال کیا جاتا ہے۔"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "منتر کا مفہوم"
     },
     {
       "type": "blockquote",
@@ -53,57 +53,102 @@
       "type": "p",
       "runs": [
         {
-          "text": "“I bow to Shiva” — the five-syllable Panchakshari is among the most universal Shaiva japa mantras."
+          "text": "\"میں شیو کو جھکتا ہوں\" - پانچ حرفوں والی پنچکشری سب سے زیادہ عالمگیر شیوا جاپ منتروں میں سے ہے۔"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "جاپ کے فوائد (روایتی نقطہ نظر)"
     },
     {
       "type": "ul",
       "items": [
-        "Calms mind; supports meditation and detachment",
-        "Monday (Somvar) is sacred for Shiva",
-        "Mrityunjaya japa traditionally associated with healing prayers",
-        "Rudraksha mala is classic for Shiva mantra"
+        "دماغ کو پرسکون کرتا ہے؛ مراقبہ اور لاتعلقی کی حمایت کرتا ہے۔",
+        "پیر (سومر) شیو کے لئے مقدس ہے۔",
+        "مرتیونجا جاپا روایتی طور پر شفا یابی کی دعاؤں سے وابستہ ہے۔",
+        "رودرکش مالا شیو منتر کے لئے کلاسک ہے۔"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "108 مرتبہ پڑھنے کا طریقہ"
     },
     {
       "type": "ul",
       "items": [
-        "Chant 108 times on rudraksha; abhisheam with water or milk on Mondays if doing puja",
-        "Learn Mrityunjaya separately if your priest teaches it — longer mantra",
-        "Visit temple or home lingam when possible",
-        "Use Japam for Om Namah Shivaya counting"
+        "رودرکش پر 108 بار جاپ کریں؛ اگر پوجا کرتے ہو تو پیر کے دن پانی یا دودھ کے ساتھ ابھیشم",
+        "اگر آپ کا پجاری اسے سکھاتا ہے تو الگ سے موتنجیا سیکھیں - طویل منتر",
+        "جب ممکن ہو مندر یا گھریلو لنگم پر جائیں۔",
+        "اوم نامہ شیوایا گنتی کے لیے جاپم کا استعمال کریں۔"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "کب نعرہ لگانا ہے۔"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Monday, Pradosham, and Maha Shivaratri are peak times."
+          "text": "سوموار، پردوشم، اور مہا شیوارتری چوٹی کے اوقات ہیں۔"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "108 تکرار کیوں اہم ہے۔",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Shiva mode in Japam features Om Namah Shivaya audio and japa counter. Explore 108 specials during Shivaratri in the app.",
+          "text": "نمبر 108 جاپ مالا پر ایک مکمل دور ہے۔ مسلسل تکرار ذہن کو پرسکون کرتی ہے اور منتر کے معنی پر توجہ مرکوز کرتی ہے۔"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "کچھ روایات 11 یا 21 مالوں کی تجویز کرتی ہیں - اپنے گرو یا پجاری سے اپنی منت کے مطابق گنتی کے لیے پوچھیں۔"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "عام غلطیوں سے بچنا ہے۔"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "بہت تیز گانا اور آواز پر توجہ کھو دینا",
+        "ہدایت کے بغیر متعدد دیوتا منتوں کو ملانا",
+        "بھکتی اور اخلاقی زندگی کے بجائے صرف مادی نتائج کی توقع کرنا"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "مندر اور گھر کی مشق ایک ساتھ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ہوم جاپا مندر کی پوجا کی حمایت کرتا ہے۔ یہ درشن کی جگہ نہیں لیتا۔ تہوار کے دنوں یا ہفتہ کے دن مندر جانا خاندانی روایت کو مضبوط کرتا ہے۔"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Japam کے ساتھ مشق کریں۔"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "جاپم میں شیوا موڈ میں اوم نمہ شیوایا آڈیو اور جاپا کاؤنٹر کی خصوصیات ہیں۔ ایپ میں شیوارتری کے دوران 108 خصوصی دریافت کریں۔",
           "bold": false
         }
       ]
@@ -113,7 +158,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start شیو Japa in Japam",
+      "label": "Start Shiva Japa in Japam",
       "href": "https://japam.digital/?lang=ur&deity=shiva&utm_source=google&utm_medium=seo&utm_campaign=shiva-mrityunjaya-mantra&utm_content=start-japa",
       "style": "primary"
     },
@@ -141,41 +186,41 @@
   ],
   "faqs": [
     {
-      "question": "Is Mrityunjaya in Japam gameplay?",
-      "answer": "Gameplay uses Om Namah Shivaya; you may chant Mrityunjaya separately as your vow."
+      "question": "کیا مرتیونجے جاپم گیم پلے میں ہے؟",
+      "answer": "گیم پلے اوم نامہ شیوایا کا استعمال کرتا ہے؛ آپ اپنی نذر کے طور پر الگ الگ طور پر موتنجیا کا نعرہ لگا سکتے ہیں۔"
     },
     {
-      "question": "Can I chant at night?",
-      "answer": "Yes — Shiva is especially associated with night meditation."
+      "question": "کیا میں رات کو جاپ کر سکتا ہوں؟",
+      "answer": "ہاں - شیو خاص طور پر رات کے مراقبہ سے وابستہ ہے۔"
     },
     {
-      "question": "How many Mrityunjaya malas?",
-      "answer": "Often 108 or 1008 on Maha Shivaratri under guidance — ask your guru."
+      "question": "کتنے مرتیونجے مالا؟",
+      "answer": "مہا شیوارتری پر اکثر 108 یا 1008 رہنمائی میں - اپنے گرو سے پوچھیں۔"
     },
     {
-      "question": "Bel patra required?",
-      "answer": "For puja yes; mental japa does not require offerings."
+      "question": "بیل پاترا کی ضرورت ہے؟",
+      "answer": "پوجا کے لیے ہاں؛ ذہنی جاپ کو پیشکش کی ضرورت نہیں ہے۔"
     },
     {
-      "question": "Is Monday fast necessary?",
-      "answer": "Optional vow; mantra japa alone is still valid."
+      "question": "کیا پیر کا روزہ ضروری ہے؟",
+      "answer": "اختیاری منت؛ اکیلے منتر جاپ اب بھی درست ہے۔"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "یہ مضمون صرف تعلیمی اور عقیدتی مشق کے لیے ہے۔ Japam طبی، قانونی، یا مالی مشورہ فراہم نہیں کرتا ہے۔ نتائج کا انحصار ذاتی ایمان اور مستقل مشق پر ہوتا ہے۔ ایپ میں منتر کا متن اور آڈیو جاپا سپورٹ کے لیے ہیں۔ رسمی پوجا کے قواعد کے لیے اپنے خاندانی پجاری یا روایت سے مشورہ کریں۔"
   },
   "relatedPages": [
     {
       "pageId": "mantra-shiva",
-      "label": "Shiva mantra pillar"
+      "label": "شیو منتر کا ستون"
     },
     {
       "pageId": "shivaratri-mantra",
-      "label": "Shivaratri japa"
+      "label": "شیوارتری جاپ"
     },
     {
       "pageId": "japa-108-times",
-      "label": "108 japa guide"
+      "label": "108 جاپا گائیڈ"
     }
   ]
 }

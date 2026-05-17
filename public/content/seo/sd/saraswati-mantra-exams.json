@@ -4,26 +4,26 @@
   "lang": "sd",
   "slug": "saraswati-mantra-exams",
   "deityId": "saraswati",
-  "primaryKeyword": "saraswati mantra for exams",
+  "primaryKeyword": "امتحانن لاءِ سرسوتي منتر",
   "secondaryKeywords": [
-    "vidya mantra",
-    "basant panchami"
+    "وديا منتر",
+    "بسنت پنچمي"
   ],
   "meta": {
-    "title": "Saraswati Mantra for Students & Exams | Japam",
-    "description": "Saraswati vidya mantra and 108 japa for students — Japam.",
+    "title": "شاگردن ۽ امتحانن لاءِ سرسوتي منتر | جپان",
+    "description": "سرسوتي وديا منتر ۽ شاگردن لاءِ 108 جپ - جپم.",
     "ogImage": "/images/deities/saraswati.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Saraswati Mantra for Exams and Learning"
+      "text": "امتحانن ۽ سکيا لاءِ سرسوتي منتر"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Goddess Saraswati blesses learning, music, and speech. Students chant before exams with humility."
+          "text": "ديوي سرسوتي سکيا، موسيقي ۽ تقرير کي برڪت ڏئي ٿي. شاگرد عاجزي سان امتحان کان اڳ نعرا."
         }
       ]
     },
@@ -31,13 +31,13 @@
       "type": "p",
       "runs": [
         {
-          "text": "Om Saraswatyai Namaha is the form used in Japam."
+          "text": "Om Saraswatyai Namaha اهو روپ آهي جيڪو Japam ۾ استعمال ٿيندو آهي."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "منتر جي معنيٰ"
     },
     {
       "type": "blockquote",
@@ -52,57 +52,102 @@
       "type": "p",
       "runs": [
         {
-          "text": "Chant with a calm mind, offering salutation rather than demanding specific outcomes."
+          "text": "پرسڪون ذهن سان ڳايو، خاص نتيجن جي طلب ڪرڻ بجاءِ سلام پيش ڪرڻ."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "جاپ جا فائدا (روايتي خيال)"
     },
     {
       "type": "ul",
       "items": [
-        "Builds festival discipline",
-        "Deepens deity bhakti",
-        "Community yagnas may align with season",
-        "Educational — not outcome guarantees"
+        "تہوار نظم و ضبط ٺاھي ٿو",
+        "ديوتا ڀڪت کي گہرا ڪري ٿو",
+        "ڪميونٽي يگنا شايد موسم سان ترتيب ڏيو",
+        "تعليمي - نتيجن جي ضمانت نه آهي"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "108 ڀيرا ڪيئن ڳايو"
     },
     {
       "type": "ul",
       "items": [
-        "Set daily 108 sankalpa for festival period",
-        "Keep fast/vrat rules from your family tradition",
-        "Visit temple when possible",
-        "Use Japam counter between work/study"
+        "تہوار جي مدت لاء روزانو 108 سنڪلپ مقرر ڪريو",
+        "پنهنجي خانداني روايت کان روزو/ ويرات جا ضابطا رکو",
+        "جڏهن ممڪن هجي مندر جو دورو ڪريو",
+        "ڪم / مطالعي جي وچ ۾ Japam انسداد استعمال ڪريو"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "جڏهن ڳائڻ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Basant Panchami and Navratri are peak; daily japa before study helps focus."
+          "text": "بسنت پنچمي ۽ نوراتري جي چوٽي آهي. روزانه جاپا مطالعي کان اڳ ڌيان ڏيڻ ۾ مدد ڪري ٿي."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "ڇو 108 ورجائي اهميت رکن ٿا",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Use Saraswati mode in Japam while revising — audio + count toward 108."
+          "text": "نمبر 108 جپا مالا تي هڪ مڪمل گول آهي. مسلسل ورهاڱي دماغ کي پرسکون ڪري ٿو ۽ منتر جي معني تي ڌيان ڏئي ٿو."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ڪجھ روايتون 11 يا 21 مالا بيان ڪن ٿيون - پنھنجي گرو يا پادريءَ کان پڇو ته توھان جي واعدي مطابق ڳڻپ لاءِ."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "عام غلطين کان بچڻ لاء"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "آواز تي تمام تيز آواز ۽ ڌيان وڃائڻ",
+        "ھدايت کانسواءِ ڪيترن ئي ديوتائن جون واڳون گڏ ڪرڻ",
+        "ڀڪت ۽ اخلاقي زندگي گذارڻ بدران فقط مادي نتيجن جي اميد رکڻ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "مندر ۽ گهر گڏجي مشق"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "گھر جاپا مندر جي پوڄا جي حمايت ڪري ٿو. اهو درشن کي تبديل نٿو ڪري. عيد جي ڏينهن يا ڇنڇر تي مندر جو دورو ڪرڻ خانداني روايت کي مضبوط ڪري ٿو."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Japam سان مشق ڪريو"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "سرسوتي موڊ استعمال ڪريو Japam ۾ نظر ثاني ڪرڻ دوران - آڊيو + ڳڻپ 108 ڏانهن."
         }
       ]
     }
@@ -111,7 +156,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start سرسوتي Japa in Japam",
+      "label": "Start Saraswati Japa in Japam",
       "href": "https://japam.digital/?lang=sd&deity=saraswati&utm_source=google&utm_medium=seo&utm_campaign=saraswati-mantra-exams&utm_content=start-japa",
       "style": "primary"
     },
@@ -139,41 +184,41 @@
   ],
   "faqs": [
     {
-      "question": "Exact festival date this year?",
-      "answer": "Check Hindu panchang for your region — we avoid locking a Gregorian year in this guide."
+      "question": "هن سال فيشن جي صحيح تاريخ؟",
+      "answer": "پنهنجي علائقي لاءِ هندو پنچانگ چيڪ ڪريو - اسان هن گائيڊ ۾ گريگورين سال کي بند ڪرڻ کان بچون ٿا."
     },
     {
-      "question": "How many japas per day?",
-      "answer": "108 minimum for many vows; some do 1008 on main day under guidance."
+      "question": "روزانو ڪيترا جپسي؟",
+      "answer": "108 گھڻن واعدن لاءِ گھٽ ۾ گھٽ؛ ڪجهه ڪن ٿا 1008 مکيه ڏينهن تي هدايت جي تحت."
     },
     {
-      "question": "Guest mode OK?",
-      "answer": "Yes for try; sign in to save progress across festival weeks."
+      "question": "مهمان موڊ ٺيڪ آهي؟",
+      "answer": "ها ڪوشش لاءِ؛ فيسٽيول هفتي ۾ ترقي بچائڻ لاءِ سائن ان ڪريو."
     },
     {
-      "question": "Replace temple?",
-      "answer": "No — digital japa supports home practice."
+      "question": "مندر مٽايو؟",
+      "answer": "نه - ڊجيٽل جاپا گهر جي مشق کي سپورٽ ڪري ٿو."
     },
     {
-      "question": "Join collective yagna?",
-      "answer": "See Maha Japa Yagnas in Japam menu during campaigns."
+      "question": "اجتماعي يگنا ۾ شامل ٿيو؟",
+      "answer": "مهمن دوران Japam مينيو ۾ Maha Japa Yagnas ڏسو."
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "هي مضمون صرف تعليمي ۽ ديني مشق لاءِ آهي. Japam طبي، قانوني، يا مالي صلاح فراهم نٿو ڪري. نتيجن جو دارومدار ذاتي ايمان ۽ مسلسل مشق تي. ايپ ۾ منتر ٽيڪسٽ ۽ آڊيو جاپا سپورٽ لاءِ آهن؛ رسمي پوجا ضابطن لاءِ پنھنجي خانداني پادريءَ يا روايت سان صلاح ڪريو."
   },
   "relatedPages": [
     {
       "pageId": "mantra-saraswati",
-      "label": "Saraswati pillar"
+      "label": "سرسوتي ستون"
     },
     {
       "pageId": "guru-graha-mantra",
-      "label": "Guru graha"
+      "label": "گرو گرهه"
     },
     {
       "pageId": "japa-108-times",
-      "label": "108 japa guide"
+      "label": "108 جپان"
     }
   ]
 }

@@ -4,26 +4,26 @@
   "lang": "sat",
   "slug": "ishta-devata-japa",
   "deityId": null,
-  "primaryKeyword": "ishta devata japa",
+  "primaryKeyword": "ᱤᱥᱛᱟ ᱫᱮᱣᱟᱛᱟ ᱡᱟᱯᱟ",
   "secondaryKeywords": [
-    "choose your deity",
-    "personal deity chanting"
+    "ᱟᱢᱤᱡ ᱵᱚᱝᱜᱟ ᱵᱟᱪᱷᱟᱣ ᱢᱮ",
+    "ᱯᱚᱨᱥᱚᱱᱟᱞ ᱵᱚᱝᱜᱟ ᱪᱟᱱᱴᱤᱝ"
   ],
   "meta": {
-    "title": "Ishta Devata Japa — Choose Your Deity | Japam",
-    "description": "How to choose an ishta devata and practise daily japa in Japam.",
+    "title": "ᱤᱥᱛᱟ ᱫᱮᱣᱟᱛᱟ ᱡᱟᱯᱟ — ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱟᱢᱤᱡ ᱵᱚᱝᱜᱟ | ᱡᱟᱯᱟᱢ",
+    "description": "ᱪᱮᱫ ᱞᱮᱠᱟ ᱛᱮ ᱤᱥᱛᱟ ᱫᱮᱣᱟᱛ ᱵᱟᱪᱷᱟᱣ ᱦᱩᱭᱩᱜᱼᱟ ᱟᱨ ᱡᱟᱯᱟᱢ ᱨᱮ ᱫᱤᱱᱟᱹᱢ ᱡᱟᱯᱟ ᱨᱮᱭᱟᱜ ᱪᱮᱥᱴᱟ ᱦᱩᱭᱩᱜᱼᱟ᱾",
     "ogImage": "/images/favicon.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Ishta Devata Japa — Choosing Your Deity"
+      "text": "ᱤᱥᱛᱟ ᱫᱮᱣᱟᱛᱟ ᱡᱟᱯᱟ — ᱟᱢ ᱨᱮᱱ ᱵᱚᱝᱜᱟ ᱵᱟᱪᱷᱟᱣ ᱢᱮ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Ishta devata is your chosen beloved deity for daily worship. Family tradition, initiation, or inner calling guide the choice."
+          "text": "ᱤᱥᱛᱟ ᱫᱮᱣᱟ ᱫᱚ ᱟᱢᱤᱡ ᱫᱤᱱᱟᱹᱢ ᱵᱚᱸᱜᱟ ᱵᱚᱸᱜᱟ ᱞᱟᱹᱜᱤᱫ ᱵᱟᱪᱷᱟᱣ ᱫᱩᱞᱟᱹᱲ ᱵᱚᱝᱜᱟ ᱠᱟᱱᱟᱭ ᱾ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮᱭᱟᱜ ᱥᱮᱨᱣᱟ, ᱮᱛᱚᱦᱚᱵ, ᱥᱮ ᱵᱷᱤᱛᱨᱤ ᱦᱚᱦᱚ ᱵᱟᱪᱷᱟᱣ ᱞᱟᱹᱜᱤᱫ ᱜᱟᱭᱤᱰ ᱮᱢᱚᱜ ᱠᱟᱱᱟ᱾"
         }
       ]
     },
@@ -31,69 +31,114 @@
       "type": "p",
       "runs": [
         {
-          "text": "Japam lets you pick any playable deity on the menu grid for mantra japa."
-        }
-      ]
-    },
-    {
-      "type": "h2",
-      "text": "How to choose"
-    },
-    {
-      "type": "p",
-      "runs": [
-        {
-          "text": "Ask elders, respect kuladeivam, or follow the deity you feel drawn to in prayer. Stick with one ishta for steady vows unless your guru directs otherwise."
+          "text": "ᱡᱟᱯᱟᱢ ᱟᱢ ᱢᱟᱱᱛᱨᱚ ᱡᱟᱯᱟ ᱞᱟᱹᱜᱤᱫ ᱢᱮᱱᱩ ᱜᱽᱨᱤᱰ ᱨᱮ ᱡᱟᱦᱟᱱ ᱠᱷᱮᱞᱚᱸᱰ ᱵᱚᱝᱜᱟ ᱵᱟᱪᱷᱟᱣ ᱫᱟᱲᱮᱭᱟᱢᱟᱭ ᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "ᱪᱮᱫ ᱞᱮᱠᱟ ᱵᱟᱪᱷᱟᱣ ᱦᱩᱭᱩᱜ-ᱟ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱢᱟᱨᱟᱝ ᱠᱚ ᱠᱩᱞᱤᱠᱚᱢ, ᱠᱩᱞᱟᱫᱮᱣᱟᱢ ᱢᱟᱹᱱ ᱢᱮ, ᱟᱨᱵᱟᱝ ᱵᱚᱸᱜᱟ ᱯᱟᱧᱡᱟᱭ ᱢᱮ ᱡᱟᱦᱟᱸ ᱴᱷᱮᱱ ᱟᱢ ᱱᱮᱦᱚᱨ ᱨᱮ ᱚᱨ ᱮᱢ ᱵᱩᱡᱷᱟᱹᱣ ᱮᱫᱟ᱾ ᱟᱢ ᱨᱮᱱ ᱜᱩᱨᱩ ᱵᱟᱝ ᱞᱟᱹᱭ ᱞᱮᱠᱷᱟᱱ ᱛᱷᱤᱨ ᱵᱟᱛᱟᱣ ᱞᱟᱹᱜᱤᱫ ᱢᱤᱫ ᱤᱥᱛᱟ ᱥᱟᱶ ᱛᱟᱦᱮᱱ ᱢᱮ᱾"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱡᱟᱯᱟ ᱨᱮᱭᱟᱜ ᱞᱟᱵᱷ (ᱯᱚᱨᱚᱢ ᱧᱮᱞᱚᱢ)"
     },
     {
       "type": "ul",
       "items": [
-        "Deepens single-pointed bhakti",
-        "Simplifies daily routine",
-        "All Japam deities include mantra audio + count",
-        "Switch only with spiritual guidance"
+        "ᱢᱤᱫ ᱯᱚᱭᱮᱱᱴ ᱵᱷᱚᱠᱛᱤ ᱜᱟᱹᱦᱤᱨ ᱢᱮ",
+        "ᱫᱤᱱᱟᱹᱢ ᱨᱳᱴᱤᱱ ᱟᱞᱜᱟ ᱢᱮ",
+        "ᱥᱟᱱᱟᱢ ᱡᱟᱯᱟᱢ ᱵᱚᱝᱜᱟ ᱠᱚ ᱨᱮ ᱢᱟᱱᱛᱨᱚ ᱚᱰᱤᱭᱳ + ᱞᱮᱠᱷᱟ ᱥᱮᱞᱮᱫ ᱢᱮᱱᱟᱜᱼᱟ",
+        "ᱥᱩᱢᱩᱝ ᱟᱛᱢᱟᱛᱤ ᱫᱤᱥᱟᱹ ᱥᱟᱶ ᱵᱚᱫᱚᱞ ᱢᱮ"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "᱑᱐᱘ ᱫᱷᱟᱣ ᱪᱮᱫ ᱞᱮᱠᱟ ᱥᱮᱨᱮᱧ ᱦᱩᱭᱩᱜ-ᱟ"
     },
     {
       "type": "ul",
       "items": [
-        "Select ishta on Japam menu after sign-in or guest try",
-        "Chant 108 daily at same time",
-        "Combine with simple home lamp offering if desired",
-        "Join yagnas for community sankalpa"
+        "ᱥᱟᱭᱤᱱ ᱤᱱ ᱥᱮ ᱯᱮᱲᱟ ᱠᱩᱨᱩᱢᱩᱴᱩ ᱛᱟᱭᱚᱢ ᱡᱟᱯᱟᱢ ᱢᱮᱱᱩ ᱨᱮ ᱤᱥᱛᱟ ᱵᱟᱪᱷᱟᱣ ᱢᱮ",
+        "ᱪᱟᱱᱴ ᱑᱐᱘ ᱫᱤᱱᱟᱹᱢ ᱢᱤᱫ ᱚᱠᱛᱚ ᱨᱮ",
+        "ᱡᱩᱫᱤ ᱢᱚᱱᱮ ᱦᱩᱭᱩᱜ ᱠᱷᱟᱱ ᱟᱞᱜᱟ ᱚᱲᱟᱜ ᱞᱮᱢᱯ ᱚᱯᱷᱟᱨᱤᱝ ᱥᱟᱶ ᱢᱤᱞᱟᱹᱣ ᱢᱮ",
+        "ᱥᱟᱶᱛᱟ ᱥᱟᱱᱠᱟᱞᱯᱟ ᱞᱟᱹᱜᱤᱫ ᱭᱟᱜᱽᱱᱟ ᱨᱮ ᱥᱮᱞᱮᱫᱚᱜ ᱢᱮ"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "ᱛᱤᱱᱨᱮ ᱥᱮᱨᱮᱧ ᱦᱩᱭᱩᱜ-ᱟ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Daily — morning or evening consistently."
+          "text": "ᱫᱤᱱᱟᱹᱢ ᱜᱮ — ᱥᱮᱛᱟᱜ ᱵᱟᱝᱠᱷᱟᱱ ᱥᱤᱸᱜᱟᱹᱲ ᱞᱮᱛᱟᱲ ᱜᱮ ᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "᱑᱐᱘ ᱫᱚᱦᱲᱟ ᱪᱮᱫᱟᱜ ᱢᱟᱱᱚᱛ ᱢᱮᱱᱟᱜᱼᱟ",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Open Japam menu → choose ishta → play match-3 with mantra."
+          "text": "᱑᱐᱘ ᱮᱞ ᱫᱚ ᱡᱟᱯᱟ ᱢᱟᱞᱟ ᱨᱮ ᱢᱤᱫ ᱯᱩᱨᱟᱹ ᱜᱩᱞᱟᱹᱭ ᱠᱟᱱᱟ ᱾ ᱛᱷᱤᱨ ᱫᱚᱦᱲᱟ ᱫᱚᱦᱲᱟ ᱛᱮ ᱢᱚᱱᱮ ᱛᱷᱤᱨᱚᱜ ᱟᱨ ᱢᱟᱱᱛᱨᱚ ᱨᱮᱭᱟᱜ ᱢᱮᱱᱮᱛ ᱨᱮ ᱜᱟᱹᱦᱤᱨ ᱫᱷᱭᱟᱱ ᱮᱢᱚᱜ ᱠᱟᱱᱟ᱾"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱛᱤᱱᱟᱹᱜ ᱜᱟᱱ ᱯᱚᱨᱚᱵ ᱑᱑ ᱵᱟᱝᱠᱷᱟᱱ ᱒᱑ ᱢᱟᱞᱟ ᱞᱟᱹᱭ ᱮᱫᱟ - ᱟᱢᱟᱜ ᱜᱩᱨᱩ ᱵᱟᱝᱠᱷᱟᱱ ᱯᱟᱭᱡᱤᱴ ᱴᱷᱮᱱ ᱟᱢᱟᱜ ᱵᱟᱛᱟᱣ ᱞᱮᱠᱟᱱ ᱞᱮᱠᱷᱟ ᱞᱟᱹᱜᱤᱫ ᱠᱩᱞᱤᱭᱮᱢ ᱾"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱥᱟᱫᱷᱟᱨᱚᱱ ᱵᱷᱩᱞ ᱠᱚ ᱠᱷᱚᱱ ᱥᱟᱦᱟᱜ ᱞᱟᱹᱜᱤᱫ"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "ᱟᱹᱰᱤ ᱩᱥᱟᱹᱨᱟ ᱪᱟᱱᱴᱤᱝ ᱟᱨ ᱥᱟᱰᱮ ᱨᱮ ᱯᱷᱚᱠᱟᱥ ᱟᱫ ᱠᱟᱛᱮ",
+        "ᱵᱤᱱ ᱫᱤᱥᱟᱹ ᱛᱮ ᱟᱭᱢᱟ ᱵᱚᱝᱜᱟ ᱠᱚ ᱢᱮᱥᱟᱞ ᱢᱮ",
+        "ᱵᱷᱚᱠᱛᱤ ᱟᱨ ᱱᱮᱭᱟᱱ ᱡᱤᱭᱚᱱ ᱵᱚᱫᱚᱞ ᱠᱟᱛᱮ ᱥᱩᱢᱩᱝ ᱡᱤᱱᱤᱥ ᱚᱨᱡᱚ ᱨᱮᱭᱟᱜ ᱟᱥᱟ ᱢᱮ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱢᱟᱱᱫᱤᱨ ᱟᱨ ᱚᱲᱟᱜ ᱨᱮ ᱢᱤᱫ ᱥᱟᱶᱛᱮ ᱦᱮᱣᱟ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱚᱲᱟᱜ ᱡᱟᱯᱟ ᱢᱟᱱᱫᱤᱨ ᱵᱚᱸᱜᱟ ᱥᱟᱯᱚᱨᱴ ᱮᱫᱟᱭ; ᱱᱚᱣᱟ ᱫᱚ ᱫᱟᱨᱥᱟᱱ ᱵᱟᱭ ᱵᱚᱫᱚᱞᱟ᱾ ᱯᱚᱨᱚᱵ ᱢᱟᱦᱟ ᱥᱮ ᱧᱩᱦᱩᱢ ᱢᱟᱦᱟ ᱦᱤᱞᱚᱜ ᱢᱟᱱᱫᱤᱨ ᱧᱮᱞ ᱛᱮ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮᱭᱟᱜ ᱥᱮᱨᱣᱟ ᱫᱚ ᱠᱮᱴᱮᱡ ᱜᱮᱭᱟ᱾"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱡᱟᱯᱟᱢ ᱥᱟᱶ ᱯᱨᱮᱠᱴᱤᱥ ᱢᱮ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱡᱟᱯᱟᱢ ᱢᱮᱱᱩ ᱡᱷᱤᱡᱽ ᱢᱮ → ᱤᱥᱛᱟ ᱵᱟᱪᱷᱟᱣ ᱢᱮ → ᱢᱟᱱᱛᱨᱟ ᱥᱟᱶ ᱢᱮᱪ-᱓ ᱠᱷᱮᱞ ᱢᱮ ᱾"
         }
       ]
     }
@@ -130,41 +175,41 @@
   ],
   "faqs": [
     {
-      "question": "Can I change ishta often?",
-      "answer": "Traditions prefer stability; change only with good reason or guru advice."
+      "question": "ᱪᱮᱫ ᱤᱧ ᱤᱥᱛᱟ ᱜᱷᱩᱲᱤᱻᱜᱷᱩᱲᱤ ᱵᱚᱫᱚᱞ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱹᱧ ᱥᱮ?",
+      "answer": "ᱥᱮᱫᱽᱨᱟ ᱠᱚ ᱥᱛᱷᱤᱨᱛᱷᱤᱛᱤ ᱠᱚ ᱠᱩᱥᱤᱭᱟᱜᱼᱟ; ᱥᱩᱢᱩᱝ ᱵᱷᱟᱜᱮ ᱠᱟᱨᱚᱱ ᱥᱮ ᱜᱩᱨᱩᱭ ᱥᱚᱞᱦᱟ ᱛᱮ ᱵᱚᱫᱚᱞ ᱢᱮ᱾"
     },
     {
-      "question": "Multiple deities?",
-      "answer": "Many honour Ganesha first then ishta; Japam supports per-deity modes."
+      "question": "ᱟᱭᱢᱟ ᱵᱚᱝᱜᱟ ᱠᱚ?",
+      "answer": "ᱟᱹᱰᱤ ᱦᱚᱲ ᱜᱮᱱᱮᱥᱟ ᱠᱚ ᱢᱟᱹᱱ ᱟᱫᱮᱭᱟ ᱚᱱᱟ ᱛᱟᱭᱚᱢ ᱤᱥᱛᱟ; ᱡᱟᱯᱟᱢ ᱫᱚ ᱯᱟᱨ-ᱵᱚᱸᱜᱟ ᱢᱚᱰ ᱠᱚ ᱥᱟᱯᱚᱨᱴ ᱮᱫᱟᱭ ᱾"
     },
     {
-      "question": "Guru-hidden deities?",
-      "answer": "Sai Baba and Bramhamgaaru are reserved in app — not in public play grid."
+      "question": "ᱜᱩᱨᱩ-ᱩᱠᱩ ᱵᱚᱝᱜᱟ ᱠᱚ?",
+      "answer": "ᱥᱟᱭ ᱵᱟᱵᱟ ᱟᱨ ᱵᱨᱚᱢᱦᱟᱢᱜᱟᱨᱩ ᱮᱯ ᱨᱮ ᱨᱟᱠᱷᱟ ᱢᱮᱱᱟᱜ ᱠᱤᱱᱟ - ᱯᱟᱹᱵᱤᱞ ᱯᱞᱮ ᱜᱽᱨᱤᱰ ᱨᱮ ᱫᱚ ᱵᱟᱝ ᱾"
     },
     {
-      "question": "Need initiation?",
-      "answer": "Mantra japa is open in many homes; diksha mantras need guru."
+      "question": "ᱮᱛᱚᱦᱚᱵ ᱞᱟᱹᱠᱛᱤᱜ ᱠᱟᱱᱟ?",
+      "answer": "ᱢᱟᱱᱛᱨᱟ ᱡᱟᱯᱟ ᱟᱭᱢᱟ ᱚᱲᱟᱜ ᱨᱮ ᱡᱷᱤᱡ ᱢᱮᱱᱟᱜᱼᱟ; ᱫᱤᱠᱥᱟ ᱢᱟᱱᱛᱨᱚ ᱜᱩᱨᱩ ᱞᱟᱹᱠᱛᱤᱭᱟᱭ ᱾"
     },
     {
-      "question": "Guest mode?",
-      "answer": "Yes — try before account creation."
+      "question": "ᱯᱮᱲᱟ ᱢᱚᱰ?",
+      "answer": "ᱦᱮᱸ — ᱮᱠᱟᱣᱩᱱᱴ ᱵᱮᱱᱟᱣ ᱞᱟᱦᱟᱨᱮ ᱪᱮᱥᱴᱟᱭ ᱢᱮ ᱾"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "ᱱᱚᱣᱟ ᱚᱱᱚᱞ ᱫᱚ ᱥᱩᱢᱩᱝ ᱥᱮᱪᱮᱫ ᱟᱨ ᱵᱷᱚᱠᱛᱚᱱ ᱦᱮᱣᱟ ᱞᱟᱹᱜᱤᱫ ᱜᱮ ᱾ ᱡᱟᱯᱟᱢ ᱫᱚ ᱪᱤᱠᱤᱥᱟ, ᱟᱹᱭᱤᱱᱤ, ᱟᱨ ᱵᱟᱝ ᱠᱟᱹᱣᱰᱤ ᱥᱚᱞᱦᱟ ᱵᱟᱭ ᱮᱢᱚᱜ ᱠᱟᱱᱟ᱾ ᱚᱨᱡᱚ ᱫᱚ ᱯᱚᱨᱥᱚᱱᱟᱞ ᱯᱟᱹᱛᱭᱟᱹᱣ ᱟᱨ ᱞᱮᱛᱟᱲ ᱦᱮᱣᱟ ᱨᱮ ᱴᱮᱦᱟᱱᱰ ᱢᱮᱱᱟᱜᱼᱟ᱾ ᱮᱯ ᱨᱮ ᱢᱟᱱᱛᱨᱟ ᱚᱱᱚᱞ ᱟᱨ ᱚᱰᱤᱭᱳ ᱫᱚ ᱡᱟᱯᱟ ᱥᱟᱯᱚᱨᱴ ᱞᱟᱹᱜᱤᱫ ᱠᱟᱱᱟ; ᱟᱹᱭᱫᱟᱹᱨᱤ ᱯᱩᱡᱟ ᱟᱹᱨᱤ ᱞᱟᱹᱜᱤᱫ ᱟᱯᱮ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮᱱ ᱯᱟᱭᱡᱤᱴ ᱥᱮ ᱥᱮᱫᱽᱨᱟ ᱥᱚᱞᱦᱟᱭ ᱢᱮ ᱾"
   },
   "relatedPages": [
     {
       "pageId": "online-japa-mantra",
-      "label": "Online japa"
+      "label": "ᱚᱱᱞᱟᱭᱤᱱ ᱡᱟᱯᱟ"
     },
     {
       "pageId": "japa-108-times",
-      "label": "108 japa guide"
+      "label": "᱑᱐᱘ ᱡᱟᱯᱟ"
     },
     {
       "pageId": "maha-japa-yagna",
-      "label": "Maha yagna"
+      "label": "ᱢᱟᱦᱟ ᱭᱟᱜᱽᱱᱟ"
     }
   ]
 }

@@ -4,27 +4,27 @@
   "lang": "sat",
   "slug": "mantra-surya",
   "deityId": "surya",
-  "primaryKeyword": "surya mantra japa 108 times",
+  "primaryKeyword": "ᱥᱩᱨᱭᱟ ᱢᱟᱱᱛᱨᱚ ᱡᱟᱯᱟ ᱑᱐᱘ ᱫᱷᱟᱣ",
   "secondaryKeywords": [
-    "Surya mantra",
-    "Surya japa",
-    "108 times mantra"
+    "ᱥᱩᱨᱭᱟ ᱢᱟᱱᱛᱨᱚ",
+    "ᱥᱩᱨᱭᱟ ᱡᱟᱯᱟ",
+    "᱑᱐᱘ ᱫᱷᱟᱣ ᱢᱟᱱᱛᱨᱟ"
   ],
   "meta": {
-    "title": "ᱥᱩᱨᱭᱚ Mantra — 108 Japa | Japam",
-    "description": "ᱥᱩᱨᱭᱚ mantra meaning, 108 japa steps, and practice in Japam.",
+    "title": "ᱥᱩᱨᱭᱟ ᱢᱟᱱᱛᱨᱟ ᱡᱟᱯᱟ ᱑᱐᱘ ᱫᱷᱟᱣ | ᱡᱟᱯᱟᱢ",
+    "description": "ᱥᱩᱨᱭᱟ ᱢᱟᱱᱛᱨᱚ ᱢᱮᱱᱮᱛ, ᱑᱐᱘ ᱡᱟᱯᱟ ᱫᱷᱟᱯ, ᱟᱨ ᱡᱟᱯᱟᱢ ᱚᱰᱤᱭᱳ ᱥᱟᱶᱛᱮ ᱰᱤᱡᱤᱴᱟᱞ ᱦᱮᱣᱟ᱾",
     "ogImage": "/images/deities/surya.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "ᱥᱩᱨᱭᱚ — 108 Japa"
+      "text": "ᱥᱩᱨᱭᱟ ᱢᱟᱱᱛᱨᱚ ᱟᱨ ᱑᱐᱘ ᱡᱟᱯᱟ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Surya bhakti includes steady mantra japa as a foundation of daily practice."
+          "text": "ᱥᱩᱨᱭᱟ ᱵᱷᱚᱠᱴᱤ ᱨᱮ ᱫᱤᱱᱟᱹᱢ ᱦᱮᱣᱟ ᱨᱮᱭᱟᱜ ᱵᱤᱫ ᱞᱮᱠᱟᱛᱮ ᱥᱴᱮᱰᱤ ᱢᱟᱱᱛᱨᱚ ᱡᱟᱯᱟ ᱥᱮᱞᱮᱫ ᱢᱮᱱᱟᱜᱼᱟ᱾"
         }
       ]
     },
@@ -32,13 +32,13 @@
       "type": "p",
       "runs": [
         {
-          "text": "Japam uses the mantra below during match-3 play with counting toward 108."
+          "text": "ᱡᱟᱯᱟᱢ ᱫᱚ ᱑᱐᱘ ᱥᱮᱫ ᱞᱮᱠᱷᱟ ᱠᱟᱛᱮ ᱢᱮᱪ-᱓ ᱠᱷᱤᱞᱚᱸᱰ ᱚᱠᱛᱚ ᱞᱟᱛᱟᱨ ᱨᱮ ᱮᱢ ᱟᱠᱟᱱ ᱢᱟᱱᱛᱨᱚ ᱵᱮᱵᱷᱟᱨ ᱮᱫᱟᱭ ᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "ᱢᱟᱱᱛᱨᱚ ᱨᱮᱭᱟᱜ ᱢᱮᱱᱮᱛ"
     },
     {
       "type": "blockquote",
@@ -53,57 +53,102 @@
       "type": "p",
       "runs": [
         {
-          "text": "Chant with a calm mind, offering salutation rather than demanding specific outcomes."
+          "text": "ᱛᱷᱤᱨ ᱢᱚᱱ ᱥᱟᱶᱛᱮ ᱥᱮᱨᱮᱧ ᱢᱮ, ᱠᱷᱟᱥ ᱯᱷᱚᱞᱚᱱ ᱠᱚ ᱫᱟᱹᱵᱤ ᱵᱚᱫᱚᱞ ᱛᱮ ᱥᱟᱹᱜᱩᱱ ᱮᱢ ᱢᱮ᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "ᱡᱟᱯᱟ ᱨᱮᱭᱟᱜ ᱞᱟᱵᱷ (ᱯᱚᱨᱚᱢ ᱧᱮᱞᱚᱢ)"
     },
     {
       "type": "ul",
       "items": [
-        "Builds daily discipline and mental focus",
-        "Deepens bhakti in traditional understanding",
-        "Supports graha or deity vows (sankalpa)",
-        "Complements temple puja — does not replace it"
+        "ᱫᱤᱱᱟᱹᱢ ᱰᱤᱥᱤᱯᱞᱤᱱ ᱟᱨ ᱢᱚᱱᱮ ᱯᱷᱚᱠᱟᱥ ᱛᱮᱭᱟᱨ ᱢᱮ",
+        "ᱯᱚᱨᱚᱢᱟᱱᱟᱜ ᱵᱩᱡᱷᱟᱹᱣ ᱨᱮ ᱵᱷᱚᱠᱛᱤ ᱜᱟᱹᱦᱤᱨ ᱢᱮ",
+        "ᱜᱽᱨᱟᱦᱟ ᱵᱟᱝᱠᱷᱟᱱ ᱵᱚᱝᱜᱟ ᱵᱷᱟᱵᱽᱱᱟ (ᱥᱟᱱᱠᱟᱞᱯᱟ) ᱜᱚᱲᱚ ᱮᱢᱟᱭᱟ",
+        "ᱢᱟᱱᱫᱤᱨ ᱯᱩᱡᱟ ᱯᱩᱨᱟᱹᱣ ᱮᱫᱟᱭ — ᱱᱚᱣᱟ ᱵᱟᱝ ᱵᱚᱫᱚᱞᱚᱜᱼᱟ"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "᱑᱐᱘ ᱫᱷᱟᱣ ᱪᱮᱫ ᱞᱮᱠᱟ ᱥᱮᱨᱮᱧ ᱦᱩᱭᱩᱜ-ᱟ"
     },
     {
       "type": "ul",
       "items": [
-        "Sit in a quiet place with spine straight",
-        "Chant 108 times on a mala (one round)",
-        "Keep attention on the mantra sound and meaning",
-        "Close with gratitude to your ishta devata"
+        "ᱫᱷᱟᱹᱨᱛᱤ ᱥᱤᱫᱷᱟᱹ ᱠᱟᱛᱮ ᱢᱤᱫ ᱱᱤᱡᱷᱩ ᱡᱟᱭᱜᱟ ᱨᱮ ᱫᱩᱲᱩᱵ ᱢᱮ",
+        "ᱢᱤᱫ ᱢᱟᱞᱟ ᱨᱮ ᱑᱐᱘ ᱫᱷᱟᱣ ᱥᱮᱨᱮᱧ ᱢᱮ (ᱢᱤᱫ ᱜᱩᱞᱟᱹᱭ)",
+        "ᱢᱟᱱᱛᱨᱟ ᱟᱲᱟᱝ ᱟᱨ ᱢᱮᱱᱮᱛ ᱨᱮ ᱫᱷᱭᱟᱱ ᱫᱚᱦᱚᱭ ᱢᱮ",
+        "ᱟᱢᱟᱜ ᱤᱥᱛᱟ ᱫᱮᱣᱟᱛᱟ ᱛᱮ ᱥᱟᱨᱦᱟᱣ ᱥᱟᱶᱛᱮ ᱢᱩᱪᱟᱹᱫ ᱢᱮ"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "ᱛᱤᱱᱨᱮ ᱥᱮᱨᱮᱧ ᱦᱩᱭᱩᱜ-ᱟ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Any sincere daily time works; ask your priest for festival or vrat days specific to this deity."
+          "text": "ᱡᱟᱦᱟᱱ ᱥᱟᱹᱨᱤ ᱫᱤᱱᱟᱹᱢ ᱚᱠᱛᱚ ᱠᱟᱹᱢᱤᱭᱟ; ᱱᱚᱣᱟ ᱵᱚᱝᱜᱟ ᱞᱟᱹᱜᱤᱫ ᱯᱚᱨᱚᱵ ᱥᱮ ᱵᱷᱨᱟᱛ ᱢᱟᱦᱟᱸ ᱠᱚ ᱞᱟᱹᱜᱤᱫ ᱟᱢ ᱨᱮᱱ ᱯᱟᱭᱡᱤᱴ ᱠᱩᱞᱤᱭᱮᱢ᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "᱑᱐᱘ ᱫᱚᱦᱲᱟ ᱪᱮᱫᱟᱜ ᱢᱟᱱᱚᱛ ᱢᱮᱱᱟᱜᱼᱟ",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Select Surya in Japam to hear the mantra audio and track your japa count."
+          "text": "᱑᱐᱘ ᱮᱞ ᱫᱚ ᱡᱟᱯᱟ ᱢᱟᱞᱟ ᱨᱮ ᱢᱤᱫ ᱯᱩᱨᱟᱹ ᱜᱩᱞᱟᱹᱭ ᱠᱟᱱᱟ ᱾ ᱛᱷᱤᱨ ᱫᱚᱦᱲᱟ ᱫᱚᱦᱲᱟ ᱛᱮ ᱢᱚᱱᱮ ᱛᱷᱤᱨᱚᱜ ᱟᱨ ᱢᱟᱱᱛᱨᱚ ᱨᱮᱭᱟᱜ ᱢᱮᱱᱮᱛ ᱨᱮ ᱜᱟᱹᱦᱤᱨ ᱫᱷᱭᱟᱱ ᱮᱢᱚᱜ ᱠᱟᱱᱟ᱾"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱛᱤᱱᱟᱹᱜ ᱜᱟᱱ ᱯᱚᱨᱚᱵ ᱑᱑ ᱵᱟᱝᱠᱷᱟᱱ ᱒᱑ ᱢᱟᱞᱟ ᱞᱟᱹᱭ ᱮᱫᱟ - ᱟᱢᱟᱜ ᱜᱩᱨᱩ ᱵᱟᱝᱠᱷᱟᱱ ᱯᱟᱭᱡᱤᱴ ᱴᱷᱮᱱ ᱟᱢᱟᱜ ᱵᱟᱛᱟᱣ ᱞᱮᱠᱟᱱ ᱞᱮᱠᱷᱟ ᱞᱟᱹᱜᱤᱫ ᱠᱩᱞᱤᱭᱮᱢ ᱾"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱥᱟᱫᱷᱟᱨᱚᱱ ᱵᱷᱩᱞ ᱠᱚ ᱠᱷᱚᱱ ᱥᱟᱦᱟᱜ ᱞᱟᱹᱜᱤᱫ"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "ᱟᱹᱰᱤ ᱩᱥᱟᱹᱨᱟ ᱪᱟᱱᱴᱤᱝ ᱟᱨ ᱥᱟᱰᱮ ᱨᱮ ᱯᱷᱚᱠᱟᱥ ᱟᱫ ᱠᱟᱛᱮ",
+        "ᱵᱤᱱ ᱫᱤᱥᱟᱹ ᱛᱮ ᱟᱭᱢᱟ ᱵᱚᱝᱜᱟ ᱠᱚ ᱢᱮᱥᱟᱞ ᱢᱮ",
+        "ᱵᱷᱚᱠᱛᱤ ᱟᱨ ᱱᱮᱭᱟᱱ ᱡᱤᱭᱚᱱ ᱵᱚᱫᱚᱞ ᱠᱟᱛᱮ ᱥᱩᱢᱩᱝ ᱡᱤᱱᱤᱥ ᱚᱨᱡᱚ ᱨᱮᱭᱟᱜ ᱟᱥᱟ ᱢᱮ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱢᱟᱱᱫᱤᱨ ᱟᱨ ᱚᱲᱟᱜ ᱨᱮ ᱢᱤᱫ ᱥᱟᱶᱛᱮ ᱦᱮᱣᱟ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱚᱲᱟᱜ ᱡᱟᱯᱟ ᱢᱟᱱᱫᱤᱨ ᱵᱚᱸᱜᱟ ᱥᱟᱯᱚᱨᱴ ᱮᱫᱟᱭ; ᱱᱚᱣᱟ ᱫᱚ ᱫᱟᱨᱥᱟᱱ ᱵᱟᱭ ᱵᱚᱫᱚᱞᱟ᱾ ᱯᱚᱨᱚᱵ ᱢᱟᱦᱟ ᱥᱮ ᱧᱩᱦᱩᱢ ᱢᱟᱦᱟ ᱦᱤᱞᱚᱜ ᱢᱟᱱᱫᱤᱨ ᱧᱮᱞ ᱛᱮ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮᱭᱟᱜ ᱥᱮᱨᱣᱟ ᱫᱚ ᱠᱮᱴᱮᱡ ᱜᱮᱭᱟ᱾"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱡᱟᱯᱟᱢ ᱥᱟᱶ ᱯᱨᱮᱠᱴᱤᱥ ᱢᱮ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱢᱟᱱᱛᱨᱚ ᱚᱰᱤᱭᱳ ᱟᱸᱡᱚᱢ ᱟᱨ ᱟᱢᱟᱜ ᱡᱟᱯᱟ ᱞᱮᱠᱷᱟ ᱴᱨᱟᱠ ᱞᱟᱹᱜᱤᱫ ᱡᱟᱯᱟᱢ ᱨᱮ ᱥᱩᱨᱭᱟ ᱵᱟᱪᱷᱟᱣ ᱢᱮ ᱾"
         }
       ]
     }
@@ -112,7 +157,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start ᱥᱩᱨᱭᱚ Japa in Japam",
+      "label": "Start Surya Japa in Japam",
       "href": "https://japam.digital/?lang=sat&deity=surya&utm_source=google&utm_medium=seo&utm_campaign=mantra-surya&utm_content=start-japa",
       "style": "primary"
     },
@@ -140,41 +185,41 @@
   ],
   "faqs": [
     {
-      "question": "How many times should I chant Surya's mantra?",
-      "answer": "108 repetitions (one mala) is the common standard; some do 11 or 21 malas under guidance."
+      "question": "ᱤᱧ ᱛᱤᱱᱟᱹᱜ ᱫᱷᱟᱣ ᱥᱩᱨᱤᱭᱟ ᱟᱜ ᱢᱟᱱᱛᱨᱚ ᱪᱟᱵᱟᱭ ᱦᱩᱭᱩᱜ ᱛᱤᱧᱟ?",
+      "answer": "᱑᱐᱘ ᱫᱚᱦᱲᱟ (ᱢᱤᱫ ᱢᱟᱞᱟ) ᱫᱚ ᱥᱟᱫᱷᱟᱨᱚᱱ ᱢᱟᱱᱚᱛ ᱠᱟᱱᱟ; ᱛᱤᱱᱟᱹᱜ ᱜᱟᱱ ᱦᱚᱲ ᱑᱑ ᱵᱟᱝᱠᱷᱟᱱ ᱒᱑ ᱢᱟᱞᱟᱥ ᱠᱚ ᱠᱟᱹᱢᱤᱭᱟ ᱫᱤᱥᱟᱹ ᱛᱮ ᱾"
     },
     {
-      "question": "Can I use Japam without signing in?",
-      "answer": "Guest try mode is available from the landing page; sign in to save long-term progress."
+      "question": "ᱪᱮᱫ ᱤᱧ ᱵᱤᱱᱟᱹ ᱥᱟᱭᱤᱱ ᱤᱱ ᱛᱮ ᱡᱟᱯᱟᱢ ᱵᱮᱵᱷᱟᱨ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱹᱧ ᱥᱮ?",
+      "answer": "ᱞᱮᱱᱰᱤᱝ ᱥᱟᱦᱴᱟ ᱠᱷᱚᱱ ᱯᱮᱲᱟ ᱠᱩᱨᱩᱢᱩᱴᱩ ᱢᱚᱰ ᱧᱟᱢᱚᱜ ᱠᱟᱱᱟ; ᱟᱹᱰᱤ ᱜᱷᱟᱹᱲᱤᱡ ᱞᱟᱦᱟᱱᱛᱤ ᱵᱟᱧᱪᱟᱣ ᱞᱟᱹᱜᱤᱫ ᱥᱟᱭᱤᱱ ᱤᱱ ᱢᱮ ᱾"
     },
     {
-      "question": "Is this the only mantra for this deity?",
-      "answer": "Your lineage may use stotras or longer mantras; this is the form in the Japam app."
+      "question": "ᱪᱮᱫ ᱱᱩᱭ ᱵᱚᱝᱜᱟ ᱞᱟᱹᱜᱤᱫ ᱱᱚᱣᱟ ᱜᱮ ᱢᱟᱱᱛᱨᱚ ᱠᱟᱱᱟ?",
+      "answer": "ᱟᱢᱟᱜ ᱵᱚᱥᱛᱟ ᱫᱚ ᱥᱴᱚᱴᱨᱟ ᱥᱮ ᱡᱮᱞᱮᱝ ᱢᱟᱱᱛᱨᱟ ᱠᱚ ᱵᱮᱵᱷᱟᱨ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ; ᱱᱚᱣᱟ ᱫᱚ ᱡᱟᱯᱟᱢ ᱮᱯ ᱨᱮᱱᱟᱜ ᱯᱷᱚᱨᱢ ᱠᱟᱱᱟ ᱾"
     },
     {
-      "question": "Does mantra japa replace puja?",
-      "answer": "No — japa supports home practice; formal puja follows your sampradaya."
+      "question": "ᱪᱮᱫ ᱢᱟᱱᱛᱨᱚ ᱡᱟᱯᱟ ᱯᱩᱡᱟ ᱵᱚᱫᱚᱞ ᱮᱫᱟᱭ?",
+      "answer": "ᱵᱟᱝ — ᱡᱟᱯᱟ ᱚᱲᱟᱜ ᱨᱮ ᱦᱮᱣᱟ ᱥᱟᱯᱚᱨᱴ ᱮᱫᱟᱭ; ᱯᱚᱨᱢᱟᱱᱟᱜ ᱯᱩᱡᱟ ᱫᱚ ᱟᱢᱟᱜ ᱥᱟᱢᱯᱨᱟᱫᱟᱭ ᱯᱟᱧᱡᱟᱭᱟ ᱾"
     },
     {
-      "question": "Which direction should I face?",
-      "answer": "East or north is common; consistency matters more than perfect direction."
+      "question": "ᱤᱧ ᱚᱠᱟ ᱫᱤᱥᱟᱹ ᱥᱟᱢᱟᱝ ᱦᱩᱭᱩᱜ ᱛᱤᱧᱟ?",
+      "answer": "ᱯᱩᱨᱩᱵ ᱥᱮ ᱩᱛᱚᱨ ᱫᱚ ᱥᱟᱫᱷᱟᱨᱚᱱ ᱜᱮᱭᱟ; ᱥᱚᱦᱮᱫ ᱫᱚ ᱱᱤᱠᱷᱩᱛ ᱫᱤᱥᱟᱹ ᱠᱷᱚᱱ ᱵᱟᱹᱲᱛᱤ ᱢᱟᱱᱚᱛ ᱢᱮᱱᱟᱜᱼᱟ ᱾"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "ᱱᱚᱣᱟ ᱚᱱᱚᱞ ᱫᱚ ᱥᱩᱢᱩᱝ ᱥᱮᱪᱮᱫ ᱟᱨ ᱵᱷᱚᱠᱛᱚᱱ ᱦᱮᱣᱟ ᱞᱟᱹᱜᱤᱫ ᱜᱮ ᱾ ᱡᱟᱯᱟᱢ ᱫᱚ ᱪᱤᱠᱤᱥᱟ, ᱟᱹᱭᱤᱱᱤ, ᱟᱨ ᱵᱟᱝ ᱠᱟᱹᱣᱰᱤ ᱥᱚᱞᱦᱟ ᱵᱟᱭ ᱮᱢᱚᱜ ᱠᱟᱱᱟ᱾ ᱚᱨᱡᱚ ᱫᱚ ᱯᱚᱨᱥᱚᱱᱟᱞ ᱯᱟᱹᱛᱭᱟᱹᱣ ᱟᱨ ᱞᱮᱛᱟᱲ ᱦᱮᱣᱟ ᱨᱮ ᱴᱮᱦᱟᱱᱰ ᱢᱮᱱᱟᱜᱼᱟ᱾ ᱮᱯ ᱨᱮ ᱢᱟᱱᱛᱨᱟ ᱚᱱᱚᱞ ᱟᱨ ᱚᱰᱤᱭᱳ ᱫᱚ ᱡᱟᱯᱟ ᱥᱟᱯᱚᱨᱴ ᱞᱟᱹᱜᱤᱫ ᱠᱟᱱᱟ; ᱟᱹᱭᱫᱟᱹᱨᱤ ᱯᱩᱡᱟ ᱟᱹᱨᱤ ᱞᱟᱹᱜᱤᱫ ᱟᱯᱮ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮᱱ ᱯᱟᱭᱡᱤᱴ ᱥᱮ ᱥᱮᱫᱽᱨᱟ ᱥᱚᱞᱦᱟᱭ ᱢᱮ ᱾"
   },
   "relatedPages": [
     {
       "pageId": "japa-108-times",
-      "label": "108 japa guide"
+      "label": "᱑᱐᱘ ᱡᱟᱯᱟ ᱜᱟᱭᱤᱰ"
     },
     {
       "pageId": "ishta-devata-japa",
-      "label": "Ishta devata japa"
+      "label": "ᱤᱥᱛᱟ ᱫᱮᱣᱟᱛᱟ ᱡᱟᱯᱟ"
     },
     {
       "pageId": "online-japa-mantra",
-      "label": "Online japa"
+      "label": "ᱚᱱᱞᱟᱭᱤᱱ ᱡᱟᱯᱟ"
     }
   ]
 }

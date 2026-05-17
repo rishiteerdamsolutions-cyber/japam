@@ -4,26 +4,26 @@
   "lang": "sa",
   "slug": "krishna-mantra-peace",
   "deityId": "krishna",
-  "primaryKeyword": "krishna mantra peace japa",
+  "primaryKeyword": "कृष्ण मन्त्र शान्ति जप",
   "secondaryKeywords": [
-    "vasudeva mantra",
-    "om namo bhagavathe"
+    "वासुदेव मन्त्रः",
+    "ॐ नमो भगवते"
   ],
   "meta": {
-    "title": "Krishna Mantra for Peace | Japam",
-    "description": "Krishna mantra japa for calm and bhakti — Japam practice.",
+    "title": "कृष्ण मन्त्र शान्ति के लिये | जपम्",
+    "description": "कृष्ण मन्त्र जप शान्त भक्ति हेतु — जप अभ्यास।",
     "ogImage": "/images/deities/krishna.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Krishna Mantra for Peace and Bhakti"
+      "text": "शान्ति भक्ति हेतु कृष्ण मन्त्र"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Krishna bhakti emphasises surrender and joy. The Vasudeva mantra settles the mind in many traditions."
+          "text": "कृष्ण भक्तिः समर्पणं आनन्दं च बलं ददाति। वासुदेवमन्त्रेण बहुषु परम्परासु मनः स्थापयति।"
         }
       ]
     },
@@ -31,13 +31,13 @@
       "type": "p",
       "runs": [
         {
-          "text": "Chant with love rather than anxiety about outcomes."
+          "text": "परिणामविषये चिन्ता न तु प्रेम्णा जपं कुर्वन्तु।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "मन्त्रार्थः"
     },
     {
       "type": "blockquote",
@@ -52,57 +52,102 @@
       "type": "p",
       "runs": [
         {
-          "text": "Chant with a calm mind, offering salutation rather than demanding specific outcomes."
+          "text": "विशिष्टपरिणामान् आग्रहं न कृत्वा नमस्कारं कृत्वा शान्तचित्तेन जपं कुर्वन्तु।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "जपस्य लाभाः (पारम्परिकदृष्टिकोणः) २."
     },
     {
       "type": "ul",
       "items": [
-        "Builds festival discipline",
-        "Deepens deity bhakti",
-        "Community yagnas may align with season",
-        "Educational — not outcome guarantees"
+        "उत्सव अनुशासनं निर्माति",
+        "देवता भक्ति गभीर करता",
+        "सामुदायिकयज्ञाः ऋतुना सह संरेखिताः भवेयुः",
+        "शैक्षिक — न तु परिणामस्य गारण्टी"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "१०८ वारं जपं कथं करणीयम्"
     },
     {
       "type": "ul",
       "items": [
-        "Set daily 108 sankalpa for festival period",
-        "Keep fast/vrat rules from your family tradition",
-        "Visit temple when possible",
-        "Use Japam counter between work/study"
+        "उत्सवकालस्य कृते नित्यं १०८ संकल्पं स्थापयतु",
+        "स्वस्य पारिवारिकपरम्परातः द्रुत/व्रत नियमाः रक्षन्तु",
+        "यदा सम्भवं तदा मन्दिरं गच्छन्तु",
+        "कार्य/अध्ययनयोः मध्ये जपम् काउण्टरस्य उपयोगं कुर्वन्तु"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "कदा जपेत्"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Janmashtami and Thursdays; daily japa anytime."
+          "text": "जन्माष्टमी तथा गुरुवार; नित्यं जपः कदापि ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "१०८ पुनरावृत्तयः किमर्थं महत्त्वपूर्णाः सन्ति",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Krishna mode in Japam uses this mantra with match-3 japa counting."
+          "text": "१०८ संख्या जपमाले एकः पूर्णगोलः अस्ति । नित्यपुनरावृत्तिः मनः शान्तं करोति, मन्त्रस्य अर्थे ध्यानं गभीरं करोति च ।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "केचन परम्पराः ११ वा २१ वा मालाः विहिताः सन्ति — भवतः गुरुं वा पुरोहितं वा भवतः व्रतस्य अनुकूलानि गणनानि पृच्छन्तु ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "परिहरणीयानि सामान्यानि त्रुटयः"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "अतिशीघ्रं जपं कृत्वा ध्वनिं प्रति ध्यानं नष्टम्",
+        "अनेकदेवव्रतमिश्रणं विना मार्गदर्शनम् |",
+        "भक्ति-नीति-जीवनस्य स्थाने केवलं भौतिक-परिणामस्य अपेक्षा"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मन्दिरं गृहं च एकत्र अभ्यासं कुर्वन्ति"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "गृहं जपः मन्दिरपूजायाः समर्थनं करोति; दर्शनस्य स्थाने न भवति। उत्सवदिनेषु शनिवासरे वा मन्दिरस्य दर्शनं पारिवारिकपरम्परां सुदृढं करोति ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपं सह अभ्यासं कुरुत"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "जपमे कृष्ण मोड् अस्य मन्त्रस्य उपयोगं मैच-३ जपगणना सह करोति ।"
         }
       ]
     }
@@ -111,7 +156,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start कृष्णः Japa in Japam",
+      "label": "Start Krishna Japa in Japam",
       "href": "https://japam.digital/?lang=sa&deity=krishna&utm_source=google&utm_medium=seo&utm_campaign=krishna-mantra-peace&utm_content=start-japa",
       "style": "primary"
     },
@@ -139,41 +184,41 @@
   ],
   "faqs": [
     {
-      "question": "Exact festival date this year?",
-      "answer": "Check Hindu panchang for your region — we avoid locking a Gregorian year in this guide."
+      "question": "अस्मिन् वर्षे उत्सवस्य सटीकतिथिः ?",
+      "answer": "स्वक्षेत्रस्य कृते हिन्दुपञ्चाङ्गं पश्यन्तु — अस्मिन् मार्गदर्शके वयं ग्रेगोरीवर्षं ताडयितुं परिहरामः ।"
     },
     {
-      "question": "How many japas per day?",
-      "answer": "108 minimum for many vows; some do 1008 on main day under guidance."
+      "question": "प्रतिदिनं कति जपाः ?",
+      "answer": "१०८ न्यूनतमं बहुव्रतानां कृते; केचन मुख्यदिने मार्गदर्शनेन १००८ कुर्वन्ति।"
     },
     {
-      "question": "Guest mode OK?",
-      "answer": "Yes for try; sign in to save progress across festival weeks."
+      "question": "अतिथिविधिः ठीकम्?",
+      "answer": "आम् प्रयासाय; उत्सवसप्ताहेषु प्रगतिः रक्षितुं साइन इन कुर्वन्तु।"
     },
     {
-      "question": "Replace temple?",
-      "answer": "No — digital japa supports home practice."
+      "question": "मन्दिरस्य स्थाने?",
+      "answer": "न — अङ्कीयजापा गृहाभ्यासस्य समर्थनं करोति ।"
     },
     {
-      "question": "Join collective yagna?",
-      "answer": "See Maha Japa Yagnas in Japam menu during campaigns."
+      "question": "सामूहिक यज्ञ में सम्मिलित हो?",
+      "answer": "अभियानानां समये जपम मेनू मध्ये महाजपयज्ञं पश्यन्तु।"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "एषः लेखः केवलं शैक्षणिक-भक्ति-अभ्यासार्थम् अस्ति । जपम् चिकित्सा, कानूनी, आर्थिकपरामर्शं न ददाति । परिणामाः व्यक्तिगतविश्वासस्य, निरन्तरं अभ्यासस्य च उपरि निर्भरं भवति। एप् मध्ये मन्त्रपाठः श्रव्यं च जपासमर्थनार्थम् अस्ति; औपचारिकपूजानियमानां कृते स्वपरिवारस्य पुरोहितेन वा परम्परेण वा परामर्शं कुर्वन्तु।"
   },
   "relatedPages": [
     {
       "pageId": "mantra-krishna",
-      "label": "Krishna pillar"
+      "label": "कृष्णस्तम्भः"
     },
     {
       "pageId": "mantra-hare-krishna",
-      "label": "Hare Krishna"
+      "label": "हरे कृष्ण"
     },
     {
       "pageId": "krishna-janmashtami-japa",
-      "label": "Janmashtami"
+      "label": "जन्माष्टमी"
     }
   ]
 }

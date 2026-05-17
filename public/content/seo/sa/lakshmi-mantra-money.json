@@ -4,27 +4,27 @@
   "lang": "sa",
   "slug": "lakshmi-mantra-money",
   "deityId": "lakshmi",
-  "primaryKeyword": "lakshmi mantra for money",
+  "primaryKeyword": "लक्ष्मी मन्त्रः धनार्थम्",
   "secondaryKeywords": [
-    "mahalakshmi mantra",
-    "friday lakshmi mantra",
-    "wealth mantra 108"
+    "महालक्ष्मी मन्त्र",
+    "शुक्रवार लक्ष्मी मन्त्र",
+    "धनमन्त्रः १०८"
   ],
   "meta": {
-    "title": "Lakshmi Mantra for Prosperity — 108 Japa | Japam",
-    "description": "Mahalakshmi mantra meaning, Friday tradition, and digital japa with Japam — educational, not quick riches.",
+    "title": "समृद्धि हेतु लक्ष्मी मन्त्र — १०८ जप | जपम्",
+    "description": "महालक्ष्मीमन्त्रार्थः, शुक्रवासरपरम्परा, जपमसहितं च डिजिटलजपम् — शैक्षिकं, न तु शीघ्रं धनम्।",
     "ogImage": "/images/deities/lakshmi.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Lakshmi Mantra for Prosperity and Gratitude"
+      "text": "समृद्धि कृतज्ञता हेतु लक्ष्मी मन्त्र"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Goddess Lakshmi is honoured as the source of auspiciousness, abundance, and dharma-aligned wealth. Devotees chant her mantra with gratitude rather than greed."
+          "text": "देवी लक्ष्मीः शुभप्रचुरता, धर्मानुरूपं धनं च इति सम्मानिता भवति। तस्याः मन्त्रं भक्ताः लोभं न तु कृतज्ञतापूर्वकं जपन्ति।"
         }
       ]
     },
@@ -32,13 +32,13 @@
       "type": "p",
       "runs": [
         {
-          "text": "This guide shares the mantra used in Japam, how to complete 108 japa, and Friday traditions — without promising instant riches."
+          "text": "अयं मार्गदर्शकः जपमे प्रयुक्तं मन्त्रं, १०८ जपं कथं पूर्णं कर्तव्यम्, शुक्रवासरस्य परम्परा च साझां करोति — तत्क्षणिकधनस्य प्रतिज्ञां विना ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "मन्त्रार्थः"
     },
     {
       "type": "blockquote",
@@ -53,57 +53,102 @@
       "type": "p",
       "runs": [
         {
-          "text": "Chant with a calm mind, offering salutation (Namaha) rather than demanding outcomes."
+          "text": "परिणामान् आग्रहं न कृत्वा नमस्कारं (नमहा) कृत्वा शान्तचित्तेन जपं कुर्वन्तु।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "जपस्य लाभाः (पारम्परिकदृष्टिकोणः) २."
     },
     {
       "type": "ul",
       "items": [
-        "Cultivates contentment and generosity alongside material goals",
-        "Friday (Shukravar) is widely observed for Lakshmi worship",
-        "Supports focus before work or business puja",
-        "Pairs with clean home altar and lamp offering in many homes"
+        "भौतिकलक्ष्याणां पार्श्वे सन्तुष्टिं उदारतां च संवर्धयति",
+        "लक्ष्मीपूजार्थं शुक्रवासरः (शुक्रवरः) बहुधा आचर्यते",
+        "कार्यस्य वा व्यापारपूजायाः पूर्वं फोकसस्य समर्थनं करोति",
+        "अनेकगृहेषु स्वच्छगृहवेदिना दीपप्रदानेन सह युग्मानि"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "१०८ वारं जपं कथं करणीयम्"
     },
     {
       "type": "ul",
       "items": [
-        "Light a lamp if convenient; sit facing east or north",
-        "Chant 108 times using a lotus-seed or sphatik mala",
-        "Visualise golden light or the deity’s peaceful form",
-        "End with thanks to your ishta devata"
+        "यदि सुविधाजनकं भवति तर्हि दीपं प्रज्वालयन्तु; पूर्वाभिमुखं वा उत्तरं वा उपविशन्ति",
+        "कमलबीजं वा स्फटिकमालं वा प्रयुज्य १०८ वारं जपं कुर्वन्तु",
+        "सुवर्णप्रकाशं वा देवस्य शान्तरूपं कल्पय",
+        "भवतः इष्टदेवतायाः धन्यवादेन समाप्तः"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "कदा जपेत्"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Friday evening is popular; some chant daily during Navratri or Diwali weeks."
+          "text": "शुक्रवासरस्य सायं लोकप्रियः अस्ति; केचन नवरात्रे वा दीपावलीसप्ताहेषु नित्यं जपन्ति।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "१०८ पुनरावृत्तयः किमर्थं महत्त्वपूर्णाः सन्ति",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Japam plays Om Sri Mahalakshmyai Namaha as you match gems — a playful way to keep count toward 108. Try guest mode or sign in to save progress.",
+          "text": "१०८ संख्या जपमाले एकः पूर्णगोलः अस्ति । नित्यपुनरावृत्तिः मनः शान्तं करोति, मन्त्रस्य अर्थे ध्यानं गभीरं करोति च ।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "केचन परम्पराः ११ वा २१ वा मालाः विहिताः सन्ति — भवतः गुरुं वा पुरोहितं वा भवतः व्रतस्य अनुकूलानि गणनानि पृच्छन्तु ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "परिहरणीयानि सामान्यानि त्रुटयः"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "अतिशीघ्रं जपं कृत्वा ध्वनिं प्रति ध्यानं नष्टम्",
+        "अनेकदेवव्रतमिश्रणं विना मार्गदर्शनम् |",
+        "भक्ति-नीति-जीवनस्य स्थाने केवलं भौतिक-परिणामस्य अपेक्षा"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मन्दिरं गृहं च एकत्र अभ्यासं कुर्वन्ति"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "गृहं जपः मन्दिरपूजायाः समर्थनं करोति; दर्शनस्य स्थाने न भवति। उत्सवदिनेषु शनिवासरे वा मन्दिरस्य दर्शनं पारिवारिकपरम्परां सुदृढं करोति ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपं सह अभ्यासं कुरुत"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "जपमः ॐ श्रीमहालक्ष्म्यै नमः यथा भवन्तः रत्नानाम् मेलनं कुर्वन्ति तथा क्रीडति — 108 प्रति गणनां स्थापयितुं चंचलः मार्गः।प्रगतिं रक्षितुं अतिथिमोडस्य प्रयासं कुर्वन्तु अथवा प्रवेशं कुर्वन्तु।",
           "bold": false
         }
       ]
@@ -113,7 +158,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start लक्ष्मी Japa in Japam",
+      "label": "Start Lakshmi Japa in Japam",
       "href": "https://japam.digital/?lang=sa&deity=lakshmi&utm_source=google&utm_medium=seo&utm_campaign=lakshmi-mantra-money&utm_content=start-japa",
       "style": "primary"
     },
@@ -141,41 +186,41 @@
   ],
   "faqs": [
     {
-      "question": "Which Lakshmi mantra is best?",
-      "answer": "Om Sri Mahalakshmyai Namaha is common; your family may use Sri Suktam or other stotras."
+      "question": "कः लक्ष्मीमन्त्रः श्रेष्ठः ?",
+      "answer": "ॐ श्री महालक्ष्म्यै नमः सामान्य; भवतः परिवारः श्रीसूक्तं वा अन्यस्तोत्रं वा प्रयोक्तुं शक्नोति।"
     },
     {
-      "question": "Will mantra clear debt overnight?",
-      "answer": "Japam does not guarantee financial outcomes. Steady practice and righteous action are the traditional path."
+      "question": "किं मन्त्रः रात्रौ एव ऋणं स्वच्छं करिष्यति ?",
+      "answer": "जपमः आर्थिकपरिणामस्य गारण्टीं न ददाति। स्थिराभ्यासः धर्मकर्म च पारम्परिकः मार्गः।"
     },
     {
-      "question": "Can men chant Lakshmi mantra?",
-      "answer": "Yes — Lakshmi is worshipped by all devotees."
+      "question": "किं पुरुषाः लक्ष्मीमन्त्रं जपन्ति ?",
+      "answer": "आम् — लक्ष्मीः सर्वभक्तैः पूज्यते ।"
     },
     {
-      "question": "How many malas per day?",
-      "answer": "One mala (108) daily is a strong start; festivals may invite more under guidance."
+      "question": "प्रतिदिनं कति मालाः ?",
+      "answer": "एकः माला (१०८) प्रतिदिनं दृढः आरम्भः अस्ति; उत्सवाः मार्गदर्शनेन अधिकं आमन्त्रयितुं शक्नुवन्ति।"
     },
     {
-      "question": "Is Friday mandatory?",
-      "answer": "Friday is customary; sincere daily japa is also valued."
+      "question": "शुक्रवासरः अनिवार्यः अस्ति वा ?",
+      "answer": "शुक्रवासरः प्रथा अस्ति; निश्छलं नित्यं जपमपि मूल्यं भवति।"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "एषः लेखः केवलं शैक्षणिक-भक्ति-अभ्यासार्थम् अस्ति । जपम् चिकित्सा, कानूनी, आर्थिकपरामर्शं न ददाति । परिणामाः व्यक्तिगतविश्वासस्य, निरन्तरं अभ्यासस्य च उपरि निर्भरं भवति। एप् मध्ये मन्त्रपाठः श्रव्यं च जपासमर्थनार्थम् अस्ति; औपचारिकपूजानियमानां कृते स्वपरिवारस्य पुरोहितेन वा परम्परेण वा परामर्शं कुर्वन्तु।"
   },
   "relatedPages": [
     {
       "pageId": "mantra-lakshmi",
-      "label": "Lakshmi mantra pillar"
+      "label": "लक्ष्मी मंत्र स्तम्भ"
     },
     {
       "pageId": "diwali-lakshmi-japa",
-      "label": "Diwali Lakshmi japa"
+      "label": "दिवाली लक्ष्मी जप"
     },
     {
       "pageId": "mantra-for-debt-relief",
-      "label": "Debt relief mantra guide"
+      "label": "ऋणमुक्ति मंत्र मार्गदर्शक"
     }
   ]
 }

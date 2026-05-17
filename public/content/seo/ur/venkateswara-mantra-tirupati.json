@@ -4,27 +4,27 @@
   "lang": "ur",
   "slug": "venkateswara-mantra-tirupati",
   "deityId": "venkateswara",
-  "primaryKeyword": "venkateswara tirupati balaji mantra",
+  "primaryKeyword": "وینکٹیشور تروپتی بالاجی منتر",
   "secondaryKeywords": [
-    "om namo venkateshaaya",
-    "tirupati darshan mantra",
-    "venkateswara japa"
+    "اوم نمو وینکٹیشایا",
+    "تروپتی درشن منتر",
+    "وینکٹیشور جاپا"
   ],
   "meta": {
-    "title": "Venkateswara Mantra — Tirupati Balaji Japa | Japam",
-    "description": "Om Namo Venkateshaaya — meaning, 108 japa, and digital practice for Balaji bhakti in Japam.",
+    "title": "وینکٹیشور منتر - تروپتی بالاجی جاپا | جاپم",
+    "description": "اوم نمو وینکٹیشایا — مطلب، 108 جاپا، اور جاپم میں بالاجی بھکتی کے لیے ڈیجیٹل مشق۔",
     "ogImage": "/images/deities/venkateswara.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Venkateswara Mantra and Tirupati Balaji Japa"
+      "text": "وینکٹیشور منتر اور تروپتی بالاجی جاپا"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Lord Venkateswara (Balaji) of Tirupati is beloved across South India and beyond. His name mantra is chanted for surrender and auspiciousness."
+          "text": "تروپتی کے بھگوان وینکٹیشور (بالاجی) پورے جنوبی ہندوستان اور اس سے باہر محبوب ہیں۔ اس کے نام کے منتر کو ہتھیار ڈالنے اور نیکی کے لئے جاپ کیا جاتا ہے۔"
         }
       ]
     },
@@ -32,13 +32,13 @@
       "type": "p",
       "runs": [
         {
-          "text": "Whether you plan a darshan or pray from home, steady japa deepens bhakti."
+          "text": "چاہے آپ درشن کی منصوبہ بندی کریں یا گھر سے دعا کریں، مستحکم جاپ بھکتی کو گہرا کرتا ہے۔"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "منتر کا مفہوم"
     },
     {
       "type": "blockquote",
@@ -53,57 +53,102 @@
       "type": "p",
       "runs": [
         {
-          "text": "Chant with a calm mind, offering salutation (Namaha) rather than demanding outcomes."
+          "text": "پُرسکون ذہن کے ساتھ نعرہ لگائیں، نتائج کا مطالبہ کرنے کی بجائے سلام پیش کریں۔"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "جاپ کے فوائد (روایتی نقطہ نظر)"
     },
     {
       "type": "ul",
       "items": [
-        "Expresses complete surrender (Sharanagati)",
-        "Popular before Tirupati pilgrimage",
-        "Friday and Saturdays see heavy temple crowds — home japa anytime",
-        "Pairs with Tulasi leaves in traditional puja"
+        "مکمل ہتھیار ڈالنے کا اظہار (شارناگتی)",
+        "تروپتی یاترا سے پہلے مقبول",
+        "جمعہ اور ہفتہ کو مندروں کا بھاری ہجوم نظر آتا ہے - کسی بھی وقت ہوم جاپا",
+        "روایتی پوجا میں تلسی کے پتوں کے ساتھ جوڑا"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "108 مرتبہ پڑھنے کا طریقہ"
     },
     {
       "type": "ul",
       "items": [
-        "Chant 108 or 1008 times as vow (kankana) before trip",
-        "Offer hair tonsuring only at temple if that is your sankalpa — not required for japa",
-        "Keep image or photo of Balaji before you",
-        "Use Japam to hear the mantra with counting"
+        "سفر سے پہلے 108 یا 1008 بار منت (کنکنا) کا جاپ کریں۔",
+        "صرف مندر میں بالوں کو ٹانسرنگ کی پیشکش کریں اگر یہ آپ کا سنکلپا ہے — جاپ کے لیے ضروری نہیں ہے۔",
+        "بالاجی کی تصویر یا تصویر اپنے سامنے رکھیں",
+        "گنتی کے ساتھ منتر سننے کے لیے جاپم کا استعمال کریں۔"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "کب نعرہ لگانا ہے۔"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Any day; many increase japa before Vaikunta Ekadashi and Brahmotsavam season."
+          "text": "کسی بھی دن؛ ویکنتا ایکادشی اور برہموتسوم سیزن سے پہلے بہت سے لوگ جاپ میں اضافہ کرتے ہیں۔"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "108 تکرار کیوں اہم ہے۔",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Venkateswara mode in Japam uses Om namo Venkateshaaya during match-3 — helpful when you cannot visit the hill temple daily.",
+          "text": "نمبر 108 جاپ مالا پر ایک مکمل دور ہے۔ مسلسل تکرار ذہن کو پرسکون کرتی ہے اور منتر کے معنی پر توجہ مرکوز کرتی ہے۔"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "کچھ روایات 11 یا 21 مالوں کی تجویز کرتی ہیں - اپنے گرو یا پجاری سے اپنی منت کے مطابق گنتی کے لیے پوچھیں۔"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "عام غلطیوں سے بچنا ہے۔"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "بہت تیز گانا اور آواز پر توجہ کھو دینا",
+        "ہدایت کے بغیر متعدد دیوتا منتوں کو ملانا",
+        "بھکتی اور اخلاقی زندگی کے بجائے صرف مادی نتائج کی توقع کرنا"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "مندر اور گھر کی مشق ایک ساتھ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ہوم جاپا مندر کی پوجا کی حمایت کرتا ہے۔ یہ درشن کی جگہ نہیں لیتا۔ تہوار کے دنوں یا ہفتہ کے دن مندر جانا خاندانی روایت کو مضبوط کرتا ہے۔"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Japam کے ساتھ مشق کریں۔"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "Japam میں وینکٹیشورا موڈ میچ 3 کے دوران اوم نمو وینکٹیشایا کا استعمال کرتا ہے - جب آپ روزانہ پہاڑی مندر نہیں جا سکتے تو مددگار۔",
           "bold": false
         }
       ]
@@ -113,7 +158,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start وینکٹیشور Japa in Japam",
+      "label": "Start Venkateswara Japa in Japam",
       "href": "https://japam.digital/?lang=ur&deity=venkateswara&utm_source=google&utm_medium=seo&utm_campaign=venkateswara-mantra-tirupati&utm_content=start-japa",
       "style": "primary"
     },
@@ -141,41 +186,41 @@
   ],
   "faqs": [
     {
-      "question": "Spelling Venkateshaaya?",
-      "answer": "Regional spellings vary; follow your priest’s transliteration."
+      "question": "ہجے وینکٹیشایا؟",
+      "answer": "علاقائی ہجے مختلف ہوتے ہیں۔ اپنے پادری کی نقل کی پیروی کریں۔"
     },
     {
-      "question": "Is Tirupati laddu prasadam required?",
-      "answer": "No for home japa — prasadam is optional devotion."
+      "question": "کیا تروپتی لڈو پرساد کی ضرورت ہے؟",
+      "answer": "ہوم جاپ کے لیے نہیں - پرسادم اختیاری عقیدت ہے۔"
     },
     {
-      "question": "Can I chant for marriage?",
-      "answer": "Many pray for family blessings; see marriage delay guide for more deities."
+      "question": "کیا میں شادی کا نعرہ لگا سکتا ہوں؟",
+      "answer": "بہت سے لوگ خاندان کی برکتوں کے لیے دعا کرتے ہیں۔ مزید دیوتاؤں کے لیے شادی میں تاخیر کا رہنما دیکھیں۔"
     },
     {
-      "question": "How many days before darshan?",
-      "answer": "Some chant 11 or 21 days — personal vow."
+      "question": "درشن سے کتنے دن پہلے؟",
+      "answer": "کچھ 11 یا 21 دن کا نعرہ لگاتے ہیں - ذاتی منت۔"
     },
     {
-      "question": "Does Japam have Venkateswara image?",
-      "answer": "Yes — select Venkateswara on the deity grid."
+      "question": "کیا Japam میں وینکٹیشور کی تصویر ہے؟",
+      "answer": "ہاں — دیوتا گرڈ پر وینکٹیشور کو منتخب کریں۔"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "یہ مضمون صرف تعلیمی اور عقیدتی مشق کے لیے ہے۔ Japam طبی، قانونی، یا مالی مشورہ فراہم نہیں کرتا ہے۔ نتائج کا انحصار ذاتی ایمان اور مستقل مشق پر ہوتا ہے۔ ایپ میں منتر کا متن اور آڈیو جاپا سپورٹ کے لیے ہیں۔ رسمی پوجا کے قواعد کے لیے اپنے خاندانی پجاری یا روایت سے مشورہ کریں۔"
   },
   "relatedPages": [
     {
       "pageId": "mantra-venkateswara",
-      "label": "Venkateswara pillar"
+      "label": "وینکٹیشور ستون"
     },
     {
       "pageId": "marriage-delay-mantra",
-      "label": "Marriage mantras"
+      "label": "شادی کے منتر"
     },
     {
       "pageId": "japa-108-times",
-      "label": "108 japa guide"
+      "label": "108 جاپ"
     }
   ]
 }

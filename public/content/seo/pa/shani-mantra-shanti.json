@@ -4,40 +4,40 @@
   "lang": "pa",
   "slug": "shani-mantra-shanti",
   "deityId": "shani",
-  "primaryKeyword": "shani mantra shanti",
+  "primaryKeyword": "ਸ਼ਨੀ ਮੰਤਰ ਸ਼ਾਂਤੀ",
   "secondaryKeywords": [
-    "shani dosha nivaran",
-    "shani pariharam",
-    "saturday shani puja",
-    "shani graha mantra 108"
+    "ਸ਼ਨੀ ਦੋਸ਼ ਨਿਵਾਰਨ",
+    "ਸ਼ਨੀ ਪਰਿਹਾਰਮ",
+    "ਸ਼ਨੀਵਾਰ ਸ਼ਨੀ ਪੂਜਾ",
+    "ਸ਼ਨੀ ਗ੍ਰਹਿ ਮੰਤਰ 108"
   ],
   "meta": {
-    "title": "Shani Mantra for Shanti — 108 Japa Guide | Japam",
-    "description": "Traditional Shani graha mantra, how to chant 108 times, and digital japa with Japam match-3 and audio.",
+    "title": "ਸ਼ਾਂਤੀ ਲਈ ਸ਼ਨੀ ਮੰਤਰ - 108 ਜਪ ਗਾਈਡ | ਜਪਮ",
+    "description": "ਰਵਾਇਤੀ ਸ਼ਨੀ ਗ੍ਰਹਿ ਮੰਤਰ, 108 ਵਾਰ ਕਿਵੇਂ ਜਾਪ ਕਰਨਾ ਹੈ, ਅਤੇ ਜਪਮ ਮੈਚ -3 ਅਤੇ ਆਡੀਓ ਦੇ ਨਾਲ ਡਿਜੀਟਲ ਜਾਪ।",
     "ogImage": "/images/deities/shani.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Shani Mantra and Graha Shanti"
+      "text": "ਸ਼ਨੀ ਮੰਤਰ ਅਤੇ ਗ੍ਰਹਿ ਸ਼ਾਂਤੀ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Lord Shani",
+          "text": "ਭਗਵਾਨ ਸ਼ਨੀ",
           "bold": true
         },
         {
-          "text": " (Shanaischara) is honoured in Hindu tradition as the graha who teaches patience, discipline, and responsibility. Devotees turn to "
+          "text": "(ਸ਼ਨਾਈਚਾਰਾ) ਨੂੰ ਹਿੰਦੂ ਪਰੰਪਰਾ ਵਿੱਚ ਗ੍ਰਹਿ ਵਜੋਂ ਸਨਮਾਨਿਤ ਕੀਤਾ ਜਾਂਦਾ ਹੈ ਜੋ ਧੀਰਜ, ਅਨੁਸ਼ਾਸਨ ਅਤੇ ਜ਼ਿੰਮੇਵਾਰੀ ਸਿਖਾਉਂਦਾ ਹੈ। ਸ਼ਰਧਾਲੂ ਮੁੜਦੇ ਹਨ"
         },
         {
-          "text": "japa",
+          "text": "ਜਪਾ",
           "bold": true,
           "underline": true
         },
         {
-          "text": " — repetition of a sacred mantra — for graha shanti (planetary peace), especially when Shani is strong in the chart or during challenging periods."
+          "text": "- ਇੱਕ ਪਵਿੱਤਰ ਮੰਤਰ ਦਾ ਦੁਹਰਾਓ - ਗ੍ਰਹਿ ਸ਼ਾਂਤੀ (ਗ੍ਰਹਿ ਸ਼ਾਂਤੀ) ਲਈ, ਖਾਸ ਤੌਰ 'ਤੇ ਜਦੋਂ ਸ਼ਨੀ ਚਾਰਟ ਵਿੱਚ ਜਾਂ ਚੁਣੌਤੀਪੂਰਨ ਦੌਰ ਵਿੱਚ ਮਜ਼ਬੂਤ ​​​​ਹੁੰਦਾ ਹੈ।"
         }
       ]
     },
@@ -45,19 +45,19 @@
       "type": "p",
       "runs": [
         {
-          "text": "This guide explains the meaning of the Shani mantra used in Japam, how to practise 108 repetitions with a mala, and how to support your practice with the Japam app."
+          "text": "ਇਹ ਗਾਈਡ ਜਪਮ ਵਿੱਚ ਵਰਤੇ ਗਏ ਸ਼ਨੀ ਮੰਤਰ ਦਾ ਅਰਥ ਦੱਸਦੀ ਹੈ, ਮਾਲਾ ਨਾਲ 108 ਦੁਹਰਾਓ ਦਾ ਅਭਿਆਸ ਕਿਵੇਂ ਕਰਨਾ ਹੈ, ਅਤੇ ਜਪਮ ਐਪ ਨਾਲ ਤੁਹਾਡੇ ਅਭਿਆਸ ਦਾ ਸਮਰਥਨ ਕਿਵੇਂ ਕਰਨਾ ਹੈ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "ਮੰਤਰ ਦਾ ਅਰਥ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "The bija and name mantra commonly chanted for Shanaischara is:"
+          "text": "ਬੀਜਾ ਅਤੇ ਨਾਮ ਮੰਤਰ ਜੋ ਆਮ ਤੌਰ 'ਤੇ ਸ਼ਨਾਈਚਾਰ ਲਈ ਉਚਾਰਿਆ ਜਾਂਦਾ ਹੈ:"
         }
       ]
     },
@@ -74,87 +74,133 @@
       "type": "p",
       "runs": [
         {
-          "text": "“Sham” is associated with Shani’s seed sound; “Shanicharaya” addresses the slow-moving lord of Saturn. “Namaha” means salutation — offering the mind to the deity with humility rather than demanding a specific outcome."
+          "text": "\"ਸ਼ਾਮ\" ਸ਼ਨੀ ਦੀ ਬੀਜ ਧੁਨੀ ਨਾਲ ਜੁੜਿਆ ਹੋਇਆ ਹੈ; \"ਸ਼ਨੀਚਾਰਯਾ\" ਸ਼ਨੀ ਦੇ ਹੌਲੀ-ਹੌਲੀ ਚੱਲਣ ਵਾਲੇ ਪ੍ਰਭੂ ਨੂੰ ਸੰਬੋਧਿਤ ਕਰਦਾ ਹੈ। \"ਨਮਹਾ\" ਦਾ ਅਰਥ ਹੈ ਨਮਸਕਾਰ - ਕਿਸੇ ਖਾਸ ਨਤੀਜੇ ਦੀ ਮੰਗ ਕਰਨ ਦੀ ਬਜਾਏ ਨਿਮਰਤਾ ਨਾਲ ਦੇਵੀ ਨੂੰ ਮਨ ਭੇਟ ਕਰਨਾ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "ਜਪ ਦੇ ਲਾਭ (ਰਵਾਇਤੀ ਵਿਚਾਰ)"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Scriptures and elders describe japa as calming the mind, building steadiness, and aligning one with dharma. Shani worship is often linked to accepting karma with grace, reducing fear, and cultivating discipline. These are spiritual aims, not guaranteed material results — faith and regular practice matter."
+          "text": "ਸ਼ਾਸਤਰ ਅਤੇ ਬਜ਼ੁਰਗ ਜਪ ਨੂੰ ਮਨ ਨੂੰ ਸ਼ਾਂਤ ਕਰਨ, ਸਥਿਰਤਾ ਪੈਦਾ ਕਰਨ ਅਤੇ ਧਰਮ ਨਾਲ ਜੋੜਨ ਦੇ ਰੂਪ ਵਿੱਚ ਵਰਣਨ ਕਰਦੇ ਹਨ। ਸ਼ਨੀ ਦੀ ਪੂਜਾ ਅਕਸਰ ਕਿਰਪਾ ਨਾਲ ਕਰਮ ਨੂੰ ਸਵੀਕਾਰ ਕਰਨ, ਡਰ ਨੂੰ ਘਟਾਉਣ ਅਤੇ ਅਨੁਸ਼ਾਸਨ ਪੈਦਾ ਕਰਨ ਨਾਲ ਜੁੜੀ ਹੁੰਦੀ ਹੈ। ਇਹ ਅਧਿਆਤਮਿਕ ਉਦੇਸ਼ ਹਨ, ਭੌਤਿਕ ਨਤੀਜਿਆਂ ਦੀ ਗਾਰੰਟੀ ਨਹੀਂ - ਵਿਸ਼ਵਾਸ ਅਤੇ ਨਿਯਮਤ ਅਭਿਆਸ ਦਾ ਮਾਮਲਾ।"
         }
       ]
     },
     {
       "type": "ul",
       "items": [
-        "Supports mental focus and patience during difficult phases",
-        "Traditionally offered on Saturdays for Shani bhakti",
-        "Often combined with charity, honesty, and service (seva)",
-        "May be practised alongside Hanuman worship in many families"
+        "ਮੁਸ਼ਕਲ ਪੜਾਵਾਂ ਦੌਰਾਨ ਮਾਨਸਿਕ ਫੋਕਸ ਅਤੇ ਧੀਰਜ ਦਾ ਸਮਰਥਨ ਕਰਦਾ ਹੈ",
+        "ਸ਼ਨੀ ਭਗਤੀ ਲਈ ਸ਼ਨਿਚਰਵਾਰ ਨੂੰ ਰਵਾਇਤੀ ਤੌਰ 'ਤੇ ਪੇਸ਼ ਕੀਤਾ ਜਾਂਦਾ ਹੈ",
+        "ਅਕਸਰ ਦਾਨ, ਇਮਾਨਦਾਰੀ, ਅਤੇ ਸੇਵਾ (ਸੇਵਾ) ਨਾਲ ਜੋੜਿਆ ਜਾਂਦਾ ਹੈ",
+        "ਕਈ ਪਰਿਵਾਰਾਂ ਵਿੱਚ ਹਨੂੰਮਾਨ ਦੀ ਪੂਜਾ ਦੇ ਨਾਲ-ਨਾਲ ਅਭਿਆਸ ਕੀਤਾ ਜਾ ਸਕਦਾ ਹੈ"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "108 ਵਾਰ ਜਾਪ ਕਿਵੇਂ ਕਰੀਏ"
     },
     {
       "type": "ul",
       "items": [
-        "Choose a quiet place; face east or north if convenient.",
-        "Sit comfortably; keep the spine straight and breath natural.",
-        "Use a rudraksha or sphatik mala of 108 beads; one round equals 108 japa.",
-        "Chant clearly or mentally; keep attention on the sound and meaning.",
-        "Many begin or end with a short prayer to your ishta devata."
+        "ਇੱਕ ਸ਼ਾਂਤ ਜਗ੍ਹਾ ਚੁਣੋ; ਜੇ ਸੁਵਿਧਾਜਨਕ ਹੋਵੇ ਤਾਂ ਪੂਰਬ ਜਾਂ ਉੱਤਰ ਵੱਲ ਮੂੰਹ ਕਰੋ।",
+        "ਆਰਾਮ ਨਾਲ ਬੈਠੋ; ਰੀੜ੍ਹ ਦੀ ਹੱਡੀ ਨੂੰ ਸਿੱਧਾ ਰੱਖੋ ਅਤੇ ਸਾਹ ਨੂੰ ਕੁਦਰਤੀ ਰੱਖੋ।",
+        "108 ਮਣਕਿਆਂ ਦੀ ਇੱਕ ਰੁਦ੍ਰਾਕਸ਼ ਜਾਂ ਸਪਟਿਕ ਮਾਲਾ ਦੀ ਵਰਤੋਂ ਕਰੋ; ਇੱਕ ਦੌਰ 108 ਜਾਪ ਦੇ ਬਰਾਬਰ ਹੈ।",
+        "ਸਪਸ਼ਟ ਜਾਂ ਮਾਨਸਿਕ ਤੌਰ 'ਤੇ ਉਚਾਰਨ ਕਰੋ; ਆਵਾਜ਼ ਅਤੇ ਅਰਥ 'ਤੇ ਧਿਆਨ ਰੱਖੋ।",
+        "ਬਹੁਤ ਸਾਰੇ ਤੁਹਾਡੀ ਇਸ਼ਟ ਦੇਵਤਾ ਨੂੰ ਛੋਟੀ ਪ੍ਰਾਰਥਨਾ ਨਾਲ ਸ਼ੁਰੂ ਜਾਂ ਸਮਾਪਤ ਕਰਦੇ ਹਨ।"
       ]
     },
     {
       "type": "h2",
-      "text": "Best day and time"
+      "text": "ਵਧੀਆ ਦਿਨ ਅਤੇ ਸਮਾਂ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Saturday (Shanivar) is widely observed for Shani puja and mantra japa. Early morning or evening after sunset are common. During Sade Sati or Shani dasha, some devotees increase regularity — consult your family tradition or priest for personal timing."
+          "text": "ਸ਼ਨੀਵਾਰ (ਸ਼ਨੀਵਰ) ਸ਼ਨੀ ਪੂਜਾ ਅਤੇ ਮੰਤਰ ਜਾਪ ਲਈ ਵਿਆਪਕ ਤੌਰ 'ਤੇ ਮਨਾਇਆ ਜਾਂਦਾ ਹੈ। ਸੂਰਜ ਡੁੱਬਣ ਤੋਂ ਬਾਅਦ ਸਵੇਰੇ ਜਾਂ ਸ਼ਾਮ ਨੂੰ ਆਮ ਗੱਲ ਹੈ। ਸਾਦੇ ਸਤੀ ਜਾਂ ਸ਼ਨੀ ਦਸ਼ਾ ਦੇ ਦੌਰਾਨ, ਕੁਝ ਸ਼ਰਧਾਲੂ ਨਿਯਮਤਤਾ ਵਧਾਉਂਦੇ ਹਨ - ਨਿੱਜੀ ਸਮੇਂ ਲਈ ਆਪਣੀ ਪਰਿਵਾਰਕ ਪਰੰਪਰਾ ਜਾਂ ਪੁਜਾਰੀ ਨਾਲ ਸਲਾਹ ਕਰੋ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "108 ਦੁਹਰਾਓ ਮਾਇਨੇ ਕਿਉਂ ਰੱਖਦੇ ਹਨ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Japam",
+          "text": "ਬਹੁਤ ਸਾਰੇ ਸੰਪ੍ਰਦਾਯਾਂ ਵਿੱਚ, 108 ਇੱਕ ਪੂਰਾ ਮਾਲਾ ਦੌਰ ਹੈ - ਗਿਣਤੀ ਗੁਆਏ ਬਿਨਾਂ ਰੋਜ਼ਾਨਾ ਸੈਸ਼ਨ ਨੂੰ ਬੰਦ ਕਰਨ ਦਾ ਇੱਕ ਵਿਹਾਰਕ ਤਰੀਕਾ। ਸੰਖਿਆ ਪ੍ਰਤੀਕਾਤਮਕ ਹੈ (ਕੁਝ ਸਿੱਖਿਆਵਾਂ ਵਿੱਚ ਬ੍ਰਹਿਮੰਡੀ ਚੱਕਰ, ਨਦੀਆਂ), ਪਰ ਡੂੰਘਾ ਟੀਚਾ ਸਥਿਰ ਧਿਆਨ ਹੈ: ਇੱਕ ਸਾਹ, ਇੱਕ ਮੰਤਰ, ਇੱਕ ਸਮੇਂ ਵਿੱਚ ਇੱਕ ਮਣਕੇ।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ਜੇ 108 ਪਹਿਲਾਂ ਭਾਰੀ ਮਹਿਸੂਸ ਕਰਦਾ ਹੈ, ਤਾਂ 11 ਜਾਂ 27 ਦੁਹਰਾਓ ਨਾਲ ਸ਼ੁਰੂ ਕਰੋ ਅਤੇ ਹਫ਼ਤਿਆਂ ਵਿੱਚ ਵਧੋ। ਆਮ ਦਿਨਾਂ 'ਤੇ ਇਕਸਾਰਤਾ ਅਕਸਰ ਇੱਕ ਸਿੰਗਲ ਤੀਬਰ ਸੈਸ਼ਨ ਤੋਂ ਵੱਧ ਮਹੱਤਵ ਰੱਖਦੀ ਹੈ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ਬਚਣ ਲਈ ਆਮ ਜਪ ਗਲਤੀਆਂ"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "ਗਿਣਤੀ ਨੂੰ \"ਮੁਕੰਮਲ\" ਕਰਨ ਲਈ ਮੰਤਰ ਦੀ ਕਾਹਲੀ - ਹੌਲੀ, ਸੁਣਨਯੋਗ ਜਾਂ ਮਾਨਸਿਕ ਤਾਲ ਬਿਹਤਰ ਹੈ",
+        "ਪੂਰੇ ਮਾਲਾ ਦੌਰ ਦੌਰਾਨ ਮਲਟੀਟਾਸਕਿੰਗ (ਸਕ੍ਰੌਲਿੰਗ, ਟੀ.ਵੀ.)",
+        "ਤਤਕਾਲ ਪਦਾਰਥਕ ਨਤੀਜਿਆਂ ਲਈ ਜਾਪ ਨੂੰ ਇੱਕ ਸੌਦੇ ਦੇ ਰੂਪ ਵਿੱਚ ਸਮਝਣਾ",
+        "ਜਦੋਂ ਤੁਹਾਡੀ ਪਰੰਪਰਾ ਗ੍ਰਹਿ ਜਾਪ ਲਈ ਇਸਦੀ ਸਿਫ਼ਾਰਸ਼ ਕਰਦੀ ਹੈ ਤਾਂ ਇਸ਼ਨਾਨ/ਸਾਫ਼ ਥਾਂ ਛੱਡਣਾ",
+        "ਇੱਕ ਚੰਗੇ ਹਫ਼ਤੇ ਦੇ ਬਾਅਦ ਰੁਕਣਾ - ਗ੍ਰਹਿ ਅਤੇ ਦੇਵਤਾ ਸੁੱਖਣਾ ਲੰਬੇ ਸਮੇਂ ਲਈ ਹਨ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ਸੰਕਲਪ ਅਤੇ ਰੋਜ਼ਾਨਾ ਅਨੁਸ਼ਾਸਨ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ਸ਼ੁਰੂ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ, ਬਹੁਤ ਸਾਰੇ ਪਰਿਵਾਰ ਇੱਕ ਛੋਟਾ ਸੰਕਲਪ (ਇਰਾਦਾ) ਨਿਰਧਾਰਤ ਕਰਦੇ ਹਨ: ਨਾਮ, ਗੋਤਰ ਜੇ ਲਾਗੂ ਹੋਵੇ, ਅਤੇ ਜਪ ਦਾ ਉਦੇਸ਼। ਜਦੋਂ ਸੰਭਵ ਹੋਵੇ ਤਾਂ ਹਰ ਰੋਜ਼ ਇੱਕੋ ਸਮਾਂ ਰੱਖੋ - ਸਵੇਰ ਜਾਂ ਸ਼ਾਮ ਆਮ ਹਨ। ਇਮਾਨਦਾਰ ਆਚਰਣ, ਦਾਨ ਜਾਂ ਸੇਵਾ ਦੇ ਨਾਲ ਮੰਤਰ ਨੂੰ ਜੋੜੋ ਜਿੱਥੇ ਤੁਹਾਡੇ ਬਜ਼ੁਰਗ ਇਸਦੀ ਸਲਾਹ ਦਿੰਦੇ ਹਨ; ਜਪਾ ਅੱਖਰ ਦਾ ਸਮਰਥਨ ਕਰਦਾ ਹੈ, ਇਹ ਸਹੀ ਕਿਰਿਆ ਨੂੰ ਨਹੀਂ ਬਦਲਦਾ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ਜਪਮ ਨਾਲ ਅਭਿਆਸ ਕਰੋ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ਜਪਮ",
           "bold": true
         },
         {
-          "text": " is a digital mantra practice app: match gems on the board while hearing deity mantra audio, with japa counting for each deity. Select Shani to hear "
+          "text": "ਇੱਕ ਡਿਜੀਟਲ ਮੰਤਰ ਅਭਿਆਸ ਐਪ ਹੈ: ਹਰ ਦੇਵਤੇ ਲਈ ਜਾਪ ਦੀ ਗਿਣਤੀ ਦੇ ਨਾਲ, ਦੇਵਤਾ ਮੰਤਰ ਆਡੀਓ ਸੁਣਦੇ ਹੋਏ ਬੋਰਡ 'ਤੇ ਰਤਨ ਨਾਲ ਮੇਲ ਕਰੋ। ਸੁਣਨ ਲਈ ਸ਼ਨੀ ਨੂੰ ਚੁਣੋ"
         },
         {
-          "text": "Om Shan Shanicharaya Namaha",
+          "text": "ॐ ਓਮ ਸ਼ਂ ਸ਼ਨਿਚਾਰਾਯ ਨਮਃ",
           "bold": true
         },
         {
-          "text": " during play, track your count toward 108, and join community Maha Japa Yagnas when you wish."
+          "text": "ਖੇਡਣ ਦੇ ਦੌਰਾਨ, ਆਪਣੀ ਗਿਣਤੀ ਨੂੰ 108 ਤੱਕ ਟ੍ਰੈਕ ਕਰੋ, ਅਤੇ ਜਦੋਂ ਤੁਸੀਂ ਚਾਹੋ ਤਾਂ ਭਾਈਚਾਰਕ ਮਹਾ ਜਪ ਯੱਗਾਂ ਵਿੱਚ ਸ਼ਾਮਲ ਹੋਵੋ।"
         }
       ]
     },
     {
       "type": "ul",
       "items": [
-        "Per-deity japa modes and 108-japa specials",
-        "Mantra audio synced to match-3 gameplay",
-        "Many Indian languages in the app UI",
-        "Optional Pushpa Aradhana (digital flower offering)"
+        "ਪ੍ਰਤੀ-ਦੇਵਤਾ ਜਪ ਢੰਗ ਅਤੇ 108-ਜਪ ਵਿਸ਼ੇਸ਼",
+        "ਮੰਤਰ ਆਡੀਓ ਮੈਚ-3 ਗੇਮਪਲੇ ਨਾਲ ਸਿੰਕ ਕੀਤਾ ਗਿਆ",
+        "ਐਪ UI ਵਿੱਚ ਕਈ ਭਾਰਤੀ ਭਾਸ਼ਾਵਾਂ",
+        "ਵਿਕਲਪਿਕ ਪੁਸ਼ਪਾ ਅਰਾਧਨਾ (ਡਿਜੀਟਲ ਫੁੱਲ ਭੇਟ)"
       ]
     }
   ],
@@ -162,7 +208,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start ਸ਼ਨੀ Japa in Japam",
+      "label": "Start Shani Japa in Japam",
       "href": "https://japam.digital/?lang=pa&deity=shani&utm_source=google&utm_medium=seo&utm_campaign=shani-mantra-shanti&utm_content=start-japa",
       "style": "primary"
     },
@@ -181,54 +227,54 @@
       "style": "secondary"
     },
     {
-      "id": "sticky",
+      "id": "start-japa",
       "position": "sticky-footer",
-      "label": "Open Japam",
+      "label": "Start Shani Japa",
       "href": "https://japam.digital/?lang=pa&deity=shani&utm_source=google&utm_medium=seo&utm_campaign=shani-mantra-shanti&utm_content=sticky",
       "style": "primary"
     }
   ],
   "faqs": [
     {
-      "question": "How many times should I chant the Shani mantra?",
-      "answer": "Tradition often recommends 108 repetitions per session (one mala). Some undertake 9, 11, or 21 malas over days under guidance. Consistency matters more than a single extreme session."
+      "question": "ਮੈਨੂੰ ਸ਼ਨੀ ਮੰਤਰ ਦਾ ਜਾਪ ਕਿੰਨੀ ਵਾਰ ਕਰਨਾ ਚਾਹੀਦਾ ਹੈ?",
+      "answer": "ਪਰੰਪਰਾ ਅਕਸਰ ਪ੍ਰਤੀ ਸੈਸ਼ਨ (ਇੱਕ ਮਾਲਾ) 108 ਦੁਹਰਾਓ ਦੀ ਸਿਫ਼ਾਰਸ਼ ਕਰਦੀ ਹੈ। ਕੁਝ ਮਾਰਗਦਰਸ਼ਨ ਵਿੱਚ ਦਿਨਾਂ ਵਿੱਚ 9, 11, ਜਾਂ 21 ਮਾਲਾ ਕਰਦੇ ਹਨ। ਇਕਸਾਰਤਾ ਇੱਕ ਸਿੰਗਲ ਅਤਿ ਸੈਸ਼ਨ ਤੋਂ ਵੱਧ ਮਹੱਤਵ ਰੱਖਦੀ ਹੈ।"
     },
     {
-      "question": "What is the correct pronunciation?",
-      "answer": "Om Shan Shanicharaya Namaha — stress is gentle; listen to the Japam audio for a steady pace. Your family priest may prefer a slight regional variation."
+      "question": "ਸਹੀ ਉਚਾਰਨ ਕੀ ਹੈ?",
+      "answer": "ਓਮ ਸ਼ਾਨ ਸ਼ਨਿਚਾਰਾਯ ਨਮਹਾ — ਤਣਾਅ ਕੋਮਲ ਹੈ; ਸਥਿਰ ਰਫ਼ਤਾਰ ਲਈ ਜਾਪਮ ਆਡੀਓ ਸੁਣੋ। ਤੁਹਾਡਾ ਪਰਿਵਾਰਕ ਪਾਦਰੀ ਇੱਕ ਮਾਮੂਲੀ ਖੇਤਰੀ ਪਰਿਵਰਤਨ ਨੂੰ ਤਰਜੀਹ ਦੇ ਸਕਦਾ ਹੈ।"
     },
     {
-      "question": "Can Hanuman worship help with Shani troubles?",
-      "answer": "Many devotees worship Hanuman alongside Shani, especially on Saturdays. See our Hanuman–Shani guide for a balanced devotional approach."
+      "question": "ਕੀ ਹਨੂੰਮਾਨ ਦੀ ਪੂਜਾ ਸ਼ਨੀ ਦੀਆਂ ਮੁਸੀਬਤਾਂ ਵਿੱਚ ਮਦਦ ਕਰ ਸਕਦੀ ਹੈ?",
+      "answer": "ਬਹੁਤ ਸਾਰੇ ਸ਼ਰਧਾਲੂ ਸ਼ਨੀ ਦੇ ਨਾਲ ਹਨੂੰਮਾਨ ਦੀ ਪੂਜਾ ਕਰਦੇ ਹਨ, ਖਾਸ ਕਰਕੇ ਸ਼ਨੀਵਾਰ ਨੂੰ। ਸੰਤੁਲਿਤ ਭਗਤੀ ਪਹੁੰਚ ਲਈ ਸਾਡੀ ਹਨੂੰਮਾਨ-ਸ਼ਨੀ ਗਾਈਡ ਦੇਖੋ।"
     },
     {
-      "question": "Is Saturday mandatory?",
-      "answer": "Saturday is customary but not the only day. Daily short japa with sincerity is acceptable in many lineages if your guru or tradition allows."
+      "question": "ਕੀ ਸ਼ਨੀਵਾਰ ਲਾਜ਼ਮੀ ਹੈ?",
+      "answer": "ਸ਼ਨੀਵਾਰ ਰਿਵਾਜ ਹੈ ਪਰ ਇਕੱਲਾ ਦਿਨ ਨਹੀਂ। ਜੇਕਰ ਤੁਹਾਡਾ ਗੁਰੂ ਜਾਂ ਪਰੰਪਰਾ ਆਗਿਆ ਦਿੰਦੀ ਹੈ ਤਾਂ ਇਮਾਨਦਾਰੀ ਨਾਲ ਰੋਜ਼ਾਨਾ ਛੋਟਾ ਜਾਪ ਬਹੁਤ ਸਾਰੀਆਂ ਵੰਸ਼ਾਂ ਵਿੱਚ ਸਵੀਕਾਰਯੋਗ ਹੈ।"
     },
     {
-      "question": "Does Japam replace temple puja?",
-      "answer": "No. Japam supports home japa and counting; formal Shani puja, oil offering, and temple customs should follow your sampradaya and local priest."
+      "question": "ਕੀ ਜਪਮ ਮੰਦਰ ਦੀ ਪੂਜਾ ਦੀ ਥਾਂ ਲੈਂਦਾ ਹੈ?",
+      "answer": "ਸੰ. ਜਪਮ ਹੋਮ ਜਪ ਅਤੇ ਗਿਣਤੀ ਦਾ ਸਮਰਥਨ ਕਰਦਾ ਹੈ; ਰਸਮੀ ਸ਼ਨੀ ਪੂਜਾ, ਤੇਲ ਚੜ੍ਹਾਉਣ ਅਤੇ ਮੰਦਰ ਦੇ ਰੀਤੀ-ਰਿਵਾਜਾਂ ਨੂੰ ਤੁਹਾਡੇ ਸੰਪ੍ਰਦਾਇ ਅਤੇ ਸਥਾਨਕ ਪੁਜਾਰੀ ਦੀ ਪਾਲਣਾ ਕਰਨੀ ਚਾਹੀਦੀ ਹੈ।"
     },
     {
-      "question": "What is Sade Sati?",
-      "answer": "Sade Sati is the roughly seven-and-a-half-year period when transiting Shani moves through signs near one's Moon sign. Japa and ethical living are traditional responses — not fear-based rituals."
+      "question": "ਸਾਦੇ ਸਤੀ ਕੀ ਹੈ?",
+      "answer": "ਸਾਦੇ ਸਤੀ ਲਗਭਗ ਸਾਢੇ ਸੱਤ ਸਾਲਾਂ ਦੀ ਮਿਆਦ ਹੈ ਜਦੋਂ ਸ਼ਨੀ ਦਾ ਸੰਕਰਮਣ ਚੰਦਰਮਾ ਦੇ ਨੇੜੇ ਚਿੰਨ੍ਹਾਂ ਰਾਹੀਂ ਹੁੰਦਾ ਹੈ। ਜਪਾ ਅਤੇ ਨੈਤਿਕ ਜੀਵਨ ਪਰੰਪਰਾਗਤ ਪ੍ਰਤੀਕਿਰਿਆਵਾਂ ਹਨ - ਡਰ-ਅਧਾਰਿਤ ਰਸਮਾਂ ਨਹੀਂ।"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "ਇਹ ਲੇਖ ਕੇਵਲ ਵਿਦਿਅਕ ਅਤੇ ਭਗਤੀ ਅਭਿਆਸ ਲਈ ਹੈ। Japam ਡਾਕਟਰੀ, ਕਾਨੂੰਨੀ, ਜਾਂ ਵਿੱਤੀ ਸਲਾਹ ਪ੍ਰਦਾਨ ਨਹੀਂ ਕਰਦਾ ਹੈ। ਨਤੀਜੇ ਨਿੱਜੀ ਵਿਸ਼ਵਾਸ ਅਤੇ ਨਿਰੰਤਰ ਅਭਿਆਸ 'ਤੇ ਨਿਰਭਰ ਕਰਦੇ ਹਨ। ਐਪ ਵਿੱਚ ਮੰਤਰ ਪਾਠ ਅਤੇ ਆਡੀਓ ਜਪਾ ਸਮਰਥਨ ਲਈ ਹਨ; ਰਸਮੀ ਪੂਜਾ ਨਿਯਮਾਂ ਲਈ ਆਪਣੇ ਪਰਿਵਾਰਕ ਪੁਜਾਰੀ ਜਾਂ ਪਰੰਪਰਾ ਨਾਲ ਸਲਾਹ ਕਰੋ।"
   },
   "relatedPages": [
     {
       "pageId": "sade-sati-remedies",
-      "label": "Sade Sati remedies"
+      "label": "ਸਾਦੇ ਸਤੀ ਦੇ ਉਪਾਅ"
     },
     {
       "pageId": "hanuman-mantra-shani",
-      "label": "Hanuman for Shani"
+      "label": "ਸ਼ਨੀ ਲਈ ਹਨੂੰਮਾਨ"
     },
     {
       "pageId": "graha-shanti-mantra",
-      "label": "Graha shanti mantra"
+      "label": "ਗ੍ਰਹਿ ਸ਼ਾਂਤੀ ਮੰਤਰ"
     }
   ]
 }

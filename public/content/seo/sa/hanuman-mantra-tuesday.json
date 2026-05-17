@@ -4,27 +4,27 @@
   "lang": "sa",
   "slug": "hanuman-mantra-tuesday",
   "deityId": "hanuman",
-  "primaryKeyword": "hanuman mantra tuesday japa",
+  "primaryKeyword": "हनुमन् मन्त्र मंगलवार जप",
   "secondaryKeywords": [
-    "om sri hanumate namah",
-    "hanuman japa",
-    "hanuman chalisa vs mantra"
+    "ॐ श्री हनुमते नमः",
+    "हनुमान् जप",
+    "हनुमान चालीसा वि मन्त्र"
   ],
   "meta": {
-    "title": "Hanuman Mantra for Tuesday Japa | Japam",
-    "description": "Tuesday Hanuman mantra, 108 japa steps, strength and devotion — practise with Japam audio.",
+    "title": "मंगलवार जप के लिये हनुमान मंत्र | जपम्",
+    "description": "मंगलवार हनुमान मन्त्र, १०८ जप पद, बल व भक्ति — जपम श्रव्य सहित अभ्यास।",
     "ogImage": "/images/deities/hanuman.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Hanuman Mantra and Tuesday Japa"
+      "text": "हनुमन् मन्त्र तथा मंगल जप"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Hanuman embodies strength, service, and Ram bhakti. Tuesday (Mangalvar) is widely dedicated to his worship across India."
+          "text": "हनुमानः बलं, सेवां, रामभक्तिं च मूर्तरूपं धारयति। मंगलवासरः (मङ्गलवरः) सम्पूर्णे भारते तस्य पूजायाः कृते बहुधा समर्पितः अस्ति।"
         }
       ]
     },
@@ -32,13 +32,13 @@
       "type": "p",
       "runs": [
         {
-          "text": "This guide covers the core Hanuman mantra in Japam and how to chant it 108 times."
+          "text": "अस्मिन् मार्गदर्शके जपमे हनुमत्मन्त्रस्य मूलं, तस्य १०८ वारं जपः कथं करणीयः इति च आच्छादितम् अस्ति ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "मन्त्रार्थः"
     },
     {
       "type": "blockquote",
@@ -53,57 +53,102 @@
       "type": "p",
       "runs": [
         {
-          "text": "Chant with a calm mind, offering salutation (Namaha) rather than demanding outcomes."
+          "text": "परिणामान् आग्रहं न कृत्वा नमस्कारं (नमहा) कृत्वा शान्तचित्तेन जपं कुर्वन्तु।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "जपस्य लाभाः (पारम्परिकदृष्टिकोणः) २."
     },
     {
       "type": "ul",
       "items": [
-        "Courage and steadiness in difficulties",
-        "Protection in traditional folk belief — stated devotionally",
-        "Complements Hanuman Chalisa for those who recite both",
-        "Tuesday fasting or simple puja in many families"
+        "कष्टेषु साहसं स्थिरता च",
+        "पारम्परिक लोकप्रत्यये रक्षणम् — भक्तिपूर्वकं उक्तम्",
+        "उभयोः पाठकानां कृते हनुमान् चालीसा पूरयति",
+        "मंगलवासरस्य उपवासः वा सरलपूजा अनेकेषु परिवारेषु"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "१०८ वारं जपं कथं करणीयम्"
     },
     {
       "type": "ul",
       "items": [
-        "Face east or the deity image; chant 108 on rudraksha or tulsi mala",
-        "Read Hanuman Chalisa before or after if that is your vow",
-        "Offer sindoor and oil lamp on Tuesday when doing formal puja",
-        "Keep body and speech calm during japa"
+        "मुखं पूर्वम् अथवा देवप्रतिमा; रुद्राक्षे वा तुलसी माले वा जपः १०८",
+        "हनुमान् चालीसा पठन्तु पूर्वं पश्चात् वा यदि तत् व्रतम्",
+        "औपचारिकपूजां कुर्वन् मंगलवासरे सिन्दूरं, तैलदीपं च अर्पयन्तु",
+        "जपसमये शरीरं वाक् च शान्तं कुर्वन्तु"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "कदा जपेत्"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Tuesday mornings or evenings; Saturdays also link Hanuman with Shani pariharam in some regions."
+          "text": "मंगलवासरे प्रातःकाले वा सायंकाले वा; शनिवासरः अपि केषुचित् प्रदेशेषु हनुमान् शनिपरिहारेण सह सम्बध्दयति।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "१०८ पुनरावृत्तयः किमर्थं महत्त्वपूर्णाः सन्ति",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Japam’s Hanuman mode plays Om Sri Hanumate Namaha while you play — ideal for counting 108 during a break.",
+          "text": "१०८ संख्या जपमाले एकः पूर्णगोलः अस्ति । नित्यपुनरावृत्तिः मनः शान्तं करोति, मन्त्रस्य अर्थे ध्यानं गभीरं करोति च ।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "केचन परम्पराः ११ वा २१ वा मालाः विहिताः सन्ति — भवतः गुरुं वा पुरोहितं वा भवतः व्रतस्य अनुकूलानि गणनानि पृच्छन्तु ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "परिहरणीयानि सामान्यानि त्रुटयः"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "अतिशीघ्रं जपं कृत्वा ध्वनिं प्रति ध्यानं नष्टम्",
+        "अनेकदेवव्रतमिश्रणं विना मार्गदर्शनम् |",
+        "भक्ति-नीति-जीवनस्य स्थाने केवलं भौतिक-परिणामस्य अपेक्षा"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मन्दिरं गृहं च एकत्र अभ्यासं कुर्वन्ति"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "गृहं जपः मन्दिरपूजायाः समर्थनं करोति; दर्शनस्य स्थाने न भवति। उत्सवदिनेषु शनिवासरे वा मन्दिरस्य दर्शनं पारिवारिकपरम्परां सुदृढं करोति ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपं सह अभ्यासं कुरुत"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "जपमस्य हनुमान् मोड् भवतः क्रीडन् ॐ श्री हनुमते नमः इति वादयति — विरामसमये १०८ गणनाय आदर्शः ।",
           "bold": false
         }
       ]
@@ -113,7 +158,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start हनुमान् Japa in Japam",
+      "label": "Start Hanuman Japa in Japam",
       "href": "https://japam.digital/?lang=sa&deity=hanuman&utm_source=google&utm_medium=seo&utm_campaign=hanuman-mantra-tuesday&utm_content=start-japa",
       "style": "primary"
     },
@@ -141,41 +186,41 @@
   ],
   "faqs": [
     {
-      "question": "Mantra or Chalisa first?",
-      "answer": "Either order is fine; follow your family custom."
+      "question": "मन्त्रः वा चालीसा प्रथमं ?",
+      "answer": "क्रमः अपि सुष्ठु अस्ति; भवतः कुलप्रथां अनुसृत्य।"
     },
     {
-      "question": "Can women chant Hanuman mantra?",
-      "answer": "Yes — widely accepted in most lineages."
+      "question": "किं स्त्रियः हनुमत्मन्त्रं जपन्ति ?",
+      "answer": "आम् — अधिकांशवंशेषु बहुधा स्वीकृतम् ।"
     },
     {
-      "question": "How does Hanuman help Shani?",
-      "answer": "See our Hanuman–Shani guide for combined Saturday practice."
+      "question": "हनुमानः शनिस्य कथं साहाय्यं करोति ?",
+      "answer": "संयुक्तशनिवासरस्य अभ्यासार्थं अस्माकं हनुमान–शनीमार्गदर्शिकां पश्यन्तु।"
     },
     {
-      "question": "Best time on Tuesday?",
-      "answer": "Brahma muhurta or evening after sunset are common."
+      "question": "मंगलवासरे सर्वोत्तमः समयः?",
+      "answer": "ब्रह्म मुहूर्तं वा सूर्यास्तं परं सायं वा सामान्यम्।"
     },
     {
-      "question": "Is sindoor required?",
-      "answer": "For puja yes; silent japa does not require it."
+      "question": "किं सिण्डूर् आवश्यकम् ?",
+      "answer": "पूजायाः कृते आम्; मौनजपं न अपेक्षते।"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "एषः लेखः केवलं शैक्षणिक-भक्ति-अभ्यासार्थम् अस्ति । जपम् चिकित्सा, कानूनी, आर्थिकपरामर्शं न ददाति । परिणामाः व्यक्तिगतविश्वासस्य, निरन्तरं अभ्यासस्य च उपरि निर्भरं भवति। एप् मध्ये मन्त्रपाठः श्रव्यं च जपासमर्थनार्थम् अस्ति; औपचारिकपूजानियमानां कृते स्वपरिवारस्य पुरोहितेन वा परम्परेण वा परामर्शं कुर्वन्तु।"
   },
   "relatedPages": [
     {
       "pageId": "mantra-hanuman",
-      "label": "Hanuman mantra pillar"
+      "label": "हनुमन् मन्त्रस्तम्भः"
     },
     {
       "pageId": "hanuman-mantra-shani",
-      "label": "Hanuman for Shani"
+      "label": "शनिस्य कृते हनुमान्"
     },
     {
       "pageId": "hanuman-jayanti-japa",
-      "label": "Hanuman Jayanti"
+      "label": "हनुमत् जयन्ती"
     }
   ]
 }

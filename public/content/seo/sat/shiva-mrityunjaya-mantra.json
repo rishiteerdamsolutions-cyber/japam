@@ -4,27 +4,27 @@
   "lang": "sat",
   "slug": "shiva-mrityunjaya-mantra",
   "deityId": "shiva",
-  "primaryKeyword": "mahamrityunjaya mantra japa",
+  "primaryKeyword": "ᱢᱟᱦᱟᱢᱨᱤᱛᱭᱩᱱᱡᱟᱭᱟ ᱢᱟᱱᱛᱨᱚ ᱡᱟᱯᱟ",
   "secondaryKeywords": [
-    "om namah shivaya",
-    "shiva mantra health",
-    "monday shiva vrat"
+    "ᱚᱢ ᱱᱟᱢᱦ ᱥᱤᱣᱟᱭᱟ",
+    "ᱥᱤᱣᱟ ᱢᱟᱱᱛᱨᱚ ᱦᱚᱲᱢᱚ ᱥᱟᱶᱟᱨ",
+    "ᱚᱛᱮ ᱢᱟᱦᱟ ᱥᱤᱣᱟ ᱵᱷᱨᱟᱛ"
   ],
   "meta": {
-    "title": "Shiva & Mrityunjaya Mantra Japa | Japam",
-    "description": "Om Namah Shivaya in Japam; Maha Mrityunjaya tradition, Monday vrat, and 108 japa guide.",
+    "title": "ᱥᱤᱣᱟ ᱟᱨ ᱢᱨᱤᱛᱭᱩᱱᱡᱟᱭᱟ ᱢᱟᱱᱛᱨᱟ ᱡᱟᱯᱟ | ᱡᱟᱯᱟᱢ",
+    "description": "ᱚᱢ ᱱᱟᱢᱦ ᱥᱤᱣᱟᱭᱟ ᱡᱟᱯᱟᱢ ᱨᱮ; ᱢᱟᱦᱟ ᱢᱨᱤᱛᱭᱩᱱᱡᱟᱭᱟ ᱥᱮᱨᱣᱟ, ᱚᱛᱮ ᱢᱟᱦᱟ ᱵᱷᱨᱟᱛ, ᱟᱨ ᱑᱐᱘ ᱡᱟᱯᱟ ᱜᱟᱭᱤᱰ᱾",
     "ogImage": "/images/deities/shiva.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Shiva Mantra: Om Namah Shivaya and Mrityunjaya Tradition"
+      "text": "ᱥᱤᱣᱟ ᱢᱟᱱᱛᱨᱚ: ᱚᱢ ᱱᱟᱢᱦ ᱥᱤᱣᱟᱭᱟ ᱟᱨ ᱢᱨᱤᱛᱭᱩᱱᱡᱟᱭᱟ ᱥᱮᱨᱣᱟ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Lord Shiva is the destroyer of ignorance and the lord of meditation. Japam uses Om Namah Shivaya as the primary gameplay mantra."
+          "text": "ᱵᱚᱸᱜᱟ ᱥᱤᱣ ᱫᱚ ᱟᱪᱮᱛᱟᱱ ᱨᱮᱱ ᱵᱟᱹᱲᱤᱡ ᱟᱨ ᱫᱷᱤᱭᱟᱱ ᱨᱮᱱ ᱵᱚᱸᱜᱟ ᱠᱟᱱᱟᱭ ᱾ ᱡᱟᱯᱟᱢ ᱚᱢ ᱱᱟᱢᱟᱦ ᱥᱤᱣᱟᱭᱟ ᱢᱩᱲᱩᱫ ᱜᱮᱢᱯᱞᱮ ᱢᱟᱱᱛᱨᱚ ᱞᱮᱠᱟᱛᱮ ᱵᱮᱵᱷᱟᱨ ᱮᱫᱟᱭ ᱾"
         }
       ]
     },
@@ -32,13 +32,13 @@
       "type": "p",
       "runs": [
         {
-          "text": "The Maha Mrityunjaya mantra is a related powerful chant for health and protection — often discussed alongside Panchakshari japa."
+          "text": "ᱢᱟᱦᱟ ᱢᱨᱤᱛᱭᱩᱱᱡᱟ ᱢᱟᱱᱛᱨᱚ ᱫᱚ ᱦᱚᱲᱢᱚ ᱟᱨ ᱨᱩᱠᱷᱤᱭᱟᱹ ᱞᱟᱹᱜᱤᱫ ᱡᱚᱲᱟᱣ ᱫᱟᱲᱮᱭᱟᱱ ᱪᱟᱱᱫᱚ ᱠᱟᱱᱟ - ᱟᱹᱰᱤ ᱜᱷᱟᱹᱲᱤᱡ ᱯᱟᱱᱪᱟᱠᱥᱟᱨᱤ ᱡᱟᱯᱟ ᱥᱟᱶ ᱥᱟᱶᱛᱮ ᱜᱟᱯᱟᱞᱢᱟᱨᱟᱣ ᱠᱟᱱᱟ᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "ᱢᱟᱱᱛᱨᱚ ᱨᱮᱭᱟᱜ ᱢᱮᱱᱮᱛ"
     },
     {
       "type": "blockquote",
@@ -53,57 +53,102 @@
       "type": "p",
       "runs": [
         {
-          "text": "“I bow to Shiva” — the five-syllable Panchakshari is among the most universal Shaiva japa mantras."
+          "text": "“ᱤᱧ ᱥᱤᱣᱟ ᱴᱷᱮᱱ ᱤᱧ ᱵᱚᱸᱫᱚᱜ ᱠᱟᱱᱟ” — ᱢᱚᱲᱮ ᱥᱤᱵᱤᱞ ᱯᱟᱱᱪᱟᱠᱥᱟᱨᱤ ᱫᱚ ᱥᱟᱱᱟᱢ ᱠᱷᱚᱱ ᱥᱟᱱᱟᱢ ᱥᱟᱭᱵᱟ ᱡᱟᱯᱟ ᱢᱟᱱᱛᱨᱚ ᱠᱚ ᱢᱩᱫᱽ ᱨᱮ ᱢᱮᱱᱟᱜᱼᱟ ᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "ᱡᱟᱯᱟ ᱨᱮᱭᱟᱜ ᱞᱟᱵᱷ (ᱯᱚᱨᱚᱢ ᱧᱮᱞᱚᱢ)"
     },
     {
       "type": "ul",
       "items": [
-        "Calms mind; supports meditation and detachment",
-        "Monday (Somvar) is sacred for Shiva",
-        "Mrityunjaya japa traditionally associated with healing prayers",
-        "Rudraksha mala is classic for Shiva mantra"
+        "ᱢᱚᱱᱮ ᱛᱷᱤᱨ ᱢᱮ; ᱫᱷᱤᱭᱟᱱ ᱟᱨ ᱰᱤᱴᱟᱪᱢᱮᱱᱴ ᱥᱟᱯᱚᱨᱴ ᱮᱫᱟᱭ",
+        "ᱚᱛᱮ ᱢᱟᱦᱟᱸ (ᱥᱚᱢᱵᱟᱨ) ᱫᱚ ᱥᱤᱣᱟ ᱞᱟᱹᱜᱤᱫ ᱥᱚᱱᱚᱛ ᱠᱟᱱᱟ",
+        "ᱢᱨᱤᱛᱭᱩᱱᱡᱟᱭᱟ ᱡᱟᱯᱟ ᱫᱚ ᱥᱮᱫᱽᱨᱟ ᱞᱮᱠᱟᱛᱮ ᱥᱟᱬᱮᱥᱤᱭᱟᱹ ᱱᱮᱦᱚᱨ ᱥᱟᱶ ᱡᱚᱲᱟᱣ ᱢᱮᱱᱟᱜᱼᱟ",
+        "ᱨᱩᱫᱨᱟᱠᱥᱟ ᱢᱟᱞᱟ ᱫᱚ ᱥᱤᱣᱟ ᱢᱟᱱᱛᱨᱚ ᱞᱟᱹᱜᱤᱫ ᱠᱞᱟᱥᱤᱠ ᱠᱟᱱᱟ"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "᱑᱐᱘ ᱫᱷᱟᱣ ᱪᱮᱫ ᱞᱮᱠᱟ ᱥᱮᱨᱮᱧ ᱦᱩᱭᱩᱜ-ᱟ"
     },
     {
       "type": "ul",
       "items": [
-        "Chant 108 times on rudraksha; abhisheam with water or milk on Mondays if doing puja",
-        "Learn Mrityunjaya separately if your priest teaches it — longer mantra",
-        "Visit temple or home lingam when possible",
-        "Use Japam for Om Namah Shivaya counting"
+        "ᱨᱩᱰᱨᱟᱠᱥᱟ ᱨᱮ ᱑᱐᱘ ᱫᱷᱟᱣ ᱪᱟᱱᱴ ᱢᱮ; ᱚᱛᱮ ᱢᱟᱦᱟᱸ ᱦᱤᱞᱚᱜ ᱫᱟᱜ ᱥᱮ ᱛᱚᱣᱟ ᱥᱟᱶ ᱟᱵᱷᱤᱥᱤᱢ ᱡᱩᱫᱤ ᱯᱩᱡᱟ ᱠᱚ ᱠᱚᱨᱟᱣ ᱠᱷᱟᱱ",
+        "ᱢᱨᱤᱛᱭᱩᱱᱡᱟᱭᱟ ᱡᱚᱝ ᱡᱚᱝ ᱪᱮᱫᱚᱜ ᱢᱮ ᱡᱩᱫᱤ ᱟᱢ ᱨᱮᱱ ᱯᱟᱭᱡᱤᱴ ᱮ ᱪᱮᱫ ᱟᱭᱟ — ᱡᱮᱞᱮᱝ ᱢᱟᱱᱛᱨᱚ",
+        "ᱡᱚᱠᱷᱚᱱ ᱦᱩᱭ ᱫᱟᱲᱮᱭᱟᱜ-ᱟ ᱢᱟᱱᱫᱤᱨ ᱥᱮ ᱚᱲᱟᱜ ᱞᱤᱝᱜᱟᱢ ᱧᱮᱞ ᱢᱮ",
+        "ᱚᱢ ᱱᱟᱢᱦ ᱥᱤᱣᱟᱭᱟ ᱞᱮᱠᱷᱟ ᱞᱟᱹᱜᱤᱫ ᱡᱟᱯᱚᱢ ᱵᱮᱵᱷᱟᱨ ᱢᱮ"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "ᱛᱤᱱᱨᱮ ᱥᱮᱨᱮᱧ ᱦᱩᱭᱩᱜ-ᱟ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Monday, Pradosham, and Maha Shivaratri are peak times."
+          "text": "ᱚᱛᱮ ᱢᱟᱦᱟᱸ, ᱯᱨᱟᱫᱚᱥᱚᱢ, ᱟᱨ ᱢᱟᱦᱟ ᱥᱤᱣᱟᱨᱟᱛᱨᱤ ᱫᱚ ᱥᱤᱨᱟᱹ ᱚᱠᱛᱚ ᱠᱟᱱᱟ ᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "᱑᱐᱘ ᱫᱚᱦᱲᱟ ᱪᱮᱫᱟᱜ ᱢᱟᱱᱚᱛ ᱢᱮᱱᱟᱜᱼᱟ",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Shiva mode in Japam features Om Namah Shivaya audio and japa counter. Explore 108 specials during Shivaratri in the app.",
+          "text": "᱑᱐᱘ ᱮᱞ ᱫᱚ ᱡᱟᱯᱟ ᱢᱟᱞᱟ ᱨᱮ ᱢᱤᱫ ᱯᱩᱨᱟᱹ ᱜᱩᱞᱟᱹᱭ ᱠᱟᱱᱟ ᱾ ᱛᱷᱤᱨ ᱫᱚᱦᱲᱟ ᱫᱚᱦᱲᱟ ᱛᱮ ᱢᱚᱱᱮ ᱛᱷᱤᱨᱚᱜ ᱟᱨ ᱢᱟᱱᱛᱨᱚ ᱨᱮᱭᱟᱜ ᱢᱮᱱᱮᱛ ᱨᱮ ᱜᱟᱹᱦᱤᱨ ᱫᱷᱭᱟᱱ ᱮᱢᱚᱜ ᱠᱟᱱᱟ᱾"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱛᱤᱱᱟᱹᱜ ᱜᱟᱱ ᱯᱚᱨᱚᱵ ᱑᱑ ᱵᱟᱝᱠᱷᱟᱱ ᱒᱑ ᱢᱟᱞᱟ ᱞᱟᱹᱭ ᱮᱫᱟ - ᱟᱢᱟᱜ ᱜᱩᱨᱩ ᱵᱟᱝᱠᱷᱟᱱ ᱯᱟᱭᱡᱤᱴ ᱴᱷᱮᱱ ᱟᱢᱟᱜ ᱵᱟᱛᱟᱣ ᱞᱮᱠᱟᱱ ᱞᱮᱠᱷᱟ ᱞᱟᱹᱜᱤᱫ ᱠᱩᱞᱤᱭᱮᱢ ᱾"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱥᱟᱫᱷᱟᱨᱚᱱ ᱵᱷᱩᱞ ᱠᱚ ᱠᱷᱚᱱ ᱥᱟᱦᱟᱜ ᱞᱟᱹᱜᱤᱫ"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "ᱟᱹᱰᱤ ᱩᱥᱟᱹᱨᱟ ᱪᱟᱱᱴᱤᱝ ᱟᱨ ᱥᱟᱰᱮ ᱨᱮ ᱯᱷᱚᱠᱟᱥ ᱟᱫ ᱠᱟᱛᱮ",
+        "ᱵᱤᱱ ᱫᱤᱥᱟᱹ ᱛᱮ ᱟᱭᱢᱟ ᱵᱚᱝᱜᱟ ᱠᱚ ᱢᱮᱥᱟᱞ ᱢᱮ",
+        "ᱵᱷᱚᱠᱛᱤ ᱟᱨ ᱱᱮᱭᱟᱱ ᱡᱤᱭᱚᱱ ᱵᱚᱫᱚᱞ ᱠᱟᱛᱮ ᱥᱩᱢᱩᱝ ᱡᱤᱱᱤᱥ ᱚᱨᱡᱚ ᱨᱮᱭᱟᱜ ᱟᱥᱟ ᱢᱮ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱢᱟᱱᱫᱤᱨ ᱟᱨ ᱚᱲᱟᱜ ᱨᱮ ᱢᱤᱫ ᱥᱟᱶᱛᱮ ᱦᱮᱣᱟ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱚᱲᱟᱜ ᱡᱟᱯᱟ ᱢᱟᱱᱫᱤᱨ ᱵᱚᱸᱜᱟ ᱥᱟᱯᱚᱨᱴ ᱮᱫᱟᱭ; ᱱᱚᱣᱟ ᱫᱚ ᱫᱟᱨᱥᱟᱱ ᱵᱟᱭ ᱵᱚᱫᱚᱞᱟ᱾ ᱯᱚᱨᱚᱵ ᱢᱟᱦᱟ ᱥᱮ ᱧᱩᱦᱩᱢ ᱢᱟᱦᱟ ᱦᱤᱞᱚᱜ ᱢᱟᱱᱫᱤᱨ ᱧᱮᱞ ᱛᱮ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮᱭᱟᱜ ᱥᱮᱨᱣᱟ ᱫᱚ ᱠᱮᱴᱮᱡ ᱜᱮᱭᱟ᱾"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱡᱟᱯᱟᱢ ᱥᱟᱶ ᱯᱨᱮᱠᱴᱤᱥ ᱢᱮ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱡᱟᱯᱟᱢ ᱨᱮ ᱥᱤᱣᱟ ᱢᱚᱰ ᱨᱮ ᱚᱢ ᱱᱟᱢᱟᱦ ᱥᱤᱣᱟᱭᱟ ᱚᱰᱤᱭᱳ ᱟᱨ ᱡᱟᱯᱟ ᱠᱟᱣᱩᱱᱴᱟᱨ ᱨᱮᱭᱟᱜ ᱜᱩᱱ ᱢᱮᱱᱟᱜᱼᱟ ᱾ ᱮᱯ ᱨᱮ ᱥᱤᱣᱟᱨᱟᱛᱨᱤ ᱚᱠᱛᱚ ᱨᱮ ᱑᱐᱘ ᱵᱤᱥᱮᱥ ᱯᱟᱱᱛᱮ ᱢᱮ᱾",
           "bold": false
         }
       ]
@@ -113,7 +158,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start ᱥᱤᱵ Japa in Japam",
+      "label": "Start Shiva Japa in Japam",
       "href": "https://japam.digital/?lang=sat&deity=shiva&utm_source=google&utm_medium=seo&utm_campaign=shiva-mrityunjaya-mantra&utm_content=start-japa",
       "style": "primary"
     },
@@ -141,41 +186,41 @@
   ],
   "faqs": [
     {
-      "question": "Is Mrityunjaya in Japam gameplay?",
-      "answer": "Gameplay uses Om Namah Shivaya; you may chant Mrityunjaya separately as your vow."
+      "question": "ᱪᱮᱫ ᱢᱨᱤᱛᱭᱩᱱᱡᱟᱭᱟ ᱡᱟᱯᱟᱢ ᱜᱮᱢᱯᱞᱮ ᱨᱮ ᱢᱮᱱᱟᱭᱟ?",
+      "answer": "ᱜᱮᱢᱯᱞᱮ ᱚᱢ ᱱᱟᱢᱟᱦ ᱥᱤᱣᱟᱭᱟ ᱵᱮᱵᱷᱟᱨ ᱮᱫᱟᱭ; ᱟᱢ ᱟᱢᱟᱜ ᱵᱟᱛᱟᱣ ᱞᱮᱠᱟᱛᱮ ᱢᱨᱤᱛᱭᱩᱱᱡᱟᱭᱟ ᱡᱚᱲᱟᱣ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ ᱾"
     },
     {
-      "question": "Can I chant at night?",
-      "answer": "Yes — Shiva is especially associated with night meditation."
+      "question": "ᱪᱮᱫ ᱤᱧ ᱧᱤᱫᱟᱹ ᱥᱮᱨᱮᱧ ᱫᱟᱲᱮᱭᱟᱜᱼᱟ?",
+      "answer": "ᱦᱮᱸ - ᱥᱤᱣᱟ ᱫᱚ ᱠᱷᱟᱥ ᱠᱟᱭᱛᱮ ᱧᱤᱫᱟᱹ ᱫᱷᱤᱭᱟᱱ ᱥᱟᱶ ᱡᱚᱲᱟᱣ ᱢᱮᱱᱟᱭᱟ ᱾"
     },
     {
-      "question": "How many Mrityunjaya malas?",
-      "answer": "Often 108 or 1008 on Maha Shivaratri under guidance — ask your guru."
+      "question": "ᱛᱤᱱᱟᱹᱜ ᱜᱟᱱ ᱢᱨᱤᱛᱭᱩᱱᱡᱟᱭᱟ ᱢᱟᱞᱟᱥ?",
+      "answer": "ᱢᱟᱦᱟ ᱥᱤᱣᱟᱨᱟᱛᱨᱤ ᱨᱮ ᱑᱐᱘ ᱵᱟᱝᱠᱷᱟᱱ ᱑᱐᱐᱘ ᱫᱤᱥᱟᱹ ᱛᱮ - ᱟᱢ ᱨᱮᱱ ᱜᱩᱨᱩ ᱠᱩᱞᱤᱭᱮᱢ ᱾"
     },
     {
-      "question": "Bel patra required?",
-      "answer": "For puja yes; mental japa does not require offerings."
+      "question": "ᱵᱮᱞ ᱯᱟᱴᱨᱟ ᱞᱟᱹᱠᱛᱤᱜ ᱠᱟᱱᱟ?",
+      "answer": "ᱯᱩᱡᱟ ᱞᱟᱹᱜᱤᱫ ᱦᱮᱸ; ᱢᱚᱱᱮᱴᱟᱞ ᱡᱟᱯᱟ ᱞᱟᱹᱜᱤᱫ ᱯᱨᱚᱥᱟᱨ ᱨᱮᱭᱟᱜ ᱞᱟᱹᱠᱛᱤ ᱵᱟᱹᱱᱩᱜᱼᱟ ᱾"
     },
     {
-      "question": "Is Monday fast necessary?",
-      "answer": "Optional vow; mantra japa alone is still valid."
+      "question": "ᱪᱮᱫ ᱚᱛᱮ ᱢᱟᱦᱟᱸ ᱦᱤᱞᱚᱜ ᱩᱥᱟᱹᱨᱟ ᱞᱟᱹᱠᱛᱤᱭᱟᱱᱟ?",
+      "answer": "ᱚᱯᱥᱚᱱᱟᱞ ᱵᱟᱛᱟᱣ; ᱢᱟᱱᱛᱨᱚ ᱡᱟᱯᱟ ᱮᱠᱞᱟ ᱱᱤᱛ ᱦᱚᱸ ᱢᱟᱱᱭᱟ ᱜᱮᱭᱟ ᱾"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "ᱱᱚᱣᱟ ᱚᱱᱚᱞ ᱫᱚ ᱥᱩᱢᱩᱝ ᱥᱮᱪᱮᱫ ᱟᱨ ᱵᱷᱚᱠᱛᱚᱱ ᱦᱮᱣᱟ ᱞᱟᱹᱜᱤᱫ ᱜᱮ ᱾ ᱡᱟᱯᱟᱢ ᱫᱚ ᱪᱤᱠᱤᱥᱟ, ᱟᱹᱭᱤᱱᱤ, ᱟᱨ ᱵᱟᱝ ᱠᱟᱹᱣᱰᱤ ᱥᱚᱞᱦᱟ ᱵᱟᱭ ᱮᱢᱚᱜ ᱠᱟᱱᱟ᱾ ᱚᱨᱡᱚ ᱫᱚ ᱯᱚᱨᱥᱚᱱᱟᱞ ᱯᱟᱹᱛᱭᱟᱹᱣ ᱟᱨ ᱞᱮᱛᱟᱲ ᱦᱮᱣᱟ ᱨᱮ ᱴᱮᱦᱟᱱᱰ ᱢᱮᱱᱟᱜᱼᱟ᱾ ᱮᱯ ᱨᱮ ᱢᱟᱱᱛᱨᱟ ᱚᱱᱚᱞ ᱟᱨ ᱚᱰᱤᱭᱳ ᱫᱚ ᱡᱟᱯᱟ ᱥᱟᱯᱚᱨᱴ ᱞᱟᱹᱜᱤᱫ ᱠᱟᱱᱟ; ᱟᱹᱭᱫᱟᱹᱨᱤ ᱯᱩᱡᱟ ᱟᱹᱨᱤ ᱞᱟᱹᱜᱤᱫ ᱟᱯᱮ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮᱱ ᱯᱟᱭᱡᱤᱴ ᱥᱮ ᱥᱮᱫᱽᱨᱟ ᱥᱚᱞᱦᱟᱭ ᱢᱮ ᱾"
   },
   "relatedPages": [
     {
       "pageId": "mantra-shiva",
-      "label": "Shiva mantra pillar"
+      "label": "ᱥᱤᱣᱟ ᱢᱟᱱᱛᱨᱟ ᱛᱷᱚᱢ"
     },
     {
       "pageId": "shivaratri-mantra",
-      "label": "Shivaratri japa"
+      "label": "ᱥᱤᱣᱟᱨᱟᱛᱨᱤ ᱡᱟᱯᱟ"
     },
     {
       "pageId": "japa-108-times",
-      "label": "108 japa guide"
+      "label": "᱑᱐᱘ ᱡᱟᱯᱟ ᱜᱟᱭᱤᱰ"
     }
   ]
 }

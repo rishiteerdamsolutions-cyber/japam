@@ -4,27 +4,27 @@
   "lang": "sd",
   "slug": "mantra-shanmukha-murugan",
   "deityId": "shanmukha",
-  "primaryKeyword": "murugan subramanya mantra",
+  "primaryKeyword": "murugan subramanya منتر",
   "secondaryKeywords": [
-    "om saravana bhavaya namaha",
-    "skanda shasti mantra",
-    "tamil murugan japa"
+    "اوم ساروانا ڀوايا نامو",
+    "اسڪند شاستي منتر",
+    "تامل موروگن جاپا"
   ],
   "meta": {
-    "title": "ڪارتيڪ Mantra — 108 Japa | Japam",
-    "description": "ڪارتيڪ mantra meaning, 108 japa steps, and practice in Japam.",
+    "title": "موروگن (شنموخا) منتر جپ | جپان",
+    "description": "سبرامنيا/مورگن/اسڪند منتر - اوم سراوان ڀوايا نامو - 108 جپم ۾.",
     "ogImage": "/images/deities/shanmukha.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "ڪارتيڪ — 108 Japa"
+      "text": "موروگن منتر - اوم سراوان ڀوايا نامو"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Lord Murugan (Shanmukha, Subramanya, Skanda) is the Tamil and pan-Indian god of courage and wisdom. His mantra is central to Skanda Shasti and Thai Poosam."
+          "text": "لارڊ موروگن (شنموڪا، سبرامنيا، اسڪنڊا) تامل ۽ پان-انڊين ديوان جرئت ۽ حڪمت جو آهي. سندس منتر اسڪنڊا شاستي ۽ ٿائي پوسم ۾ مرڪزي حيثيت رکي ٿو."
         }
       ]
     },
@@ -32,13 +32,13 @@
       "type": "p",
       "runs": [
         {
-          "text": "Japam includes Murugan with authentic mantra audio for daily japa."
+          "text": "Japam روزاني جپ لاء مستند منتر آڊيو سان گڏ مورگن شامل آهي."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "منتر جي معنيٰ"
     },
     {
       "type": "blockquote",
@@ -53,57 +53,102 @@
       "type": "p",
       "runs": [
         {
-          "text": "Chant with a calm mind, offering salutation (Namaha) rather than demanding outcomes."
+          "text": "پرسڪون ذهن سان گپ ڪريو، نتيجن جو مطالبو ڪرڻ بجاءِ سلام پيش ڪريو (نامها)."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "جاپ جا فائدا (روايتي خيال)"
     },
     {
       "type": "ul",
       "items": [
-        "Victory over inner fear — traditional Skanda symbolism",
-        "Tuesday and Shasti days are sacred",
-        "Vel worship and kavadi traditions complement japa",
-        "Students pray for clarity and discipline"
+        "اندروني خوف تي فتح - روايتي اسڪنڊا جي علامت",
+        "اڱارو ۽ شڪتي جا ڏينهن مقدس آهن",
+        "ويل پوڄا ۽ ڪوادي روايتون جاپ کي پورو ڪن ٿيون",
+        "شاگرد وضاحت ۽ نظم و ضبط لاء دعا ڪن ٿا"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "108 ڀيرا ڪيئن ڳايو"
     },
     {
       "type": "ul",
       "items": [
-        "Chant 108 on Shasti or daily morning",
-        "Offer red flowers if doing puja",
-        "Visit Murugan temple on Thai Poosam when possible",
-        "Track rounds in Japam during commute"
+        "شاستي يا روزانو صبح جو 108 چئو",
+        "پوڄا ڪرڻ جي صورت ۾ ڳاڙهي گل چڙهڻ",
+        "جڏهن ممڪن هجي ٿائي پوسم تي موروگن مندر جو دورو ڪريو",
+        "سفر دوران Japam ۾ ٽريڪ گول"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "جڏهن ڳائڻ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Skanda Shasti (six days in Aippasi/Tulam month), Thai Poosam, and Tuesdays."
+          "text": "اسڪنڊا شاستي (ايپاسي / تلم مهيني ۾ ڇهه ڏينهن)، ٿائي پوسم، ۽ اڱارو."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "ڇو 108 ورجائي اهميت رکن ٿا",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Choose Shanmukha in Japam for Om Saravana Bhavaya Namaha — regional names Murugan/Skanda all point to the same beloved deity.",
+          "text": "نمبر 108 جپا مالا تي هڪ مڪمل گول آهي. مسلسل ورهاڱي دماغ کي پرسکون ڪري ٿو ۽ منتر جي معني تي ڌيان ڏئي ٿو."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ڪجھ روايتون 11 يا 21 مالا بيان ڪن ٿيون - پنھنجي گرو يا پادريءَ کان پڇو ته توھان جي واعدي مطابق ڳڻپ لاءِ."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "عام غلطين کان بچڻ لاء"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "آواز تي تمام تيز آواز ۽ ڌيان وڃائڻ",
+        "ھدايت کانسواءِ ڪيترن ئي ديوتائن جون واڳون گڏ ڪرڻ",
+        "ڀڪت ۽ اخلاقي زندگي گذارڻ بدران فقط مادي نتيجن جي اميد رکڻ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "مندر ۽ گهر گڏجي مشق"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "گھر جاپا مندر جي پوڄا جي حمايت ڪري ٿو. اهو درشن کي تبديل نٿو ڪري. عيد جي ڏينهن يا ڇنڇر تي مندر جو دورو ڪرڻ خانداني روايت کي مضبوط ڪري ٿو."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Japam سان مشق ڪريو"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "اوم سراوان ڀوايا ناما لاءِ جپم ۾ شنموڪا چونڊيو - علائقائي نالا Murugan/Skanda سڀ هڪ ئي محبوب ديوتا ڏانهن اشارو ڪن ٿا.",
           "bold": false
         }
       ]
@@ -113,7 +158,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start ڪارتيڪ Japa in Japam",
+      "label": "Start Shanmukha Japa in Japam",
       "href": "https://japam.digital/?lang=sd&deity=shanmukha&utm_source=google&utm_medium=seo&utm_campaign=mantra-shanmukha-murugan&utm_content=start-japa",
       "style": "primary"
     },
@@ -141,41 +186,41 @@
   ],
   "faqs": [
     {
-      "question": "Murugan vs Subramanya?",
-      "answer": "Same deity — regional names."
+      "question": "موروگن بمقابله سبرامنيا؟",
+      "answer": "ساڳيو ديوتا - علائقائي نالا."
     },
     {
-      "question": "Tamil or Sanskrit chant?",
-      "answer": "Mantra is Sanskrit; Tamil padigams are separate devotion."
+      "question": "تامل يا سنسڪرت گيت؟",
+      "answer": "منتر سنسڪرت آهي؛ تامل پاديگام الڳ عقيدت آهن."
     },
     {
-      "question": "Kavadi and japa together?",
-      "answer": "Many vow japa before kavadi pilgrimage."
+      "question": "ڪاوادي ۽ جپان گڏجي؟",
+      "answer": "ڪاوادي زيارت کان اڳ ڪيترائي واعظ جاپا."
     },
     {
-      "question": "Shasti fasting?",
-      "answer": "Optional — follow temple tradition."
+      "question": "شاستي روزو رکڻ؟",
+      "answer": "اختياري - مندر جي روايت جي پيروي ڪريو."
     },
     {
-      "question": "Is vel icon required?",
-      "answer": "Helpful in puja; mental japa needs only focus."
+      "question": "ڇا وييل آئڪن جي ضرورت آهي؟",
+      "answer": "پوڄا ۾ مددگار؛ ذهني جپان کي صرف ڌيان جي ضرورت آهي."
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "هي مضمون صرف تعليمي ۽ ديني مشق لاءِ آهي. Japam طبي، قانوني، يا مالي صلاح فراهم نٿو ڪري. نتيجن جو دارومدار ذاتي ايمان ۽ مسلسل مشق تي. ايپ ۾ منتر ٽيڪسٽ ۽ آڊيو جاپا سپورٽ لاءِ آهن؛ رسمي پوجا ضابطن لاءِ پنھنجي خانداني پادريءَ يا روايت سان صلاح ڪريو."
   },
   "relatedPages": [
     {
       "pageId": "skanda-shasti-murugan",
-      "label": "Skanda Shasti"
+      "label": "اسڪنڊا شاستي"
     },
     {
       "pageId": "japa-108-times",
-      "label": "108 japa guide"
+      "label": "108 جپان"
     },
     {
       "pageId": "online-japa-mantra",
-      "label": "Online japa"
+      "label": "آن لائن جپان"
     }
   ]
 }

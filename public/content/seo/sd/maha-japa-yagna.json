@@ -4,27 +4,27 @@
   "lang": "sd",
   "slug": "maha-japa-yagna",
   "deityId": null,
-  "primaryKeyword": "maha japa yagna community chanting",
+  "primaryKeyword": "مها جپا يگنا ڪميونٽي جا نعرا",
   "secondaryKeywords": [
-    "collective japa",
-    "online yagna",
-    "sankalpa group"
+    "اجتماعي جپان",
+    "آن لائن يگنا",
+    "سنڪلپ گروپ"
   ],
   "meta": {
-    "title": "Maha Japa Yagna — Community Chanting | Japam",
-    "description": "Collective Maha Japa Yagnas in Japam — join community mantra goals.",
+    "title": "مها جپ يگنا - ڪميونٽي جاپ | جپان",
+    "description": "Japam ۾ اجتماعي مها جپ يگناس - ڪميونٽي منتر جي مقصدن ۾ شامل ٿيو.",
     "ogImage": "/images/favicon.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Maha Japa Yagna — Community Mantra Chanting"
+      "text": "مها جپا يگنا - ڪميونٽي منتر جاپنگ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "A yagna is sacred offering; Maha Japa Yagnas in Japam are collective chanting goals where many devotees add japa counts."
+          "text": "هڪ يگنا مقدس پيشڪش آهي؛ Japam ۾ مها جپ يگنس اجتماعي منتر جا مقصد آهن جتي ڪيترائي عقيدتمند جاپ جي ڳڻپ شامل ڪندا آهن."
         }
       ]
     },
@@ -32,69 +32,114 @@
       "type": "p",
       "runs": [
         {
-          "text": "Join from the menu to participate in sankalpa with others."
-        }
-      ]
-    },
-    {
-      "type": "h2",
-      "text": "What is a Maha Japa Yagna?"
-    },
-    {
-      "type": "p",
-      "runs": [
-        {
-          "text": "Community targets (e.g. lakhs of japas) build shared merit and motivation. Your counts sync when signed in."
+          "text": "ٻين سان گڏ سنڪلپا ۾ حصو وٺڻ لاءِ مينيو مان شامل ٿيو."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "مها جپا يگنا ڇا آهي؟"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ڪميونٽي جا مقصد (مثال طور لکن جاپاس) گڏيل قابليت ۽ حوصلا افزائي ڪن ٿا. سائن ان ٿيڻ تي توهان جا شمار هم وقت ٿيندا آهن."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "جاپ جا فائدا (روايتي خيال)"
     },
     {
       "type": "ul",
       "items": [
-        "Shared devotional goal",
-        "Visible community progress",
-        "Motivation for daily practice",
-        "Works across regions"
+        "گڏيل عقيدت وارو مقصد",
+        "ڏسندڙ ڪميونٽي جي ترقي",
+        "روزاني مشق لاء حوصلا افزائي",
+        "علائقن ۾ ڪم ڪري ٿو"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "108 ڀيرا ڪيئن ڳايو"
     },
     {
       "type": "ul",
       "items": [
-        "Sign in to Japam",
-        "Open Maha Yagnas from menu",
-        "Join active yagna",
-        "Play and chant — counts add to collective total"
+        "Japam ۾ سائن ان ڪريو",
+        "مينيو مان Maha Yagnas کوليو",
+        "فعال يگنا ۾ شامل ٿيو",
+        "راند ۽ گيت - ڳڻپ مجموعي مجموعي ۾ شامل ڪريو"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "جڏهن ڳائڻ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "During yagna window shown in app."
+          "text": "يگنا ونڊو دوران ايپ ۾ ڏيکاريل آهي."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "ڇو 108 ورجائي اهميت رکن ٿا",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "CTA: Menu → Maha Japa Yagnas — see live counters."
+          "text": "نمبر 108 جپا مالا تي هڪ مڪمل گول آهي. مسلسل ورهاڱي دماغ کي پرسکون ڪري ٿو ۽ منتر جي معني تي ڌيان ڏئي ٿو."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ڪجھ روايتون 11 يا 21 مالا بيان ڪن ٿيون - پنھنجي گرو يا پادريءَ کان پڇو ته توھان جي واعدي مطابق ڳڻپ لاءِ."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "عام غلطين کان بچڻ لاء"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "آواز تي تمام تيز آواز ۽ ڌيان وڃائڻ",
+        "ھدايت کانسواءِ ڪيترن ئي ديوتائن جون واڳون گڏ ڪرڻ",
+        "ڀڪت ۽ اخلاقي زندگي گذارڻ بدران فقط مادي نتيجن جي اميد رکڻ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "مندر ۽ گهر گڏجي مشق"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "گھر جاپا مندر جي پوڄا جي حمايت ڪري ٿو. اهو درشن کي تبديل نٿو ڪري. عيد جي ڏينهن يا ڇنڇر تي مندر جو دورو ڪرڻ خانداني روايت کي مضبوط ڪري ٿو."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Japam سان مشق ڪريو"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "CTA: مينيو → Maha Japa Yagnas — لائيو ڳڻپيوڪر ڏسو."
         }
       ]
     }
@@ -131,41 +176,41 @@
   ],
   "faqs": [
     {
-      "question": "Is login required?",
-      "answer": "Yes for leaderboard-style community totals."
+      "question": "لاگ ان گهربل آهي؟",
+      "answer": "ها ليڊربورڊ طرز جي ڪميونٽي جي مجموعي لاءِ."
     },
     {
-      "question": "Same as temple fire yagna?",
-      "answer": "Digital collective japa — complements, not replaces, priest-led homam."
+      "question": "مندر جي باهه يگنا وانگر؟",
+      "answer": "ڊجيٽل اجتماعي جاپا - مڪمل، نه متبادل، پادريء جي اڳواڻي هوم."
     },
     {
-      "question": "Which mantra is used?",
-      "answer": "Per yagna deity/theme — read details in app."
+      "question": "ڪهڙو منتر استعمال ڪيو ويندو آهي؟",
+      "answer": "في يگنا ديوتا/موضوع - ايپ ۾ تفصيل پڙهو."
     },
     {
-      "question": "Free to join?",
-      "answer": "Core join is free; app may show optional support (dakshina)."
+      "question": "شامل ٿيڻ لاء مفت؟",
+      "answer": "بنيادي شموليت مفت آهي؛ ايپ اختياري مدد ڏيکاري سگھي ٿي (دڪشينا)."
     },
     {
-      "question": "How long do yagnas run?",
-      "answer": "Varies — check dates in Maha Yagnas screen."
+      "question": "يگنا ڪيترو وقت هلندا آهن؟",
+      "answer": "مختلف - مها يگناس اسڪرين ۾ تاريخون چيڪ ڪريو."
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "هي مضمون صرف تعليمي ۽ ديني مشق لاءِ آهي. Japam طبي، قانوني، يا مالي صلاح فراهم نٿو ڪري. نتيجن جو دارومدار ذاتي ايمان ۽ مسلسل مشق تي. ايپ ۾ منتر ٽيڪسٽ ۽ آڊيو جاپا سپورٽ لاءِ آهن؛ رسمي پوجا ضابطن لاءِ پنھنجي خانداني پادريءَ يا روايت سان صلاح ڪريو."
   },
   "relatedPages": [
     {
       "pageId": "online-japa-mantra",
-      "label": "Online japa"
+      "label": "آن لائن جپان"
     },
     {
       "pageId": "japa-108-times",
-      "label": "108 japa guide"
+      "label": "108 جپان"
     },
     {
       "pageId": "ishta-devata-japa",
-      "label": "Ishta devata"
+      "label": "ايشتا ديوتا"
     }
   ]
 }

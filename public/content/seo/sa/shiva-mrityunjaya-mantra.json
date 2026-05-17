@@ -4,27 +4,27 @@
   "lang": "sa",
   "slug": "shiva-mrityunjaya-mantra",
   "deityId": "shiva",
-  "primaryKeyword": "mahamrityunjaya mantra japa",
+  "primaryKeyword": "महामृत्युञ्जय मन्त्र जप",
   "secondaryKeywords": [
-    "om namah shivaya",
-    "shiva mantra health",
-    "monday shiva vrat"
+    "ॐ नमः शिवाय",
+    "शिव मन्त्र आरोग्यम्",
+    "सोमवार शिव व्रत"
   ],
   "meta": {
-    "title": "Shiva & Mrityunjaya Mantra Japa | Japam",
-    "description": "Om Namah Shivaya in Japam; Maha Mrityunjaya tradition, Monday vrat, and 108 japa guide.",
+    "title": "शिव एवं मृत्युंजय मंत्र जप | जपम्",
+    "description": "ॐ नमः शिवाय जपम्; महा मृत्युंजय परम्परा, सोमवार व्रत, एवं 108 जप मार्गदर्शक।",
     "ogImage": "/images/deities/shiva.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Shiva Mantra: Om Namah Shivaya and Mrityunjaya Tradition"
+      "text": "शिव मंत्र: ॐ नमः शिवाय तथा मृत्युंजय परम्परा"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Lord Shiva is the destroyer of ignorance and the lord of meditation. Japam uses Om Namah Shivaya as the primary gameplay mantra."
+          "text": "अविद्यानाशकः शिवः ध्यानेश्वरः | जपमः प्राथमिक गेमप्ले मन्त्ररूपेण ॐ नमः शिवायस्य उपयोगं करोति।"
         }
       ]
     },
@@ -32,13 +32,13 @@
       "type": "p",
       "runs": [
         {
-          "text": "The Maha Mrityunjaya mantra is a related powerful chant for health and protection — often discussed alongside Panchakshari japa."
+          "text": "महामृत्युञ्जयमन्त्रः स्वास्थ्याय रक्षणाय च सम्बन्धितः शक्तिशाली जपः अस्ति — प्रायः पञ्चक्षरीजपस्य पार्श्वे चर्चा क्रियते ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "मन्त्रार्थः"
     },
     {
       "type": "blockquote",
@@ -53,57 +53,102 @@
       "type": "p",
       "runs": [
         {
-          "text": "“I bow to Shiva” — the five-syllable Panchakshari is among the most universal Shaiva japa mantras."
+          "text": "“शिवं नमामि” — पञ्चाक्षरा पञ्चाक्षरी शैवजपमन्त्रेषु सर्वाधिकमस्ति ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "जपस्य लाभाः (पारम्परिकदृष्टिकोणः) २."
     },
     {
       "type": "ul",
       "items": [
-        "Calms mind; supports meditation and detachment",
-        "Monday (Somvar) is sacred for Shiva",
-        "Mrityunjaya japa traditionally associated with healing prayers",
-        "Rudraksha mala is classic for Shiva mantra"
+        "मनः शान्तयति; ध्यानं वैराग्यं च समर्थयति",
+        "सोमवासरः (सोमवरः) शिवस्य कृते पवित्रः अस्ति",
+        "मृत्युञ्जय जप परम्परागतरूपेण चिकित्साप्रार्थनाभिः सह सम्बद्धः",
+        "रुद्राक्षमाला शिवमन्त्रस्य कृते शास्त्रीयः अस्ति"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "१०८ वारं जपं कथं करणीयम्"
     },
     {
       "type": "ul",
       "items": [
-        "Chant 108 times on rudraksha; abhisheam with water or milk on Mondays if doing puja",
-        "Learn Mrityunjaya separately if your priest teaches it — longer mantra",
-        "Visit temple or home lingam when possible",
-        "Use Japam for Om Namah Shivaya counting"
+        "रुद्राक्षे १०८ बार जप; अभिषेम जलेन वा क्षीरेण वा सोमवासरे यदि पूजां करोति",
+        "मृत्युंजयं पृथक् पृथक् शिक्षन्तु यदि भवतः पुरोहितः तत् उपदिशति — दीर्घतरः मन्त्रः",
+        "यदा सम्भवं तदा मन्दिरं वा गृहलिङ्गं वा गच्छन्तु",
+        "ॐ नमः शिवाय गणना हेतु जपम् का प्रयोग करें"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "कदा जपेत्"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Monday, Pradosham, and Maha Shivaratri are peak times."
+          "text": "सोमवासरः, प्रदोषं, महाशिवरात्रिः च शिखरसमयाः सन्ति ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "१०८ पुनरावृत्तयः किमर्थं महत्त्वपूर्णाः सन्ति",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Shiva mode in Japam features Om Namah Shivaya audio and japa counter. Explore 108 specials during Shivaratri in the app.",
+          "text": "१०८ संख्या जपमाले एकः पूर्णगोलः अस्ति । नित्यपुनरावृत्तिः मनः शान्तं करोति, मन्त्रस्य अर्थे ध्यानं गभीरं करोति च ।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "केचन परम्पराः ११ वा २१ वा मालाः विहिताः सन्ति — भवतः गुरुं वा पुरोहितं वा भवतः व्रतस्य अनुकूलानि गणनानि पृच्छन्तु ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "परिहरणीयानि सामान्यानि त्रुटयः"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "अतिशीघ्रं जपं कृत्वा ध्वनिं प्रति ध्यानं नष्टम्",
+        "अनेकदेवव्रतमिश्रणं विना मार्गदर्शनम् |",
+        "भक्ति-नीति-जीवनस्य स्थाने केवलं भौतिक-परिणामस्य अपेक्षा"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मन्दिरं गृहं च एकत्र अभ्यासं कुर्वन्ति"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "गृहं जपः मन्दिरपूजायाः समर्थनं करोति; दर्शनस्य स्थाने न भवति। उत्सवदिनेषु शनिवासरे वा मन्दिरस्य दर्शनं पारिवारिकपरम्परां सुदृढं करोति ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपं सह अभ्यासं कुरुत"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "जपम् इत्यस्मिन् शिव मोड् मध्ये ॐ नमः शिवाय ऑडियो तथा जप काउण्टर इति सुविधा अस्ति। एप् मध्ये शिवरात्रि के दौरान 108 विशेषों का अन्वेषण करें।",
           "bold": false
         }
       ]
@@ -113,7 +158,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start शिवः Japa in Japam",
+      "label": "Start Shiva Japa in Japam",
       "href": "https://japam.digital/?lang=sa&deity=shiva&utm_source=google&utm_medium=seo&utm_campaign=shiva-mrityunjaya-mantra&utm_content=start-japa",
       "style": "primary"
     },
@@ -141,41 +186,41 @@
   ],
   "faqs": [
     {
-      "question": "Is Mrityunjaya in Japam gameplay?",
-      "answer": "Gameplay uses Om Namah Shivaya; you may chant Mrityunjaya separately as your vow."
+      "question": "मृत्युञ्जया जपम् गेमप्ले मध्ये अस्ति वा ?",
+      "answer": "Gameplay uses ॐ नमः शिवाय; मृत्युंजयं पृथक्पृथक् व्रतत्वेन जपेत् |"
     },
     {
-      "question": "Can I chant at night?",
-      "answer": "Yes — Shiva is especially associated with night meditation."
+      "question": "रात्रौ जपं कर्तुं शक्नोमि वा ?",
+      "answer": "आम् — शिवः विशेषतः रात्रौ ध्यानेन सह सम्बद्धः अस्ति ।"
     },
     {
-      "question": "How many Mrityunjaya malas?",
-      "answer": "Often 108 or 1008 on Maha Shivaratri under guidance — ask your guru."
+      "question": "कति मृत्युञ्जयमालाः ?",
+      "answer": "प्रायः १०८ वा १००८ महाशिवरात्रे मार्गदर्शने — गुरुं पृच्छन्तु ।"
     },
     {
-      "question": "Bel patra required?",
-      "answer": "For puja yes; mental japa does not require offerings."
+      "question": "बेल पत्रा आवश्यक?",
+      "answer": "पूजायाः कृते आम्; मानसिकं जपं नैवेद्यं न अपेक्षते।"
     },
     {
-      "question": "Is Monday fast necessary?",
-      "answer": "Optional vow; mantra japa alone is still valid."
+      "question": "सोमवासरस्य उपवासः आवश्यकः वा ?",
+      "answer": "वैकल्पिकं व्रतम्; मन्त्र जप एव अद्यापि प्रामाणिकम्।"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "एषः लेखः केवलं शैक्षणिक-भक्ति-अभ्यासार्थम् अस्ति । जपम् चिकित्सा, कानूनी, आर्थिकपरामर्शं न ददाति । परिणामाः व्यक्तिगतविश्वासस्य, निरन्तरं अभ्यासस्य च उपरि निर्भरं भवति। एप् मध्ये मन्त्रपाठः श्रव्यं च जपासमर्थनार्थम् अस्ति; औपचारिकपूजानियमानां कृते स्वपरिवारस्य पुरोहितेन वा परम्परेण वा परामर्शं कुर्वन्तु।"
   },
   "relatedPages": [
     {
       "pageId": "mantra-shiva",
-      "label": "Shiva mantra pillar"
+      "label": "शिवमन्त्रस्तम्भः"
     },
     {
       "pageId": "shivaratri-mantra",
-      "label": "Shivaratri japa"
+      "label": "शिवरात्रि जप"
     },
     {
       "pageId": "japa-108-times",
-      "label": "108 japa guide"
+      "label": "१०८ जप मार्गदर्शक"
     }
   ]
 }

@@ -4,27 +4,27 @@
   "lang": "sat",
   "slug": "maha-japa-yagna",
   "deityId": null,
-  "primaryKeyword": "maha japa yagna community chanting",
+  "primaryKeyword": "ᱢᱟᱦᱟ ᱡᱟᱯᱟ ᱭᱟᱜᱽᱱᱟ ᱥᱟᱶᱛᱟ ᱪᱟᱱᱴᱤᱝ",
   "secondaryKeywords": [
-    "collective japa",
-    "online yagna",
-    "sankalpa group"
+    "ᱥᱟᱢᱴᱟᱣ ᱡᱟᱯᱟ",
+    "ᱚᱱᱞᱟᱭᱤᱱ ᱭᱟᱜᱽᱱᱟ",
+    "ᱥᱟᱱᱠᱟᱞᱯᱟ ᱜᱟᱫᱮᱞ"
   ],
   "meta": {
-    "title": "Maha Japa Yagna — Community Chanting | Japam",
-    "description": "Collective Maha Japa Yagnas in Japam — join community mantra goals.",
+    "title": "ᱢᱟᱦᱟ ᱡᱟᱯᱟ ᱭᱟᱜᱽᱱᱟ — ᱥᱟᱶᱛᱟ ᱪᱟᱱᱴᱤᱝ | ᱡᱟᱯᱟᱢ",
+    "description": "ᱡᱟᱯᱚᱢ ᱨᱮ ᱥᱟᱢᱴᱟᱣ ᱢᱟᱦᱟ ᱡᱟᱯᱟ ᱭᱟᱜᱽᱱᱟᱥ — ᱥᱟᱶᱛᱟ ᱢᱟᱱᱛᱨᱚ ᱡᱚᱥ ᱨᱮ ᱥᱮᱞᱮᱫᱚᱜ ᱢᱮ ᱾",
     "ogImage": "/images/favicon.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Maha Japa Yagna — Community Mantra Chanting"
+      "text": "ᱢᱟᱦᱟ ᱡᱟᱯᱟ ᱭᱟᱜᱽᱱᱟ — ᱥᱟᱶᱛᱟ ᱢᱟᱱᱛᱨᱚ ᱪᱟᱱᱴᱤᱝ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "A yagna is sacred offering; Maha Japa Yagnas in Japam are collective chanting goals where many devotees add japa counts."
+          "text": "ᱢᱤᱫ ᱭᱟᱜᱽᱱᱟ ᱫᱚ ᱥᱚᱱᱚᱛ ᱯᱷᱚᱨᱢᱚᱱ ᱠᱟᱱᱟ; ᱡᱟᱯᱚᱢ ᱨᱮ ᱢᱟᱦᱟ ᱡᱟᱯᱟ ᱭᱟᱜᱽᱱᱟ ᱫᱚ ᱥᱟᱢᱴᱟᱣ ᱪᱟᱱᱴᱤᱝ ᱜᱚᱞ ᱠᱟᱱᱟ ᱡᱟᱦᱟᱸ ᱨᱮ ᱟᱭᱢᱟ ᱵᱷᱚᱠᱛᱚ ᱠᱚ ᱡᱟᱯᱟ ᱞᱮᱠᱷᱟ ᱠᱚ ᱥᱮᱞᱮᱫᱟ᱾"
         }
       ]
     },
@@ -32,69 +32,114 @@
       "type": "p",
       "runs": [
         {
-          "text": "Join from the menu to participate in sankalpa with others."
-        }
-      ]
-    },
-    {
-      "type": "h2",
-      "text": "What is a Maha Japa Yagna?"
-    },
-    {
-      "type": "p",
-      "runs": [
-        {
-          "text": "Community targets (e.g. lakhs of japas) build shared merit and motivation. Your counts sync when signed in."
+          "text": "ᱮᱴᱟᱜ ᱠᱚ ᱥᱟᱶ ᱥᱟᱱᱠᱟᱞᱯᱟ ᱨᱮ ᱦᱤᱸᱥ ᱦᱟᱛᱟᱣ ᱞᱟᱹᱜᱤᱫ ᱢᱮᱱᱩ ᱠᱷᱚᱱ ᱥᱮᱞᱮᱫᱚᱜ ᱢᱮ᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "ᱢᱟᱦᱟ ᱡᱟᱯᱟ ᱭᱟᱜᱽᱱᱟ ᱫᱚ ᱪᱮᱫ ᱠᱟᱱᱟ?"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱥᱟᱶᱛᱟ ᱡᱚᱥ (ᱡᱮᱞᱠᱟ ᱞᱟᱠᱷ ᱞᱟᱠᱷ ᱡᱟᱯᱟᱥ) ᱦᱟᱹᱴᱤᱧ ᱜᱩᱱ ᱟᱨ ᱩᱫᱽᱜᱟᱹᱣ ᱛᱮᱭᱟᱨ ᱮᱫᱟᱭ᱾ ᱥᱟᱭᱤᱱ ᱤᱱ ᱡᱷᱚᱜ ᱟᱢᱟᱜ ᱞᱮᱠᱷᱟ ᱥᱤᱱᱠ ᱦᱩᱭᱩᱜᱼᱟ ᱾"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱡᱟᱯᱟ ᱨᱮᱭᱟᱜ ᱞᱟᱵᱷ (ᱯᱚᱨᱚᱢ ᱧᱮᱞᱚᱢ)"
     },
     {
       "type": "ul",
       "items": [
-        "Shared devotional goal",
-        "Visible community progress",
-        "Motivation for daily practice",
-        "Works across regions"
+        "ᱦᱟᱹᱴᱤᱧ ᱵᱷᱚᱠᱛᱚ ᱡᱚᱥ",
+        "ᱧᱮᱞᱚᱜ ᱠᱟᱱ ᱜᱟᱶᱛᱟ ᱞᱟᱦᱟᱱᱛᱤ",
+        "ᱫᱤᱱᱟᱹᱢ ᱦᱮᱣᱟ ᱞᱟᱹᱜᱤᱫ ᱩᱫᱽᱜᱟᱹᱣ",
+        "ᱥᱟᱱᱟᱢ ᱴᱚᱴᱷᱟ ᱨᱮ ᱠᱟᱹᱢᱤ ᱠᱟᱱᱟᱭ"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "᱑᱐᱘ ᱫᱷᱟᱣ ᱪᱮᱫ ᱞᱮᱠᱟ ᱥᱮᱨᱮᱧ ᱦᱩᱭᱩᱜ-ᱟ"
     },
     {
       "type": "ul",
       "items": [
-        "Sign in to Japam",
-        "Open Maha Yagnas from menu",
-        "Join active yagna",
-        "Play and chant — counts add to collective total"
+        "ᱡᱟᱯᱟᱢ ᱨᱮ ᱥᱟᱭᱤᱱ ᱤᱱ ᱢᱮ",
+        "ᱢᱮᱱᱩ ᱠᱷᱚᱱ ᱢᱟᱦᱟ ᱭᱟᱜᱽᱱᱟᱥ ᱡᱷᱤᱡᱽ ᱢᱮ",
+        "ᱮᱠᱴᱤᱵᱷ ᱭᱟᱜᱽᱱᱟ ᱨᱮ ᱥᱮᱞᱮᱫᱚᱜ ᱢᱮ",
+        "ᱮᱱᱮᱡ ᱢᱮ ᱟᱨ ᱥᱮᱨᱮᱧ ᱢᱮ — ᱞᱮᱠᱷᱟ ᱠᱚ ᱥᱟᱢᱴᱟᱣ ᱢᱩᱴ ᱨᱮ ᱥᱮᱞᱮᱫᱚᱜ ᱢᱮ"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "ᱛᱤᱱᱨᱮ ᱥᱮᱨᱮᱧ ᱦᱩᱭᱩᱜ-ᱟ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "During yagna window shown in app."
+          "text": "ᱮᱯ ᱨᱮ ᱩᱫᱩᱜ ᱟᱠᱟᱱ ᱭᱟᱜᱽᱱᱟ ᱡᱷᱚᱨᱠᱟ ᱚᱠᱛᱚ ᱾"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "᱑᱐᱘ ᱫᱚᱦᱲᱟ ᱪᱮᱫᱟᱜ ᱢᱟᱱᱚᱛ ᱢᱮᱱᱟᱜᱼᱟ",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "CTA: Menu → Maha Japa Yagnas — see live counters."
+          "text": "᱑᱐᱘ ᱮᱞ ᱫᱚ ᱡᱟᱯᱟ ᱢᱟᱞᱟ ᱨᱮ ᱢᱤᱫ ᱯᱩᱨᱟᱹ ᱜᱩᱞᱟᱹᱭ ᱠᱟᱱᱟ ᱾ ᱛᱷᱤᱨ ᱫᱚᱦᱲᱟ ᱫᱚᱦᱲᱟ ᱛᱮ ᱢᱚᱱᱮ ᱛᱷᱤᱨᱚᱜ ᱟᱨ ᱢᱟᱱᱛᱨᱚ ᱨᱮᱭᱟᱜ ᱢᱮᱱᱮᱛ ᱨᱮ ᱜᱟᱹᱦᱤᱨ ᱫᱷᱭᱟᱱ ᱮᱢᱚᱜ ᱠᱟᱱᱟ᱾"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱛᱤᱱᱟᱹᱜ ᱜᱟᱱ ᱯᱚᱨᱚᱵ ᱑᱑ ᱵᱟᱝᱠᱷᱟᱱ ᱒᱑ ᱢᱟᱞᱟ ᱞᱟᱹᱭ ᱮᱫᱟ - ᱟᱢᱟᱜ ᱜᱩᱨᱩ ᱵᱟᱝᱠᱷᱟᱱ ᱯᱟᱭᱡᱤᱴ ᱴᱷᱮᱱ ᱟᱢᱟᱜ ᱵᱟᱛᱟᱣ ᱞᱮᱠᱟᱱ ᱞᱮᱠᱷᱟ ᱞᱟᱹᱜᱤᱫ ᱠᱩᱞᱤᱭᱮᱢ ᱾"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱥᱟᱫᱷᱟᱨᱚᱱ ᱵᱷᱩᱞ ᱠᱚ ᱠᱷᱚᱱ ᱥᱟᱦᱟᱜ ᱞᱟᱹᱜᱤᱫ"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "ᱟᱹᱰᱤ ᱩᱥᱟᱹᱨᱟ ᱪᱟᱱᱴᱤᱝ ᱟᱨ ᱥᱟᱰᱮ ᱨᱮ ᱯᱷᱚᱠᱟᱥ ᱟᱫ ᱠᱟᱛᱮ",
+        "ᱵᱤᱱ ᱫᱤᱥᱟᱹ ᱛᱮ ᱟᱭᱢᱟ ᱵᱚᱝᱜᱟ ᱠᱚ ᱢᱮᱥᱟᱞ ᱢᱮ",
+        "ᱵᱷᱚᱠᱛᱤ ᱟᱨ ᱱᱮᱭᱟᱱ ᱡᱤᱭᱚᱱ ᱵᱚᱫᱚᱞ ᱠᱟᱛᱮ ᱥᱩᱢᱩᱝ ᱡᱤᱱᱤᱥ ᱚᱨᱡᱚ ᱨᱮᱭᱟᱜ ᱟᱥᱟ ᱢᱮ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱢᱟᱱᱫᱤᱨ ᱟᱨ ᱚᱲᱟᱜ ᱨᱮ ᱢᱤᱫ ᱥᱟᱶᱛᱮ ᱦᱮᱣᱟ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ᱚᱲᱟᱜ ᱡᱟᱯᱟ ᱢᱟᱱᱫᱤᱨ ᱵᱚᱸᱜᱟ ᱥᱟᱯᱚᱨᱴ ᱮᱫᱟᱭ; ᱱᱚᱣᱟ ᱫᱚ ᱫᱟᱨᱥᱟᱱ ᱵᱟᱭ ᱵᱚᱫᱚᱞᱟ᱾ ᱯᱚᱨᱚᱵ ᱢᱟᱦᱟ ᱥᱮ ᱧᱩᱦᱩᱢ ᱢᱟᱦᱟ ᱦᱤᱞᱚᱜ ᱢᱟᱱᱫᱤᱨ ᱧᱮᱞ ᱛᱮ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮᱭᱟᱜ ᱥᱮᱨᱣᱟ ᱫᱚ ᱠᱮᱴᱮᱡ ᱜᱮᱭᱟ᱾"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ᱡᱟᱯᱟᱢ ᱥᱟᱶ ᱯᱨᱮᱠᱴᱤᱥ ᱢᱮ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "CTA: ᱢᱮᱱᱭᱩ → ᱢᱟᱦᱟ ᱡᱟᱯᱟ ᱭᱟᱜᱽᱱᱟᱥ — ᱞᱟᱭᱤᱵᱽ ᱠᱟᱣᱩᱱᱴᱟᱨ ᱧᱮᱞ ᱢᱮ ᱾"
         }
       ]
     }
@@ -131,41 +176,41 @@
   ],
   "faqs": [
     {
-      "question": "Is login required?",
-      "answer": "Yes for leaderboard-style community totals."
+      "question": "ᱪᱮᱫ ᱞᱚᱜᱤᱱ ᱞᱟᱹᱠᱛᱤᱜ ᱠᱟᱱᱟ?",
+      "answer": "ᱦᱮᱸ ᱞᱤᱰᱟᱨᱵᱚᱨᱰ-ᱥᱴᱟᱭᱤᱞ ᱥᱟᱶᱛᱟ ᱢᱩᱴ ᱞᱟᱹᱜᱤᱫ ᱾"
     },
     {
-      "question": "Same as temple fire yagna?",
-      "answer": "Digital collective japa — complements, not replaces, priest-led homam."
+      "question": "ᱢᱟᱱᱫᱤᱨ ᱥᱮᱸᱜᱮᱞ ᱭᱟᱜᱽᱱᱟ ᱞᱮᱠᱟ ᱜᱮ?",
+      "answer": "ᱰᱤᱡᱤᱴᱟᱞ ᱥᱟᱢᱴᱟᱣ ᱡᱟᱯᱟ - ᱯᱩᱨᱟᱹᱣ, ᱵᱚᱫᱚᱞ ᱵᱟᱝ, ᱯᱟᱭᱡᱤᱴ ᱟᱹᱭᱩᱨ ᱦᱚᱢᱟᱢ ᱾"
     },
     {
-      "question": "Which mantra is used?",
-      "answer": "Per yagna deity/theme — read details in app."
+      "question": "ᱚᱠᱟ ᱢᱟᱱᱛᱨᱟ ᱵᱮᱵᱷᱟᱨᱚᱜ ᱠᱟᱱᱟ?",
+      "answer": "ᱯᱨᱚ ᱭᱟᱜᱽᱱᱟ ᱵᱚᱝᱜᱟ/ᱛᱷᱤᱢ — ᱮᱯ ᱨᱮ ᱵᱤᱵᱨᱚᱬ ᱯᱟᱲᱦᱟᱣ ᱢᱮ ᱾"
     },
     {
-      "question": "Free to join?",
-      "answer": "Core join is free; app may show optional support (dakshina)."
+      "question": "ᱥᱮᱞᱮᱫᱚᱜ ᱞᱟᱹᱜᱤᱫ ᱯᱷᱨᱤ?",
+      "answer": "ᱠᱚᱨ ᱡᱚᱭᱤᱱ ᱫᱚ ᱯᱷᱨᱤ ᱜᱮᱭᱟ; ᱮᱯ ᱫᱚ ᱚᱯᱥᱚᱱᱟᱞ ᱥᱟᱯᱚᱨᱴ ᱩᱫᱩᱜ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱭ (ᱫᱟᱠᱥᱤᱱᱟ)᱾"
     },
     {
-      "question": "How long do yagnas run?",
-      "answer": "Varies — check dates in Maha Yagnas screen."
+      "question": "ᱭᱟᱜᱽᱱᱟᱥ ᱛᱤᱱᱟᱹᱜ ᱜᱷᱟᱹᱲᱤᱡ ᱫᱟᱹᱲᱟ?",
+      "answer": "ᱵᱷᱮᱜᱟᱨᱚᱜ ᱠᱟᱱᱟ — ᱢᱟᱦᱟ ᱭᱟᱜᱽᱱᱟᱥ ᱥᱠᱨᱤᱱ ᱨᱮ ᱢᱟᱹᱦᱤᱛ ᱠᱚ ᱧᱮᱞ ᱢᱮ ᱾"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "ᱱᱚᱣᱟ ᱚᱱᱚᱞ ᱫᱚ ᱥᱩᱢᱩᱝ ᱥᱮᱪᱮᱫ ᱟᱨ ᱵᱷᱚᱠᱛᱚᱱ ᱦᱮᱣᱟ ᱞᱟᱹᱜᱤᱫ ᱜᱮ ᱾ ᱡᱟᱯᱟᱢ ᱫᱚ ᱪᱤᱠᱤᱥᱟ, ᱟᱹᱭᱤᱱᱤ, ᱟᱨ ᱵᱟᱝ ᱠᱟᱹᱣᱰᱤ ᱥᱚᱞᱦᱟ ᱵᱟᱭ ᱮᱢᱚᱜ ᱠᱟᱱᱟ᱾ ᱚᱨᱡᱚ ᱫᱚ ᱯᱚᱨᱥᱚᱱᱟᱞ ᱯᱟᱹᱛᱭᱟᱹᱣ ᱟᱨ ᱞᱮᱛᱟᱲ ᱦᱮᱣᱟ ᱨᱮ ᱴᱮᱦᱟᱱᱰ ᱢᱮᱱᱟᱜᱼᱟ᱾ ᱮᱯ ᱨᱮ ᱢᱟᱱᱛᱨᱟ ᱚᱱᱚᱞ ᱟᱨ ᱚᱰᱤᱭᱳ ᱫᱚ ᱡᱟᱯᱟ ᱥᱟᱯᱚᱨᱴ ᱞᱟᱹᱜᱤᱫ ᱠᱟᱱᱟ; ᱟᱹᱭᱫᱟᱹᱨᱤ ᱯᱩᱡᱟ ᱟᱹᱨᱤ ᱞᱟᱹᱜᱤᱫ ᱟᱯᱮ ᱜᱷᱟᱨᱚᱧᱡᱽ ᱨᱮᱱ ᱯᱟᱭᱡᱤᱴ ᱥᱮ ᱥᱮᱫᱽᱨᱟ ᱥᱚᱞᱦᱟᱭ ᱢᱮ ᱾"
   },
   "relatedPages": [
     {
       "pageId": "online-japa-mantra",
-      "label": "Online japa"
+      "label": "ᱚᱱᱞᱟᱭᱤᱱ ᱡᱟᱯᱟ"
     },
     {
       "pageId": "japa-108-times",
-      "label": "108 japa guide"
+      "label": "᱑᱐᱘ ᱡᱟᱯᱟ"
     },
     {
       "pageId": "ishta-devata-japa",
-      "label": "Ishta devata"
+      "label": "ᱤᱥᱛᱟ ᱫᱮᱣᱟᱛᱟ"
     }
   ]
 }

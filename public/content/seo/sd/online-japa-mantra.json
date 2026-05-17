@@ -4,39 +4,39 @@
   "lang": "sd",
   "slug": "online-japa-mantra",
   "deityId": null,
-  "primaryKeyword": "online japa mantra chanting app",
+  "primaryKeyword": "آن لائن جپا منتر جاپنگ ايپ",
   "secondaryKeywords": [
-    "digital mantra practice",
-    "mantra app hindu",
-    "chant mantra with audio"
+    "ڊجيٽل منتر مشق",
+    "منتر ايپ هندو",
+    "آواز سان منتر ڳايو"
   ],
   "meta": {
-    "title": "Online Japa & Mantra Chanting — Japam App | Japam",
-    "description": "Practice Hindu mantra japa online with Japam: match-3 gameplay, deity audio, 108 counting, and community yagnas.",
+    "title": "آن لائين جاپا ۽ منتر جاپنگ - Japam ايپ",
+    "description": "Japam سان آن لائن ھندو منتر جاپ جي مشق ڪريو: ميچ-3 گيم پلے، ديوي آڊيو، 108 ڳڻپ، ۽ ڪميونٽي يگنا.",
     "ogImage": "/images/favicon.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Online Japa and Digital Mantra Practice"
+      "text": "آن لائين جاپا ۽ ڊجيٽل منتر مشق"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Japam",
+          "text": "جپان",
           "bold": true
         },
         {
-          "text": " (japam.digital) is a "
+          "text": "(japam.digital) آهي a"
         },
         {
-          "text": "digital mantra practice",
+          "text": "ڊجيٽل منتر مشق",
           "bold": true,
           "underline": true
         },
         {
-          "text": " platform: play a match-3 game while hearing authentic deity mantras, track your japa count, and join collective Maha Japa Yagnas — in many Indian languages."
+          "text": "پليٽ فارم: هڪ ميچ-3 راند کيڏڻ دوران مستند ديوتا منتر ٻڌو، پنهنجي جپان جي ڳڻپ کي ٽريڪ ڪريو، ۽ اجتماعي مها جپا يگناس ۾ شامل ٿيو - ڪيترن ئي هندستاني ٻولين ۾."
         }
       ]
     },
@@ -44,46 +44,92 @@
       "type": "p",
       "runs": [
         {
-          "text": "Online japa does not replace temple worship or your family's puja rules; it supports daily repetition when you are travelling, at work breaks, or learning a new mantra."
+          "text": "آن لائن جاپا مندر جي پوڄا يا توهان جي خاندان جي پوجا ضابطن کي تبديل نٿو ڪري. اهو روزانه ورهاڱي جي حمايت ڪري ٿو جڏهن توهان سفر ڪري رهيا آهيو، ڪم جي وقفي تي، يا هڪ نئون منتر سکڻ."
         }
       ]
     },
     {
       "type": "h2",
-      "text": "What makes Japam different"
+      "text": "ڇا Japam مختلف بڻائي ٿو"
     },
     {
       "type": "ul",
       "items": [
-        "Mantra audio tied to gameplay — stay engaged while chanting",
-        "Per-deity boards and japa tallies",
-        "108-japa specials and weekly streaks",
-        "Pushpa Aradhana — digital flower offering",
-        "23+ Indian language UI options"
+        "منتر آڊيو گیم پلے سان ڳنڍيو ويو آهي - ڳائڻ دوران مشغول رهو",
+        "في ديوي بورڊ ۽ جاپا ٽيليز",
+        "108-جاپا خاص ۽ هفتيوار اسٽريڪ",
+        "Pushpa Aradhana - ڊجيٽل گلن جي آڇ",
+        "23+ هندستاني ٻولي UI اختيارن"
       ]
     },
     {
       "type": "h2",
-      "text": "How to start"
+      "text": "ڪيئن شروع ڪجي"
     },
     {
       "type": "ol",
       "items": [
-        "Open japam.digital on phone or desktop",
-        "Choose your language",
-        "Pick your ishta devata from the menu",
-        "Play matches; each session adds to your japa count"
+        "فون يا ڊيسڪ ٽاپ تي japam.digital کوليو",
+        "پنھنجي ٻولي چونڊيو",
+        "مينيو مان پنھنجي استا ديوتا چونڊيو",
+        "رانديون کيڏڻ؛ هر سيشن توهان جي جپان جي ڳڻپ ۾ اضافو ڪري ٿو"
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "ڇو 108 ورجائي اهميت رکن ٿا"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Sign in with Google to save progress, or use guest mode to try japa without an account. Explore Maha Yagnas from the menu for community chanting goals."
+          "text": "ڪيترن ئي سمپرديا ۾، 108 هڪ مڪمل مالا دور آهي - هڪ عملي طريقو روزاني سيشن کي بند ڪرڻ جو بغير شمار وڃائڻ جي. انگ علامتي آهي (ڪهني تعليمات ۾ ڪائناتي چڪر، ناديس)، پر گہرے مقصد مسلسل ڌيان ڏيڻ آهي: هڪ سانس، هڪ منتر، هڪ وقت ۾ هڪ مالا."
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "جيڪڏهن 108 پهرين تي ڳري محسوس ٿئي ٿي، 11 يا 27 ورهاڱي سان شروع ڪريو ۽ هفتي کان وڌو. عام ڏينهن تي مستقل مزاجي اڪثر ڪري هڪ واحد شديد سيشن کان وڌيڪ اهميت رکي ٿي."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "عام جاپاني غلطين کان بچڻ لاء"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "ڳڻپ کي ”ختم“ ڪرڻ لاءِ منتر کي تيز ڪرڻ - سست ، ٻڌڻ وارو يا ذهني تال بهتر آهي",
+        "ملٽي ٽاسڪنگ (اسڪرولنگ، ٽي وي) مڪمل مالا دور دوران",
+        "فوري مادي نتيجن لاءِ جاپا کي سوداءَ جي طور تي علاج ڪرڻ",
+        "Skipping غسل / صاف جاء جڏهن توهان جي روايت graha japa لاء ان جي صلاح",
+        "هڪ سٺي هفتي کان پوءِ بند ٿيڻ - گراها ۽ ديوتا قسمون ڊگهي مدي واريون آهن"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Sankalpa ۽ روزاني نظم و ضبط"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "شروع ڪرڻ کان اڳ، گھڻن خاندانن ھڪ مختصر سنڪلپا (نيت) مقرر ڪيو: نالو، گوترا جيڪڏھن قابل اطلاق، ۽ جپ جو مقصد. ساڳئي وقت هر روز رکو جڏهن ممڪن هجي - صبح يا شام عام آهن. منتر کي ايماندار اخلاق، خيرات، يا خدمت سان گڏ ڪريو جتي توهان جا بزرگ ان جي صلاح ڏين ٿا؛ japa ڪردار کي سپورٽ ڪري ٿو، اهو صحيح عمل کي تبديل نٿو ڪري."
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Japam سان مشق ڪريو"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "گوگل سان سائن ان ڪريو ترقي کي بچائڻ لاءِ، يا گيسٽ موڊ استعمال ڪريو جاپا بغير اڪائونٽ جي ڪوشش ڪرڻ لاءِ. ڳولھيو مها يگناس کي مينيو مان ڪميونٽي جي نعرن جي مقصدن لاءِ."
         }
       ]
     }
@@ -99,7 +145,7 @@
     {
       "id": "try-free",
       "position": "after-how-to",
-      "label": "Try Japa without login",
+      "label": "Try without login",
       "href": "https://japam.digital/?lang=sd&try=1&utm_source=google&utm_medium=seo&utm_campaign=online-japa-mantra&utm_content=try-free",
       "style": "secondary"
     },
@@ -111,46 +157,46 @@
       "style": "secondary"
     },
     {
-      "id": "sticky",
+      "id": "try-free",
       "position": "sticky-footer",
-      "label": "Open Japam",
-      "href": "https://japam.digital/?lang=sd&utm_source=google&utm_medium=seo&utm_campaign=online-japa-mantra&utm_content=sticky",
+      "label": "Try Japam free",
+      "href": "https://japam.digital/?lang=sd&try=1&utm_source=google&utm_medium=seo&utm_campaign=online-japa-mantra&utm_content=sticky",
       "style": "primary"
     }
   ],
   "faqs": [
     {
-      "question": "Is Japam free?",
-      "answer": "You can try guest play and core japa features; some levels and Pro features may require sign-in or support (dakshina) as shown in the app."
+      "question": "ڇا Japam مفت آهي؟",
+      "answer": "توھان ڪوشش ڪري سگھو ٿا مهمان راند ۽ بنيادي جاپا خاصيتون؛ ڪجھ ليولز ۽ پرو فيچرز لاءِ سائن ان يا سپورٽ (دڪشينا) جي ضرورت ٿي سگھي ٿي جيئن ايپ ۾ ڏيکاريل آھي."
     },
     {
-      "question": "Which deities are available?",
-      "answer": "Rama, Shiva, Ganesh, Lakshmi, Hanuman, Venkateswara, Murugan, Navagraha deities, and more — see the in-app deity grid."
+      "question": "ڪهڙا ديوتا موجود آهن؟",
+      "answer": "راما، شيوا، گنيش، لکشمي، هنومان، وينڪيشورا، موروگن، نواگرا ديوتا، ۽ وڌيڪ - ڏسو ان-ايپ ديوي گرڊ."
     },
     {
-      "question": "Do I need headphones?",
-      "answer": "Recommended for mantra audio clarity; respect quiet spaces and others around you."
+      "question": "ڇا مون کي هيڊفونز جي ضرورت آهي؟",
+      "answer": "منتر آڊيو وضاحت لاءِ تجويز ڪيل؛ توهان جي چوڌاري خاموش جڳهن ۽ ٻين جو احترام ڪريو."
     },
     {
-      "question": "Can I use Japam offline?",
-      "answer": "The PWA can cache some assets after you visit; full features need connectivity for sign-in and leaderboards."
+      "question": "ڇا مان Japam آف لائن استعمال ڪري سگهان ٿو؟",
+      "answer": "PWA توهان جي دوري کان پوءِ ڪجهه اثاثن کي ڪيش ڪري سگهي ٿو. مڪمل خصوصيتون سائن ان ۽ ليڊر بورڊز لاءِ رابطي جي ضرورت آهي."
     },
     {
-      "question": "Is this an ISKCON-only app?",
-      "answer": "No — Japam includes many sampradayas' deities, including ISKCON (Hare Krishna) as one option among many."
+      "question": "ڇا هي صرف ISKCON ايپ آهي؟",
+      "answer": "نه - جاپم ۾ ڪيترائي سمپراديا جا ديوتا شامل آهن، جن ۾ اسڪون (هري ڪرشنا) شامل آهن ڪيترن ئي مان هڪ اختيار."
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "هي مضمون صرف تعليمي ۽ ديني مشق لاءِ آهي. Japam طبي، قانوني، يا مالي صلاح فراهم نٿو ڪري. نتيجن جو دارومدار ذاتي ايمان ۽ مسلسل مشق تي. ايپ ۾ منتر ٽيڪسٽ ۽ آڊيو جاپا سپورٽ لاءِ آهن؛ رسمي پوجا ضابطن لاءِ پنھنجي خانداني پادريءَ يا روايت سان صلاح ڪريو."
   },
   "relatedPages": [
     {
       "pageId": "japa-108-times",
-      "label": "108 japa guide"
+      "label": "108 جپان گائيڊ"
     },
     {
       "pageId": "maha-japa-yagna",
-      "label": "Maha Japa Yagna"
+      "label": "مها جپ يگنا"
     }
   ]
 }

@@ -206,7 +206,7 @@ export async function translateText(text, pageLang, cache) {
         return out;
       } catch (e) {
         lastErr = e;
-        if (e.status === 400 || e.status === 429 || e.status === 503) continue;
+        if (e.status === 400 || e.status === 429 || e.status === 500 || e.status === 503) continue;
         throw e;
       }
     }

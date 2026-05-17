@@ -4,34 +4,34 @@
   "lang": "ur",
   "slug": "japa-108-times",
   "deityId": null,
-  "primaryKeyword": "108 japa how to count mantra",
+  "primaryKeyword": "108 جاپ منتر کو کیسے گنیں۔",
   "secondaryKeywords": [
-    "japa mala 108",
-    "how to count japa",
-    "digital japa counter"
+    "جاپ مالا 108",
+    "جاپ کو کیسے گننا ہے۔",
+    "ڈیجیٹل جاپا کاؤنٹر"
   ],
   "meta": {
-    "title": "108 Japa — How to Count Mantra Repetitions | Japam",
-    "description": "Learn why Hindus chant mantras 108 times, mala rules, and how Japam helps you count digital japa.",
+    "title": "108 Japa — منتر کی تکرار کو کیسے گننا ہے | جاپم",
+    "description": "جانیں کہ ہندو 108 بار منتر کیوں پڑھتے ہیں، مالا کے اصول، اور جاپم آپ کو ڈیجیٹل جاپ کی گنتی میں کیسے مدد کرتا ہے۔",
     "ogImage": "/images/favicon.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "108 Japa: How to Count Mantra Repetitions"
+      "text": "108 Japa: منتر کی تکرار کو کیسے شمار کریں۔"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "In Hindu practice, "
+          "text": "ہندو پریکٹس میں"
         },
         {
           "text": "108",
           "bold": true
         },
         {
-          "text": " is a sacred number for mantra japa. One full mala usually has 108 beads — each bead is one repetition of your chosen mantra."
+          "text": "منتر جاپ کے لیے ایک مقدس نمبر ہے۔ ایک مکمل مالا میں عام طور پر 108 موتیوں کی مالا ہوتی ہے - ہر مالا آپ کے منتخب کردہ منتر کی ایک تکرار ہے۔"
         }
       ]
     },
@@ -39,101 +39,147 @@
       "type": "p",
       "runs": [
         {
-          "text": "Whether you use a physical rosary or a digital counter, steady rhythm and focused attention matter more than speed."
+          "text": "چاہے آپ جسمانی مالا استعمال کریں یا ڈیجیٹل کاؤنٹر، مستحکم تال اور توجہ مرکوز رفتار سے زیادہ اہمیت رکھتی ہے۔"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Why 108?"
+      "text": "108 کیوں؟"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Traditions link 108 to cosmic symbolism — 27 nakshatras × 4 padas, 108 Upanishads cited in some lists, and the idea of a complete cycle. Practically, 108 is long enough to settle the mind without being unmanageable for daily sadhana."
+          "text": "روایات 108 کو کائناتی علامت سے جوڑتی ہیں — 27 نکشتر × 4 پاد، کچھ فہرستوں میں 108 اپنشدوں کا حوالہ دیا گیا ہے، اور ایک مکمل سائیکل کا خیال۔ عملی طور پر، 108 روزانہ کی سادھنا کے لیے بے قابو ہوئے بغیر ذہن کو ٹھیک کرنے کے لیے کافی لمبا ہے۔"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of counted japa"
+      "text": "شمار شدہ جاپ کے فوائد"
     },
     {
       "type": "ul",
       "items": [
-        "Builds discipline and measurable daily practice",
-        "Helps withdraw attention from distraction",
-        "Supports vow (sankalpa) completion — e.g. 108 for a deity",
-        "Pairs well with breath awareness in silent japa"
+        "نظم و ضبط اور پیمائشی روزانہ کی مشق بناتا ہے۔",
+        "خلفشار سے توجہ ہٹانے میں مدد کرتا ہے۔",
+        "منت (سنکلپا) کی تکمیل کی حمایت کرتا ہے — جیسے ایک دیوتا کے لیے 108",
+        "خاموش جاپ میں سانس کی آگاہی کے ساتھ اچھی طرح جوڑتا ہے۔"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "108 مرتبہ پڑھنے کا طریقہ"
     },
     {
       "type": "ol",
       "items": [
-        "Hold the mala in your right hand; do not cross the meru (guru) bead.",
-        "Start after the meru; move one bead per mantra.",
-        "At 108, you may reverse direction without crossing the meru, or stop per your tradition.",
-        "If you lose count, many restart the round rather than guess."
+        "مالا کو اپنے دائیں ہاتھ میں پکڑو۔ میرو (گرو) مالا کو عبور نہ کریں۔",
+        "میرو کے بعد شروع کریں؛ ایک منتر فی منتر منتقل کریں.",
+        "108 پر، آپ میرو کو عبور کیے بغیر سمت کو الٹ سکتے ہیں، یا اپنی روایت کے مطابق رک سکتے ہیں۔",
+        "اگر آپ گنتی کھو دیتے ہیں تو بہت سے لوگ اندازہ لگانے کے بجائے راؤنڈ دوبارہ شروع کرتے ہیں۔"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "کب نعرہ لگانا ہے۔"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Brahma muhurta, evening sandhya, or deity-specific days (e.g. Monday for Shiva, Saturday for Shani) are common. Choose a time you can repeat daily."
+          "text": "برہما مہورتا، شام کی سندھیا، یا دیوتا کے لیے مخصوص دن (جیسے شیو کے لیے پیر، شانی کے لیے ہفتہ) عام ہیں۔ ایک وقت کا انتخاب کریں جسے آپ روزانہ دہرا سکتے ہیں۔"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "108 تکرار کیوں اہم ہے۔"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Japam",
+          "text": "بہت سے سمپرادیوں میں، 108 ایک مکمل مالا راؤنڈ ہے - شمار کھونے کے بغیر روزانہ سیشن کو بند کرنے کا ایک عملی طریقہ۔ نمبر علامتی ہے (کائناتی چکر، کچھ تعلیمات میں نادیاں)، لیکن گہرا مقصد مستقل توجہ ہے: ایک سانس، ایک منتر، ایک وقت میں ایک مالا۔"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "اگر 108 سب سے پہلے بھاری محسوس ہوتا ہے، تو 11 یا 27 تکرار کے ساتھ شروع کریں اور ہفتوں میں بڑھیں. عام دنوں میں مستقل مزاجی اکثر ایک شدید سیشن سے زیادہ اہمیت رکھتی ہے۔"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "عام جاپانی غلطیوں سے بچنے کے لیے"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "گنتی کو \"ختم\" کرنے کے لیے منتر کو تیز کرنا - سست، سنائی دینے والی یا ذہنی تال بہتر ہے۔",
+        "مکمل مالا راؤنڈ کے دوران ملٹی ٹاسکنگ (اسکرولنگ، ٹی وی)",
+        "فوری مادی نتائج کے لیے جاپا کو سودا سمجھنا",
+        "جب آپ کی روایت گرہ جاپ کے لیے تجویز کرتی ہے تو غسل/صاف جگہ کو چھوڑنا",
+        "ایک اچھے ہفتے کے بعد رکنا - گرہ اور دیوتا کی قسمیں طویل مدتی ہیں۔"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "سنکلپا اور روزانہ کا نظم و ضبط"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "شروع کرنے سے پہلے، بہت سے خاندانوں نے ایک مختصر سنکلپا (ارادہ) مقرر کیا: نام، اگر قابل اطلاق ہو تو گوتر، اور جاپ کا مقصد۔ جب ممکن ہو ہر روز ایک ہی وقت رکھیں — صبح یا شام عام ہیں۔ منتر کو ایماندارانہ طرز عمل، خیرات، یا خدمت کے ساتھ جوڑیں جہاں آپ کے بزرگ اسے مشورہ دیتے ہیں۔ japa کردار کی حمایت کرتا ہے، یہ صحیح عمل کی جگہ نہیں لیتا ہے۔"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Japam کے ساتھ مشق کریں۔"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "جاپم",
           "bold": true
         },
         {
-          "text": " tracks japa during match-3 play with deity mantra audio. Special 108-japa modes help you complete a full round with on-screen counting — useful when you do not have a mala at hand."
+          "text": "دیوتا منتر آڈیو کے ساتھ میچ 3 پلے کے دوران جاپ کو ٹریک کرتا ہے۔ خصوصی 108-جاپا موڈز آپ کو آن اسکرین گنتی کے ساتھ مکمل راؤنڈ مکمل کرنے میں مدد کرتے ہیں - جب آپ کے ہاتھ میں مالا نہ ہو تو مفید ہے۔"
         }
       ]
     }
   ],
   "ctas": [
     {
-      "id": "start-japa",
+      "id": "try-free",
       "position": "above-fold",
-      "label": "Start Japa in Japam",
-      "href": "https://japam.digital/?lang=ur&utm_source=google&utm_medium=seo&utm_campaign=japa-108-times&utm_content=start-japa",
+      "label": "Try 108 Japa free",
+      "href": "https://japam.digital/?lang=ur&try=1&utm_source=google&utm_medium=seo&utm_campaign=japa-108-times&utm_content=try-free",
       "style": "primary"
     },
     {
-      "id": "try-free",
+      "id": "start-japa",
       "position": "after-how-to",
-      "label": "Try Japa without login",
-      "href": "https://japam.digital/?lang=ur&try=1&utm_source=google&utm_medium=seo&utm_campaign=japa-108-times&utm_content=try-free",
+      "label": "Start Japa in Japam",
+      "href": "https://japam.digital/?lang=ur&utm_source=google&utm_medium=seo&utm_campaign=japa-108-times&utm_content=start-japa",
       "style": "secondary"
     },
     {
-      "id": "join-yagna",
+      "id": "all-deities",
       "position": "after-faq",
-      "label": "Join Maha Japa Yagna",
-      "href": "https://japam.digital/menu?lang=ur&utm_source=google&utm_medium=seo&utm_campaign=japa-108-times&utm_content=join-yagna",
+      "label": "Choose your deity",
+      "href": "https://japam.digital/menu?lang=ur&utm_source=google&utm_medium=seo&utm_campaign=japa-108-times&utm_content=all-deities",
       "style": "secondary"
     },
     {
-      "id": "sticky",
+      "id": "start-japa",
       "position": "sticky-footer",
       "label": "Open Japam",
       "href": "https://japam.digital/?lang=ur&utm_source=google&utm_medium=seo&utm_campaign=japa-108-times&utm_content=sticky",
@@ -142,37 +188,37 @@
   ],
   "faqs": [
     {
-      "question": "Can I chant more than 108?",
-      "answer": "Yes — 108 is a standard minimum round. Some sadhakas do 1008 (10 malas) on festivals under guidance."
+      "question": "کیا میں 108 سے زیادہ کا نعرہ لگا سکتا ہوں؟",
+      "answer": "ہاں — 108 ایک معیاری کم از کم راؤنڈ ہے۔ کچھ صادقین ہدایت کے تحت تہواروں پر 1008 (10 مالا) کرتے ہیں۔"
     },
     {
-      "question": "What if I don't have a mala?",
-      "answer": "Use Japam's counter, finger counting, or a written tally. The intention and focus remain the same."
+      "question": "اگر مجھے مالا نہ ہو تو کیا ہوگا؟",
+      "answer": "Japam کا کاؤنٹر، انگلیوں کی گنتی، یا تحریری حساب کا استعمال کریں۔ نیت اور توجہ ایک ہی رہتی ہے۔"
     },
     {
-      "question": "Should japa be loud or silent?",
-      "answer": "Both are valid: upamshu (whisper) and manasika (mental) japa are praised for concentration."
+      "question": "کیا جاپ اونچی آواز میں ہونا چاہئے یا خاموش؟",
+      "answer": "دونوں درست ہیں: اپامشو (سرگوشی) اور ماناسیکا (ذہنی) جاپ کو ارتکاز کے لیے سراہا جاتا ہے۔"
     },
     {
-      "question": "Does the meru bead count?",
-      "answer": "Usually you do not chant while crossing the meru; you turn back or transfer the mala per your teacher's instruction."
+      "question": "کیا میرو مالا شمار ہوتا ہے؟",
+      "answer": "عام طور پر آپ میرو کو عبور کرتے وقت جاپ نہیں کرتے۔ آپ واپس مڑیں یا اپنے استاد کی ہدایت کے مطابق مالا کو منتقل کریں۔"
     },
     {
-      "question": "Can children do 108 japa?",
-      "answer": "Shorter counts may be better for young children; 108 is common for teens and adults with gentle encouragement."
+      "question": "کیا بچے 108 جاپ کر سکتے ہیں؟",
+      "answer": "چھوٹے بچوں کے لیے چھوٹی تعداد بہتر ہو سکتی ہے۔ 108 نوعمروں اور بالغوں کے لئے نرم حوصلہ افزائی کے ساتھ عام ہے۔"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "یہ مضمون صرف تعلیمی اور عقیدتی مشق کے لیے ہے۔ Japam طبی، قانونی، یا مالی مشورہ فراہم نہیں کرتا ہے۔ نتائج کا انحصار ذاتی ایمان اور مستقل مشق پر ہوتا ہے۔ ایپ میں منتر کا متن اور آڈیو جاپا سپورٹ کے لیے ہیں۔ رسمی پوجا کے قواعد کے لیے اپنے خاندانی پجاری یا روایت سے مشورہ کریں۔"
   },
   "relatedPages": [
     {
       "pageId": "online-japa-mantra",
-      "label": "Online japa with Japam"
+      "label": "Japam کے ساتھ آن لائن جاپا"
     },
     {
       "pageId": "ishta-devata-japa",
-      "label": "Ishta devata japa"
+      "label": "اشتہ دیوتا جاپا۔"
     }
   ]
 }

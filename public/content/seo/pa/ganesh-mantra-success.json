@@ -4,27 +4,27 @@
   "lang": "pa",
   "slug": "ganesh-mantra-success",
   "deityId": "ganesh",
-  "primaryKeyword": "ganesh mantra for success",
+  "primaryKeyword": "ਸਫਲਤਾ ਲਈ ਗਣੇਸ਼ ਮੰਤਰ",
   "secondaryKeywords": [
-    "vinayaka mantra",
-    "om gan ganapataye namah",
-    "obstacle removal mantra"
+    "ਵਿਨਾਇਕ ਮੰਤਰ",
+    "ॐ ॐ ਗਂ ਗਣਪਤਯੇ ਨਮਃ",
+    "ਰੁਕਾਵਟ ਹਟਾਉਣ ਦਾ ਮੰਤਰ"
   ],
   "meta": {
-    "title": "Ganesh Mantra for Success & Obstacles | Japam",
-    "description": "Vinayaka/Ganesh mantra for new beginnings, 108 japa method, and practice in Japam.",
+    "title": "ਸਫਲਤਾ ਅਤੇ ਰੁਕਾਵਟਾਂ ਲਈ ਗਣੇਸ਼ ਮੰਤਰ | ਜਪਮ",
+    "description": "ਨਵੀਂ ਸ਼ੁਰੂਆਤ ਲਈ ਵਿਨਾਇਕ/ਗਣੇਸ਼ ਮੰਤਰ, 108 ਜਪ ਵਿਧੀ, ਅਤੇ ਜਪਮ ਵਿੱਚ ਅਭਿਆਸ।",
     "ogImage": "/images/deities/ganesh.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Ganesh Mantra for Success and Obstacle Removal"
+      "text": "ਸਫਲਤਾ ਅਤੇ ਰੁਕਾਵਟਾਂ ਨੂੰ ਦੂਰ ਕਰਨ ਲਈ ਗਣੇਸ਼ ਮੰਤਰ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Lord Ganesh (Vinayaka) is invoked at the start of ventures, study, and travel. His mantra clears mental obstacles and invites wisdom."
+          "text": "ਭਗਵਾਨ ਗਣੇਸ਼ (ਵਿਨਾਇਕ) ਨੂੰ ਉੱਦਮ, ਅਧਿਐਨ ਅਤੇ ਯਾਤਰਾ ਦੀ ਸ਼ੁਰੂਆਤ ਵਿੱਚ ਬੁਲਾਇਆ ਜਾਂਦਾ ਹੈ। ਉਸਦਾ ਮੰਤਰ ਮਾਨਸਿਕ ਰੁਕਾਵਟਾਂ ਨੂੰ ਦੂਰ ਕਰਦਾ ਹੈ ਅਤੇ ਬੁੱਧੀ ਨੂੰ ਸੱਦਾ ਦਿੰਦਾ ਹੈ।"
         }
       ]
     },
@@ -32,13 +32,13 @@
       "type": "p",
       "runs": [
         {
-          "text": "Learn the chant used in Japam and how to practise 108 repetitions with focus."
+          "text": "ਜਪਮ ਵਿੱਚ ਵਰਤੇ ਜਾਣ ਵਾਲੇ ਉਚਾਰਨ ਅਤੇ ਫੋਕਸ ਨਾਲ 108 ਦੁਹਰਾਓ ਦਾ ਅਭਿਆਸ ਕਰਨਾ ਸਿੱਖੋ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "ਮੰਤਰ ਦਾ ਅਰਥ"
     },
     {
       "type": "blockquote",
@@ -53,57 +53,102 @@
       "type": "p",
       "runs": [
         {
-          "text": "Chant with a calm mind, offering salutation (Namaha) rather than demanding outcomes."
+          "text": "ਨਤੀਜੇ ਦੀ ਮੰਗ ਕਰਨ ਦੀ ਬਜਾਏ ਸ਼ਾਂਤ ਮਨ ਨਾਲ ਸਲਾਮ (ਨਮਹਾ) ਦਾ ਜਾਪ ਕਰੋ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "ਜਪ ਦੇ ਲਾਭ (ਰਵਾਇਤੀ ਵਿਚਾਰ)"
     },
     {
       "type": "ul",
       "items": [
-        "Traditional first prayer before puja or important work",
-        "Builds confidence and humility together",
-        "Wednesday and Chaturthi are especially sacred",
-        "Students and entrepreneurs alike chant for clarity"
+        "ਪੂਜਾ ਜਾਂ ਮਹੱਤਵਪੂਰਨ ਕੰਮ ਤੋਂ ਪਹਿਲਾਂ ਰਵਾਇਤੀ ਪਹਿਲੀ ਪ੍ਰਾਰਥਨਾ",
+        "ਇਕੱਠੇ ਵਿਸ਼ਵਾਸ ਅਤੇ ਨਿਮਰਤਾ ਪੈਦਾ ਕਰਦਾ ਹੈ",
+        "ਬੁੱਧਵਾਰ ਅਤੇ ਚਤੁਰਥੀ ਵਿਸ਼ੇਸ਼ ਤੌਰ 'ਤੇ ਪਵਿੱਤਰ ਹਨ",
+        "ਵਿਦਿਆਰਥੀ ਅਤੇ ਉੱਦਮੀ ਸਪਸ਼ਟਤਾ ਲਈ ਇੱਕੋ ਜਿਹੇ ਜਾਪ ਕਰਦੇ ਹਨ"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "108 ਵਾਰ ਜਾਪ ਕਿਵੇਂ ਕਰੀਏ"
     },
     {
       "type": "ul",
       "items": [
-        "Chant 108 times before beginning a task or after morning bath",
-        "Offer modak or fruit if doing formal puja",
-        "Keep breath steady; pronounce Gaṇapataye clearly",
-        "Use Japam to track count if you lack a mala"
+        "ਕੋਈ ਕੰਮ ਸ਼ੁਰੂ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਜਾਂ ਸਵੇਰ ਦੇ ਇਸ਼ਨਾਨ ਤੋਂ ਬਾਅਦ 108 ਵਾਰ ਜਾਪ ਕਰੋ",
+        "ਰਸਮੀ ਪੂਜਾ ਕਰਦੇ ਸਮੇਂ ਮੋਦਕ ਜਾਂ ਫਲ ਚੜ੍ਹਾਓ",
+        "ਸਾਹ ਨੂੰ ਸਥਿਰ ਰੱਖੋ; ਗਣਪਤਯੇ ਦਾ ਸਪਸ਼ਟ ਉਚਾਰਨ ਕਰੋ",
+        "ਜੇ ਤੁਹਾਡੇ ਕੋਲ ਮਾਲਾ ਦੀ ਘਾਟ ਹੈ ਤਾਂ ਗਿਣਤੀ ਨੂੰ ਟਰੈਕ ਕਰਨ ਲਈ ਜਾਪਮ ਦੀ ਵਰਤੋਂ ਕਰੋ"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "ਜਪ ਕਦੋਂ ਕਰਨਾ ਹੈ"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Wednesday, Sankatahara Chaturthi, and Ganesh Chaturthi are key; any sincere morning works."
+          "text": "ਬੁੱਧਵਾਰ, ਸੰਕਟਹਾਰਾ ਚਤੁਰਥੀ, ਅਤੇ ਗਣੇਸ਼ ਚਤੁਰਥੀ ਮੁੱਖ ਹਨ; ਕੋਈ ਵੀ ਇਮਾਨਦਾਰ ਸਵੇਰ ਦਾ ਕੰਮ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "108 ਦੁਹਰਾਓ ਮਾਇਨੇ ਕਿਉਂ ਰੱਖਦੇ ਹਨ",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Select Ganesh in Japam for Om Gan Ganapataye Namah audio during gameplay and japa tally toward 108.",
+          "text": "ਸੰਖਿਆ 108 ਜਪ ਮਾਲਾ ਦਾ ਇੱਕ ਪੂਰਾ ਗੇੜ ਹੈ। ਨਿਰੰਤਰ ਦੁਹਰਾਓ ਮਨ ਨੂੰ ਸ਼ਾਂਤ ਕਰਦਾ ਹੈ ਅਤੇ ਮੰਤਰ ਦੇ ਅਰਥਾਂ 'ਤੇ ਧਿਆਨ ਖਿੱਚਦਾ ਹੈ।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ਕੁਝ ਪਰੰਪਰਾਵਾਂ 11 ਜਾਂ 21 ਮਾਲਾ ਨਿਰਧਾਰਤ ਕਰਦੀਆਂ ਹਨ - ਆਪਣੇ ਗੁਰੂ ਜਾਂ ਪੁਜਾਰੀ ਨੂੰ ਤੁਹਾਡੀ ਸੁੱਖਣਾ ਦੇ ਅਨੁਕੂਲ ਗਿਣਤੀ ਲਈ ਪੁੱਛੋ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ਬਚਣ ਲਈ ਆਮ ਗਲਤੀਆਂ"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "ਬਹੁਤ ਤੇਜ਼ੀ ਨਾਲ ਜਾਪ ਕਰਨਾ ਅਤੇ ਆਵਾਜ਼ 'ਤੇ ਧਿਆਨ ਗੁਆਉਣਾ",
+        "ਬਿਨਾਂ ਸੇਧ ਦੇ ਕਈ ਦੇਵਤਿਆਂ ਦੀਆਂ ਸੁੱਖਣਾਂ ਨੂੰ ਮਿਲਾਉਣਾ",
+        "ਭਗਤੀ ਅਤੇ ਨੈਤਿਕ ਜੀਵਨ ਦੀ ਬਜਾਏ ਕੇਵਲ ਭੌਤਿਕ ਨਤੀਜਿਆਂ ਦੀ ਉਮੀਦ ਕਰਨਾ"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ਮੰਦਰ ਅਤੇ ਘਰ ਇਕੱਠੇ ਅਭਿਆਸ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ਘਰ ਜਾਪ ਮੰਦਰ ਪੂਜਾ ਦਾ ਸਮਰਥਨ ਕਰਦਾ ਹੈ; ਇਹ ਦਰਸ਼ਨ ਦੀ ਥਾਂ ਨਹੀਂ ਲੈਂਦਾ। ਤਿਉਹਾਰਾਂ ਦੇ ਦਿਨ ਜਾਂ ਸ਼ਨੀਵਾਰ ਨੂੰ ਮੰਦਰ ਜਾਣਾ ਪਰਿਵਾਰਕ ਪਰੰਪਰਾ ਨੂੰ ਮਜ਼ਬੂਤ ​​ਕਰਦਾ ਹੈ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "ਜਪਮ ਨਾਲ ਅਭਿਆਸ ਕਰੋ"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "ਗੇਮਪਲੇ ਦੇ ਦੌਰਾਨ ਓਮ ਗਣ ਗਣਪਤੇ ਨਮਹ ਆਡੀਓ ਲਈ ਜਪਮ ਵਿੱਚ ਗਣੇਸ਼ ਦੀ ਚੋਣ ਕਰੋ ਅਤੇ 108 ਤੱਕ ਜਾਪ ਕਰੋ।",
           "bold": false
         }
       ]
@@ -113,7 +158,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start ਗਣੇਸ਼ Japa in Japam",
+      "label": "Start Ganesh Japa in Japam",
       "href": "https://japam.digital/?lang=pa&deity=ganesh&utm_source=google&utm_medium=seo&utm_campaign=ganesh-mantra-success&utm_content=start-japa",
       "style": "primary"
     },
@@ -141,41 +186,41 @@
   ],
   "faqs": [
     {
-      "question": "Ganesh or Vinayaka — same mantra?",
-      "answer": "Yes — regional names refer to the same deity; mantra form is shared."
+      "question": "ਗਣੇਸ਼ ਜਾਂ ਵਿਨਾਇਕ - ਇੱਕੋ ਮੰਤਰ?",
+      "answer": "ਹਾਂ — ਖੇਤਰੀ ਨਾਮ ਇੱਕੋ ਦੇਵਤੇ ਨੂੰ ਦਰਸਾਉਂਦੇ ਹਨ; ਮੰਤਰ ਰੂਪ ਸਾਂਝਾ ਹੈ।"
     },
     {
-      "question": "How many times before exam?",
-      "answer": "108 is standard; some chant 11 or 21 rounds under teacher advice."
+      "question": "ਪ੍ਰੀਖਿਆ ਤੋਂ ਪਹਿਲਾਂ ਕਿੰਨੀ ਵਾਰ?",
+      "answer": "108 ਮਿਆਰੀ ਹੈ; ਕੁਝ ਅਧਿਆਪਕ ਦੀ ਸਲਾਹ ਦੇ ਤਹਿਤ 11 ਜਾਂ 21 ਦੌਰ ਦਾ ਜਾਪ ਕਰਦੇ ਹਨ।"
     },
     {
-      "question": "Can I chant in the evening?",
-      "answer": "Morning is preferred; evening japa is fine with sincerity."
+      "question": "ਕੀ ਮੈਂ ਸ਼ਾਮ ਨੂੰ ਜਾਪ ਕਰ ਸਕਦਾ ਹਾਂ?",
+      "answer": "ਸਵੇਰ ਨੂੰ ਤਰਜੀਹ ਦਿੱਤੀ ਜਾਂਦੀ ਹੈ; ਸ਼ਾਮ ਦਾ ਜਾਪ ਇਮਾਨਦਾਰੀ ਨਾਲ ਠੀਕ ਹੈ।"
     },
     {
-      "question": "Does Japam include Ganesh Chaturthi specials?",
-      "answer": "Check the app specials menu during festival seasons."
+      "question": "ਕੀ ਜਪਮ ਵਿੱਚ ਗਣੇਸ਼ ਚਤੁਰਥੀ ਵਿਸ਼ੇਸ਼ ਸ਼ਾਮਲ ਹਨ?",
+      "answer": "ਤਿਉਹਾਰਾਂ ਦੇ ਮੌਸਮ ਦੌਰਾਨ ਐਪ ਵਿਸ਼ੇਸ਼ ਮੀਨੂ ਦੀ ਜਾਂਚ ਕਰੋ।"
     },
     {
-      "question": "Is modak required?",
-      "answer": "Optional for home japa; festivals often include food offering."
+      "question": "ਕੀ ਮੋਦਕ ਦੀ ਲੋੜ ਹੈ?",
+      "answer": "ਗ੍ਰਹਿ ਜਪ ਲਈ ਵਿਕਲਪਿਕ; ਤਿਉਹਾਰਾਂ ਵਿੱਚ ਅਕਸਰ ਭੋਜਨ ਦੀ ਪੇਸ਼ਕਸ਼ ਸ਼ਾਮਲ ਹੁੰਦੀ ਹੈ।"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "ਇਹ ਲੇਖ ਕੇਵਲ ਵਿਦਿਅਕ ਅਤੇ ਭਗਤੀ ਅਭਿਆਸ ਲਈ ਹੈ। Japam ਡਾਕਟਰੀ, ਕਾਨੂੰਨੀ, ਜਾਂ ਵਿੱਤੀ ਸਲਾਹ ਪ੍ਰਦਾਨ ਨਹੀਂ ਕਰਦਾ ਹੈ। ਨਤੀਜੇ ਨਿੱਜੀ ਵਿਸ਼ਵਾਸ ਅਤੇ ਨਿਰੰਤਰ ਅਭਿਆਸ 'ਤੇ ਨਿਰਭਰ ਕਰਦੇ ਹਨ। ਐਪ ਵਿੱਚ ਮੰਤਰ ਪਾਠ ਅਤੇ ਆਡੀਓ ਜਪਾ ਸਮਰਥਨ ਲਈ ਹਨ; ਰਸਮੀ ਪੂਜਾ ਨਿਯਮਾਂ ਲਈ ਆਪਣੇ ਪਰਿਵਾਰਕ ਪੁਜਾਰੀ ਜਾਂ ਪਰੰਪਰਾ ਨਾਲ ਸਲਾਹ ਕਰੋ।"
   },
   "relatedPages": [
     {
       "pageId": "mantra-ganesh",
-      "label": "Ganesh mantra guide"
+      "label": "ਗਣੇਸ਼ ਮੰਤਰ ਗਾਈਡ"
     },
     {
       "pageId": "mantra-for-debt-relief",
-      "label": "Financial worries japa"
+      "label": "ਵਿੱਤੀ ਚਿੰਤਾ ਜਪਾ"
     },
     {
       "pageId": "japa-108-times",
-      "label": "108 japa counting"
+      "label": "108 ਜਪ ਗਿਣਦੇ ਹਨ"
     }
   ]
 }

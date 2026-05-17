@@ -4,27 +4,27 @@
   "lang": "sa",
   "slug": "sade-sati-remedies",
   "deityId": "shani",
-  "primaryKeyword": "sade sati remedies mantra",
+  "primaryKeyword": "सदे सति उपाय मन्त्र",
   "secondaryKeywords": [
-    "sade sati puja",
-    "shani sade sati pariharam",
-    "sade sati duration"
+    "सदे सति पूजा",
+    "शनि सदे सति परिहारम्",
+    "सदे सति अवधिः"
   ],
   "meta": {
-    "title": "Sade Sati Remedies & Mantra Japa | Japam",
-    "description": "Understand Sade Sati and traditional Shani mantra japa for peace — with digital practice in Japam.",
+    "title": "सादे सती उपाय एवं मंत्र जप | जपम्",
+    "description": "सादे सतिं पारम्परिकं शनिमन्त्रं च शान्तिार्थं जपं अवगन्तुं — जपमे डिजिटल-अभ्यासेन सह।",
     "ogImage": "/images/deities/shani.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Sade Sati Remedies and Shani Mantra Japa"
+      "text": "सादे सती उपाय एवं शनि मंत्र जप"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Sade Sati is the roughly seven-and-a-half-year period when transiting Shani (Saturn) moves through signs near your Moon sign in the birth chart. Many families respond with patience, seva, and japa rather than fear."
+          "text": "सादे सतिः मोटेन सार्धसप्तवर्षस्य अवधिः अस्ति यदा संक्रमणं कुर्वन् शनिः (शनिः) जन्मपत्रिकायां भवतः चन्द्रराशिसमीपे राशिभिः गच्छति बहवः कुटुम्बाः भयस्य अपेक्षया धैर्यं, सेवां, जपं च प्रतिक्रियां ददति ।"
         }
       ]
     },
@@ -32,13 +32,13 @@
       "type": "p",
       "runs": [
         {
-          "text": "This guide outlines traditional remedies including Shani mantra repetition and how Japam can support steady daily practice."
+          "text": "अस्मिन् मार्गदर्शके शनिमन्त्रस्य पुनरावृत्तिः सहितं पारम्परिकं उपायं वर्णितम् अस्ति तथा च जपमः कथं स्थिरदैनिक अभ्यासस्य समर्थनं कर्तुं शक्नोति।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Meaning of the mantra"
+      "text": "मन्त्रार्थः"
     },
     {
       "type": "blockquote",
@@ -53,57 +53,102 @@
       "type": "p",
       "runs": [
         {
-          "text": "Saluting Shanaischara with humility supports graha shanti — planetary peace in the mind and conduct."
+          "text": "शनैश्चरस्य विनयेन विनयेन ग्रहशान्तिः समर्थः भवति — मनसि आचरणे च ग्रहशान्तिः ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Benefits of japa (traditional view)"
+      "text": "जपस्य लाभाः (पारम्परिकदृष्टिकोणः) २."
     },
     {
       "type": "ul",
       "items": [
-        "Encourages steadiness and acceptance during long phases",
-        "Pairs with Saturday worship and ethical living",
-        "Often combined with Hanuman bhakti in many traditions",
-        "Japa builds focus away from anxiety about the future"
+        "दीर्घचरणयोः स्थिरतां स्वीकारं च प्रोत्साहयति",
+        "शनिवासरस्य पूजायाः नैतिकजीवनस्य च सह युग्मम्",
+        "प्रायः अनेकपरम्परासु हनुमत्भक्त्या सह संयुक्तम्",
+        "जपः भविष्यस्य चिन्तातः दूरं ध्यानं निर्माति"
       ]
     },
     {
       "type": "h2",
-      "text": "How to chant 108 times"
+      "text": "१०८ वारं जपं कथं करणीयम्"
     },
     {
       "type": "ul",
       "items": [
-        "Chant 108 times on a mala in a quiet place",
-        "Observe Saturday fast or simple meal if your tradition allows",
-        "Offer charity (seva) when possible — a classic Shani remedy",
-        "Keep count consistently; quality over speed"
+        "शान्तस्थाने मालायां १०८ वारं जपं कुर्वन्तु",
+        "यदि भवतः परम्परा अनुमन्यते तर्हि शनिवासरस्य उपवासं वा सरलं वा भोजनं कुर्वन्तु",
+        "यदा सम्भवं तदा दानं (सेवा) अर्पयन्तु — एकः शास्त्रीयः शनिः उपायः",
+        "गणनां निरन्तरं कुर्वन्तु; वेगस्य अपेक्षया गुणवत्ता"
       ]
     },
     {
       "type": "h2",
-      "text": "When to chant"
+      "text": "कदा जपेत्"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Saturday is primary for Shani. During active Sade Sati, many devotees add a short daily round — ask your priest for personal timing."
+          "text": "शनिवासरः शनिवासरः प्राथमिकः अस्ति। सक्रिय-सादेसती-काले बहवः भक्ताः लघु-दैनिक-परिक्रमणं योजयन्ति — स्वस्य पुरोहितः व्यक्तिगत-समयं पृच्छन्तु ।"
         }
       ]
     },
     {
       "type": "h2",
-      "text": "Practice with Japam"
+      "text": "१०८ पुनरावृत्तयः किमर्थं महत्त्वपूर्णाः सन्ति",
+      "_enrichId": "why-108-enrich"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "In Japam, select Shani to hear Om Shan Shanicharaya Namaha during match-3 play and track your japa count toward 108. Join Maha Japa Yagnas for community support.",
+          "text": "१०८ संख्या जपमाले एकः पूर्णगोलः अस्ति । नित्यपुनरावृत्तिः मनः शान्तं करोति, मन्त्रस्य अर्थे ध्यानं गभीरं करोति च ।"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "केचन परम्पराः ११ वा २१ वा मालाः विहिताः सन्ति — भवतः गुरुं वा पुरोहितं वा भवतः व्रतस्य अनुकूलानि गणनानि पृच्छन्तु ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "परिहरणीयानि सामान्यानि त्रुटयः"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "अतिशीघ्रं जपं कृत्वा ध्वनिं प्रति ध्यानं नष्टम्",
+        "अनेकदेवव्रतमिश्रणं विना मार्गदर्शनम् |",
+        "भक्ति-नीति-जीवनस्य स्थाने केवलं भौतिक-परिणामस्य अपेक्षा"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "मन्दिरं गृहं च एकत्र अभ्यासं कुर्वन्ति"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "गृहं जपः मन्दिरपूजायाः समर्थनं करोति; दर्शनस्य स्थाने न भवति। उत्सवदिनेषु शनिवासरे वा मन्दिरस्य दर्शनं पारिवारिकपरम्परां सुदृढं करोति ।"
+        }
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "जपं सह अभ्यासं कुरुत"
+    },
+    {
+      "type": "p",
+      "runs": [
+        {
+          "text": "जपमे, मैच-3 क्रीडायाः समये ओम शान शनिचराय नमहं श्रुतुं शनिं चयनं कुर्वन्तु तथा च 108 प्रति स्वस्य जपगणनाम् अनुसृत्य सामुदायिकसमर्थनार्थं महाजपयज्ञेषु सम्मिलिताः भवन्तु।",
           "bold": false
         }
       ]
@@ -113,7 +158,7 @@
     {
       "id": "start-japa",
       "position": "above-fold",
-      "label": "Start शनिः Japa in Japam",
+      "label": "Start Shani Japa in Japam",
       "href": "https://japam.digital/?lang=sa&deity=shani&utm_source=google&utm_medium=seo&utm_campaign=sade-sati-remedies&utm_content=start-japa",
       "style": "primary"
     },
@@ -141,41 +186,41 @@
   ],
   "faqs": [
     {
-      "question": "How long does Sade Sati last?",
-      "answer": "About 7.5 years in classical reckoning, as Shani transits three signs relative to the Moon. Exact timing is calculated by your astrologer."
+      "question": "सादे सती कियत्कालं यावत् तिष्ठति ?",
+      "answer": "शास्त्रीयगणनायां प्रायः ७.५ वर्षाणि, यथा शनिः चन्द्रस्य सापेक्षतया त्रीणि राशीनि पारयति। समीचीनः समयः भवतः ज्योतिषी गणितः भवति।"
     },
     {
-      "question": "Is Sade Sati always bad?",
-      "answer": "Traditions teach it as a period of discipline and karmic lessons, not punishment. Japa and dharma steady the mind."
+      "question": "सदे सती सर्वदा दुष्टा वा ?",
+      "answer": "परम्पराः अनुशासनस्य कर्मपाठस्य च अवधिरूपेण पाठयन्ति, न तु दण्डस्य। जपधर्मा च मनः स्थिरं करोति।"
     },
     {
-      "question": "Which mantra for Sade Sati?",
-      "answer": "Om Shan Shanicharaya Namaha is widely used; your lineage may prescribe additional stotras."
+      "question": "सादे सति कः मन्त्रः ?",
+      "answer": "ॐ शां शनिचराय नमः बहुप्रयोगः; भवतः वंशः अतिरिक्तं स्तोत्रं विहितं कर्तुं शक्नोति।"
     },
     {
-      "question": "Can I chant without a mala?",
-      "answer": "Yes — use Japam’s digital counter or finger counting with the same sincerity."
+      "question": "माला विना जपं कर्तुं शक्नोमि वा ?",
+      "answer": "आम् — जपमस्य अङ्कीयगणकं वा अङ्गुलीगणना वा समाननिष्कपटतया उपयोगं कुर्वन्तु ।"
     },
     {
-      "question": "Does oil abhisheka replace japa?",
-      "answer": "Temple rituals and home japa complement each other; follow your sampradaya."
+      "question": "किं जपस्य स्थाने तैल अभिषेकः भवति ?",
+      "answer": "मन्दिरसंस्कारः गृहजपः च परस्परं पूरयन्ति; भवतः सम्प्रदायम् अनुसृत्य ।"
     }
   ],
   "disclaimer": {
-    "text": "This article is for educational and devotional practice only. Japam does not provide medical, legal, or financial advice."
+    "text": "एषः लेखः केवलं शैक्षणिक-भक्ति-अभ्यासार्थम् अस्ति । जपम् चिकित्सा, कानूनी, आर्थिकपरामर्शं न ददाति । परिणामाः व्यक्तिगतविश्वासस्य, निरन्तरं अभ्यासस्य च उपरि निर्भरं भवति। एप् मध्ये मन्त्रपाठः श्रव्यं च जपासमर्थनार्थम् अस्ति; औपचारिकपूजानियमानां कृते स्वपरिवारस्य पुरोहितेन वा परम्परेण वा परामर्शं कुर्वन्तु।"
   },
   "relatedPages": [
     {
       "pageId": "shani-mantra-shanti",
-      "label": "Shani mantra shanti"
+      "label": "शनि मन्त्र शान्ति"
     },
     {
       "pageId": "hanuman-mantra-shani",
-      "label": "Hanuman for Shani"
+      "label": "शनिस्य कृते हनुमान्"
     },
     {
       "pageId": "graha-shanti-mantra",
-      "label": "Graha shanti"
+      "label": "ग्रह शान्ति"
     }
   ]
 }

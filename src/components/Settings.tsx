@@ -827,7 +827,9 @@ export function Settings({ onBack }: SettingsProps) {
                 {priestLinking ? 'Linking…' : 'Link'}
               </button>
               {priestMessage && <p className="text-amber-200 text-xs">{priestMessage}</p>}
-              {user && <Link to="/priest" className="text-amber-400 text-sm block">Priest dashboard →</Link>}
+              <Link to="/priest" className="text-amber-400 text-sm block">
+                Priest dashboard (username sign-in) →
+              </Link>
             </form>
           </SettingsCard>
 

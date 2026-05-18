@@ -1,11 +1,14 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { JapamBrand } from '../components/ui/JapamBrand';
+import { PriestLoginForm, PRIEST_TOKEN_KEY, PRIEST_TEMPLE_KEY } from '../components/priest/PriestLoginForm';
+import { getApiBase } from '../lib/apiBase';
 import { DEITIES } from '../data/deities';
 
-const API_BASE = import.meta.env.VITE_API_URL ?? '';
-const PRIEST_TOKEN_KEY = 'japam_priest_token';
-const PRIEST_TEMPLE_KEY = 'japam_priest_temple';
+function priestApi(path: string): string {
+  const base = getApiBase();
+  return base ? `${base}${path}` : path;
+}
 
 export const MARATHON_HARD_DELETE_PHRASE = 'DELETE MARATHON FOREVER';
 export const YAGNA_HARD_DELETE_PHRASE = 'DELETE YAGNA FOREVER';
@@ -210,7 +213,7 @@ export function PriestPage() {
     if (!token) return;
     setLoadError(null);
     try {
-      const url = API_BASE ? `${API_BASE}/api/priest/marathons` : '/api/priest/marathons';
+      const url = priestApi('/api/priest/marathons');
       const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
       const data = await res.json().catch(() => ({}));
       if (res.status === 401) {
@@ -234,7 +237,7 @@ export function PriestPage() {
     if (!token) return;
     setMahaLoadError(null);
     try {
-      const url = API_BASE ? `${API_BASE}/api/priest/maha-yagnas` : '/api/priest/maha-yagnas';
+      const url = priestApi('/api/priest/maha-yagnas');
       const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
       const data = await res.json().catch(() => ({}));
       if (res.status === 401) return;
@@ -281,7 +284,7 @@ export function PriestPage() {
       setApavargaLoading(true);
       setApavargaError(null);
       try {
-        const url = API_BASE ? `${API_BASE}/api/apavarga/priest/settings` : '/api/apavarga/priest/settings';
+        const url = priestApi('/api/apavarga/priest/settings');
         const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
         const data = await res.json().catch(() => ({}));
         if (!cancelled) {
@@ -386,7 +389,7 @@ export function PriestPage() {
     setMahaCreating(true);
     setMahaCreateError(null);
     try {
-      const url = API_BASE ? `${API_BASE}/api/priest/maha-yagnas` : '/api/priest/maha-yagnas';
+      const url = priestApi('/api/priest/maha-yagnas');
       const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
@@ -436,7 +439,7 @@ export function PriestPage() {
     setCreating(true);
     setCreateError(null);
     try {
-      const url = API_BASE ? `${API_BASE}/api/priest/marathons` : '/api/priest/marathons';
+      const url = priestApi('/api/priest/marathons');
       const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
@@ -483,7 +486,7 @@ export function PriestPage() {
     setEditSaving(true);
     setEditError(null);
     try {
-      const url = API_BASE ? `${API_BASE}/api/priest/marathon-edit` : '/api/priest/marathon-edit';
+      const url = priestApi('/api/priest/marathon-edit');
       const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
@@ -532,7 +535,7 @@ export function PriestPage() {
     setMahaEditSaving(true);
     setMahaEditError(null);
     try {
-      const url = API_BASE ? `${API_BASE}/api/priest/maha-yagnas-edit` : '/api/priest/maha-yagnas-edit';
+      const url = priestApi('/api/priest/maha-yagnas-edit');
       const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
@@ -563,7 +566,7 @@ export function PriestPage() {
   };
 
   const postLifecycleMarathon = async (m: Marathon, lifecycleStatus: Lifecycle) => {
-    const url = API_BASE ? `${API_BASE}/api/priest/marathon-edit` : '/api/priest/marathon-edit';
+    const url = priestApi('/api/priest/marathon-edit');
     const res = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
@@ -574,7 +577,7 @@ export function PriestPage() {
   };
 
   const postLifecycleYagna = async (y: MahaYagna, lifecycleStatus: Lifecycle) => {
-    const url = API_BASE ? `${API_BASE}/api/priest/maha-yagnas-edit` : '/api/priest/maha-yagnas-edit';
+    const url = priestApi('/api/priest/maha-yagnas-edit');
     const res = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
@@ -627,7 +630,7 @@ export function PriestPage() {
     setHardDeleteBusy(true);
     try {
       if (hardDelete.kind === 'marathon') {
-        const url = API_BASE ? `${API_BASE}/api/priest/marathon-edit` : '/api/priest/marathon-edit';
+        const url = priestApi('/api/priest/marathon-edit');
         const res = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
@@ -642,7 +645,7 @@ export function PriestPage() {
         if (!res.ok) throw new Error(data.error || 'Failed');
         await refreshMarathons();
       } else {
-        const url = API_BASE ? `${API_BASE}/api/priest/maha-yagnas-edit` : '/api/priest/maha-yagnas-edit';
+        const url = priestApi('/api/priest/maha-yagnas-edit');
         const res = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
@@ -674,7 +677,7 @@ export function PriestPage() {
     setApavargaSaving(true);
     setApavargaError(null);
     try {
-      const url = API_BASE ? `${API_BASE}/api/apavarga/priest/settings` : '/api/apavarga/priest/settings';
+      const url = priestApi('/api/apavarga/priest/settings');
       const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
@@ -761,14 +764,19 @@ export function PriestPage() {
       <div className="relative min-h-screen p-6 flex flex-col items-center justify-center">
         <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
         <div className="relative z-10 flex flex-col items-center">
-          <h1 className="text-2xl font-bold text-amber-400 mb-4">Priest Dashboard</h1>
-          <p className="text-amber-200/80 text-center mb-6 max-w-sm">
-            Sign in with Google first, then link your priest account in Settings.
+          <h1 className="text-2xl font-bold text-amber-400 mb-2">Priest Dashboard</h1>
+          <p className="text-amber-200/70 text-sm mb-6 text-center max-w-sm">
+            Sign in with the username and password from your temple admin.
           </p>
-          <Link to="/settings" className="px-6 py-3 rounded-xl bg-amber-500 text-white font-semibold">
-            Go to Settings
-          </Link>
-          <Link to="/" className="text-amber-200/70 text-sm mt-4 underline">
+          <PriestLoginForm
+            onSuccess={(session) => {
+              setToken(session.token);
+              setTemple({ templeId: session.templeId, templeName: session.templeName });
+              setLoading(true);
+              setMahaLoading(true);
+            }}
+          />
+          <Link to="/" className="text-amber-200/70 text-sm mt-6 underline">
             ← Back to <JapamBrand className="inline text-sm">Japam</JapamBrand>
           </Link>
         </div>

@@ -1,87 +1,19 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getApiBase } from '../lib/apiBase';
-
-const PRIEST_TOKEN_KEY = 'japam_priest_token';
-const PRIEST_TEMPLE_KEY = 'japam_priest_temple';
+import { PriestLoginForm } from '../components/priest/PriestLoginForm';
 
 export function PriestLoginPage() {
   const navigate = useNavigate();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setLoading(true);
-    try {
-      const url = `${getApiBase()}/api/priest-login`;
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: username.trim(), password }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        setError(data.error || 'Login failed');
-        return;
-      }
-      if (data.token && data.templeId) {
-        localStorage.setItem(PRIEST_TOKEN_KEY, data.token);
-        localStorage.setItem(PRIEST_TEMPLE_KEY, JSON.stringify({ templeId: data.templeId, templeName: data.templeName || '' }));
-        navigate('/priest', { replace: true });
-      } else {
-        setError('Invalid response');
-      }
-    } catch {
-      setError('Network error');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center p-4">
       <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10 flex flex-col items-center w-full">
-      <h1 className="text-2xl font-bold text-amber-400 mb-2">Priest Login</h1>
-      <p className="text-amber-200/70 text-sm mb-6">Sign in to manage your temple&apos;s marathons</p>
-      <form onSubmit={handleSubmit} className="w-full max-w-xs space-y-4">
-        <div>
-          <label className="text-amber-200/80 text-sm block mb-1">Username</label>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="pujari@templename"
-            className="w-full px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30"
-            required
-          />
-        </div>
-        <div>
-          <label className="text-amber-200/80 text-sm block mb-1">Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30"
-            required
-          />
-        </div>
-        {error && <p className="text-red-400 text-sm">{error}</p>}
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full py-3 rounded-xl bg-amber-500 text-white font-semibold disabled:opacity-50"
-        >
-          {loading ? 'Signing in…' : 'Sign in'}
-        </button>
-      </form>
+        <h1 className="text-2xl font-bold text-amber-400 mb-2">Priest Login</h1>
+        <p className="text-amber-200/70 text-sm mb-6">Sign in to manage your temple&apos;s marathons</p>
+        <PriestLoginForm onSuccess={() => navigate('/priest', { replace: true })} />
       </div>
     </div>
   );
 }
 
-export { PRIEST_TOKEN_KEY, PRIEST_TEMPLE_KEY };
+export { PRIEST_TOKEN_KEY, PRIEST_TEMPLE_KEY } from '../components/priest/PriestLoginForm';

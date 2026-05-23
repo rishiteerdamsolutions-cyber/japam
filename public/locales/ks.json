@@ -17,7 +17,7 @@
     "refund": "واپسی تہ منسوخی",
     "shipping": "شپنگ تہ ڈیلیوری",
     "apiDocs": "API دستاویزات",
-    "specials": "Specials"
+    "specials": "خاص"
   },
   "videoModal": {
     "title1": "جپم",
@@ -47,7 +47,9 @@
     "offerDakshinaToUnlock": "Offer Dakshina to unlock",
     "mahaJapaYagnas": "مہا جپ یجنا",
     "navStripMarathons": "Marathons",
-    "navStripYagnas": "Yagnas"
+    "navStripYagnas": "Yagnas",
+    "specials": "خاص",
+    "pushpaAradhana": "پُشپ آرادھنا"
   },
   "game": {
     "jai": "جے!",
@@ -469,5 +471,53 @@
     "gotram": "gotram",
     "mobileNumber": "mobile_number",
     "generating": "generating"
+  },
+  "specials": {
+    "back": "واپس",
+    "title": "خاص",
+    "hubSubtitle": "راہہ چُنو — پھُل، 108 جپ، گنتی، یا تہوار۔",
+    "hubPushpaBlurb": "ڈیجیٹل پھُل چڑھاو — میچ جپ نَہ۔",
+    "hub108Title": "108 جپ",
+    "hub108Subtitle": "بورڈ کھیڈو · 108 جپ مکمل",
+    "hub108OneTime": "اَک دَفہ",
+    "hub108OneTimeHint": "اَک سیشن",
+    "hub108Weekly": "ہفتہ وار",
+    "hub108WeeklyHint": "زُن–اَتھ (IST)",
+    "hubCounterTitle": "جپ گنتی",
+    "hubCounterSubtitle": "صرف منتر · بورڈ نَہ · پھُل نَہ",
+    "hubCounterManual": "اَک اَک",
+    "hubCounterManualHint": "منتر ختم پَتہٕ اگلا جپ",
+    "hubCounterAuto": "آٹو",
+    "hubCounterAutoHint": "ییٚلہِ تُہۍ ختم کٔرو",
+    "hubOccasionsTitle": "تہوار",
+    "hubOccasionsSubtitle": "وَڈٕ دِہَنہٕ خٲطرٕ جپ",
+    "japa108": "108 جپ",
+    "japa108Title": "108 جپ",
+    "japa108ChooseDeity": "پنُن اِشتھ دیوتا چُنو۔ اَک سیشن = بورڈس 108 جپ۔",
+    "japa108ProGate": "شکتی مُفت؛ باقی خٲطرٕ Pro یا Premium۔",
+    "japa108TotalSessions": "تُہنٛد 108 جپ سیشن (تمام دیوتا): {{n}}",
+    "japa108ChangeDeity": "← دیوتا بدلاؤ",
+    "japa108Blurb": "108 جپ مکمل ییٚلہِ لامحدود چال۔ میچ جپ عام گنتی۔",
+    "japa108YourCompletions": "یہِ 108 جپ خاص تُہۍ {{n}} دَفہ مکمل",
+    "japa108Start": "108 جپ شروع",
+    "pushpaAradhana": "پُشپ آرادھنا",
+    "weeklyStreak": "ہفتہ وار (108)",
+    "japamCounter": "جپ گنتی",
+    "autoJapamCounter": "آٹو جپ گنتی",
+    "japamCounterTitle": "جپ گنتی",
+    "autoJapamCounterTitle": "آٹو جپ گنتی",
+    "japamCounterChooseDeity": "اِشتھ دیوتا چُنو۔ اَک وَکھِ اَک جپ—منتر ختم پَتہٕ اگلا۔",
+    "japamCounterProGate": "شکتی مُفت؛ باقی خٲطرٕ Pro یا Premium۔",
+    "japamCounterChangeDeity": "← دیوتا بدلاؤ",
+    "japamCounterBlurb": "بورڈ نَہ، پھُل نَہ — گنتی تِ منتر۔ منتر ختم پَتہٕ اگلا جپ۔",
+    "autoJapamCounterBlurb": "ییٚلہِ تُہۍ ختم کٔرو تام منتر آپہِ چلان۔ ہر مکمل منترس پَتہٕ اَک گنتی۔",
+    "japamCounterTap": "جپ",
+    "japamCounterListening": "منتر چَلان…",
+    "japamCounterReset": "گنتی ری سیٹ",
+    "autoJapamCounterStart": "آٹو جپ شروع",
+    "autoJapamCounterStop": "ختم",
+    "happyBirthday": "یَمِہ دۄہ",
+    "anniversary": "سالگراہ",
+    "comingSoon": "جلدی یی"
   }
 }

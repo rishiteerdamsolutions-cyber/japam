@@ -105,41 +105,99 @@ async function preloadMantras() {
 }
 
 const activeSources: AudioBufferSourceNode[] = [];
+const activeMantraHtmlAudios: HTMLAudioElement[] = [];
+let mantraPlayGeneration = 0;
 
 function playMantraAudio(deity: DeityId) {
+  void playMantraOnce(deity);
+}
+
+/** Play one deity mantra and resolve when playback finishes (or is stopped). */
+export function playMantraOnce(deity: DeityId): Promise<void> {
   const ctx = getAudioContext();
   if (ctx.state === 'suspended') {
     ctx.resume().catch(() => {});
   }
 
-  const buffer = mantraBuffers.get(deity);
-  if (buffer) {
-    const source = ctx.createBufferSource();
-    const gain = ctx.createGain();
-    source.buffer = buffer;
-    gain.gain.value = 0.8;
-    source.connect(gain);
-    gain.connect(ctx.destination);
-    source.start();
-    activeSources.push(source);
-    source.onended = () => {
-      const i = activeSources.indexOf(source);
-      if (i >= 0) activeSources.splice(i, 1);
+  return new Promise((resolve) => {
+    let settled = false;
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      resolve();
     };
-  } else {
+
+    const buffer = mantraBuffers.get(deity);
+    if (buffer) {
+      const source = ctx.createBufferSource();
+      const gain = ctx.createGain();
+      source.buffer = buffer;
+      gain.gain.value = 0.8;
+      source.connect(gain);
+      gain.connect(ctx.destination);
+      source.onended = () => {
+        const i = activeSources.indexOf(source);
+        if (i >= 0) activeSources.splice(i, 1);
+        finish();
+      };
+      activeSources.push(source);
+      try {
+        source.start();
+      } catch {
+        finish();
+      }
+      return;
+    }
+
     const d = getDeity(deity);
     const src = d.mantraAudio.startsWith('/') ? d.mantraAudio : '/' + d.mantraAudio;
     const audio = new Audio(src);
     audio.volume = 0.8;
-    audio.play().catch(() => playDeityTone(ctx, deity));
-  }
+    activeMantraHtmlAudios.push(audio);
+    const cleanupHtml = () => {
+      const i = activeMantraHtmlAudios.indexOf(audio);
+      if (i >= 0) activeMantraHtmlAudios.splice(i, 1);
+    };
+    audio.addEventListener(
+      'ended',
+      () => {
+        cleanupHtml();
+        finish();
+      },
+      { once: true },
+    );
+    audio.addEventListener(
+      'error',
+      () => {
+        cleanupHtml();
+        playDeityTone(ctx, deity);
+        window.setTimeout(finish, 320);
+      },
+      { once: true },
+    );
+    audio.play().catch(() => {
+      cleanupHtml();
+      playDeityTone(ctx, deity);
+      window.setTimeout(finish, 320);
+    });
+  });
 }
 
 export function stopAllMantras() {
+  mantraPlayGeneration++;
   for (const s of activeSources) {
-    try { s.stop(); } catch {}
+    try {
+      s.stop();
+    } catch {}
   }
   activeSources.length = 0;
+  for (const a of activeMantraHtmlAudios) {
+    try {
+      a.pause();
+      a.currentTime = 0;
+    } catch {}
+  }
+  activeMantraHtmlAudios.length = 0;
 }
 
 const activeBonusAudios: HTMLAudioElement[] = [];

@@ -17,7 +17,7 @@
     "refund": "ಮರುಪಾವತಿ ಮತ್ತು ರದ್ದತಿ",
     "shipping": "ಶಿಪ್ಪಿಂಗ್ ಮತ್ತು ಡೆಲಿವರಿ",
     "apiDocs": "API ದಾಖಲೆಗಳು",
-    "specials": "Specials"
+    "specials": "ವಿಶೇಷ"
   },
   "videoModal": {
     "title1": "ಜಪಂ",
@@ -47,7 +47,9 @@
     "offerDakshinaToUnlock": "Offer Dakshina to unlock",
     "mahaJapaYagnas": "ಮಹಾ ಜಪ ಯಜ್ಞ",
     "navStripMarathons": "Marathons",
-    "navStripYagnas": "Yagnas"
+    "navStripYagnas": "Yagnas",
+    "specials": "ವಿಶೇಷ",
+    "pushpaAradhana": "ಪುಷ್ಪಾರಾಧನೆ"
   },
   "game": {
     "jai": "ಜೈ!",
@@ -469,5 +471,53 @@
     "gotram": "gotram",
     "mobileNumber": "mobile_number",
     "generating": "generating"
+  },
+  "specials": {
+    "back": "ಹಿಂದೆ",
+    "title": "ವಿಶೇಷ",
+    "hubSubtitle": "ಮಾರ್ಗ ಆರಿಸಿ—ಹೂವುಗಳು, 108 ಜಪ, ಎಣಿಕೆ, ಅಥವಾ ಹಬ್ಬ.",
+    "hubPushpaBlurb": "ಡಿಜಿಟಲ್ ಹೂ ಪೂಜೆ—ಮ್ಯಾಚ್ ಜಪ ಅಲ್ಲ.",
+    "hub108Title": "108 ಜಪ",
+    "hub108Subtitle": "ಬೋರ್ಡ್ ಆಡಿ · 108 ಜಪ ಮುಗಿಸಿ",
+    "hub108OneTime": "ಒಮ್ಮೆ",
+    "hub108OneTimeHint": "ಒಂದೇ ಸೆಷನ್",
+    "hub108Weekly": "ವಾರದ ಸ್ಟ್ರೀಕ್",
+    "hub108WeeklyHint": "ಸೋಮ–ಭಾನು (IST)",
+    "hubCounterTitle": "ಜಪ ಎಣಿಕೆ",
+    "hubCounterSubtitle": "ಮಂತ್ರ ಮಾತ್ರ · ಬೋರ್ಡ್ ಇಲ್ಲ · ಹೂವಿಲ್ಲ",
+    "hubCounterManual": "ಒಂದೊಂದಾಗಿ",
+    "hubCounterManualHint": "ಮಂತ್ರ ಮುಗಿದ ನಂತರ ಮುಂದಿನ ಜಪ",
+    "hubCounterAuto": "ಆಟೋ",
+    "hubCounterAutoHint": "ನೀವು ಮುಗಿಸುವವರೆಗೆ",
+    "hubOccasionsTitle": "ಹಬ್ಬಗಳು",
+    "hubOccasionsSubtitle": "ದೊಡ್ಡ ದಿನಗಳಿಗೆ ಜಪ",
+    "japa108": "108 ಜಪ",
+    "japa108Title": "108 ಜಪ",
+    "japa108ChooseDeity": "ನಿಮ್ಮ ಇಷ್ಟ ದೇವರನ್ನು ಆರಿಸಿ. ಒಂದು ಸೆಷನ್ = ಬೋರ್ಡ್ನಲ್ಲಿ 108 ಜಪ.",
+    "japa108ProGate": "ಶಕ್ತಿ ಉಚಿತ; ಬೇರೆ ದೇವರಿಗೆ Pro ಅಥವಾ Premium ಬೇಕು.",
+    "japa108TotalSessions": "ನಿಮ್ಮ 108 ಜಪ ಸೆಷನ್ಗಳು (ಎಲ್ಲಾ ದೇವರು): {{n}}",
+    "japa108ChangeDeity": "← ದೇವರನ್ನು ಬದಲಾಯಿಸಿ",
+    "japa108Blurb": "108 ಜಪ ಮುಗಿಯುವವರೆಗೆ ಅನಿಯಮಿತ ಚಲನೆಗಳು. ಮ್ಯಾಚ್ ಜಪ ಸಾಮಾನ್ಯವಾಗಿ ಎಣಿಸಲಾಗುತ್ತದೆ.",
+    "japa108YourCompletions": "ಈ 108 ಜಪ ವಿಶೇಷವನ್ನು ನೀವು ಮುಗಿಸಿದ ಬಾರಿ: {{n}}",
+    "japa108Start": "108 ಜಪ ಪ್ರಾರಂಭಿಸಿ",
+    "pushpaAradhana": "ಪುಷ್ಪಾರಾಧನೆ",
+    "weeklyStreak": "ವಾರದ ಸ್ಟ್ರೀಕ್ (108)",
+    "japamCounter": "ಜಪ ಎಣಿಕೆ",
+    "autoJapamCounter": "ಆಟೋ ಜಪ ಎಣಿಕೆ",
+    "japamCounterTitle": "ಜಪ ಎಣಿಕೆ",
+    "autoJapamCounterTitle": "ಆಟೋ ಜಪ ಎಣಿಕೆ",
+    "japamCounterChooseDeity": "ಇಷ್ಟ ದೇವರನ್ನು ಆರಿಸಿ. ಒಂದು ಸಮಯದಲ್ಲಿ ಒಂದು ಜಪ—ಮಂತ್ರ ಪೂರ್ಣವಾದ ನಂತರ ಮಾತ್ರ ಮುಂದೆ.",
+    "japamCounterProGate": "ಶಕ್ತಿ ಉಚಿತ; ಬೇರೆ ದೇವರಿಗೆ Pro ಅಥವಾ Premium.",
+    "japamCounterChangeDeity": "← ದೇವರನ್ನು ಬದಲಾಯಿಸಿ",
+    "japamCounterBlurb": "ಬೋರ್ಡ್ ಇಲ್ಲ, ಹೂವಿಲ್ಲ—ಎಣಿಕೆ ಮತ್ತು ಮಂತ್ರ ಮಾತ್ರ. ಮಂತ್ರ ಮುಗಿದ ನಂತರ ಮುಂದಿನ ಜಪ.",
+    "autoJapamCounterBlurb": "ನೀವು ಮುಗಿಸುವವರೆಗೆ ಮಂತ್ರ ಸ್ವಯಂ ಚಾಲಿಸುತ್ತದೆ. ಪ್ರತಿ ಪೂರ್ಣ ಮಂತ್ರಕ್ಕೆ ಒಂದು ಎಣಿಕೆ.",
+    "japamCounterTap": "ಜಪ",
+    "japamCounterListening": "ಮಂತ್ರ ಚಾಲಿಸುತ್ತಿದೆ…",
+    "japamCounterReset": "ಎಣಿಕೆ ರೀಸೆಟ್",
+    "autoJapamCounterStart": "ಆಟೋ ಜಪ ಪ್ರಾರಂಭ",
+    "autoJapamCounterStop": "ಮುಗಿಸಿ",
+    "happyBirthday": "ಜನ್ಮದಿನ",
+    "anniversary": "ವಾರ್ಷಿಕೋತ್ಸವ",
+    "comingSoon": "ಶೀಘ್ರದಲ್ಲೇ ಬರುತ್ತದೆ"
   }
 }

@@ -17,7 +17,7 @@
     "refund": "રિફંડ અને રદ",
     "shipping": "શિપિંગ અને ડિલિવરી",
     "apiDocs": "API દસ્તાવેજો",
-    "specials": "Specials"
+    "specials": "વિશેષ"
   },
   "videoModal": {
     "title1": "જપમ",
@@ -47,7 +47,9 @@
     "offerDakshinaToUnlock": "Offer Dakshina to unlock",
     "mahaJapaYagnas": "મહા જપ યજ્ઞ",
     "navStripMarathons": "Marathons",
-    "navStripYagnas": "Yagnas"
+    "navStripYagnas": "Yagnas",
+    "specials": "વિશેષ",
+    "pushpaAradhana": "પુષ્પારાધના"
   },
   "game": {
     "jai": "જય!",
@@ -469,5 +471,53 @@
     "gotram": "gotram",
     "mobileNumber": "mobile_number",
     "generating": "generating"
+  },
+  "specials": {
+    "back": "પાછળ",
+    "title": "વિશેષ",
+    "hubSubtitle": "માર્ગ પસંદ કરો—ફૂલો, 108 જપ, ગણતરી, અથવા તહેવાર.",
+    "hubPushpaBlurb": "ડિજિટલ ફૂલ અર્પણ—મેચ જપ નહીં.",
+    "hub108Title": "108 જપ",
+    "hub108Subtitle": "બોર્ડ રમો · 108 જપ પૂર્ણ કરો",
+    "hub108OneTime": "એક વાર",
+    "hub108OneTimeHint": "એક સત્ર",
+    "hub108Weekly": "સાપ્તાહિક",
+    "hub108WeeklyHint": "સોમ–રવિ (IST)",
+    "hubCounterTitle": "જપ ગણતરી",
+    "hubCounterSubtitle": "ફક્ત મંત્ર · બોર્ડ નહીં · ફૂલ નહીં",
+    "hubCounterManual": "એક પછી એક",
+    "hubCounterManualHint": "મંત્ર પૂરો થયા પછી આગળનો જપ",
+    "hubCounterAuto": "ઓટો",
+    "hubCounterAutoHint": "તમે સમાપ્ત કરો ત્યાં સુધી",
+    "hubOccasionsTitle": "તહેવાર",
+    "hubOccasionsSubtitle": "મોટા દિવસો માટે જપ",
+    "japa108": "108 જપ",
+    "japa108Title": "108 જપ",
+    "japa108ChooseDeity": "તમારી ઇષ્ટ દેવતા પસંદ કરો. એક સત્ર = બોર્ડ પર 108 જપ.",
+    "japa108ProGate": "શક્તિ મફત; બાકી માટે Pro અથવા Premium જોઈએ.",
+    "japa108TotalSessions": "તમારા 108 જપ સત્રો (બધા દેવતા): {{n}}",
+    "japa108ChangeDeity": "← દેવતા બદલો",
+    "japa108Blurb": "108 જપ પૂરા થાય ત્યાં સુધી અમર્યાદિત ચાલ. મેચ જપ સામાન્ય રીતે ગણાય છે.",
+    "japa108YourCompletions": "આ 108 જપ વિશેષ તમે પૂર્ણ કર્યું: {{n}} વાર",
+    "japa108Start": "108 જપ શરૂ કરો",
+    "pushpaAradhana": "પુષ્પારાધના",
+    "weeklyStreak": "સાપ્તાહિક (108)",
+    "japamCounter": "જપ ગણતરી",
+    "autoJapamCounter": "ઓટો જપ ગણતરી",
+    "japamCounterTitle": "જપ ગણતરી",
+    "autoJapamCounterTitle": "ઓટો જપ ગણતરી",
+    "japamCounterChooseDeity": "ઇષ્ટ દેવતા પસંદ કરો. એક સમયે એક જપ—મંત્ર પૂરો થયા પછી જ આગળ.",
+    "japamCounterProGate": "શક્તિ મફત; બાકી માટે Pro અથવા Premium.",
+    "japamCounterChangeDeity": "← દેવતા બદલો",
+    "japamCounterBlurb": "બોર્ડ નહીં, ફૂલ નહીં—ફક્ત ગણતરી અને મંત્ર. મંત્ર પૂરો થયા પછી આગળનો જપ.",
+    "autoJapamCounterBlurb": "તમે સમાપ્ત કરો ત્યાં સુધી મંત્ર આપોઆપ ચાલશે. દરેક પૂર્ણ મંત્ર પછી એક ગણતરી.",
+    "japamCounterTap": "જપ",
+    "japamCounterListening": "મંત્ર વાગી રહ્યું છે…",
+    "japamCounterReset": "ગણતરી રીસેટ",
+    "autoJapamCounterStart": "ઓટો જપ શરૂ",
+    "autoJapamCounterStop": "સમાપ્ત",
+    "happyBirthday": "જન્મદિવસ",
+    "anniversary": "વર્ષગાંઠ",
+    "comingSoon": "ટૂંક સમયમાં આવશે"
   }
 }

@@ -549,6 +549,7 @@ export type ShareEventType =
   | 'marathon_rank_card'
   | 'maha_yagna_rank_card'
   | 'pushpa_rank_card'
+  | 'japam_counter_rank_card'
   | 'japa_pdf'
   | 'share_click';
 

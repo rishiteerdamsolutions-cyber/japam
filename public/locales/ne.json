@@ -17,7 +17,7 @@
     "refund": "फिर्ता र रद्द",
     "shipping": "पठाउने र वितरण",
     "apiDocs": "API कागजात",
-    "specials": "Specials"
+    "specials": "विशेष"
   },
   "videoModal": {
     "title1": "जपम",
@@ -47,7 +47,9 @@
     "offerDakshinaToUnlock": "Offer Dakshina to unlock",
     "mahaJapaYagnas": "महा जप यज्ञ",
     "navStripMarathons": "Marathons",
-    "navStripYagnas": "Yagnas"
+    "navStripYagnas": "Yagnas",
+    "specials": "विशेष",
+    "pushpaAradhana": "पुष्पाराधना"
   },
   "game": {
     "jai": "जय!",
@@ -469,5 +471,53 @@
     "gotram": "gotram",
     "mobileNumber": "mobile_number",
     "generating": "generating"
+  },
+  "specials": {
+    "back": "पछाडि",
+    "title": "विशेष",
+    "hubSubtitle": "बाटो छान्नुहोस्—फूल, 108 जप, गणना, वा चाड।",
+    "hubPushpaBlurb": "डिजिटल फूल अर्पण—म्याच जप होइन।",
+    "hub108Title": "108 जप",
+    "hub108Subtitle": "बोर्ड खेल्नुहोस् · 108 जप पूरा गर्नुहोस्",
+    "hub108OneTime": "एक पटक",
+    "hub108OneTimeHint": "एक सत्र",
+    "hub108Weekly": "साप्ताहिक",
+    "hub108WeeklyHint": "सोम–आइत (IST)",
+    "hubCounterTitle": "जप गणना",
+    "hubCounterSubtitle": "मन्त्र मात्र · बोर्ड छैन · फूल छैन",
+    "hubCounterManual": "एक-एक गरी",
+    "hubCounterManualHint": "मन्त्र सकिएपछि अर्को जप",
+    "hubCounterAuto": "अटो",
+    "hubCounterAutoHint": "तपाईंले समाप्त नगरेसम्म",
+    "hubOccasionsTitle": "चाडपर्व",
+    "hubOccasionsSubtitle": "ठूला दिनका लागि जप",
+    "japa108": "108 जप",
+    "japa108Title": "108 जप",
+    "japa108ChooseDeity": "आफ्नो इष्ट देवता छान्नुहोस्। एक सत्र = बोर्डमा 108 जप।",
+    "japa108ProGate": "शक्ति निःशुल्क; अरूलाई Pro वा Premium चाहिन्छ।",
+    "japa108TotalSessions": "तपाईंका 108 जप सत्र (सबै देवता): {{n}}",
+    "japa108ChangeDeity": "← देवता बदल्नुहोस्",
+    "japa108Blurb": "108 जप पूरा नभएसम्म असीम चाल। म्याच जप सामान्यतया गनिन्छ।",
+    "japa108YourCompletions": "यो 108 जप विशेष तपाईंले पूरा गर्नुभयो: {{n}} पटक",
+    "japa108Start": "108 जप सुरु",
+    "pushpaAradhana": "पुष्पाराधना",
+    "weeklyStreak": "साप्ताहिक (108)",
+    "japamCounter": "जप गणना",
+    "autoJapamCounter": "अटो जप गणना",
+    "japamCounterTitle": "जप गणना",
+    "autoJapamCounterTitle": "अटो जप गणना",
+    "japamCounterChooseDeity": "इष्ट देवता छान्नुहोस्। एक पटकमा एक जप—मन्त्र सकिएपछि मात्र अर्को।",
+    "japamCounterProGate": "शक्ति निःशुल्क; अरूलाई Pro वा Premium।",
+    "japamCounterChangeDeity": "← देवता बदल्नुहोस्",
+    "japamCounterBlurb": "बोर्ड छैन, फूल छैन—गणना र मन्त्र मात्र। मन्त्र सकिएपछि अर्को जप।",
+    "autoJapamCounterBlurb": "तपाईंले समाप्त नगरेसम्म मन्त्र स्वयं बज्छ। प्रत्येक पूर्ण मन्त्रपछि एक गणना।",
+    "japamCounterTap": "जप",
+    "japamCounterListening": "मन्त्र बजिरहेको छ…",
+    "japamCounterReset": "गणना रिसेट",
+    "autoJapamCounterStart": "अटो जप सुरु",
+    "autoJapamCounterStop": "समाप्त",
+    "happyBirthday": "जन्मदिन",
+    "anniversary": "वार्षिकोत्सव",
+    "comingSoon": "छिट्टै आउँदैछ"
   }
 }

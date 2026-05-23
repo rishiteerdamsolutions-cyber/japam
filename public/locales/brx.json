@@ -17,7 +17,7 @@
     "refund": "फिर्ता आरो रद्द",
     "shipping": "पठानाय आरो बितरण",
     "apiDocs": "API दस्तावेज",
-    "specials": "Specials"
+    "specials": "बिसेष"
   },
   "videoModal": {
     "title1": "जपम",
@@ -47,7 +47,9 @@
     "offerDakshinaToUnlock": "Offer Dakshina to unlock",
     "mahaJapaYagnas": "महा जप यज्ञ",
     "navStripMarathons": "Marathons",
-    "navStripYagnas": "Yagnas"
+    "navStripYagnas": "Yagnas",
+    "specials": "बिसेष",
+    "pushpaAradhana": "पुष्पाराधना"
   },
   "game": {
     "jai": "जय!",
@@ -469,5 +471,53 @@
     "gotram": "gotram",
     "mobileNumber": "mobile_number",
     "generating": "generating"
+  },
+  "specials": {
+    "back": "फिननाय",
+    "title": "बिसेष",
+    "hubSubtitle": "लाम खालाम—फुल, 108 जप, गिनना, एबा उत्सव।",
+    "hubPushpaBlurb": "डिजिटेल फुल अर्पण—मेच जप नङा।",
+    "hub108Title": "108 जप",
+    "hub108Subtitle": "बोर्ड खेल · 108 जप पूरा",
+    "hub108OneTime": "मावसे",
+    "hub108OneTimeHint": "माव सत्र",
+    "hub108Weekly": "साप्ताहिक",
+    "hub108WeeklyHint": "सोम–रवि (IST)",
+    "hubCounterTitle": "जप गिनना",
+    "hubCounterSubtitle": "मंत्र माव · बोर्ड नङा · फुल नङा",
+    "hubCounterManual": "माव माव",
+    "hubCounterManualHint": "मंत्र पूरा नङै बानाय गुबुन जप",
+    "hubCounterAuto": "अटो",
+    "hubCounterAutoHint": "नों समाप्त खालामनो बेबे",
+    "hubOccasionsTitle": "उत्सव",
+    "hubOccasionsSubtitle": "गेदेर दिननि थाखाय जप",
+    "japa108": "108 जप",
+    "japa108Title": "108 जप",
+    "japa108ChooseDeity": "नोंनि इष्ट देवता सायख। माव सत्र = बोर्डाव 108 जप।",
+    "japa108ProGate": "शक्ति फोराइ; गुबुनखौ Pro एबा Premium दरकार।",
+    "japa108TotalSessions": "नोंनि 108 जप सत्र (गासैबो देवता): {{n}}",
+    "japa108ChangeDeity": "← देवता सोलाय",
+    "japa108Blurb": "108 जप पूरा नङै बेसेन चाल। मेच जप साधारणनि गिननाय।",
+    "japa108YourCompletions": "बे 108 जप बिसेष नों {{n}} बेर पूरा खालामनानै",
+    "japa108Start": "108 जप जागाय",
+    "pushpaAradhana": "पुष्पाराधना",
+    "weeklyStreak": "साप्ताहिक (108)",
+    "japamCounter": "जप गिनना",
+    "autoJapamCounter": "अटो जप गिनना",
+    "japamCounterTitle": "जप गिनना",
+    "autoJapamCounterTitle": "अटो जप गिनना",
+    "japamCounterChooseDeity": "इष्ट देवता सायख। माव समयाव माव जप—मंत्र पूरा नङै बानाय गुबुन।",
+    "japamCounterProGate": "शक्ति फोराइ; गुबुनखौ Pro एबा Premium।",
+    "japamCounterChangeDeity": "← देवता सोलाय",
+    "japamCounterBlurb": "बोर्ड नङा, फुल नङा—गिनना आरो मंत्र माव। मंत्र पूरा नङै बानाय गुबुन जप।",
+    "autoJapamCounterBlurb": "नों समाप्त खालामनो बेबे मंत्र अटो चालि। माव पूरा मंत्रनि उनाव माव गिनना।",
+    "japamCounterTap": "जप",
+    "japamCounterListening": "मंत्र चालि…",
+    "japamCounterReset": "गिनना रिसेट",
+    "autoJapamCounterStart": "अटो जप जागाय",
+    "autoJapamCounterStop": "समाप्त",
+    "happyBirthday": "जन्मदिन",
+    "anniversary": "बार्षिकी",
+    "comingSoon": "जल्दि आगोन"
   }
 }

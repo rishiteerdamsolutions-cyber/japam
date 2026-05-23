@@ -17,7 +17,7 @@
     "refund": "واپسی اور منسوخی",
     "shipping": "شپنگ اور ڈیلیوری",
     "apiDocs": "API دستاویزات",
-    "specials": "Specials"
+    "specials": "خصوصی"
   },
   "videoModal": {
     "title1": "جپم",
@@ -47,7 +47,9 @@
     "offerDakshinaToUnlock": "Offer Dakshina to unlock",
     "mahaJapaYagnas": "مہا جپ یجنا",
     "navStripMarathons": "Marathons",
-    "navStripYagnas": "Yagnas"
+    "navStripYagnas": "Yagnas",
+    "specials": "خصوصی",
+    "pushpaAradhana": "پشپ آرادھنا"
   },
   "game": {
     "jai": "جے!",
@@ -469,5 +471,53 @@
     "gotram": "gotram",
     "mobileNumber": "mobile_number",
     "generating": "generating"
+  },
+  "specials": {
+    "back": "واپس",
+    "title": "خصوصی",
+    "hubSubtitle": "راستہ چنیں—پھول، 108 جپ، گنتی، یا تہوار۔",
+    "hubPushpaBlurb": "ڈیجیٹل پھول چڑھاوا—میچ جپ نہیں۔",
+    "hub108Title": "108 جپ",
+    "hub108Subtitle": "بورڈ کھیلیں · 108 جپ مکمل کریں",
+    "hub108OneTime": "ایک بار",
+    "hub108OneTimeHint": "ایک سیشن",
+    "hub108Weekly": "ہفتہ وار",
+    "hub108WeeklyHint": "پیر–اتوار (IST)",
+    "hubCounterTitle": "جپ گنتی",
+    "hubCounterSubtitle": "صرف منتر · بورڈ نہیں · پھول نہیں",
+    "hubCounterManual": "ایک ایک کر کے",
+    "hubCounterManualHint": "منتر ختم ہونے کے بعد اگلا جپ",
+    "hubCounterAuto": "آٹو",
+    "hubCounterAutoHint": "جب تک آپ ختم کریں",
+    "hubOccasionsTitle": "تہوار",
+    "hubOccasionsSubtitle": "بڑے دنوں کے لیے جپ",
+    "japa108": "108 جپ",
+    "japa108Title": "108 جپ",
+    "japa108ChooseDeity": "اپنی پسندیدہ دیوی/دیوتا چنیں۔ ایک سیشن = بورڈ پر 108 جپ۔",
+    "japa108ProGate": "شکتی مفت؛ باقی کے لیے Pro یا Premium چاہیے۔",
+    "japa108TotalSessions": "آپ کے 108 جپ سیشن (تمام دیوتا): {{n}}",
+    "japa108ChangeDeity": "← دیوتا بدلیں",
+    "japa108Blurb": "108 جپ مکمل ہونے تک لامحدود چالیں۔ میچ جپ عام طور پر گنے جاتے ہیں۔",
+    "japa108YourCompletions": "اس 108 جپ خصوصی کو آپ نے مکمل کیا: {{n}} بار",
+    "japa108Start": "108 جپ شروع",
+    "pushpaAradhana": "پشپ آرادھنا",
+    "weeklyStreak": "ہفتہ وار (108)",
+    "japamCounter": "جپ گنتی",
+    "autoJapamCounter": "آٹو جپ گنتی",
+    "japamCounterTitle": "جپ گنتی",
+    "autoJapamCounterTitle": "آٹو جپ گنتی",
+    "japamCounterChooseDeity": "پسندیدہ دیوتا چنیں۔ ایک وقت میں ایک جپ—منتر ختم ہونے کے بعد ہی اگلا۔",
+    "japamCounterProGate": "شکتی مفت؛ باقی کے لیے Pro یا Premium۔",
+    "japamCounterChangeDeity": "← دیوتا بدلیں",
+    "japamCounterBlurb": "بورڈ نہیں، پھول نہیں—صرف گنتی اور منتر۔ منتر ختم ہونے کے بعد اگلا جپ۔",
+    "autoJapamCounterBlurb": "جب تک آپ ختم کریں، منتر خود چلے گا۔ ہر مکمل منتر کے بعد ایک گنتی۔",
+    "japamCounterTap": "جپ",
+    "japamCounterListening": "منتر بج رہا ہے…",
+    "japamCounterReset": "گنتی ری سیٹ",
+    "autoJapamCounterStart": "آٹو جپ شروع",
+    "autoJapamCounterStop": "ختم",
+    "happyBirthday": "یوم پیدائش",
+    "anniversary": "سالگرہ",
+    "comingSoon": "جلد آ رہا ہے"
   }
 }

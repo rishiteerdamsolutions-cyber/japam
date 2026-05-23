@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
@@ -5,8 +6,15 @@ import { useAuthStore } from '../store/authStore';
 import { isFirebaseConfigured } from '../lib/firebase';
 import { BottomNav } from '../components/nav/BottomNav';
 import { MenuMatchChantHeader } from '../components/layout/MenuMatchChantHeader';
-import { LAUNCH_FEATURE_OCCASION_GAMES } from '../config/launchFeatures';
-import { landingStartJapaButtonClass, landingTryJapaButtonClass } from '../lib/landingCtaStyles';
+import {
+  SpecialsCategoryPanel,
+  SpecialsDualOption,
+  SpecialsFeaturedCard,
+  SpecialsIcon108Once,
+  SpecialsIcon108Weekly,
+  SpecialsIconAuto,
+  SpecialsIconManual,
+} from '../components/specials/SpecialsHub';
 
 export function SpecialsPage() {
   const { t } = useTranslation();
@@ -14,99 +22,124 @@ export function SpecialsPage() {
   const user = useAuthStore((s) => s.user);
   const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle);
 
-  /** Stay on Specials during Google popup, then open the feature (same pattern as main menu). */
-  const openPushpaAradhana = async () => {
-    if (isFirebaseConfigured && !user) {
-      await signInWithGoogle();
-      if (!useAuthStore.getState().user) return;
-    }
-    navigate('/pushpa-aradhana');
-  };
+  const openWithAuth = useCallback(
+    async (path: string) => {
+      if (isFirebaseConfigured && !user) {
+        await signInWithGoogle();
+        if (!useAuthStore.getState().user) return;
+      }
+      navigate(path);
+    },
+    [navigate, signInWithGoogle, user],
+  );
 
-  const openJapa108 = async () => {
-    if (isFirebaseConfigured && !user) {
-      await signInWithGoogle();
-      if (!useAuthStore.getState().user) return;
-    }
-    navigate('/special-108-japa');
-  };
-
-  const openWeeklyStreak = async () => {
-    if (isFirebaseConfigured && !user) {
-      await signInWithGoogle();
-      if (!useAuthStore.getState().user) return;
-    }
-    navigate('/weekly-streak');
-  };
+  const comingSoonHint = t('specials.comingSoon');
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] overflow-hidden">
+    <div className="relative min-h-[100dvh] flex flex-col items-center px-3 pt-3 pb-[max(5.5rem,env(safe-area-inset-bottom))] overflow-y-auto overflow-x-hidden">
       <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
-      <div className="relative z-10 w-full max-w-lg flex flex-col items-center">
+      <div className="relative z-10 w-full max-w-sm flex flex-col items-stretch">
         <MenuMatchChantHeader />
         <button
           type="button"
           onClick={() => navigate(-1)}
-          className="self-start text-amber-300/90 text-sm mb-4 hover:underline py-1"
+          className="self-start text-amber-300/90 text-sm mb-3 hover:underline py-1"
         >
           {t('specials.back')}
         </button>
-        <h1 className="text-xl font-bold text-amber-400 mb-6 text-center px-2" style={{ fontFamily: 'serif' }}>
-          {t('specials.title')}
-        </h1>
+        <motion.div
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-5 text-center px-1"
+        >
+          <h1 className="text-xl font-bold text-amber-400" style={{ fontFamily: 'serif' }}>
+            {t('specials.title')}
+          </h1>
+          <p className="text-amber-200/60 text-[11px] mt-1 leading-snug">{t('specials.hubSubtitle')}</p>
+        </motion.div>
 
-        <div className="w-full flex flex-col gap-3 max-w-sm">
-          <motion.button
-            type="button"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.99 }}
-            onClick={openPushpaAradhana}
-            className={`${landingStartJapaButtonClass} w-full min-h-[3rem] inline-flex items-center justify-center px-3`}
-          >
-            <span className="text-white font-bold text-sm sm:text-base text-center">{t('specials.pushpaAradhana')}</span>
-          </motion.button>
+        <div className="flex flex-col gap-4 w-full">
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.04 }}>
+            <SpecialsFeaturedCard
+              title={t('specials.pushpaAradhana')}
+              subtitle={t('specials.hubPushpaBlurb')}
+              icon="🌸"
+              onClick={() => void openWithAuth('/pushpa-aradhana')}
+            />
+          </motion.div>
 
-          <motion.button
-            type="button"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.99 }}
-            onClick={openJapa108}
-            className={`${landingStartJapaButtonClass} w-full min-h-[3rem] inline-flex items-center justify-center px-3`}
-          >
-            <span className="text-white font-bold text-sm sm:text-base text-center">{t('specials.japa108')}</span>
-          </motion.button>
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 }}>
+            <SpecialsCategoryPanel
+              title={t('specials.hub108Title')}
+              subtitle={t('specials.hub108Subtitle')}
+              tone="amber"
+              badge="108"
+            >
+              <SpecialsDualOption
+                variant="amber"
+                left={{
+                  label: t('specials.hub108OneTime'),
+                  hint: t('specials.hub108OneTimeHint'),
+                  icon: <SpecialsIcon108Once />,
+                  onClick: () => void openWithAuth('/special-108-japa'),
+                }}
+                right={{
+                  label: t('specials.hub108Weekly'),
+                  hint: t('specials.hub108WeeklyHint'),
+                  icon: <SpecialsIcon108Weekly />,
+                  onClick: () => void openWithAuth('/weekly-streak'),
+                }}
+              />
+            </SpecialsCategoryPanel>
+          </motion.div>
 
-          <motion.button
-            type="button"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.99 }}
-            onClick={openWeeklyStreak}
-            className={`${landingStartJapaButtonClass} w-full min-h-[3rem] inline-flex items-center justify-center px-3`}
-          >
-            <span className="text-white font-bold text-sm sm:text-base text-center">{t('specials.weeklyStreak')}</span>
-          </motion.button>
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.12 }}>
+            <SpecialsCategoryPanel
+              title={t('specials.hubCounterTitle')}
+              subtitle={t('specials.hubCounterSubtitle')}
+              tone="emerald"
+            >
+              <SpecialsDualOption
+                variant="emerald"
+                left={{
+                  label: t('specials.hubCounterManual'),
+                  hint: t('specials.hubCounterManualHint'),
+                  icon: <SpecialsIconManual />,
+                  onClick: () => void openWithAuth('/special-japam-counter'),
+                }}
+                right={{
+                  label: t('specials.hubCounterAuto'),
+                  hint: t('specials.hubCounterAutoHint'),
+                  icon: <SpecialsIconAuto />,
+                  onClick: () => void openWithAuth('/special-auto-japam-counter'),
+                }}
+              />
+            </SpecialsCategoryPanel>
+          </motion.div>
 
-          <motion.button
-            type="button"
-            disabled
-            title={t('specials.comingSoon')}
-            className={`${landingTryJapaButtonClass} w-full min-h-[3rem] inline-flex items-center justify-center px-3 opacity-60 cursor-not-allowed`}
-          >
-            <span className="text-sm sm:text-base text-center">
-              {t('specials.happyBirthday')} · <span className="text-amber-300/90">{t('specials.comingSoon')}</span>
-            </span>
-          </motion.button>
-
-          <motion.button
-            type="button"
-            disabled={!LAUNCH_FEATURE_OCCASION_GAMES}
-            title={LAUNCH_FEATURE_OCCASION_GAMES ? t('specials.comingSoon') : undefined}
-            className={`${landingTryJapaButtonClass} w-full min-h-[3rem] inline-flex items-center justify-center px-3 opacity-60 cursor-not-allowed`}
-          >
-            <span className="text-sm sm:text-base text-center">
-              {t('specials.anniversary')} · <span className="text-amber-300/90">{t('specials.comingSoon')}</span>
-            </span>
-          </motion.button>
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.16 }}>
+            <SpecialsCategoryPanel
+              title={t('specials.hubOccasionsTitle')}
+              subtitle={t('specials.hubOccasionsSubtitle')}
+              tone="muted"
+            >
+              <SpecialsDualOption
+                variant="muted"
+                left={{
+                  label: t('specials.happyBirthday'),
+                  hint: comingSoonHint,
+                  icon: '🎂',
+                  disabled: true,
+                }}
+                right={{
+                  label: t('specials.anniversary'),
+                  hint: comingSoonHint,
+                  icon: '💍',
+                  disabled: true,
+                }}
+              />
+            </SpecialsCategoryPanel>
+          </motion.div>
         </div>
 
         <BottomNav />

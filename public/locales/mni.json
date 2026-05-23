@@ -17,7 +17,7 @@
     "refund": "ꯋꯥꯄꯁꯤ ꯑꯃꯗꯤ ꯔꯥꯗꯗꯥ",
     "shipping": "ꯁꯤꯄꯤꯡ ꯑꯃꯗꯤ ꯗꯦꯂꯤꯚꯦꯔꯤ",
     "apiDocs": "API ꯗꯁꯇꯥꯚꯦꯖꯁꯤꯡ",
-    "specials": "Specials"
+    "specials": "বিশেষ"
   },
   "videoModal": {
     "title1": "ꯖꯄꯝ",
@@ -47,7 +47,9 @@
     "offerDakshinaToUnlock": "Offer Dakshina to unlock",
     "mahaJapaYagnas": "ꯃꯍꯥ ꯖꯄ ꯌꯖ꯭ꯪ",
     "navStripMarathons": "Marathons",
-    "navStripYagnas": "Yagnas"
+    "navStripYagnas": "Yagnas",
+    "specials": "বিশেষ",
+    "pushpaAradhana": "পুষ্পারাধনা"
   },
   "game": {
     "jai": "ꯖꯥꯏ!",
@@ -469,5 +471,53 @@
     "gotram": "gotram",
     "mobileNumber": "mobile_number",
     "generating": "generating"
+  },
+  "specials": {
+    "back": "মনিং",
+    "title": "বিশেষ",
+    "hubSubtitle": "লমদা খল্লু—পান, 108 জপ, মশক, নত্তগা উত্সব।",
+    "hubPushpaBlurb": "দিজিটেল পান অর্পণ—ম্যাচ জপ ওইদবা।",
+    "hub108Title": "108 জপ",
+    "hub108Subtitle": "বোর্দ খাইবা · 108 জপ লোইশিনবা",
+    "hub108OneTime": "অমা খিবা",
+    "hub108OneTimeHint": "অমা সেশন",
+    "hub108Weekly": "চয়োল শেনবা",
+    "hub108WeeklyHint": "নোম–নোংমাইজিং (IST)",
+    "hubCounterTitle": "জপ মশক",
+    "hubCounterSubtitle": "মন্ত্র মরক্তা · বোর্দ নাই · পান নাই",
+    "hubCounterManual": "অমা অমা",
+    "hubCounterManualHint": "মন্ত্র লোইরক্পা মতুংদা মরক্তা জপ",
+    "hubCounterAuto": "অটো",
+    "hubCounterAutoHint": "নুংশিংবা লোইশিগনুং",
+    "hubOccasionsTitle": "উত্সব",
+    "hubOccasionsSubtitle": "অহেনবা নুমৈতকী জপ",
+    "japa108": "108 জপ",
+    "japa108Title": "108 জপ",
+    "japa108ChooseDeity": "ইষ্ট দেবতা খল্লু। অমা সেশন = বোর্দতা 108 জপ।",
+    "japa108ProGate": "শক্তি ফাবা; অতোইদা Pro নত্তগা Premium দরকার।",
+    "japa108TotalSessions": "নুংগাই 108 জপ সেশন (লোইনমক দেবতা): {{n}}",
+    "japa108ChangeDeity": "← দেবতা হোংঙু",
+    "japa108Blurb": "108 জপ লোইশিগনুং অসীম চাল। ম্যাচ জপ সাধারণদা মশক্কনি।",
+    "japa108YourCompletions": "হৈবা 108 জপ বিশেষ নুং {{n}} জারি লোইশিল্লি",
+    "japa108Start": "108 জপ হৌবা",
+    "pushpaAradhana": "পুষ্পারাধনা",
+    "weeklyStreak": "চয়োল শেনবা (108)",
+    "japamCounter": "জপ মশক",
+    "autoJapamCounter": "অটো জপ মশক",
+    "japamCounterTitle": "জপ মশক",
+    "autoJapamCounterTitle": "অটো জপ মশক",
+    "japamCounterChooseDeity": "ইষ্ট দেবতা খল্লু। অমা সময়দা অমা জপ—মন্ত্র লোইরক্পা মতুংদা মরক্তা।",
+    "japamCounterProGate": "শক্তি ফাবা; অতোইদা Pro নত্তগা Premium।",
+    "japamCounterChangeDeity": "← দেবতা হোংঙু",
+    "japamCounterBlurb": "বোর্দ নাই, পান নাই—মশক অমসুং মন্ত্র মরক্তা। মন্ত্র লোইরক্পা মতুংদা মরক্তা জপ।",
+    "autoJapamCounterBlurb": "নুংশিংবা লোইশিগনুং মন্ত্র অটো চল্লি। মন্ত্র অমা লোইরক্পা মতুংদা অমা মশক।",
+    "japamCounterTap": "জপ",
+    "japamCounterListening": "মন্ত্র চল্লি…",
+    "japamCounterReset": "মশক রিসেট",
+    "autoJapamCounterStart": "অটো জপ হৌবা",
+    "autoJapamCounterStop": "লোইশিনবা",
+    "happyBirthday": "পোরোল",
+    "anniversary": "বাশিক",
+    "comingSoon": "চংদ্রিদা লৈরগনি"
   }
 }

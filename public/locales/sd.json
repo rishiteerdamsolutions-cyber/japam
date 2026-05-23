@@ -17,7 +17,7 @@
     "refund": "واپسي ۽ رد",
     "shipping": "شپنگ ۽ ڊليوري",
     "apiDocs": "API دستاويز",
-    "specials": "Specials"
+    "specials": "خاص"
   },
   "videoModal": {
     "title1": "جپم",
@@ -47,7 +47,9 @@
     "offerDakshinaToUnlock": "Offer Dakshina to unlock",
     "mahaJapaYagnas": "مها جپ يجن",
     "navStripMarathons": "Marathons",
-    "navStripYagnas": "Yagnas"
+    "navStripYagnas": "Yagnas",
+    "specials": "خاص",
+    "pushpaAradhana": "پشپ آرادھنا"
   },
   "game": {
     "jai": "جَي!",
@@ -469,5 +471,53 @@
     "gotram": "gotram",
     "mobileNumber": "mobile_number",
     "generating": "generating"
+  },
+  "specials": {
+    "back": "واپس",
+    "title": "خاص",
+    "hubSubtitle": "رستو چونڊيو—گل، 108 جپ، ڳڻپ، يا تہوار.",
+    "hubPushpaBlurb": "ڊجيٽل گل چڙهايو—ميچ جپ نه.",
+    "hub108Title": "108 جپ",
+    "hub108Subtitle": "بورڊ کيڏو · 108 جپ مڪمل",
+    "hub108OneTime": "هڪ دفعو",
+    "hub108OneTimeHint": "هڪ سيشن",
+    "hub108Weekly": "هفتيوار",
+    "hub108WeeklyHint": "سومر–آچر (IST)",
+    "hubCounterTitle": "جپ ڳڻپ",
+    "hubCounterSubtitle": "صرف منتر · بورڊ نه · گل نه",
+    "hubCounterManual": "هڪ هڪ ڪري",
+    "hubCounterManualHint": "منتر ختم ٿيڻ کان پوءِ اڳيون جپ",
+    "hubCounterAuto": "آٽو",
+    "hubCounterAutoHint": "جيستائين توهان ختم ڪريو",
+    "hubOccasionsTitle": "تہوار",
+    "hubOccasionsSubtitle": "وڏن ڏينهن لاءِ جپ",
+    "japa108": "108 جپ",
+    "japa108Title": "108 جپ",
+    "japa108ChooseDeity": "پنهنجي پسنديده ديوتا چونڊيو. هڪ سيشن = بورڊ تي 108 جپ.",
+    "japa108ProGate": "شڪتي مفت؛ ٻين لاءِ Pro يا Premium.",
+    "japa108TotalSessions": "توهان جا 108 جپ سيشن (سڀ ديوتا): {{n}}",
+    "japa108ChangeDeity": "← ديوتا بدلايو",
+    "japa108Blurb": "108 جپ مڪمل ٿيڻ تائين لامحدود چال. ميچ جپ عام طور ڳڻجي.",
+    "japa108YourCompletions": "هي 108 جپ خاص توهان {{n}} دفعا مڪمل ڪيو",
+    "japa108Start": "108 جپ شروع",
+    "pushpaAradhana": "پشپ آرادھنا",
+    "weeklyStreak": "هفتيوار (108)",
+    "japamCounter": "جپ ڳڻپ",
+    "autoJapamCounter": "آٽو جپ ڳڻپ",
+    "japamCounterTitle": "جپ ڳڻپ",
+    "autoJapamCounterTitle": "آٽو جپ ڳڻپ",
+    "japamCounterChooseDeity": "پسنديده ديوتا چونڊيو۔ هڪ وقت ۾ هڪ جپ—منتر ختم ٿيڻ کان پوءِ اڳيون۔",
+    "japamCounterProGate": "شڪتي مفت؛ ٻين لاءِ Pro يا Premium.",
+    "japamCounterChangeDeity": "← ديوتا بدلايو",
+    "japamCounterBlurb": "بورڊ نه، گل نه—صرف ڳڻپ ۽ منتر۔ منتر ختم ٿيڻ کان پوءِ اڳيون جپ۔",
+    "autoJapamCounterBlurb": "جيستائين توهان ختم ڪريو، منتر پاڻ هلندو۔ هر مڪمل منتر کان پوءِ هڪ ڳڻپ۔",
+    "japamCounterTap": "جپ",
+    "japamCounterListening": "منتر هلي رهيو آهي…",
+    "japamCounterReset": "ڳڻپ ري سيٽ",
+    "autoJapamCounterStart": "آٽو جپ شروع",
+    "autoJapamCounterStop": "ختم",
+    "happyBirthday": "ڄمڻ ڏينهن",
+    "anniversary": "سالگراه",
+    "comingSoon": "جلد اچي"
   }
 }

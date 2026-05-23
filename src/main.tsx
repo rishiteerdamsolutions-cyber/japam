@@ -64,6 +64,12 @@ const Japa108SpecialPage = lazy(() =>
 const WeeklyStreakPage = lazy(() =>
   import('./pages/WeeklyStreakPage').then((m) => ({ default: m.WeeklyStreakPage })),
 )
+const JapamCounterSpecialPage = lazy(() =>
+  import('./pages/JapamCounterSpecialPage').then((m) => ({ default: m.JapamCounterSpecialPage })),
+)
+const AutoJapamCounterSpecialPage = lazy(() =>
+  import('./pages/JapamCounterSpecialPage').then((m) => ({ default: m.AutoJapamCounterSpecialPage })),
+)
 const BirthdayOccasionPage = lazy(() =>
   import('./pages/BirthdayOccasionPage').then((m) => ({ default: m.BirthdayOccasionPage })),
 );
@@ -125,6 +131,22 @@ createRoot(document.getElementById('root')!).render(
           element={
             <RequireAuth>
               <WeeklyStreakPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/special-japam-counter"
+          element={
+            <RequireAuth>
+              <JapamCounterSpecialPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/special-auto-japam-counter"
+          element={
+            <RequireAuth>
+              <AutoJapamCounterSpecialPage />
             </RequireAuth>
           }
         />

@@ -25,6 +25,8 @@ function skipBlockingAuthOverlay(pathname: string): boolean {
     '/maha-yagnas',
     '/pushpa-aradhana',
     '/special-108-japa',
+    '/special-japam-counter',
+    '/special-auto-japam-counter',
     '/occasion',
     '/contact',
   ];

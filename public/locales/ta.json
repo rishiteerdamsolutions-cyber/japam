@@ -17,7 +17,7 @@
     "refund": "பணத்திரும்பம் மற்றும் ரத்து",
     "shipping": "அனுப்புதல் மற்றும் விநியோகம்",
     "apiDocs": "API ஆவணங்கள்",
-    "specials": "Specials"
+    "specials": "சிறப்புகள்"
   },
   "videoModal": {
     "title1": "ஜபம்",
@@ -47,7 +47,9 @@
     "offerDakshinaToUnlock": "Offer Dakshina to unlock",
     "mahaJapaYagnas": "மஹா ஜப யஜ்ஞம்",
     "navStripMarathons": "Marathons",
-    "navStripYagnas": "Yagnas"
+    "navStripYagnas": "Yagnas",
+    "specials": "சிறப்புகள்",
+    "pushpaAradhana": "புஷ்பாராதனை"
   },
   "game": {
     "jai": "ஜெய்!",
@@ -469,5 +471,53 @@
     "gotram": "gotram",
     "mobileNumber": "mobile_number",
     "generating": "generating"
+  },
+  "specials": {
+    "back": "பின்செல்",
+    "title": "சிறப்புகள்",
+    "hubSubtitle": "வழியைத் தேர்ந்தெடுங்கள்—பூக்கள், 108 ஜபம், எண்ணி, அல்லது விழா.",
+    "hubPushpaBlurb": "டிஜிட்டல் பூ பூஜை—மேட்ச் ஜபம் அல்ல.",
+    "hub108Title": "108 ஜபம்",
+    "hub108Subtitle": "பலகை விளையாடி · 108 ஜபம் முடிக்கவும்",
+    "hub108OneTime": "ஒருமுறை",
+    "hub108OneTimeHint": "ஒரே அமர்வு",
+    "hub108Weekly": "வார ஸ்ட்ரீக்",
+    "hub108WeeklyHint": "திங்–ஞாயி (IST)",
+    "hubCounterTitle": "ஜப எண்ணி",
+    "hubCounterSubtitle": "மந்திரம் மட்டும் · பலகை இல்லை · பூக்கள் இல்லை",
+    "hubCounterManual": "ஒன்றொன்றாக",
+    "hubCounterManualHint": "மந்திரம் முடிந்த பிறகு அடுத்த ஜபம்",
+    "hubCounterAuto": "ஆட்டோ",
+    "hubCounterAutoHint": "நீங்கள் முடிக்கும் வரை",
+    "hubOccasionsTitle": "விழாக்கள்",
+    "hubOccasionsSubtitle": "பெரிய நாட்களுக்கான ஜபம்",
+    "japa108": "108 ஜபம்",
+    "japa108Title": "108 ஜபம்",
+    "japa108ChooseDeity": "உங்கள் இஷ்ட தெய்வத்தைத் தேர்ந்தெடுங்கள். ஒரு அமர்வு = பலகையில் 108 ஜபம்.",
+    "japa108ProGate": "சக்தி இலவசம்; மற்ற தெய்வங்களுக்கு Pro அல்லது Premium வேண்டும்.",
+    "japa108TotalSessions": "உங்கள் 108 ஜப அமர்வுகள் (அனைத்து தெய்வங்கள்): {{n}}",
+    "japa108ChangeDeity": "← தெய்வம் மாற்று",
+    "japa108Blurb": "108 ஜபம் முடியும் வரை வரம்பற்ற நகர்வுகள். மேட்ச் ஜபம் சாதாரணமாக எண்ணப்படும்.",
+    "japa108YourCompletions": "இந்த 108 ஜப சிறப்பை நீங்கள் முடித்த முறைகள்: {{n}}",
+    "japa108Start": "108 ஜபம் தொடங்கு",
+    "pushpaAradhana": "புஷ்பாராதனை",
+    "weeklyStreak": "வார ஸ்ட்ரீக் (108)",
+    "japamCounter": "ஜப எண்ணி",
+    "autoJapamCounter": "ஆட்டோ ஜப எண்ணி",
+    "japamCounterTitle": "ஜப எண்ணி",
+    "autoJapamCounterTitle": "ஆட்டோ ஜப எண்ணி",
+    "japamCounterChooseDeity": "இஷ்ட தெய்வத்தைத் தேர்ந்தெடுங்கள். ஒரு நேரம் ஒரு ஜபம்—மந்திரம் முடிந்த பிறகே அடுத்தது.",
+    "japamCounterProGate": "சக்தி இலவசம்; மற்ற தெய்வங்களுக்கு Pro அல்லது Premium.",
+    "japamCounterChangeDeity": "← தெய்வம் மாற்று",
+    "japamCounterBlurb": "பலகை இல்லை, பூக்கள் இல்லை—எண்ணிக்கையும் மந்திரமும் மட்டும். மந்திரம் முடிந்த பிறகே அடுத்த ஜபம்.",
+    "autoJapamCounterBlurb": "நீங்கள் முடிக்கும் வரை மந்திரம் தானாக வரும். ஒவ்வொரு முழு மந்திரத்திற்கும் ஒரு எண்.",
+    "japamCounterTap": "ஜபம்",
+    "japamCounterListening": "மந்திரம் ஒலிக்கிறது…",
+    "japamCounterReset": "எண்ணை மீட்டமை",
+    "autoJapamCounterStart": "ஆட்டோ ஜபம் தொடங்கு",
+    "autoJapamCounterStop": "முடி",
+    "happyBirthday": "பிறந்தநாள்",
+    "anniversary": "திருமண வருடம்",
+    "comingSoon": "விரைவில் வரும்"
   }
 }

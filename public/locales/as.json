@@ -17,7 +17,7 @@
     "refund": "পৰিবৰ্তন আৰু বাতিল",
     "shipping": "পাঠোৱা আৰু বিতৰণ",
     "apiDocs": "API দলিল",
-    "specials": "Specials"
+    "specials": "বিশেষ"
   },
   "videoModal": {
     "title1": "জপম",
@@ -47,7 +47,9 @@
     "offerDakshinaToUnlock": "Offer Dakshina to unlock",
     "mahaJapaYagnas": "মহা জপ যজ্ঞ",
     "navStripMarathons": "Marathons",
-    "navStripYagnas": "Yagnas"
+    "navStripYagnas": "Yagnas",
+    "specials": "বিশেষ",
+    "pushpaAradhana": "পুষ্পাৰাধনা"
   },
   "game": {
     "jai": "জয়!",
@@ -469,5 +471,53 @@
     "gotram": "gotram",
     "mobileNumber": "mobile_number",
     "generating": "generating"
+  },
+  "specials": {
+    "back": "পিছলৈ",
+    "title": "বিশেষ",
+    "hubSubtitle": "পথ বাছক—ফুল, 108 জপ, গণনা, বা উৎসৱ।",
+    "hubPushpaBlurb": "ডিজিটেল ফুলৰ আৰাধনা—মেচ জপ নহয়।",
+    "hub108Title": "108 জপ",
+    "hub108Subtitle": "বৰ্ড খেলক · 108 জপ শেষ কৰক",
+    "hub108OneTime": "একেবাৰ",
+    "hub108OneTimeHint": "এক ছেচন",
+    "hub108Weekly": "সাপ্তাহিক",
+    "hub108WeeklyHint": "সোম–দেও (IST)",
+    "hubCounterTitle": "জপ গণনা",
+    "hubCounterSubtitle": "কেৱল মন্ত্ৰ · বৰ্ড নাই · ফুল নাই",
+    "hubCounterManual": "একে একে",
+    "hubCounterManualHint": "মন্ত্ৰ শেষ হোৱাৰ পিছত পৰৱৰ্তী জপ",
+    "hubCounterAuto": "অটো",
+    "hubCounterAutoHint": "আপুনি শেষ নকৰা পৰ্যন্ত",
+    "hubOccasionsTitle": "উৎসৱ",
+    "hubOccasionsSubtitle": "ডাঙৰ দিনৰ বাবে জপ",
+    "japa108": "108 জপ",
+    "japa108Title": "108 জপ",
+    "japa108ChooseDeity": "আপোনাৰ ইষ্ট দেবতা বাছক। এটা ছেচন = বৰ্ডত 108 জপ।",
+    "japa108ProGate": "শক্তি মুক্ত; আনৰ বাবে Pro বা Premium লাগিব।",
+    "japa108TotalSessions": "আপোনাৰ 108 জপ ছেচন (সকলো দেবতা): {{n}}",
+    "japa108ChangeDeity": "← দেবতা সলনি",
+    "japa108Blurb": "108 জপ শেষ হোৱালৈকে সীমাহীন চাল। মেচ জপ সাধাৰণতে গণনা হয়।",
+    "japa108YourCompletions": "এই 108 জপ বিশেষ আপুনি শেষ কৰিছে: {{n}} বাৰ",
+    "japa108Start": "108 জপ আৰম্ভ",
+    "pushpaAradhana": "পুষ্পাৰাধনা",
+    "weeklyStreak": "সাপ্তাহিক (108)",
+    "japamCounter": "জপ গণনা",
+    "autoJapamCounter": "অটো জপ গণনা",
+    "japamCounterTitle": "জপ গণনা",
+    "autoJapamCounterTitle": "অটো জপ গণনা",
+    "japamCounterChooseDeity": "ইষ্ট দেবতা বাছক। এটা সময়ত এটা জপ—মন্ত্ৰ শেষ হোৱাৰ পিছতহে পৰৱৰ্তী।",
+    "japamCounterProGate": "শক্তি মুক্ত; আনৰ বাবে Pro বা Premium।",
+    "japamCounterChangeDeity": "← দেবতা সলনি",
+    "japamCounterBlurb": "বৰ্ড নাই, ফুল নাই—গণনা আৰু মন্ত্ৰ মাত্ৰ। মন্ত্ৰ শেষ হোৱাৰ পিছত পৰৱৰ্তী জপ।",
+    "autoJapamCounterBlurb": "আপুনি শেষ নকৰা পৰ্যন্ত মন্ত্ৰ নিজে বাজিব। প্ৰতিটো সম্পূৰ্ণ মন্ত্ৰত এটা গণনা।",
+    "japamCounterTap": "জপ",
+    "japamCounterListening": "মন্ত্ৰ বাজি আছে…",
+    "japamCounterReset": "গণনা ৰিছেট",
+    "autoJapamCounterStart": "অটো জপ আৰম্ভ",
+    "autoJapamCounterStop": "শেষ",
+    "happyBirthday": "জন্মদিন",
+    "anniversary": "বাৰ্ষিকী",
+    "comingSoon": "শীঘ্ৰে আহিব"
   }
 }

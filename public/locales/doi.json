@@ -17,7 +17,7 @@
     "refund": "वापसी आरू रद्द",
     "shipping": "भेजण आरू डिलिवरी",
     "apiDocs": "API दस्तावेज",
-    "specials": "Specials"
+    "specials": "खास"
   },
   "videoModal": {
     "title1": "जपम",
@@ -47,7 +47,9 @@
     "offerDakshinaToUnlock": "Offer Dakshina to unlock",
     "mahaJapaYagnas": "महा जप यज्ञ",
     "navStripMarathons": "Marathons",
-    "navStripYagnas": "Yagnas"
+    "navStripYagnas": "Yagnas",
+    "specials": "खास",
+    "pushpaAradhana": "पुष्पाराधना"
   },
   "game": {
     "jai": "जय!",
@@ -469,5 +471,53 @@
     "gotram": "gotram",
     "mobileNumber": "mobile_number",
     "generating": "generating"
+  },
+  "specials": {
+    "back": "पिछ्छै",
+    "title": "खास",
+    "hubSubtitle": "रास्ता चुनो—फुल, 108 जप, गिनती, जां त्यौहार।",
+    "hubPushpaBlurb": "डिजिटल फुल चढ़ावा—मैच जप नेईं।",
+    "hub108Title": "108 जप",
+    "hub108Subtitle": "बोर्ड खेलो · 108 जप पूरे करो",
+    "hub108OneTime": "इक बारी",
+    "hub108OneTimeHint": "इक सैशन",
+    "hub108Weekly": "हफ्तावार",
+    "hub108WeeklyHint": "सोम–ऐत (IST)",
+    "hubCounterTitle": "जप गिनती",
+    "hubCounterSubtitle": "सिर्फ मंत्र · बोर्ड नेईं · फुल नेईं",
+    "hubCounterManual": "इक-इक करके",
+    "hubCounterManualHint": "मंत्र खत्म होने पर अगला जप",
+    "hubCounterAuto": "ऑटो",
+    "hubCounterAutoHint": "जदूं तूं समाप्त करै",
+    "hubOccasionsTitle": "त्यौहार",
+    "hubOccasionsSubtitle": "वड्डे दिनें गी जप",
+    "japa108": "108 जप",
+    "japa108Title": "108 जप",
+    "japa108ChooseDeity": "अपणी इष्ट देवता चुनो। इक सैशन = बोर्ड पर 108 जप।",
+    "japa108ProGate": "शक्ति मुफ्त; होरें गी Pro जां Premium चाहिदा।",
+    "japa108TotalSessions": "तुहाडे 108 जप सैशन (सारे देवता): {{n}}",
+    "japa108ChangeDeity": "← देवता बदलो",
+    "japa108Blurb": "108 जप पूरे होने तगी अनलिमिटेड चाल। मैच जप आमतौर पर गिने जांदे न।",
+    "japa108YourCompletions": "एह् 108 जप खास तूं {{n}} बारी पूरा कीता",
+    "japa108Start": "108 जप शुरू",
+    "pushpaAradhana": "पुष्पाराधना",
+    "weeklyStreak": "हफ्तावार (108)",
+    "japamCounter": "जप गिनती",
+    "autoJapamCounter": "ऑटो जप गिनती",
+    "japamCounterTitle": "जप गिनती",
+    "autoJapamCounterTitle": "ऑटो जप गिनती",
+    "japamCounterChooseDeity": "इष्ट देवता चुनो। इक वेलै इक जप—मंत्र खत्म होने पर ही अगला।",
+    "japamCounterProGate": "शक्ति मुफ्त; होरें गी Pro जां Premium।",
+    "japamCounterChangeDeity": "← देवता बदलो",
+    "japamCounterBlurb": "बोर्ड नेईं, फुल नेईं—गिनती ते मंत्र मात्र। मंत्र खत्म होने पर अगला जप।",
+    "autoJapamCounterBlurb": "तूं समाप्त करै तगी मंत्र आपे चलेगा। हर पूरे मंत्र पर इक गिनती।",
+    "japamCounterTap": "जप",
+    "japamCounterListening": "मंत्र बजै दा…",
+    "japamCounterReset": "गिनती रीसेट",
+    "autoJapamCounterStart": "ऑटो जप शुरू",
+    "autoJapamCounterStop": "समाप्त",
+    "happyBirthday": "जन्मदिन",
+    "anniversary": "सालगिरह",
+    "comingSoon": "जल्दी आवैगा"
   }
 }

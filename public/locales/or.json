@@ -17,7 +17,7 @@
     "refund": "ଫେରସ୍ତ ଓ ବାତିଲ",
     "shipping": "ପ୍ରେରଣ ଓ ବିତରଣ",
     "apiDocs": "API ଦଲିଲ",
-    "specials": "Specials"
+    "specials": "ବିଶେଷ"
   },
   "videoModal": {
     "title1": "ଜପମ",
@@ -47,7 +47,9 @@
     "offerDakshinaToUnlock": "Offer Dakshina to unlock",
     "mahaJapaYagnas": "ମହା ଜପ ଯଜ୍ଞ",
     "navStripMarathons": "Marathons",
-    "navStripYagnas": "Yagnas"
+    "navStripYagnas": "Yagnas",
+    "specials": "ବିଶେଷ",
+    "pushpaAradhana": "ପୁଷ୍ପାରାଧନା"
   },
   "game": {
     "jai": "ଜୟ!",
@@ -469,5 +471,53 @@
     "gotram": "gotram",
     "mobileNumber": "mobile_number",
     "generating": "generating"
+  },
+  "specials": {
+    "back": "ପଛକୁ",
+    "title": "ବିଶେଷ",
+    "hubSubtitle": "ପଥ ବାଛନ୍ତୁ—ଫୁଲ, 108 ଜପ, ଗଣନା, କିମ୍ବା ଉତ୍ସବ।",
+    "hubPushpaBlurb": "ଡିଜିଟାଲ୍ ଫୁଲ ଅର୍ପଣ—ମ୍ୟାଚ୍ ଜପ ନୁହେଁ।",
+    "hub108Title": "108 ଜପ",
+    "hub108Subtitle": "ବୋର୍ଡ ଖେଳନ୍ତୁ · 108 ଜପ ଶେଷ କରନ୍ତୁ",
+    "hub108OneTime": "ଥରେ",
+    "hub108OneTimeHint": "ଗୋଟିଏ ସେସନ୍",
+    "hub108Weekly": "ସାପ୍ତାହିକ",
+    "hub108WeeklyHint": "ସୋମ–ରବି (IST)",
+    "hubCounterTitle": "ଜପ ଗଣନା",
+    "hubCounterSubtitle": "କେବଳ ମନ୍ତ୍ର · ବୋର୍ଡ ନାହିଁ · ଫୁଲ ନାହିଁ",
+    "hubCounterManual": "ଗୋଟିଏ ପରେ ଗୋଟିଏ",
+    "hubCounterManualHint": "ମନ୍ତ୍ର ଶେଷ ହେଲା ପରେ ପରବର୍ତ୍ତୀ ଜପ",
+    "hubCounterAuto": "ଅଟୋ",
+    "hubCounterAutoHint": "ଆପଣ ଶେଷ କରିବା ପର୍ଯ୍ୟନ୍ତ",
+    "hubOccasionsTitle": "ଉତ୍ସବ",
+    "hubOccasionsSubtitle": "ବଡ଼ ଦିନ ପାଇଁ ଜପ",
+    "japa108": "108 ଜପ",
+    "japa108Title": "108 ଜପ",
+    "japa108ChooseDeity": "ଆପଣଙ୍କ ଇଷ୍ଟ ଦେବତା ବାଛନ୍ତୁ। ଗୋଟିଏ ସେସନ୍ = ବୋର୍ଡରେ 108 ଜପ।",
+    "japa108ProGate": "ଶକ୍ତି ମାଗଣ; ଅନ୍ୟଙ୍କ ପାଇଁ Pro କିମ୍ବା Premium ଲାଗିବ।",
+    "japa108TotalSessions": "ଆପଣଙ୍କ 108 ଜପ ସେସନ୍ (ସବୁ ଦେବତା): {{n}}",
+    "japa108ChangeDeity": "← ଦେବତା ବଦଳାନ୍ତୁ",
+    "japa108Blurb": "108 ଜପ ଶେଷ ହେବା ପର୍ଯ୍ୟନ୍ତ ଅସୀମ ଚାଲ। ମ୍ୟାଚ୍ ଜପ ସାଧାରଣତଃ ଗଣାଯାଏ।",
+    "japa108YourCompletions": "ଏହି 108 ଜପ ବିଶେଷ ଆପଣ ଶେଷ କରିଛନ୍ତି: {{n}} ଥର",
+    "japa108Start": "108 ଜପ ଆରମ୍ଭ",
+    "pushpaAradhana": "ପୁଷ୍ପାରାଧନା",
+    "weeklyStreak": "ସାପ୍ତାହିକ (108)",
+    "japamCounter": "ଜପ ଗଣନା",
+    "autoJapamCounter": "ଅଟୋ ଜପ ଗଣନା",
+    "japamCounterTitle": "ଜପ ଗଣନା",
+    "autoJapamCounterTitle": "ଅଟୋ ଜପ ଗଣନା",
+    "japamCounterChooseDeity": "ଇଷ୍ଟ ଦେବତା ବାଛନ୍ତୁ। ଗୋଟିଏ ସମୟରେ ଗୋଟିଏ ଜପ—ମନ୍ତ୍ର ଶେଷ ହେଲା ପରେ ପରବର୍ତ୍ତୀ।",
+    "japamCounterProGate": "ଶକ୍ତି ମାଗଣ; ଅନ୍ୟଙ୍କ ପାଇଁ Pro କିମ୍ବା Premium।",
+    "japamCounterChangeDeity": "← ଦେବତା ବଦଳାନ୍ତୁ",
+    "japamCounterBlurb": "ବୋର୍ଡ ନାହିଁ, ଫୁଲ ନାହିଁ—ଗଣନା ଓ ମନ୍ତ୍ର ମାତ୍ର। ମନ୍ତ୍ର ଶେଷ ହେଲା ପରେ ପରବର୍ତ୍ତୀ ଜପ।",
+    "autoJapamCounterBlurb": "ଆପଣ ଶେଷ କରିବା ପର୍ଯ୍ୟନ୍ତ ମନ୍ତ୍ର ନିଜେ ଚାଲିବ। ପ୍ରତି ପୂର୍ଣ୍ଣ ମନ୍ତ୍ରରେ ଗୋଟିଏ ଗଣନା।",
+    "japamCounterTap": "ଜପ",
+    "japamCounterListening": "ମନ୍ତ୍ର ବଜୁଛି…",
+    "japamCounterReset": "ଗଣନା ରିସେଟ୍",
+    "autoJapamCounterStart": "ଅଟୋ ଜପ ଆରମ୍ଭ",
+    "autoJapamCounterStop": "ଶେଷ",
+    "happyBirthday": "ଜନ୍ମଦିନ",
+    "anniversary": "ବାର୍ଷିକୀ",
+    "comingSoon": "ଶୀଘ୍ର ଆସୁଛି"
   }
 }

@@ -17,7 +17,7 @@
     "refund": "ਰਿਫੰਡ ਅਤੇ ਰੱਦ",
     "shipping": "ਸ਼ਿਪਿੰਗ ਅਤੇ ਡਿਲਿਵਰੀ",
     "apiDocs": "API ਦਸਤਾਵੇਜ਼",
-    "specials": "Specials"
+    "specials": "ਵਿਸ਼ੇਸ਼"
   },
   "videoModal": {
     "title1": "ਜਪਮ",
@@ -47,7 +47,9 @@
     "offerDakshinaToUnlock": "Offer Dakshina to unlock",
     "mahaJapaYagnas": "ਮਹਾ ਜਪ ਯਜਨਾ",
     "navStripMarathons": "Marathons",
-    "navStripYagnas": "Yagnas"
+    "navStripYagnas": "Yagnas",
+    "specials": "ਵਿਸ਼ੇਸ਼",
+    "pushpaAradhana": "ਪੁਸ਼ਪਾਰਾਧਨਾ"
   },
   "game": {
     "jai": "ਜੈ!",
@@ -469,5 +471,53 @@
     "gotram": "gotram",
     "mobileNumber": "mobile_number",
     "generating": "generating"
+  },
+  "specials": {
+    "back": "ਪਿੱਛੇ",
+    "title": "ਵਿਸ਼ੇਸ਼",
+    "hubSubtitle": "ਰਾਹ ਚੁਣੋ—ਫੁੱਲ, 108 ਜਪ, ਗਿਣਤੀ, ਜਾਂ ਤਿਉਹਾਰ।",
+    "hubPushpaBlurb": "ਡਿਜੀਟਲ ਫੁੱਲ ਅਰਪਣ—ਮੈਚ ਜਪ ਨਹੀਂ।",
+    "hub108Title": "108 ਜਪ",
+    "hub108Subtitle": "ਬੋਰਡ ਖੇਡੋ · 108 ਜਪ ਪੂਰੇ ਕਰੋ",
+    "hub108OneTime": "ਇੱਕ ਵਾਰ",
+    "hub108OneTimeHint": "ਇੱਕ ਸੈਸ਼ਨ",
+    "hub108Weekly": "ਹਫਤਾਵਾਰ",
+    "hub108WeeklyHint": "ਸੋਮ–ਐਤ (IST)",
+    "hubCounterTitle": "ਜਪ ਗਿਣਤੀ",
+    "hubCounterSubtitle": "ਸਿਰਫ਼ ਮੰਤਰ · ਬੋਰਡ ਨਹੀਂ · ਫੁੱਲ ਨਹੀਂ",
+    "hubCounterManual": "ਇੱਕ-ਇੱਕ ਕਰਕੇ",
+    "hubCounterManualHint": "ਮੰਤਰ ਪੂਰਾ ਹੋਣ ਤੋਂ ਬਾਅਦ ਅਗਲਾ ਜਪ",
+    "hubCounterAuto": "ਆਟੋ",
+    "hubCounterAutoHint": "ਜਦੋਂ ਤੱਕ ਤੁਸੀਂ ਸਮਾਪਤ ਕਰੋ",
+    "hubOccasionsTitle": "ਤਿਉਹਾਰ",
+    "hubOccasionsSubtitle": "ਵੱਡੇ ਦਿਨਾਂ ਲਈ ਜਪ",
+    "japa108": "108 ਜਪ",
+    "japa108Title": "108 ਜਪ",
+    "japa108ChooseDeity": "ਆਪਣੀ ਇਸ਼ਟ ਦੇਵਤਾ ਚੁਣੋ। ਇੱਕ ਸੈਸ਼ਨ = ਬੋਰਡ ਤੇ 108 ਜਪ।",
+    "japa108ProGate": "ਸ਼ਕਤੀ ਮੁਫ਼ਤ; ਹੋਰਾਂ ਲਈ Pro ਜਾਂ Premium ਚਾਹੀਦਾ।",
+    "japa108TotalSessions": "ਤੁਹਾਡੇ 108 ਜਪ ਸੈਸ਼ਨ (ਸਾਰੇ ਦੇਵਤੇ): {{n}}",
+    "japa108ChangeDeity": "← ਦੇਵਤਾ ਬਦਲੋ",
+    "japa108Blurb": "108 ਜਪ ਪੂਰੇ ਹੋਣ ਤੱਕ ਅਸੀਮਤ ਚਾਲਾਂ। ਮੈਚ ਜਪ ਆਮ ਤੌਰ ਤੇ ਗਿਣੇ ਜਾਂਦੇ ਹਨ।",
+    "japa108YourCompletions": "ਇਹ 108 ਜਪ ਵਿਸ਼ੇਸ਼ ਤੁਸੀਂ ਪੂਰਾ ਕੀਤਾ: {{n}} ਵਾਰ",
+    "japa108Start": "108 ਜਪ ਸ਼ੁਰੂ",
+    "pushpaAradhana": "ਪੁਸ਼ਪਾਰਾਧਨਾ",
+    "weeklyStreak": "ਹਫਤਾਵਾਰ (108)",
+    "japamCounter": "ਜਪ ਗਿਣਤੀ",
+    "autoJapamCounter": "ਆਟੋ ਜਪ ਗਿਣਤੀ",
+    "japamCounterTitle": "ਜਪ ਗਿਣਤੀ",
+    "autoJapamCounterTitle": "ਆਟੋ ਜਪ ਗਿਣਤੀ",
+    "japamCounterChooseDeity": "ਇਸ਼ਟ ਦੇਵਤਾ ਚੁਣੋ। ਇੱਕ ਵਾਰ ਵਿੱਚ ਇੱਕ ਜਪ—ਮੰਤਰ ਪੂਰਾ ਹੋਣ ਤੋਂ ਬਾਅਦ ਹੀ ਅਗਲਾ।",
+    "japamCounterProGate": "ਸ਼ਕਤੀ ਮੁਫ਼ਤ; ਹੋਰਾਂ ਲਈ Pro ਜਾਂ Premium।",
+    "japamCounterChangeDeity": "← ਦੇਵਤਾ ਬਦਲੋ",
+    "japamCounterBlurb": "ਬੋਰਡ ਨਹੀਂ, ਫੁੱਲ ਨਹੀਂ—ਸਿਰਫ਼ ਗਿਣਤੀ ਅਤੇ ਮੰਤਰ। ਮੰਤਰ ਪੂਰਾ ਹੋਣ ਤੋਂ ਬਾਅਦ ਅਗਲਾ ਜਪ।",
+    "autoJapamCounterBlurb": "ਜਦੋਂ ਤੱਕ ਤੁਸੀਂ ਸਮਾਪਤ ਕਰੋ, ਮੰਤਰ ਆਪੇ ਚੱਲੇਗਾ। ਹਰ ਪੂਰੇ ਮੰਤਰ ਤੋਂ ਬਾਅਦ ਇੱਕ ਗਿਣਤੀ।",
+    "japamCounterTap": "ਜਪ",
+    "japamCounterListening": "ਮੰਤਰ ਵੱਜ ਰਿਹਾ ਹੈ…",
+    "japamCounterReset": "ਗਿਣਤੀ ਰੀਸੈੱਟ",
+    "autoJapamCounterStart": "ਆਟੋ ਜਪ ਸ਼ੁਰੂ",
+    "autoJapamCounterStop": "ਸਮਾਪਤ",
+    "happyBirthday": "ਜਨਮਦਿਨ",
+    "anniversary": "ਵਰ੍ਹੇਗੰਢ",
+    "comingSoon": "ਜਲਦੀ ਆ ਰਿਹਾ ਹੈ"
   }
 }

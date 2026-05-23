@@ -17,7 +17,7 @@
     "refund": "റിഫണ്ടും റദ്ദാക്കലും",
     "shipping": "ഷിപ്പിംഗും ഡെലിവറിയും",
     "apiDocs": "API ഡോക്യുമെന്റുകൾ",
-    "specials": "Specials"
+    "specials": "പ്രത്യേകം"
   },
   "videoModal": {
     "title1": "ജപം",
@@ -47,7 +47,9 @@
     "offerDakshinaToUnlock": "Offer Dakshina to unlock",
     "mahaJapaYagnas": "മഹാ ജപ യജ്ഞം",
     "navStripMarathons": "Marathons",
-    "navStripYagnas": "Yagnas"
+    "navStripYagnas": "Yagnas",
+    "specials": "പ്രത്യേകം",
+    "pushpaAradhana": "പുഷ്പാരാധന"
   },
   "game": {
     "jai": "ജയ്!",
@@ -469,5 +471,53 @@
     "gotram": "gotram",
     "mobileNumber": "mobile_number",
     "generating": "generating"
+  },
+  "specials": {
+    "back": "പിന്നോട്ട്",
+    "title": "പ്രത്യേകം",
+    "hubSubtitle": "വഴി തിരഞ്ഞെടുക്കുക—പുഷ്പങ്ങൾ, 108 ജപം, കൗണ്ടർ, അല്ലെങ്കിൽ ആഘോഷം.",
+    "hubPushpaBlurb": "ഡിജിറ്റൽ പുഷ്പ പൂജ—മാച്ച് ജപമല്ല.",
+    "hub108Title": "108 ജപം",
+    "hub108Subtitle": "ബോർഡ് കളിച്ച് · 108 ജപം പൂർത്തിയാക്കുക",
+    "hub108OneTime": "ഒരിക്കൽ",
+    "hub108OneTimeHint": "ഒരു സെഷൻ",
+    "hub108Weekly": "ആഴ്ച സ്ട്രീക്ക്",
+    "hub108WeeklyHint": "തിങ്ക–ഞായി (IST)",
+    "hubCounterTitle": "ജപ കൗണ്ടർ",
+    "hubCounterSubtitle": "മന്ത്രം മാത്രം · ബോർഡ് ഇല്ല · പുഷ്പം ഇല്ല",
+    "hubCounterManual": "ഒന്നൊന്നായി",
+    "hubCounterManualHint": "മന്ത്രം കഴിഞ്ഞ ശേഷം അടുത്ത ജപം",
+    "hubCounterAuto": "ഓട്ടോ",
+    "hubCounterAutoHint": "നിങ്ങൾ അവസാനിപ്പിക്കുന്ന വരെ",
+    "hubOccasionsTitle": "ആഘോഷങ്ങൾ",
+    "hubOccasionsSubtitle": "വലിയ ദിനങ്ങൾക്കുള്ള ജപം",
+    "japa108": "108 ജപം",
+    "japa108Title": "108 ജപം",
+    "japa108ChooseDeity": "നിങ്ങളുടെ ഇഷ്ട ദേവത തിരഞ്ഞെടുക്കുക. ഒരു സെഷൻ = ബോർഡിൽ 108 ജപം.",
+    "japa108ProGate": "ശക്തി സൗജന്യം; മറ്റുള്ളവർക്ക് Pro അല്ലെങ്കിൽ Premium വേണം.",
+    "japa108TotalSessions": "നിങ്ങളുടെ 108 ജപ സെഷനുകൾ (എല്ലാ ദേവതകൾ): {{n}}",
+    "japa108ChangeDeity": "← ദേവത മാറ്റുക",
+    "japa108Blurb": "108 ജപം പൂർത്തിയാകുന്ന വരെ പരിധിയില്ലാത്ത നീക്കങ്ങൾ. മാച്ച് ജപം സാധാരണയായി കണക്കാക്കും.",
+    "japa108YourCompletions": "ഈ 108 ജപ പ്രത്യേകം നിങ്ങൾ പൂർത്തിയാക്കിയ തവണ: {{n}}",
+    "japa108Start": "108 ജപം ആരംഭിക്കുക",
+    "pushpaAradhana": "പുഷ്പാരാധന",
+    "weeklyStreak": "ആഴ്ച സ്ട്രീക്ക് (108)",
+    "japamCounter": "ജപ കൗണ്ടർ",
+    "autoJapamCounter": "ഓട്ടോ ജപ കൗണ്ടർ",
+    "japamCounterTitle": "ജപ കൗണ്ടർ",
+    "autoJapamCounterTitle": "ഓട്ടോ ജപ കൗണ്ടർ",
+    "japamCounterChooseDeity": "ഇഷ്ട ദേവത തിരഞ്ഞെടുക്കുക. ഒരു സമയം ഒരു ജപം—മന്ത്രം കഴിഞ്ഞ ശേഷം മാത്രം അടുത്തത്.",
+    "japamCounterProGate": "ശക്തി സൗജന്യം; മറ്റുള്ളവർക്ക് Pro അല്ലെങ്കിൽ Premium.",
+    "japamCounterChangeDeity": "← ദേവത മാറ്റുക",
+    "japamCounterBlurb": "ബോർഡ് ഇല്ല, പുഷ്പം ഇല്ല—കൗണ്ടും മന്ത്രവും മാത്രം. മന്ത്രം കഴിഞ്ഞ ശേഷം അടുത്ത ജപം.",
+    "autoJapamCounterBlurb": "നിങ്ങൾ അവസാനിപ്പിക്കുന്ന വരെ മന്ത്രം സ്വയം ചലിക്കും. ഓരോ പൂർണ്ണ മന്ത്രത്തിനും ഒരു എണ്ണം.",
+    "japamCounterTap": "ജപം",
+    "japamCounterListening": "മന്ത്രം പ്ലേ ചെയ്യുന്നു…",
+    "japamCounterReset": "കൗണ്ട് റീസെറ്റ്",
+    "autoJapamCounterStart": "ഓട്ടോ ജപം ആരംഭിക്കുക",
+    "autoJapamCounterStop": "അവസാനിക്കുക",
+    "happyBirthday": "ജന്മദിനം",
+    "anniversary": "വാർഷികം",
+    "comingSoon": "ഉടൻ വരുന്നു"
   }
 }

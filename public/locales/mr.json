@@ -17,7 +17,7 @@
     "refund": "परतावा आणि रद्द",
     "shipping": "शिपिंग आणि डिलिव्हरी",
     "apiDocs": "API दस्तऐवज",
-    "specials": "Specials"
+    "specials": "विशेष"
   },
   "videoModal": {
     "title1": "जपम",
@@ -47,7 +47,9 @@
     "offerDakshinaToUnlock": "Offer Dakshina to unlock",
     "mahaJapaYagnas": "महा जप यज्ञ",
     "navStripMarathons": "Marathons",
-    "navStripYagnas": "Yagnas"
+    "navStripYagnas": "Yagnas",
+    "specials": "विशेष",
+    "pushpaAradhana": "पुष्पाराधना"
   },
   "game": {
     "jai": "जय!",
@@ -469,5 +471,53 @@
     "gotram": "gotram",
     "mobileNumber": "mobile_number",
     "generating": "generating"
+  },
+  "specials": {
+    "back": "मागे",
+    "title": "विशेष",
+    "hubSubtitle": "मार्ग निवडा—फुले, 108 जप, मोजणी, किंवा सण.",
+    "hubPushpaBlurb": "डिजिटल फुलांची अर्पणा—मॅच जप नाही.",
+    "hub108Title": "108 जप",
+    "hub108Subtitle": "बोर्ड खेळा · 108 जप पूर्ण करा",
+    "hub108OneTime": "एकदा",
+    "hub108OneTimeHint": "एक सत्र",
+    "hub108Weekly": "साप्ताहिक",
+    "hub108WeeklyHint": "सोम–रवि (IST)",
+    "hubCounterTitle": "जप मोजणी",
+    "hubCounterSubtitle": "फक्त मंत्र · बोर्ड नाही · फुले नाहीत",
+    "hubCounterManual": "एक-एक",
+    "hubCounterManualHint": "मंत्र संपल्यावर पुढचा जप",
+    "hubCounterAuto": "ऑटो",
+    "hubCounterAutoHint": "तुम्ही संपवेपर्यंत",
+    "hubOccasionsTitle": "सण",
+    "hubOccasionsSubtitle": "महत्त्वाच्या दिवसांसाठी जप",
+    "japa108": "108 जप",
+    "japa108Title": "108 जप",
+    "japa108ChooseDeity": "तुमची इष्ट देवता निवडा. एक सत्र = बोर्डवर 108 जप.",
+    "japa108ProGate": "शक्ती मोफत; इतरांसाठी Pro किंवा Premium लागेल.",
+    "japa108TotalSessions": "तुमची 108 जप सत्रे (सर्व देवता): {{n}}",
+    "japa108ChangeDeity": "← देवता बदला",
+    "japa108Blurb": "108 जप पूर्ण होईपर्यंत अमर्याद चाली. मॅच जप नेहमी मोजले जातात.",
+    "japa108YourCompletions": "हे 108 जप विशेष तुम्ही पूर्ण केले: {{n}} वेळा",
+    "japa108Start": "108 जप सुरू करा",
+    "pushpaAradhana": "पुष्पाराधना",
+    "weeklyStreak": "साप्ताहिक (108)",
+    "japamCounter": "जप मोजणी",
+    "autoJapamCounter": "ऑटो जप मोजणी",
+    "japamCounterTitle": "जप मोजणी",
+    "autoJapamCounterTitle": "ऑटो जप मोजणी",
+    "japamCounterChooseDeity": "इष्ट देवता निवडा. एकावेळी एक जप—मंत्र संपल्यावरच पुढचा.",
+    "japamCounterProGate": "शक्ती मोफत; इतरांसाठी Pro किंवा Premium.",
+    "japamCounterChangeDeity": "← देवता बदला",
+    "japamCounterBlurb": "बोर्ड नाही, फुले नाहीत—फक्त मोजणी आणि मंत्र. मंत्र संपल्यावर पुढचा जप.",
+    "autoJapamCounterBlurb": "तुम्ही संपवेपर्यंत मंत्र आपोआप चालेल. प्रत्येक पूर्ण मंत्रानंतर एक मोजणी.",
+    "japamCounterTap": "जप",
+    "japamCounterListening": "मंत्र चालू आहे…",
+    "japamCounterReset": "मोजणी रीसेट",
+    "autoJapamCounterStart": "ऑटो जप सुरू",
+    "autoJapamCounterStop": "संपवा",
+    "happyBirthday": "वाढदिवस",
+    "anniversary": "वर्धापनदिन",
+    "comingSoon": "लवकरच येत आहे"
   }
 }

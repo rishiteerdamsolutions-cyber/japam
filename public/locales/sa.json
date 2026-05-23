@@ -17,7 +17,7 @@
     "refund": "प्रत्यावर्तनं च रद्दीकरणं च",
     "shipping": "प्रेषणं च वितरणं च",
     "apiDocs": "API दस्तावेजानि",
-    "specials": "Specials"
+    "specials": "विशेषाः"
   },
   "videoModal": {
     "title1": "जपम्",
@@ -47,7 +47,9 @@
     "offerDakshinaToUnlock": "Offer Dakshina to unlock",
     "mahaJapaYagnas": "महाजपयज्ञानि",
     "navStripMarathons": "Marathons",
-    "navStripYagnas": "Yagnas"
+    "navStripYagnas": "Yagnas",
+    "specials": "विशेषाः",
+    "pushpaAradhana": "पुष्पाराधना"
   },
   "game": {
     "jai": "जय!",
@@ -469,5 +471,53 @@
     "gotram": "gotram",
     "mobileNumber": "mobile_number",
     "generating": "generating"
+  },
+  "specials": {
+    "back": "पृष्ठतः",
+    "title": "विशेषाः",
+    "hubSubtitle": "मार्गं चिनुत — पुष्पाणि, 108 जपाः, गणना, उत्सवः वा।",
+    "hubPushpaBlurb": "अङ्कितपुष्पार्चनम् — मेल-जपात् पृथक्।",
+    "hub108Title": "108 जपाः",
+    "hub108Subtitle": "फलके क्रीडत · 108 जपान् पूरयत",
+    "hub108OneTime": "एकवारम्",
+    "hub108OneTimeHint": "एकः सत्रः",
+    "hub108Weekly": "साप्ताहिकम्",
+    "hub108WeeklyHint": "सोम–रवि (IST)",
+    "hubCounterTitle": "जपगणना",
+    "hubCounterSubtitle": "मन्त्रमात्रम् · फलकं न · पुष्पाणि न",
+    "hubCounterManual": "एकैकम्",
+    "hubCounterManualHint": "मन्त्रे समाप्ते अग्रिमः जपः",
+    "hubCounterAuto": "स्वयम्",
+    "hubCounterAutoHint": "यावत् समापयति",
+    "hubOccasionsTitle": "उत्सवाः",
+    "hubOccasionsSubtitle": "महद्दिनानां जपः",
+    "japa108": "108 जपाः",
+    "japa108Title": "108 जपाः",
+    "japa108ChooseDeity": "इष्टदेवतां चिनुत। एकं सत्रम् = फलके 108 जपाः।",
+    "japa108ProGate": "शक्तिः मुक्ता; अन्येषां Pro वा Premium वा।",
+    "japa108TotalSessions": "भवतः 108 जपसत्राणि (सर्वदेवताः): {{n}}",
+    "japa108ChangeDeity": "← देवतां परिवर्तय",
+    "japa108Blurb": "108 जपाः पूरयन्त्यावधि अनन्तचालनानि। मेल-जपाः सामान्यतः गण्यन्ते।",
+    "japa108YourCompletions": "एतत् 108 जपविशेषं भवता {{n}} वारं पूरितम्",
+    "japa108Start": "108 जपान् आरभत",
+    "pushpaAradhana": "पुष्पाराधना",
+    "weeklyStreak": "साप्ताहिकम् (108)",
+    "japamCounter": "जपगणना",
+    "autoJapamCounter": "स्वयं जपगणना",
+    "japamCounterTitle": "जपगणना",
+    "autoJapamCounterTitle": "स्वयं जपगणना",
+    "japamCounterChooseDeity": "इष्टदेवतां चिनुत। एकः समये एकः जपः—मन्त्रे समाप्ते एव अग्रिमः।",
+    "japamCounterProGate": "शक्तिः मुक्ता; अन्येषां Pro वा Premium वा।",
+    "japamCounterChangeDeity": "← देवतां परिवर्तय",
+    "japamCounterBlurb": "फलकं न, पुष्पाणि न—गणना मन्त्रश्च। मन्त्रे समाप्ते अग्रिमः जपः।",
+    "autoJapamCounterBlurb": "यावत् समापयति तावत् मन्त्रः स्वयम्। प्रति पूर्णमन्त्रे एका गणना।",
+    "japamCounterTap": "जपः",
+    "japamCounterListening": "मन्त्रः वाद्यते…",
+    "japamCounterReset": "गणनां पुनः सेट् कुरु",
+    "autoJapamCounterStart": "स्वयं जपम् आरभत",
+    "autoJapamCounterStop": "समापय",
+    "happyBirthday": "जन्मदिनम्",
+    "anniversary": "वार्षिकी",
+    "comingSoon": "शीघ्रम् आगमिष्यति"
   }
 }

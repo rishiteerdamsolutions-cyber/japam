@@ -107,6 +107,8 @@ import * as userReferralEventHandler from './_handlers/user/referral-event.js';
 import * as userReferralAttributeHandler from './_handlers/user/referral-attribute.js';
 import * as publicActiveUsersHandler from './_handlers/public/active-users.js';
 import * as publicPushpaAradhanaLeaderboardHandler from './_handlers/public/pushpa-abhisheka-leaderboard.js';
+import * as publicJapamCounterLeaderboardHandler from './_handlers/public/japam-counter-leaderboard.js';
+import * as userJapamCounterIncrementHandler from './_handlers/user/japam-counter-increment.js';
 import * as publicAppConfigHandler from './_handlers/public/app-config.js';
 import * as adminAppConfigHandler from './_handlers/admin/app-config.js';
 import * as userReminderHandler from './_handlers/user/reminder.js';
@@ -255,6 +257,8 @@ const HANDLERS = {
   'POST user/referral-attribute': userReferralAttributeHandler,
   'GET public/active-users': publicActiveUsersHandler,
   'GET public/pushpa-abhisheka-leaderboard': publicPushpaAradhanaLeaderboardHandler,
+  'GET public/japam-counter-leaderboard': publicJapamCounterLeaderboardHandler,
+  'POST user/japam-counter-increment': userJapamCounterIncrementHandler,
   'GET public/app-config': publicAppConfigHandler,
   'GET admin/app-config': adminAppConfigHandler,
   'POST admin/app-config': adminAppConfigHandler,

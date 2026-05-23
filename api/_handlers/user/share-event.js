@@ -1,5 +1,12 @@
 import { getDb, jsonResponse, verifyFirebaseUser, jsonInternalServerError } from '../_lib.js';
-import { trackShareEvent } from '../_analytics.js';
+import { trackShareEvent, trackProductUsage } from '../_analytics.js';
+
+const SHARE_TO_USAGE = {
+  marathon_rank_card: 'action_share_marathon_rank',
+  maha_yagna_rank_card: 'action_share_yagna_rank',
+  pushpa_rank_card: 'action_share_pushpa_rank',
+  japa_pdf: 'action_share_japa_pdf',
+};
 
 const VALID_EVENTS = new Set([
   'share_click',
@@ -20,6 +27,8 @@ export async function POST(request) {
     const event = typeof body.event === 'string' ? body.event.trim() : '';
     if (!VALID_EVENTS.has(event)) return jsonResponse({ error: 'Invalid event' }, 400);
     await trackShareEvent(db, uid, event);
+    const usageKey = SHARE_TO_USAGE[event];
+    if (usageKey) await trackProductUsage(db, usageKey);
     return jsonResponse({ ok: true }, 200);
   } catch (e) {
     console.error('user share-event POST', e);

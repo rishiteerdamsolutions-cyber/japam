@@ -282,6 +282,21 @@ export function getDayKeyFromOffset(days = 0) {
   return toIsoDay(Date.now() + days * DAY_MS);
 }
 
+/** Increment a catalogued product-usage counter on today's analyticsDaily doc. */
+export async function trackProductUsage(db, eventKey) {
+  const todayDay = toIsoDay(Date.now());
+  const now = admin.firestore.FieldValue.serverTimestamp();
+  const field = `usage_counts.${eventKey}`;
+  await db.doc(`analyticsDaily/${todayDay}`).set(
+    {
+      day: todayDay,
+      updated_at: now,
+      [field]: admin.firestore.FieldValue.increment(1),
+    },
+    { merge: true },
+  );
+}
+
 export async function computeDailyRetention(db, baseDay) {
   const d1 = baseDay;
   const d2 = toIsoDay(parseIsoDay(baseDay) + DAY_MS);

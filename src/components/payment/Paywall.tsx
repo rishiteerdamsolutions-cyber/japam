@@ -8,6 +8,7 @@ import { verifyCashfreeOrderAfterCheckout } from '../../lib/verifyCashfreeOrder'
 import { useAuthStore } from '../../store/authStore';
 import { useUnlockStore } from '../../store/unlockStore';
 import { auth } from '../../lib/firebase';
+import { trackProductUsage } from '../../lib/productUsage';
 import type { GameMode } from '../../types';
 
 interface PaywallProps {
@@ -41,6 +42,10 @@ export function Paywall({ onClose, onUnlocked, gateMode = 'general' }: PaywallPr
   const [coupon, setCoupon] = useState<CouponPreview | null>(null);
   const [couponBusy, setCouponBusy] = useState(false);
   const [couponNotice, setCouponNotice] = useState<string | null>(null);
+
+  useEffect(() => {
+    trackProductUsage('action_paywall_open');
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -184,6 +189,7 @@ export function Paywall({ onClose, onUnlocked, gateMode = 'general' }: PaywallPr
     }
     setError(null);
     setPaying(true);
+    trackProductUsage('action_paywall_pay');
     try {
       const idToken = await currentUser.getIdToken().catch(() => null);
       if (!idToken) throw new Error('Please sign in again');

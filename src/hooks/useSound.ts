@@ -106,7 +106,7 @@ async function preloadMantras() {
 
 const activeSources: AudioBufferSourceNode[] = [];
 const activeMantraHtmlAudios: HTMLAudioElement[] = [];
-let mantraPlayGeneration = 0;
+let _mantraPlayGeneration = 0;
 
 function playMantraAudio(deity: DeityId) {
   void playMantraOnce(deity);
@@ -184,7 +184,7 @@ export function playMantraOnce(deity: DeityId): Promise<void> {
 }
 
 export function stopAllMantras() {
-  mantraPlayGeneration++;
+  _mantraPlayGeneration++;
   for (const s of activeSources) {
     try {
       s.stop();
@@ -289,6 +289,80 @@ export function primeAudio() {
   }
   // Kick off preload in background (non-blocking)
   preloadMantras().catch(() => {});
+}
+
+function malaBeadWoodNoise(ctx: AudioContext, when: number, gainValue: number, duration: number) {
+  const len = Math.max(1, Math.floor(ctx.sampleRate * duration));
+  const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < len; i++) {
+    data[i] = (Math.random() * 2 - 1) * (1 - i / len);
+  }
+  const src = ctx.createBufferSource();
+  const filter = ctx.createBiquadFilter();
+  const gain = ctx.createGain();
+  src.buffer = buf;
+  filter.type = 'bandpass';
+  filter.frequency.value = 520;
+  filter.Q.value = 0.7;
+  src.connect(filter);
+  filter.connect(gain);
+  gain.connect(ctx.destination);
+  gain.gain.setValueAtTime(gainValue, when);
+  gain.gain.exponentialRampToValueAtTime(0.001, when + duration);
+  src.start(when);
+  src.stop(when + duration + 0.02);
+}
+
+/** Heavy bead gripped — low thud (shot-put weight). */
+export function playMalaBeadGrabSound() {
+  const ctx = getAudioContext();
+  if (ctx.state === 'suspended') ctx.resume().catch(() => {});
+  const now = ctx.currentTime;
+  malaBeadWoodNoise(ctx, now, 0.14, 0.045);
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'lowpass';
+  filter.frequency.value = 280;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(filter);
+  filter.connect(gain);
+  gain.connect(ctx.destination);
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(118, now);
+  osc.frequency.exponentialRampToValueAtTime(82, now + 0.07);
+  gain.gain.setValueAtTime(0.2, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+  osc.start(now);
+  osc.stop(now + 0.095);
+}
+
+/** Heavy bead seats — deep knock. */
+export function playMalaBeadDropSound() {
+  const ctx = getAudioContext();
+  if (ctx.state === 'suspended') ctx.resume().catch(() => {});
+  const now = ctx.currentTime;
+  malaBeadWoodNoise(ctx, now, 0.18, 0.06);
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'lowpass';
+  filter.frequency.value = 220;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(filter);
+  filter.connect(gain);
+  gain.connect(ctx.destination);
+  osc.type = 'triangle';
+  osc.frequency.setValueAtTime(95, now);
+  osc.frequency.exponentialRampToValueAtTime(62, now + 0.11);
+  gain.gain.setValueAtTime(0.22, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+  osc.start(now);
+  osc.stop(now + 0.125);
+}
+
+/** @deprecated use grab + drop sounds */
+export function playMalaBeadTick() {
+  playMalaBeadDropSound();
 }
 
 let bgMusicAudio: HTMLAudioElement | null = null;

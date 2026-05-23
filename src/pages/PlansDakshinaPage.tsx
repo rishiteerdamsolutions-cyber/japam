@@ -10,6 +10,7 @@ import { useUnlockStore } from '../store/unlockStore';
 import { hasActivePaidAccess, getProfileRingFlags } from '../lib/membershipDisplay';
 import { isFirebaseConfigured } from '../lib/firebase';
 import { loadPricingConfig } from '../lib/firestore';
+import { trackProductUsage } from '../lib/productUsage';
 
 /**
  * Pro (unlock / monthly dakshina) vs Premium (dakshina to fund the mission) — one place to read and pay.
@@ -151,7 +152,10 @@ export function PlansDakshinaPage() {
             {user && !isProMember && !isPremiumMember && !accessActive && (
               <button
                 type="button"
-                onClick={() => setShowProPay(true)}
+                onClick={() => {
+                  trackProductUsage('action_plans_pro_open');
+                  setShowProPay(true);
+                }}
                 className="w-full py-3 rounded-xl bg-green-600 hover:bg-green-500 text-white font-semibold"
               >
                 {t('plans.ctaPro')}
@@ -190,7 +194,10 @@ export function PlansDakshinaPage() {
             {user && canDonateForPremium && (
               <button
                 type="button"
-                onClick={() => setShowPremiumDonate(true)}
+                onClick={() => {
+                  trackProductUsage('action_plans_premium_open');
+                  setShowPremiumDonate(true);
+                }}
                 className="w-full py-3 rounded-xl bg-amber-500 text-white font-semibold"
               >
                 {t('plans.ctaPremium')}

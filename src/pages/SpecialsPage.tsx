@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { useAuthStore } from '../store/authStore';
 import { isFirebaseConfigured } from '../lib/firebase';
+import { trackProductUsage } from '../lib/productUsage';
 import { BottomNav } from '../components/nav/BottomNav';
 import { MenuMatchChantHeader } from '../components/layout/MenuMatchChantHeader';
 import {
@@ -23,7 +24,8 @@ export function SpecialsPage() {
   const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle);
 
   const openWithAuth = useCallback(
-    async (path: string) => {
+    async (path: string, usageKey?: string) => {
+      if (usageKey) trackProductUsage(usageKey);
       if (isFirebaseConfigured && !user) {
         await signInWithGoogle();
         if (!useAuthStore.getState().user) return;
@@ -64,7 +66,7 @@ export function SpecialsPage() {
               title={t('specials.pushpaAradhana')}
               subtitle={t('specials.hubPushpaBlurb')}
               icon="🌸"
-              onClick={() => void openWithAuth('/pushpa-aradhana')}
+              onClick={() => void openWithAuth('/pushpa-aradhana', 'action_specials_pushpa')}
             />
           </motion.div>
 
@@ -81,13 +83,13 @@ export function SpecialsPage() {
                   label: t('specials.hub108OneTime'),
                   hint: t('specials.hub108OneTimeHint'),
                   icon: <SpecialsIcon108Once />,
-                  onClick: () => void openWithAuth('/special-108-japa'),
+                  onClick: () => void openWithAuth('/special-108-japa', 'action_specials_108_once'),
                 }}
                 right={{
                   label: t('specials.hub108Weekly'),
                   hint: t('specials.hub108WeeklyHint'),
                   icon: <SpecialsIcon108Weekly />,
-                  onClick: () => void openWithAuth('/weekly-streak'),
+                  onClick: () => void openWithAuth('/weekly-streak', 'action_specials_108_weekly'),
                 }}
               />
             </SpecialsCategoryPanel>
@@ -105,13 +107,13 @@ export function SpecialsPage() {
                   label: t('specials.hubCounterManual'),
                   hint: t('specials.hubCounterManualHint'),
                   icon: <SpecialsIconManual />,
-                  onClick: () => void openWithAuth('/special-japam-counter'),
+                  onClick: () => void openWithAuth('/special-japam-counter', 'action_specials_counter_manual'),
                 }}
                 right={{
                   label: t('specials.hubCounterAuto'),
                   hint: t('specials.hubCounterAutoHint'),
                   icon: <SpecialsIconAuto />,
-                  onClick: () => void openWithAuth('/special-auto-japam-counter'),
+                  onClick: () => void openWithAuth('/special-auto-japam-counter', 'action_specials_counter_auto'),
                 }}
               />
             </SpecialsCategoryPanel>

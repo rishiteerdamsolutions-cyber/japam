@@ -102,6 +102,7 @@ import * as userLivesGrantHandler from './_handlers/user/lives-grant.js';
 import * as userRewardVideoEventHandler from './_handlers/user/reward-video-event.js';
 import * as userReactHandler from './_handlers/user/react.js';
 import * as userShareEventHandler from './_handlers/user/share-event.js';
+import * as userProductUsageHandler from './_handlers/user/product-usage.js';
 import * as userJapaPdfContactHandler from './_handlers/user/japa-pdf-contact.js';
 import * as userReferralEventHandler from './_handlers/user/referral-event.js';
 import * as userReferralAttributeHandler from './_handlers/user/referral-attribute.js';
@@ -164,6 +165,7 @@ import * as healthHandler from './_handlers/health.js';
 import * as adminAnalyticsOverviewHandler from './_handlers/admin/analytics-overview.js';
 import * as adminAnalyticsUsersHandler from './_handlers/admin/analytics-users.js';
 import * as adminAnalyticsTimeseriesHandler from './_handlers/admin/analytics-timeseries.js';
+import * as adminProductUsageHandler from './_handlers/admin/product-usage.js';
 import * as occasionsAnniversaryCreateHandler from './_handlers/occasions/anniversary-create.js';
 import * as occasionsAnniversaryJoinHandler from './_handlers/occasions/anniversary-join.js';
 import * as occasionsAnniversaryCompleteHandler from './_handlers/occasions/anniversary-complete.js';
@@ -252,6 +254,7 @@ const HANDLERS = {
   'POST user/reward-video-event': userRewardVideoEventHandler,
   'POST user/react': userReactHandler,
   'POST user/share-event': userShareEventHandler,
+  'POST user/product-usage': userProductUsageHandler,
   'POST user/japa-pdf-contact': userJapaPdfContactHandler,
   'POST user/referral-event': userReferralEventHandler,
   'POST user/referral-attribute': userReferralAttributeHandler,
@@ -301,6 +304,7 @@ const HANDLERS = {
   'GET admin/analytics-overview': adminAnalyticsOverviewHandler,
   'GET admin/analytics-users': adminAnalyticsUsersHandler,
   'GET admin/analytics-timeseries': adminAnalyticsTimeseriesHandler,
+  'GET admin/product-usage': adminProductUsageHandler,
   'GET maha-yagnas/list': mahaYagnasListHandler,
   'GET maha-yagnas/my-contribution': mahaYagnasMyContributionHandler,
   'POST maha-yagnas/join': mahaYagnasJoinHandler,

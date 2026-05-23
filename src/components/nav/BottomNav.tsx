@@ -5,6 +5,7 @@ import { useProgressStore } from '../../store/progressStore';
 import { useAuthStore } from '../../store/authStore';
 import { isFirebaseConfigured } from '../../lib/firebase';
 import { getLastPausedGame } from '../../lib/pausedGame';
+import { trackProductUsage } from '../../lib/productUsage';
 
 const NAV_LEFT = [
   {
@@ -78,6 +79,7 @@ export function BottomNav() {
   const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle);
 
   const handlePlay = async () => {
+    trackProductUsage('action_bottom_nav_play');
     if (isFirebaseConfigured && !user) {
       await signInWithGoogle();
       if (!useAuthStore.getState().user) return;
@@ -117,7 +119,13 @@ export function BottomNav() {
     return (
       <button
         type="button"
-        onClick={() => navigate(path)}
+        onClick={() => {
+          if (path === '/marathons') trackProductUsage('action_bottom_nav_marathons');
+          else if (path === '/maha-yagnas') trackProductUsage('action_bottom_nav_yagnas');
+          else if (path === '/japa') trackProductUsage('action_bottom_nav_japa');
+          else if (path === '/levels') trackProductUsage('action_bottom_nav_levels');
+          navigate(path);
+        }}
         aria-label={fullName}
         title={fullName}
         className={`flex flex-col items-center justify-center flex-1 min-w-0 py-2 px-1 gap-0.5 transition-colors ${

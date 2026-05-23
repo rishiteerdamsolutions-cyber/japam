@@ -47,6 +47,7 @@ export function AdminLayout() {
         <NavLink to="/admin/video-analytics">Video analytics</NavLink>
         <NavLink to="/admin/users">Paid users</NavLink>
         <NavLink to="/admin/analytics">Analytics</NavLink>
+        <NavLink to="/admin/product-usage">Product usage</NavLink>
         <NavLink to="/admin/app-config">App config</NavLink>
       </nav>
       <Outlet />

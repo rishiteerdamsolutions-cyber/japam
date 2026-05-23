@@ -15,6 +15,7 @@ import type { GameMode } from '../../store/gameStore';
 import { useProfileStore } from '../../store/profileStore';
 import { getProfileRingFlags } from '../../lib/membershipDisplay';
 import { landingStartJapaButtonClass } from '../../lib/landingCtaStyles';
+import { trackProductUsage } from '../../lib/productUsage';
 /** `public/japam.gif` — keyed transparent intro (640px wide) until Ista Devata Japa is tapped. */
 const ISTA_DEVATA_INTRO_GIF_SRC = '/japam.gif';
 
@@ -111,7 +112,10 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
               )}
               <button
                 type="button"
-                onClick={() => navigate('/plans')}
+                onClick={() => {
+                  trackProductUsage('action_menu_plans');
+                  navigate('/plans');
+                }}
                 className="p-2 rounded-lg text-amber-400/90 hover:bg-white/10 hover:text-amber-400 min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0"
                 aria-label={t('menu.openPlansA11y')}
               >
@@ -122,7 +126,10 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
               </span>
               <button
                 type="button"
-                onClick={() => onOpenSettings()}
+                onClick={() => {
+                  trackProductUsage('action_menu_settings');
+                  onOpenSettings();
+                }}
                 className="flex items-center justify-center min-h-[44px] min-w-[44px] rounded-lg px-0.5 hover:bg-white/5 transition-colors shrink-0"
                 title={displayName}
                 aria-label={t('menu.settings')}
@@ -176,7 +183,10 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
             initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.08 }}
-            onClick={() => navigate('/specials')}
+            onClick={() => {
+              trackProductUsage('action_menu_specials');
+              navigate('/specials');
+            }}
             className={`${landingStartJapaButtonClass} w-full min-h-[3.75rem] h-full inline-flex items-center justify-center px-1 sm:px-2 !max-w-none`}
           >
             <span className="text-white font-bold text-[clamp(0.65rem,2.8vw,0.85rem)] sm:text-sm leading-tight text-center whitespace-normal">
@@ -194,7 +204,10 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
             initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.11 }}
-            onClick={() => setIstaDevataRevealed(true)}
+            onClick={() => {
+              trackProductUsage('action_menu_ista_reveal');
+              setIstaDevataRevealed(true);
+            }}
             className={`${landingStartJapaButtonClass} w-full min-h-[3.75rem] h-full inline-flex items-center justify-center px-1 sm:px-2 !max-w-none`}
           >
             <span className="text-white font-bold text-[clamp(0.65rem,2.8vw,0.85rem)] sm:text-sm leading-tight text-center whitespace-normal">

@@ -8,6 +8,7 @@ import { isFirebaseConfigured } from '../lib/firebase';
 import type { GameMode } from '../types';
 import { DEITY_IDS, type PlayableDeityId } from '../data/deities';
 import { consumeSeoDeityHint } from '../lib/seoAttribution';
+import { trackProductUsage } from '../lib/productUsage';
 
 export function MenuPage() {
   const navigate = useNavigate();
@@ -39,6 +40,8 @@ export function MenuPage() {
       if (!useAuthStore.getState().user) return;
     }
     const level = getCurrentLevelIndex(mode);
+    if (mode === 'general') trackProductUsage('action_menu_all_devatas');
+    else trackProductUsage('action_menu_ista_select');
     navigate(`/game?mode=${encodeURIComponent(mode)}&level=${level}`);
   };
 

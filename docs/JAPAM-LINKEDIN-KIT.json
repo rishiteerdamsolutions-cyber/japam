@@ -1,0 +1,311 @@
+{
+  "schemaVersion": 1,
+  "documentPurpose": "Complete product profile for LinkedIn, marketing, press, and AI assistants. Generated from codebase May 2026.",
+  "product": {
+    "name": "Japam",
+    "nameDevanagari": "जपम",
+    "tagline": "Match & Chant",
+    "subtitle": "Digital Mantra Practice",
+    "oneLiner": "A Candy Crush–style match-3 PWA where every match plays deity mantra audio and counts toward your japa (mantra repetition) goals.",
+    "elevatorPitch": "Japam turns Hindu mantra japa into an engaging mobile game: match deity-colored gems, hear authentic mantras, track lifetime counts, join temple marathons and collective Maha Japa Yagnas, and practice in 23+ Indian languages—all without replacing temple worship.",
+    "website": "https://japam.digital",
+    "category": ["Spirituality", "Wellness", "Mobile game", "PWA", "Hindu devotional tech"],
+    "developer": {
+      "brand": "AI Developer India",
+      "founder": "Aditya Nandagiri"
+    }
+  },
+  "vision": {
+    "mission": "Make daily japa accessible, engaging, and measurable through gamification while connecting digital practice to real temples and priests.",
+    "principles": [
+      "Supports traditional practice; does not replace family puja rules or temple worship",
+      "Mobile-first, installable PWA for India and diaspora",
+      "Authentic mantra audio tied to gameplay",
+      "Community scale: marathons, yagnas, leaderboards",
+      "Multilingual by design (Indian languages)"
+    ]
+  },
+  "targetAudiences": [
+    {
+      "role": "player_seeker",
+      "description": "Devotees and casual users who chant, play levels, track japa, join community events"
+    },
+    {
+      "role": "priest",
+      "description": "Temple priests who create Japa Marathons and Maha Japa Yagnas for their temple"
+    },
+    {
+      "role": "admin",
+      "description": "Platform operators: pricing, temples, coupons, analytics, yagnas, content"
+    },
+    {
+      "role": "premium_community_member",
+      "description": "Pro/Premium users who access Apavarga community (chats, status, appointments, groups)"
+    }
+  ],
+  "coreGameplay": {
+    "genre": "Match-3 puzzle (Candy Crush style)",
+    "mechanic": "Swap adjacent gems; matches of 3+ play mantra audio and increment japa counters",
+    "modes": [
+      {
+        "id": "general",
+        "name": "All Deity Japa / General Japa",
+        "description": "Board uses all playable deities; any deity match counts toward level target"
+      },
+      {
+        "id": "deity_specific",
+        "name": "Iṣṭa Devatā Japa / Deity mode",
+        "description": "Only matches of the chosen deity count toward level japa target"
+      }
+    ],
+    "levels": {
+      "total": 1000,
+      "episodes": 100,
+      "levelsPerEpisode": 10,
+      "episodeTheme": "Sanātana-themed names (e.g. Veda Bhoomi, Upanishad Vanam, Gita Kshetra)",
+      "freeLevels": "Levels 1–5 (indices 0–4) playable without Pro; level 6+ gated behind Dakshina/Pro",
+      "perLevelConfig": ["japa target", "move limit", "grid size", "max gem types"]
+    },
+    "progression": {
+      "starsPerLevel": true,
+      "cloudSave": "Firebase Firestore via API when signed in with Google",
+      "pauseResume": "Paused game state saved to backend"
+    },
+    "wellbeing": {
+      "twentyMinuteBreakReminder": "Prompts user after ~20 minutes of continuous japa"
+    }
+  },
+  "deities": {
+    "playableCount": 22,
+    "playableIds": [
+      "rama", "shiva", "ganesh", "surya", "shakthi", "krishna", "shanmukha", "venkateswara",
+      "hanuman", "narasimha", "lakshmi", "durga", "saraswati", "ayyappan", "jagannath",
+      "dattatreya", "narayana", "iskcon", "guru", "shani", "rahu", "ketu"
+    ],
+    "hiddenGuruReserved": {
+      "ids": ["saiBaba", "bramhamgaaru"],
+      "note": "Reserved for future Gurus/Pro path; not in menus or boards; historical japa data preserved"
+    },
+    "perDeityAssets": ["mantra text (with optional 3/4/5-match variants)", "mantra audio (.m4a)", "menu artwork", "game face crop for gems", "themed color"]
+  },
+  "specialFeatures": {
+    "pushpaAradhana": {
+      "route": "/pushpa-aradhana",
+      "description": "Separate mini-game: offer digital flowers (floral flight). Counts Pushpa totals only—not match-game japa. Upachāra steps (dhyānam, padyam, snanam, etc.). Public leaderboard and WhatsApp rank cards.",
+      "freeDeity": "ganesh",
+      "proGate": "Other deities require Pro/Premium"
+    },
+    "japa108Special": {
+      "route": "/special-108-japa",
+      "description": "Dedicated 108-japa session mode with deity picker and completion tracking",
+      "freeDeity": "shakthi",
+      "proGate": "Other deities require Pro/Premium"
+    },
+    "weeklyStreak": {
+      "route": "/weekly-streak",
+      "description": "IST week-based streak plan; free users track Shakthi; Pro users plan deity per weekday",
+      "freeDeity": "shakthi"
+    },
+    "powerBoosters": {
+      "status": "In development (icons/spec complete; game logic and VFX phased)",
+      "types": ["Namaskaram (clear cell)", "Per-deity offering powers", "Free swap (no move cost)", "5-match flower bomb clearing one deity color"]
+    }
+  },
+  "communityAndTemple": {
+    "japaMarathons": {
+      "route": "/marathons",
+      "description": "Location-based discovery: State → District → City/Town/Village → Area; join temple marathon for a deity; japas in app count toward event",
+      "joinRequirement": "Pro/unlocked users only",
+      "priestCreates": true,
+      "leaderboard": true,
+      "shareRankCard": "Download image for WhatsApp Status"
+    },
+    "mahaJapaYagnas": {
+      "route": "/maha-yagnas",
+      "description": "Collective chanting goals (lakhs of japas); signed-in play adds to personal and global counters",
+      "creators": ["Admin (global or temple-scoped)", "Priest (temple-scoped)"],
+      "freeStarterYagna": "Default Rama yagna counts for all joined users; other active yagnas require Pro"
+    },
+    "apavargaCommunity": {
+      "name": "Apavarga",
+      "type": "Separate PWA under community/",
+      "access": "Pro or Premium game members; priests via username/password",
+      "features": ["Direct chats with priests", "24h Status posts", "Appointments (request → confirm → I'm coming)", "Groups with admin-only toggle", "Media via Firebase Storage"]
+    }
+  },
+  "japaTracking": {
+    "dashboardRoute": "/japa",
+    "metrics": ["Lifetime japa per deity", "Total japa", "Special 108 completions", "Pushpa flower counts (separate)"],
+    "pdfExport": {
+      "includes": ["Mantra", "Count", "Name", "Gotram", "Mobile", "Optional handwriting image"]
+    }
+  },
+  "monetization": {
+    "paymentGateway": "Cashfree (India)",
+    "plansPage": "/plans",
+    "tiers": [
+      {
+        "id": "pro",
+        "name": "Pro / Dakshina",
+        "benefits": [
+          "Unlock levels 6–1000",
+          "Join Japa Marathons",
+          "Most Maha Japa Yagnas",
+          "Full deity access in specials (108, weekly streak, Pushpa beyond free deity)",
+          "Profile green Pro ring"
+        ],
+        "pricing": "Admin-configurable (display strikethrough + actual price in paise)"
+      },
+      {
+        "id": "premium",
+        "name": "Premium",
+        "benefits": [
+          "Additional dakshina to fund mission",
+          "Apavarga community access",
+          "Profile amber Premium ring",
+          "Pro benefits included when active"
+        ],
+        "requirement": "Typically after Pro; donation flow via Cashfree"
+      }
+    ],
+    "coupons": "Admin-managed coupon codes",
+    "donorsList": "Public appreciation for supporters"
+  },
+  "authAndAccess": {
+    "primaryAuth": "Google Sign-In (Firebase Auth)",
+    "guestMode": {
+      "available": true,
+      "label": "Try Japa / Continue as guest",
+      "limits": "Limited play without cloud save for full features"
+    },
+    "priestAuth": "Username + password (linked to Google in Settings or standalone /priest-login)",
+    "adminAuth": "Admin ID + password at /admin"
+  },
+  "localization": {
+    "languageCount": 23,
+    "defaultLanguage": "te",
+    "languages": [
+      "en", "hi", "te", "ta", "ml", "kn", "bn", "mr", "gu", "pa", "or", "as", "ne", "sa", "ur",
+      "mni", "sd", "sat", "mai", "ks", "kok", "doi", "brx"
+    ],
+    "stack": "react-i18next, public/locales/{code}.json",
+    "fonts": "Noto Sans for Indic scripts (self-hosted where needed)"
+  },
+  "seoAndContent": {
+    "learnHubRoute": "/learn/:lang/:slug",
+    "englishArticleCount": 55,
+    "topics": [
+      "Per-deity mantra guides",
+      "Festival japa (Navratri, Shivaratri, Diwali, etc.)",
+      "Navagraha and graha shanti",
+      "108 japa, online japa, Pushpa Aradhana, Maha Japa Yagna",
+      "Life-topics (exams, debt relief, marriage delay, protection mantras)"
+    ],
+    "buildPipeline": ["sitemap generation", "learn page prerender", "SEO content validation scripts"]
+  },
+  "pwaAndUx": {
+    "installable": true,
+    "offline": "Service worker; offline banner when disconnected",
+    "updatePrompt": "New version available → Update Now",
+    "installPrompt": "Add to home screen",
+    "openingVideo": "Landing first-visit cinematic (public/openingvideo.mp4)",
+    "backgroundMusic": "Toggle and volume in Settings (IndexedDB)",
+    "dailyReminder": "Configurable local notification time",
+    "monitoring": ["Sentry", "Vercel Speed Insights"]
+  },
+  "adminCapabilities": {
+    "route": "/admin",
+    "tabs": [
+      "Pricing",
+      "Coupons",
+      "Temples",
+      "Marathons",
+      "Maha Yagnas",
+      "Levels config",
+      "Videos",
+      "Video analytics",
+      "Users",
+      "Analytics (daily aggregation via cron)",
+      "App config"
+    ]
+  },
+  "roadmapInRepoNotPublicByDefault": {
+    "occasionGames": {
+      "flag": "VITE_LAUNCH_OCCASION_GAMES",
+      "features": ["Birthday japa", "Wedding anniversary couple game", "Lobby/join flows"],
+      "default": "disabled in production build"
+    },
+    "multiplayerAsura": {
+      "flag": "VITE_LAUNCH_MULTIPLAYER_ASURA",
+      "description": "Two-player prototype",
+      "default": "disabled"
+    },
+    "powerBoostersPhase": "Game logic and VFX after icon approval"
+  },
+  "techStack": {
+    "frontend": ["Vite 7", "React 19", "TypeScript", "Tailwind CSS 4", "Zustand", "Framer Motion", "React Router"],
+    "backend": ["Vercel serverless (api/proxy.js)", "Node 20+"],
+    "data": ["Firebase Auth", "Firestore", "Firebase Storage (community media)"],
+    "cache": "Upstash Redis (where configured)",
+    "payments": "Cashfree",
+    "hosting": "Vercel",
+    "pwa": "vite-plugin-pwa",
+    "communityApp": "Separate Vite PWA in community/",
+    "scalabilityNote": "Stateless API + Firestore; designed for 10k+ concurrent users with appropriate Vercel/Firebase tiers"
+  },
+  "legalAndTrust": {
+    "pages": [
+      "/privacy",
+      "/terms",
+      "/refund-cancellation",
+      "/shipping-delivery",
+      "/contact",
+      "/api-docs (OpenAPI)"
+    ]
+  },
+  "linkedinCopySuggestions": {
+    "companyTagline": "Match divine gems. Hear mantras. Build your japa.",
+    "aboutShort": "Japam (japam.digital) is India's digital mantra practice platform—a match-3 game where every match chants deity mantras, tracks your japa, and connects you to temple marathons and collective Maha Japa Yagnas. 22 deities, 1000 levels, 23 languages, installable PWA.",
+    "aboutLong": "Japam reimagines Hindu japa for the smartphone era without replacing temple tradition. Players match deity-colored gems in a Candy Crush–style board; each match plays authentic mantra audio and adds to lifetime japa counts. Beyond solo play, Japam links devotees to real temples: priests run Japa Marathons by location, and Maha Japa Yagnas unite thousands toward shared chanting goals. Special modes include Pushpa Aradhana (digital flower offering), 108-japa sessions, and weekly streak plans. Pro members unlock the full level map, marathons, and the Apavarga community for priest chat and appointments. Built as a fast, installable PWA with 23 Indian languages, Cashfree payments, and cloud save via Google Sign-In. From AI Developer India.",
+    "hashtags": [
+      "#Japam",
+      "#DigitalMantra",
+      "#Japa",
+      "#Bhakti",
+      "#HinduSpirituality",
+      "#Mantra",
+      "#PWA",
+      "#MadeInIndia",
+      "#TempleTech",
+      "#DevotionalTech"
+    ],
+    "featureBulletsForPosts": [
+      "Match-3 + mantra audio on every match",
+      "22 Hindu deities with authentic mantras",
+      "1000 levels across 100 Sanātana-themed episodes",
+      "Lifetime japa dashboard + PDF export",
+      "Temple Japa Marathons by State/District/City",
+      "Maha Japa Yagnas — collective chanting goals",
+      "Pushpa Aradhana — digital flower offerings + leaderboard",
+      "108 Japa specials & weekly streak (IST)",
+      "23 Indian languages",
+      "Installable PWA — works on phone & desktop",
+      "Pro/Premium via Cashfree; Apavarga community for devotees & priests"
+    ]
+  },
+  "keyRoutes": {
+    "public": ["/", "/menu", "/game", "/levels", "/japa", "/marathons", "/maha-yagnas", "/plans", "/specials", "/learn/:lang/:slug"],
+    "authRequired": ["/pushpa-aradhana", "/special-108-japa", "/weekly-streak"],
+    "roles": {
+      "admin": "/admin",
+      "priest": "/priest",
+      "priestLogin": "/priest-login",
+      "settings": "/settings",
+      "community": "Apavarga PWA (separate deploy path via build:apavarga)"
+    }
+  },
+  "contactAndLinks": {
+    "website": "https://japam.digital",
+    "settingsContact": "WhatsApp, email, address links in Settings page"
+  }
+}

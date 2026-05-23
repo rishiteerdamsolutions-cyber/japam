@@ -7,6 +7,7 @@ import { useAuthStore } from '../store/authStore';
 import { useUnlockStore } from '../store/unlockStore';
 import { hasActivePaidAccess } from '../lib/membershipDisplay';
 import {
+  AUTO_JAPAM_SESSION_TARGET,
   FREE_JAPAM_COUNTER_DEITY,
   japamCounterDeityAllowed,
   parseJapamCounterDeity,
@@ -36,7 +37,10 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
   const [count, setCount] = useState(0);
   const [mantraBusy, setMantraBusy] = useState(false);
   const [autoRunning, setAutoRunning] = useState(false);
+  const [saveNotice, setSaveNotice] = useState<string | null>(null);
+  const [commitRequest, setCommitRequest] = useState<{ id: number; delta: number } | null>(null);
   const autoRunningRef = useRef(false);
+  const countRef = useRef(0);
   const manualBusyRef = useRef(false);
 
   const isAuto = mode === 'auto';
@@ -54,11 +58,17 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
     autoRunningRef.current = autoRunning;
   }, [autoRunning]);
 
+  useEffect(() => {
+    countRef.current = count;
+  }, [count]);
+
   const setDeity = useCallback(
     (id: DeityId) => {
       setCount(0);
       setMantraBusy(false);
       setAutoRunning(false);
+      setSaveNotice(null);
+      setCommitRequest(null);
       autoRunningRef.current = false;
       manualBusyRef.current = false;
       stopAllMantras();
@@ -84,10 +94,16 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
     let cancelled = false;
 
     const loop = async () => {
-      while (!cancelled && autoRunningRef.current) {
+      while (!cancelled && autoRunningRef.current && countRef.current < AUTO_JAPAM_SESSION_TARGET) {
         await playMantraOnce(deityId);
         if (cancelled || !autoRunningRef.current) break;
-        setCount((n) => n + 1);
+        const next = Math.min(countRef.current + 1, AUTO_JAPAM_SESSION_TARGET);
+        countRef.current = next;
+        setCount(next);
+        if (next >= AUTO_JAPAM_SESSION_TARGET) {
+          autoRunningRef.current = false;
+          setAutoRunning(false);
+        }
       }
       if (!cancelled) {
         setMantraBusy(false);
@@ -114,31 +130,56 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
     setMantraBusy(false);
   }, [deityId]);
 
-  const onToggleAuto = useCallback(() => {
+  const stopAutoPlayback = useCallback(() => {
+    autoRunningRef.current = false;
+    setAutoRunning(false);
+    stopAllMantras();
+    setMantraBusy(false);
+  }, []);
+
+  const saveAutoSession = useCallback(
+    (delta: number) => {
+      if (delta <= 0) return;
+      setCommitRequest({ id: Date.now(), delta });
+      countRef.current = 0;
+      setCount(0);
+      setSaveNotice(t('specials.autoJapamCounterSaved'));
+    },
+    [t],
+  );
+
+  const onStartAuto = useCallback(() => {
     primeAudio();
-    if (autoRunning) {
-      autoRunningRef.current = false;
-      setAutoRunning(false);
-      stopAllMantras();
-      setMantraBusy(false);
-      return;
-    }
+    setSaveNotice(null);
+    countRef.current = 0;
     setCount(0);
     autoRunningRef.current = true;
     setAutoRunning(true);
-  }, [autoRunning]);
+  }, []);
+
+  const onEndAuto = useCallback(() => {
+    primeAudio();
+    stopAutoPlayback();
+    const toSave = countRef.current;
+    if (toSave > 0) saveAutoSession(toSave);
+  }, [stopAutoPlayback, saveAutoSession]);
+
+  const onCompleteAuto = useCallback(() => {
+    stopAutoPlayback();
+    const toSave = countRef.current;
+    if (toSave > 0) saveAutoSession(toSave);
+  }, [stopAutoPlayback, saveAutoSession]);
 
   const onResetCount = useCallback(() => {
     if (autoRunning) {
-      autoRunningRef.current = false;
-      setAutoRunning(false);
-      stopAllMantras();
-      setMantraBusy(false);
+      stopAutoPlayback();
     }
     manualBusyRef.current = false;
     setMantraBusy(false);
+    countRef.current = 0;
     setCount(0);
-  }, [autoRunning]);
+    setSaveNotice(null);
+  }, [autoRunning, stopAutoPlayback]);
 
   if (!deityId) {
     return (
@@ -234,24 +275,63 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
         <p className="text-amber-200/75 text-[11px] text-center mb-3 max-w-sm">{t(blurbKey)}</p>
 
         <p
-          className="text-[clamp(3rem,18vw,4.5rem)] font-bold text-white tabular-nums leading-none mb-4"
+          className="text-[clamp(3rem,18vw,4.5rem)] font-bold text-white tabular-nums leading-none mb-1"
           aria-live="polite"
         >
           {count}
+          {isAuto ? (
+            <span className="text-[clamp(1.25rem,6vw,1.75rem)] text-amber-200/55 font-semibold">
+              {' '}
+              / {AUTO_JAPAM_SESSION_TARGET}
+            </span>
+          ) : null}
         </p>
+        {isAuto ? (
+          <p className="text-amber-200/65 text-[10px] text-center mb-3 max-w-sm leading-snug">
+            {count >= AUTO_JAPAM_SESSION_TARGET && !autoRunning
+              ? t('specials.autoJapamCounterPaused')
+              : t('specials.autoJapamCounterTargetNote')}
+          </p>
+        ) : (
+          <div className="mb-3" />
+        )}
 
         {isAuto ? (
-          <motion.button
-            type="button"
-            whileTap={{ scale: 0.99 }}
-            onClick={onToggleAuto}
-            disabled={unlockPending}
-            className={`w-full max-w-sm py-3.5 rounded-2xl font-semibold text-white disabled:opacity-50 ${
-              autoRunning ? 'bg-rose-600 hover:bg-rose-500' : 'bg-emerald-600 hover:bg-emerald-500'
-            }`}
-          >
-            {autoRunning ? t('specials.autoJapamCounterStop') : t('specials.autoJapamCounterStart')}
-          </motion.button>
+          <div className="w-full max-w-sm flex flex-col gap-2">
+            {autoRunning ? (
+              <motion.button
+                type="button"
+                whileTap={{ scale: 0.99 }}
+                onClick={onEndAuto}
+                disabled={unlockPending}
+                className="w-full py-3.5 rounded-2xl font-semibold text-white bg-rose-600 hover:bg-rose-500 disabled:opacity-50"
+              >
+                {t('specials.autoJapamCounterStop')}
+              </motion.button>
+            ) : count > 0 ? (
+              <motion.button
+                type="button"
+                whileTap={{ scale: 0.99 }}
+                onClick={onCompleteAuto}
+                disabled={unlockPending}
+                className="w-full py-3.5 rounded-2xl font-semibold text-white bg-amber-500 hover:bg-amber-400 disabled:opacity-50"
+              >
+                {count >= AUTO_JAPAM_SESSION_TARGET
+                  ? t('specials.autoJapamCounterComplete')
+                  : t('specials.autoJapamCounterSaveSession')}
+              </motion.button>
+            ) : (
+              <motion.button
+                type="button"
+                whileTap={{ scale: 0.99 }}
+                onClick={onStartAuto}
+                disabled={unlockPending}
+                className="w-full py-3.5 rounded-2xl font-semibold text-white bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50"
+              >
+                {t('specials.autoJapamCounterStart')}
+              </motion.button>
+            )}
+          </div>
         ) : (
           <motion.button
             type="button"
@@ -271,6 +351,11 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
         {mantraBusy && isAuto ? (
           <p className="mt-2 text-amber-200/60 text-[10px] text-center">{t('specials.japamCounterListening')}</p>
         ) : null}
+        {saveNotice ? (
+          <p className="mt-2 text-emerald-200/85 text-[11px] text-center" role="status">
+            {saveNotice}
+          </p>
+        ) : null}
 
         <button
           type="button"
@@ -285,6 +370,8 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
           mode={isAuto ? 'auto' : 'manual'}
           deityLabel={t(`deities.${deity.id}`)}
           sessionCount={count}
+          syncMode={isAuto ? 'commit' : 'live'}
+          commitRequest={isAuto ? commitRequest : null}
         />
       </div>
       <BottomNav />

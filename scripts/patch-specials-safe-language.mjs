@@ -13,27 +13,38 @@ const LOCALES_DIR = path.join(__dirname, '..', 'public', 'locales');
 export const SPECIALS_SAFE_COUNTER_COPY = {
   en: {
     hubCounterManual: 'One by one',
-    hubCounterManualHint: 'Next japa after the mantra ends',
-    hubCounterAutoHint: 'Until you end the session',
+    hubCounterManualHint: 'No match board—one japa at a time',
+    hubCounterAutoHint: 'Up to 108 · save when done',
     japamCounterChooseDeity:
       'Choose your Iṣṭa Devatā. One japa at a time—the mantra must finish before the next.',
     japamCounterBlurb:
-      'No board, no flowers—only your count and the mantra. Finish the mantra before the next japa.',
+      'If the match board is hard: count japas here—one tap after each full mantra, no limit.',
     autoJapamCounterBlurb:
-      'The mantra repeats until you end the session. One count after each full mantra.',
-    autoJapamCounterStop: 'End',
+      'For elders or anyone who needs help: each mantra plays on its own, up to 108. Then save to this month.',
+    autoJapamCounterTargetNote:
+      'Stops at 108. End or Complete saves your japas for this month.',
+    autoJapamCounterPaused: '108 japas done. Tap Complete to save to this month.',
+    autoJapamCounterComplete: 'Complete & save 108',
+    autoJapamCounterSaveSession: 'Save japas',
+    autoJapamCounterSaved: 'Saved to this month’s count.',
+    autoJapamCounterStop: 'End & save',
   },
   te: {
     hubCounterManual: 'ఒక్కొక్కటి',
     hubCounterManualHint: 'మంత్రం పూర్తయ్యాక మరో జపం',
-    hubCounterAutoHint: 'మీరు ముగించేవరకు',
+    hubCounterAutoHint: '108 వరకు · చివరిలో భద్రపరచండి',
     japamCounterChooseDeity:
       'మీ ఇష్ట దేవతను ఎంచుకోండి. ఒక్కొక్క జపం—మంత్రం పూర్తయ్యాకనే తదుపరి జపం.',
     japamCounterBlurb:
       'బోర్డు లేదు, పుష్పాలు లేవు—మీ లెక్క మరియు మంత్రం మాత్రమే. మంత్రం పూర్తయ్యాకనే తదుపరి జపం.',
     autoJapamCounterBlurb:
-      'మీరు ముగించేవరకు మంత్రం స్వయంగా వినిపించబడుతుంది. ప్రతి మంత్రం పూర్తయిన తర్వాత ఒక సంఖ్య.',
-    autoJapamCounterStop: 'ముగించు',
+      'వృద్ధులు లేదా సహాయం కావలసినవారికి: మంత్రం 108 వరకు స్వయంగా. తర్వాత ఈ నెలలో భద్రపరచండి.',
+    autoJapamCounterTargetNote: '108 వరకు ఆగుతుంది. ముగించు లేదా పూర్తి చేసి ఈ నెలలో భద్రపరచండి.',
+    autoJapamCounterPaused: '108 జపాలు పూర్తి. భద్రపరచడానికి పూర్తి నొక్కండి.',
+    autoJapamCounterComplete: 'పూర్తి చేసి 108 భద్రపరచు',
+    autoJapamCounterSaveSession: 'జపాలు భద్రపరచు',
+    autoJapamCounterSaved: 'ఈ నెల లెక్కలో భద్రపరచబడింది.',
+    autoJapamCounterStop: 'ముగించి భద్రపరచు',
   },
   hi: {
     hubCounterManual: 'एक-एक करके',

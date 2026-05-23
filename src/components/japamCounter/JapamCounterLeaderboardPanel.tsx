@@ -16,9 +16,19 @@ type Props = {
   mode: JapamCounterMode;
   deityLabel: string;
   sessionCount: number;
+  /** Manual: each japa updates the month. Auto: parent commits on Complete/End. */
+  syncMode?: 'live' | 'commit';
+  /** When set, adds `delta` japas for this mode (auto sessions). */
+  commitRequest?: { id: number; delta: number } | null;
 };
 
-export function JapamCounterLeaderboardPanel({ mode, deityLabel, sessionCount }: Props) {
+export function JapamCounterLeaderboardPanel({
+  mode,
+  deityLabel,
+  sessionCount,
+  syncMode = 'live',
+  commitRequest = null,
+}: Props) {
   const { t } = useTranslation();
   const user = useAuthStore((s) => s.user);
   const monthKey = useMemo(() => istMonthKeyFromDate(), []);
@@ -49,6 +59,7 @@ export function JapamCounterLeaderboardPanel({ mode, deityLabel, sessionCount }:
 
   const prevSessionCount = useRef(0);
   useEffect(() => {
+    if (syncMode !== 'live') return;
     if (!user?.uid || sessionCount <= prevSessionCount.current) {
       prevSessionCount.current = sessionCount;
       return;
@@ -61,7 +72,22 @@ export function JapamCounterLeaderboardPanel({ mode, deityLabel, sessionCount }:
       setMonthAuto(res.autoMonth);
       void refreshLeaderboard();
     });
-  }, [sessionCount, mode, user?.uid, refreshLeaderboard]);
+  }, [sessionCount, mode, user?.uid, refreshLeaderboard, syncMode]);
+
+  const lastCommitId = useRef(0);
+  useEffect(() => {
+    if (syncMode !== 'commit' || !commitRequest?.id || !user?.uid) return;
+    if (commitRequest.id === lastCommitId.current) return;
+    const delta = Math.max(0, Math.round(commitRequest.delta));
+    if (delta <= 0) return;
+    lastCommitId.current = commitRequest.id;
+    void incrementJapamCounter(mode, delta).then((res) => {
+      if (!res) return;
+      setMonthManual(res.manualMonth);
+      setMonthAuto(res.autoMonth);
+      void refreshLeaderboard();
+    });
+  }, [commitRequest, mode, user?.uid, refreshLeaderboard, syncMode]);
 
   const handleDownloadRankCard = useCallback(async () => {
     if (!user?.uid) {

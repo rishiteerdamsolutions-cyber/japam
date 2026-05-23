@@ -677,7 +677,7 @@
     "hubCounterManual": "ఒక్కొక్కటి",
     "hubCounterManualHint": "మంత్రం పూర్తయ్యాక మరో జపం",
     "hubCounterAuto": "ఆటో",
-    "hubCounterAutoHint": "మీరు ముగించేవరకు",
+    "hubCounterAutoHint": "108 వరకు · చివరిలో భద్రపరచండి",
     "hubOccasionsTitle": "పండుగలు",
     "hubOccasionsSubtitle": "పెద్ద రోజులకు జపం",
     "japa108": "108 జపం",
@@ -699,14 +699,19 @@
     "japamCounterProGate": "శక్తి ఉచితం; మిగతా దేవతలకు ప్రో లేదా ప్రీమియం కావాలి.",
     "japamCounterChangeDeity": "← దేవత మార్చండి",
     "japamCounterBlurb": "బోర్డు లేదు, పుష్పాలు లేవు—మీ లెక్క మరియు మంత్రం మాత్రమే. మంత్రం పూర్తయ్యాకనే తదుపరి జపం.",
-    "autoJapamCounterBlurb": "మీరు ముగించేవరకు మంత్రం స్వయంగా వినిపించబడుతుంది. ప్రతి మంత్రం పూర్తయిన తర్వాత ఒక సంఖ్య.",
+    "autoJapamCounterBlurb": "వృద్ధులు లేదా సహాయం కావలసినవారికి: మంత్రం 108 వరకు స్వయంగా. తర్వాత ఈ నెలలో భద్రపరచండి.",
     "japamCounterTap": "జపం",
     "japamCounterListening": "మంత్రం వినిపిస్తోంది…",
     "japamCounterReset": "కౌంట్ రీసెట్",
     "autoJapamCounterStart": "ఆటో జపం మొదలు",
-    "autoJapamCounterStop": "ముగించు",
+    "autoJapamCounterStop": "ముగించి భద్రపరచు",
     "happyBirthday": "పుట్టినరోజు",
     "anniversary": "వార్షికోత్సవం",
-    "comingSoon": "త్వరలో వస్తుంది"
+    "comingSoon": "త్వరలో వస్తుంది",
+    "autoJapamCounterTargetNote": "108 వరకు ఆగుతుంది. ముగించు లేదా పూర్తి చేసి ఈ నెలలో భద్రపరచండి.",
+    "autoJapamCounterPaused": "108 జపాలు పూర్తి. భద్రపరచడానికి పూర్తి నొక్కండి.",
+    "autoJapamCounterComplete": "పూర్తి చేసి 108 భద్రపరచు",
+    "autoJapamCounterSaveSession": "జపాలు భద్రపరచు",
+    "autoJapamCounterSaved": "ఈ నెల లెక్కలో భద్రపరచబడింది."
   }
 }

@@ -56,8 +56,8 @@ type Props = {
   sessionTarget?: number;
   /** Tap bead = one japa per finger stroke (release or one roll). */
   fastJapa?: boolean;
-  /** Finger already down on a stroke — block starting another touch-down mantra. */
-  strokeActiveRef?: RefObject<boolean>;
+  /** Mantra/haptic in progress — ignore new touches until the parent clears this. */
+  japaInFlightRef?: RefObject<boolean>;
   onStrokeDebug?: (info: { delta: number; source: string }) => void;
 };
 
@@ -94,7 +94,7 @@ export function MalaBeadSwipeZone({
   sessionCountRef,
   sessionTarget = AUTO_JAPAM_SESSION_TARGET,
   fastJapa = false,
-  strokeActiveRef,
+  japaInFlightRef,
   onStrokeDebug,
 }: Props) {
   const currentSessionCount = useCallback(
@@ -103,9 +103,9 @@ export function MalaBeadSwipeZone({
   );
 
   const canAcceptJapa = useCallback(() => {
-    if (disabled || strokeActiveRef?.current) return false;
+    if (disabled || japaInFlightRef?.current) return false;
     return currentSessionCount() < sessionTarget;
-  }, [disabled, strokeActiveRef, currentSessionCount, sessionTarget]);
+  }, [disabled, japaInFlightRef, currentSessionCount, sessionTarget]);
   const zoneRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(false);
   const [spinX, setSpinX] = useState(0);
@@ -133,6 +133,7 @@ export function MalaBeadSwipeZone({
     (source: string) => {
       if (
         disabled ||
+        japaInFlightRef?.current ||
         beadCountedRef.current ||
         !touchActiveRef.current ||
         currentSessionCount() >= sessionTarget
@@ -140,14 +141,13 @@ export function MalaBeadSwipeZone({
         return;
       }
       beadCountedRef.current = true;
-      if (strokeActiveRef) strokeActiveRef.current = false;
       onBead();
       onStrokeDebug?.({
         delta: Math.round(Math.max(0, lastYRef.current - startYRef.current)),
         source: `bead:${source}`,
       });
     },
-    [disabled, onBead, onStrokeDebug, currentSessionCount, sessionTarget, strokeActiveRef],
+    [disabled, japaInFlightRef, onBead, onStrokeDebug, currentSessionCount, sessionTarget],
   );
 
   const applyDrag = useCallback(
@@ -228,7 +228,7 @@ export function MalaBeadSwipeZone({
 
   const beginStroke = useCallback(
     (clientX: number, clientY: number) => {
-      if (disabled) return;
+      if (disabled || japaInFlightRef?.current) return;
       primeAudio();
       primeMalaHaptics();
       resetMalaBeadStrokeHaptic();
@@ -244,10 +244,9 @@ export function MalaBeadSwipeZone({
       beadCountedRef.current = false;
       setActive(onBeadPad);
 
-      if (onBeadPad && canAcceptJapa()) {
-        if (strokeActiveRef) strokeActiveRef.current = true;
+      if (onBeadPad && onBeadTouchStart && canAcceptJapa()) {
         pulseMalaBeadTouchHaptic();
-        onBeadTouchStart?.();
+        onBeadTouchStart();
       }
 
       onStrokeDebug?.({

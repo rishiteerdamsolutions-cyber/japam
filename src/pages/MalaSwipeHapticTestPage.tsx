@@ -8,6 +8,7 @@ import {
   startMalaBeadRollHaptic,
 } from '../lib/malaHaptics';
 import { primeAudio } from '../hooks/useSound';
+import { AUTO_JAPAM_SESSION_TARGET } from '../lib/japamCounterSpecial';
 
 const BACKEND_LABEL: Record<ReturnType<typeof getMalaHapticBackend>, string> = {
   vibration: 'Vibration API (Android)',
@@ -19,8 +20,10 @@ const BACKEND_LABEL: Record<ReturnType<typeof getMalaHapticBackend>, string> = {
  * Haptic + swipe prototype for manual japam counter.
  * Open on phone: `/test/mala-swipe-haptic`
  */
+const TEST_PAGE_INITIAL_COUNT = import.meta.env.DEV ? 100 : 0;
+
 export function MalaSwipeHapticTestPage() {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(TEST_PAGE_INITIAL_COUNT);
   const [backend, setBackend] = useState(getMalaHapticBackend);
   const [debugLine, setDebugLine] = useState<string | null>(null);
   const [uaShort, setUaShort] = useState('');
@@ -35,7 +38,7 @@ export function MalaSwipeHapticTestPage() {
   }, []);
 
   const onBead = useCallback(() => {
-    setCount((n) => n + 1);
+    setCount((n) => Math.min(n + 1, AUTO_JAPAM_SESSION_TARGET));
   }, []);
 
   const onTestPulse = useCallback(() => {
@@ -97,7 +100,7 @@ export function MalaSwipeHapticTestPage() {
           <button
             type="button"
             onClick={() => {
-              setCount(0);
+              setCount(TEST_PAGE_INITIAL_COUNT);
               setDebugLine(null);
             }}
             className="text-amber-300/80 hover:underline"
@@ -114,7 +117,12 @@ export function MalaSwipeHapticTestPage() {
         className="shrink-0 flex justify-center w-full"
         style={{ paddingBottom: 'max(1.75rem, env(safe-area-inset-bottom))' }}
       >
-        <ManualMalaJapaPad onBead={onBead} />
+        <ManualMalaJapaPad
+          onBead={onBead}
+          sessionCount={count}
+          sessionTarget={AUTO_JAPAM_SESSION_TARGET}
+          disabled={count >= AUTO_JAPAM_SESSION_TARGET}
+        />
       </div>
     </div>
   );

@@ -78,7 +78,9 @@ export function Japa108SpecialPage() {
       navigate('/plans');
       return;
     }
-    navigate(`/game?mode=${encodeURIComponent(deityId)}&level=0&special108=1&target=108`);
+    navigate(
+      `/special-japam-counter?deity=${encodeURIComponent(deityId)}&special108=1`,
+    );
   };
 
   if (!deityId) {

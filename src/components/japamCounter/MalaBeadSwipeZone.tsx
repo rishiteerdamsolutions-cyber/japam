@@ -2,16 +2,21 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   cancelMalaBeadStrokeHaptic,
   primeMalaHaptics,
+  confirmMalaBeadCountedHaptic,
   resetMalaBeadStrokeHaptic,
   startMalaBeadRollHaptic,
 } from '../../lib/malaHaptics';
 import { primeAudio } from '../../hooks/useSound';
 import { MalaBeadGlobe } from './MalaBeadGlobe';
 import { MalaBeadStringVisual } from './MalaBeadStringVisual';
+import { buildFixedCoreRows, fixedCoreHeightPx } from './FixedMalaCore';
+import { AUTO_JAPAM_SESSION_TARGET } from '../../lib/japamCounterSpecial';
 import {
   BEAD_SIZE_PX,
   MALA_BEAD_DIAMETER_PX,
   MALA_TOUCH_PAD_PX,
+  malaSwipeZoneHeightPx,
+  malaSwipeZoneWidthPx,
 } from './malaBeadSizes';
 
 export { BEAD_SIZE_PX, MALA_BEAD_DIAMETER_PX, MALA_TOUCH_PAD_PX } from './malaBeadSizes';
@@ -37,8 +42,16 @@ type Props = {
   onBead: () => void;
   disabled?: boolean;
   className?: string;
+  sessionCount?: number;
+  /** Stop counting at this value (manual japam: 108). */
+  sessionTarget?: number;
   onStrokeDebug?: (info: { delta: number; source: string }) => void;
 };
+
+const CORE_ROWS = buildFixedCoreRows();
+const CORE_H = fixedCoreHeightPx(CORE_ROWS);
+const ZONE_W = malaSwipeZoneWidthPx();
+const ZONE_H = malaSwipeZoneHeightPx(CORE_H);
 
 function localPoint(clientX: number, clientY: number, el: HTMLElement) {
   const r = el.getBoundingClientRect();
@@ -62,6 +75,8 @@ export function MalaBeadSwipeZone({
   onBead,
   disabled = false,
   className = '',
+  sessionCount = 0,
+  sessionTarget = AUTO_JAPAM_SESSION_TARGET,
   onStrokeDebug,
 }: Props) {
   const zoneRef = useRef<HTMLDivElement>(null);
@@ -81,12 +96,20 @@ export function MalaBeadSwipeZone({
 
   const commitBead = useCallback(
     (source: string) => {
-      if (disabled || beadCountedRef.current || !touchActiveRef.current) return;
+      if (
+        disabled ||
+        beadCountedRef.current ||
+        !touchActiveRef.current ||
+        sessionCount >= sessionTarget
+      ) {
+        return;
+      }
       beadCountedRef.current = true;
       onBead();
+      confirmMalaBeadCountedHaptic();
       onStrokeDebug?.({ delta: Math.round(Math.max(0, lastYRef.current - startYRef.current)), source: `bead:${source}` });
     },
-    [disabled, onBead, onStrokeDebug],
+    [disabled, onBead, onStrokeDebug, sessionCount, sessionTarget],
   );
 
   const applyDrag = useCallback(
@@ -171,6 +194,10 @@ export function MalaBeadSwipeZone({
       grabFiredRef.current = false;
       setActive(onBead);
 
+      if (onBead && !disabled) {
+        startMalaBeadRollHaptic();
+      }
+
       onStrokeDebug?.({
         delta: 0,
         source: onBead ? 'bead·armed' : 'outside-bead',
@@ -254,7 +281,7 @@ export function MalaBeadSwipeZone({
 
   return (
     <div
-      className={`relative touch-none select-none flex items-center justify-center overflow-visible bg-transparent ${className}`}
+      className={`relative touch-none select-none flex items-center justify-center overflow-hidden bg-transparent ${className}`}
       style={{
         touchAction: 'none',
         WebkitTouchCallout: 'none',
@@ -262,10 +289,14 @@ export function MalaBeadSwipeZone({
         userSelect: 'none',
         minWidth: hit,
         minHeight: hit,
+        width: ZONE_W,
+        height: ZONE_H,
       }}
     >
       <MalaBeadStringVisual
         spinX={spinX}
+        sessionCount={sessionCount}
+        columnWidthPx={ZONE_W}
         mainBead={
           <div
             ref={zoneRef}

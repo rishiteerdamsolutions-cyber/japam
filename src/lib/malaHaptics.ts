@@ -130,6 +130,18 @@ export function finishMalaBeadRollHaptic(): void {
   /* intentional no-op */
 }
 
+/** Short pulse when a japa counted but roll buzz never started (e.g. first gesture). */
+export function confirmMalaBeadCountedHaptic(): void {
+  if (rollBuzzStarted) return;
+  if (hasVibrationApi()) {
+    flatVibrate(120);
+    return;
+  }
+  if (isLikelyIos()) {
+    pulseViaIosSwitch();
+  }
+}
+
 export function pulseMalaBeadHeavyGrab(): boolean {
   return false;
 }

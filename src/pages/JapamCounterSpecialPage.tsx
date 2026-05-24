@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { CTA } from '../lib/ctaCopy';
 import { motion } from 'framer-motion';
 import { DEITIES, getDeity, type DeityId } from '../data/deities';
 import { useAuthStore } from '../store/authStore';
@@ -11,6 +10,7 @@ import {
   AUTO_JAPAM_SESSION_TARGET,
   FREE_JAPAM_COUNTER_DEITY,
   japamCounterDeityAllowed,
+  MANUAL_JAPAM_COUNTER_INITIAL_COUNT,
   parseJapamCounterDeity,
 } from '../lib/japamCounterSpecial';
 import { AccessBadge } from '../components/ui/AccessBadge';
@@ -20,6 +20,8 @@ import { JapamCounterLeaderboardPanel } from '../components/japamCounter/JapamCo
 import { ManualMalaJapaPad } from '../components/japamCounter/ManualMalaJapaPad';
 import { useManualJapaTouchLock } from '../hooks/useManualJapaTouchLock';
 import { playMantraOnce, primeAudio, stopAllMantras } from '../hooks/useSound';
+import { useJapaStore } from '../store/japaStore';
+import { primeMalaHaptics } from '../lib/malaHaptics';
 
 type JapamCounterMode = 'manual' | 'auto';
 
@@ -28,6 +30,8 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const deityId = useMemo(() => parseJapamCounterDeity(searchParams.get('deity')), [searchParams]);
+  const isSpecial108Session = searchParams.get('special108') === '1';
+  const special108LoggedRef = useRef(false);
   const user = useAuthStore((s) => s.user);
   const tier = useUnlockStore((s) => s.tier);
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
@@ -37,13 +41,13 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
     hasActivePaidAccess(levelsUnlocked === true, unlockExpiresAt);
   const unlockPending = Boolean(user?.uid && levelsUnlocked === null);
 
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(MANUAL_JAPAM_COUNTER_INITIAL_COUNT);
   const [mantraBusy, setMantraBusy] = useState(false);
   const [autoRunning, setAutoRunning] = useState(false);
   const [saveNotice, setSaveNotice] = useState<string | null>(null);
   const [commitRequest, setCommitRequest] = useState<{ id: number; delta: number } | null>(null);
   const autoRunningRef = useRef(false);
-  const countRef = useRef(0);
+  const countRef = useRef(MANUAL_JAPAM_COUNTER_INITIAL_COUNT);
   const manualBusyRef = useRef(false);
 
   const isAuto = mode === 'auto';
@@ -60,6 +64,12 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
   useManualJapaTouchLock(!isAuto && Boolean(deityId));
 
   useEffect(() => {
+    if (!deityId || isAuto) return;
+    primeAudio();
+    primeMalaHaptics();
+  }, [deityId, isAuto]);
+
+  useEffect(() => {
     autoRunningRef.current = autoRunning;
   }, [autoRunning]);
 
@@ -69,17 +79,23 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
 
   const setDeity = useCallback(
     (id: DeityId) => {
-      setCount(0);
+      const initial = isAuto ? 0 : MANUAL_JAPAM_COUNTER_INITIAL_COUNT;
+      countRef.current = initial;
+      setCount(initial);
       setMantraBusy(false);
       setAutoRunning(false);
       setSaveNotice(null);
       setCommitRequest(null);
       autoRunningRef.current = false;
       manualBusyRef.current = false;
+      special108LoggedRef.current = false;
       stopAllMantras();
-      setSearchParams({ deity: id }, { replace: true });
+      setSearchParams(
+        isSpecial108Session ? { deity: id, special108: '1' } : { deity: id },
+        { replace: true },
+      );
     },
-    [setSearchParams],
+    [isAuto, isSpecial108Session, setSearchParams],
   );
 
   const handleDeityCardClick = useCallback(
@@ -125,16 +141,27 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
   }, [autoRunning, deityId, isAuto]);
 
   const onManualBeadRoll = useCallback(() => {
-    if (!deityId || manualBusyRef.current) return;
+    if (!deityId || manualBusyRef.current || countRef.current >= AUTO_JAPAM_SESSION_TARGET) return;
     primeAudio();
+    primeMalaHaptics();
     manualBusyRef.current = true;
     setMantraBusy(true);
-    setCount((n) => n + 1);
+    const next = Math.min(countRef.current + 1, AUTO_JAPAM_SESSION_TARGET);
+    countRef.current = next;
+    setCount(next);
     void playMantraOnce(deityId).finally(() => {
       manualBusyRef.current = false;
       setMantraBusy(false);
     });
   }, [deityId]);
+
+  useEffect(() => {
+    if (isAuto || !isSpecial108Session || !deityId) return;
+    if (count < AUTO_JAPAM_SESSION_TARGET) return;
+    if (special108LoggedRef.current) return;
+    special108LoggedRef.current = true;
+    useJapaStore.getState().addSpecial108JapaCompletion(deityId);
+  }, [count, deityId, isAuto, isSpecial108Session]);
 
   const stopAutoPlayback = useCallback(() => {
     autoRunningRef.current = false;
@@ -184,6 +211,7 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
     setMantraBusy(false);
     countRef.current = 0;
     setCount(0);
+    special108LoggedRef.current = false;
     setSaveNotice(null);
   }, [autoRunning, stopAutoPlayback]);
 
@@ -301,10 +329,24 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
               aria-live="polite"
             >
               {count}
+              <span className="text-[0.42em] font-semibold text-amber-200/55">
+                {' '}
+                / {AUTO_JAPAM_SESSION_TARGET}
+              </span>
             </p>
             {mantraBusy ? (
               <p className="shrink-0 text-amber-200/70 text-[10px] text-center" role="status">
                 {t('specials.japamCounterListening')}
+              </p>
+            ) : count >= AUTO_JAPAM_SESSION_TARGET ? (
+              <p className="shrink-0 text-emerald-200/85 text-[10px] text-center px-2" role="status">
+                {isSpecial108Session
+                  ? t('specials.japamCounterSessionComplete108', {
+                      defaultValue: '108 japas complete — session finished.',
+                    })
+                  : t('specials.japamCounterSessionComplete', {
+                      defaultValue: 'Session complete.',
+                    })}
               </p>
             ) : (
               <p className="shrink-0 text-amber-200/55 text-[10px] text-center px-2">
@@ -337,9 +379,11 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
           style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
         >
           <ManualMalaJapaPad
-            className={mantraBusy ? 'opacity-45' : ''}
+            className={mantraBusy || count >= AUTO_JAPAM_SESSION_TARGET ? 'opacity-45' : ''}
             onBead={onManualBeadRoll}
-            disabled={mantraBusy || unlockPending}
+            sessionCount={count}
+            disabled={mantraBusy || unlockPending || count >= AUTO_JAPAM_SESSION_TARGET}
+            sessionTarget={AUTO_JAPAM_SESSION_TARGET}
           />
         </div>
       </div>

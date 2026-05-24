@@ -1,7 +1,8 @@
 import { useCallback, useEffect } from 'react';
-import { DEITY_IDS, getDeity } from '../data/deities';
+import { DEITY_IDS } from '../data/deities';
 import type { DeityId } from '../data/deities';
 import { shouldSuppressIncidentalAudio } from '../lib/authAudioGuard';
+import { mantraAudioUrlCandidates } from '../lib/mantraAudio';
 import { matchSfxUrlCandidates, type MatchSfxSelection } from '../lib/matchSfx';
 
 let audioContext: AudioContext | null = null;
@@ -97,14 +98,19 @@ async function loadMantraBufferForDeity(deity: DeityId): Promise<AudioBuffer | n
       if (ctx.state === 'suspended') {
         await ctx.resume().catch(() => {});
       }
-      const d = getDeity(deity);
-      const src = d.mantraAudio.startsWith('/') ? d.mantraAudio : '/' + d.mantraAudio;
-      const resp = await fetch(src);
-      const buf = await resp.arrayBuffer();
-      const decoded = await ctx.decodeAudioData(buf);
-      mantraBuffers.set(deity, decoded);
-      return decoded;
-    } catch {
+      for (const src of mantraAudioUrlCandidates(deity)) {
+        try {
+          const resp = await fetch(src);
+          if (!resp.ok) continue;
+          const buf = await resp.arrayBuffer();
+          if (buf.byteLength === 0) continue;
+          const decoded = await ctx.decodeAudioData(buf);
+          mantraBuffers.set(deity, decoded);
+          return decoded;
+        } catch {
+          /* try next candidate */
+        }
+      }
       return null;
     } finally {
       mantraLoadPromises.delete(deity);
@@ -210,6 +216,69 @@ export function playMantraJapaTick(deity: DeityId): void {
   void loadMantraBufferForDeity(deity);
 }
 
+function playMantraHtmlCandidates(
+  deity: DeityId,
+  playGen: number,
+  ctx: AudioContext,
+  resolve: () => void,
+): Promise<void> {
+  const urls = mantraAudioUrlCandidates(deity);
+  let idx = 0;
+
+  return new Promise<void>((outerResolve) => {
+    let done = false;
+    const complete = () => {
+      if (done) return;
+      done = true;
+      resolve();
+      outerResolve();
+    };
+
+    const tryNext = () => {
+      if (playGen !== _mantraPlayGeneration) {
+        complete();
+        return;
+      }
+      if (idx >= urls.length) {
+        playDeityTone(ctx, deity);
+        window.setTimeout(complete, 320);
+        return;
+      }
+      const src = urls[idx++];
+      const audio = new Audio(src);
+      audio.volume = 0.8;
+      audio.preload = 'auto';
+      activeMantraHtmlAudios.push(audio);
+      const cleanupHtml = () => {
+        const i = activeMantraHtmlAudios.indexOf(audio);
+        if (i >= 0) activeMantraHtmlAudios.splice(i, 1);
+      };
+      audio.addEventListener(
+        'ended',
+        () => {
+          cleanupHtml();
+          if (playGen === _mantraPlayGeneration) complete();
+        },
+        { once: true },
+      );
+      audio.addEventListener(
+        'error',
+        () => {
+          cleanupHtml();
+          tryNext();
+        },
+        { once: true },
+      );
+      void audio.play().catch(() => {
+        cleanupHtml();
+        tryNext();
+      });
+    };
+
+    tryNext();
+  });
+}
+
 /** Play one deity mantra and resolve when playback finishes (or is stopped). */
 export function playMantraOnce(deity: DeityId): Promise<void> {
   const playGen = ++_mantraPlayGeneration;
@@ -252,47 +321,7 @@ export function playMantraOnce(deity: DeityId): Promise<void> {
       });
     }
 
-    return new Promise<void>((resolve) => {
-      let done = false;
-      const complete = () => {
-        if (done) return;
-        done = true;
-        resolve();
-      };
-
-      const d = getDeity(deity);
-      const src = d.mantraAudio.startsWith('/') ? d.mantraAudio : '/' + d.mantraAudio;
-      const audio = new Audio(src);
-      audio.volume = 0.8;
-      audio.preload = 'auto';
-      activeMantraHtmlAudios.push(audio);
-      const cleanupHtml = () => {
-        const i = activeMantraHtmlAudios.indexOf(audio);
-        if (i >= 0) activeMantraHtmlAudios.splice(i, 1);
-      };
-      audio.addEventListener(
-        'ended',
-        () => {
-          cleanupHtml();
-          if (playGen === _mantraPlayGeneration) complete();
-        },
-        { once: true },
-      );
-      audio.addEventListener(
-        'error',
-        () => {
-          cleanupHtml();
-          playDeityTone(ctx, deity);
-          window.setTimeout(complete, 320);
-        },
-        { once: true },
-      );
-      void audio.play().catch(() => {
-        cleanupHtml();
-        playDeityTone(ctx, deity);
-        window.setTimeout(complete, 320);
-      });
-    });
+    return playMantraHtmlCandidates(deity, playGen, ctx, () => {});
   })();
 }
 

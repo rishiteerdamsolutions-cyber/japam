@@ -71,9 +71,9 @@ export function computeMatchSfxSelection(
 /**
  * Bump this string whenever you replace an MP3 **in place** under
  * `public/sounds/{3,4,5}match-sounds/` (same filename). Otherwise browsers may keep the old cached file.
- * Hanuman 3-match asset refreshed: 2026-05-11.
+ * Japa counter now uses the same clips as 3-match SFX (legacy root `.m4a` removed).
  */
-export const MATCH_SFX_CACHE_BUST = '20260511';
+export const MATCH_SFX_CACHE_BUST = '20260523';
 
 const TIER_FOLDER: Record<MatchStrengthTier, string> = {
   3: '3match-sounds',
@@ -88,12 +88,18 @@ const TIER_PREFIX: Record<MatchStrengthTier, string> = {
 };
 
 /** Only where filenames still differ from `DeityId` (e.g. saraswathi vs saraswati). */
+const ALL_TIERS: MatchStrengthTier[] = [3, 4, 5];
+
 const SLUG_TRIES: Partial<Record<DeityId, Partial<Record<MatchStrengthTier, readonly string[]>>>> = {
-  saraswati: {
-    3: ['saraswathi', 'saraswati'],
-    4: ['saraswathi', 'saraswati'],
-    5: ['saraswathi', 'saraswati'],
-  },
+  saraswati: Object.fromEntries(ALL_TIERS.map((t) => [t, ['saraswathi', 'saraswati']])) as Partial<
+    Record<MatchStrengthTier, readonly string[]>
+  >,
+  saiBaba: Object.fromEntries(ALL_TIERS.map((t) => [t, ['saibaba', 'saiBaba']])) as Partial<
+    Record<MatchStrengthTier, readonly string[]>
+  >,
+  bramhamgaaru: Object.fromEntries(ALL_TIERS.map((t) => [t, ['bramhamgaru', 'bramhamgaaru']])) as Partial<
+    Record<MatchStrengthTier, readonly string[]>
+  >,
 };
 
 function defaultSlug(id: DeityId): string {
@@ -111,4 +117,9 @@ export function matchSfxUrlCandidates(deity: DeityId, tier: MatchStrengthTier): 
   const fallback = `/sounds/${folder}/${prefix}ganesh.mp3${v}`;
   if (!urls.includes(fallback)) urls.push(fallback);
   return urls;
+}
+
+/** Primary 3-match mantra clip (japa counter / preload — same file as in-game 3-match SFX). */
+export function matchMantraAudioPath(deity: DeityId): string {
+  return matchSfxUrlCandidates(deity, 3)[0]!;
 }

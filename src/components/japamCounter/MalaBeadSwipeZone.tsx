@@ -43,6 +43,10 @@ export const MALA_GLOBE_ZONE_ATTR = 'data-mala-globe-zone';
 
 type Props = {
   onBead: () => void;
+  /** Finger down on bead — start mantra with haptic (before commit). */
+  onBeadTouchStart?: () => void;
+  /** Stroke ended without a counted japa — cancel in-flight mantra. */
+  onBeadStrokeCancel?: () => void;
   disabled?: boolean;
   className?: string;
   sessionCount?: number;
@@ -82,6 +86,8 @@ function isInsideBeadPad(clientX: number, clientY: number, el: HTMLElement): boo
 
 export function MalaBeadSwipeZone({
   onBead,
+  onBeadTouchStart,
+  onBeadStrokeCancel,
   disabled = false,
   className = '',
   sessionCount = 0,
@@ -200,6 +206,7 @@ export function MalaBeadSwipeZone({
   const resetStroke = useCallback(() => {
     const hadRoll = rollHapticStartedRef.current;
     const counted = beadCountedRef.current;
+    const wasOnBead = touchActiveRef.current;
 
     setActive(false);
     beadCountedRef.current = false;
@@ -208,10 +215,14 @@ export function MalaBeadSwipeZone({
     rollHapticStartedRef.current = false;
     resetMalaBeadStrokeHaptic();
 
+    if (!counted && wasOnBead) {
+      onBeadStrokeCancel?.();
+    }
+
     if (hadRoll && !counted) {
       cancelMalaBeadStrokeHaptic();
     }
-  }, []);
+  }, [onBeadStrokeCancel]);
 
   const beginStroke = useCallback(
     (clientX: number, clientY: number) => {
@@ -233,6 +244,7 @@ export function MalaBeadSwipeZone({
 
       if (onBeadPad && canAcceptJapa()) {
         pulseMalaBeadTouchHaptic();
+        onBeadTouchStart?.();
       }
 
       onStrokeDebug?.({
@@ -240,7 +252,7 @@ export function MalaBeadSwipeZone({
         source: onBeadPad ? 'bead·armed' : 'outside-bead',
       });
     },
-    [canAcceptJapa, disabled, onStrokeDebug],
+    [canAcceptJapa, disabled, onBeadTouchStart, onStrokeDebug],
   );
 
   useEffect(() => {

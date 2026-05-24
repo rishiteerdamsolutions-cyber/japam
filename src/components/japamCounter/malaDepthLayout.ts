@@ -125,3 +125,27 @@ export function buildDepthChain(arm: 'upper' | 'lower', fourthCenter: MalaPoint)
 export function buildCoreThreadPoints(coreCenters: MalaPoint[]): MalaPoint[] {
   return coreCenters;
 }
+
+/** Connector segments bead-to-bead (pole to pole), not through bead bodies. */
+export function buildCoreThreadSegments(
+  beadRadiiPx: number[],
+  centers: MalaPoint[],
+): [MalaPoint, MalaPoint][] {
+  const segments: [MalaPoint, MalaPoint][] = [];
+  for (let i = 0; i < centers.length - 1; i++) {
+    const a = centers[i]!;
+    const b = centers[i + 1]!;
+    const rA = beadRadiiPx[i]! / 2;
+    const rB = beadRadiiPx[i + 1]! / 2;
+    const dx = b.x - a.x;
+    const dy = b.y - a.y;
+    const len = Math.hypot(dx, dy) || 1;
+    const ux = dx / len;
+    const uy = dy / len;
+    segments.push([
+      { x: a.x + ux * rA, y: a.y + uy * rA },
+      { x: b.x - ux * rB, y: b.y - uy * rB },
+    ]);
+  }
+  return segments;
+}

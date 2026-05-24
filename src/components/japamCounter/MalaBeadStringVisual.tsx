@@ -6,10 +6,10 @@ import {
   fixedCoreHeightPx,
   FixedMalaCore,
   MalaThreadPath,
-  useMalaThreadGradientId,
+  useMalaThreadSvgIds,
 } from './FixedMalaCore';
 import { MalaDepthChain } from './MalaDepthChain';
-import { buildCoreThreadPoints, buildDepthChain, fourthBeadCenter } from './malaDepthLayout';
+import { buildCoreThreadSegments, buildDepthChain, fourthBeadCenter } from './malaDepthLayout';
 
 type Props = {
   spinX: number;
@@ -24,20 +24,21 @@ const MAIN = BEAD_SIZE_PX;
  * Fixed core unchanged. Depth 5–54: lower style down-left, upper mirrored up-left, exit left off screen.
  */
 export function MalaBeadStringVisual({ spinX, mainBead, columnWidthPx }: Props) {
-  const gradientId = useMalaThreadGradientId();
+  const { gradientId, glowFilterId } = useMalaThreadSvgIds();
   const coreRows = buildFixedCoreRows();
   const coreH = fixedCoreHeightPx(coreRows);
   const colW = columnWidthPx ?? MAIN;
   const corePadX = (colW - MAIN) / 2;
 
-  const { upperChain, lowerChain, threadPoints } = useMemo(() => {
+  const { upperChain, lowerChain, threadSegments } = useMemo(() => {
     const upperFourth = fourthBeadCenter(coreRows, 'upper');
     const lowerFourth = fourthBeadCenter(coreRows, 'lower');
     const corePoints = fixedCoreCenterPoints(coreRows, 0);
+    const radii = coreRows.map((row) => row.sizePx);
     return {
       upperChain: buildDepthChain('upper', upperFourth),
       lowerChain: buildDepthChain('lower', lowerFourth),
-      threadPoints: buildCoreThreadPoints(corePoints),
+      threadSegments: buildCoreThreadSegments(radii, corePoints),
     };
   }, [coreRows]);
 
@@ -55,10 +56,11 @@ export function MalaBeadStringVisual({ spinX, mainBead, columnWidthPx }: Props) 
         style={{ width: MAIN, height: coreH, marginLeft: corePadX }}
       >
         <MalaThreadPath
-          points={threadPoints}
+          segments={threadSegments}
           width={MAIN}
           height={coreH}
           gradientId={gradientId}
+          glowFilterId={glowFilterId}
         />
 
         <MalaDepthChain spinX={spinX} chain={upperChain} />

@@ -81,7 +81,7 @@ function BeadGlobe({
 
   return (
     <div
-      className="pointer-events-none leading-none"
+      className="pointer-events-none relative leading-none"
       style={{
         width: sizePx,
         height: sizePx,
@@ -91,7 +91,16 @@ function BeadGlobe({
       }}
       aria-hidden
     >
-      <MalaBeadGlobe spinX={spinX + spinOffsetDeg} sizePx={sizePx} />
+      <div
+        className="absolute inset-0 rounded-full"
+        style={{
+          zIndex: 0,
+          background: 'radial-gradient(circle at 38% 32%, #2a1608 0%, #120a04 72%, #080402 100%)',
+        }}
+      />
+      <div className="relative z-[1]">
+        <MalaBeadGlobe spinX={spinX + spinOffsetDeg} sizePx={sizePx} />
+      </div>
     </div>
   );
 }
@@ -136,7 +145,15 @@ export function FixedMalaCore({ spinX, mainBead }: Props) {
             className="pointer-events-auto relative z-[3] shrink-0 leading-none"
             style={{ width: MAIN, height: MAIN, lineHeight: 0 }}
           >
-            {mainBead}
+            <div
+              className="pointer-events-none absolute inset-0 rounded-full"
+              aria-hidden
+              style={{
+                zIndex: 0,
+                background: 'radial-gradient(circle at 38% 32%, #2a1608 0%, #120a04 72%, #080402 100%)',
+              }}
+            />
+            <div className="relative z-[1] h-full w-full">{mainBead}</div>
           </div>
         ) : (
           <ThreadRow key={i} spinX={spinX} row={row} />
@@ -147,48 +164,69 @@ export function FixedMalaCore({ spinX, mainBead }: Props) {
 }
 
 export function MalaThreadPath({
-  points,
+  segments,
   width,
   height,
   gradientId,
+  glowFilterId,
 }: {
-  points: { x: number; y: number }[];
+  segments: [{ x: number; y: number }, { x: number; y: number }][];
   width: number;
   height: number;
   gradientId: string;
+  glowFilterId: string;
 }) {
-  if (points.length < 2) return null;
+  if (segments.length === 0) return null;
 
-  const d = points
-    .map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(2)} ${p.y.toFixed(2)}`)
+  const d = segments
+    .map(([from, to]) => `M ${from.x.toFixed(2)} ${from.y.toFixed(2)} L ${to.x.toFixed(2)} ${to.y.toFixed(2)}`)
     .join(' ');
 
   return (
     <svg
-      className="absolute left-0 top-0 z-0 pointer-events-none overflow-hidden"
+      className="absolute left-0 top-0 z-0 pointer-events-none overflow-visible"
       width={width}
       height={height}
       aria-hidden
     >
       <defs>
         <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="rgba(36,20,10,0.45)" />
-          <stop offset="50%" stopColor="rgba(110,72,38,0.88)" />
-          <stop offset="100%" stopColor="rgba(36,20,10,0.45)" />
+          <stop offset="0%" stopColor="#8a5a12" />
+          <stop offset="35%" stopColor="#f0c84a" />
+          <stop offset="65%" stopColor="#ffe9a8" />
+          <stop offset="100%" stopColor="#9a6818" />
         </linearGradient>
+        <filter id={glowFilterId} x="-40%" y="-10%" width="180%" height="120%">
+          <feGaussianBlur stdDeviation="1.4" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
       </defs>
       <path
         d={d}
         fill="none"
         stroke={`url(#${gradientId})`}
-        strokeWidth={2}
+        strokeWidth={2.25}
         strokeLinecap="round"
         strokeLinejoin="round"
+        filter={`url(#${glowFilterId})`}
+        opacity={0.95}
       />
     </svg>
   );
 }
 
+export function useMalaThreadSvgIds(): { gradientId: string; glowFilterId: string } {
+  const raw = useId().replace(/:/g, '');
+  return {
+    gradientId: `mala-thread-gold-${raw}`,
+    glowFilterId: `mala-thread-glow-${raw}`,
+  };
+}
+
+/** @deprecated */
 export function useMalaThreadGradientId(): string {
-  return useId();
+  return useMalaThreadSvgIds().gradientId;
 }

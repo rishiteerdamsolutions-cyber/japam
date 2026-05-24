@@ -3,6 +3,8 @@ import { MalaBeadSwipeZone } from './MalaBeadSwipeZone';
 
 type Props = {
   onBead: () => void;
+  onBeadTouchStart?: () => void;
+  onBeadStrokeCancel?: () => void;
   disabled?: boolean;
   className?: string;
   sessionCount?: number;
@@ -19,6 +21,8 @@ type Props = {
  */
 export function ManualMalaJapaPad({
   onBead,
+  onBeadTouchStart,
+  onBeadStrokeCancel,
   disabled = false,
   className = '',
   sessionCount = 0,
@@ -30,6 +34,8 @@ export function ManualMalaJapaPad({
   return (
     <MalaBeadSwipeZone
       onBead={onBead}
+      onBeadTouchStart={onBeadTouchStart}
+      onBeadStrokeCancel={onBeadStrokeCancel}
       disabled={disabled}
       className={className}
       sessionCount={sessionCount}

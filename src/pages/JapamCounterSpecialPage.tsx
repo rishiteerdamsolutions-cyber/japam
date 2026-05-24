@@ -48,6 +48,7 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
   const autoRunningRef = useRef(false);
   const countRef = useRef(MANUAL_JAPAM_COUNTER_INITIAL_COUNT);
   const manualBusyRef = useRef(false);
+  const manualMantraPlayRef = useRef<Promise<void> | null>(null);
 
   const isAuto = mode === 'auto';
   const titleKey = isAuto ? 'specials.autoJapamCounterTitle' : 'specials.japamCounterTitle';
@@ -139,24 +140,34 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
     };
   }, [autoRunning, deityId, isAuto]);
 
-  const onManualBeadRoll = useCallback(() => {
+  const onManualBeadTouchStart = useCallback(() => {
     if (!deityId || manualBusyRef.current || countRef.current >= AUTO_JAPAM_SESSION_TARGET) return;
     manualBusyRef.current = true;
-    setMantraBusy(true);
+    manualMantraPlayRef.current = playMantraOnce(deityId);
+  }, [deityId]);
+
+  const onManualBeadStrokeCancel = useCallback(() => {
+    if (!manualBusyRef.current) return;
+    stopAllMantras();
+    manualMantraPlayRef.current = null;
+    manualBusyRef.current = false;
+  }, []);
+
+  const onManualBeadRoll = useCallback(() => {
+    if (!deityId || countRef.current >= AUTO_JAPAM_SESSION_TARGET) return;
 
     void (async () => {
-      try {
-        await new Promise<void>((r) => window.setTimeout(r, 25));
-        await playMantraOnce(deityId);
-        if (countRef.current < AUTO_JAPAM_SESSION_TARGET) {
-          const next = Math.min(countRef.current + 1, AUTO_JAPAM_SESSION_TARGET);
-          countRef.current = next;
-          setCount(next);
-        }
-      } finally {
-        manualBusyRef.current = false;
-        setMantraBusy(false);
+      const play = manualMantraPlayRef.current;
+      if (play) {
+        await play.catch(() => {});
       }
+      if (countRef.current < AUTO_JAPAM_SESSION_TARGET) {
+        const next = Math.min(countRef.current + 1, AUTO_JAPAM_SESSION_TARGET);
+        countRef.current = next;
+        setCount(next);
+      }
+      manualMantraPlayRef.current = null;
+      manualBusyRef.current = false;
     })();
   }, [deityId]);
 
@@ -213,6 +224,7 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
       stopAutoPlayback();
     }
     manualBusyRef.current = false;
+    manualMantraPlayRef.current = null;
     setMantraBusy(false);
     countRef.current = 0;
     setCount(0);
@@ -360,22 +372,11 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
               </p>
               <p
                 className={`text-amber-200/55 text-[10px] text-center leading-snug transition-opacity duration-150 ${
-                  count >= AUTO_JAPAM_SESSION_TARGET || mantraBusy ? 'opacity-0' : 'opacity-100'
+                  count >= AUTO_JAPAM_SESSION_TARGET ? 'opacity-0' : 'opacity-100'
                 }`}
-                aria-hidden={count >= AUTO_JAPAM_SESSION_TARGET || mantraBusy}
+                aria-hidden={count >= AUTO_JAPAM_SESSION_TARGET}
               >
                 {t('specials.japamCounterMalaHint')}
-              </p>
-              <p
-                className={`absolute inset-x-0 top-0 text-amber-200/70 text-[10px] text-center leading-snug transition-opacity duration-150 ${
-                  mantraBusy && count < AUTO_JAPAM_SESSION_TARGET
-                    ? 'opacity-100'
-                    : 'opacity-0 pointer-events-none'
-                }`}
-                role={mantraBusy ? 'status' : undefined}
-                aria-hidden={!mantraBusy || count >= AUTO_JAPAM_SESSION_TARGET}
-              >
-                {t('specials.japamCounterListening')}
               </p>
             </div>
 
@@ -404,12 +405,14 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
           style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
         >
           <ManualMalaJapaPad
-            className={count >= AUTO_JAPAM_SESSION_TARGET || mantraBusy ? 'opacity-45' : ''}
+            className={count >= AUTO_JAPAM_SESSION_TARGET ? 'opacity-45' : ''}
             onBead={onManualBeadRoll}
+            onBeadTouchStart={onManualBeadTouchStart}
+            onBeadStrokeCancel={onManualBeadStrokeCancel}
             sessionCount={count}
             sessionCountRef={countRef}
             japaInFlightRef={manualBusyRef}
-            disabled={unlockPending || mantraBusy || count >= AUTO_JAPAM_SESSION_TARGET}
+            disabled={unlockPending || count >= AUTO_JAPAM_SESSION_TARGET}
             sessionTarget={AUTO_JAPAM_SESSION_TARGET}
           />
         </div>

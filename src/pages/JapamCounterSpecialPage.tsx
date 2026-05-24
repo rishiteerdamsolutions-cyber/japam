@@ -47,8 +47,7 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
   const [commitRequest, setCommitRequest] = useState<{ id: number; delta: number } | null>(null);
   const autoRunningRef = useRef(false);
   const countRef = useRef(MANUAL_JAPAM_COUNTER_INITIAL_COUNT);
-  const manualBusyRef = useRef(false);
-  const manualMantraPlayRef = useRef<Promise<void> | null>(null);
+  const strokeActiveRef = useRef(false);
 
   const isAuto = mode === 'auto';
   const titleKey = isAuto ? 'specials.autoJapamCounterTitle' : 'specials.japamCounterTitle';
@@ -87,7 +86,7 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
       setSaveNotice(null);
       setCommitRequest(null);
       autoRunningRef.current = false;
-      manualBusyRef.current = false;
+      strokeActiveRef.current = false;
       special108LoggedRef.current = false;
       stopAllMantras();
       setSearchParams(
@@ -141,34 +140,21 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
   }, [autoRunning, deityId, isAuto]);
 
   const onManualBeadTouchStart = useCallback(() => {
-    if (!deityId || manualBusyRef.current || countRef.current >= AUTO_JAPAM_SESSION_TARGET) return;
-    manualBusyRef.current = true;
-    manualMantraPlayRef.current = playMantraOnce(deityId);
+    if (!deityId || countRef.current >= AUTO_JAPAM_SESSION_TARGET) return;
+    void playMantraOnce(deityId);
   }, [deityId]);
 
   const onManualBeadStrokeCancel = useCallback(() => {
-    if (!manualBusyRef.current) return;
+    strokeActiveRef.current = false;
     stopAllMantras();
-    manualMantraPlayRef.current = null;
-    manualBusyRef.current = false;
   }, []);
 
   const onManualBeadRoll = useCallback(() => {
     if (!deityId || countRef.current >= AUTO_JAPAM_SESSION_TARGET) return;
-
-    void (async () => {
-      const play = manualMantraPlayRef.current;
-      if (play) {
-        await play.catch(() => {});
-      }
-      if (countRef.current < AUTO_JAPAM_SESSION_TARGET) {
-        const next = Math.min(countRef.current + 1, AUTO_JAPAM_SESSION_TARGET);
-        countRef.current = next;
-        setCount(next);
-      }
-      manualMantraPlayRef.current = null;
-      manualBusyRef.current = false;
-    })();
+    const next = Math.min(countRef.current + 1, AUTO_JAPAM_SESSION_TARGET);
+    countRef.current = next;
+    setCount(next);
+    strokeActiveRef.current = false;
   }, [deityId]);
 
   useEffect(() => {
@@ -223,8 +209,7 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
     if (autoRunning) {
       stopAutoPlayback();
     }
-    manualBusyRef.current = false;
-    manualMantraPlayRef.current = null;
+    strokeActiveRef.current = false;
     setMantraBusy(false);
     countRef.current = 0;
     setCount(0);
@@ -411,7 +396,7 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
             onBeadStrokeCancel={onManualBeadStrokeCancel}
             sessionCount={count}
             sessionCountRef={countRef}
-            japaInFlightRef={manualBusyRef}
+            strokeActiveRef={strokeActiveRef}
             disabled={unlockPending || count >= AUTO_JAPAM_SESSION_TARGET}
             sessionTarget={AUTO_JAPAM_SESSION_TARGET}
           />

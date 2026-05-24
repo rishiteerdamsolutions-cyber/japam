@@ -32,12 +32,12 @@ export const MALA_GLOBE_DIAMETER_PX = MALA_BEAD_DIAMETER_PX;
 /** @deprecated */
 export const MALA_GLOBE_HIT_DIAMETER_PX = MALA_TOUCH_PAD_PX;
 
-/** Ceremonial swipe path (haptic test page). */
-const BEAD_SWIPE_PX = 22;
-const SWIPE_COMMIT_P = 0.55;
-const SWIPE_COMMIT_END_P = 0.42;
+/** Fast roll — short stroke to commit one japa. */
+const BEAD_SWIPE_PX = 10;
+const SWIPE_COMMIT_P = 0.28;
+const SWIPE_COMMIT_END_P = 0.18;
 const MIN_DOWN_PX = 2;
-const BEAD_ROLL_SENS = 0.9;
+const BEAD_ROLL_SENS = 1.15;
 
 export const MALA_GLOBE_ZONE_ATTR = 'data-mala-globe-zone';
 
@@ -56,8 +56,8 @@ type Props = {
   sessionTarget?: number;
   /** Tap bead = one japa per finger stroke (release or one roll). */
   fastJapa?: boolean;
-  /** Mantra playing — block another commit until finished. */
-  japaInFlightRef?: RefObject<boolean>;
+  /** Finger already down on a stroke — block starting another touch-down mantra. */
+  strokeActiveRef?: RefObject<boolean>;
   onStrokeDebug?: (info: { delta: number; source: string }) => void;
 };
 
@@ -94,7 +94,7 @@ export function MalaBeadSwipeZone({
   sessionCountRef,
   sessionTarget = AUTO_JAPAM_SESSION_TARGET,
   fastJapa = false,
-  japaInFlightRef,
+  strokeActiveRef,
   onStrokeDebug,
 }: Props) {
   const currentSessionCount = useCallback(
@@ -103,9 +103,9 @@ export function MalaBeadSwipeZone({
   );
 
   const canAcceptJapa = useCallback(() => {
-    if (disabled || japaInFlightRef?.current) return false;
+    if (disabled || strokeActiveRef?.current) return false;
     return currentSessionCount() < sessionTarget;
-  }, [disabled, japaInFlightRef, currentSessionCount, sessionTarget]);
+  }, [disabled, strokeActiveRef, currentSessionCount, sessionTarget]);
   const zoneRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(false);
   const [spinX, setSpinX] = useState(0);
@@ -135,19 +135,19 @@ export function MalaBeadSwipeZone({
         disabled ||
         beadCountedRef.current ||
         !touchActiveRef.current ||
-        japaInFlightRef?.current ||
         currentSessionCount() >= sessionTarget
       ) {
         return;
       }
       beadCountedRef.current = true;
+      if (strokeActiveRef) strokeActiveRef.current = false;
       onBead();
       onStrokeDebug?.({
         delta: Math.round(Math.max(0, lastYRef.current - startYRef.current)),
         source: `bead:${source}`,
       });
     },
-    [disabled, onBead, onStrokeDebug, currentSessionCount, sessionTarget, japaInFlightRef],
+    [disabled, onBead, onStrokeDebug, currentSessionCount, sessionTarget, strokeActiveRef],
   );
 
   const applyDrag = useCallback(
@@ -167,15 +167,17 @@ export function MalaBeadSwipeZone({
       if (Math.abs(dx) < 0.05 && Math.abs(dy) < 0.05 && !endStroke) return;
 
       spinXRef.current -= dy * BEAD_ROLL_SENS;
-      scheduleSpinPaint();
+      if (fastJapa) {
+        setSpinX(spinXRef.current);
+      } else {
+        scheduleSpinPaint();
+      }
 
       if (fastJapa) {
         const p = Math.min(1, downPx / BEAD_SWIPE_PX);
         if (!beadCountedRef.current) {
-          if (p >= SWIPE_COMMIT_P) {
+          if (p >= SWIPE_COMMIT_P || endStroke) {
             commitBead(source);
-          } else if (endStroke) {
-            commitBead(`${source}-stroke`);
           }
         }
         onStrokeDebug?.({
@@ -243,6 +245,7 @@ export function MalaBeadSwipeZone({
       setActive(onBeadPad);
 
       if (onBeadPad && canAcceptJapa()) {
+        if (strokeActiveRef) strokeActiveRef.current = true;
         pulseMalaBeadTouchHaptic();
         onBeadTouchStart?.();
       }
@@ -372,7 +375,7 @@ export function MalaBeadSwipeZone({
               onPointerCancel={endPointer}
               className={`relative h-full w-full touch-none select-none leading-none ${
                 disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-grab active:cursor-grabbing'
-              } ${active && !disabled ? 'scale-[1.02] transition-transform' : ''}`}
+              } ${active && !disabled ? 'scale-[1.02]' : ''}`}
               style={{
                 touchAction: 'none',
                 WebkitTouchCallout: 'none',

@@ -50,8 +50,10 @@ type Props = {
   sessionCountRef?: RefObject<number>;
   /** Stop counting at this value (manual japam: 108). */
   sessionTarget?: number;
-  /** Tap bead = one japa instantly (easier than physical mala). */
+  /** Tap bead = one japa per finger stroke (release or one roll). */
   fastJapa?: boolean;
+  /** Mantra playing — block another commit until finished. */
+  japaInFlightRef?: RefObject<boolean>;
   onStrokeDebug?: (info: { delta: number; source: string }) => void;
 };
 
@@ -86,12 +88,18 @@ export function MalaBeadSwipeZone({
   sessionCountRef,
   sessionTarget = AUTO_JAPAM_SESSION_TARGET,
   fastJapa = false,
+  japaInFlightRef,
   onStrokeDebug,
 }: Props) {
   const currentSessionCount = useCallback(
     () => sessionCountRef?.current ?? sessionCount,
     [sessionCount, sessionCountRef],
   );
+
+  const canAcceptJapa = useCallback(() => {
+    if (disabled || japaInFlightRef?.current) return false;
+    return currentSessionCount() < sessionTarget;
+  }, [disabled, japaInFlightRef, currentSessionCount, sessionTarget]);
   const zoneRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(false);
   const [spinX, setSpinX] = useState(0);
@@ -121,6 +129,7 @@ export function MalaBeadSwipeZone({
         disabled ||
         beadCountedRef.current ||
         !touchActiveRef.current ||
+        japaInFlightRef?.current ||
         currentSessionCount() >= sessionTarget
       ) {
         return;
@@ -132,7 +141,7 @@ export function MalaBeadSwipeZone({
         source: `bead:${source}`,
       });
     },
-    [disabled, onBead, onStrokeDebug, currentSessionCount, sessionTarget],
+    [disabled, onBead, onStrokeDebug, currentSessionCount, sessionTarget, japaInFlightRef],
   );
 
   const applyDrag = useCallback(
@@ -155,9 +164,17 @@ export function MalaBeadSwipeZone({
       scheduleSpinPaint();
 
       if (fastJapa) {
+        const p = Math.min(1, downPx / BEAD_SWIPE_PX);
+        if (!beadCountedRef.current) {
+          if (p >= SWIPE_COMMIT_P) {
+            commitBead(source);
+          } else if (endStroke) {
+            commitBead(`${source}-stroke`);
+          }
+        }
         onStrokeDebug?.({
           delta: Math.round(downPx),
-          source: `${source}·spin·x${Math.round(spinXRef.current)}°`,
+          source: `${source}·${Math.round(p * 100)}%·x${Math.round(spinXRef.current)}°`,
         });
         return;
       }
@@ -214,14 +231,8 @@ export function MalaBeadSwipeZone({
       beadCountedRef.current = false;
       setActive(onBeadPad);
 
-      if (onBeadPad && !disabled) {
+      if (onBeadPad && canAcceptJapa()) {
         pulseMalaBeadTouchHaptic();
-      }
-
-      if (fastJapa && onBeadPad) {
-        commitBead('tap');
-        onStrokeDebug?.({ delta: 0, source: 'bead·tap' });
-        return;
       }
 
       onStrokeDebug?.({
@@ -229,7 +240,7 @@ export function MalaBeadSwipeZone({
         source: onBeadPad ? 'bead·armed' : 'outside-bead',
       });
     },
-    [commitBead, disabled, fastJapa, onStrokeDebug],
+    [canAcceptJapa, disabled, onStrokeDebug],
   );
 
   useEffect(() => {
@@ -337,7 +348,11 @@ export function MalaBeadSwipeZone({
               ref={zoneRef}
               {...{ [MALA_GLOBE_ZONE_ATTR]: '' }}
               role="button"
-              aria-label={fastJapa ? 'Rudraksha bead — tap for each japa' : 'Rudraksha bead — swipe down to roll'}
+              aria-label={
+                fastJapa
+                  ? 'Rudraksha bead — roll or release for one japa'
+                  : 'Rudraksha bead — swipe down to roll'
+              }
               aria-disabled={disabled}
               onPointerDown={onPointerDown}
               onPointerMove={onPointerMove}
@@ -365,7 +380,11 @@ export function MalaBeadSwipeZone({
         />
       </div>
       <span className="sr-only">
-        {fastJapa ? 'Tap the bead for each japa' : active ? 'Rolling rudraksha' : 'Swipe down on the bead'}
+        {fastJapa
+          ? 'One japa per roll or finger lift on the bead'
+          : active
+            ? 'Rolling rudraksha'
+            : 'Swipe down on the bead'}
       </span>
     </div>
   );

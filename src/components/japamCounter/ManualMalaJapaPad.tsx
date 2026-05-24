@@ -8,8 +8,9 @@ type Props = {
   sessionCount?: number;
   sessionCountRef?: RefObject<number>;
   sessionTarget?: number;
-  /** Tap-to-count (default for manual japam counter). */
+  /** One japa per finger stroke (default for manual japam counter). */
   fastJapa?: boolean;
+  japaInFlightRef?: RefObject<boolean>;
 };
 
 /**
@@ -24,6 +25,7 @@ export function ManualMalaJapaPad({
   sessionCountRef,
   sessionTarget,
   fastJapa = true,
+  japaInFlightRef,
 }: Props) {
   return (
     <MalaBeadSwipeZone
@@ -34,6 +36,7 @@ export function ManualMalaJapaPad({
       sessionCountRef={sessionCountRef}
       sessionTarget={sessionTarget}
       fastJapa={fastJapa}
+      japaInFlightRef={japaInFlightRef}
     />
   );
 }

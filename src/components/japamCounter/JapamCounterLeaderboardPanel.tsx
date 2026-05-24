@@ -81,13 +81,17 @@ export function JapamCounterLeaderboardPanel({
     }
     const delta = sessionCount - prevSessionCount.current;
     prevSessionCount.current = sessionCount;
+    if (mode === 'manual') {
+      setMonthManual((v) => v + delta);
+    } else {
+      setMonthAuto((v) => v + delta);
+    }
     void incrementJapamCounter(mode, deityId, delta).then((res) => {
       if (!res) return;
       setMonthManual(res.manualMonth);
       setMonthAuto(res.autoMonth);
-      void refreshLeaderboard();
     });
-  }, [sessionCount, mode, deityId, user?.uid, refreshLeaderboard, syncMode]);
+  }, [sessionCount, mode, deityId, user?.uid, syncMode]);
 
   const lastCommitId = useRef(0);
   useEffect(() => {
@@ -180,7 +184,7 @@ export function JapamCounterLeaderboardPanel({
 
   if (variant === 'minimal') {
     return (
-      <div className="w-full max-w-sm shrink-0 px-1" aria-live="polite">
+      <div className="w-full max-w-sm shrink-0 px-1" aria-live="off">
         {user ? (
           <p className="text-amber-200/75 text-[10px] text-center tabular-nums leading-snug">
             {t('japamCounter.yourMonthDeity', {

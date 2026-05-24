@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type RefObject } from 'react';
 import {
   cancelMalaBeadStrokeHaptic,
   primeMalaHaptics,
@@ -9,6 +9,7 @@ import {
 import { primeAudio } from '../../hooks/useSound';
 import { MalaBeadGlobe } from './MalaBeadGlobe';
 import { MalaBeadStringVisual } from './MalaBeadStringVisual';
+import { MalaSaffronSessionOverlay } from './MalaSaffronSessionOverlay';
 import { buildFixedCoreRows, fixedCoreHeightPx } from './FixedMalaCore';
 import { AUTO_JAPAM_SESSION_TARGET } from '../../lib/japamCounterSpecial';
 import {
@@ -32,7 +33,10 @@ export const MALA_GLOBE_DIAMETER_PX = MALA_BEAD_DIAMETER_PX;
 /** @deprecated */
 export const MALA_GLOBE_HIT_DIAMETER_PX = MALA_TOUCH_PAD_PX;
 
-const BEAD_SWIPE_PX = 36;
+/** Shorter stroke so the japa count updates sooner. */
+const BEAD_SWIPE_PX = 22;
+const SWIPE_COMMIT_P = 0.55;
+const SWIPE_COMMIT_END_P = 0.42;
 const MIN_DOWN_PX = 2;
 const BEAD_ROLL_SENS = 0.9;
 
@@ -43,6 +47,8 @@ type Props = {
   disabled?: boolean;
   className?: string;
   sessionCount?: number;
+  /** Authoritative count for cap checks (avoids stale render blocking commits). */
+  sessionCountRef?: RefObject<number>;
   /** Stop counting at this value (manual japam: 108). */
   sessionTarget?: number;
   onStrokeDebug?: (info: { delta: number; source: string }) => void;
@@ -76,9 +82,14 @@ export function MalaBeadSwipeZone({
   disabled = false,
   className = '',
   sessionCount = 0,
+  sessionCountRef,
   sessionTarget = AUTO_JAPAM_SESSION_TARGET,
   onStrokeDebug,
 }: Props) {
+  const currentSessionCount = useCallback(
+    () => sessionCountRef?.current ?? sessionCount,
+    [sessionCount, sessionCountRef],
+  );
   const zoneRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(false);
   const [spinX, setSpinX] = useState(0);
@@ -100,7 +111,7 @@ export function MalaBeadSwipeZone({
         disabled ||
         beadCountedRef.current ||
         !touchActiveRef.current ||
-        sessionCount >= sessionTarget
+        currentSessionCount() >= sessionTarget
       ) {
         return;
       }
@@ -109,7 +120,7 @@ export function MalaBeadSwipeZone({
       confirmMalaBeadCountedHaptic();
       onStrokeDebug?.({ delta: Math.round(Math.max(0, lastYRef.current - startYRef.current)), source: `bead:${source}` });
     },
-    [disabled, onBead, onStrokeDebug, sessionCount, sessionTarget],
+    [disabled, onBead, onStrokeDebug, currentSessionCount, sessionTarget],
   );
 
   const applyDrag = useCallback(
@@ -149,9 +160,9 @@ export function MalaBeadSwipeZone({
         source: `${source}·${Math.round(p * 100)}%·x${Math.round(spinXRef.current)}°`,
       });
 
-      if (p >= 1) {
+      if (p >= SWIPE_COMMIT_P) {
         commitBead(source);
-      } else if (endStroke && p >= 0.72 && downPx > Math.abs(clientX - startXRef.current)) {
+      } else if (endStroke && p >= SWIPE_COMMIT_END_P && downPx > Math.abs(clientX - startXRef.current)) {
         commitBead(`${source}-end`);
       }
     },
@@ -281,7 +292,7 @@ export function MalaBeadSwipeZone({
 
   return (
     <div
-      className={`relative touch-none select-none flex items-center justify-center overflow-hidden bg-transparent ${className}`}
+      className={`relative touch-none select-none flex items-center justify-center overflow-visible bg-transparent ${className}`}
       style={{
         touchAction: 'none',
         WebkitTouchCallout: 'none',
@@ -293,11 +304,7 @@ export function MalaBeadSwipeZone({
         height: ZONE_H,
       }}
     >
-      <MalaBeadStringVisual
-        spinX={spinX}
-        sessionCount={sessionCount}
-        columnWidthPx={ZONE_W}
-        mainBead={
+      <MalaBeadStringVisual spinX={spinX} columnWidthPx={ZONE_W} mainBead={
           <div
             ref={zoneRef}
             {...{ [MALA_GLOBE_ZONE_ATTR]: '' }}
@@ -322,6 +329,11 @@ export function MalaBeadSwipeZone({
             <MalaBeadGlobe spinX={spinX} sizePx={BEAD_SIZE_PX} />
           </div>
         }
+      />
+      <MalaSaffronSessionOverlay
+        sessionCount={sessionCount}
+        columnWidthPx={ZONE_W}
+        coreHeightPx={CORE_H}
       />
       <span className="sr-only">{active ? 'Rolling rudraksha' : 'Swipe down on the bead'}</span>
     </div>

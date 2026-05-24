@@ -81,27 +81,53 @@ export function playPushpaUpacharaPlaceholder(stepIndex: number) {
 }
 
 const mantraBuffers = new Map<DeityId, AudioBuffer>();
+const mantraLoadPromises = new Map<DeityId, Promise<AudioBuffer | null>>();
 let mantraLoadAttempted = false;
+
+async function loadMantraBufferForDeity(deity: DeityId): Promise<AudioBuffer | null> {
+  const cached = mantraBuffers.get(deity);
+  if (cached) return cached;
+
+  const pending = mantraLoadPromises.get(deity);
+  if (pending) return pending;
+
+  const load = (async () => {
+    try {
+      const ctx = getAudioContext();
+      if (ctx.state === 'suspended') {
+        await ctx.resume().catch(() => {});
+      }
+      const d = getDeity(deity);
+      const src = d.mantraAudio.startsWith('/') ? d.mantraAudio : '/' + d.mantraAudio;
+      const resp = await fetch(src);
+      const buf = await resp.arrayBuffer();
+      const decoded = await ctx.decodeAudioData(buf);
+      mantraBuffers.set(deity, decoded);
+      return decoded;
+    } catch {
+      return null;
+    } finally {
+      mantraLoadPromises.delete(deity);
+    }
+  })();
+
+  mantraLoadPromises.set(deity, load);
+  return load;
+}
+
+/** Eager-load one deity mantra so the first japa plays without fetch/decode delay. */
+export function ensureMantraPreloaded(deity: DeityId): void {
+  void loadMantraBufferForDeity(deity);
+}
 
 async function preloadMantras() {
   if (mantraLoadAttempted) return;
   mantraLoadAttempted = true;
   const ctx = getAudioContext();
   if (ctx.state === 'suspended') {
-    // decodeAudioData + playback are more reliable after resume
     await ctx.resume().catch(() => {});
   }
-  const deities: DeityId[] = DEITY_IDS;
-  for (const id of deities) {
-    try {
-      const d = getDeity(id);
-      const src = d.mantraAudio.startsWith('/') ? d.mantraAudio : '/' + d.mantraAudio;
-      const resp = await fetch(src);
-      const buf = await resp.arrayBuffer();
-      const decoded = await ctx.decodeAudioData(buf);
-      mantraBuffers.set(id, decoded);
-    } catch {}
-  }
+  await Promise.all(DEITY_IDS.map((id) => loadMantraBufferForDeity(id)));
 }
 
 const activeSources: AudioBufferSourceNode[] = [];
@@ -112,79 +138,7 @@ function playMantraAudio(deity: DeityId) {
   void playMantraOnce(deity);
 }
 
-/** Play one deity mantra and resolve when playback finishes (or is stopped). */
-export function playMantraOnce(deity: DeityId): Promise<void> {
-  const ctx = getAudioContext();
-  if (ctx.state === 'suspended') {
-    ctx.resume().catch(() => {});
-  }
-
-  return new Promise((resolve) => {
-    let settled = false;
-    const finish = () => {
-      if (settled) return;
-      settled = true;
-      resolve();
-    };
-
-    const buffer = mantraBuffers.get(deity);
-    if (buffer) {
-      const source = ctx.createBufferSource();
-      const gain = ctx.createGain();
-      source.buffer = buffer;
-      gain.gain.value = 0.8;
-      source.connect(gain);
-      gain.connect(ctx.destination);
-      source.onended = () => {
-        const i = activeSources.indexOf(source);
-        if (i >= 0) activeSources.splice(i, 1);
-        finish();
-      };
-      activeSources.push(source);
-      try {
-        source.start();
-      } catch {
-        finish();
-      }
-      return;
-    }
-
-    const d = getDeity(deity);
-    const src = d.mantraAudio.startsWith('/') ? d.mantraAudio : '/' + d.mantraAudio;
-    const audio = new Audio(src);
-    audio.volume = 0.8;
-    activeMantraHtmlAudios.push(audio);
-    const cleanupHtml = () => {
-      const i = activeMantraHtmlAudios.indexOf(audio);
-      if (i >= 0) activeMantraHtmlAudios.splice(i, 1);
-    };
-    audio.addEventListener(
-      'ended',
-      () => {
-        cleanupHtml();
-        finish();
-      },
-      { once: true },
-    );
-    audio.addEventListener(
-      'error',
-      () => {
-        cleanupHtml();
-        playDeityTone(ctx, deity);
-        window.setTimeout(finish, 320);
-      },
-      { once: true },
-    );
-    audio.play().catch(() => {
-      cleanupHtml();
-      playDeityTone(ctx, deity);
-      window.setTimeout(finish, 320);
-    });
-  });
-}
-
-export function stopAllMantras() {
-  _mantraPlayGeneration++;
+function stopActiveMantraPlayback(): void {
   for (const s of activeSources) {
     try {
       s.stop();
@@ -198,6 +152,97 @@ export function stopAllMantras() {
     } catch {}
   }
   activeMantraHtmlAudios.length = 0;
+}
+
+/** Play one deity mantra and resolve when playback finishes (or is stopped). */
+export function playMantraOnce(deity: DeityId): Promise<void> {
+  const playGen = ++_mantraPlayGeneration;
+  stopActiveMantraPlayback();
+
+  return (async () => {
+    const ctx = getAudioContext();
+    await ctx.resume().catch(() => {});
+    if (playGen !== _mantraPlayGeneration) return;
+
+    const buffer = mantraBuffers.get(deity) ?? (await loadMantraBufferForDeity(deity));
+    if (playGen !== _mantraPlayGeneration) return;
+
+    if (buffer) {
+      return new Promise<void>((resolve) => {
+        let done = false;
+        const complete = () => {
+          if (done) return;
+          done = true;
+          resolve();
+        };
+
+        const source = ctx.createBufferSource();
+        const gain = ctx.createGain();
+        source.buffer = buffer;
+        gain.gain.value = 0.8;
+        source.connect(gain);
+        gain.connect(ctx.destination);
+        source.onended = () => {
+          const i = activeSources.indexOf(source);
+          if (i >= 0) activeSources.splice(i, 1);
+          if (playGen === _mantraPlayGeneration) complete();
+        };
+        activeSources.push(source);
+        try {
+          source.start(0);
+        } catch {
+          complete();
+        }
+      });
+    }
+
+    return new Promise<void>((resolve) => {
+      let done = false;
+      const complete = () => {
+        if (done) return;
+        done = true;
+        resolve();
+      };
+
+      const d = getDeity(deity);
+      const src = d.mantraAudio.startsWith('/') ? d.mantraAudio : '/' + d.mantraAudio;
+      const audio = new Audio(src);
+      audio.volume = 0.8;
+      audio.preload = 'auto';
+      activeMantraHtmlAudios.push(audio);
+      const cleanupHtml = () => {
+        const i = activeMantraHtmlAudios.indexOf(audio);
+        if (i >= 0) activeMantraHtmlAudios.splice(i, 1);
+      };
+      audio.addEventListener(
+        'ended',
+        () => {
+          cleanupHtml();
+          if (playGen === _mantraPlayGeneration) complete();
+        },
+        { once: true },
+      );
+      audio.addEventListener(
+        'error',
+        () => {
+          cleanupHtml();
+          playDeityTone(ctx, deity);
+          window.setTimeout(complete, 320);
+        },
+        { once: true },
+      );
+      void audio.play().catch(() => {
+        cleanupHtml();
+        playDeityTone(ctx, deity);
+        window.setTimeout(complete, 320);
+      });
+    });
+  })();
+}
+
+export function stopAllMantras() {
+  _mantraPlayGeneration++;
+  stopActiveMantraPlayback();
 }
 
 const activeBonusAudios: HTMLAudioElement[] = [];

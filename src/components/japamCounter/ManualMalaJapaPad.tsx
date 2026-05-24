@@ -1,3 +1,4 @@
+import type { RefObject } from 'react';
 import { MalaBeadSwipeZone } from './MalaBeadSwipeZone';
 
 type Props = {
@@ -5,6 +6,7 @@ type Props = {
   disabled?: boolean;
   className?: string;
   sessionCount?: number;
+  sessionCountRef?: RefObject<number>;
   sessionTarget?: number;
 };
 
@@ -17,6 +19,7 @@ export function ManualMalaJapaPad({
   disabled = false,
   className = '',
   sessionCount = 0,
+  sessionCountRef,
   sessionTarget,
 }: Props) {
   return (
@@ -25,6 +28,7 @@ export function ManualMalaJapaPad({
       disabled={disabled}
       className={className}
       sessionCount={sessionCount}
+      sessionCountRef={sessionCountRef}
       sessionTarget={sessionTarget}
     />
   );

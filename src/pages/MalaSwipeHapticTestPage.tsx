@@ -78,7 +78,7 @@ export function MalaSwipeHapticTestPage() {
         {isLikelyIos() ? (
           <label className="mb-4 flex items-center justify-center gap-2 text-[10px] text-amber-100/70 cursor-pointer">
             <span>Native switch</span>
-            <input type="checkbox" switch className="scale-110" />
+            <input type="checkbox" role="switch" className="scale-110" />
           </label>
         ) : null}
 

@@ -751,8 +751,8 @@ export function Settings({ onBack }: SettingsProps) {
                     min={0}
                     max={100}
                     value={Math.round((backgroundMusicVolume ?? 0.25) * 100)}
-                    onInput={(e) => setBackgroundMusicVolume(Number(e.target.value) / 100)}
-                    onChange={(e) => setBackgroundMusicVolume(Number(e.target.value) / 100)}
+                    onInput={(e) => setBackgroundMusicVolume(Number(e.currentTarget.value) / 100)}
+                    onChange={(e) => setBackgroundMusicVolume(Number(e.currentTarget.value) / 100)}
                     className="flex-1 accent-amber-500"
                   />
                   <span className="text-amber-200/70 text-xs w-10">{Math.round((backgroundMusicVolume ?? 0.25) * 100)}%</span>

@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import { PushableButton } from '../ui/PushableButton';
-import { pushableFullWidthFrontClass, pushableTileFrontClass } from '../../lib/landingCtaStyles';
+import { pushableTileFrontClass } from '../../lib/landingCtaStyles';
 import { TWO_PLAYER_PNG_SRC } from '../../lib/twoPlayerPng';
 
 type Tone = 'rose' | 'amber' | 'emerald' | 'muted';

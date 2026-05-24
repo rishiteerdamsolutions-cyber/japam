@@ -846,8 +846,8 @@ export function GameScreen({
     setCandyBorderSpin(!candyBorderSpinEnabled);
   };
 
-  const handleVolumeChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    const value = Number(e.target.value);
+  const handleVolumeChange = (e: React.SyntheticEvent<HTMLInputElement>) => {
+    const value = Number(e.currentTarget.value);
     if (Number.isFinite(value)) {
       const normalized = value / 100;
       applyBackgroundMusicVolume(normalized);

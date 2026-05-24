@@ -48,7 +48,7 @@ function buildTasselModel(anchor: MalaPoint, beadSizePx: number, width: number, 
 
   const fringeStrands: TasselModel['fringeStrands'] = [];
   for (let i = 0; i < FRINGE_STRANDS; i++) {
-    const t = FRINGE_STRANDS === 1 ? 0 : i / (FRINGE_STRANDS - 1) - 0.5;
+    const t = i / (FRINGE_STRANDS - 1) - 0.5;
     const spread = Math.abs(t);
     const x1 = fringeStartX;
     const x2 = fringeEndX + spread * s * 0.04;

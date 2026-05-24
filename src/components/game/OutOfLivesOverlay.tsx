@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { CTA } from '../../lib/ctaCopy';
 import { motion } from 'framer-motion';
 import { RewardVideoModal } from './RewardVideoModal';
 import { useLivesStore } from '../../store/livesStore';
@@ -109,7 +110,7 @@ export function OutOfLivesOverlay({ onClose, onRetryAfterLife, returnMode, retur
       <RewardVideoModal
         onComplete={handleWatchComplete}
         onClose={() => setShowVideo(false)}
-        rewardLabel={t('game.continue')}
+        rewardLabel={CTA.game.continue}
         rewardType="life"
         getIdToken={getIdToken}
       />
@@ -163,7 +164,7 @@ export function OutOfLivesOverlay({ onClose, onRetryAfterLife, returnMode, retur
               className="w-full py-3 rounded-xl bg-gradient-to-b from-emerald-500 to-green-600 text-white font-bold shadow-lg hover:shadow-xl transition-shadow"
               style={{ fontFamily: 'serif' }}
             >
-              {t('game.continue')}
+              {CTA.game.continue}
             </motion.button>
           )}
           <motion.button
@@ -174,7 +175,7 @@ export function OutOfLivesOverlay({ onClose, onRetryAfterLife, returnMode, retur
             className="w-full py-3 rounded-xl bg-gradient-to-b from-violet-500 to-purple-600 text-white font-bold shadow-lg hover:shadow-xl transition-shadow"
             style={{ fontFamily: 'serif' }}
           >
-            {t('game.watchForLife')}
+            {CTA.game.watchForLife}
           </motion.button>
           <motion.button
             initial={{ opacity: 0, y: 5 }}
@@ -186,7 +187,7 @@ export function OutOfLivesOverlay({ onClose, onRetryAfterLife, returnMode, retur
             style={{ fontFamily: 'serif' }}
             title={!canBuyLives ? t('game.buyLivesOnlyWhenZero', 'Buy only when you have no lives') : undefined}
           >
-            {buying ? t('common.loading') : t('game.buyLives', { price: livesPrice })}
+            {buying ? CTA.common.loading : CTA.game.buyLives(livesPrice)}
           </motion.button>
           {refillIn > 0 && (
             <motion.p
@@ -205,7 +206,7 @@ export function OutOfLivesOverlay({ onClose, onRetryAfterLife, returnMode, retur
             onClick={onClose}
             className="w-full py-3 rounded-xl border-2 border-rose-400/60 text-rose-700 font-semibold hover:bg-rose-100/50 transition-colors"
           >
-            {t('game.menu')}
+            {CTA.game.menu}
           </motion.button>
         </div>
         {buyError && <p className="mt-3 text-red-600 text-sm font-medium">{buyError}</p>}

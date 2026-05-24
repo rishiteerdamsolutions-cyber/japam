@@ -3,6 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { RewardVideoModal } from './RewardVideoModal';
 import { useGameStore } from '../../store/gameStore';
+import { PushableButton } from '../ui/PushableButton';
+import { pushableFullWidthFrontClass } from '../../lib/landingCtaStyles';
+import { CTA } from '../../lib/ctaCopy';
 
 interface GameOverlayProps {
   status: 'won' | 'lost';
@@ -21,6 +24,10 @@ interface GameOverlayProps {
   onDownloadWeeklyProgressCard?: () => void | Promise<void>;
   /** Weekly streak win: open Japa count for handwritten 108-japa PDFs. */
   onOpenWeeklyStreakHandwritingDownloads?: () => void;
+  /** Special 108 win: open Japa count for handwritten 108 PDF. */
+  onOpenSpecial108HandwritingDownloads?: () => void;
+  /** Special 108 win: download shareable birthday greeting PNG. */
+  onDownloadBirthdayGreetingCard?: () => void | Promise<void>;
 }
 
 export function GameOverlay({
@@ -35,12 +42,16 @@ export function GameOverlay({
   getIdToken,
   onDownloadWeeklyProgressCard,
   onOpenWeeklyStreakHandwritingDownloads,
+  onOpenSpecial108HandwritingDownloads,
+  onDownloadBirthdayGreetingCard,
 }: GameOverlayProps) {
   const { t } = useTranslation();
   const addMoves = useGameStore((s) => s.addMoves);
   const [showVideo, setShowVideo] = useState(false);
   const [progressCardLoading, setProgressCardLoading] = useState(false);
   const [progressCardError, setProgressCardError] = useState<string | null>(null);
+  const [birthdayCardLoading, setBirthdayCardLoading] = useState(false);
+  const [birthdayCardError, setBirthdayCardError] = useState<string | null>(null);
 
   const handleWatchComplete = () => {
     addMoves(5);
@@ -74,6 +85,21 @@ export function GameOverlay({
       );
     } finally {
       setProgressCardLoading(false);
+    }
+  };
+
+  const handleBirthdayGreetingDownload = async () => {
+    if (!onDownloadBirthdayGreetingCard || birthdayCardLoading) return;
+    setBirthdayCardError(null);
+    setBirthdayCardLoading(true);
+    try {
+      await onDownloadBirthdayGreetingCard();
+    } catch {
+      setBirthdayCardError(
+        t('birthdayGreeting.downloadFailed', { defaultValue: 'Could not create greeting card.' }),
+      );
+    } finally {
+      setBirthdayCardLoading(false);
     }
   };
 
@@ -141,7 +167,7 @@ export function GameOverlay({
                   {t('game.outOfMovesWatchHint')}
                 </p>
               ) : (
-                <div className="mb-6" aria-hidden />
+                    <div className="mb-6" aria-hidden />
               )}
             </>
           )}
@@ -149,65 +175,76 @@ export function GameOverlay({
           {progressCardError ? (
             <p className="text-red-300 text-xs mb-2 leading-snug">{progressCardError}</p>
           ) : null}
+          {birthdayCardError ? (
+            <p className="text-red-300 text-xs mb-2 leading-snug">{birthdayCardError}</p>
+          ) : null}
 
           <div className="flex flex-col gap-2.5">
             {status === 'won' && onDownloadWeeklyProgressCard && (
-              <button
+              <PushableButton
                 type="button"
+                fullWidth
                 disabled={progressCardLoading}
                 onClick={() => void handleProgressCardDownload()}
-                className="w-full py-3 rounded-xl bg-emerald-600/90 text-white font-semibold text-sm sm:text-base break-words min-h-[44px] shadow-md hover:bg-emerald-500 active:scale-[0.99] transition-transform disabled:opacity-50"
+                frontClassName={pushableFullWidthFrontClass}
               >
-                {progressCardLoading
-                  ? t('japaDashboard.generating', { defaultValue: 'Generating…' })
-                  : t('game.weeklyStreakDownloadCta', { defaultValue: 'Download week progress card' })}
-              </button>
+                {progressCardLoading ? CTA.game.generating : CTA.game.weeklyStreakDownload}
+              </PushableButton>
             )}
             {status === 'won' && onOpenWeeklyStreakHandwritingDownloads && (
-              <button
+              <PushableButton
                 type="button"
+                fullWidth
                 onClick={onOpenWeeklyStreakHandwritingDownloads}
-                className="w-full py-3 rounded-xl border border-amber-400/50 text-amber-100 font-semibold text-sm sm:text-base break-words min-h-[44px] hover:bg-amber-500/10 active:scale-[0.99] transition-transform"
+                frontClassName={pushableFullWidthFrontClass}
               >
-                {t('game.weeklyStreakHandwritingCta', {
-                  defaultValue: 'Handwritten 108 PDF (Japa count)',
-                })}
-              </button>
+                {CTA.game.weeklyStreakHandwriting}
+              </PushableButton>
+            )}
+            {status === 'won' && onOpenSpecial108HandwritingDownloads && (
+              <PushableButton
+                type="button"
+                fullWidth
+                onClick={onOpenSpecial108HandwritingDownloads}
+                frontClassName={pushableFullWidthFrontClass}
+              >
+                {CTA.game.special108Handwriting}
+              </PushableButton>
+            )}
+            {status === 'won' && onDownloadBirthdayGreetingCard && (
+              <PushableButton
+                type="button"
+                fullWidth
+                disabled={birthdayCardLoading}
+                onClick={() => void handleBirthdayGreetingDownload()}
+                frontClassName={pushableFullWidthFrontClass}
+              >
+                {birthdayCardLoading ? CTA.game.creatingGreeting : CTA.game.birthdayGreeting}
+              </PushableButton>
             )}
             {status === 'won' && onNext && (
-              <button
-                type="button"
-                onClick={onNext}
-                className="w-full py-3 rounded-xl bg-amber-500 text-white font-semibold text-sm sm:text-base break-words min-h-[44px] shadow-md shadow-amber-900/30 hover:bg-amber-400 active:scale-[0.99] transition-transform"
-              >
-                {t('game.nextLevel')}
-              </button>
+              <PushableButton type="button" fullWidth onClick={onNext} frontClassName={pushableFullWidthFrontClass}>
+                {CTA.game.nextLevel}
+              </PushableButton>
             )}
             {status === 'lost' && showWatchForMoves && (
-              <button
+              <PushableButton
                 type="button"
+                fullWidth
                 onClick={() => setShowVideo(true)}
-                className="w-full py-3 rounded-xl bg-amber-500 text-white font-semibold text-sm sm:text-base break-words min-h-[44px] shadow-md shadow-amber-900/30 hover:bg-amber-400 active:scale-[0.99] transition-transform"
+                frontClassName={pushableFullWidthFrontClass}
               >
-                {t('game.watchForMoves')}
-              </button>
+                {CTA.game.watchForMoves}
+              </PushableButton>
             )}
             {status === 'lost' && onRetry && (
-              <button
-                type="button"
-                onClick={onRetry}
-                className="w-full py-3 rounded-xl bg-amber-500/80 text-white font-semibold text-sm sm:text-base break-words min-h-[44px] hover:bg-amber-500/95 active:scale-[0.99] transition-transform"
-              >
-                {t('game.restart')}
-              </button>
+              <PushableButton type="button" fullWidth onClick={onRetry} frontClassName={pushableFullWidthFrontClass}>
+                {CTA.game.restart}
+              </PushableButton>
             )}
-            <button
-              type="button"
-              onClick={onMenu}
-              className="w-full py-3 rounded-xl border border-amber-500/45 text-amber-200 text-sm sm:text-base break-words min-h-[44px] hover:bg-amber-500/10 active:scale-[0.99] transition-transform"
-            >
-              {t('game.menu')}
-            </button>
+            <PushableButton type="button" fullWidth onClick={onMenu} frontClassName={pushableFullWidthFrontClass}>
+              {CTA.game.menu}
+            </PushableButton>
           </div>
         </motion.div>
       </motion.div>

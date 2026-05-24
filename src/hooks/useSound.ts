@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect } from 'react';
 import { DEITY_IDS, getDeity } from '../data/deities';
 import type { DeityId } from '../data/deities';
 import { shouldSuppressIncidentalAudio } from '../lib/authAudioGuard';
@@ -366,46 +366,76 @@ export function playMalaBeadTick() {
 }
 
 let bgMusicAudio: HTMLAudioElement | null = null;
+let bgMusicGain: GainNode | null = null;
+let bgMusicElementSource: MediaElementAudioSourceNode | null = null;
+
+/** Live volume — does not restart playback (safe to call while dragging the slider). */
+export function applyBackgroundMusicVolume(volume: number) {
+  const v = Math.min(1, Math.max(0, volume));
+  if (bgMusicGain) {
+    bgMusicGain.gain.value = v;
+  }
+  if (bgMusicAudio) {
+    bgMusicAudio.volume = 1;
+  }
+}
 
 function startBgMusic(volume: number) {
-  if (bgMusicAudio) return;
+  if (bgMusicAudio) {
+    applyBackgroundMusicVolume(volume);
+    if (bgMusicAudio.paused) {
+      bgMusicAudio.play().catch(() => {});
+    }
+    return;
+  }
+  const ctx = getAudioContext();
+  if (ctx.state === 'suspended') {
+    ctx.resume().catch(() => {});
+  }
   bgMusicAudio = new Audio('/sounds/background.mp3');
   bgMusicAudio.loop = true;
-  bgMusicAudio.volume = volume;
+  bgMusicAudio.volume = 1;
+  bgMusicElementSource = ctx.createMediaElementSource(bgMusicAudio);
+  bgMusicGain = ctx.createGain();
+  bgMusicGain.gain.value = volume;
+  bgMusicElementSource.connect(bgMusicGain);
+  bgMusicGain.connect(ctx.destination);
   bgMusicAudio.play().catch(() => {});
 }
 
 function stopBgMusic() {
   if (bgMusicAudio) {
     bgMusicAudio.pause();
-    bgMusicAudio = null;
+    try {
+      bgMusicAudio.currentTime = 0;
+    } catch {}
   }
+  try {
+    bgMusicElementSource?.disconnect();
+    bgMusicGain?.disconnect();
+  } catch {}
+  bgMusicAudio = null;
+  bgMusicGain = null;
+  bgMusicElementSource = null;
 }
 
 export function useSound(bgMusicEnabled: boolean, bgMusicVolume = 0.25) {
-  const bgStarted = useRef(false);
-
   useEffect(() => {
     if (!bgMusicEnabled) {
       stopBgMusic();
-      bgStarted.current = false;
       return;
     }
-    if (!bgStarted.current) {
-      startBgMusic(bgMusicVolume);
-      bgStarted.current = true;
-    }
+    startBgMusic(bgMusicVolume);
     return () => {
       stopBgMusic();
-      bgStarted.current = false;
     };
-  }, [bgMusicEnabled, bgMusicVolume]);
+  }, [bgMusicEnabled]);
 
   useEffect(() => {
-    if (bgMusicAudio) {
-      bgMusicAudio.volume = bgMusicVolume;
+    if (bgMusicEnabled) {
+      applyBackgroundMusicVolume(bgMusicVolume);
     }
-  }, [bgMusicVolume]);
+  }, [bgMusicEnabled, bgMusicVolume]);
 
   useEffect(() => {
     preloadMantras();

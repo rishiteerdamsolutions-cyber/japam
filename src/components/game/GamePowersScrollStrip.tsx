@@ -513,7 +513,8 @@ export function GamePowersScrollStrip({ isGuest = false, onGuestPowerTap }: Game
         <PowerInfoModal payload={powerInfoModal} onClose={() => setPowerInfoModal(null)} />
       ) : null}
       <div
-        className="w-full"
+        data-game-powers-strip
+        className="w-full touch-manipulation"
         aria-label={t('game.powersStripRegion')}
         aria-describedby="powers-strip-interaction-hint"
       >

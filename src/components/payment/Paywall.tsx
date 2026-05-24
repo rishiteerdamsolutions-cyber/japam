@@ -10,6 +10,9 @@ import { useUnlockStore } from '../../store/unlockStore';
 import { auth } from '../../lib/firebase';
 import { trackProductUsage } from '../../lib/productUsage';
 import type { GameMode } from '../../types';
+import { PushableButton } from '../ui/PushableButton';
+import { pushableFullWidthFrontClass } from '../../lib/landingCtaStyles';
+import { CTA } from '../../lib/ctaCopy';
 
 interface PaywallProps {
   onClose: () => void;
@@ -240,7 +243,7 @@ export function Paywall({ onClose, onUnlocked, gateMode = 'general' }: PaywallPr
   };
 
   const payButtonLabel = paying
-    ? 'Opening…'
+    ? CTA.paywall.opening
     : coupon?.fullyCovered
       ? `Unlock free with ${coupon.code}`
       : `Offer Dakshina ₹${chargedRupees} & unlock`;
@@ -275,7 +278,7 @@ export function Paywall({ onClose, onUnlocked, gateMode = 'general' }: PaywallPr
               onClick={onClose}
               className="w-full py-3 rounded-xl bg-white/10 text-amber-200 font-medium"
             >
-              Later
+              {CTA.paywall.later}
             </button>
           </div>
         ) : (
@@ -331,23 +334,24 @@ export function Paywall({ onClose, onUnlocked, gateMode = 'general' }: PaywallPr
 
           {error && <p className="text-red-400 text-sm mb-2">{error}</p>}
           <div className="flex gap-2">
-            <button
+            <PushableButton
               type="button"
               aria-label={paying ? 'Opening payment' : payButtonLabel}
               onClick={handlePay}
               disabled={paying || !priceLoaded}
-              className="flex-1 py-3 rounded-xl bg-amber-500 text-white font-semibold disabled:opacity-50 transition-opacity"
+              className="flex-1 min-w-0"
+              frontClassName={pushableFullWidthFrontClass}
             >
               {payButtonLabel}
-            </button>
-            <button
+            </PushableButton>
+            <PushableButton
               type="button"
               aria-label="Close and continue later"
               onClick={onClose}
-              className="px-4 py-3 rounded-xl bg-white/10 text-amber-200 font-medium"
+              frontClassName={`px-5 ${pushableFullWidthFrontClass}`}
             >
-              Later
-            </button>
+              {CTA.paywall.later}
+            </PushableButton>
           </div>
           </>
         )}

@@ -1,5 +1,8 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
 import { reportError } from '../lib/errorMonitor';
+import { PushableButton } from './ui/PushableButton';
+import { pushablePrimaryFrontClass } from '../lib/landingCtaStyles';
+import { CTA } from '../lib/ctaCopy';
 
 interface Props {
   children: ReactNode;
@@ -39,13 +42,9 @@ export class ErrorBoundary extends Component<Props, State> {
           <p className="text-amber-200/80 text-sm text-center mb-4 max-w-md">
             We&apos;re sorry. The app encountered an error. Please refresh the page or try again later.
           </p>
-          <button
-            type="button"
-            onClick={() => window.location.reload()}
-            className="px-6 py-3 rounded-xl bg-amber-500 text-white font-semibold hover:bg-amber-400 transition-colors"
-          >
-            Reload
-          </button>
+          <PushableButton type="button" onClick={() => window.location.reload()} frontClassName={`px-8 ${pushablePrimaryFrontClass}`}>
+            {CTA.common.reload}
+          </PushableButton>
           </div>
         </div>
       );

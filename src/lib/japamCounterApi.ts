@@ -1,3 +1,4 @@
+import type { DeityId } from '../data/deities';
 import { getApiBase } from './apiBase';
 import { auth } from './firebase';
 import type { LeaderboardEntry } from './rankCard';
@@ -42,6 +43,7 @@ function parseRow(item: unknown): JapamCounterLeaderboardRow | null {
 
 export async function incrementJapamCounter(
   mode: JapamCounterMode,
+  deityId: DeityId,
   delta = 1,
 ): Promise<{ yourMonth: number; manualMonth: number; autoMonth: number; monthKey: string } | null> {
   const token = await getFirebaseIdToken();
@@ -50,7 +52,7 @@ export async function incrementJapamCounter(
     const res = await fetch(apiUrl('/api/user/japam-counter-increment'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ mode, delta }),
+      body: JSON.stringify({ mode, deity: deityId, delta }),
     });
     const data = (await res.json().catch(() => ({}))) as {
       ok?: boolean;
@@ -71,14 +73,21 @@ export async function incrementJapamCounter(
   }
 }
 
-export async function loadJapamCounterLeaderboard(options?: {
+export async function loadJapamCounterLeaderboard(options: {
+  deityId: DeityId;
   monthKey?: string;
   mode?: JapamCounterMode | 'all';
-}): Promise<{ leaderboard: JapamCounterLeaderboardRow[]; monthKey: string }> {
+}): Promise<{
+  leaderboard: JapamCounterLeaderboardRow[];
+  monthKey: string;
+  viewerManual: number;
+  viewerAuto: number;
+}> {
   const token = await getFirebaseIdToken();
   const q = new URLSearchParams();
-  if (options?.monthKey) q.set('month', options.monthKey);
-  if (options?.mode && options.mode !== 'all') q.set('mode', options.mode);
+  q.set('deity', options.deityId);
+  if (options.monthKey) q.set('month', options.monthKey);
+  if (options.mode && options.mode !== 'all') q.set('mode', options.mode);
   const qs = q.toString();
   const url = apiUrl(`/api/public/japam-counter-leaderboard${qs ? `?${qs}` : ''}`);
   try {
@@ -86,6 +95,8 @@ export async function loadJapamCounterLeaderboard(options?: {
     const data = (await res.json().catch(() => ({}))) as {
       leaderboard?: unknown[];
       monthKey?: string;
+      viewerManual?: number;
+      viewerAuto?: number;
     };
     const raw = Array.isArray(data.leaderboard) ? data.leaderboard : [];
     const leaderboard: JapamCounterLeaderboardRow[] = [];
@@ -96,9 +107,11 @@ export async function loadJapamCounterLeaderboard(options?: {
     return {
       leaderboard,
       monthKey: typeof data.monthKey === 'string' ? data.monthKey : '',
+      viewerManual: Math.max(0, Math.round(Number(data.viewerManual) || 0)),
+      viewerAuto: Math.max(0, Math.round(Number(data.viewerAuto) || 0)),
     };
   } catch {
-    return { leaderboard: [], monthKey: '' };
+    return { leaderboard: [], monthKey: '', viewerManual: 0, viewerAuto: 0 };
   }
 }
 

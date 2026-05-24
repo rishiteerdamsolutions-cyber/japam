@@ -7,7 +7,10 @@ import { JapamLogo } from '../ui/JapamLogo';
 import { LanguageDropdown } from '../ui/LanguageDropdown';
 import { AppFooter } from '../layout/AppFooter';
 import { useAuthStore } from '../../store/authStore';
-import { landingStartJapaButtonClass, landingTryJapaButtonClass } from '../../lib/landingCtaStyles';
+import { landingPrimaryPushableClass, landingSecondaryPushableClass, pushablePrimaryFrontClass, pushableStackedFrontClass } from '../../lib/landingCtaStyles';
+import { CTA } from '../../lib/ctaCopy';
+import { TWO_PLAYER_PNG_SRC } from '../../lib/twoPlayerPng';
+import { PushableButton } from '../ui/PushableButton';
 import { MenuMiniGameDemo } from '../demo/MenuMiniGameDemo';
 
 interface LandingProps {
@@ -21,16 +24,17 @@ interface LandingProps {
 /** Bump the matching constant when you replace the PNG under `public/` so browsers fetch the new file (cache bust). */
 const LANDING_BIRTHDAY_PNG_VER = '2026-04-06';
 const LANDING_ANNIVERSARY_JAPA_PNG_VER = '2026-04-08';
-const LANDING_MULTIPLAYER_PNG_VER = '2026-04-08b';
 const BIRTHDAY_PNG = `/birthday.png?v=${LANDING_BIRTHDAY_PNG_VER}`;
 const ANNIVERSARY_JAPA_PNG = `/anniversary-japa.png?v=${LANDING_ANNIVERSARY_JAPA_PNG_VER}`;
-const MULTIPLAYER_PNG = `/${encodeURIComponent('SAVED TWOPLAYER.png')}?v=${LANDING_MULTIPLAYER_PNG_VER}`;
+const MULTIPLAYER_PNG = TWO_PLAYER_PNG_SRC;
 
 const TILE_WRAP = 'w-full max-w-[132px] flex flex-col items-center gap-1';
 const TILE_LABEL =
   'text-center text-amber-100/95 text-[11px] sm:text-xs font-semibold leading-snug px-0.5';
 const TILE_IMG =
   'w-full h-[132px] object-contain object-center bg-transparent pointer-events-none select-none drop-shadow-[0_6px_22px_rgba(0,0,0,0.25)] [image-rendering:auto]';
+
+type LandingVideoIntent = 'start' | 'guest';
 
 export function Landing({
   onEnterApp,
@@ -45,15 +49,22 @@ export function Landing({
   const authLoading = useAuthStore((s) => s.loading);
   /** Guest CTA only after Firebase has settled — avoids flashing Try Japa while persisted session restores. */
   const showGuestTryJapa = !authLoading && !user;
-  const [showVideo, setShowVideo] = useState(true);
+  const [videoIntent, setVideoIntent] = useState<LandingVideoIntent | null>(null);
   const showSpecialsRow = Boolean(onBirthday || onAnniversary);
   const showSpecials = Boolean(showSpecialsRow || onMultiplayer);
+
+  const handleVideoClose = () => {
+    const intent = videoIntent;
+    setVideoIntent(null);
+    if (intent === 'start') onEnterApp();
+    else if (intent === 'guest') onGuestPlay();
+  };
 
   return (
     <>
       <AnimatePresence>
-        {showVideo && (
-          <OpeningVideoModal onClose={() => setShowVideo(false)} />
+        {videoIntent && (
+          <OpeningVideoModal onClose={handleVideoClose} />
         )}
       </AnimatePresence>
 
@@ -110,16 +121,16 @@ export function Landing({
             className="flex min-h-0 flex-1 flex-col px-4 max-w-md mx-auto w-full"
           >
             <div className="flex shrink-0 flex-col items-center gap-3">
-            <motion.button
+            <PushableButton
               type="button"
-              aria-label={t('landing.startJapam')}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.99 }}
-              onClick={onEnterApp}
-              className={landingStartJapaButtonClass}
+              layout="inline"
+              aria-label={CTA.landing.startJapa}
+              onClick={() => setVideoIntent('start')}
+              className={landingPrimaryPushableClass}
+              frontClassName={pushablePrimaryFrontClass}
             >
-              {t('landing.startJapam')}
-            </motion.button>
+              {CTA.landing.startJapa}
+            </PushableButton>
 
             {showSpecials && (
               <>
@@ -193,19 +204,19 @@ export function Landing({
             )}
 
             {showGuestTryJapa ? (
-              <motion.button
+              <PushableButton
                 type="button"
-                aria-label={`${t('landing.tryJapam')} ${t('landing.tryJapamNoLoginHint')}`}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.99 }}
-                onClick={onGuestPlay}
-                className={`${landingTryJapaButtonClass} mt-2`}
+                layout="stacked"
+                aria-label={`${CTA.landing.tryJapa} ${CTA.landing.tryJapaNoLoginHint}`}
+                onClick={() => setVideoIntent('guest')}
+                className={landingSecondaryPushableClass}
+                frontClassName={pushableStackedFrontClass}
               >
-                <span className="text-sm sm:text-base leading-tight">{t('landing.tryJapam')}</span>
+                <span className="text-sm sm:text-base leading-tight">{CTA.landing.tryJapa}</span>
                 <span className="text-[11px] sm:text-xs text-white/85 font-medium leading-tight">
-                  {t('landing.tryJapamNoLoginHint')}
+                  {CTA.landing.tryJapaNoLoginHint}
                 </span>
-              </motion.button>
+              </PushableButton>
             ) : null}
             </div>
 

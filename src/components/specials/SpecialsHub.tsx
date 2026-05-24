@@ -1,5 +1,8 @@
 import type { ReactNode } from 'react';
 import { motion } from 'framer-motion';
+import { PushableButton } from '../ui/PushableButton';
+import { pushableFullWidthFrontClass, pushableTileFrontClass } from '../../lib/landingCtaStyles';
+import { TWO_PLAYER_PNG_SRC } from '../../lib/twoPlayerPng';
 
 type Tone = 'rose' | 'amber' | 'emerald' | 'muted';
 type OptionVariant = 'amber' | 'emerald' | 'muted';
@@ -114,6 +117,19 @@ export function SpecialsIcon108Weekly() {
   );
 }
 
+/** Two-player tile art from `public/SAVED TWOPLAYER.png`. */
+export function SpecialsIconTwoPlayer() {
+  return (
+    <img
+      src={TWO_PLAYER_PNG_SRC}
+      alt=""
+      draggable={false}
+      aria-hidden
+      className="h-9 w-9 object-contain object-center pointer-events-none select-none"
+    />
+  );
+}
+
 export function SpecialsFeaturedCard({
   title,
   subtitle,
@@ -157,12 +173,15 @@ export function SpecialsCategoryPanel({
   subtitle,
   tone,
   badge,
+  headerTag,
   children,
 }: {
   title: string;
   subtitle: string;
   tone: Tone;
   badge?: string;
+  /** Short pill beside the section title (e.g. Two Player Game). */
+  headerTag?: string;
   children: ReactNode;
 }) {
   const s = toneStyles[tone];
@@ -172,7 +191,16 @@ export function SpecialsCategoryPanel({
     >
       <div className="flex items-start justify-between gap-2 mb-3">
         <div className="min-w-0">
-          <h2 className={`font-bold text-sm ${s.title}`}>{title}</h2>
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <h2 className={`font-bold text-sm ${s.title}`}>{title}</h2>
+            {headerTag ? (
+              <span
+                className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[9px] font-semibold leading-tight ${s.border} ${s.title} bg-white/5`}
+              >
+                {headerTag}
+              </span>
+            ) : null}
+          </div>
           <p className="text-white/60 text-[10px] leading-snug mt-0.5">{subtitle}</p>
         </div>
         {badge ? (
@@ -205,7 +233,7 @@ export function SpecialsDualOption({
   );
 }
 
-function SpecialsOptionTile({
+export function SpecialsOptionTile({
   label,
   hint,
   icon,
@@ -243,21 +271,21 @@ function SpecialsOptionTile({
   }
 
   return (
-    <motion.button
+    <PushableButton
       type="button"
-      whileHover={{ scale: 1.03, y: -1 }}
-      whileTap={{ scale: 0.97 }}
+      layout="tile"
+      fullWidth
       onClick={onClick}
-      className={`${shared} ${v.tile} focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/80`}
+      frontClassName={pushableTileFrontClass}
     >
       <span
-        className={`flex h-10 w-10 items-center justify-center rounded-xl border-2 shadow-sm ${v.iconWrap}`}
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border-2 border-amber-300/50 bg-amber-400/20 text-amber-100 shadow-sm"
         aria-hidden
       >
         {icon}
       </span>
-      <span className="text-white text-xs font-bold leading-tight drop-shadow-sm">{label}</span>
-      {hint ? <span className={`text-[9px] font-medium leading-none ${v.hint}`}>{hint}</span> : null}
-    </motion.button>
+      <span className="text-xs font-bold leading-tight">{label}</span>
+      {hint ? <span className="text-[9px] font-medium leading-none text-amber-200/85">{hint}</span> : null}
+    </PushableButton>
   );
 }

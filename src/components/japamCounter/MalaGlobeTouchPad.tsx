@@ -26,7 +26,7 @@ export function MalaGlobeTouchPad({ children, className = '' }: Props) {
   return (
     <div
       ref={padRef}
-      className={`w-full flex flex-col items-center justify-center ${className}`}
+      className={`w-full flex flex-col items-center ${className}`}
       style={{
         touchAction: 'none',
         overscrollBehavior: 'none',

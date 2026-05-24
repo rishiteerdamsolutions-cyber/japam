@@ -1,5 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import type { GameMode } from '../../types';
+import { PushableButton } from '../ui/PushableButton';
+import { pushableFullWidthFrontClass } from '../../lib/landingCtaStyles';
+import { CTA } from '../../lib/ctaCopy';
 
 type LevelAlreadyCompleteProps = {
   mode: GameMode;
@@ -16,13 +19,9 @@ export function LevelAlreadyCompleteModal({ mode, onClose }: LevelAlreadyComplet
         <p className="text-amber-200/90 text-sm mb-4">
           {mode === 'general' ? t('levelGate.alreadyCompleteBodyGeneral') : t('levelGate.alreadyCompleteBodyDeity')}
         </p>
-        <button
-          type="button"
-          onClick={onClose}
-          className="w-full py-3 rounded-xl bg-amber-500 text-white font-semibold"
-        >
-          {t('levelGate.alreadyCompleteOk')}
-        </button>
+        <PushableButton type="button" fullWidth onClick={onClose} frontClassName={pushableFullWidthFrontClass}>
+          {CTA.levelGate.alreadyCompleteOk}
+        </PushableButton>
       </div>
     </div>
   );
@@ -43,20 +42,12 @@ export function GeneralMalaCompleteModal({ onGetPro, onLater }: GeneralMalaCompl
         <p className="text-amber-200/90 text-sm mb-4">{t('levelGate.malaCompleteBody')}</p>
         <p className="text-amber-200/80 text-xs mb-4">{t('levelGate.malaCompleteIsta')}</p>
         <div className="flex flex-col gap-2">
-          <button
-            type="button"
-            onClick={onGetPro}
-            className="w-full py-3 rounded-xl bg-amber-500 text-white font-semibold"
-          >
-            {t('levelGate.malaCompleteCtaPro')}
-          </button>
-          <button
-            type="button"
-            onClick={onLater}
-            className="w-full py-3 rounded-xl bg-white/10 text-amber-200 font-medium"
-          >
-            {t('levelGate.malaCompleteLater')}
-          </button>
+          <PushableButton type="button" fullWidth onClick={onGetPro} frontClassName={pushableFullWidthFrontClass}>
+            {CTA.levelGate.getPro}
+          </PushableButton>
+          <PushableButton type="button" fullWidth onClick={onLater} frontClassName={pushableFullWidthFrontClass}>
+            {CTA.levelGate.later}
+          </PushableButton>
         </div>
       </div>
     </div>

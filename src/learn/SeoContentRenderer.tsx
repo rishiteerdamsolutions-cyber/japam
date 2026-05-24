@@ -1,21 +1,19 @@
 import type { SeoBlock, SeoCta } from './types';
 import { SeoTextRuns } from './SeoTextRuns';
+import { PushableLink } from '../components/ui/PushableButton';
+import { pushablePrimaryFrontClass } from '../lib/landingCtaStyles';
 
 function CtaButton({ cta }: { cta: SeoCta }) {
-  const isPrimary = cta.style === 'primary';
   return (
-    <a
+    <PushableLink
       href={cta.href}
-      className={
-        isPrimary
-          ? 'inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-xl font-semibold text-center text-[#4a148c] bg-gradient-to-b from-amber-200 to-amber-400 shadow-lg hover:from-amber-100 hover:to-amber-300 transition-colors touch-manipulation'
-          : 'inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-xl font-semibold text-center text-amber-100 border-2 border-amber-400/50 bg-white/10 hover:bg-white/15 transition-colors touch-manipulation'
-      }
+      layout="inline"
+      frontClassName={`${pushablePrimaryFrontClass} text-center touch-manipulation px-6`}
       data-cta-id={cta.id}
       data-cta-position={cta.position}
     >
       {cta.label}
-    </a>
+    </PushableLink>
   );
 }
 

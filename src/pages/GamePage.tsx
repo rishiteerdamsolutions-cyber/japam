@@ -23,6 +23,9 @@ import type { GameMode } from '../types';
 import { getOccasionEntryGate } from '../lib/occasionEntryGate';
 import { LAUNCH_FEATURE_OCCASION_GAMES } from '../config/launchFeatures';
 import { LevelAlreadyCompleteModal, GeneralMalaCompleteModal } from '../components/game/LevelGateModals';
+import { PushableButton } from '../components/ui/PushableButton';
+import { pushableFullWidthFrontClass } from '../lib/landingCtaStyles';
+import { CTA } from '../lib/ctaCopy';
 import { shouldOfferResumePausedGame } from '../lib/pausedGameResume';
 
 function parseGameMode(rawMode: string | null): GameMode {
@@ -530,13 +533,14 @@ export function GamePage() {
             aria-invalid={!!playNameError}
           />
           {playNameError && <p className="text-red-300/90 text-xs text-left">{playNameError}</p>}
-          <button
+          <PushableButton
             type="submit"
+            fullWidth
             disabled={playNameSaving || !playNameDraft.trim()}
-            className="w-full py-3 rounded-xl bg-amber-500 text-white font-semibold disabled:opacity-50"
+            frontClassName={pushableFullWidthFrontClass}
           >
-            {playNameSaving ? t('game.playNameSaving') : t('game.playNameSave')}
-          </button>
+            {playNameSaving ? CTA.game.playNameSaving : CTA.game.playNameSave}
+          </PushableButton>
         </form>
       </div>
     );
@@ -553,20 +557,22 @@ export function GamePage() {
                 {t('game.startFreshConfirmMessage')}
               </p>
               <div className="flex flex-col gap-2">
-                <button
+                <PushableButton
                   type="button"
+                  fullWidth
                   onClick={handleStartFreshConfirm}
-                  className="w-full py-3 rounded-xl bg-red-600/90 text-white font-semibold"
+                  frontClassName={pushableFullWidthFrontClass}
                 >
-                  {t('game.startFreshConfirmYes')}
-                </button>
-                <button
+                  {CTA.game.startFreshConfirmYes}
+                </PushableButton>
+                <PushableButton
                   type="button"
+                  fullWidth
                   onClick={() => setStartFreshConfirmOpen(false)}
-                  className="w-full py-3 rounded-xl bg-amber-500 text-white font-semibold"
+                  frontClassName={pushableFullWidthFrontClass}
                 >
-                  {t('game.startFreshConfirmNo')}
-                </button>
+                  {CTA.game.startFreshConfirmNo}
+                </PushableButton>
               </div>
             </>
           ) : (
@@ -579,20 +585,17 @@ export function GamePage() {
                 {t('game.saveProgressTip')}
               </p>
               <div className="flex flex-col gap-2">
-                <button
+                <PushableButton type="button" fullWidth onClick={handleResume} frontClassName={pushableFullWidthFrontClass}>
+                  {CTA.game.resume}
+                </PushableButton>
+                <PushableButton
                   type="button"
-                  onClick={handleResume}
-                  className="w-full py-3 rounded-xl bg-amber-500 text-white font-semibold"
-                >
-                  {t('game.resume')}
-                </button>
-                <button
-                  type="button"
+                  fullWidth
                   onClick={() => setStartFreshConfirmOpen(true)}
-                  className="w-full py-3 rounded-xl border border-amber-500/50 text-amber-400"
+                  frontClassName={pushableFullWidthFrontClass}
                 >
-                  {t('game.startFresh')}
-                </button>
+                  {CTA.game.startFresh}
+                </PushableButton>
               </div>
             </>
           )}

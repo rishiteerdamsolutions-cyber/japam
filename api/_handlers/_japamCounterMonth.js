@@ -19,6 +19,16 @@ export function publicFieldAuto(monthKey) {
   return `jca_${monthKey}`;
 }
 
+/** Per-deity manual japas for rank card / leaderboard (IST month). */
+export function publicFieldManualDeity(monthKey, deityId) {
+  return `jcm_${deityId}_${monthKey}`;
+}
+
+/** Per-deity auto japas for rank card / leaderboard (IST month). */
+export function publicFieldAutoDeity(monthKey, deityId) {
+  return `jca_${deityId}_${monthKey}`;
+}
+
 export function parseMonthKeyParam(raw) {
   const s = String(raw || '').trim();
   if (/^\d{4}-\d{2}$/.test(s)) return s;

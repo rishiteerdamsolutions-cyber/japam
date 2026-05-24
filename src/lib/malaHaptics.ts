@@ -1,14 +1,15 @@
 /**
- * Heavy shot-put style haptics: deep thuds + current traveling top → bottom.
+ * Mala bead haptics — one flat buzz per finger stroke.
+ * Never call vibrate(0) after a successful roll (that reads as a second pulse on many phones).
  */
 
 export type MalaHapticBackend = 'vibration' | 'ios-switch' | 'none';
 
-const CURRENT_SEGMENTS = 6;
+/** Steady roll while the bead moves (ms). */
+export const MALA_ROLL_HAPTIC_MS = 520;
 
 let iosSwitchInput: HTMLInputElement | null = null;
-let lastCurrentSegment = -1;
-const firedSegments = new Set<number>();
+let rollBuzzStarted = false;
 
 function isCoarseTouchDevice(): boolean {
   if (typeof window === 'undefined') return false;
@@ -20,6 +21,10 @@ export function isLikelyIos(): boolean {
   const ua = navigator.userAgent;
   if (/iPad|iPhone|iPod/i.test(ua)) return true;
   return navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
+}
+
+function hasVibrationApi(): boolean {
+  return typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function';
 }
 
 function ensureIosSwitch(): HTMLInputElement | null {
@@ -54,17 +59,26 @@ function ensureIosSwitch(): HTMLInputElement | null {
 
 export function getMalaHapticBackend(): MalaHapticBackend {
   if (typeof navigator === 'undefined') return 'none';
+  if (hasVibrationApi()) return 'vibration';
   if (isLikelyIos() && isCoarseTouchDevice()) return 'ios-switch';
-  if (typeof navigator.vibrate === 'function') return 'vibration';
   return 'none';
 }
 
-function pulseViaVibration(pattern: number | number[]): boolean {
-  if (typeof navigator === 'undefined' || typeof navigator.vibrate !== 'function') return false;
+function flatVibrate(ms: number): boolean {
+  if (!hasVibrationApi() || ms <= 0) return false;
   try {
-    return navigator.vibrate(pattern);
+    return navigator.vibrate(ms);
   } catch {
     return false;
+  }
+}
+
+function stopVibration(): void {
+  if (!hasVibrationApi()) return;
+  try {
+    navigator.vibrate(0);
+  } catch {
+    /* ignore */
   }
 }
 
@@ -80,89 +94,52 @@ function pulseViaIosSwitch(): boolean {
   }
 }
 
-/** One heavy slice of the traveling current. */
-function heavyThudPattern(weight01: number): number[] {
-  const v = Math.round(24 + weight01 * 32);
-  const tail = Math.round(v * 0.65);
-  return [v, 22, tail, 20];
-}
-
-/** Call on first user gesture so iOS switch node exists before pulses. */
 export function primeMalaHaptics(): void {
   ensureIosSwitch();
 }
 
+/** Prepare for a new finger stroke (does not stop an in-flight buzz). */
 export function resetMalaBeadStrokeHaptic(): void {
-  lastCurrentSegment = -1;
-  firedSegments.clear();
-  if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
-    try {
-      navigator.vibrate(0);
-    } catch {
-      /* ignore */
-    }
-  }
+  rollBuzzStarted = false;
 }
 
-/** Lifting the heavy bead — deep initial thud. */
+/** Abort an incomplete stroke — only case that calls vibrate(0). */
+export function cancelMalaBeadStrokeHaptic(): void {
+  if (!rollBuzzStarted) return;
+  rollBuzzStarted = false;
+  stopVibration();
+}
+
+/**
+ * One steady buzz for this stroke. No-op if already started for this gesture.
+ */
+export function startMalaBeadRollHaptic(durationMs = MALA_ROLL_HAPTIC_MS): boolean {
+  if (rollBuzzStarted) return false;
+  rollBuzzStarted = true;
+  let ok = false;
+  if (hasVibrationApi()) {
+    ok = flatVibrate(durationMs) || ok;
+  } else if (isLikelyIos()) {
+    ok = pulseViaIosSwitch() || ok;
+  }
+  return ok;
+}
+
+/** Successful bead count — do not cancel motor (avoids second haptic). */
+export function finishMalaBeadRollHaptic(): void {
+  /* intentional no-op */
+}
+
 export function pulseMalaBeadHeavyGrab(): boolean {
-  let ok = false;
-  if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
-    ok = pulseViaVibration([16, 30, 42, 28, 36]) || ok;
-  }
-  if (isLikelyIos()) ok = pulseViaIosSwitch() || ok;
-  return ok;
+  return false;
 }
 
-/** Bead seats at bottom — final slam. */
 export function pulseMalaBeadHeavyLand(): boolean {
-  let ok = false;
-  if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
-    ok = pulseViaVibration([20, 35, 48, 30, 40, 25]) || ok;
-  }
-  if (isLikelyIos()) {
-    ok = pulseViaIosSwitch() || ok;
-    ok = pulseViaIosSwitch() || ok;
-  }
-  return ok;
+  return false;
 }
 
-/** Current passes down the track — each zone is a heavy knock. */
-export function tickMalaBeadCurrentHaptic(progress01: number): boolean {
-  const p = Math.max(0, Math.min(1, progress01));
-  if (p <= 0) return false;
-
-  const seg = Math.min(CURRENT_SEGMENTS - 1, Math.floor(p * CURRENT_SEGMENTS));
-  const from = lastCurrentSegment < 0 ? 0 : lastCurrentSegment + 1;
-
-  const toFire: number[] = [];
-  for (let s = from; s <= seg; s++) {
-    if (!firedSegments.has(s)) toFire.push(s);
-  }
-  if (toFire.length === 0) return false;
-
-  for (const s of toFire) firedSegments.add(s);
-  lastCurrentSegment = Math.max(lastCurrentSegment, seg);
-
-  let ok = false;
-  const pattern: number[] = [];
-
-  for (const s of toFire) {
-    const w = (s + 1) / CURRENT_SEGMENTS;
-    pattern.push(...heavyThudPattern(w));
-  }
-
-  if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function' && pattern.length > 0) {
-    ok = pulseViaVibration(pattern) || ok;
-  }
-
-  if (isLikelyIos()) {
-    for (let i = 0; i < toFire.length; i++) {
-      ok = pulseViaIosSwitch() || ok;
-    }
-  }
-
-  return ok;
+export function tickMalaBeadCurrentHaptic(_progress01: number): boolean {
+  return false;
 }
 
 export function tickMalaBeadStrokeHaptic(progress01: number): boolean {
@@ -170,13 +147,13 @@ export function tickMalaBeadStrokeHaptic(progress01: number): boolean {
 }
 
 export function pulseMalaBeadGrab(): boolean {
-  return pulseMalaBeadHeavyGrab();
+  return false;
 }
 
 export function pulseMalaBeadRelease(): boolean {
-  return pulseMalaBeadHeavyLand();
+  return false;
 }
 
 export function pulseMalaBead(): boolean {
-  return pulseMalaBeadHeavyLand();
+  return false;
 }

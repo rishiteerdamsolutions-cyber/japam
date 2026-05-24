@@ -5,6 +5,7 @@ import { AppHeader } from '../components/layout/AppHeader';
 import { useAuthStore } from '../store/authStore';
 import { joinAnniversarySession } from '../lib/occasionsApi';
 import { setOccasionEntryGate } from '../lib/occasionEntryGate';
+import { CTA } from '../lib/ctaCopy';
 
 export function AnniversaryJoinPage() {
   const { t } = useTranslation();
@@ -66,7 +67,7 @@ export function AnniversaryJoinPage() {
             onClick={() => navigate('/signin')}
             className="w-full py-3 rounded-2xl bg-amber-500 text-white font-semibold"
           >
-            {t('menu.signIn')}
+            {CTA.menu.signIn}
           </button>
         </div>
       </div>

@@ -14,7 +14,9 @@ import { useUnlockStore } from '../../store/unlockStore';
 import type { GameMode } from '../../store/gameStore';
 import { useProfileStore } from '../../store/profileStore';
 import { getProfileRingFlags } from '../../lib/membershipDisplay';
-import { landingStartJapaButtonClass } from '../../lib/landingCtaStyles';
+import { menuGridPushableClass, menuGridPushableFrontClass } from '../../lib/landingCtaStyles';
+import { PushableButton } from '../ui/PushableButton';
+import { CTA } from '../../lib/ctaCopy';
 import { trackProductUsage } from '../../lib/productUsage';
 /** `public/japam.gif` — keyed transparent intro (640px wide) until Ista Devata Japa is tapped. */
 const ISTA_DEVATA_INTRO_GIF_SRC = '/japam.gif';
@@ -100,7 +102,7 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
                   onClick={() => signInWithGoogle()}
                   className="text-amber-400/90 text-xs font-medium hover:text-amber-400 whitespace-nowrap disabled:opacity-60"
                 >
-                  {signInPending ? '…' : t('menu.signIn')}
+                  {signInPending ? '…' : CTA.menu.signIn}
                 </button>
               )}
             </div>
@@ -159,61 +161,46 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
         {demoNotice}
 
         <div className="grid grid-cols-3 gap-2 w-full mt-3 mb-2 items-stretch shrink-0">
-          <motion.button
+          <PushableButton
             type="button"
-            aria-label={t('menu.allDevatasJapa')}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.99 }}
-            initial={{ opacity: 0, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.05 }}
+            layout="grid"
+            aria-label={CTA.menu.allDevatasJapa}
             onClick={() => onSelect('general')}
-            className={`${landingStartJapaButtonClass} w-full min-h-[3.75rem] h-full inline-flex items-center justify-center px-1 sm:px-2 !max-w-none`}
+            className={menuGridPushableClass}
+            frontClassName={menuGridPushableFrontClass}
           >
-            <span className="text-white font-bold text-[clamp(0.65rem,2.8vw,0.85rem)] sm:text-sm leading-tight text-center whitespace-normal">
-              {t('menu.allDevatasJapa')}
-            </span>
-          </motion.button>
+            {CTA.menu.allDevatasJapa}
+          </PushableButton>
 
-          <motion.button
+          <PushableButton
             type="button"
-            aria-label={t('menu.specials')}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.99 }}
-            initial={{ opacity: 0, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.08 }}
+            layout="grid"
+            aria-label={CTA.menu.specials}
             onClick={() => {
               trackProductUsage('action_menu_specials');
               navigate('/specials');
             }}
-            className={`${landingStartJapaButtonClass} w-full min-h-[3.75rem] h-full inline-flex items-center justify-center px-1 sm:px-2 !max-w-none`}
+            className={menuGridPushableClass}
+            frontClassName={menuGridPushableFrontClass}
           >
-            <span className="text-white font-bold text-[clamp(0.65rem,2.8vw,0.85rem)] sm:text-sm leading-tight text-center whitespace-normal">
-              {t('menu.specials')}
-            </span>
-          </motion.button>
+            {CTA.menu.specials}
+          </PushableButton>
 
-          <motion.button
+          <PushableButton
             type="button"
+            layout="grid"
             id="ista-devata-reveal"
             aria-expanded={istaDevataRevealed}
             aria-controls="ista-devata-grid"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.99 }}
-            initial={{ opacity: 0, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.11 }}
             onClick={() => {
               trackProductUsage('action_menu_ista_reveal');
               setIstaDevataRevealed(true);
             }}
-            className={`${landingStartJapaButtonClass} w-full min-h-[3.75rem] h-full inline-flex items-center justify-center px-1 sm:px-2 !max-w-none`}
+            className={menuGridPushableClass}
+            frontClassName={menuGridPushableFrontClass}
           >
-            <span className="text-white font-bold text-[clamp(0.65rem,2.8vw,0.85rem)] sm:text-sm leading-tight text-center whitespace-normal">
-              {t('menu.istaDevata')}
-            </span>
-          </motion.button>
+            {CTA.menu.istaDevata}
+          </PushableButton>
         </div>
 
         {!istaDevataRevealed ? (

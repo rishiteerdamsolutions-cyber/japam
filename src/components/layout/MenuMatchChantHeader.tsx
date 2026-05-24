@@ -7,6 +7,7 @@ import { AuthSessionRestoreHint } from '../auth/AuthSessionRestoreHint';
 import { useUnlockStore } from '../../store/unlockStore';
 import { useProfileStore } from '../../store/profileStore';
 import { getProfileRingFlags } from '../../lib/membershipDisplay';
+import { CTA } from '../../lib/ctaCopy';
 
 function HeartIcon() {
   return (
@@ -84,7 +85,7 @@ export function MenuMatchChantHeader({ rightElement }: MenuMatchChantHeaderProps
                 onClick={() => signInWithGoogle()}
                 className="text-amber-400/90 text-xs font-medium hover:text-amber-400 whitespace-nowrap disabled:opacity-60"
               >
-                {signInPending ? '…' : t('menu.signIn')}
+                {signInPending ? '…' : CTA.menu.signIn}
               </button>
             )}
           </>

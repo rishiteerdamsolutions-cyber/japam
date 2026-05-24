@@ -1,16 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { MalaBeadSwipeZone } from '../components/japamCounter/MalaBeadSwipeZone';
-import { MalaGlobeTouchPad } from '../components/japamCounter/MalaGlobeTouchPad';
+import { ManualMalaJapaPad } from '../components/japamCounter/ManualMalaJapaPad';
 import {
   getMalaHapticBackend,
   isLikelyIos,
-  pulseMalaBeadHeavyGrab,
-  pulseMalaBeadHeavyLand,
   resetMalaBeadStrokeHaptic,
-  tickMalaBeadCurrentHaptic,
+  startMalaBeadRollHaptic,
 } from '../lib/malaHaptics';
-import { playMalaBeadDropSound, playMalaBeadGrabSound, primeAudio } from '../hooks/useSound';
+import { primeAudio } from '../hooks/useSound';
 
 const BACKEND_LABEL: Record<ReturnType<typeof getMalaHapticBackend>, string> = {
   vibration: 'Vibration API (Android)',
@@ -44,13 +41,8 @@ export function MalaSwipeHapticTestPage() {
   const onTestPulse = useCallback(() => {
     primeAudio();
     resetMalaBeadStrokeHaptic();
-    pulseMalaBeadHeavyGrab();
-    tickMalaBeadCurrentHaptic(0.35);
-    tickMalaBeadCurrentHaptic(0.7);
-    pulseMalaBeadHeavyLand();
-    playMalaBeadGrabSound();
-    playMalaBeadDropSound();
-    setDebugLine('tap: haptic test');
+    startMalaBeadRollHaptic();
+    setDebugLine('tap: single flat roll buzz (~520ms)');
   }, []);
 
   return (
@@ -62,7 +54,8 @@ export function MalaSwipeHapticTestPage() {
         <p className="text-[11px] uppercase tracking-wider text-amber-300/70 mb-1">Test only</p>
         <h1 className="text-lg font-semibold text-center mb-1">Mala swipe haptics</h1>
         <p className="text-amber-100/65 text-xs text-center max-w-sm mb-4 leading-relaxed">
-          Touch the thick ring, swipe down — bead flips from top toward you (X axis).
+          Haptic + bead physics test only (no mantra). Production manual counter uses deity audio on{' '}
+          <span className="text-amber-200/90">/special-japam-counter</span>.
         </p>
 
         <p className="text-5xl font-bold text-amber-400 tabular-nums mb-1" aria-live="polite">
@@ -118,18 +111,10 @@ export function MalaSwipeHapticTestPage() {
       </div>
 
       <div
-        className="shrink-0 border-t border-amber-500/15 bg-[#1a0a2e]/95"
+        className="shrink-0 flex justify-center w-full"
         style={{ paddingBottom: 'max(1.75rem, env(safe-area-inset-bottom))' }}
       >
-        <p className="text-amber-100/80 text-xs text-center px-4 pt-2 pb-1">
-          Touch anywhere on the ring → swipe down
-        </p>
-        <MalaGlobeTouchPad className="min-h-[min(42vh,320px)] w-full px-4 pb-2">
-          <MalaBeadSwipeZone
-            onBead={onBead}
-            onStrokeDebug={({ delta, source }) => setDebugLine(`${source} · ${Math.round(delta)}px`)}
-          />
-        </MalaGlobeTouchPad>
+        <ManualMalaJapaPad onBead={onBead} />
       </div>
     </div>
   );

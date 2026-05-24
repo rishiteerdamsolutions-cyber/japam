@@ -10,6 +10,9 @@ import { hasActivePaidAccess } from '../lib/membershipDisplay';
 import { AccessBadge } from '../components/ui/AccessBadge';
 import { BottomNav } from '../components/nav/BottomNav';
 import { MenuMatchChantHeader } from '../components/layout/MenuMatchChantHeader';
+import { PushableButton } from '../components/ui/PushableButton';
+import { pushableFullWidthFrontClass } from '../lib/landingCtaStyles';
+import { CTA } from '../lib/ctaCopy';
 
 /** Free path for 108 Japa special (Pro unlocks all deities). */
 const FREE_JAPA_108_DEITY: DeityId = 'shakthi';
@@ -173,18 +176,19 @@ export function Japa108SpecialPage() {
         <p className="text-amber-200/70 text-xs tabular-nums mb-4">
           {t('specials.japa108YourCompletions', { n: special108ForDeity })}
         </p>
-        <motion.button
+        <PushableButton
           type="button"
-          whileTap={{ scale: 0.99 }}
+          fullWidth
           onClick={startGame}
           disabled={unlockPending}
-          className="w-full max-w-sm py-3 rounded-2xl bg-amber-500 text-white font-semibold disabled:opacity-50"
+          className="max-w-sm"
+          frontClassName={pushableFullWidthFrontClass}
         >
-          {t('specials.japa108Start')}
-        </motion.button>
+          {CTA.specials.japa108Start}
+        </PushableButton>
         {user && special108ForDeity > 0 ? (
           <p className="mt-2 text-amber-200/70 text-xs text-center max-w-sm">
-            For handwritten PDF download, use Japa Count page.
+            {t('specials.japa108DownloadHint')}
           </p>
         ) : null}
       </div>

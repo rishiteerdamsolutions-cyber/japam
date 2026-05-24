@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { CTA } from '../lib/ctaCopy';
 import { MenuMatchChantHeader } from '../components/layout/MenuMatchChantHeader';
 import { BottomNav } from '../components/nav/BottomNav';
 import { Paywall } from '../components/payment/Paywall';
@@ -146,7 +147,7 @@ export function PlansDakshinaPage() {
                 }}
                 className="w-full py-3 rounded-xl bg-green-600 hover:bg-green-500 text-white font-semibold disabled:opacity-50"
               >
-                {signInPending ? '…' : t('plans.signInToPayPro')}
+                {signInPending ? '…' : CTA.plans.signInToPayPro}
               </button>
             )}
             {user && !isProMember && !isPremiumMember && !accessActive && (
@@ -158,7 +159,7 @@ export function PlansDakshinaPage() {
                 }}
                 className="w-full py-3 rounded-xl bg-green-600 hover:bg-green-500 text-white font-semibold"
               >
-                {t('plans.ctaPro')}
+                {CTA.plans.ctaPro}
               </button>
             )}
             {user && isProMember && !isPremiumMember && (
@@ -200,7 +201,7 @@ export function PlansDakshinaPage() {
                 }}
                 className="w-full py-3 rounded-xl bg-amber-500 text-white font-semibold"
               >
-                {t('plans.ctaPremium')}
+                {CTA.plans.ctaPremium}
               </button>
             )}
             {user && !canDonateForPremium && !isPremiumMember && (

@@ -276,6 +276,7 @@ export function Board() {
 
   return (
     <div
+      data-game-board
       className="relative w-full select-none touch-none"
       style={{
         aspectRatio: `${cols} / ${rows}`,

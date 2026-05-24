@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { useAuthStore } from '../store/authStore';
 import { isFirebaseConfigured } from '../lib/firebase';
 import { trackProductUsage } from '../lib/productUsage';
+import { CTA } from '../lib/ctaCopy';
 import { BottomNav } from '../components/nav/BottomNav';
 import { MenuMatchChantHeader } from '../components/layout/MenuMatchChantHeader';
 import {
@@ -15,6 +16,8 @@ import {
   SpecialsIcon108Weekly,
   SpecialsIconAuto,
   SpecialsIconManual,
+  SpecialsIconTwoPlayer,
+  SpecialsOptionTile,
 } from '../components/specials/SpecialsHub';
 
 export function SpecialsPage() {
@@ -34,8 +37,6 @@ export function SpecialsPage() {
     },
     [navigate, signInWithGoogle, user],
   );
-
-  const comingSoonHint = t('specials.comingSoon');
 
   return (
     <div className="relative min-h-[100dvh] flex flex-col items-center px-3 pt-3 pb-[max(5.5rem,env(safe-area-inset-bottom))] overflow-y-auto overflow-x-hidden">
@@ -63,7 +64,7 @@ export function SpecialsPage() {
         <div className="flex flex-col gap-4 w-full">
           <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.04 }}>
             <SpecialsFeaturedCard
-              title={t('specials.pushpaAradhana')}
+              title={CTA.specials.pushpaAradhana}
               subtitle={t('specials.hubPushpaBlurb')}
               icon="🌸"
               onClick={() => void openWithAuth('/pushpa-aradhana', 'action_specials_pushpa')}
@@ -80,14 +81,14 @@ export function SpecialsPage() {
               <SpecialsDualOption
                 variant="amber"
                 left={{
-                  label: t('specials.hub108OneTime'),
-                  hint: t('specials.hub108OneTimeHint'),
+                  label: CTA.specials.hub108OneTime,
+                  hint: CTA.specials.hub108OneTimeHint,
                   icon: <SpecialsIcon108Once />,
                   onClick: () => void openWithAuth('/special-108-japa', 'action_specials_108_once'),
                 }}
                 right={{
-                  label: t('specials.hub108Weekly'),
-                  hint: t('specials.hub108WeeklyHint'),
+                  label: CTA.specials.hub108Weekly,
+                  hint: CTA.specials.hub108WeeklyHint,
                   icon: <SpecialsIcon108Weekly />,
                   onClick: () => void openWithAuth('/weekly-streak', 'action_specials_108_weekly'),
                 }}
@@ -104,14 +105,14 @@ export function SpecialsPage() {
               <SpecialsDualOption
                 variant="emerald"
                 left={{
-                  label: t('specials.hubCounterManual'),
-                  hint: t('specials.hubCounterManualHint'),
+                  label: CTA.specials.hubCounterManual,
+                  hint: CTA.specials.hubCounterManualHint,
                   icon: <SpecialsIconManual />,
                   onClick: () => void openWithAuth('/special-japam-counter', 'action_specials_counter_manual'),
                 }}
                 right={{
-                  label: t('specials.hubCounterAuto'),
-                  hint: t('specials.hubCounterAutoHint'),
+                  label: CTA.specials.hubCounterAuto,
+                  hint: CTA.specials.hubCounterAutoHint,
                   icon: <SpecialsIconAuto />,
                   onClick: () => void openWithAuth('/special-auto-japam-counter', 'action_specials_counter_auto'),
                 }}
@@ -122,24 +123,19 @@ export function SpecialsPage() {
           <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.16 }}>
             <SpecialsCategoryPanel
               title={t('specials.hubOccasionsTitle')}
+              headerTag={CTA.specials.twoPlayerGame}
               subtitle={t('specials.hubOccasionsSubtitle')}
               tone="muted"
             >
-              <SpecialsDualOption
-                variant="muted"
-                left={{
-                  label: t('specials.happyBirthday'),
-                  hint: comingSoonHint,
-                  icon: '🎂',
-                  disabled: true,
-                }}
-                right={{
-                  label: t('specials.anniversary'),
-                  hint: comingSoonHint,
-                  icon: '💍',
-                  disabled: true,
-                }}
-              />
+              <div className="max-w-[11rem] mx-auto">
+                <SpecialsOptionTile
+                  label={CTA.specials.twoPlayerGame}
+                  hint={CTA.specials.anniversaryComingSoonHint}
+                  icon={<SpecialsIconTwoPlayer />}
+                  disabled
+                  variant="muted"
+                />
+              </div>
             </SpecialsCategoryPanel>
           </motion.div>
         </div>

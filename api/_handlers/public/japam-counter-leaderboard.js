@@ -2,16 +2,16 @@ import { getDb, jsonResponse, verifyFirebaseUser, jsonInternalServerError } from
 import {
   istMonthKey,
   parseMonthKeyParam,
-  publicFieldAuto,
-  publicFieldManual,
+  publicFieldAutoDeity,
+  publicFieldManualDeity,
 } from '../_japamCounterMonth.js';
+import { parseJapamCounterDeityParam } from '../_japamCounterDeity.js';
 
 const TOP_N = 12;
 
 /**
- * GET /api/public/japam-counter-leaderboard?month=YYYY-MM&mode=manual|auto|all
- * Rows: rank, uid, name, counterMode ('manual'|'auto'), japasCount.
- * Default month = current IST month. Default mode = all (manual + auto rows).
+ * GET /api/public/japam-counter-leaderboard?month=YYYY-MM&mode=manual|auto|all&deity=shakthi
+ * Rows: rank, uid, name, counterMode ('manual'|'auto'), japasCount (for that deity).
  */
 export async function GET(request) {
   try {
@@ -22,8 +22,12 @@ export async function GET(request) {
     const url = new URL(request.url);
     const monthKey = parseMonthKeyParam(url.searchParams.get('month'));
     const modeParam = (url.searchParams.get('mode') || 'all').trim().toLowerCase();
-    const fManual = publicFieldManual(monthKey);
-    const fAuto = publicFieldAuto(monthKey);
+    const deity = parseJapamCounterDeityParam(url.searchParams.get('deity'));
+    if (!deity) {
+      return jsonResponse({ error: 'deity query parameter is required' }, 400);
+    }
+    const fManual = publicFieldManualDeity(monthKey, deity);
+    const fAuto = publicFieldAutoDeity(monthKey, deity);
 
     async function fetchByField(field) {
       try {
@@ -93,7 +97,20 @@ export async function GET(request) {
       }
     }
 
-    return jsonResponse({ leaderboard: top, monthKey }, 200);
+    let viewerManual = 0;
+    let viewerAuto = 0;
+    if (viewerUid) {
+      try {
+        const snap = await db.doc(`publicUsers/${viewerUid}`).get();
+        const data = snap.exists ? snap.data() || {} : {};
+        viewerManual = Math.max(0, Math.round(Number(data[fManual]) || 0));
+        viewerAuto = Math.max(0, Math.round(Number(data[fAuto]) || 0));
+      } catch {
+        /* ignore */
+      }
+    }
+
+    return jsonResponse({ leaderboard: top, monthKey, deity, viewerManual, viewerAuto }, 200);
   } catch (e) {
     console.error('japam-counter-leaderboard', e);
     return jsonInternalServerError(e, 'api/_handlers/public/japam-counter-leaderboard.js');

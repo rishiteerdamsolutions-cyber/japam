@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { CTA } from '../lib/ctaCopy';
 import { motion } from 'framer-motion';
 import { DEITIES, getDeity, type DeityId } from '../data/deities';
 import { useAuthStore } from '../store/authStore';
@@ -16,6 +17,8 @@ import { AccessBadge } from '../components/ui/AccessBadge';
 import { BottomNav } from '../components/nav/BottomNav';
 import { MenuMatchChantHeader } from '../components/layout/MenuMatchChantHeader';
 import { JapamCounterLeaderboardPanel } from '../components/japamCounter/JapamCounterLeaderboardPanel';
+import { ManualMalaJapaPad } from '../components/japamCounter/ManualMalaJapaPad';
+import { useManualJapaTouchLock } from '../hooks/useManualJapaTouchLock';
 import { playMantraOnce, primeAudio, stopAllMantras } from '../hooks/useSound';
 
 type JapamCounterMode = 'manual' | 'auto';
@@ -53,6 +56,8 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
       stopAllMantras();
     };
   }, []);
+
+  useManualJapaTouchLock(!isAuto && Boolean(deityId));
 
   useEffect(() => {
     autoRunningRef.current = autoRunning;
@@ -119,15 +124,16 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
     };
   }, [autoRunning, deityId, isAuto]);
 
-  const onManualJapa = useCallback(async () => {
+  const onManualBeadRoll = useCallback(() => {
     if (!deityId || manualBusyRef.current) return;
     primeAudio();
     manualBusyRef.current = true;
     setMantraBusy(true);
-    await playMantraOnce(deityId);
     setCount((n) => n + 1);
-    manualBusyRef.current = false;
-    setMantraBusy(false);
+    void playMantraOnce(deityId).finally(() => {
+      manualBusyRef.current = false;
+      setMantraBusy(false);
+    });
   }, [deityId]);
 
   const stopAutoPlayback = useCallback(() => {
@@ -183,7 +189,11 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
 
   if (!deityId) {
     return (
-      <div className="relative min-h-[100dvh] flex flex-col items-center px-3 pt-3 pb-[max(6rem,env(safe-area-inset-bottom))] sm:p-4 sm:pb-28 overflow-y-auto overflow-x-hidden">
+      <div
+        className={`relative min-h-[100dvh] flex flex-col items-center px-3 pt-3 sm:p-4 overflow-y-auto overflow-x-hidden ${
+          isAuto ? 'pb-[max(6rem,env(safe-area-inset-bottom))] sm:pb-28' : 'pb-[max(1rem,env(safe-area-inset-bottom))]'
+        }`}
+      >
         <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
         <div className="relative z-10 w-full max-w-[min(100%,28rem)] flex flex-col items-center">
           <MenuMatchChantHeader />
@@ -244,18 +254,102 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
             </div>
           )}
         </div>
-        <BottomNav />
+        {!isAuto ? null : <BottomNav />}
       </div>
     );
   }
 
   const deity = getDeity(deityId);
-  const manualDisabled = mantraBusy;
+
+  if (!isAuto) {
+    return (
+      <div
+        className="fixed inset-0 z-0 flex h-[100dvh] max-h-[100dvh] flex-col overflow-x-visible overflow-y-hidden touch-none"
+        style={{ overscrollBehavior: 'none' }}
+      >
+        <div className="absolute inset-0 bg-gloss-bubblegum pointer-events-none" aria-hidden />
+        <div
+          data-immersive-ui
+          className="relative z-10 flex min-h-0 flex-1 flex-col w-full max-w-md mx-auto px-3 overflow-x-visible overflow-y-hidden touch-manipulation"
+          style={{ paddingTop: 'max(0.5rem, env(safe-area-inset-top))' }}
+        >
+          <MenuMatchChantHeader />
+          <button
+            type="button"
+            onClick={() => {
+              stopAllMantras();
+              setSearchParams({}, { replace: true });
+            }}
+            className="shrink-0 self-start text-amber-300/90 text-sm mb-1 hover:underline"
+          >
+            {t('specials.japamCounterChangeDeity')}
+          </button>
+
+          <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-0.5 overflow-visible pb-1">
+            <div className="w-16 h-16 shrink-0 rounded-xl overflow-hidden border border-amber-500/30">
+              <img src={deity.image} alt="" className="w-full h-full object-cover" />
+            </div>
+            <h1 className="shrink-0 text-base font-bold text-amber-300 text-center leading-tight">
+              {t(`deities.${deity.id}`)}
+            </h1>
+            <p className="shrink-0 text-amber-200/65 text-[10px] text-center max-w-[16rem] leading-snug italic line-clamp-2 px-1">
+              {deity.mantra}
+            </p>
+
+            <p
+              className="shrink-0 text-[clamp(2.75rem,16vw,4rem)] font-bold text-white tabular-nums leading-none text-center"
+              aria-live="polite"
+            >
+              {count}
+            </p>
+            {mantraBusy ? (
+              <p className="shrink-0 text-amber-200/70 text-[10px] text-center" role="status">
+                {t('specials.japamCounterListening')}
+              </p>
+            ) : (
+              <p className="shrink-0 text-amber-200/55 text-[10px] text-center px-2">
+                {t('specials.japamCounterMalaHint')}
+              </p>
+            )}
+
+            <button
+              type="button"
+              onClick={onResetCount}
+              disabled={count === 0}
+              className="shrink-0 text-amber-300/80 text-[10px] hover:underline disabled:opacity-40 disabled:no-underline"
+            >
+              {t('specials.japamCounterReset')}
+            </button>
+
+            <JapamCounterLeaderboardPanel
+              mode="manual"
+              deityId={deity.id}
+              deityLabel={t(`deities.${deity.id}`)}
+              sessionCount={count}
+              syncMode="live"
+              variant="minimal"
+            />
+          </div>
+        </div>
+
+        <div
+          className="relative z-20 shrink-0 w-full max-w-md mx-auto flex justify-center overflow-visible"
+          style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
+        >
+          <ManualMalaJapaPad
+            className={mantraBusy ? 'opacity-45' : ''}
+            onBead={onManualBeadRoll}
+            disabled={mantraBusy || unlockPending}
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="relative min-h-[100dvh] flex flex-col items-center px-3 pt-3 pb-[max(6rem,env(safe-area-inset-bottom))] overflow-y-auto">
+    <div className="relative min-h-[100dvh] flex flex-col">
       <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
-      <div className="relative z-10 w-full max-w-md flex flex-col items-center flex-1">
+      <div className="relative z-10 flex flex-col flex-1 min-h-0 w-full max-w-md mx-auto px-3 pt-3 pb-[max(6rem,env(safe-area-inset-bottom))] overflow-y-auto">
         <MenuMatchChantHeader />
         <button
           type="button"
@@ -267,88 +361,68 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
         >
           {t('specials.japamCounterChangeDeity')}
         </button>
-        <div className="w-32 h-32 rounded-2xl overflow-hidden border border-amber-500/30 mb-2">
+        <div className="w-32 h-32 rounded-2xl overflow-hidden border border-amber-500/30 mb-2 mx-auto">
           <img src={deity.image} alt="" className="w-full h-full object-cover" />
         </div>
         <h1 className="text-lg font-bold text-amber-300 text-center mb-0.5">{t(`deities.${deity.id}`)}</h1>
-        <p className="text-amber-200/70 text-xs text-center mb-1 max-w-sm leading-snug italic">{deity.mantra}</p>
-        <p className="text-amber-200/75 text-[11px] text-center mb-3 max-w-sm">{t(blurbKey)}</p>
+        <p className="text-amber-200/70 text-xs text-center mb-1 max-w-sm leading-snug italic mx-auto">
+          {deity.mantra}
+        </p>
+        <p className="text-amber-200/75 text-[11px] text-center mb-3 max-w-sm mx-auto">{t(blurbKey)}</p>
 
         <p
-          className="text-[clamp(3rem,18vw,4.5rem)] font-bold text-white tabular-nums leading-none mb-1"
+          className="text-[clamp(3rem,18vw,4.5rem)] font-bold text-white tabular-nums leading-none mb-1 text-center"
           aria-live="polite"
         >
           {count}
-          {isAuto ? (
-            <span className="text-[clamp(1.25rem,6vw,1.75rem)] text-amber-200/55 font-semibold">
-              {' '}
-              / {AUTO_JAPAM_SESSION_TARGET}
-            </span>
-          ) : null}
+          <span className="text-[clamp(1.25rem,6vw,1.75rem)] text-amber-200/55 font-semibold">
+            {' '}
+            / {AUTO_JAPAM_SESSION_TARGET}
+          </span>
         </p>
-        {isAuto ? (
-          <p className="text-amber-200/65 text-[10px] text-center mb-3 max-w-sm leading-snug">
-            {count >= AUTO_JAPAM_SESSION_TARGET && !autoRunning
-              ? t('specials.autoJapamCounterPaused')
-              : t('specials.autoJapamCounterTargetNote')}
-          </p>
-        ) : (
-          <div className="mb-3" />
-        )}
+        <p className="text-amber-200/65 text-[10px] text-center mb-3 max-w-sm leading-snug mx-auto">
+          {count >= AUTO_JAPAM_SESSION_TARGET && !autoRunning
+            ? t('specials.autoJapamCounterPaused')
+            : t('specials.autoJapamCounterTargetNote')}
+        </p>
 
-        {isAuto ? (
-          <div className="w-full max-w-sm flex flex-col gap-2">
-            {autoRunning ? (
-              <motion.button
-                type="button"
-                whileTap={{ scale: 0.99 }}
-                onClick={onEndAuto}
-                disabled={unlockPending}
-                className="w-full py-3.5 rounded-2xl font-semibold text-white bg-rose-600 hover:bg-rose-500 disabled:opacity-50"
-              >
-                {t('specials.autoJapamCounterStop')}
-              </motion.button>
-            ) : count > 0 ? (
-              <motion.button
-                type="button"
-                whileTap={{ scale: 0.99 }}
-                onClick={onCompleteAuto}
-                disabled={unlockPending}
-                className="w-full py-3.5 rounded-2xl font-semibold text-white bg-amber-500 hover:bg-amber-400 disabled:opacity-50"
-              >
-                {count >= AUTO_JAPAM_SESSION_TARGET
-                  ? t('specials.autoJapamCounterComplete')
-                  : t('specials.autoJapamCounterSaveSession')}
-              </motion.button>
-            ) : (
-              <motion.button
-                type="button"
-                whileTap={{ scale: 0.99 }}
-                onClick={onStartAuto}
-                disabled={unlockPending}
-                className="w-full py-3.5 rounded-2xl font-semibold text-white bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50"
-              >
-                {t('specials.autoJapamCounterStart')}
-              </motion.button>
-            )}
-          </div>
-        ) : (
-          <motion.button
-            type="button"
-            whileTap={manualDisabled ? undefined : { scale: 0.98 }}
-            onPointerDown={() => primeAudio()}
-            onClick={() => void onManualJapa()}
-            disabled={manualDisabled || unlockPending}
-            aria-busy={mantraBusy}
-            className={`w-full max-w-sm py-4 rounded-2xl font-semibold text-white transition-opacity ${
-              manualDisabled ? 'bg-amber-600/50 cursor-not-allowed' : 'bg-amber-500 hover:bg-amber-400'
-            }`}
-          >
-            {mantraBusy ? t('specials.japamCounterListening') : t('specials.japamCounterTap')}
-          </motion.button>
-        )}
+        <div className="w-full max-w-sm flex flex-col gap-2 mx-auto">
+          {autoRunning ? (
+            <motion.button
+              type="button"
+              whileTap={{ scale: 0.99 }}
+              onClick={onEndAuto}
+              disabled={unlockPending}
+              className="w-full py-3.5 rounded-2xl font-semibold text-white bg-rose-600 hover:bg-rose-500 disabled:opacity-50"
+            >
+              {t('specials.autoJapamCounterStop')}
+            </motion.button>
+          ) : count > 0 ? (
+            <motion.button
+              type="button"
+              whileTap={{ scale: 0.99 }}
+              onClick={onCompleteAuto}
+              disabled={unlockPending}
+              className="w-full py-3.5 rounded-2xl font-semibold text-white bg-amber-500 hover:bg-amber-400 disabled:opacity-50"
+            >
+              {count >= AUTO_JAPAM_SESSION_TARGET
+                ? t('specials.autoJapamCounterComplete')
+                : t('specials.autoJapamCounterSaveSession')}
+            </motion.button>
+          ) : (
+            <motion.button
+              type="button"
+              whileTap={{ scale: 0.99 }}
+              onClick={onStartAuto}
+              disabled={unlockPending}
+              className="w-full py-3.5 rounded-2xl font-semibold text-white bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50"
+            >
+              {t('specials.autoJapamCounterStart')}
+            </motion.button>
+          )}
+        </div>
 
-        {mantraBusy && isAuto ? (
+        {mantraBusy ? (
           <p className="mt-2 text-amber-200/60 text-[10px] text-center">{t('specials.japamCounterListening')}</p>
         ) : null}
         {saveNotice ? (
@@ -361,19 +435,21 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
           type="button"
           onClick={onResetCount}
           disabled={count === 0 && !autoRunning}
-          className="mt-4 text-amber-300/80 text-xs hover:underline disabled:opacity-40 disabled:no-underline"
+          className="mt-4 text-amber-300/80 text-xs hover:underline disabled:opacity-40 disabled:no-underline mx-auto block"
         >
           {t('specials.japamCounterReset')}
         </button>
 
         <JapamCounterLeaderboardPanel
-          mode={isAuto ? 'auto' : 'manual'}
+          mode="auto"
+          deityId={deity.id}
           deityLabel={t(`deities.${deity.id}`)}
           sessionCount={count}
-          syncMode={isAuto ? 'commit' : 'live'}
-          commitRequest={isAuto ? commitRequest : null}
+          syncMode="commit"
+          commitRequest={commitRequest}
         />
       </div>
+
       <BottomNav />
     </div>
   );

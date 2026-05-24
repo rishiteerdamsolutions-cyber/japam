@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import type { DeityId } from '../../data/deities';
 import { istMonthKeyFromDate, istMonthLabelFromKey } from '../../lib/japamCounterIst';
 import {
   incrementJapamCounter,
@@ -14,20 +15,25 @@ import { useAuthStore } from '../../store/authStore';
 
 type Props = {
   mode: JapamCounterMode;
+  deityId: DeityId;
   deityLabel: string;
   sessionCount: number;
   /** Manual: each japa updates the month. Auto: parent commits on Complete/End. */
   syncMode?: 'live' | 'commit';
   /** When set, adds `delta` japas for this mode (auto sessions). */
   commitRequest?: { id: number; delta: number } | null;
+  /** Manual counting screen: one line month total, no scrollable leaderboard. */
+  variant?: 'full' | 'minimal';
 };
 
 export function JapamCounterLeaderboardPanel({
   mode,
+  deityId,
   deityLabel,
   sessionCount,
   syncMode = 'live',
   commitRequest = null,
+  variant = 'full',
 }: Props) {
   const { t } = useTranslation();
   const user = useAuthStore((s) => s.user);
@@ -48,10 +54,19 @@ export function JapamCounterLeaderboardPanel({
 
   const yourMonthTotal = mode === 'auto' ? monthAuto : monthManual;
 
+  const applyLeaderboardPayload = useCallback(
+    (lb: JapamCounterLeaderboardRow[], viewerManual: number, viewerAuto: number) => {
+      setLeaderboard(lb);
+      setMonthManual(viewerManual);
+      setMonthAuto(viewerAuto);
+    },
+    [],
+  );
+
   const refreshLeaderboard = useCallback(async () => {
-    const { leaderboard: lb } = await loadJapamCounterLeaderboard({ monthKey, mode: 'all' });
-    setLeaderboard(lb);
-  }, [monthKey]);
+    const res = await loadJapamCounterLeaderboard({ monthKey, mode: 'all', deityId });
+    applyLeaderboardPayload(res.leaderboard, res.viewerManual, res.viewerAuto);
+  }, [monthKey, deityId, applyLeaderboardPayload]);
 
   useEffect(() => {
     void refreshLeaderboard();
@@ -66,13 +81,13 @@ export function JapamCounterLeaderboardPanel({
     }
     const delta = sessionCount - prevSessionCount.current;
     prevSessionCount.current = sessionCount;
-    void incrementJapamCounter(mode, delta).then((res) => {
+    void incrementJapamCounter(mode, deityId, delta).then((res) => {
       if (!res) return;
       setMonthManual(res.manualMonth);
       setMonthAuto(res.autoMonth);
       void refreshLeaderboard();
     });
-  }, [sessionCount, mode, user?.uid, refreshLeaderboard, syncMode]);
+  }, [sessionCount, mode, deityId, user?.uid, refreshLeaderboard, syncMode]);
 
   const lastCommitId = useRef(0);
   useEffect(() => {
@@ -81,13 +96,13 @@ export function JapamCounterLeaderboardPanel({
     const delta = Math.max(0, Math.round(commitRequest.delta));
     if (delta <= 0) return;
     lastCommitId.current = commitRequest.id;
-    void incrementJapamCounter(mode, delta).then((res) => {
+    void incrementJapamCounter(mode, deityId, delta).then((res) => {
       if (!res) return;
       setMonthManual(res.manualMonth);
       setMonthAuto(res.autoMonth);
       void refreshLeaderboard();
     });
-  }, [commitRequest, mode, user?.uid, refreshLeaderboard, syncMode]);
+  }, [commitRequest, mode, deityId, user?.uid, refreshLeaderboard, syncMode]);
 
   const handleDownloadRankCard = useCallback(async () => {
     if (!user?.uid) {
@@ -99,28 +114,32 @@ export function JapamCounterLeaderboardPanel({
     setShareNotice(null);
     setSharing(true);
     try {
-      const lbFresh = await loadJapamCounterLeaderboard({ monthKey, mode: 'all' });
-      if (lbFresh.leaderboard.length > 0) setLeaderboard(lbFresh.leaderboard);
+      const lbFresh = await loadJapamCounterLeaderboard({ monthKey, mode: 'all', deityId });
+      if (lbFresh.leaderboard.length > 0) {
+        applyLeaderboardPayload(lbFresh.leaderboard, lbFresh.viewerManual, lbFresh.viewerAuto);
+      }
       const lbForCard = lbFresh.leaderboard.length > 0 ? lbFresh.leaderboard : leaderboard;
       const lbNormalized = normalizeLeaderboardForRankCard(
         mapJapamCounterLeaderboardToRankCardEntries(lbForCard, modeLabel),
       );
-      const participated = yourMonthTotal > 0;
+      const monthForCard = mode === 'auto' ? lbFresh.viewerAuto : lbFresh.viewerManual;
+      const participated = monthForCard > 0;
       const modeTitle = mode === 'auto' ? t('japamCounter.modeAuto') : t('japamCounter.modeManual');
       const headerName = t('japamCounter.rankCardHeader', { deity: deityLabel, mode: modeTitle });
       const summaryLine = t('japamCounter.rankCardSummary', {
-        count: yourMonthTotal,
+        count: monthForCard,
         mode: modeTitle,
+        deity: deityLabel,
         month: monthLabel,
       });
       const blob = await renderRankCardBlob({
         title: 'JAPAM COUNTER',
         headerName,
-        deityName: '',
+        deityName: deityLabel,
         subtitleLine: t('japamCounter.rankCardSubtitle', { month: monthLabel }),
         leaderboard: lbNormalized,
         currentUserUid: user.uid,
-        currentUserJapasOverride: yourMonthTotal,
+        currentUserJapasOverride: monthForCard,
         currentUserDisplayName: user.displayName || user.email?.split('@')[0] || undefined,
         currentUserParticipated: participated,
         soloPersonalMarathon: lbNormalized.length === 0,
@@ -133,7 +152,7 @@ export function JapamCounterLeaderboardPanel({
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `japam-counter-${mode}-${monthKey}.png`;
+      a.download = `japam-counter-${mode}-${deityId}-${monthKey}.png`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -146,6 +165,8 @@ export function JapamCounterLeaderboardPanel({
       setSharing(false);
     }
   }, [
+    applyLeaderboardPayload,
+    deityId,
     deityLabel,
     leaderboard,
     mode,
@@ -155,8 +176,26 @@ export function JapamCounterLeaderboardPanel({
     sharing,
     t,
     user,
-    yourMonthTotal,
   ]);
+
+  if (variant === 'minimal') {
+    return (
+      <div className="w-full max-w-sm shrink-0 px-1" aria-live="polite">
+        {user ? (
+          <p className="text-amber-200/75 text-[10px] text-center tabular-nums leading-snug">
+            {t('japamCounter.yourMonthDeity', {
+              mode: mode === 'auto' ? t('japamCounter.modeAuto') : t('japamCounter.modeManual'),
+              deity: deityLabel,
+              count: yourMonthTotal,
+            })}
+            <span className="text-amber-200/45"> · {monthLabel}</span>
+          </p>
+        ) : (
+          <p className="text-amber-200/55 text-[10px] text-center">{t('japamCounter.monthNote', { month: monthLabel })}</p>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-sm mt-4 rounded-xl border border-emerald-500/25 bg-black/30 p-3">
@@ -165,8 +204,9 @@ export function JapamCounterLeaderboardPanel({
       </p>
       {user ? (
         <p className="text-amber-200/85 text-[11px] text-center tabular-nums mb-2">
-          {t('japamCounter.yourMonth', {
+          {t('japamCounter.yourMonthDeity', {
             mode: mode === 'auto' ? t('japamCounter.modeAuto') : t('japamCounter.modeManual'),
+            deity: deityLabel,
             count: yourMonthTotal,
           })}
         </p>
@@ -174,7 +214,7 @@ export function JapamCounterLeaderboardPanel({
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
         <h2 className="text-amber-200 text-[10px] font-semibold uppercase tracking-wide">
-          {t('japamCounter.leaderboardTitle')}
+          {t('japamCounter.leaderboardTitleDeity', { deity: deityLabel })}
         </h2>
         {user ? (
           <button
@@ -208,7 +248,7 @@ export function JapamCounterLeaderboardPanel({
           <ul className="space-y-1 max-h-40 overflow-y-auto overscroll-contain pr-1">
             {leaderboard.map((row) => (
               <li
-                key={`${row.uid}-${row.counterMode}-${row.rank}`}
+                key={`${row.uid}-${row.counterMode}-${deityId}`}
                 className={`grid grid-cols-[2rem_1fr_3.5rem_2.5rem] gap-1 text-[11px] items-center ${
                   user?.uid === row.uid ? 'text-amber-50' : 'text-amber-100/90'
                 }`}

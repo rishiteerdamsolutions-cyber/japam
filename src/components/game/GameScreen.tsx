@@ -16,15 +16,22 @@ import { useWeeklyStreakStore } from '../../store/weeklyStreakStore';
 import { useProfileStore } from '../../store/profileStore';
 import { hasActivePaidAccess } from '../../lib/membershipDisplay';
 import { downloadCurrentIstWeekStreakProgressCard } from '../../lib/downloadWeeklyStreakProgressCard';
+import {
+  downloadBirthdayGreetingCard,
+  renderBirthdayGreetingCardBlob,
+} from '../../lib/birthdayGreetingCard';
 import { trackShareEvent } from '../../lib/firestore';
 import { saveUserPausedGame } from '../../lib/firestore';
 import { gameDebug } from '../../lib/gameDebug';
 import { setLastPausedGame } from '../../lib/pausedGame';
-import { useSound, stopAllMantras, stopMatchBonusAudio } from '../../hooks/useSound';
+import { useSound, stopAllMantras, stopMatchBonusAudio, applyBackgroundMusicVolume } from '../../hooks/useSound';
 import { useSettingsStore } from '../../store/settingsStore';
 import type { DeityId } from '../../data/deities';
 import type { GameMode } from '../../types';
 import { GoogleSignIn } from '../auth/GoogleSignIn';
+import { PushableButton } from '../ui/PushableButton';
+import { pushableFullWidthFrontClass } from '../../lib/landingCtaStyles';
+import { CTA } from '../../lib/ctaCopy';
 import { LivesDisplay } from '../lives/LivesDisplay';
 import { LivesModal } from '../lives/LivesModal';
 import { GamePowersScrollStrip } from './GamePowersScrollStrip';
@@ -35,6 +42,7 @@ import { pauseAnniversarySession, resumeAnniversarySession } from '../../lib/ann
 import { completeBirthdayOccasion } from '../../lib/occasionsApi';
 import { downloadAnniversaryReportPdf, downloadOccasionSummaryPdf } from '../../utils/occasionPdf';
 import { formatMovesForDisplay, MOVES_INFINITY_CHAR } from '../../lib/formatMovesForDisplay';
+import { useImmersiveTouchLock } from '../../hooks/useImmersiveTouchLock';
 
 /** Shown after ~20 min play; always English regardless of UI language (i18n keys live under `shared.*`). */
 const JAPA_BREAK_REMINDER_MARATHON_EN =
@@ -148,7 +156,7 @@ function GameBottomStrip({
           type="button"
           onClick={onPause}
           disabled={pauseSaving}
-          aria-label={t('game.pause')}
+          aria-label={CTA.game.pause}
           className="flex-shrink-0 w-14 h-14 -mt-5 rounded-full bg-amber-500 shadow-lg shadow-amber-500/40 flex items-center justify-center text-white border-4 border-black/80 hover:bg-amber-400 active:scale-95 transition-transform disabled:opacity-50 mx-1"
         >
           <PauseIcon />
@@ -157,7 +165,7 @@ function GameBottomStrip({
         <button
           type="button"
           onClick={onBack}
-          aria-label={t('game.exit')}
+          aria-label={CTA.game.exit}
           className="flex-shrink-0 w-14 h-14 -mt-5 rounded-full bg-amber-500 shadow-lg shadow-amber-500/40 flex items-center justify-center text-white border-4 border-black/80 hover:bg-amber-400 active:scale-95 transition-transform mx-1"
         >
           <ExitIcon />
@@ -234,6 +242,17 @@ export function GameScreen({
   const profileDisplayName = useProfileStore((s) => s.displayName);
   const initGame = useGameStore(s => s.initGame);
   const status = useGameStore(s => s.status);
+  const { allowNavigation } = useImmersiveTouchLock({
+    enabled: status === 'playing',
+    allowTouchMoveWithin: '[data-game-board], [data-game-powers-strip]',
+    blockHistoryBack: status === 'playing',
+  });
+  const allowNavigationRef = useRef(allowNavigation);
+  allowNavigationRef.current = allowNavigation;
+  const exitGame = useCallback(() => {
+    allowNavigationRef.current();
+    onBack();
+  }, [onBack]);
   const reset = useGameStore(s => s.reset);
   const matchSfxPlayToken = useGameStore((s) => s.matchSfxPlayToken);
   const lastMatchSfxTokenRef = useRef(0);
@@ -369,6 +388,38 @@ export function GameScreen({
     }
     navigate('/japa#japa-dashboard-weekly-streak');
   }, [navigate, onOpenWeeklyStreakHandwritingDownloads]);
+
+  const openSpecial108HandwritingDownloads = useCallback(() => {
+    navigate('/japa#japa-dashboard-special108');
+  }, [navigate]);
+
+  const handleDownloadBirthdayGreetingCard = useCallback(async () => {
+    if (mode === 'general') return;
+    const deityId = mode as DeityId;
+    const deityName = t(`deities.${deityId}`);
+    const blob = await renderBirthdayGreetingCardBlob({
+      deityName,
+      copy: {
+        headline: t('birthdayGreeting.cardHeadline', { defaultValue: 'Happy Birthday' }),
+        achievement: t('birthdayGreeting.cardAchievement', {
+          defaultValue: 'You completed 108 japas of {{deity}} on your special day.',
+          deity: deityName,
+        }),
+        blessing1: t('birthdayGreeting.cardBlessing1', {
+          defaultValue: 'You offered your heart through every mantra.',
+        }),
+        blessing2: t('birthdayGreeting.cardBlessing2', {
+          defaultValue: 'May this sacred count bring you peace, strength, and blessings for the year ahead.',
+        }),
+        from: t('birthdayGreeting.cardFrom', { defaultValue: 'With love from Japam.digital' }),
+      },
+    });
+    if (!blob) {
+      throw new Error('render failed');
+    }
+    downloadBirthdayGreetingCard(blob, deityId);
+    trackShareEvent('japa_pdf').catch(() => {});
+  }, [mode, t]);
 
   useEffect(() => {
     if (!isGuest) setGuestPowerSignInOpen(false);
@@ -663,6 +714,7 @@ export function GameScreen({
       setPauseSavedNotice(true);
       if (pauseSavedTimerRef.current != null) window.clearTimeout(pauseSavedTimerRef.current);
       pauseSavedTimerRef.current = window.setTimeout(() => {
+        allowNavigationRef.current();
         onBack();
       }, 700);
     };
@@ -737,6 +789,7 @@ export function GameScreen({
   // When leaving via overlay (won/lost), flush japas before navigating.
   const handleMenuBack = useCallback(async () => {
     if (user?.uid && (yagnaId || marathonId || useGameStore.getState().special108Japa)) await flushJapas();
+    allowNavigationRef.current();
     onBack();
   }, [user?.uid, yagnaId, marathonId, flushJapas, onBack]);
 
@@ -796,14 +849,16 @@ export function GameScreen({
   const handleVolumeChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const value = Number(e.target.value);
     if (Number.isFinite(value)) {
-      setBackgroundMusicVolume(value / 100);
+      const normalized = value / 100;
+      applyBackgroundMusicVolume(normalized);
+      void setBackgroundMusicVolume(normalized);
     }
   };
 
   if (showOutOfLives) {
     return (
       <OutOfLivesOverlay
-        onClose={onBack}
+        onClose={exitGame}
         onRetryAfterLife={handleRetryAfterLife}
         returnMode={mode}
         returnLevelIndex={levelIndex}
@@ -812,17 +867,23 @@ export function GameScreen({
   }
 
   return (
-    <div className="fixed inset-0 flex flex-col items-center overflow-hidden">
-      <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
-      <div className="relative z-10 flex flex-col items-center w-full flex-1 min-h-0" style={{
+    <div
+      className="fixed inset-0 flex flex-col items-center overflow-hidden touch-none"
+      style={{ overscrollBehavior: 'none' }}
+    >
+      <div className="absolute inset-0 bg-gloss-bubblegum pointer-events-none" aria-hidden />
+      <div className="relative z-10 flex flex-col items-center w-full flex-1 min-h-0 touch-manipulation" style={{
         paddingTop: 'calc(1rem + env(safe-area-inset-top, 0px))',
         paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom, 0px))',
         paddingLeft: 'calc(1rem + env(safe-area-inset-left, 0px))',
         paddingRight: 'calc(1rem + env(safe-area-inset-right, 0px))',
       }}>
-        <div className="w-full max-w-md flex items-center justify-between shrink-0 mb-1 min-w-0 gap-2 min-h-[44px]">
-        <button onClick={handleBack} className="text-amber-400 text-sm font-medium py-2 px-2 -ml-2 min-h-[44px] flex items-center shrink-0" aria-label={t('game.back')}>
-          {t('game.back')}
+        <div
+          data-immersive-ui
+          className="w-full max-w-md flex items-center justify-between shrink-0 mb-1 min-w-0 gap-2 min-h-[44px]"
+        >
+        <button onClick={handleBack} className="text-amber-400 text-sm font-medium py-2 px-2 -ml-2 min-h-[44px] flex items-center shrink-0" aria-label={CTA.game.back}>
+          {CTA.game.back}
         </button>
         {(useLives || (!!user && !isGuest && isMarathon)) && (
             <LivesDisplay
@@ -850,6 +911,7 @@ export function GameScreen({
               max={100}
               step={1}
               value={Math.round((bgMusicVolume ?? 0.25) * 100)}
+              onInput={handleVolumeChange}
               onChange={handleVolumeChange}
               disabled={!bgMusicEnabled}
               className="w-16 sm:w-20 accent-amber-500 h-6"
@@ -921,21 +983,25 @@ export function GameScreen({
         <div className="fixed inset-0 z-[38] flex flex-col items-center justify-center bg-black/88 p-6 text-center">
           <p className="text-amber-100 text-sm max-w-xs mb-4">{t('occasions.sessionPausedCouple')}</p>
           <p className="text-amber-200/70 text-xs max-w-xs mb-6">{t('occasions.resumeCoupleHint')}</p>
-          <button
+          <PushableButton
             type="button"
+            fullWidth
             disabled={pauseSaving || !isFirebaseConfigured || !firestore}
             onClick={() => void handleResumeCouple()}
-            className="w-full max-w-xs py-3 rounded-2xl bg-amber-500 text-black font-semibold disabled:opacity-50 mb-3"
+            className="max-w-xs mb-3"
+            frontClassName={pushableFullWidthFrontClass}
           >
-            {pauseSaving ? '…' : t('occasions.resumeCoupleGame')}
-          </button>
-          <button
+            {pauseSaving ? '…' : CTA.occasions.resumeCoupleGame}
+          </PushableButton>
+          <PushableButton
             type="button"
-            onClick={() => onBack()}
-            className="w-full max-w-xs py-2.5 rounded-xl border border-amber-500/50 text-amber-200 text-sm"
+            fullWidth
+            onClick={exitGame}
+            className="max-w-xs"
+            frontClassName={pushableFullWidthFrontClass}
           >
-            {t('occasions.leavePausedSession')}
-          </button>
+            {CTA.occasions.leavePausedSession}
+          </PushableButton>
         </div>
       )}
 
@@ -956,11 +1022,11 @@ export function GameScreen({
           <button
             type="button"
             onClick={handleRefreshBoard}
-            aria-label={t('game.refreshBoard')}
-            title={t('game.refreshBoard')}
+            aria-label={CTA.game.refreshBoard}
+            title={CTA.game.refreshBoard}
             className="px-3 py-1.5 rounded-lg bg-amber-500/75 text-black font-semibold text-[10px] sm:text-xs leading-snug border border-amber-400/50 shadow-sm hover:bg-amber-400/90 active:scale-[0.98] transition-transform max-w-full text-center whitespace-nowrap"
           >
-            {t('game.refreshBoard')}
+            {CTA.game.refreshBoard}
           </button>
         </div>
       )}
@@ -1001,7 +1067,7 @@ export function GameScreen({
             isGuest={!!isGuest}
             pauseSaving={pauseSaving}
             onPause={handlePause}
-            onBack={onBack}
+            onBack={exitGame}
             occasionKind={occasionKind}
           />
         </>
@@ -1062,20 +1128,25 @@ export function GameScreen({
               </p>
             )}
             {occasionKind === 'anniversary' && anniversaryMidWin && anniversaryHostFromStore && (
-              <button
+              <PushableButton
                 type="button"
+                fullWidth
                 onClick={handleAnniversaryNextLevel}
-                className="w-full py-2.5 rounded-xl bg-amber-500 text-white font-semibold text-sm mb-2"
+                className="mb-2"
+                frontClassName={pushableFullWidthFrontClass}
               >
-                {t('occasions.coupleNextLevel')}
-              </button>
+                {CTA.occasions.coupleNextLevel}
+              </PushableButton>
             )}
             {occasionKind === 'anniversary' && anniversaryMidWin && !anniversaryHostFromStore && (
               <p className="text-amber-200/75 text-xs mb-3">{t('occasions.coupleWaitHostNext')}</p>
             )}
             {(occasionKind === 'birthday' || anniversaryIsFinalWin) && (
-              <button
+              <PushableButton
                 type="button"
+                fullWidth
+                className="mb-2"
+                frontClassName={pushableFullWidthFrontClass}
                 onClick={() => {
                   const s = useGameStore.getState();
                   if (occasionKind === 'birthday') {
@@ -1100,18 +1171,18 @@ export function GameScreen({
                     });
                   }
                 }}
-                className="w-full py-2.5 rounded-xl bg-amber-500 text-white font-semibold text-sm mb-2"
               >
-                {t('occasions.downloadPdf')}
-              </button>
+                {CTA.occasions.downloadPdf}
+              </PushableButton>
             )}
-            <button
+            <PushableButton
               type="button"
+              fullWidth
               onClick={() => void handleMenuBack()}
-              className="w-full py-2.5 rounded-xl border border-amber-500/50 text-amber-300 text-sm"
+              frontClassName={pushableFullWidthFrontClass}
             >
-              {t('game.menu')}
-            </button>
+              {CTA.game.menu}
+            </PushableButton>
           </div>
         </div>
       )}
@@ -1127,18 +1198,18 @@ export function GameScreen({
               <div className="mb-4">
                 <GoogleSignIn />
               </div>
-              <button
-                onClick={reset}
-                className="w-full py-3 rounded-xl bg-amber-500/80 text-white font-semibold"
+              <PushableButton type="button" fullWidth onClick={reset} frontClassName={pushableFullWidthFrontClass}>
+                {CTA.game.continueAsGuest}
+              </PushableButton>
+              <PushableButton
+                type="button"
+                fullWidth
+                onClick={exitGame}
+                className="mt-2"
+                frontClassName={pushableFullWidthFrontClass}
               >
-                Continue as guest
-              </button>
-              <button
-                onClick={onBack}
-                className="mt-2 w-full py-3 rounded-xl border border-amber-500/50 text-amber-400"
-              >
-                Menu
-              </button>
+                {CTA.game.menu}
+              </PushableButton>
             </div>
           </div>
         ) : !occasionKind ? (
@@ -1154,6 +1225,12 @@ export function GameScreen({
             onDownloadWeeklyProgressCard={weeklyStreakJapa ? handleDownloadWeeklyProgressCard : undefined}
             onOpenWeeklyStreakHandwritingDownloads={
               weeklyStreakJapa ? openWeeklyStreakHandwritingDownloads : undefined
+            }
+            onOpenSpecial108HandwritingDownloads={
+              special108Japa ? openSpecial108HandwritingDownloads : undefined
+            }
+            onDownloadBirthdayGreetingCard={
+              special108Japa && mode !== 'general' ? handleDownloadBirthdayGreetingCard : undefined
             }
           />
         ) : null
@@ -1195,15 +1272,17 @@ export function GameScreen({
             <p className="text-amber-200/90 mb-8 text-sm sm:text-base break-words">
               {isMarathon ? JAPA_BREAK_REMINDER_MARATHON_EN : JAPA_BREAK_REMINDER_AFTER_LEVEL_EN}
             </p>
-            <button
+            <PushableButton
+              type="button"
+              fullWidth
               onClick={() => {
                 setShowBreakReminder(false);
                 scheduleBreakReminder();
               }}
-              className="w-full py-3 rounded-xl bg-amber-500 text-white font-semibold"
+              frontClassName={pushableFullWidthFrontClass}
             >
-              OK
-            </button>
+              {CTA.common.ok}
+            </PushableButton>
           </div>
         </div>
       )}

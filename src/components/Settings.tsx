@@ -12,6 +12,7 @@ import { isFirebaseConfigured } from '../lib/firebase';
 import { DonateThankYouBox } from './donation/DonateThankYouBox';
 import { AccessBadge } from './ui/AccessBadge';
 import { buildJapamWhatsAppShareHref } from '../lib/japamWhatsAppShare';
+import { CTA } from '../lib/ctaCopy';
 import { loadMyAppreciations, loadUserPaymentHistory, type MyAppreciations, type UserPaymentHistoryData } from '../lib/firestore';
 import { useReminderStore } from '../store/reminderStore';
 import { auth } from '../lib/firebase';
@@ -446,7 +447,7 @@ export function Settings({ onBack }: SettingsProps) {
                     onClick={() => signInWithGoogle()}
                     className="text-amber-400/90 text-xs font-medium hover:text-amber-400 whitespace-nowrap disabled:opacity-60"
                   >
-                    {signInPending ? '…' : t('menu.signIn')}
+                    {signInPending ? '…' : CTA.menu.signIn}
                   </button>
                 )}
               </>
@@ -750,6 +751,7 @@ export function Settings({ onBack }: SettingsProps) {
                     min={0}
                     max={100}
                     value={Math.round((backgroundMusicVolume ?? 0.25) * 100)}
+                    onInput={(e) => setBackgroundMusicVolume(Number(e.target.value) / 100)}
                     onChange={(e) => setBackgroundMusicVolume(Number(e.target.value) / 100)}
                     className="flex-1 accent-amber-500"
                   />

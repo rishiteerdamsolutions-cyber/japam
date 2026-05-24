@@ -1,0 +1,153 @@
+/* 3D pushable button — content-sized; constant pixel lift for depth. */
+
+.pushable {
+  --pushable-lift: 4px;
+  --pushable-shadow-offset: 2px;
+  --pushable-radius: 12px;
+  position: relative;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  outline-offset: 4px;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  font: inherit;
+  display: inline-block;
+  text-decoration: none;
+  color: inherit;
+  vertical-align: top;
+  box-sizing: border-box;
+}
+
+.pushable--disabled,
+.pushable:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  filter: grayscale(0.12);
+}
+
+.pushable:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.pushable:focus-visible {
+  outline: 2px solid rgba(251, 191, 36, 0.85);
+  outline-offset: 4px;
+}
+
+/* Sized by .pushable-front in flow; shadow/edge mirror that box */
+.pushable-shadow,
+.pushable-edge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--pushable-radius);
+  pointer-events: none;
+}
+
+.pushable-shadow {
+  background: hsl(0deg 0% 0% / 0.28);
+  transform: translateY(var(--pushable-shadow-offset));
+  transition: transform 34ms cubic-bezier(0.3, 0.7, 0.4, 1);
+}
+
+.pushable-edge {
+  background: linear-gradient(
+    to left,
+    var(--pushable-edge-dark, hsl(28deg 100% 16%)) 0%,
+    var(--pushable-edge-mid, hsl(32deg 100% 32%)) 8%,
+    var(--pushable-edge-mid, hsl(32deg 100% 32%)) 92%,
+    var(--pushable-edge-dark, hsl(28deg 100% 16%)) 100%
+  );
+}
+
+.pushable-front {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.625rem 1.5rem;
+  border-radius: var(--pushable-radius);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--pushable-front-color, #fff);
+  background: var(--pushable-front-bg, hsl(38deg 96% 47%));
+  transform: translateY(calc(-1 * var(--pushable-lift)));
+  transition: transform 34ms cubic-bezier(0.3, 0.7, 0.4, 1);
+  text-align: center;
+  gap: 0.125rem;
+  user-select: none;
+}
+
+/* Layout hints — sizing comes from content + min-height, not fixed rem */
+.pushable--layout-inline {
+  width: auto;
+  max-width: 100%;
+}
+
+.pushable--layout-stacked .pushable-front {
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.pushable--layout-block {
+  display: block;
+  width: 100%;
+}
+
+.pushable--layout-grid {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.pushable--layout-grid .pushable-front {
+  height: 100%;
+  min-height: 3rem;
+  padding: 0.5rem 0.5rem;
+}
+
+.pushable--layout-tile .pushable-front {
+  flex-direction: column;
+  gap: 0.375rem;
+  min-height: 5rem;
+  padding: 0.75rem 0.5rem;
+}
+
+.pushable--sm .pushable-front {
+  min-height: 2.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+.pushable--lg .pushable-front {
+  min-height: 3.25rem;
+  padding: 0.75rem 1.75rem;
+  font-size: 1.0625rem;
+}
+
+/* Press only — lift is always 4px, never tied to button height */
+.pushable:active:not(:disabled) .pushable-front {
+  transform: translateY(calc(-1 * var(--pushable-lift) + 2px));
+}
+
+.pushable:active:not(:disabled) .pushable-shadow {
+  transform: translateY(1px);
+}
+
+.pushable--primary {
+  --pushable-edge-dark: hsl(28deg 100% 16%);
+  --pushable-edge-mid: hsl(32deg 100% 32%);
+  --pushable-front-bg: hsl(38deg 96% 47%);
+  --pushable-front-color: #fff;
+}

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { get, set } from 'idb-keyval';
+import { applyBackgroundMusicVolume } from '../hooks/useSound';
 
 const STORAGE_KEY = 'japam-settings';
 
@@ -50,6 +51,7 @@ export const useSettingsStore = create<SettingsState>((setState) => ({
   setBackgroundMusicVolume: async (volume) => {
     const v = Math.min(1, Math.max(0, volume));
     setState({ backgroundMusicVolume: v });
+    applyBackgroundMusicVolume(v);
     try {
       await set(STORAGE_KEY, { ...(await get(STORAGE_KEY)) ?? {}, backgroundMusicVolume: v });
     } catch {}

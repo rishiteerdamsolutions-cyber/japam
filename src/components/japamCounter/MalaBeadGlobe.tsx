@@ -1,12 +1,15 @@
 import { useLayoutEffect, useRef } from 'react';
 
 type Props = {
-  /** Flip toward camera — rotation around horizontal X axis (poles tip toward/away from you) */
+  /** Roll on thread axis — rotation around X (poles left/right; only top↔bottom spin) */
   spinX?: number;
   sizePx?: number;
 };
 
 const DEG = Math.PI / 180;
+/** 90° left: model poles (+Y) → fixed on ±X (pole-to-pole horizontal) */
+const POLE_ON_X_RZ = 90 * DEG;
+const VIEW_TILT_X = 14 * DEG;
 const MUKHI_COUNT = 5;
 const LIGHT = normVec(-0.36, -0.4, 0.82);
 const SPEC_DIR = normVec(0.5, -0.3, 0.8);
@@ -102,21 +105,45 @@ function perturbedNormal(mx: number, my: number, mz: number, strength: number) {
   return norm(mx - (hx / eps) * strength, my - (hy / eps) * strength, mz - (hz / eps) * strength);
 }
 
-/** view = Rx(spinX) · model — swipe flips bead toward the user */
+/**
+ * Thread through poles (X). view = Rx(tilt) · Rx(spinX) · Rz(lay) · model
+ * Only X-axis spin — no left/right twist (thread blocks Y spin).
+ */
 function modelToView(x: number, y: number, z: number, spinX: number) {
+  const cz = Math.cos(POLE_ON_X_RZ);
+  const sz = Math.sin(POLE_ON_X_RZ);
+  const x0 = x * cz - y * sz;
+  const y0 = x * sz + y * cz;
+  const z0 = z;
+
   const cx = Math.cos(spinX);
   const sx = Math.sin(spinX);
-  const y1 = y * cx - z * sx;
-  const z1 = y * sx + z * cx;
-  return { x, y: y1, z: z1 };
+  const y1 = y0 * cx - z0 * sx;
+  const z1 = y0 * sx + z0 * cx;
+
+  const cx2 = Math.cos(VIEW_TILT_X);
+  const sx2 = Math.sin(VIEW_TILT_X);
+  const y2 = y1 * cx2 - z1 * sx2;
+  const z2 = y1 * sx2 + z1 * cx2;
+  return { x: x0, y: y2, z: z2 };
 }
 
 function viewToModel(x: number, y: number, z: number, spinX: number) {
+  const cx2 = Math.cos(VIEW_TILT_X);
+  const sx2 = Math.sin(VIEW_TILT_X);
+  const y1 = y * cx2 + z * sx2;
+  const z1 = -y * sx2 + z * cx2;
+
   const cx = Math.cos(spinX);
   const sx = Math.sin(spinX);
-  const y1 = y * cx + z * sx;
-  const z1 = -y * sx + z * cx;
-  return norm(x, y1, z1);
+  const y0 = y1 * cx + z1 * sx;
+  const z0 = -y1 * sx + z1 * cx;
+
+  const cz = Math.cos(POLE_ON_X_RZ);
+  const sz = Math.sin(POLE_ON_X_RZ);
+  const x2 = x * cz + y0 * sz;
+  const y2 = -x * sz + y0 * cz;
+  return norm(x2, y2, z0);
 }
 
 function shadeRudraksha(
@@ -231,8 +258,8 @@ function drawRudraksha(ctx: CanvasRenderingContext2D, size: number, spinXDeg: nu
   ctx.fill();
 }
 
-/** 3D rudraksha bead (5-mukhi) — flips on X axis toward the user */
-export function MalaBeadGlobe({ spinX = 16, sizePx = 70 }: Props) {
+/** 3D rudraksha — thread on X; roll top↔bottom on X only */
+export function MalaBeadGlobe({ spinX = 0, sizePx = 70 }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useLayoutEffect(() => {

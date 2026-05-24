@@ -4,6 +4,7 @@ import { ManualMalaJapaPad } from '../components/japamCounter/ManualMalaJapaPad'
 import {
   getMalaHapticBackend,
   isLikelyIos,
+  MALA_ROLL_HAPTIC_MS,
   resetMalaBeadStrokeHaptic,
   startMalaBeadRollHaptic,
 } from '../lib/malaHaptics';
@@ -44,7 +45,7 @@ export function MalaSwipeHapticTestPage() {
   const onTestPulse = useCallback(() => {
     primeAudio();
     resetMalaBeadStrokeHaptic();
-    startMalaBeadRollHaptic();
+    startMalaBeadRollHaptic(MALA_ROLL_HAPTIC_MS);
     setDebugLine('tap: single flat roll buzz (~520ms)');
   }, []);
 
@@ -57,8 +58,10 @@ export function MalaSwipeHapticTestPage() {
         <p className="text-[11px] uppercase tracking-wider text-amber-300/70 mb-1">Test only</p>
         <h1 className="text-lg font-semibold text-center mb-1">Mala swipe haptics</h1>
         <p className="text-amber-100/65 text-xs text-center max-w-sm mb-4 leading-relaxed">
-          Haptic + bead physics test only (no mantra). Production manual counter uses deity audio on{' '}
-          <span className="text-amber-200/90">/special-japam-counter</span>.
+          Bead below uses <span className="text-amber-200/90">swipe-to-count</span> + roll haptics (test only).
+          Production counter on{' '}
+          <span className="text-amber-200/90">/special-japam-counter</span> uses{' '}
+          <span className="text-amber-200/90">tap-to-count</span>, short mantra ticks, and light haptics.
         </p>
 
         <p className="text-5xl font-bold text-amber-400 tabular-nums mb-1" aria-live="polite">
@@ -122,6 +125,7 @@ export function MalaSwipeHapticTestPage() {
           sessionCount={count}
           sessionTarget={AUTO_JAPAM_SESSION_TARGET}
           disabled={count >= AUTO_JAPAM_SESSION_TARGET}
+          fastJapa={false}
         />
       </div>
     </div>

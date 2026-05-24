@@ -5,8 +5,11 @@
 
 export type MalaHapticBackend = 'vibration' | 'ios-switch' | 'none';
 
-/** Steady roll while the bead moves (ms). */
+/** @deprecated Long roll buzz — use tap pulse only (interferes with mantra on phones). */
 export const MALA_ROLL_HAPTIC_MS = 520;
+
+/** One firm pulse on bead touch (short — does not block mantra). */
+export const MALA_COUNT_HAPTIC_MS = 44;
 
 let iosSwitchInput: HTMLInputElement | null = null;
 let rollBuzzStarted = false;
@@ -111,9 +114,11 @@ export function cancelMalaBeadStrokeHaptic(): void {
 }
 
 /**
- * One steady buzz for this stroke. No-op if already started for this gesture.
+ * Roll buzz — disabled by default (520ms motor blocks speaker / feels sluggish).
+ * Haptic test page can pass an explicit duration.
  */
-export function startMalaBeadRollHaptic(durationMs = MALA_ROLL_HAPTIC_MS): boolean {
+export function startMalaBeadRollHaptic(durationMs = 0): boolean {
+  if (durationMs <= 0) return false;
   if (rollBuzzStarted) return false;
   rollBuzzStarted = true;
   let ok = false;
@@ -130,16 +135,20 @@ export function finishMalaBeadRollHaptic(): void {
   /* intentional no-op */
 }
 
-/** Short pulse when a japa counted but roll buzz never started (e.g. first gesture). */
-export function confirmMalaBeadCountedHaptic(): void {
-  if (rollBuzzStarted) return;
+/** Single pulse when the finger first lands on the bead. */
+export function pulseMalaBeadTouchHaptic(): void {
   if (hasVibrationApi()) {
-    flatVibrate(120);
+    flatVibrate(MALA_COUNT_HAPTIC_MS);
     return;
   }
   if (isLikelyIos()) {
     pulseViaIosSwitch();
   }
+}
+
+/** @deprecated Use pulseMalaBeadTouchHaptic on touch-down. */
+export function confirmMalaBeadCountedHaptic(): void {
+  pulseMalaBeadTouchHaptic();
 }
 
 export function pulseMalaBeadHeavyGrab(): boolean {

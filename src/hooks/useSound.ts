@@ -132,10 +132,24 @@ async function preloadMantras() {
 
 const activeSources: AudioBufferSourceNode[] = [];
 const activeMantraHtmlAudios: HTMLAudioElement[] = [];
+const japaTickSources: AudioBufferSourceNode[] = [];
 let _mantraPlayGeneration = 0;
+
+/** Snippet length for rapid manual japam (full mantra overlaps and feels delayed). */
+const JAPA_TICK_SEC = 0.52;
+const JAPA_TICK_MAX_OVERLAP = 2;
 
 function playMantraAudio(deity: DeityId) {
   void playMantraOnce(deity);
+}
+
+function stopJapaTickSources(): void {
+  for (const s of japaTickSources) {
+    try {
+      s.stop();
+    } catch {}
+  }
+  japaTickSources.length = 0;
 }
 
 function stopActiveMantraPlayback(): void {
@@ -152,6 +166,48 @@ function stopActiveMantraPlayback(): void {
     } catch {}
   }
   activeMantraHtmlAudios.length = 0;
+  stopJapaTickSources();
+}
+
+/**
+ * Fast manual japam: play a short mantra head immediately, overlap a few, never stop the prior clip.
+ */
+export function playMantraJapaTick(deity: DeityId): void {
+  const ctx = getAudioContext();
+  if (ctx.state === 'suspended') {
+    void ctx.resume();
+  }
+
+  const buffer = mantraBuffers.get(deity);
+  if (buffer) {
+    while (japaTickSources.length >= JAPA_TICK_MAX_OVERLAP) {
+      const old = japaTickSources.shift();
+      try {
+        old?.stop();
+      } catch {}
+    }
+    const dur = Math.min(JAPA_TICK_SEC, buffer.duration);
+    const source = ctx.createBufferSource();
+    const gain = ctx.createGain();
+    source.buffer = buffer;
+    gain.gain.value = 0.72;
+    source.connect(gain);
+    gain.connect(ctx.destination);
+    source.onended = () => {
+      const i = japaTickSources.indexOf(source);
+      if (i >= 0) japaTickSources.splice(i, 1);
+    };
+    japaTickSources.push(source);
+    try {
+      source.start(0, 0, dur);
+    } catch {
+      playDeityTone(ctx, deity);
+    }
+    return;
+  }
+
+  playDeityTone(ctx, deity);
+  void loadMantraBufferForDeity(deity);
 }
 
 /** Play one deity mantra and resolve when playback finishes (or is stopped). */

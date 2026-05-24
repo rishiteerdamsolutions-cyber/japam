@@ -32,7 +32,7 @@ export function MalaSaffronSessionOverlay({ sessionCount, columnWidthPx, coreHei
 
   return (
     <div
-      className="pointer-events-none absolute left-0 top-0 z-[6]"
+      className="pointer-events-none absolute inset-0 z-[6]"
       style={{ width: columnWidthPx, height: coreHeightPx }}
     >
       <MalaSaffronClosingThreads

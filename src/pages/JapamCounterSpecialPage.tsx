@@ -19,9 +19,14 @@ import { MenuMatchChantHeader } from '../components/layout/MenuMatchChantHeader'
 import { JapamCounterLeaderboardPanel } from '../components/japamCounter/JapamCounterLeaderboardPanel';
 import { ManualMalaJapaPad } from '../components/japamCounter/ManualMalaJapaPad';
 import { useManualJapaTouchLock } from '../hooks/useManualJapaTouchLock';
-import { ensureMantraPreloaded, playMantraOnce, primeAudio, stopAllMantras } from '../hooks/useSound';
+import {
+  ensureMantraPreloaded,
+  playMantraJapaTick,
+  playMantraOnce,
+  primeAudio,
+  stopAllMantras,
+} from '../hooks/useSound';
 import { useJapaStore } from '../store/japaStore';
-import { primeMalaHaptics } from '../lib/malaHaptics';
 
 type JapamCounterMode = 'manual' | 'auto';
 
@@ -66,7 +71,6 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
   useEffect(() => {
     if (!deityId || isAuto) return;
     primeAudio();
-    primeMalaHaptics();
     ensureMantraPreloaded(deityId);
   }, [deityId, isAuto]);
 
@@ -143,13 +147,10 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
 
   const onManualBeadRoll = useCallback(() => {
     if (!deityId || countRef.current >= AUTO_JAPAM_SESSION_TARGET) return;
-    primeAudio();
-    primeMalaHaptics();
-    ensureMantraPreloaded(deityId);
     const next = Math.min(countRef.current + 1, AUTO_JAPAM_SESSION_TARGET);
     countRef.current = next;
     setCount(next);
-    void playMantraOnce(deityId);
+    playMantraJapaTick(deityId);
   }, [deityId]);
 
   useEffect(() => {

@@ -17,6 +17,7 @@ import { AccessBadge } from '../components/ui/AccessBadge';
 import { BottomNav } from '../components/nav/BottomNav';
 import { MenuMatchChantHeader } from '../components/layout/MenuMatchChantHeader';
 import { JapamCounterLeaderboardPanel } from '../components/japamCounter/JapamCounterLeaderboardPanel';
+import { incrementJapamCounter } from '../lib/japamCounterApi';
 import { ManualMalaJapaPad } from '../components/japamCounter/ManualMalaJapaPad';
 import { useManualJapaTouchLock } from '../hooks/useManualJapaTouchLock';
 import { pulseMalaBeadTouchHaptic } from '../lib/malaHaptics';
@@ -43,13 +44,13 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
 
   const [count, setCount] = useState(MANUAL_JAPAM_COUNTER_INITIAL_COUNT);
   const [mantraBusy, setMantraBusy] = useState(false);
-  const [japaLocked, setJapaLocked] = useState(false);
   const [autoRunning, setAutoRunning] = useState(false);
   const [saveNotice, setSaveNotice] = useState<string | null>(null);
   const [commitRequest, setCommitRequest] = useState<{ id: number; delta: number } | null>(null);
   const autoRunningRef = useRef(false);
   const countRef = useRef(MANUAL_JAPAM_COUNTER_INITIAL_COUNT);
   const japaInFlightRef = useRef(false);
+  const prevManualSyncCountRef = useRef(MANUAL_JAPAM_COUNTER_INITIAL_COUNT);
 
   const isAuto = mode === 'auto';
   const titleKey = isAuto ? 'specials.autoJapamCounterTitle' : 'specials.japamCounterTitle';
@@ -89,7 +90,7 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
       setCommitRequest(null);
       autoRunningRef.current = false;
       japaInFlightRef.current = false;
-      setJapaLocked(false);
+      prevManualSyncCountRef.current = MANUAL_JAPAM_COUNTER_INITIAL_COUNT;
       special108LoggedRef.current = false;
       stopAllMantras();
       setSearchParams(
@@ -145,21 +146,31 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
   const onManualBeadRoll = useCallback(() => {
     if (!deityId || japaInFlightRef.current || countRef.current >= AUTO_JAPAM_SESSION_TARGET) return;
     japaInFlightRef.current = true;
-    setJapaLocked(true);
+
+    const next = Math.min(countRef.current + 1, AUTO_JAPAM_SESSION_TARGET);
+    countRef.current = next;
+    setCount(next);
+
     pulseMalaBeadTouchHaptic();
     void (async () => {
       try {
         await playMantraOnce(deityId);
-        if (countRef.current >= AUTO_JAPAM_SESSION_TARGET) return;
-        const next = Math.min(countRef.current + 1, AUTO_JAPAM_SESSION_TARGET);
-        countRef.current = next;
-        setCount(next);
       } finally {
         japaInFlightRef.current = false;
-        setJapaLocked(false);
       }
     })();
   }, [deityId]);
+
+  useEffect(() => {
+    if (isAuto || !deityId || !user?.uid) return;
+    if (count <= prevManualSyncCountRef.current) {
+      prevManualSyncCountRef.current = count;
+      return;
+    }
+    const delta = count - prevManualSyncCountRef.current;
+    prevManualSyncCountRef.current = count;
+    void incrementJapamCounter('manual', deityId, delta);
+  }, [count, deityId, isAuto, user?.uid]);
 
   useEffect(() => {
     if (isAuto || !isSpecial108Session || !deityId) return;
@@ -214,7 +225,7 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
       stopAutoPlayback();
     }
     japaInFlightRef.current = false;
-    setJapaLocked(false);
+    prevManualSyncCountRef.current = MANUAL_JAPAM_COUNTER_INITIAL_COUNT;
     setMantraBusy(false);
     countRef.current = 0;
     setCount(0);
@@ -331,35 +342,35 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
               {deity.mantra}
             </p>
 
-            <div className="relative shrink-0 min-h-[2.5rem] w-full max-w-[18rem] px-2 flex items-center justify-center">
+            <div className="relative shrink-0 min-h-[2.5rem] w-full max-w-[18rem] px-2 flex flex-col items-center justify-center gap-1">
               {count >= AUTO_JAPAM_SESSION_TARGET ? (
-                <p
-                  className="text-emerald-200/90 text-sm font-semibold text-center leading-snug"
-                  role="status"
-                >
-                  {isSpecial108Session
-                    ? t('specials.japamCounterSessionComplete108', {
-                        defaultValue: '108 japas complete — session finished.',
-                      })
-                    : t('specials.japamCounterSessionComplete', {
-                        defaultValue: 'Session complete.',
-                      })}
-                </p>
+                <>
+                  <p
+                    className="text-[clamp(2.5rem,14vw,3.25rem)] font-bold text-white tabular-nums leading-none"
+                    role="status"
+                    aria-atomic="true"
+                  >
+                    {count}
+                  </p>
+                  <p className="text-emerald-200/90 text-sm font-semibold text-center leading-snug">
+                    {isSpecial108Session
+                      ? t('specials.japamCounterSessionComplete108', {
+                          defaultValue: '108 japas complete — session finished.',
+                        })
+                      : t('specials.japamCounterSessionComplete', {
+                          defaultValue: 'Session complete.',
+                        })}
+                  </p>
+                </>
               ) : (
-                <p className="text-amber-200/55 text-[10px] text-center leading-snug">
-                  {t('specials.japamCounterMalaHint')}
+                <p className="text-amber-200/55 text-[10px] text-center leading-snug max-w-[16rem]">
+                  {t('specials.japamCounterMalaHint', {
+                    defaultValue:
+                      'Roll the digital japa mala. Your count appears when you finish 108 japas.',
+                  })}
                 </p>
               )}
             </div>
-
-            <JapamCounterLeaderboardPanel
-              mode="manual"
-              deityId={deity.id}
-              deityLabel={t(`deities.${deity.id}`)}
-              sessionCount={count}
-              syncMode="live"
-              variant="minimal"
-            />
           </div>
         </div>
 
@@ -373,7 +384,7 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
             sessionCount={count}
             sessionCountRef={countRef}
             japaInFlightRef={japaInFlightRef}
-            disabled={unlockPending || japaLocked || count >= AUTO_JAPAM_SESSION_TARGET}
+            disabled={unlockPending || count >= AUTO_JAPAM_SESSION_TARGET}
             sessionTarget={AUTO_JAPAM_SESSION_TARGET}
           />
         </div>

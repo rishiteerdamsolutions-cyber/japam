@@ -141,6 +141,8 @@ export function MalaBeadSwipeZone({
         return;
       }
       beadCountedRef.current = true;
+      spinXRef.current -= BEAD_SWIPE_PX * BEAD_ROLL_SENS;
+      setSpinX(spinXRef.current);
       onBead();
       onStrokeDebug?.({
         delta: Math.round(Math.max(0, lastYRef.current - startYRef.current)),

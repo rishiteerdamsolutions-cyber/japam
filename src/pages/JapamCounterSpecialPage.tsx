@@ -151,7 +151,7 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
     countRef.current = next;
     setCount(next);
 
-    queueMicrotask(() => {
+    requestAnimationFrame(() => {
       pulseMalaBeadTouchHaptic();
       void (async () => {
         try {

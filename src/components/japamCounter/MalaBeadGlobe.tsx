@@ -1,4 +1,11 @@
-import { memo, useEffect, useRef } from 'react';
+import { forwardRef, memo, useImperativeHandle, useLayoutEffect, useRef } from 'react';
+
+export type MalaBeadGlobeQuality = 'draft' | 'full';
+
+export type MalaBeadGlobeHandle = {
+  /** Paint immediately (used while finger is rolling — skips React state). */
+  paint: (spinXDeg: number, quality?: MalaBeadGlobeQuality) => void;
+};
 
 type Props = {
   /** Roll on thread axis — rotation around X (poles left/right; only top↔bottom spin) */
@@ -69,14 +76,10 @@ function fbm(x: number, y: number, z: number, octaves: number) {
   return sum / normAmp;
 }
 
-/** Longitude from Y-up sphere (poles at ±Y) */
 function lonY(mx: number, mz: number) {
   return Math.atan2(mx, mz);
 }
 
-/**
- * 5-mukhi rudraksha: deep vertical grooves, rounded ridges, pole depressions, seed grain.
- */
 function rudrakshaHeight(mx: number, my: number, mz: number) {
   const lon = lonY(mx, mz);
   const mukhiWave = Math.cos(lon * MUKHI_COUNT);
@@ -90,7 +93,6 @@ function rudrakshaHeight(mx: number, my: number, mz: number) {
   return ridge - groove - poleCup + grain + organic;
 }
 
-/** 0 = ridge crest, 1 = deep groove */
 function grooveDepth01(mx: number, mz: number) {
   const mukhiWave = Math.cos(lonY(mx, mz) * MUKHI_COUNT);
   return Math.pow(Math.max(0, -mukhiWave), 1.6);
@@ -105,10 +107,6 @@ function perturbedNormal(mx: number, my: number, mz: number, strength: number) {
   return norm(mx - (hx / eps) * strength, my - (hy / eps) * strength, mz - (hz / eps) * strength);
 }
 
-/**
- * Thread through poles (X). view = Rx(tilt) · Rx(spinX) · Rz(lay) · model
- * Only X-axis spin — no left/right twist (thread blocks Y spin).
- */
 function modelToView(x: number, y: number, z: number, spinX: number) {
   const cz = Math.cos(POLE_ON_X_RZ);
   const sz = Math.sin(POLE_ON_X_RZ);
@@ -194,12 +192,18 @@ function shadeRudraksha(
   };
 }
 
-function drawRudraksha(ctx: CanvasRenderingContext2D, size: number, spinXDeg: number) {
+function drawRudraksha(
+  ctx: CanvasRenderingContext2D,
+  size: number,
+  spinXDeg: number,
+  quality: MalaBeadGlobeQuality,
+) {
   const spinX = spinXDeg * DEG;
   const cx = size / 2;
   const cy = size / 2;
   const R = size * 0.48;
   const bump = 0.48;
+  const stride = quality === 'draft' ? 2 : 1;
 
   ctx.clearRect(0, 0, size, size);
 
@@ -207,8 +211,8 @@ function drawRudraksha(ctx: CanvasRenderingContext2D, size: number, spinXDeg: nu
   const d = img.data;
   const R2 = R * R;
 
-  for (let py = 0; py < size; py++) {
-    for (let px = 0; px < size; px++) {
+  for (let py = 0; py < size; py += stride) {
+    for (let px = 0; px < size; px += stride) {
       const dx = px - cx;
       const dy = py - cy;
       if (dx * dx + dy * dy > R2) continue;
@@ -224,11 +228,19 @@ function drawRudraksha(ctx: CanvasRenderingContext2D, size: number, spinXDeg: nu
       const nView = modelToView(n.x, n.y, n.z, spinX);
       const viewZ = Math.max(0, nView.z);
       const { r, g, b, a } = shadeRudraksha(n, viewZ, cavity, groove01);
-      const i = (py * size + px) * 4;
-      d[i] = r;
-      d[i + 1] = g;
-      d[i + 2] = b;
-      d[i + 3] = a;
+
+      for (let sy = 0; sy < stride && py + sy < size; sy++) {
+        for (let sx = 0; sx < stride && px + sx < size; sx++) {
+          const ppx = px + sx;
+          const ppy = py + sy;
+          if ((ppx - cx) ** 2 + (ppy - cy) ** 2 > R2) continue;
+          const i = (ppy * size + ppx) * 4;
+          d[i] = r;
+          d[i + 1] = g;
+          d[i + 2] = b;
+          d[i + 3] = a;
+        }
+      }
     }
   }
   ctx.putImageData(img, 0, 0);
@@ -258,50 +270,60 @@ function drawRudraksha(ctx: CanvasRenderingContext2D, size: number, spinXDeg: nu
   ctx.fill();
 }
 
+function paintGlobeCanvas(
+  canvas: HTMLCanvasElement,
+  sizePx: number,
+  spinXDeg: number,
+  quality: MalaBeadGlobeQuality,
+) {
+  const dpr =
+    quality === 'draft'
+      ? 1
+      : Math.min(2.5, typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1);
+  const px = Math.round(sizePx * dpr);
+  canvas.width = px;
+  canvas.height = px;
+  canvas.style.width = `${sizePx}px`;
+  canvas.style.height = `${sizePx}px`;
+  const ctx = canvas.getContext('2d', { alpha: true });
+  if (!ctx) return;
+  drawRudraksha(ctx, px, spinXDeg, quality);
+}
+
 /** 3D rudraksha — thread on X; roll top↔bottom on X only */
-export const MalaBeadGlobe = memo(function MalaBeadGlobe({ spinX = 0, sizePx = 70 }: Props) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const paintFrameRef = useRef<number | null>(null);
-  const pendingSpinRef = useRef(spinX);
+export const MalaBeadGlobe = memo(
+  forwardRef<MalaBeadGlobeHandle, Props>(function MalaBeadGlobe({ spinX = 0, sizePx = 70 }, ref) {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    useImperativeHandle(
+      ref,
+      () => ({
+        paint(spinXDeg: number, quality: MalaBeadGlobeQuality = 'draft') {
+          const canvas = canvasRef.current;
+          if (!canvas) return;
+          paintGlobeCanvas(canvas, sizePx, spinXDeg, quality);
+        },
+      }),
+      [sizePx],
+    );
 
-  useEffect(() => {
-    pendingSpinRef.current = spinX;
-    if (paintFrameRef.current != null) return;
-
-    paintFrameRef.current = requestAnimationFrame(() => {
-      paintFrameRef.current = null;
+    useLayoutEffect(() => {
       const canvas = canvasRef.current;
       if (!canvas) return;
-      const dpr = Math.min(2.5, typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1);
-      const px = Math.round(sizePx * dpr);
-      canvas.width = px;
-      canvas.height = px;
-      canvas.style.width = `${sizePx}px`;
-      canvas.style.height = `${sizePx}px`;
-      const ctx = canvas.getContext('2d', { alpha: true });
-      if (!ctx) return;
-      drawRudraksha(ctx, px, pendingSpinRef.current);
-    });
+      paintGlobeCanvas(canvas, sizePx, spinX, 'full');
+    }, [spinX, sizePx]);
 
-    return () => {
-      if (paintFrameRef.current != null) {
-        cancelAnimationFrame(paintFrameRef.current);
-        paintFrameRef.current = null;
-      }
-    };
-  }, [spinX, sizePx]);
-
-  return (
-    <div
-      className="pointer-events-none relative"
-      style={{
-        width: sizePx,
-        height: sizePx,
-        filter: 'drop-shadow(0 3px 8px rgba(40, 20, 8, 0.52))',
-      }}
-      aria-hidden
-    >
-      <canvas ref={canvasRef} className="block rounded-full" />
-    </div>
-  );
-});
+    return (
+      <div
+        className="pointer-events-none relative shrink-0 overflow-hidden rounded-full"
+        style={{
+          width: sizePx,
+          height: sizePx,
+          filter: 'drop-shadow(0 3px 8px rgba(40, 20, 8, 0.52))',
+        }}
+        aria-hidden
+      >
+        <canvas ref={canvasRef} className="block h-full w-full" />
+      </div>
+    );
+  }),
+);

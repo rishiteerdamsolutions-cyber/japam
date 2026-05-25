@@ -151,14 +151,16 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
     countRef.current = next;
     setCount(next);
 
-    pulseMalaBeadTouchHaptic();
-    void (async () => {
-      try {
-        await playMantraOnce(deityId);
-      } finally {
-        japaInFlightRef.current = false;
-      }
-    })();
+    queueMicrotask(() => {
+      pulseMalaBeadTouchHaptic();
+      void (async () => {
+        try {
+          await playMantraOnce(deityId);
+        } finally {
+          japaInFlightRef.current = false;
+        }
+      })();
+    });
   }, [deityId]);
 
   useEffect(() => {
@@ -342,31 +344,35 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
               {deity.mantra}
             </p>
 
-            <div className="relative shrink-0 min-h-[2.5rem] w-full max-w-[18rem] px-2 flex flex-col items-center justify-center gap-1">
+            <p
+              className="shrink-0 text-[clamp(2.75rem,16vw,4rem)] font-bold text-white tabular-nums leading-none text-center"
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              {count}
+              <span className="text-[0.42em] font-semibold text-amber-200/55">
+                {' '}
+                / {AUTO_JAPAM_SESSION_TARGET}
+              </span>
+            </p>
+            <div className="relative shrink-0 min-h-[1.35rem] w-full max-w-[18rem] px-2 flex items-center justify-center">
               {count >= AUTO_JAPAM_SESSION_TARGET ? (
-                <>
-                  <p
-                    className="text-[clamp(2.5rem,14vw,3.25rem)] font-bold text-white tabular-nums leading-none"
-                    role="status"
-                    aria-atomic="true"
-                  >
-                    {count}
-                  </p>
-                  <p className="text-emerald-200/90 text-sm font-semibold text-center leading-snug">
-                    {isSpecial108Session
-                      ? t('specials.japamCounterSessionComplete108', {
-                          defaultValue: '108 japas complete — session finished.',
-                        })
-                      : t('specials.japamCounterSessionComplete', {
-                          defaultValue: 'Session complete.',
-                        })}
-                  </p>
-                </>
+                <p
+                  className="text-emerald-200/90 text-xs font-semibold text-center leading-snug"
+                  role="status"
+                >
+                  {isSpecial108Session
+                    ? t('specials.japamCounterSessionComplete108', {
+                        defaultValue: '108 japas complete — session finished.',
+                      })
+                    : t('specials.japamCounterSessionComplete', {
+                        defaultValue: 'Session complete.',
+                      })}
+                </p>
               ) : (
                 <p className="text-amber-200/55 text-[10px] text-center leading-snug max-w-[16rem]">
                   {t('specials.japamCounterMalaHint', {
-                    defaultValue:
-                      'Roll the digital japa mala. Your count appears when you finish 108 japas.',
+                    defaultValue: 'Roll the digital japa mala — one bead, one japa.',
                   })}
                 </p>
               )}

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ManualMalaJapaPad } from '../components/japamCounter/ManualMalaJapaPad';
 import {
@@ -25,6 +25,7 @@ const TEST_PAGE_INITIAL_COUNT = import.meta.env.DEV ? 100 : 0;
 
 export function MalaSwipeHapticTestPage() {
   const [count, setCount] = useState(TEST_PAGE_INITIAL_COUNT);
+  const countRef = useRef(TEST_PAGE_INITIAL_COUNT);
   const [backend, setBackend] = useState(getMalaHapticBackend);
   const [debugLine, setDebugLine] = useState<string | null>(null);
   const [uaShort, setUaShort] = useState('');
@@ -39,7 +40,9 @@ export function MalaSwipeHapticTestPage() {
   }, []);
 
   const onBead = useCallback(() => {
-    setCount((n) => Math.min(n + 1, AUTO_JAPAM_SESSION_TARGET));
+    const next = Math.min(countRef.current + 1, AUTO_JAPAM_SESSION_TARGET);
+    countRef.current = next;
+    setCount(next);
   }, []);
 
   const onTestPulse = useCallback(() => {
@@ -103,6 +106,7 @@ export function MalaSwipeHapticTestPage() {
           <button
             type="button"
             onClick={() => {
+              countRef.current = TEST_PAGE_INITIAL_COUNT;
               setCount(TEST_PAGE_INITIAL_COUNT);
               setDebugLine(null);
             }}
@@ -123,6 +127,7 @@ export function MalaSwipeHapticTestPage() {
         <ManualMalaJapaPad
           onBead={onBead}
           sessionCount={count}
+          sessionCountRef={countRef}
           sessionTarget={AUTO_JAPAM_SESSION_TARGET}
           disabled={count >= AUTO_JAPAM_SESSION_TARGET}
           fastJapa={false}

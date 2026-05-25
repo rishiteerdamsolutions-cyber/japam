@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from 'react';
+import { memo, useEffect, useRef } from 'react';
 
 type Props = {
   /** Roll on thread axis — rotation around X (poles left/right; only top↔bottom spin) */
@@ -259,21 +259,36 @@ function drawRudraksha(ctx: CanvasRenderingContext2D, size: number, spinXDeg: nu
 }
 
 /** 3D rudraksha — thread on X; roll top↔bottom on X only */
-export function MalaBeadGlobe({ spinX = 0, sizePx = 70 }: Props) {
+export const MalaBeadGlobe = memo(function MalaBeadGlobe({ spinX = 0, sizePx = 70 }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const paintFrameRef = useRef<number | null>(null);
+  const pendingSpinRef = useRef(spinX);
 
-  useLayoutEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const dpr = Math.min(2.5, typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1);
-    const px = Math.round(sizePx * dpr);
-    canvas.width = px;
-    canvas.height = px;
-    canvas.style.width = `${sizePx}px`;
-    canvas.style.height = `${sizePx}px`;
-    const ctx = canvas.getContext('2d', { alpha: true });
-    if (!ctx) return;
-    drawRudraksha(ctx, px, spinX);
+  useEffect(() => {
+    pendingSpinRef.current = spinX;
+    if (paintFrameRef.current != null) return;
+
+    paintFrameRef.current = requestAnimationFrame(() => {
+      paintFrameRef.current = null;
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const dpr = Math.min(2.5, typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1);
+      const px = Math.round(sizePx * dpr);
+      canvas.width = px;
+      canvas.height = px;
+      canvas.style.width = `${sizePx}px`;
+      canvas.style.height = `${sizePx}px`;
+      const ctx = canvas.getContext('2d', { alpha: true });
+      if (!ctx) return;
+      drawRudraksha(ctx, px, pendingSpinRef.current);
+    });
+
+    return () => {
+      if (paintFrameRef.current != null) {
+        cancelAnimationFrame(paintFrameRef.current);
+        paintFrameRef.current = null;
+      }
+    };
   }, [spinX, sizePx]);
 
   return (
@@ -289,4 +304,4 @@ export function MalaBeadGlobe({ spinX = 0, sizePx = 70 }: Props) {
       <canvas ref={canvasRef} className="block rounded-full" />
     </div>
   );
-}
+});

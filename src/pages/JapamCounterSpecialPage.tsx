@@ -150,17 +150,14 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
     const next = Math.min(countRef.current + 1, AUTO_JAPAM_SESSION_TARGET);
     countRef.current = next;
     setCount(next);
-
-    requestAnimationFrame(() => {
-      pulseMalaBeadTouchHaptic();
-      void (async () => {
-        try {
-          await playMantraOnce(deityId);
-        } finally {
-          japaInFlightRef.current = false;
-        }
-      })();
-    });
+    pulseMalaBeadTouchHaptic();
+    void (async () => {
+      try {
+        await playMantraOnce(deityId);
+      } finally {
+        japaInFlightRef.current = false;
+      }
+    })();
   }, [deityId]);
 
   useEffect(() => {

@@ -142,18 +142,10 @@ export function FixedMalaCore({ spinX, mainBead }: Props) {
         row.isMain ? (
           <div
             key="main"
-            className="pointer-events-auto relative z-[3] shrink-0 leading-none"
+            className="pointer-events-auto relative z-[3] shrink-0 leading-none overflow-hidden"
             style={{ width: MAIN, height: MAIN, lineHeight: 0 }}
           >
-            <div
-              className="pointer-events-none absolute inset-0 rounded-full"
-              aria-hidden
-              style={{
-                zIndex: 0,
-                background: 'radial-gradient(circle at 38% 32%, #2a1608 0%, #120a04 72%, #080402 100%)',
-              }}
-            />
-            <div className="relative z-[1] h-full w-full">{mainBead}</div>
+            {mainBead}
           </div>
         ) : (
           <ThreadRow key={i} spinX={spinX} row={row} />

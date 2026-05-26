@@ -11,6 +11,7 @@ import { DEITY_IDS, type PlayableDeityId } from '../data/deities';
 import { applySeoSearchParams, clearSeoDeityHint, consumeSeoDeityHint } from '../lib/seoAttribution';
 import { withReturnTo } from '../lib/navigationReturn';
 import {
+  buildInviteIntroGameSearch,
   clearPendingInviteDeity,
   peekPendingInviteDeity,
   storePendingInviteDeity,
@@ -48,10 +49,15 @@ export function MenuPage() {
   const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle);
 
   const launchDeityGame = useCallback(
-    (mode: PlayableDeityId) => {
-      const level = getCurrentLevelIndex(mode);
+    (mode: PlayableDeityId, opts?: { inviteFresh?: boolean }) => {
+      const level = opts?.inviteFresh ? 0 : getCurrentLevelIndex(mode);
       trackProductUsage('action_menu_ista_select');
-      navigate(`/game?mode=${encodeURIComponent(mode)}&level=${level}`, {
+      const params = new URLSearchParams({
+        mode,
+        level: String(level),
+      });
+      if (opts?.inviteFresh) params.set('inviteFresh', '1');
+      navigate(`/game?${params.toString()}`, {
         state: withReturnTo('/menu'),
       });
     },
@@ -93,7 +99,7 @@ export function MenuPage() {
       clearPendingInviteDeity();
       setPendingInviteDeity(null);
       inviteHandledRef.current = true;
-      launchDeityGame(deity);
+      launchDeityGame(deity, { inviteFresh: true });
       return;
     }
 
@@ -126,10 +132,14 @@ export function MenuPage() {
     clearPendingInviteDeity();
     setPendingInviteDeity(null);
     inviteHandledRef.current = true;
-    navigate(`/game?mode=${encodeURIComponent(deity)}&level=0&guest=1`, {
+    navigate(`/game${buildInviteIntroGameSearch(deity)}`, {
       state: withReturnTo('/menu'),
     });
   }, [navigate, pendingInviteDeity]);
+
+  const handleInviteSignIn = useCallback(() => {
+    void signInWithGoogle();
+  }, [signInWithGoogle]);
 
   const dismissInviteGate = useCallback(() => {
     clearPendingInviteDeity();
@@ -137,6 +147,17 @@ export function MenuPage() {
   }, []);
 
   const showInviteGate = Boolean(pendingInviteDeity && !user && !authLoading);
+  const redirectingSignedInInvite =
+    Boolean(pendingInviteDeity && user && !authLoading) && !inviteHandledRef.current;
+
+  if (redirectingSignedInInvite) {
+    return (
+      <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
+        <p className="relative z-10 text-amber-400 text-sm">Opening your japa…</p>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -149,6 +170,7 @@ export function MenuPage() {
       {showInviteGate && pendingInviteDeity ? (
         <DeityInviteGate
           deityId={pendingInviteDeity}
+          onSignIn={handleInviteSignIn}
           onTryAsGuest={tryInviteAsGuest}
           onBrowseMenu={dismissInviteGate}
         />

@@ -34,3 +34,16 @@ export function consumePendingInviteDeity(): PlayableDeityId | null {
   clearPendingInviteDeity();
   return id;
 }
+
+/** Introductory invite play — taste of the deity board without saving progress. */
+export const INVITE_INTRO_JAPA_TARGET = 11;
+
+export function buildInviteIntroGameSearch(deityId: PlayableDeityId): string {
+  const params = new URLSearchParams({
+    mode: deityId,
+    level: '0',
+    guest: '1',
+    intro: '1',
+  });
+  return `?${params.toString()}`;
+}

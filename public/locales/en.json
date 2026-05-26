@@ -47,19 +47,26 @@
     "generalInvite": "Share general Japam link (no specific deity)"
   },
   "invite": {
-    "deityEyebrow": "You are invited",
-    "deityBody": "Play {{game}} on Japam — the match-3 japa board with mantra audio.",
-    "onPlatform": "Either choice opens Japam on this device — match candies, hear mantras, count japas.",
+    "deityTitle": "You are invited to {{deity}} japam",
+    "deityTagline": "Match, chant, and try {{count}} japas on the {{deity}} board — free, no account needed.",
     "chooseHow": "Choose how to join",
     "optionSignIn": "Sign in with Google",
     "optionSignInBadge": "Recommended",
     "signInWaiting": "Opening Google sign-in…",
     "signInWhy": "Your japas, levels, and leaderboard are saved to your account.",
     "optionTry": "Try without signing in",
-    "optionTryWhy": "Play one session on the game board now. You can sign in later to save progress.",
-    "optionTryPlay": "Play now on Japam",
+    "optionTryWhy": "A short {{count}}-japa preview on this deity’s board. Nothing is saved until you sign in.",
+    "optionTryPlay": "Try {{count}} japas now",
+    "signInError": "Sign-in did not complete. Please try again.",
     "orDivider": "or",
     "browseMenu": "Look around the menu first"
+  },
+  "inviteIntro": {
+    "cardHeadline": "Jai!",
+    "cardAchievement": "I tried {{deity}} japam on Japam.",
+    "cardBlessing1": "Match gems, hear mantras, count japas.",
+    "cardBlessing2": "Join me on Japam.digital",
+    "cardFrom": "Shared from Japam.digital"
   },
   "menu": {
     "back": "← Back",

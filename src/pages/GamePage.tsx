@@ -78,13 +78,22 @@ export function GamePage() {
     searchParams.get('special108') === '1' && !gameContextId && !occasionKind;
   const isWeeklyStreakUrl =
     searchParams.get('weeklyStreak') === '1' && !gameContextId && !occasionKind;
-  /** Guest quick-play defaults to general, except Special 108 / weekly streak from URL (needs deity mode). */
+  const introParam = searchParams.get('intro');
+  const isInviteIntroUrl =
+    (introParam === '1' || introParam === 'true') && !gameContextId && !occasionKind;
+  const inviteFresh = searchParams.get('inviteFresh') === '1';
+  /** Guest quick-play defaults to general, except Special 108 / weekly streak / invite intro from URL. */
   const parsedMode = parseGameMode(searchParams.get('mode'));
-  /** Guest without a deity in the URL plays general; invite links use `?mode=hanuman&guest=1`. */
+  /** Guest without a deity in the URL plays general; invite intro uses `?mode=shani&guest=1&intro=1`. */
   const mode =
-    isGuest && !isSpecial108Url && !isWeeklyStreakUrl && parsedMode === 'general'
+    isGuest &&
+    !isSpecial108Url &&
+    !isWeeklyStreakUrl &&
+    !isInviteIntroUrl &&
+    parsedMode === 'general'
       ? 'general'
       : parsedMode;
+  const isInviteIntro = isGuest && isInviteIntroUrl && parsedMode !== 'general';
   const isSpecial108 = isSpecial108Url && parsedMode !== 'general';
   const isWeeklyStreak = isWeeklyStreakUrl && parsedMode !== 'general';
 
@@ -99,6 +108,12 @@ export function GamePage() {
     if (!isWeeklyStreakUrl || parsedMode !== 'general') return;
     navigate('/weekly-streak', { replace: true });
   }, [isWeeklyStreakUrl, parsedMode, navigate]);
+
+  /** `intro=1` without a deity — back to menu invite. */
+  useEffect(() => {
+    if (!isInviteIntroUrl || parsedMode !== 'general') return;
+    navigate('/menu', { replace: true });
+  }, [isInviteIntroUrl, parsedMode, navigate]);
 
   useEffect(() => {
     if (!occasionKind) return;
@@ -261,7 +276,7 @@ export function GamePage() {
       if (isLocked) setPaywallPending({ mode, levelIndex });
       return;
     }
-    if (isGuest) {
+    if (isGuest || inviteFresh) {
       setResumePending(null);
       setResumeKey(null);
       setPauseCheckDone(true);
@@ -273,7 +288,7 @@ export function GamePage() {
     if (user?.uid && authLoading) return;
 
     setLevelCompleteBlock(null);
-    if (user?.uid && !isMarathon && !occasionKind && !isSpecial108 && !isWeeklyStreak) {
+    if (user?.uid && !isMarathon && !occasionKind && !isSpecial108 && !isWeeklyStreak && !inviteFresh) {
       if (!progressLoaded) return;
       // Read progress here; do NOT list `levelProgress` in effect deps — on win, saveLevel updates
       // progress in the same beat as the victory UI; re-running the effect would mistake "just won"
@@ -452,6 +467,8 @@ export function GamePage() {
     }
     if (isMarathon) {
       navigate(yagnaId ? '/maha-yagnas' : '/marathons');
+    } else if (isInviteIntro) {
+      navigate('/menu');
     } else if (isGuest) {
       navigate('/');
     } else if (isWeeklyStreak) {
@@ -461,7 +478,7 @@ export function GamePage() {
     } else {
       navigate('/levels');
     }
-  }, [navigate, location.state, isMarathon, yagnaId, isGuest, occasionKind, isSpecial108, isWeeklyStreak]);
+  }, [navigate, location.state, isMarathon, yagnaId, isGuest, isInviteIntro, occasionKind, isSpecial108, isWeeklyStreak]);
 
   const handlePlayNameSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -504,7 +521,13 @@ export function GamePage() {
     (waitingProfile ||
       waitingUnlock ||
       !pauseCheckDone ||
-      (!!user?.uid && !isMarathon && !occasionKind && !isSpecial108 && !isWeeklyStreak && !progressLoaded))
+      (!!user?.uid &&
+        !isMarathon &&
+        !occasionKind &&
+        !isSpecial108 &&
+        !isWeeklyStreak &&
+        !inviteFresh &&
+        !progressLoaded))
   ) {
     return (
       <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -655,6 +678,7 @@ export function GamePage() {
       marathonTargetJapas={marathonTargetJapas}
       yagnaId={yagnaId}
       isGuest={isGuest}
+      inviteIntroJapa={isInviteIntro}
       justRestored={justRestored}
       onJustRestoredCleared={onJustRestoredCleared}
       onBack={onBack}

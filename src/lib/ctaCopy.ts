@@ -35,6 +35,7 @@ export const CTA = {
     weeklyStreakHandwriting: 'Handwritten 108 PDF (Japa count)',
     special108Handwriting: 'Handwritten 108 PDF (Japa count)',
     birthdayGreeting: 'Download birthday greeting',
+    japaCard: 'Download Japa Card',
     creatingGreeting: 'Creating greeting…',
   },
   levelGate: {

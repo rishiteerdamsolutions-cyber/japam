@@ -92,6 +92,8 @@ export interface PausedGameState {
   special108Japa?: boolean;
   /** Specials → Weekly streak 108 (isolated; does not credit platform japa / Special 108). */
   weeklyStreakJapa?: boolean;
+  /** Deity invite intro — short preview; no pause/progress/japa credit. */
+  inviteIntroJapa?: boolean;
   /** All Deity Japa only: which deities are on this board / strip for this session. */
   generalBoardDeities?: DeityId[];
   savedAt: number;
@@ -124,6 +126,8 @@ interface GameState {
   special108Japa: boolean;
   /** Weekly streak 108 board — no map progress, no platform japa; completion goes to weekly streak store only. */
   weeklyStreakJapa: boolean;
+  /** Deity WhatsApp invite: 11-japa preview without saving progress. */
+  inviteIntroJapa: boolean;
   isGuest: boolean;
   selectedCell: { row: number; col: number } | null;
   lastMatches: { deity: DeityId; count: number; combo: number }[];
@@ -353,6 +357,7 @@ interface GameActions {
       overrideJapaTarget?: number;
       special108Japa?: boolean;
       weeklyStreakJapa?: boolean;
+      inviteIntroJapa?: boolean;
       isGuest?: boolean;
       occasionKind?: 'birthday' | 'anniversary';
       anniversarySessionId?: string | null;
@@ -402,6 +407,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   overrideJapaTarget: null,
   special108Japa: false,
   weeklyStreakJapa: false,
+  inviteIntroJapa: false,
   isGuest: false,
   selectedCell: null,
   lastMatches: [],
@@ -461,6 +467,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const overrideJapaTarget = options?.overrideJapaTarget ?? null;
     const special108Japa = options?.special108Japa === true;
     const weeklyStreakJapa = options?.weeklyStreakJapa === true;
+    const inviteIntroJapa = options?.inviteIntroJapa === true;
     const isGuest = options?.isGuest === true;
     const occasionKind = options?.occasionKind ?? null;
     const anniversarySessionId = options?.anniversarySessionId ?? null;
@@ -547,6 +554,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       overrideJapaTarget,
       special108Japa,
       weeklyStreakJapa,
+      inviteIntroJapa,
       isGuest,
       selectedCell: null,
       lastMatches: [],
@@ -604,6 +612,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
 
   savePausedState: (): PausedGameState | null => {
     const state = get();
+    if (state.inviteIntroJapa) return null;
     if (state.occasionKind === 'anniversary') return null;
     if (state.status !== 'playing' || state.board.length === 0) return null;
     const key = get().getPausedKey();
@@ -1248,6 +1257,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     const isMarathon = state.marathonTargetJapas != null;
     const special108 = state.special108Japa === true;
     const weeklyStreak = state.weeklyStreakJapa === true;
+    const inviteIntro = state.inviteIntroJapa === true;
     const sessionCredits108JapaSpecial =
       !weeklyStreak &&
       (special108 ||
@@ -1286,10 +1296,10 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
         void useJapaStore.getState().flushJapas();
       }
       // Marathons / yāgās / 108 special / weekly streak: no map-style level power grant.
-      if (!isMarathon && !occasionBlocksProgress && !session108ShapedBoard) {
+      if (!isMarathon && !occasionBlocksProgress && !session108ShapedBoard && !inviteIntro) {
         void usePowersInventoryStore.getState().grantAfterLevelWin(state.mode);
       }
-      if (!isMarathon && !state.isGuest && !occasionBlocksProgress && !session108ShapedBoard) {
+      if (!isMarathon && !state.isGuest && !occasionBlocksProgress && !session108ShapedBoard && !inviteIntro) {
         const totalScore = state.score;
         const stars = getStars(japasNeeded, japaTarget, moves);
         useProgressStore.getState().saveLevel(state.mode, level.id, {
@@ -1475,6 +1485,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       overrideJapaTarget,
       special108Japa,
       weeklyStreakJapa,
+      inviteIntroJapa,
       isGuest,
       occasionKind,
       anniversarySessionId,
@@ -1520,6 +1531,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
             overrideJapaTarget: overrideJapaTarget ?? undefined,
             special108Japa: special108Japa ? true : undefined,
             weeklyStreakJapa: weeklyStreakJapa ? true : undefined,
+            inviteIntroJapa: inviteIntroJapa ? true : undefined,
             isGuest,
             ...occasionOpts,
           };

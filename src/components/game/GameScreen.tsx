@@ -10,6 +10,7 @@ import { useGameStore, type AnniversarySessionFlavor } from '../../store/gameSto
 import { useJapaStore } from '../../store/japaStore';
 import { useLivesStore } from '../../store/livesStore';
 import { LEVELS, ANNIVERSARY_COUPLE_LAST_LEVEL_INDEX } from '../../data/levels';
+import { INVITE_INTRO_JAPA_TARGET } from '../../lib/deityInvite';
 import { useAuthStore } from '../../store/authStore';
 import { useUnlockStore } from '../../store/unlockStore';
 import { useWeeklyStreakStore } from '../../store/weeklyStreakStore';
@@ -209,6 +210,8 @@ interface GameScreenProps {
   special108Japa?: boolean;
   /** Specials → Weekly streak 108 (isolated from platform japa). */
   weeklyStreakJapa?: boolean;
+  /** Deity invite: short preview session (no saved progress). */
+  inviteIntroJapa?: boolean;
 }
 
 export function GameScreen({
@@ -232,6 +235,7 @@ export function GameScreen({
   anniversarySessionFlavor = 'occasion',
   special108Japa = false,
   weeklyStreakJapa = false,
+  inviteIntroJapa = false,
 }: GameScreenProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -425,6 +429,27 @@ export function GameScreen({
     trackShareEvent('japa_pdf').catch(() => {});
   }, [mode, t]);
 
+  const handleDownloadInviteIntroJapaCard = useCallback(async () => {
+    if (mode === 'general') return;
+    const deityId = mode as DeityId;
+    const deityName = t(`deities.${deityId}`);
+    const blob = await renderBirthdayGreetingCardBlob({
+      deityName,
+      copy: {
+        headline: t('inviteIntro.cardHeadline'),
+        achievement: t('inviteIntro.cardAchievement', { deity: deityName }),
+        blessing1: t('inviteIntro.cardBlessing1'),
+        blessing2: t('inviteIntro.cardBlessing2'),
+        from: t('inviteIntro.cardFrom'),
+      },
+    });
+    if (!blob) {
+      throw new Error('render failed');
+    }
+    downloadBirthdayGreetingCard(blob, deityId);
+    trackShareEvent('japa_pdf').catch(() => {});
+  }, [mode, t]);
+
   useEffect(() => {
     if (!isGuest) setGuestPowerSignInOpen(false);
   }, [isGuest]);
@@ -507,6 +532,12 @@ export function GameScreen({
           anniversaryFirestoreVersion: av,
           anniversarySessionFlavor,
         });
+      } else if (inviteIntroJapa && mode !== 'general') {
+        initGame(mode, 0, {
+          overrideJapaTarget: INVITE_INTRO_JAPA_TARGET,
+          isGuest: true,
+          inviteIntroJapa: true,
+        });
       } else if (isGuest) {
         initGame('general', 0, { overrideJapaTarget: 11, isGuest: true });
       } else {
@@ -534,6 +565,7 @@ export function GameScreen({
     anniversarySessionFlavor,
     special108Japa,
     weeklyStreakJapa,
+    inviteIntroJapa,
   ]);
 
   const powersInventoryLoaded = usePowersInventoryStore((s) => s.loaded);
@@ -552,7 +584,7 @@ export function GameScreen({
   useEffect(() => {
     const persistQuiet = (reason: 'pagehide' | 'unmount') => {
       const gs = useGameStore.getState();
-      if (gs.occasionKind === 'anniversary') return;
+      if (gs.occasionKind === 'anniversary' || gs.inviteIntroJapa) return;
       if (gs.status !== 'playing' || !gs.board.length) {
         gameDebug('persistQuiet skip', { reason, status: gs.status, boardLen: gs.board.length });
         return;
@@ -1201,7 +1233,14 @@ export function GameScreen({
       )}
 
       {status === 'won' && (!occasionKind || isGuest || !user) && (
-        isGuest ? (
+        inviteIntroJapa && mode !== 'general' ? (
+          <GameOverlay
+            status="won"
+            shareCardCtaLabel={CTA.game.japaCard}
+            onMenu={exitGame}
+            onDownloadBirthdayGreetingCard={handleDownloadInviteIntroJapaCard}
+          />
+        ) : isGuest ? (
           <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center z-20 p-4">
             <div className="bg-[#C2185B]/90 rounded-2xl p-4 sm:p-6 max-w-sm w-full text-center min-w-0">
               <h2 className="text-xl sm:text-2xl font-bold text-amber-400 mb-3 break-words">Jai!</h2>

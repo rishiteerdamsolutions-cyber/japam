@@ -55,9 +55,16 @@ export function Landing({
 
   const handleVideoClose = () => {
     const intent = videoIntent;
+    // Navigate first; keep the modal mounted until this route unmounts (avoids a landing flash).
+    if (intent === 'start') {
+      onEnterApp();
+      return;
+    }
+    if (intent === 'guest') {
+      onGuestPlay();
+      return;
+    }
     setVideoIntent(null);
-    if (intent === 'start') onEnterApp();
-    else if (intent === 'guest') onGuestPlay();
   };
 
   return (

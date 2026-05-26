@@ -143,7 +143,7 @@ export function MenuPage() {
       <MainMenu
         onSelect={handleSelect}
         onOpenSettings={() => navigate('/settings', { state: withReturnTo('/menu') })}
-        introHeroSlot={<MenuMiniGameDemo key={location.key} />}
+        introHeroSlot={<MenuMiniGameDemo key={location.key} fillContainer />}
         forceIstaRevealed={Boolean(pendingInviteDeity)}
       />
       {showInviteGate && pendingInviteDeity ? (

@@ -33,5 +33,23 @@ export function malaSwipeZoneHeightPx(coreHeightPx: number): number {
   return coreHeightPx + MALA_SWIPE_ZONE_EXTRA_V_PX;
 }
 
-/** Fixed-core tier spin (deg): 1st +40°, 2nd +80°, 3rd +120°, 4th +160° so faces don’t align. */
+/** 360° / 9 beads — one unique face every 40°. */
 export const MALA_BEAD_TIER_SPIN_STEP_DEG = 40;
+
+/**
+ * Initial globe face (deg) per bead #1 (bottom) … #9 (top).
+ * Full set: 0, 40, 80, 120, 160, 200, 240, 280, 320 — all different.
+ */
+export const MALA_CORE_BEAD_FACE_BY_NUMBER: readonly number[] = [
+  200, 240, 280, 320, 0, 40, 80, 120, 160,
+] as const;
+
+/** Same angles, visual stack top → bottom (row order in FixedMalaCore). */
+export const MALA_CORE_FACE_VISUAL_STACK: readonly number[] = [
+  160, 120, 80, 40, 0, 320, 280, 240, 200,
+] as const;
+
+/** Small Y-twist per bead so 5-mukhi symmetry cannot make two faces look alike. */
+export const MALA_CORE_BEAD_Y_TWIST_VISUAL_STACK: readonly number[] = [
+  31, 23, 17, 11, 0, 7, 13, 19, 29,
+] as const;

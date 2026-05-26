@@ -1,0 +1,42 @@
+/* Full-viewport pages: no document scroll, proportional gaps, flex shrink. */
+.viewport-shell {
+  position: relative;
+  height: 100dvh;
+  max-height: 100dvh;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.viewport-shell__column {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-height: 0;
+  width: 100%;
+  max-width: 32rem;
+  gap: clamp(0.35rem, 1.25vh, 1rem);
+}
+
+.viewport-shell__demo-frame {
+  flex: 1 1 0;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.viewport-shell__demo-square {
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  max-height: 100%;
+  aspect-ratio: 1 / 1;
+  margin-inline: auto;
+}

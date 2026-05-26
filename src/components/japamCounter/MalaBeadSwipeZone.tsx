@@ -149,9 +149,11 @@ export function MalaBeadSwipeZone({
         return;
       }
       beadCountedRef.current = true;
-      spinXRef.current -= BEAD_SWIPE_PX * BEAD_ROLL_SENS;
+      if (spinPaintFrameRef.current != null) {
+        cancelAnimationFrame(spinPaintFrameRef.current);
+        spinPaintFrameRef.current = null;
+      }
       paintCoreBeadsNow();
-      setSpinX(spinXRef.current);
       onBeadRef.current();
       onStrokeDebugRef.current?.({
         delta: Math.round(Math.max(0, lastYRef.current - startYRef.current)),
@@ -218,7 +220,6 @@ export function MalaBeadSwipeZone({
 
     setActive(false);
     setSpinX(spinXRef.current);
-    paintCoreBeadsNow();
     beadCountedRef.current = false;
     touchActiveRef.current = false;
     activePointerRef.current = null;
@@ -228,7 +229,7 @@ export function MalaBeadSwipeZone({
       cancelMalaBeadStrokeHaptic();
     }
     resetMalaBeadStrokeHaptic();
-  }, [paintCoreBeadsNow]);
+  }, []);
 
   const beginStroke = useCallback(
     (clientX: number, clientY: number) => {
@@ -401,7 +402,15 @@ export function MalaBeadSwipeZone({
                 lineHeight: 0,
               }}
             >
-              <MalaBeadGlobe spinX={spinX} sizePx={BEAD_SIZE_PX} />
+              <div
+                className="h-full w-full overflow-hidden rounded-full"
+                style={{
+                  backgroundColor: '#3d2210',
+                  filter: 'brightness(1.08) saturate(1.12) contrast(1.06)',
+                }}
+              >
+                <MalaBeadGlobe spinX={spinX} sizePx={BEAD_SIZE_PX} />
+              </div>
             </div>
           }
         />

@@ -3,7 +3,10 @@ import type { DepthBeadSlot } from './malaDepthLayout';
 /** Decorative off-screen string — cheap CSS only (no 3D globe, no roll). */
 function DepthBead({ slot }: { slot: DepthBeadSlot }) {
   const { x, y, sizePx, dimmed, zIndex } = slot;
-  const opacity = Math.max(0.5, 0.95 - dimmed * 0.1);
+  const dim = Math.min(1, dimmed * 0.12);
+  const highlight = `rgb(${Math.round(122 - dim * 28)}, ${Math.round(79 - dim * 18)}, ${Math.round(44 - dim * 10)})`;
+  const mid = `rgb(${Math.round(61 - dim * 12)}, ${Math.round(34 - dim * 8)}, ${Math.round(16 - dim * 4)})`;
+  const shadow = `rgb(${Math.round(26 - dim * 6)}, ${Math.round(14 - dim * 4)}, ${Math.round(6 - dim * 2)})`;
 
   return (
     <div
@@ -21,8 +24,7 @@ function DepthBead({ slot }: { slot: DepthBeadSlot }) {
       <div
         className="h-full w-full rounded-full overflow-hidden"
         style={{
-          opacity,
-          background: 'radial-gradient(circle at 38% 32%, #7a4f2c 0%, #3d2210 78%, #1a0e06 100%)',
+          background: `radial-gradient(circle at 38% 32%, ${highlight} 0%, ${mid} 78%, ${shadow} 100%)`,
         }}
       />
     </div>

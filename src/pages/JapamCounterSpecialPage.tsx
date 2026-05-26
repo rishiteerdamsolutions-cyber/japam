@@ -18,7 +18,6 @@ import {
   parseJapamCounterDeity,
 } from '../lib/japamCounterSpecial';
 import { AccessBadge } from '../components/ui/AccessBadge';
-import { BottomNav } from '../components/nav/BottomNav';
 import { MenuMatchChantHeader } from '../components/layout/MenuMatchChantHeader';
 import { JapamCounterLeaderboardPanel } from '../components/japamCounter/JapamCounterLeaderboardPanel';
 import { incrementJapamCounter } from '../lib/japamCounterApi';
@@ -265,9 +264,7 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
   if (!deityId) {
     return (
       <div
-        className={`relative min-h-[100dvh] flex flex-col items-center px-3 pt-3 sm:p-4 overflow-y-auto overflow-x-hidden ${
-          isAuto ? 'pb-[max(6rem,env(safe-area-inset-bottom))] sm:pb-28' : 'pb-[max(1rem,env(safe-area-inset-bottom))]'
-        }`}
+        className={`relative min-h-[100dvh] flex flex-col items-center px-3 pt-3 sm:p-4 overflow-y-auto overflow-x-hidden pb-[max(1rem,env(safe-area-inset-bottom))]`}
       >
         <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
         <div className="relative z-10 w-full max-w-[min(100%,28rem)] flex flex-col items-center">
@@ -326,7 +323,6 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
             </div>
           )}
         </div>
-        {!isAuto ? null : <BottomNav />}
       </div>
     );
   }
@@ -428,7 +424,7 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
   return (
     <div className="relative min-h-[100dvh] flex flex-col overflow-hidden">
       <JapamCounterDeityBackdrop imageUrl={deity.image} />
-      <div className="relative z-10 flex flex-col flex-1 min-h-0 w-full max-w-md mx-auto px-3 pt-3 pb-[max(6rem,env(safe-area-inset-bottom))] overflow-y-auto">
+      <div className="relative z-10 flex flex-col flex-1 min-h-0 w-full max-w-md mx-auto px-3 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] overflow-y-auto">
         <MenuMatchChantHeader />
         <button
           type="button"
@@ -553,8 +549,6 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
           variant="full"
         />
       </div>
-
-      <BottomNav />
     </div>
   );
 }

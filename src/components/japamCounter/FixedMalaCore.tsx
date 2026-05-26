@@ -2,7 +2,8 @@ import { useId, type ReactNode } from 'react';
 import { MalaBeadGlobe } from './MalaBeadGlobe';
 import {
   BEAD_SIZE_PX,
-  MALA_BEAD_TIER_SPIN_STEP_DEG,
+  MALA_CORE_BEAD_Y_TWIST_VISUAL_STACK,
+  MALA_CORE_FACE_VISUAL_STACK,
   MALA_FIFTH_BEAD_GLOBE_PX,
   MALA_FOURTH_BEAD_GLOBE_PX,
   MALA_REAR_BEAD_GLOBE_PX,
@@ -19,8 +20,10 @@ export type CoreStackRow = {
   leftNudge: number;
   dimmed: number;
   isMain?: boolean;
-  /** Added to main-bead spin so stacked beads show different faces. */
+  /** Unique starting face on the thread (0…320, 40° apart). */
   spinOffsetDeg?: number;
+  /** Breaks 5-mukhi symmetry so no two beads look the same. */
+  faceTwistDeg?: number;
 };
 
 const MAIN = BEAD_SIZE_PX;
@@ -34,21 +37,35 @@ function leftNudgePx(beadPx: number, layer: 1 | 2 | 3): number {
   return -step * layer;
 }
 
-function tierSpin(tier: 1 | 2 | 3 | 4): number {
-  return tier * MALA_BEAD_TIER_SPIN_STEP_DEG;
+function coreRow(
+  sizePx: number,
+  leftNudge: number,
+  dimmed: number,
+  stackIndex: number,
+  isMain?: boolean,
+): CoreStackRow {
+  return {
+    sizePx,
+    leftNudge,
+    dimmed,
+    isMain,
+    spinOffsetDeg: MALA_CORE_FACE_VISUAL_STACK[stackIndex]!,
+    faceTwistDeg: MALA_CORE_BEAD_Y_TWIST_VISUAL_STACK[stackIndex]!,
+  };
 }
 
+/** Bead #9 (top) … #5 (main) … #1 (bottom) — nine unique faces on 360°. */
 export function buildFixedCoreRows(): CoreStackRow[] {
   return [
-    { sizePx: FOURTH, leftNudge: leftNudgePx(FOURTH, 3), dimmed: 4, spinOffsetDeg: tierSpin(4) },
-    { sizePx: THIRD, leftNudge: leftNudgePx(THIRD, 2), dimmed: 3, spinOffsetDeg: tierSpin(3) },
-    { sizePx: SECOND, leftNudge: leftNudgePx(SECOND, 1), dimmed: 2, spinOffsetDeg: tierSpin(2) },
-    { sizePx: FIRST, leftNudge: 0, dimmed: 0, spinOffsetDeg: tierSpin(1) },
-    { sizePx: MAIN, leftNudge: 0, dimmed: 0, isMain: true, spinOffsetDeg: 0 },
-    { sizePx: FIRST, leftNudge: 0, dimmed: 0, spinOffsetDeg: tierSpin(1) },
-    { sizePx: SECOND, leftNudge: leftNudgePx(SECOND, 1), dimmed: 2, spinOffsetDeg: tierSpin(2) },
-    { sizePx: THIRD, leftNudge: leftNudgePx(THIRD, 2), dimmed: 3, spinOffsetDeg: tierSpin(3) },
-    { sizePx: FOURTH, leftNudge: leftNudgePx(FOURTH, 3), dimmed: 4, spinOffsetDeg: tierSpin(4) },
+    coreRow(FOURTH, leftNudgePx(FOURTH, 3), 4, 0),
+    coreRow(THIRD, leftNudgePx(THIRD, 2), 3, 1),
+    coreRow(SECOND, leftNudgePx(SECOND, 1), 2, 2),
+    coreRow(FIRST, 0, 0, 3),
+    coreRow(MAIN, 0, 0, 4, true),
+    coreRow(FIRST, 0, 0, 5),
+    coreRow(SECOND, leftNudgePx(SECOND, 1), 2, 6),
+    coreRow(THIRD, leftNudgePx(THIRD, 2), 3, 7),
+    coreRow(FOURTH, leftNudgePx(FOURTH, 3), 4, 8),
   ];
 }
 
@@ -68,16 +85,20 @@ export function fixedCoreHeightPx(rows: CoreStackRow[]): number {
 function BeadGlobe({
   spinX,
   spinOffsetDeg = 0,
+  faceTwistDeg = 0,
   sizePx,
   dimmed = 0,
 }: {
   spinX: number;
   spinOffsetDeg?: number;
+  faceTwistDeg?: number;
   sizePx: number;
   dimmed?: number;
 }) {
-  const opacity = dimmed === 0 ? 0.95 : Math.max(0.6, 0.95 - dimmed * 0.09);
-  const brightness = dimmed === 0 ? 1 : Math.max(0.75, 1 - dimmed * 0.055);
+  const filter =
+    dimmed === 0
+      ? 'brightness(1.08) saturate(1.12) contrast(1.06)'
+      : `brightness(${Math.max(0.88, 1.04 - dimmed * 0.04)}) saturate(1.05) contrast(1.04)`;
 
   return (
     <div
@@ -86,12 +107,17 @@ function BeadGlobe({
         width: sizePx,
         height: sizePx,
         lineHeight: 0,
-        opacity,
-        filter: dimmed > 0 ? `brightness(${brightness}) saturate(0.92)` : undefined,
+        backgroundColor: '#3d2210',
+        filter,
       }}
       aria-hidden
     >
-      <MalaBeadGlobe spinX={spinX} spinOffsetDeg={spinOffsetDeg} sizePx={sizePx} />
+      <MalaBeadGlobe
+        spinX={spinX}
+        spinOffsetDeg={spinOffsetDeg}
+        faceTwistDeg={faceTwistDeg}
+        sizePx={sizePx}
+      />
     </div>
   );
 }
@@ -115,6 +141,7 @@ function ThreadRow({ spinX, row }: { spinX: number; row: CoreStackRow }) {
         <BeadGlobe
           spinX={spinX}
           spinOffsetDeg={row.spinOffsetDeg ?? 0}
+          faceTwistDeg={row.faceTwistDeg ?? 0}
           sizePx={row.sizePx}
           dimmed={row.dimmed}
         />

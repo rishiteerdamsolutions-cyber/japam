@@ -61,7 +61,7 @@ export function deityDailyJapaHook(deityId: PlayableDeityId): string {
 }
 
 export function deityIstaGameLabel(deityId: PlayableDeityId): string {
-  return `Iṣṭa Devatā ${getDeity(deityId).name} Japa`;
+  return `Ista Devata ${getDeity(deityId).name} Japa`;
 }
 
 function waShareUrl(message: string): string {

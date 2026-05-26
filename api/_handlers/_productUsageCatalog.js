@@ -33,8 +33,8 @@ export const PRODUCT_USAGE_CATALOG = [
   // Menu & game entry
   { key: 'action_menu_all_devatas', label: 'Menu — All Devatā japa', category: 'action' },
   { key: 'action_menu_specials', label: 'Menu — Specials button', category: 'action' },
-  { key: 'action_menu_ista_reveal', label: 'Menu — Iṣṭa Devatā reveal', category: 'action' },
-  { key: 'action_menu_ista_select', label: 'Menu — Iṣṭa Devatā chosen', category: 'action' },
+  { key: 'action_menu_ista_reveal', label: 'Menu — Ista Devata reveal', category: 'action' },
+  { key: 'action_menu_ista_select', label: 'Menu — Ista Devata chosen', category: 'action' },
   { key: 'action_menu_plans', label: 'Menu — Plans (heart)', category: 'action' },
   { key: 'action_menu_settings', label: 'Menu — Settings avatar', category: 'action' },
   { key: 'action_bottom_nav_play', label: 'Bottom nav — Play (centre)', category: 'nav' },

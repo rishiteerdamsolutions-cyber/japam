@@ -23,6 +23,7 @@ import {
 import { PushableButton } from '../ui/PushableButton';
 import { CTA } from '../../lib/ctaCopy';
 import { trackProductUsage } from '../../lib/productUsage';
+import { useViewportLock } from '../../hooks/useViewportLock';
 /** `public/japam.gif` — keyed transparent intro (640px wide) until Ista Devata Japa is tapped. */
 const ISTA_DEVATA_INTRO_GIF_SRC = '/japam.gif';
 
@@ -37,11 +38,11 @@ function HeartIcon() {
 interface MainMenuProps {
   onSelect: (mode: GameMode) => void;
   onOpenSettings: () => void;
-  /** When set (e.g. `/test/menu-demo`), replaces the Iṣṭa intro GIF before the grid is revealed. */
+  /** When set (e.g. `/test/menu-demo`), replaces the Ista Devata intro GIF before the grid is revealed. */
   introHeroSlot?: ReactNode;
   /** Optional strip under the active-users row (test pages). */
   demoNotice?: ReactNode;
-  /** Open Iṣṭa grid (e.g. deity invite deep link). */
+  /** Open Ista Devata grid (e.g. deity invite deep link). */
   forceIstaRevealed?: boolean;
 }
 
@@ -87,12 +88,15 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice, 
   });
   const initial = (displayName && displayName.charAt(0).toUpperCase()) || '?';
 
-  const menuSectionGap = 'gap-4';
+  useViewportLock(true);
+
+  const demoFrameClass =
+    'viewport-shell__demo-square rounded-2xl border-2 border-amber-400/75 p-0 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.45),0_0_0_1px_rgba(251,191,36,0.2)_inset] bg-black/20 ring-1 ring-amber-300/35 overflow-hidden';
 
   return (
-    <div className="relative h-[100dvh] max-h-[100dvh] flex flex-col items-center px-4 pt-3 pb-[max(0.25rem,env(safe-area-inset-bottom))] overflow-hidden">
+    <div className="viewport-shell px-4 pt-3 pb-[max(0.25rem,env(safe-area-inset-bottom))]">
       <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
-      <div className={`relative z-10 w-full max-w-lg flex flex-col flex-1 min-h-0 items-center ${menuSectionGap}`}>
+      <div className="viewport-shell__column max-w-lg">
         {/* 1 — Top: brand, heart, profile */}
         <div className="w-full shrink-0 flex justify-between items-center gap-2 min-h-[44px]">
           <div className="min-w-0 flex-1 pr-2 text-left">
@@ -224,18 +228,16 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice, 
             </div>
 
             {/* 4 — Demo / intro */}
-            <div className="w-full flex-1 min-h-0 flex flex-col items-center justify-center">
-              <div className="w-full min-w-0 max-w-full flex justify-center items-center pl-[max(0.25rem,env(safe-area-inset-left,0px))] pr-[max(0.25rem,env(safe-area-inset-right,0px))]">
-                <div className="relative @container max-w-full rounded-2xl border-2 border-amber-400/75 p-0 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.45),0_0_0_1px_rgba(251,191,36,0.2)_inset] bg-black/20 ring-1 ring-amber-300/35 w-full min-w-0 max-w-[min(100%,26rem)] overflow-hidden">
-                  {introHeroSlot ?? (
-                    <img
-                      src={ISTA_DEVATA_INTRO_GIF_SRC}
-                      alt={t('menu.istaDevataMalaaVideoAria')}
-                      decoding="async"
-                      className="block h-auto w-full max-w-full max-h-[min(42svh,360px)] object-contain bg-transparent rounded-xl"
-                    />
-                  )}
-                </div>
+            <div className="viewport-shell__demo-frame">
+              <div className={demoFrameClass}>
+                {introHeroSlot ?? (
+                  <img
+                    src={ISTA_DEVATA_INTRO_GIF_SRC}
+                    alt={t('menu.istaDevataMalaaVideoAria')}
+                    decoding="async"
+                    className="block h-full w-full object-contain bg-transparent"
+                  />
+                )}
               </div>
             </div>
 
@@ -305,7 +307,7 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice, 
             <motion.div
             ref={istaDevataScrollRef}
             tabIndex={-1}
-            className="w-full flex-1 min-h-0 overflow-y-auto overscroll-contain touch-pan-y"
+            className="w-full flex-1 min-h-0 overflow-y-auto overscroll-contain touch-pan-y [-webkit-overflow-scrolling:touch]"
             role="region"
             aria-label={t('menu.istaDevata')}
           >

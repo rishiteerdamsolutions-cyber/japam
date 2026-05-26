@@ -107,13 +107,16 @@ function FooterIcon({
 
 interface AppFooterProps {
   className?: string;
+  compact?: boolean;
 }
 
-export function AppFooter({ className = '' }: AppFooterProps) {
+export function AppFooter({ className = '', compact = false }: AppFooterProps) {
   const { t } = useTranslation();
   return (
     <footer
-      className={`mt-auto shrink-0 pt-6 pb-4 px-4 flex flex-col items-center justify-center gap-3 text-white/40 text-xs border-t border-white/10 w-full ${className}`}
+      className={`mt-auto shrink-0 px-4 flex flex-col items-center justify-center text-white/40 text-xs border-t border-white/10 w-full ${
+        compact ? 'pt-2 pb-2 gap-1.5' : 'pt-6 pb-4 gap-3'
+      } ${className}`}
     >
       <div className="flex items-center justify-center gap-1 flex-wrap">
         <FooterIcon href="/contact" label={t('landing.contact')} icon={ContactIcon} />

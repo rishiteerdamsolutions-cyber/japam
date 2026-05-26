@@ -282,6 +282,21 @@
   animation: bg-float 18s ease-in-out infinite;
 }
 
+/** Japam counter deity mosaic — slow light sweep (disabled via motion-reduce). */
+@keyframes japamBackdropShimmer {
+  0%,
+  100% {
+    transform: translate(-35%, -25%) rotate(0deg);
+  }
+  50% {
+    transform: translate(35%, 25%) rotate(0deg);
+  }
+}
+
+.animate-japam-backdrop-shimmer {
+  animation: japamBackdropShimmer 14s ease-in-out infinite;
+}
+
 /* Stronger overlay to reduce intense pattern distraction – softer, playful feel */
 .bg-playful-overlay {
   background: linear-gradient(

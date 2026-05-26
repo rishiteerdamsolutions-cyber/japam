@@ -395,7 +395,7 @@ const CROSSFADE_HALF_MS = 500;
  * Six scripted beats (3-row → 4-col → 5-row → 3-col → 4-row → 5-col), each its own board;
  * ~1s crossfade to the next beat after clear.
  */
-export function MenuMiniGameDemo() {
+export function MenuMiniGameDemo({ fillContainer = false }: { fillContainer?: boolean }) {
   const [grid, setGrid] = useState<DeityId[][]>(() => cloneGrid(DEMO_CHAIN[0]!.gridBeforeSwap));
   const [phase, setPhase] = useState<Phase>('idle');
   const [stepIndex, setStepIndex] = useState(0);
@@ -532,7 +532,11 @@ export function MenuMiniGameDemo() {
     <div
       className={`
         relative mx-auto aspect-square max-w-full min-h-0 min-w-0 overflow-hidden select-none touch-manipulation
-        w-[min(100%,26rem,calc(100svw-1.125rem-env(safe-area-inset-left)-env(safe-area-inset-right)),68svh,72vmin)]
+        ${
+          fillContainer
+            ? 'h-full w-full max-h-full'
+            : 'w-[min(100%,26rem,calc(100svw-1.125rem-env(safe-area-inset-left)-env(safe-area-inset-right)),68svh,72vmin)]'
+        }
       `}
     >
       <DemoCornerRibbon />

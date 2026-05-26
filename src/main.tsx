@@ -25,6 +25,7 @@ import App from './App.tsx'
 import { MenuPage } from './pages/MenuPage'
 import { MenuDemoTestPage } from './pages/MenuDemoTestPage'
 import { MalaSwipeHapticTestPage } from './pages/MalaSwipeHapticTestPage'
+import { JapamCounterBackdropTestPage } from './pages/JapamCounterBackdropTestPage'
 import { LAUNCH_FEATURE_OCCASION_GAMES } from './config/launchFeatures'
 
 const GamePage = lazy(() => import('./pages/GamePage').then(m => ({ default: m.GamePage })))
@@ -159,6 +160,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/pushpa-abhisheka" element={<Navigate to="/pushpa-aradhana" replace />} />
         <Route path="/test/menu-demo" element={<MenuDemoTestPage />} />
         <Route path="/test/mala-swipe-haptic" element={<MalaSwipeHapticTestPage />} />
+        <Route path="/test/japam-counter" element={<JapamCounterBackdropTestPage />} />
         <Route path="/game" element={<GamePage />} />
         <Route path="/levels" element={<LevelsPage />} />
         <Route path="/japa" element={<JapaPage />} />

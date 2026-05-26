@@ -1,9 +1,11 @@
-import { memo, useLayoutEffect, useRef } from 'react';
+import { memo, useEffect, useLayoutEffect, useRef } from 'react';
 
 type Props = {
   /** Roll on thread axis — rotation around X (poles left/right; only top↔bottom spin) */
   spinX?: number;
   sizePx?: number;
+  /** Per-bead phase on the string (registered for imperative drag paint). */
+  spinOffsetDeg?: number;
 };
 
 const DEG = Math.PI / 180;
@@ -174,6 +176,46 @@ function shadeRudraksha(
   };
 }
 
+export function paintMalaBeadGlobeCanvas(
+  canvas: HTMLCanvasElement,
+  sizePx: number,
+  spinXDeg: number,
+) {
+  const dpr = Math.min(2.5, typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1);
+  const px = Math.round(sizePx * dpr);
+  if (canvas.width !== px || canvas.height !== px) {
+    canvas.width = px;
+    canvas.height = px;
+    canvas.style.width = `${sizePx}px`;
+    canvas.style.height = `${sizePx}px`;
+  }
+  const ctx = canvas.getContext('2d', { alpha: true });
+  if (!ctx) return;
+  drawRudraksha(ctx, px, spinXDeg);
+}
+
+type GlobeRegistryEntry = {
+  canvas: HTMLCanvasElement;
+  sizePx: number;
+  spinOffsetDeg: number;
+};
+
+const globeRegistry = new Set<GlobeRegistryEntry>();
+
+export function registerMalaBeadGlobe(entry: GlobeRegistryEntry): () => void {
+  globeRegistry.add(entry);
+  return () => {
+    globeRegistry.delete(entry);
+  };
+}
+
+/** Imperative roll — all registered beads without React reconciliation. */
+export function paintAllMalaBeadGlobes(spinXDeg: number): void {
+  for (const { canvas, sizePx, spinOffsetDeg } of globeRegistry) {
+    paintMalaBeadGlobeCanvas(canvas, sizePx, spinXDeg + spinOffsetDeg);
+  }
+}
+
 function drawRudraksha(ctx: CanvasRenderingContext2D, size: number, spinXDeg: number) {
   const spinX = spinXDeg * DEG;
   const cx = size / 2;
@@ -223,9 +265,9 @@ function drawRudraksha(ctx: CanvasRenderingContext2D, size: number, spinXDeg: nu
   ctx.beginPath();
   ctx.arc(cx, cy, R, 0, Math.PI * 2);
   ctx.fill();
-  const rim = ctx.createRadialGradient(cx, cy, R * 0.68, cx, cy, R);
+  const rim = ctx.createRadialGradient(cx, cy, R * 0.82, cx, cy, R);
   rim.addColorStop(0, 'rgba(0,0,0,0)');
-  rim.addColorStop(1, 'rgba(32, 16, 8, 0.5)');
+  rim.addColorStop(1, 'rgba(32, 16, 8, 0.22)');
   ctx.fillStyle = rim;
   ctx.beginPath();
   ctx.arc(cx, cy, R, 0, Math.PI * 2);
@@ -233,35 +275,33 @@ function drawRudraksha(ctx: CanvasRenderingContext2D, size: number, spinXDeg: nu
 }
 
 /** 3D rudraksha — thread on X; roll top↔bottom on X only */
-export const MalaBeadGlobe = memo(function MalaBeadGlobe({ spinX = 0, sizePx = 70 }: Props) {
+export const MalaBeadGlobe = memo(function MalaBeadGlobe({
+  spinX = 0,
+  sizePx = 70,
+  spinOffsetDeg = 0,
+}: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const entry = { canvas, sizePx, spinOffsetDeg };
+    return registerMalaBeadGlobe(entry);
+  }, [sizePx, spinOffsetDeg]);
 
   useLayoutEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const dpr = Math.min(2.5, typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1);
-    const px = Math.round(sizePx * dpr);
-    canvas.width = px;
-    canvas.height = px;
-    canvas.style.width = `${sizePx}px`;
-    canvas.style.height = `${sizePx}px`;
-    const ctx = canvas.getContext('2d', { alpha: true });
-    if (!ctx) return;
-    drawRudraksha(ctx, px, spinX);
-  }, [spinX, sizePx]);
+    paintMalaBeadGlobeCanvas(canvas, sizePx, spinX + spinOffsetDeg);
+  }, [spinX, sizePx, spinOffsetDeg]);
 
   return (
     <div
-      className="pointer-events-none relative leading-none"
-      style={{
-        width: sizePx,
-        height: sizePx,
-        lineHeight: 0,
-        filter: 'drop-shadow(0 3px 8px rgba(40, 20, 8, 0.52))',
-      }}
+      className="pointer-events-none relative h-full w-full overflow-hidden rounded-full leading-none"
+      style={{ lineHeight: 0 }}
       aria-hidden
     >
-      <canvas ref={canvasRef} className="block rounded-full" />
+      <canvas ref={canvasRef} className="block h-full w-full rounded-full" />
     </div>
   );
 });

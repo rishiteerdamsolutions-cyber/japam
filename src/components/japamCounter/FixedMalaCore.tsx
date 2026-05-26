@@ -81,7 +81,7 @@ function BeadGlobe({
 
   return (
     <div
-      className="pointer-events-none relative leading-none"
+      className="pointer-events-none relative overflow-hidden rounded-full leading-none"
       style={{
         width: sizePx,
         height: sizePx,
@@ -91,16 +91,7 @@ function BeadGlobe({
       }}
       aria-hidden
     >
-      <div
-        className="absolute inset-0 rounded-full"
-        style={{
-          zIndex: 0,
-          background: 'radial-gradient(circle at 38% 32%, #2a1608 0%, #120a04 72%, #080402 100%)',
-        }}
-      />
-      <div className="relative z-[1]">
-        <MalaBeadGlobe spinX={spinX + spinOffsetDeg} sizePx={sizePx} />
-      </div>
+      <MalaBeadGlobe spinX={spinX} spinOffsetDeg={spinOffsetDeg} sizePx={sizePx} />
     </div>
   );
 }

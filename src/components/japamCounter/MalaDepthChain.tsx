@@ -27,16 +27,15 @@ function DepthBead({
     >
       {sizePx < MALA_GLOBE_MIN_RENDER_PX ? (
         <div
-          className="h-full w-full rounded-full"
+          className="h-full w-full rounded-full overflow-hidden"
           style={{
             opacity,
-            background: 'radial-gradient(circle at 32% 28%, #7a4f2c 0%, #3d2210 55%, #1a0e06 100%)',
-            boxShadow: '0 1px 2px rgba(0,0,0,0.35)',
+            background: 'radial-gradient(circle at 38% 32%, #7a4f2c 0%, #3d2210 78%, #1a0e06 100%)',
           }}
         />
       ) : (
         <div
-          className="leading-none"
+          className="h-full w-full overflow-hidden rounded-full leading-none"
           style={{
             opacity,
             filter: `brightness(${Math.max(0.72, 1 - dimmed * 0.06)}) saturate(0.9)`,

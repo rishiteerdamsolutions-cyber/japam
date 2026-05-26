@@ -129,7 +129,7 @@ const DEFAULT_HOW_TO = [
   'Sit in a quiet place with spine straight',
   'Chant 108 times on a mala (one round)',
   'Keep attention on the mantra sound and meaning',
-  'Close with gratitude to your ishta devata',
+  'Close with gratitude to your Ista Devata',
 ];
 
 const DEFAULT_BENEFITS = [
@@ -186,7 +186,7 @@ export function deityPillarPage(deityId, name, mantra, ogImage) {
     ],
     relatedPages: [
       { pageId: 'japa-108-times', label: '108 japa guide' },
-      { pageId: 'ishta-devata-japa', label: 'Ishta devata japa' },
+      { pageId: 'ishta-devata-japa', label: 'Ista Devata' },
       { pageId: 'online-japa-mantra', label: 'Online japa' },
     ],
   };

@@ -38,7 +38,7 @@ Japam reimagines daily **japa** (mantra repetition) for the smartphone era—wit
 
 **Solo practice**
 - **General Japa** — all deities on one board  
-- **Iṣṭa Devatā Japa** — focus on one deity  
+- **Ista Devata** — focus on one deity  
 - **1,000 levels** across 100 Sanātana-themed episodes  
 - **Japa dashboard** — lifetime counts per deity, PDF export (name, gotram, mantra, count)  
 - **Specials:** Pushpa Aradhana (digital flower offering), 108-japa mode, weekly streak (IST)
@@ -66,7 +66,7 @@ Japam connects digital devotion to real temples—priests create marathons; devo
 - Match-3 puzzle gameplay (swap gems, cascades, move limits)
 - Mantra audio on every qualifying match
 - **General Japa** — all deity matches count  
-- **Deity-specific / Iṣṭa Devatā** — only chosen deity counts  
+- **Deity-specific / Ista Devata** — only chosen deity counts  
 - **1,000 levels**, **100 episodes** (10 levels each), Sanātana episode names  
 - Free play through early levels; **Pro (Dakshina)** unlocks level 6+  
 - Stars, level map, pause/resume with cloud save  

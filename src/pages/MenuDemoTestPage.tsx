@@ -8,7 +8,7 @@ import { isFirebaseConfigured } from '../lib/firebase';
 import type { GameMode } from '../types';
 
 /**
- * Clones menu UX/UI with an animated mini-board in place of the Iṣṭa intro GIF.
+ * Clones menu UX/UI with an animated mini-board in place of the Ista Devata intro GIF.
  * Open: `/test/menu-demo`
  */
 export function MenuDemoTestPage() {

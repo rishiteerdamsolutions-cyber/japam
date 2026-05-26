@@ -16,7 +16,7 @@ export const SPECIALS_SAFE_COUNTER_COPY = {
     hubCounterManualHint: 'No match board—one japa at a time',
     hubCounterAutoHint: 'Up to 108 · save when done',
     japamCounterChooseDeity:
-      'Choose your Iṣṭa Devatā. One japa at a time—the mantra must finish before the next.',
+      'Choose your Ista Devata. One japa at a time, the mantra must finish before the next.',
     japamCounterBlurb:
       'If the match board is hard: count japas here—one tap after each full mantra, no limit.',
     autoJapamCounterBlurb:

@@ -181,7 +181,7 @@ const PAGES = [
       'Light a lamp if convenient; sit facing east or north',
       'Chant 108 times using a lotus-seed or sphatik mala',
       'Visualise golden light or the deity’s peaceful form',
-      'End with thanks to your ishta devata',
+      'End with thanks to your Ista Devata',
     ],
     whenTo: 'Friday evening is popular; some chant daily during Navratri or Diwali weeks.',
     japamBlurb:

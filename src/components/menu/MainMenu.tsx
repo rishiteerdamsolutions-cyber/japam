@@ -24,7 +24,7 @@ import { PushableButton } from '../ui/PushableButton';
 import { CTA } from '../../lib/ctaCopy';
 import { trackProductUsage } from '../../lib/productUsage';
 import { useViewportLock } from '../../hooks/useViewportLock';
-/** `public/japam.gif` — keyed transparent intro (640px wide) until Ista Devata Japa is tapped. */
+/** `public/japam.gif` — keyed transparent intro (640px wide) until Ista Devata is tapped. */
 const ISTA_DEVATA_INTRO_GIF_SRC = '/japam.gif';
 
 function HeartIcon() {

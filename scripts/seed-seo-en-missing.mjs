@@ -346,18 +346,18 @@ const CUSTOM = [
   {
     pageId: 'ishta-devata-japa',
     deityId: null,
-    primaryKeyword: 'ishta devata japa',
+    primaryKeyword: 'Ista Devata',
     secondaryKeywords: ['choose your deity', 'personal deity chanting'],
-    metaTitle: 'Ishta Devata Japa — Choose Your Deity | Japam',
-    metaDescription: 'How to choose an ishta devata and practise daily japa in Japam.',
-    h1: 'Ishta Devata Japa — Choosing Your Deity',
+    metaTitle: 'Ista Devata — Choose Your Deity | Japam',
+    metaDescription: 'How to choose an Ista Devata and practise daily japa in Japam.',
+    h1: 'Ista Devata — Choosing Your Deity',
     intro: [
-      'Ishta devata is your chosen beloved deity for daily worship. Family tradition, initiation, or inner calling guide the choice.',
+      'Ista Devata is your chosen beloved deity for daily worship. Family tradition, initiation, or inner calling guide the choice.',
       'Japam lets you pick any playable deity on the menu grid for mantra japa.',
     ],
     meaningTitle: 'How to choose',
     meaningBody:
-      'Ask elders, respect kuladeivam, or follow the deity you feel drawn to in prayer. Stick with one ishta for steady vows unless your guru directs otherwise.',
+      'Ask elders, respect kuladeivam, or follow the deity you feel drawn to in prayer. Stick with one Ista Devata for steady vows unless your guru directs otherwise.',
     benefits: [
       'Deepens single-pointed bhakti',
       'Simplifies daily routine',
@@ -365,16 +365,16 @@ const CUSTOM = [
       'Switch only with spiritual guidance',
     ],
     howTo: [
-      'Select ishta on Japam menu after sign-in or guest try',
+      'Select Ista Devata on Japam menu after sign-in or guest try',
       'Chant 108 daily at same time',
       'Combine with simple home lamp offering if desired',
       'Join yagnas for community sankalpa',
     ],
     whenTo: 'Daily — morning or evening consistently.',
-    japamBlurb: 'Open Japam menu → choose ishta → play match-3 with mantra.',
+    japamBlurb: 'Open Japam menu, choose Ista Devata, and play match-3 with mantra.',
     faqs: [
-      { question: 'Can I change ishta often?', answer: 'Traditions prefer stability; change only with good reason or guru advice.' },
-      { question: 'Multiple deities?', answer: 'Many honour Ganesha first then ishta; Japam supports per-deity modes.' },
+      { question: 'Can I change Ista Devata often?', answer: 'Traditions prefer stability; change only with good reason or guru advice.' },
+      { question: 'Multiple deities?', answer: 'Many honour Ganesha first then Ista Devata; Japam supports per-deity modes.' },
       { question: 'Guru-hidden deities?', answer: 'Sai Baba and Bramhamgaaru are reserved in app — not in public play grid.' },
       { question: 'Need initiation?', answer: 'Mantra japa is open in many homes; diksha mantras need guru.' },
       { question: 'Guest mode?', answer: 'Yes — try before account creation.' },
@@ -419,7 +419,7 @@ const CUSTOM = [
     relatedPages: [
       { pageId: 'online-japa-mantra', label: 'Online japa' },
       { pageId: 'japa-108-times', label: '108 japa' },
-      { pageId: 'ishta-devata-japa', label: 'Ishta devata' },
+      { pageId: 'ishta-devata-japa', label: 'Ista Devata' },
     ],
   },
   {
@@ -460,7 +460,7 @@ const CUSTOM = [
     ],
     relatedPages: [
       { pageId: 'online-japa-mantra', label: 'Online japa' },
-      { pageId: 'ishta-devata-japa', label: 'Ishta devata' },
+      { pageId: 'ishta-devata-japa', label: 'Ista Devata' },
       { pageId: 'maha-japa-yagna', label: 'Maha yagna' },
     ],
   },

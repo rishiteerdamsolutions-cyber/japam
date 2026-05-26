@@ -208,7 +208,7 @@
     "premiumTagline": "Optional extra Dakshina for the mission, with a ★ badge of thanks.",
     "proTitle": "Pro — Monthly Dakshina",
     "proBody": "Offer Monthly Dakshina to continue after the free path and unlock full Pro features.",
-    "proBullet1": "All Devatas and Ista paths, levels 6-50 after your free mala",
+    "proBullet1": "All Devatas and Ista Devata paths, levels 6-50 after your free mala",
     "proBullet2": "Marathons, Mahā Yāgas, Pushpa Aradhana & more",
     "proBullet3": "Green Pro badge on your profile while active",
     "proFootnote": "Checkout clearly shows payment details and access dates.",
@@ -234,7 +234,7 @@
   "paywall": {
     "title": "Unlock all levels",
     "bodyAfterFreeGeneral": "You completed the free mālā on All-Devatā Japa (first 5 levels, 108 japas). Offer Monthly Dakshina to continue from level 6 and unlock the full path.",
-    "bodyAfterFreeDeity": "You completed the first 2 free levels on this Ista path. Get Pro to continue this deity’s levels and the full level map (3–50) everywhere."
+    "bodyAfterFreeDeity": "You completed the first 2 free levels on this Ista Devata path. Get Pro to continue this deity’s levels and the full level map (3–50) everywhere."
   },
   "levelGate": {
     "alreadyCompleteTitle": "Level already completed",
@@ -831,7 +831,7 @@
     "dismiss": "Dismiss",
     "display_price_strikethrough_in_rupees": "Display price (strikethrough) in rupees",
     "district_optional": "District (optional)",
-    "do_your_ista_devata_japa_sign_in_with_google": "Do your ista devata japa? Sign in with Google",
+    "do_your_ista_devata_japa_sign_in_with_google": "Do your Ista Devata japa? Sign in with Google",
     "do_your_japa_for_these_marathons_your_japas_count_toward_the_marathon": "Do your japa for these marathons — your japas count toward the marathon.",
     "donate": "Donate",
     "donation_failed": "Donation failed",
@@ -870,7 +870,7 @@
     "install_the_app_for_100_reliable_notifications": "Install the app for 100% reliable notifications",
     "invalid_create_order_response": "Invalid create-order response",
     "invalid_credentials": "Invalid credentials",
-    "ista_devata_japa": "Ista Devata Japa",
+    "ista_devata_japa": "Ista Devata",
     "jai": "Jai!",
     "japa": "Japa",
     "japa_count": "Japa Count",

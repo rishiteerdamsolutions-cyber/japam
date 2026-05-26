@@ -4,26 +4,26 @@
   "lang": "en",
   "slug": "ishta-devata-japa",
   "deityId": null,
-  "primaryKeyword": "ishta devata japa",
+  "primaryKeyword": "Ista Devata",
   "secondaryKeywords": [
     "choose your deity",
     "personal deity chanting"
   ],
   "meta": {
-    "title": "Ishta Devata Japa — Choose Your Deity | Japam",
-    "description": "How to choose an ishta devata and practise daily japa in Japam.",
+    "title": "Ista Devata — Choose Your Deity | Japam",
+    "description": "How to choose an Ista Devata and practise daily japa in Japam.",
     "ogImage": "/images/favicon.png"
   },
   "blocks": [
     {
       "type": "h1",
-      "text": "Ishta Devata Japa — Choosing Your Deity"
+      "text": "Ista Devata — Choosing Your Deity"
     },
     {
       "type": "p",
       "runs": [
         {
-          "text": "Ishta devata is your chosen beloved deity for daily worship. Family tradition, initiation, or inner calling guide the choice."
+          "text": "Ista Devata is your chosen beloved deity for daily worship. Family tradition, initiation, or inner calling guide the choice."
         }
       ]
     },
@@ -43,7 +43,7 @@
       "type": "p",
       "runs": [
         {
-          "text": "Ask elders, respect kuladeivam, or follow the deity you feel drawn to in prayer. Stick with one ishta for steady vows unless your guru directs otherwise."
+          "text": "Ask elders, respect kuladeivam, or follow the deity you feel drawn to in prayer. Stick with one Ista Devata for steady vows unless your guru directs otherwise."
         }
       ]
     },
@@ -67,7 +67,7 @@
     {
       "type": "ul",
       "items": [
-        "Select ishta on Japam menu after sign-in or guest try",
+        "Select Ista Devata on Japam menu after sign-in or guest try",
         "Chant 108 daily at same time",
         "Combine with simple home lamp offering if desired",
         "Join yagnas for community sankalpa"
@@ -138,7 +138,7 @@
       "type": "p",
       "runs": [
         {
-          "text": "Open Japam menu → choose ishta → play match-3 with mantra."
+          "text": "Open Japam menu, choose Ista Devata, and play match-3 with mantra."
         }
       ]
     }
@@ -175,12 +175,12 @@
   ],
   "faqs": [
     {
-      "question": "Can I change ishta often?",
+      "question": "Can I change Ista Devata often?",
       "answer": "Traditions prefer stability; change only with good reason or guru advice."
     },
     {
       "question": "Multiple deities?",
-      "answer": "Many honour Ganesha first then ishta; Japam supports per-deity modes."
+      "answer": "Many honour Ganesha first then Ista Devata; Japam supports per-deity modes."
     },
     {
       "question": "Guru-hidden deities?",

@@ -35,7 +35,7 @@ function refCodeFromUid(userUid: string | null | undefined): string | null {
   return userUid.trim().slice(0, 8).toUpperCase();
 }
 
-/** Public invite URL — opens menu and starts this Iṣṭa Devatā japa game. */
+/** Public invite URL — opens menu and starts this Ista Devata japa game. */
 export function buildDeityInviteUrl(deityId: PlayableDeityId, userUid?: string | null): string {
   const params = new URLSearchParams();
   params.set('deity', deityId);
@@ -80,7 +80,7 @@ Open the link · sign in with Google or try without signing in — both start on
 🕉️ Free to start · Join marathons · Grow your practice daily.`;
 }
 
-/** WhatsApp share for a specific Iṣṭa Devatā (menu deep link → game). */
+/** WhatsApp share for a specific Ista Devata (menu deep link → game). */
 export function buildDeityWhatsAppShareHref(
   deityId: PlayableDeityId,
   userUid?: string | null,

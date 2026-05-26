@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { OpeningVideoModal } from './OpeningVideoModal';
-import { JapamLogo } from '../ui/JapamLogo';
 import { LanguageDropdown } from '../ui/LanguageDropdown';
 import { AppFooter } from '../layout/AppFooter';
 import { useAuthStore } from '../../store/authStore';
@@ -79,63 +78,63 @@ export function Landing({
 
       <div className="viewport-shell px-3 sm:px-4 pb-[max(0.25rem,env(safe-area-inset-bottom))]">
         <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
-        <div className="viewport-shell__column max-w-xl">
-          <header className="relative shrink-0 pt-[max(0.35rem,env(safe-area-inset-top,0px))]">
-            <div className="absolute top-[max(0.35rem,env(safe-area-inset-top,0px))] right-0 z-20">
-              <LanguageDropdown />
-            </div>
-            <div className="mx-auto flex max-w-xl flex-col items-center gap-2 sm:flex-row sm:items-center sm:justify-center sm:gap-6 sm:text-left pr-10 sm:pr-0">
+        <div className="viewport-shell__column max-w-xl gap-[clamp(0.25rem,0.9vh,0.65rem)]">
+          <header className="relative shrink-0 pt-[max(0.2rem,env(safe-area-inset-top,0px))]">
+            <div className="flex items-start justify-between gap-2">
               <motion.div
-                initial={{ scale: 0.9, opacity: 0 }}
+                initial={{ scale: 0.92, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.4 }}
-                className="shrink-0 drop-shadow-[0_0_20px_rgba(251,191,36,0.4)]"
+                transition={{ duration: 0.35 }}
+                className="shrink-0 drop-shadow-[0_0_16px_rgba(251,191,36,0.35)]"
               >
-                <JapamLogo size={80} />
+                <img src="/images/logo.png" alt="Japam" width={56} height={56} className="h-14 w-14 object-contain drop-shadow-[0_2px_10px_rgba(0,0,0,0.28)]" draggable={false} />
               </motion.div>
-              <div className="flex min-w-0 flex-col items-center text-center sm:items-start sm:text-left">
-                <motion.h1
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.1 }}
-                  className="text-[clamp(1.65rem,7vw,3rem)] font-bold text-white mb-0.5 sm:mb-1 tracking-tight drop-shadow-[0_0_20px_rgba(251,191,36,0.5)] break-words"
-                  style={{ fontFamily: 'serif' }}
-                >
-                  {t('landing.title')}
-                </motion.h1>
-                <motion.p
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.25, duration: 0.4 }}
-                  className="text-amber-200 text-[clamp(0.8rem,3.2vw,1.15rem)] font-medium break-words px-1"
-                >
-                  {t('landing.tagline')}
-                </motion.p>
-                <motion.p
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.32, duration: 0.4 }}
-                  className="mt-1.5 max-w-md text-[clamp(0.7rem,2.8vw,0.875rem)] leading-snug text-white/95 drop-shadow-md break-words sm:mt-2 line-clamp-2 [@media(max-height:720px)]:hidden"
-                >
-                  {t('landing.description')}
-                </motion.p>
+              <div className="shrink-0 pt-0.5">
+                <LanguageDropdown />
               </div>
+            </div>
+            <div className="mt-1 w-full min-w-0 text-center">
+              <motion.h1
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.45, delay: 0.05 }}
+                className="text-[clamp(1.5rem,6.5vw,2.35rem)] font-bold text-white leading-[1.05] tracking-tight drop-shadow-[0_0_18px_rgba(251,191,36,0.45)] break-words"
+                style={{ fontFamily: 'serif' }}
+              >
+                {t('landing.title')}
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.12, duration: 0.35 }}
+                className="text-amber-200 text-[clamp(0.95rem,3.8vw,1.2rem)] font-semibold leading-tight break-words -mt-0.5"
+              >
+                {t('landing.tagline')}
+              </motion.p>
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2, duration: 0.35 }}
+                className="mx-auto mt-1 max-w-md text-[clamp(0.68rem,2.6vw,0.8rem)] leading-snug text-white/90 drop-shadow-md break-words line-clamp-2 [@media(max-height:740px)]:hidden"
+              >
+                {t('landing.description')}
+              </motion.p>
             </div>
           </header>
 
           <motion.section
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
-            className="flex min-h-0 flex-1 flex-col overflow-hidden"
+            transition={{ delay: 0.22, duration: 0.45 }}
+            className="flex min-h-0 flex-1 flex-col overflow-x-hidden"
           >
-            <div className="flex shrink-0 flex-col items-center gap-[clamp(0.35rem,1vh,0.75rem)]">
+            <div className="flex shrink-0 flex-col items-center gap-[clamp(0.3rem,0.85vh,0.6rem)] pt-2 pb-0.5 overflow-visible">
               <PushableButton
                 type="button"
                 layout="inline"
                 aria-label={CTA.landing.startJapa}
                 onClick={() => setVideoIntent('start')}
-                className={landingPrimaryPushableClass}
+                className={`${landingPrimaryPushableClass} z-10`}
                 frontClassName={pushablePrimaryFrontClass}
               >
                 {CTA.landing.startJapa}
@@ -146,7 +145,7 @@ export function Landing({
                   <h2 className="w-full max-w-xs text-center text-amber-200/95 text-[10px] font-semibold uppercase tracking-[0.18em] [@media(max-height:700px)]:hidden">
                     {t('landing.specials')}
                   </h2>
-                  <div className="w-full max-w-sm flex flex-col items-center gap-2 [@media(max-height:700px)]:scale-[0.92] [@media(max-height:700px)]:origin-top">
+                  <div className="w-full max-w-sm flex flex-col items-center gap-1.5 [@media(max-height:740px)]:scale-[0.88] [@media(max-height:740px)]:origin-top">
                     {showSpecialsRow && (
                       <div className="flex justify-center gap-2 sm:gap-3 w-full items-start">
                         {onBirthday && (

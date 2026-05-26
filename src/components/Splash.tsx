@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import { JapamLogo } from './ui/JapamLogo';
 
 interface SplashProps {
   onComplete: () => void;
@@ -21,7 +20,7 @@ export function Splash({ onComplete }: SplashProps) {
         transition={{ duration: 0.5 }}
         className="mb-3"
       >
-        <JapamLogo size={100} />
+        <img src="/images/logo.png" alt="Japam" width={100} height={100} className="object-contain drop-shadow-lg" draggable={false} />
       </motion.div>
       <motion.h1
         initial={{ scale: 0.8, opacity: 0 }}

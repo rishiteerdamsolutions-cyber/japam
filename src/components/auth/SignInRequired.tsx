@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { GoogleSignIn } from './GoogleSignIn';
-import { JapamLogo } from '../ui/JapamLogo';
 import { isFirebaseConfigured } from '../../lib/firebase';
 interface SignInRequiredProps {
   onBack: () => void;
@@ -25,7 +24,7 @@ export function SignInRequired({ onBack, message = 'Sign in with Google to play'
         >
           ← Back
         </button>
-        <JapamLogo size={80} className="mb-6 drop-shadow-lg shrink-0" />
+        <img src="/images/logo.png" alt="Japam" width={80} height={80} className="mb-6 drop-shadow-lg shrink-0 object-contain" draggable={false} />
         <div className="w-full rounded-2xl bg-black/30 backdrop-blur-sm border border-white/10 p-6 space-y-4">
           <h2 className="text-amber-400 font-semibold text-center text-sm">Sign in</h2>
           <p className="text-amber-200/90 text-sm text-center leading-relaxed">{message}</p>

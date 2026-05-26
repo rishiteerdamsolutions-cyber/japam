@@ -1,5 +1,4 @@
 import { Outlet, Link } from 'react-router-dom';
-import { JapamLogo } from '../components/ui/JapamLogo';
 import { LearnLanguageSwitcher } from '../learn/LearnLanguageSwitcher';
 
 /** Minimal chrome for SEO guide pages — no game nav, no auth gate. */
@@ -14,7 +13,7 @@ export function LearnLayout() {
             className="flex items-center gap-2 min-w-0 touch-manipulation"
             aria-label="Japam home"
           >
-            <JapamLogo size={48} />
+            <img src="/images/logo.png" alt="Japam" width={48} height={48} className="object-contain" draggable={false} />
             <span className="font-serif font-bold text-amber-200 text-lg hidden sm:inline">Japam</span>
           </Link>
           <LearnLanguageSwitcher />

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { withReturnTo } from '../lib/navigationReturn';
 import { WorldMap } from '../components/map/WorldMap';
 import { useUnlockStore } from '../store/unlockStore';
 import { useProgressStore } from '../store/progressStore';
@@ -20,11 +21,12 @@ export function LevelsPage() {
     }
     const firstLock = getFirstLockedLevelIndex(mode);
     const isLocked = levelIndex >= firstLock && levelsUnlocked === false;
+    const gameState = withReturnTo('/levels');
     if (isLocked) {
-      navigate(`/game?mode=${encodeURIComponent(mode)}&level=${levelIndex}`);
+      navigate(`/game?mode=${encodeURIComponent(mode)}&level=${levelIndex}`, { state: gameState });
       return;
     }
-    navigate(`/game?mode=${encodeURIComponent(mode)}&level=${levelIndex}`);
+    navigate(`/game?mode=${encodeURIComponent(mode)}&level=${levelIndex}`, { state: gameState });
   };
 
   return (

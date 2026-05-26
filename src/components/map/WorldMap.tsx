@@ -7,6 +7,7 @@ import { useLevelsConfigStore } from '../../store/levelsConfigStore';
 import { AccessBadge } from '../ui/AccessBadge';
 import { DonateThankYouBox } from '../donation/DonateThankYouBox';
 import { MenuMatchChantHeader } from '../layout/MenuMatchChantHeader';
+import { NaturalBackButton } from '../nav/NaturalBackButton';
 import { BottomNav } from '../nav/BottomNav';
 import { LEVELS } from '../../data/levels';
 import { EPISODES } from '../../data/episodes';
@@ -42,6 +43,7 @@ export function WorldMap({ onSelectLevel }: WorldMapProps) {
       <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10">
       <MenuMatchChantHeader />
+      <NaturalBackButton fallback="/menu" className="self-start text-amber-300/90 text-sm mb-2 hover:underline py-1" />
       <h2 className="text-base sm:text-xl font-bold text-amber-400 mb-2 truncate" style={{ fontFamily: 'serif' }}>
         {levelsTitle}
       </h2>

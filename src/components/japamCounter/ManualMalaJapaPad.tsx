@@ -2,7 +2,7 @@ import type { RefObject } from 'react';
 import { MalaBeadSwipeZone } from './MalaBeadSwipeZone';
 
 type Props = {
-  onBead: () => void;
+  onBead?: () => void;
   onBeadTouchStart?: () => void;
   onBeadStrokeCancel?: () => void;
   disabled?: boolean;
@@ -13,6 +13,8 @@ type Props = {
   /** One japa per finger stroke (default for manual japam counter). */
   fastJapa?: boolean;
   japaInFlightRef?: RefObject<boolean>;
+  autoSpinOnCount?: number;
+  displayOnly?: boolean;
 };
 
 /**
@@ -30,10 +32,12 @@ export function ManualMalaJapaPad({
   sessionTarget,
   fastJapa = true,
   japaInFlightRef,
+  autoSpinOnCount,
+  displayOnly = false,
 }: Props) {
   return (
     <MalaBeadSwipeZone
-      onBead={onBead}
+      onBead={onBead ?? (() => {})}
       onBeadTouchStart={onBeadTouchStart}
       onBeadStrokeCancel={onBeadStrokeCancel}
       disabled={disabled}
@@ -43,6 +47,8 @@ export function ManualMalaJapaPad({
       sessionTarget={sessionTarget}
       fastJapa={fastJapa}
       japaInFlightRef={japaInFlightRef}
+      autoSpinOnCount={autoSpinOnCount}
+      displayOnly={displayOnly}
     />
   );
 }

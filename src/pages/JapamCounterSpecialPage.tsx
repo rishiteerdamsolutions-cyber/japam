@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { NaturalBackButton } from '../components/nav/NaturalBackButton';
+import { currentReturnPath, withReturnTo } from '../lib/navigationReturn';
+import { ManualMalaJapaPad } from '../components/japamCounter/ManualMalaJapaPad';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { DEITIES, getDeity, type DeityId } from '../data/deities';
@@ -18,7 +21,6 @@ import { BottomNav } from '../components/nav/BottomNav';
 import { MenuMatchChantHeader } from '../components/layout/MenuMatchChantHeader';
 import { JapamCounterLeaderboardPanel } from '../components/japamCounter/JapamCounterLeaderboardPanel';
 import { incrementJapamCounter } from '../lib/japamCounterApi';
-import { ManualMalaJapaPad } from '../components/japamCounter/ManualMalaJapaPad';
 import { useManualJapaTouchLock } from '../hooks/useManualJapaTouchLock';
 import { pulseMalaBeadTouchHaptic } from '../lib/malaHaptics';
 import { ensureMantraPreloaded, playMantraOnce, primeAudio, stopAllMantras } from '../hooks/useSound';
@@ -26,9 +28,20 @@ import { useJapaStore } from '../store/japaStore';
 
 type JapamCounterMode = 'manual' | 'auto';
 
+const AUTO_MALA_PREF_KEY = 'japam_auto_counter_show_mala';
+
+function readAutoMalaPref(): boolean {
+  try {
+    return localStorage.getItem(AUTO_MALA_PREF_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
 function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const deityId = useMemo(() => parseJapamCounterDeity(searchParams.get('deity')), [searchParams]);
   const isSpecial108Session = searchParams.get('special108') === '1';
@@ -47,6 +60,7 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
   const [autoRunning, setAutoRunning] = useState(false);
   const [saveNotice, setSaveNotice] = useState<string | null>(null);
   const [commitRequest, setCommitRequest] = useState<{ id: number; delta: number } | null>(null);
+  const [showAutoMala, setShowAutoMala] = useState(() => (mode === 'auto' ? readAutoMalaPref() : false));
   const autoRunningRef = useRef(false);
   const countRef = useRef(MANUAL_JAPAM_COUNTER_INITIAL_COUNT);
   const japaInFlightRef = useRef(false);
@@ -105,13 +119,27 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
     (id: DeityId) => {
       if (unlockPending) return;
       if (!japamCounterDeityAllowed(id, proOrPremiumActive)) {
-        navigate('/plans');
+        navigate('/plans', {
+          state: withReturnTo(currentReturnPath(location.pathname, location.search)),
+        });
         return;
       }
       setDeity(id);
     },
-    [navigate, proOrPremiumActive, unlockPending, setDeity],
+    [location.pathname, location.search, navigate, proOrPremiumActive, unlockPending, setDeity],
   );
+
+  const toggleShowAutoMala = useCallback(() => {
+    setShowAutoMala((on) => {
+      const next = !on;
+      try {
+        localStorage.setItem(AUTO_MALA_PREF_KEY, next ? '1' : '0');
+      } catch {
+        /* ignore */
+      }
+      return next;
+    });
+  }, []);
 
   useEffect(() => {
     if (!isAuto || !autoRunning || !deityId) return;
@@ -242,13 +270,10 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
         <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
         <div className="relative z-10 w-full max-w-[min(100%,28rem)] flex flex-col items-center">
           <MenuMatchChantHeader />
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
+          <NaturalBackButton
+            fallback="/specials"
             className="self-start text-amber-300/90 text-sm mb-4 hover:underline"
-          >
-            {t('specials.back')}
-          </button>
+          />
           <h1 className="text-[clamp(1.05rem,4.5vw,1.35rem)] font-bold text-amber-300 text-center mb-1 px-1">
             {t(titleKey)}
           </h1>
@@ -434,6 +459,29 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
             ? t('specials.autoJapamCounterPaused')
             : t('specials.autoJapamCounterTargetNote')}
         </p>
+
+        <label className="flex items-center justify-center gap-2 mb-3 cursor-pointer select-none">
+          <input
+            type="checkbox"
+            checked={showAutoMala}
+            onChange={toggleShowAutoMala}
+            className="accent-amber-500 w-4 h-4"
+          />
+          <span className="text-amber-200/85 text-xs">{t('specials.autoJapamCounterShowMala')}</span>
+        </label>
+
+        {showAutoMala ? (
+          <div className="w-full flex justify-center mb-4 -mt-1">
+            <ManualMalaJapaPad
+              displayOnly
+              autoSpinOnCount={count}
+              sessionCount={count}
+              sessionCountRef={countRef}
+              sessionTarget={AUTO_JAPAM_SESSION_TARGET}
+              className={autoRunning ? 'opacity-100' : 'opacity-90'}
+            />
+          </div>
+        ) : null}
 
         <div className="w-full max-w-sm flex flex-col gap-2 mx-auto">
           {autoRunning ? (

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import { NaturalBackButton } from '../components/nav/NaturalBackButton';
 import { useTranslation } from 'react-i18next';
 import { AnimatePresence, motion } from 'framer-motion';
 import { DEITIES, DEITY_IDS, getDeity, type DeityId } from '../data/deities';
@@ -400,13 +401,11 @@ export function PushpaAradhanaPage() {
       <div className="relative min-h-[100dvh] flex flex-col items-center px-3 pt-3 pb-[max(6rem,env(safe-area-inset-bottom))] sm:p-4 sm:pb-28 overflow-y-auto overflow-x-hidden">
         <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
         <div className="relative z-10 w-full max-w-[min(100%,28rem)] flex flex-col items-center">
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
+          <NaturalBackButton
+            fallback="/specials"
+            labelKey="pushpa.back"
             className="self-start text-amber-300/90 text-sm mb-4 hover:underline"
-          >
-            {t('pushpa.back')}
-          </button>
+          />
           <h1 className="text-[clamp(1.05rem,4.5vw,1.35rem)] font-bold text-amber-300 text-center mb-1 px-1">
             {t('pushpa.title')}
           </h1>

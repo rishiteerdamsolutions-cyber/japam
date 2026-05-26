@@ -886,17 +886,14 @@ export function GameScreen({
           data-immersive-ui
           className="w-full max-w-md flex items-center justify-between shrink-0 mb-1 min-w-0 gap-2 min-h-[44px]"
         >
-        <PushableButton
+        <button
           type="button"
-          size="sm"
-          variant="secondary"
           onClick={handleBack}
-          className="-ml-2 shrink-0"
-          frontClassName={pushableCompactFrontClass}
+          className="text-amber-400 text-sm font-medium py-2 px-2 -ml-2 min-h-[44px] flex items-center shrink-0 hover:text-amber-300"
           aria-label={CTA.game.back}
         >
           {CTA.game.back}
-        </PushableButton>
+        </button>
         {(useLives || (!!user && !isGuest && isMarathon)) && (
             <LivesDisplay
               onClick={useLives ? () => setShowLivesModal(true) : undefined}

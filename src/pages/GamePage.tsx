@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { normalizeReturnPath } from '../lib/navigationReturn';
 import { useTranslation } from 'react-i18next';
 import { GameScreen } from '../components/game/GameScreen';
 import { Paywall } from '../components/payment/Paywall';
@@ -47,6 +48,7 @@ function parseGameMode(rawMode: string | null): GameMode {
 export function GamePage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const user = useAuthStore((s) => s.user);
   const authLoading = useAuthStore((s) => s.loading);
@@ -429,6 +431,13 @@ export function GamePage() {
 
   const onJustRestoredCleared = useCallback(() => setJustRestored(false), []);
   const onBack = useCallback(() => {
+    const navState = location.state as { returnTo?: string; from?: string } | null;
+    const explicitReturn =
+      normalizeReturnPath(navState?.returnTo) ?? normalizeReturnPath(navState?.from);
+    if (explicitReturn) {
+      navigate(explicitReturn);
+      return;
+    }
     if (occasionKind === 'birthday') {
       navigate(LAUNCH_FEATURE_OCCASION_GAMES ? '/occasion/birthday' : '/');
       return;
@@ -448,7 +457,7 @@ export function GamePage() {
     } else {
       navigate('/levels');
     }
-  }, [navigate, isMarathon, yagnaId, isGuest, occasionKind, isSpecial108, isWeeklyStreak]);
+  }, [navigate, location.state, isMarathon, yagnaId, isGuest, occasionKind, isSpecial108, isWeeklyStreak]);
 
   const handlePlayNameSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

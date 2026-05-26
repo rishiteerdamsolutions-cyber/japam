@@ -21,6 +21,19 @@ export function applySeoSearchParams(search: string): void {
   }
 }
 
+export function hasDeityInSearchParams(search: string): boolean {
+  const deity = new URLSearchParams(search).get('deity');
+  return Boolean(deity && ALL_DEITY_IDS.has(deity));
+}
+
+export function clearSeoDeityHint(): void {
+  try {
+    sessionStorage.removeItem(SEO_DEITY_KEY);
+  } catch {
+    /* ignore */
+  }
+}
+
 /** One-shot deity hint from SEO CTA (cleared after read). */
 export function consumeSeoDeityHint(): DeityId | null {
   try {

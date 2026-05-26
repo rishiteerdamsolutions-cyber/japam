@@ -57,6 +57,10 @@ type Props = {
   fastJapa?: boolean;
   /** Mantra/haptic in progress — ignore new touches until the parent clears this. */
   japaInFlightRef?: RefObject<boolean>;
+  /** Each increment runs a bead-roll animation (auto japam counter with mala visible). */
+  autoSpinOnCount?: number;
+  /** Visual-only mala — no touch interaction. */
+  displayOnly?: boolean;
   onStrokeDebug?: (info: { delta: number; source: string }) => void;
 };
 
@@ -94,6 +98,8 @@ export function MalaBeadSwipeZone({
   sessionTarget = AUTO_JAPAM_SESSION_TARGET,
   fastJapa = false,
   japaInFlightRef,
+  autoSpinOnCount,
+  displayOnly = false,
   onStrokeDebug,
 }: Props) {
   const zoneRef = useRef<HTMLDivElement>(null);
@@ -109,6 +115,8 @@ export function MalaBeadSwipeZone({
   const readSessionCount = () => sessionCountRef?.current ?? sessionCount;
   const [active, setActive] = useState(false);
   const [spinX, setSpinX] = useState(0);
+  const prevAutoSpinCountRef = useRef(autoSpinOnCount ?? 0);
+  const interactionDisabled = disabled || displayOnly;
 
   const startYRef = useRef(0);
   const startXRef = useRef(0);
@@ -127,7 +135,7 @@ export function MalaBeadSwipeZone({
   const commitBead = useCallback(
     (source: string) => {
       if (
-        disabled ||
+        interactionDisabled ||
         japaInFlightRef?.current ||
         beadCountedRef.current ||
         !touchActiveRef.current ||
@@ -147,7 +155,7 @@ export function MalaBeadSwipeZone({
         source: `bead:${source}`,
       });
     },
-    [disabled, japaInFlightRef, sessionTarget, sessionCountRef, sessionCount, paintAllBeadsNow],
+    [interactionDisabled, japaInFlightRef, sessionTarget, sessionCountRef, sessionCount, paintAllBeadsNow],
   );
 
   const applyDrag = useCallback(
@@ -226,7 +234,7 @@ export function MalaBeadSwipeZone({
 
   const beginStroke = useCallback(
     (clientX: number, clientY: number) => {
-      if (disabled || japaInFlightRef?.current) return;
+      if (interactionDisabled || japaInFlightRef?.current) return;
       primeAudio();
       primeMalaHaptics();
       resetMalaBeadStrokeHaptic();
@@ -251,15 +259,25 @@ export function MalaBeadSwipeZone({
         source: onBeadPad ? 'bead·armed' : 'outside-bead',
       });
     },
-    [disabled, japaInFlightRef, sessionTarget, sessionCountRef, sessionCount],
+    [interactionDisabled, japaInFlightRef, sessionTarget, sessionCountRef, sessionCount],
   );
 
   const strokeHandlersRef = useRef({ beginStroke, applyDrag, resetStroke });
   strokeHandlersRef.current = { beginStroke, applyDrag, resetStroke };
 
   useEffect(() => {
+    if (autoSpinOnCount == null) return;
+    if (autoSpinOnCount <= prevAutoSpinCountRef.current) return;
+    prevAutoSpinCountRef.current = autoSpinOnCount;
+    const rollDelta = BEAD_SWIPE_PX * BEAD_ROLL_SENS * 2.2;
+    spinXRef.current += rollDelta;
+    setSpinX(spinXRef.current);
+    paintAllMalaBeadGlobes(spinXRef.current);
+  }, [autoSpinOnCount]);
+
+  useEffect(() => {
     const el = zoneRef.current;
-    if (!el || disabled) return;
+    if (!el || interactionDisabled) return;
 
     const onTouchStart = (e: TouchEvent) => {
       if (e.touches.length !== 1) return;
@@ -290,26 +308,26 @@ export function MalaBeadSwipeZone({
 
     el.addEventListener('touchstart', onTouchStart, { passive: true });
     return () => el.removeEventListener('touchstart', onTouchStart);
-  }, [disabled]);
+  }, [interactionDisabled]);
 
   const onPointerDown = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
-      if (disabled || e.pointerType === 'touch') return;
+      if (interactionDisabled || e.pointerType === 'touch') return;
       e.preventDefault();
       e.currentTarget.setPointerCapture(e.pointerId);
       activePointerRef.current = e.pointerId;
       beginStroke(e.clientX, e.clientY);
     },
-    [disabled, beginStroke],
+    [interactionDisabled, beginStroke],
   );
 
   const onPointerMove = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
-      if (disabled || e.pointerType === 'touch' || activePointerRef.current !== e.pointerId) return;
+      if (interactionDisabled || e.pointerType === 'touch' || activePointerRef.current !== e.pointerId) return;
       e.preventDefault();
       applyDrag(e.clientX, e.clientY, 'pointermove');
     },
-    [disabled, applyDrag],
+    [interactionDisabled, applyDrag],
   );
 
   const endPointer = useCallback(
@@ -358,14 +376,18 @@ export function MalaBeadSwipeZone({
                   ? 'Rudraksha bead — roll or release for one japa'
                   : 'Rudraksha bead — swipe down to roll'
               }
-              aria-disabled={disabled}
-              onPointerDown={onPointerDown}
-              onPointerMove={onPointerMove}
-              onPointerUp={endPointer}
-              onPointerCancel={endPointer}
+              aria-disabled={interactionDisabled}
+              onPointerDown={displayOnly ? undefined : onPointerDown}
+              onPointerMove={displayOnly ? undefined : onPointerMove}
+              onPointerUp={displayOnly ? undefined : endPointer}
+              onPointerCancel={displayOnly ? undefined : endPointer}
               className={`relative h-full w-full touch-none select-none leading-none ${
-                disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-grab active:cursor-grabbing'
-              } ${active && !disabled ? 'scale-[1.02]' : ''}`}
+                interactionDisabled
+                  ? displayOnly
+                    ? 'cursor-default'
+                    : 'opacity-50 cursor-not-allowed'
+                  : 'cursor-grab active:cursor-grabbing'
+              } ${active && !interactionDisabled ? 'scale-[1.02]' : ''}`}
               style={{
                 touchAction: 'none',
                 WebkitTouchCallout: 'none',

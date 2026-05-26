@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { clearSeoDeityHint, hasDeityInSearchParams } from './lib/seoAttribution';
 import { Splash } from './components/Splash';
 import { Landing } from './components/landing/Landing';
 import { InstallPrompt } from './components/ui/InstallPrompt';
@@ -15,6 +16,7 @@ function multiplayerAsuraHref(): string {
 
 function App() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [screen, setScreen] = useState<'splash' | 'landing'>('splash');
 
   // Auth + data stores are bootstrapped globally in AuthProvider (mounted for all routes).
@@ -28,7 +30,9 @@ function App() {
         <Landing
           onEnterApp={() => {
             trackProductUsage('action_landing_start');
-            navigate('/menu');
+            const seoDeityLaunch = hasDeityInSearchParams(location.search);
+            if (!seoDeityLaunch) clearSeoDeityHint();
+            navigate('/menu', { state: seoDeityLaunch ? { seoDeityLaunch: true } : undefined });
           }}
           onGuestPlay={() => {
             trackProductUsage('action_landing_guest');

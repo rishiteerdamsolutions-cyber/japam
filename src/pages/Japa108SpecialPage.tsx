@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { NaturalBackButton } from '../components/nav/NaturalBackButton';
+import { currentReturnPath, withReturnTo } from '../lib/navigationReturn';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { DEITIES, type DeityId } from '../data/deities';
@@ -31,6 +33,7 @@ function parseDeity(raw: string | null): DeityId | null {
 export function Japa108SpecialPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const deityId = useMemo(() => parseDeity(searchParams.get('deity')), [searchParams]);
   const user = useAuthStore((s) => s.user);
@@ -64,23 +67,27 @@ export function Japa108SpecialPage() {
     (id: DeityId) => {
       if (unlockPending) return;
       if (!japa108DeityAllowedForUser(id, proOrPremiumActive)) {
-        navigate('/plans');
+        navigate('/plans', {
+          state: withReturnTo(currentReturnPath(location.pathname, location.search)),
+        });
         return;
       }
       setDeity(id);
     },
-    [navigate, proOrPremiumActive, unlockPending, setDeity],
+    [location.pathname, location.search, navigate, proOrPremiumActive, unlockPending, setDeity],
   );
 
   const startGame = () => {
     if (!deityId || unlockPending) return;
     if (!japa108DeityAllowedForUser(deityId, proOrPremiumActive)) {
-      navigate('/plans');
+      navigate('/plans', {
+        state: withReturnTo(currentReturnPath(location.pathname, location.search)),
+      });
       return;
     }
-    navigate(
-      `/special-japam-counter?deity=${encodeURIComponent(deityId)}&special108=1`,
-    );
+    navigate(`/special-japam-counter?deity=${encodeURIComponent(deityId)}&special108=1`, {
+      state: withReturnTo(currentReturnPath(location.pathname, location.search)),
+    });
   };
 
   if (!deityId) {
@@ -89,13 +96,10 @@ export function Japa108SpecialPage() {
         <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
         <div className="relative z-10 w-full max-w-[min(100%,28rem)] flex flex-col items-center">
           <MenuMatchChantHeader />
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
+          <NaturalBackButton
+            fallback="/specials"
             className="self-start text-amber-300/90 text-sm mb-4 hover:underline"
-          >
-            {t('specials.back')}
-          </button>
+          />
           <h1 className="text-[clamp(1.05rem,4.5vw,1.35rem)] font-bold text-amber-300 text-center mb-1 px-1">
             {t('specials.japa108Title')}
           </h1>

@@ -19,7 +19,6 @@ import {
   menuGridPushableFrontClass,
   pushableCompactFrontClass,
   pushableDeityTileFrontClass,
-  pushableIconToggleFrontClass,
 } from '../../lib/landingCtaStyles';
 import { PushableButton } from '../ui/PushableButton';
 import { CTA } from '../../lib/ctaCopy';
@@ -120,33 +119,27 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
               {!profileLoaded && (
                 <AuthSessionRestoreHint variant="profileSync" className="hidden sm:inline max-w-[min(9rem,36vw)]" />
               )}
-              <PushableButton
+              <button
                 type="button"
-                layout="icon"
-                variant="secondary"
                 onClick={() => {
                   trackProductUsage('action_menu_plans');
-                  navigate('/plans');
+                  navigate('/plans', { state: { returnTo: '/menu' } });
                 }}
-                className="shrink-0"
-                frontClassName={pushableIconToggleFrontClass}
+                className="p-2 rounded-lg text-amber-400/90 hover:bg-white/10 hover:text-amber-400 min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0"
                 aria-label={t('menu.openPlansA11y')}
               >
                 <HeartIcon />
-              </PushableButton>
+              </button>
               <span className="hidden sm:inline text-amber-200/90 text-xs truncate max-w-[72px] text-right" title={displayName}>
                 {displayName}
               </span>
-              <PushableButton
+              <button
                 type="button"
-                layout="icon"
-                variant="secondary"
                 onClick={() => {
                   trackProductUsage('action_menu_settings');
                   onOpenSettings();
                 }}
-                className="shrink-0"
-                frontClassName={`${pushableIconToggleFrontClass} !p-1`}
+                className="flex items-center justify-center min-h-[44px] min-w-[44px] rounded-lg px-0.5 hover:bg-white/5 transition-colors shrink-0"
                 title={displayName}
                 aria-label={t('menu.settings')}
               >
@@ -162,7 +155,7 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
                   {isPremium && <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-amber-500 flex items-center justify-center text-white text-[9px] font-bold">★</span>}
                   {isPro && !isPremium && <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-green-500 flex items-center justify-center text-white text-[9px] font-bold">✓</span>}
                 </div>
-              </PushableButton>
+              </button>
             </div>
           )}
           </div>
@@ -178,6 +171,7 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
           <PushableButton
             type="button"
             layout="grid"
+            pressBeforeAction={false}
             aria-label={CTA.menu.allDevatasJapa}
             onClick={() => onSelect('general')}
             className={menuGridPushableClass}

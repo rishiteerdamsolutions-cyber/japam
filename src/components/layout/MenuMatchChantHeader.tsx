@@ -8,6 +8,7 @@ import { useUnlockStore } from '../../store/unlockStore';
 import { useProfileStore } from '../../store/profileStore';
 import { getProfileRingFlags } from '../../lib/membershipDisplay';
 import { CTA } from '../../lib/ctaCopy';
+import { currentReturnPath, withReturnTo } from '../../lib/navigationReturn';
 
 function HeartIcon() {
   return (
@@ -51,19 +52,24 @@ export function MenuMatchChantHeader({ rightElement }: MenuMatchChantHeaderProps
   });
   const initial = (displayName && displayName.charAt(0).toUpperCase()) || '?';
 
-  const returnPath = `${location.pathname}${location.search || ''}`;
+  const returnPath = currentReturnPath(location.pathname, location.search);
+  const onMenuPage = location.pathname === '/menu';
 
   const openSettings = () => {
-    navigate('/settings', { state: { from: returnPath } });
+    navigate('/settings', { state: withReturnTo(returnPath) });
   };
 
   return (
     <header className="flex items-center justify-between gap-2 w-full mb-4 min-h-[44px]">
       <button
         type="button"
-        onClick={() => navigate('/')}
+        onClick={() => navigate(onMenuPage ? '/' : '/menu')}
         className="min-w-0 flex-1 pr-2 text-left rounded-lg hover:bg-white/5 -ml-1 pl-1 py-1 transition-colors"
-        aria-label={t('menu.goToLanding', { defaultValue: 'Go to landing page' })}
+        aria-label={
+          onMenuPage
+            ? t('menu.goToLanding', { defaultValue: 'Go to landing page' })
+            : t('menu.goToMenu', { defaultValue: 'Go to menu' })
+        }
       >
         <JapamBrand as="span" className="block text-lg sm:text-xl leading-tight truncate">
           {t('menu.title')}
@@ -96,7 +102,7 @@ export function MenuMatchChantHeader({ rightElement }: MenuMatchChantHeaderProps
         {user && !onPlansPage && (
           <button
             type="button"
-            onClick={() => navigate('/plans')}
+            onClick={() => navigate('/plans', { state: withReturnTo(returnPath) })}
             className="p-2 rounded-lg text-amber-400/90 hover:bg-white/10 hover:text-amber-400 min-h-[44px] min-w-[44px] flex items-center justify-center"
             aria-label={t('menu.openPlansA11y')}
           >

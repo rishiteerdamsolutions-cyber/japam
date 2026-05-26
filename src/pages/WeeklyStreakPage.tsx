@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { NaturalBackButton } from '../components/nav/NaturalBackButton';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { DEITY_IDS, type DeityId } from '../data/deities';
@@ -77,13 +78,7 @@ export function WeeklyStreakPage() {
       <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10 w-full max-w-md flex flex-col flex-1 min-w-0">
         <MenuMatchChantHeader />
-        <button
-          type="button"
-          onClick={() => navigate(-1)}
-          className="self-start text-amber-300/90 text-sm mb-3 hover:underline"
-        >
-          {t('specials.back')}
-        </button>
+        <NaturalBackButton fallback="/specials" className="self-start text-amber-300/90 text-sm mb-3 hover:underline" />
         <h1 className="text-lg font-bold text-amber-300 text-center mb-1 px-1">{t('weeklyStreak.title')}</h1>
         <p className="text-amber-200/75 text-[11px] text-center mb-4 px-1 leading-snug">{t('weeklyStreak.subtitle')}</p>
 

@@ -7,7 +7,8 @@ import { useAuthStore } from '../store/authStore';
 import { isFirebaseConfigured } from '../lib/firebase';
 import type { GameMode } from '../types';
 import { DEITY_IDS, type PlayableDeityId } from '../data/deities';
-import { consumeSeoDeityHint } from '../lib/seoAttribution';
+import { clearSeoDeityHint, consumeSeoDeityHint } from '../lib/seoAttribution';
+import { withReturnTo } from '../lib/navigationReturn';
 import { trackProductUsage } from '../lib/productUsage';
 
 export function MenuPage() {
@@ -34,28 +35,38 @@ export function MenuPage() {
   const user = useAuthStore((s) => s.user);
   const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle);
 
-  const handleSelect = async (mode: GameMode) => {
-    if (isFirebaseConfigured && !user) {
-      await signInWithGoogle();
-      if (!useAuthStore.getState().user) return;
-    }
+  const handleSelect = (mode: GameMode) => {
     const level = getCurrentLevelIndex(mode);
     if (mode === 'general') trackProductUsage('action_menu_all_devatas');
     else trackProductUsage('action_menu_ista_select');
-    navigate(`/game?mode=${encodeURIComponent(mode)}&level=${level}`);
+    navigate(`/game?mode=${encodeURIComponent(mode)}&level=${level}`, {
+      state: withReturnTo('/menu'),
+    });
+    if (isFirebaseConfigured && !user) {
+      void signInWithGoogle();
+    }
   };
 
+  const seoLaunchRef = useRef(false);
+
   useEffect(() => {
+    const seoLaunch = Boolean((location.state as { seoDeityLaunch?: boolean } | null)?.seoDeityLaunch);
+    if (!seoLaunch) {
+      clearSeoDeityHint();
+      return;
+    }
+    if (seoLaunchRef.current) return;
     const deity = consumeSeoDeityHint();
     if (!deity || !DEITY_IDS.includes(deity as PlayableDeityId)) return;
-    void handleSelect(deity);
+    seoLaunchRef.current = true;
+    handleSelect(deity);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- one-shot SEO deep link on mount
-  }, []);
+  }, [location.state]);
 
   return (
     <MainMenu
       onSelect={handleSelect}
-      onOpenSettings={() => navigate('/settings', { state: { from: '/menu' } })}
+      onOpenSettings={() => navigate('/settings', { state: withReturnTo('/menu') })}
       introHeroSlot={<MenuMiniGameDemo key={location.key} />}
     />
   );

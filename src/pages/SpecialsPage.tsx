@@ -1,5 +1,7 @@
 import { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { currentReturnPath, withReturnTo } from '../lib/navigationReturn';
+import { NaturalBackButton } from '../components/nav/NaturalBackButton';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { useAuthStore } from '../store/authStore';
@@ -23,6 +25,7 @@ import {
 export function SpecialsPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
   const user = useAuthStore((s) => s.user);
   const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle);
 
@@ -33,9 +36,11 @@ export function SpecialsPage() {
         await signInWithGoogle();
         if (!useAuthStore.getState().user) return;
       }
-      navigate(path);
+      navigate(path, {
+        state: withReturnTo(currentReturnPath(location.pathname, location.search)),
+      });
     },
-    [navigate, signInWithGoogle, user],
+    [location.pathname, location.search, navigate, signInWithGoogle, user],
   );
 
   return (
@@ -43,13 +48,7 @@ export function SpecialsPage() {
       <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10 w-full max-w-sm flex flex-col items-stretch">
         <MenuMatchChantHeader />
-        <button
-          type="button"
-          onClick={() => navigate(-1)}
-          className="self-start text-amber-300/90 text-sm mb-3 hover:underline py-1"
-        >
-          {t('specials.back')}
-        </button>
+        <NaturalBackButton fallback="/menu" className="self-start text-amber-300/90 text-sm mb-3 hover:underline py-1" />
         <motion.div
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}

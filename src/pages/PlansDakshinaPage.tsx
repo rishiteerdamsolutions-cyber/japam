@@ -5,6 +5,7 @@ import { CTA } from '../lib/ctaCopy';
 import { PushableButton } from '../components/ui/PushableButton';
 import { pushableCompactFrontClass, pushableFullWidthFrontClass } from '../lib/landingCtaStyles';
 import { MenuMatchChantHeader } from '../components/layout/MenuMatchChantHeader';
+import { NaturalBackButton } from '../components/nav/NaturalBackButton';
 import { BottomNav } from '../components/nav/BottomNav';
 import { Paywall } from '../components/payment/Paywall';
 import { DonateModal } from '../components/donation/DonateModal';
@@ -82,6 +83,7 @@ export function PlansDakshinaPage() {
       <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10 w-full">
         <MenuMatchChantHeader />
+        <NaturalBackButton fallback="/menu" className="self-start text-amber-300/90 text-sm mb-3 hover:underline py-1" />
         <h1 className="text-base sm:text-xl font-bold text-amber-400 mb-2" style={{ fontFamily: 'serif' }}>
           {t('plans.title')}
         </h1>

@@ -28,6 +28,8 @@ interface GameOverlayProps {
   onOpenSpecial108HandwritingDownloads?: () => void;
   /** Special 108 win: download shareable birthday greeting PNG. */
   onDownloadBirthdayGreetingCard?: () => void | Promise<void>;
+  /** Override label for share-card download (e.g. invite intro Japa Card). */
+  shareCardCtaLabel?: string;
 }
 
 export function GameOverlay({
@@ -44,6 +46,7 @@ export function GameOverlay({
   onOpenWeeklyStreakHandwritingDownloads,
   onOpenSpecial108HandwritingDownloads,
   onDownloadBirthdayGreetingCard,
+  shareCardCtaLabel,
 }: GameOverlayProps) {
   const { t } = useTranslation();
   const addMoves = useGameStore((s) => s.addMoves);
@@ -219,7 +222,9 @@ export function GameOverlay({
                 onClick={() => void handleBirthdayGreetingDownload()}
                 frontClassName={pushableFullWidthFrontClass}
               >
-                {birthdayCardLoading ? CTA.game.creatingGreeting : CTA.game.birthdayGreeting}
+                {birthdayCardLoading
+                  ? CTA.game.creatingGreeting
+                  : (shareCardCtaLabel ?? CTA.game.birthdayGreeting)}
               </PushableButton>
             )}
             {status === 'won' && onNext && (

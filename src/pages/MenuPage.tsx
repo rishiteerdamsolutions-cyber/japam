@@ -47,6 +47,7 @@ export function MenuPage() {
   const user = useAuthStore((s) => s.user);
   const authLoading = useAuthStore((s) => s.loading);
   const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle);
+  const clearAuthError = useAuthStore((s) => s.clearError);
 
   const launchDeityGame = useCallback(
     (mode: PlayableDeityId, opts?: { inviteFresh?: boolean }) => {
@@ -138,8 +139,9 @@ export function MenuPage() {
   }, [navigate, pendingInviteDeity]);
 
   const handleInviteSignIn = useCallback(() => {
+    clearAuthError();
     void signInWithGoogle();
-  }, [signInWithGoogle]);
+  }, [clearAuthError, signInWithGoogle]);
 
   const dismissInviteGate = useCallback(() => {
     clearPendingInviteDeity();

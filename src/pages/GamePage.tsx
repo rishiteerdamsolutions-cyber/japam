@@ -386,7 +386,7 @@ export function GamePage() {
     };
     load();
     return () => { cancelled = true; };
-  }, [mode, levelIndex, isMarathon, isSpecial108, isWeeklyStreak, marathonId, yagnaId, expectedKey, isLocked, paywallPending, user, authLoading, occasionKind, isGuest, progressLoaded]);
+  }, [mode, levelIndex, isMarathon, isSpecial108, isWeeklyStreak, marathonId, yagnaId, expectedKey, isLocked, paywallPending, user, authLoading, occasionKind, isGuest, inviteFresh, progressLoaded]);
 
   const handleResume = () => {
     if (resumePending) {

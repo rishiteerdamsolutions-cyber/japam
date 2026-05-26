@@ -3,6 +3,8 @@ import type { CoreStackRow } from './FixedMalaCore';
 
 export const MALA_BEADS_PER_SIDE = 54;
 export const MALA_DEPTH_START_INDEX = 5;
+/** Only render the beads that peek beside the fixed core; 19–54 stay conceptual. */
+export const MALA_DEPTH_RENDER_COUNT = 14;
 export const MALA_MIN_DEPTH_BEAD_PX = 8;
 
 const MAIN = BEAD_SIZE_PX;
@@ -92,14 +94,18 @@ function applyExitLeft(slots: DepthBeadSlot[]): void {
   }
 }
 
-/** 5 under 4th → 6 under 5 → … → 54 fades off left of screen. */
+/** 5 under 4th → … → a short run fades off left (not all 54 drawn). */
 export function buildDepthChain(arm: 'upper' | 'lower', fourthCenter: MalaPoint): DepthBeadSlot[] {
   const slots: DepthBeadSlot[] = [];
   let x = fourthCenter.x;
   let y = fourthCenter.y;
   let frontPx = FOURTH;
+  const lastIndex = Math.min(
+    MALA_BEADS_PER_SIDE,
+    MALA_DEPTH_START_INDEX + MALA_DEPTH_RENDER_COUNT - 1,
+  );
 
-  for (let index = MALA_DEPTH_START_INDEX; index <= MALA_BEADS_PER_SIDE; index++) {
+  for (let index = MALA_DEPTH_START_INDEX; index <= lastIndex; index++) {
     const sizePx = depthBeadSizePx(index);
     const { dx, dy } = rearCenterDeltaUnderFront(frontPx, sizePx, arm);
     x += dx;

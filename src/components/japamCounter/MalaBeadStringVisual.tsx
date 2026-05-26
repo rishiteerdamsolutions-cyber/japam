@@ -1,4 +1,4 @@
-import { useMemo, type ReactNode } from 'react';
+import { useMemo, type ReactNode, type RefObject } from 'react';
 import { BEAD_SIZE_PX } from './malaBeadSizes';
 import {
   buildFixedCoreRows,
@@ -16,6 +16,8 @@ type Props = {
   mainBead: ReactNode;
   /** Wider than core when used inside MalaBeadSwipeZone (room for right tassel). */
   columnWidthPx?: number;
+  /** Live GPU roll — only the visible fixed core (9 beads), not depth string. */
+  coreSpinLayerRef?: RefObject<HTMLDivElement | null>;
 };
 
 const MAIN = BEAD_SIZE_PX;
@@ -23,7 +25,7 @@ const MAIN = BEAD_SIZE_PX;
 /**
  * Fixed core unchanged. Depth 5–54: lower style down-left, upper mirrored up-left, exit left off screen.
  */
-export function MalaBeadStringVisual({ spinX, mainBead, columnWidthPx }: Props) {
+export function MalaBeadStringVisual({ spinX, mainBead, columnWidthPx, coreSpinLayerRef }: Props) {
   const { gradientId, glowFilterId } = useMalaThreadSvgIds();
   const coreRows = buildFixedCoreRows();
   const coreH = fixedCoreHeightPx(coreRows);
@@ -55,18 +57,31 @@ export function MalaBeadStringVisual({ spinX, mainBead, columnWidthPx }: Props) 
         className="relative shrink-0 overflow-hidden"
         style={{ width: MAIN, height: coreH, marginLeft: corePadX }}
       >
-        <MalaThreadPath
-          segments={threadSegments}
-          width={MAIN}
-          height={coreH}
-          gradientId={gradientId}
-          glowFilterId={glowFilterId}
-        />
+        <MalaDepthChain chain={upperChain} />
+        <MalaDepthChain chain={lowerChain} />
 
-        <MalaDepthChain spinX={spinX} chain={upperChain} />
-        <MalaDepthChain spinX={spinX} chain={lowerChain} />
-
-        <FixedMalaCore spinX={spinX} mainBead={mainBead} />
+        <div
+          ref={coreSpinLayerRef}
+          className="relative z-[2]"
+          style={
+            coreSpinLayerRef
+              ? {
+                  transformStyle: 'preserve-3d',
+                  transformOrigin: '50% 50%',
+                  willChange: 'transform',
+                }
+              : undefined
+          }
+        >
+          <MalaThreadPath
+            segments={threadSegments}
+            width={MAIN}
+            height={coreH}
+            gradientId={gradientId}
+            glowFilterId={glowFilterId}
+          />
+          <FixedMalaCore spinX={spinX} mainBead={mainBead} />
+        </div>
       </div>
     </div>
   );

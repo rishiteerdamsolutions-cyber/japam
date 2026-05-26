@@ -23,8 +23,8 @@ import { MenuMatchChantHeader } from '../components/layout/MenuMatchChantHeader'
 import { JapamCounterLeaderboardPanel } from '../components/japamCounter/JapamCounterLeaderboardPanel';
 import { incrementJapamCounter } from '../lib/japamCounterApi';
 import { useManualJapaTouchLock } from '../hooks/useManualJapaTouchLock';
-import { pulseMalaBeadTouchHaptic } from '../lib/malaHaptics';
 import { ensureMantraPreloaded, playMantraOnce, primeAudio, stopAllMantras } from '../hooks/useSound';
+import { pulseMalaBeadTouchHaptic } from '../lib/malaHaptics';
 import { useJapaStore } from '../store/japaStore';
 
 type JapamCounterMode = 'manual' | 'auto';
@@ -64,7 +64,6 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
   const [showAutoMala, setShowAutoMala] = useState(() => (mode === 'auto' ? readAutoMalaPref() : false));
   const autoRunningRef = useRef(false);
   const countRef = useRef(MANUAL_JAPAM_COUNTER_INITIAL_COUNT);
-  const japaInFlightRef = useRef(false);
   const prevManualSyncCountRef = useRef(MANUAL_JAPAM_COUNTER_INITIAL_COUNT);
 
   const isAuto = mode === 'auto';
@@ -115,7 +114,6 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
       setSaveNotice(null);
       setCommitRequest(null);
       autoRunningRef.current = false;
-      japaInFlightRef.current = false;
       prevManualSyncCountRef.current = MANUAL_JAPAM_COUNTER_INITIAL_COUNT;
       special108LoggedRef.current = false;
       stopAllMantras();
@@ -184,20 +182,13 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
   }, [autoRunning, deityId, isAuto]);
 
   const onManualBeadRoll = useCallback(() => {
-    if (!deityId || japaInFlightRef.current || countRef.current >= AUTO_JAPAM_SESSION_TARGET) return;
-    japaInFlightRef.current = true;
+    if (!deityId || countRef.current >= AUTO_JAPAM_SESSION_TARGET) return;
 
     const next = Math.min(countRef.current + 1, AUTO_JAPAM_SESSION_TARGET);
     countRef.current = next;
     setCount(next);
     pulseMalaBeadTouchHaptic();
-    void (async () => {
-      try {
-        await playMantraOnce(deityId);
-      } finally {
-        japaInFlightRef.current = false;
-      }
-    })();
+    void playMantraOnce(deityId);
   }, [deityId]);
 
   useEffect(() => {
@@ -263,7 +254,6 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
     if (autoRunning) {
       stopAutoPlayback();
     }
-    japaInFlightRef.current = false;
     prevManualSyncCountRef.current = MANUAL_JAPAM_COUNTER_INITIAL_COUNT;
     setMantraBusy(false);
     countRef.current = 0;
@@ -427,7 +417,6 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
             onBead={onManualBeadRoll}
             sessionCount={count}
             sessionCountRef={countRef}
-            japaInFlightRef={japaInFlightRef}
             disabled={unlockPending || count >= AUTO_JAPAM_SESSION_TARGET}
             sessionTarget={AUTO_JAPAM_SESSION_TARGET}
           />

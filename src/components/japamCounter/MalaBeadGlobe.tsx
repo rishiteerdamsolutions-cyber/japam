@@ -209,7 +209,7 @@ export function registerMalaBeadGlobe(entry: GlobeRegistryEntry): () => void {
   };
 }
 
-/** Imperative roll — all registered beads without React reconciliation. */
+/** Imperative roll — visible fixed-core globes only (~9), not depth string. */
 export function paintAllMalaBeadGlobes(spinXDeg: number): void {
   for (const { canvas, sizePx, spinOffsetDeg } of globeRegistry) {
     paintMalaBeadGlobeCanvas(canvas, sizePx, spinXDeg + spinOffsetDeg);

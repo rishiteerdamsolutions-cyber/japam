@@ -12,7 +12,7 @@ type Props = {
 
 const MAIN = BEAD_SIZE_PX;
 
-/** Saffron tassel only — isolated so bead stack does not re-layout on each count. */
+/** Saffron closing tassel: hidden below 105; at 105→4th bead … 108→1st (upper core). */
 export function MalaSaffronSessionOverlay({ sessionCount, columnWidthPx, coreHeightPx }: Props) {
   const corePadX = (columnWidthPx - MAIN) / 2;
 

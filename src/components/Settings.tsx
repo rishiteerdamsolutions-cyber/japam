@@ -13,6 +13,13 @@ import { DonateThankYouBox } from './donation/DonateThankYouBox';
 import { AccessBadge } from './ui/AccessBadge';
 import { buildJapamWhatsAppShareHref } from '../lib/japamWhatsAppShare';
 import { CTA } from '../lib/ctaCopy';
+import { PushableButton } from './ui/PushableButton';
+import {
+  pushableAccordionFrontClass,
+  pushableCompactFrontClass,
+  pushableFullWidthFrontClass,
+  pushableIconToggleFrontClass,
+} from '../lib/landingCtaStyles';
 import { loadMyAppreciations, loadUserPaymentHistory, type MyAppreciations, type UserPaymentHistoryData } from '../lib/firestore';
 import { useReminderStore } from '../store/reminderStore';
 import { auth } from '../lib/firebase';
@@ -105,12 +112,16 @@ function SettingsCard({
 }) {
   return (
     <div className="rounded-2xl bg-black/20 border border-white/10 overflow-hidden">
-        <button
+        <PushableButton
         type="button"
+        layout="block"
+        fullWidth
+        variant="secondary"
         onClick={onToggle}
-        className="w-full flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-3 sm:p-4 text-left hover:bg-white/5 transition-colors"
+        className="w-full"
+        frontClassName={pushableAccordionFrontClass}
       >
-        <div className="flex items-center gap-3 sm:flex-1 min-w-0">
+        <div className="flex items-center gap-3 sm:flex-1 min-w-0 w-full">
           <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400">
             <Icon />
           </div>
@@ -127,7 +138,7 @@ function SettingsCard({
         >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
-      </button>
+      </PushableButton>
       <AnimatePresence>
         {expanded && (
           <motion.div
@@ -422,13 +433,16 @@ export function Settings({ onBack }: SettingsProps) {
       <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10 max-w-md mx-auto flex flex-col gap-4">
         <header className="grid grid-cols-[auto_1fr_auto] items-center gap-2 w-full min-h-[44px] shrink-0">
-          <button
+          <PushableButton
             type="button"
+            size="sm"
+            variant="secondary"
             onClick={onBack}
-            className="text-amber-400 text-xs sm:text-sm font-medium hover:text-amber-300 shrink-0 justify-self-start"
+            className="justify-self-start shrink-0"
+            frontClassName={pushableCompactFrontClass}
           >
             ← Back
-          </button>
+          </PushableButton>
           <h1
             className="text-base sm:text-xl font-bold text-amber-400 truncate min-w-0 text-center px-1"
             style={{ fontFamily: 'serif' }}
@@ -441,14 +455,16 @@ export function Settings({ onBack }: SettingsProps) {
                 {showAuthRestoringHint ? (
                   <AuthSessionRestoreHint />
                 ) : (
-                  <button
+                  <PushableButton
                     type="button"
+                    size="sm"
+                    variant="secondary"
                     disabled={signInPending}
                     onClick={() => signInWithGoogle()}
-                    className="text-amber-400/90 text-xs font-medium hover:text-amber-400 whitespace-nowrap disabled:opacity-60"
+                    frontClassName={pushableCompactFrontClass}
                   >
                     {signInPending ? '…' : CTA.menu.signIn}
-                  </button>
+                  </PushableButton>
                 )}
               </>
             )}
@@ -475,14 +491,17 @@ export function Settings({ onBack }: SettingsProps) {
               </p>
               <p className="text-amber-200/50 text-xs truncate">{user.email}</p>
             </div>
-            <button
+            <PushableButton
               type="button"
+              layout="icon"
+              variant="secondary"
               onClick={() => navigate('/plans')}
-              className="p-2 rounded-lg text-amber-400/90 hover:bg-white/10 hover:text-amber-400 min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0"
+              className="shrink-0"
+              frontClassName={pushableIconToggleFrontClass}
               aria-label={t('menu.openPlansA11y')}
             >
               <HeartIconSm />
-            </button>
+            </PushableButton>
           </div>
         )}
 
@@ -617,9 +636,9 @@ export function Settings({ onBack }: SettingsProps) {
                   className="w-full px-4 py-2.5 rounded-xl bg-black/30 text-white border border-white/10 text-sm focus:border-amber-500/50 focus:outline-none"
                 />
                 {nameSaveError && <p className="text-red-300/90 text-xs">{nameSaveError}</p>}
-                <button type="submit" disabled={savingName || !localName.trim()} className="w-full py-2.5 rounded-xl bg-amber-500 text-white text-sm font-medium disabled:opacity-50">
+                <PushableButton type="submit" fullWidth disabled={savingName || !localName.trim()} frontClassName={pushableFullWidthFrontClass}>
                   {savingName ? 'Saving…' : 'Save'}
-                </button>
+                </PushableButton>
               </form>
             </SettingsCard>
           )}
@@ -636,9 +655,9 @@ export function Settings({ onBack }: SettingsProps) {
                 {!isInstalled && (
                   <div className="rounded-xl bg-black/30 p-3 space-y-2">
                     {installPrompt ? (
-                      <button type="button" onClick={handleInstall} className="w-full py-2 rounded-lg bg-amber-500 text-white text-sm font-medium">
+                      <PushableButton type="button" fullWidth onClick={handleInstall} frontClassName={pushableFullWidthFrontClass}>
                         Install app
-                      </button>
+                      </PushableButton>
                     ) : (
                       <p className="text-amber-200/70 text-xs">Share → Add to Home Screen</p>
                     )}
@@ -648,26 +667,28 @@ export function Settings({ onBack }: SettingsProps) {
                 {notifPermission !== 'unsupported' && notifPermission !== 'granted' && (
                   <div className="rounded-xl bg-black/30 p-3">
                     {notifPermission !== 'denied' && (
-                      <button type="button" onClick={requestNotifPermission} className="w-full py-2 rounded-lg bg-white/10 text-amber-200 text-sm">
+                      <PushableButton type="button" fullWidth variant="secondary" onClick={requestNotifPermission} frontClassName={pushableFullWidthFrontClass}>
                         Allow notifications
-                      </button>
+                      </PushableButton>
                     )}
                     {notifPermission === 'denied' && <p className="text-amber-200/70 text-xs">Enable in device settings</p>}
                   </div>
                 )}
                 <div className="flex items-center justify-between">
                   <span className="text-amber-200/80 text-sm">Enable</span>
-                  <button
+                  <PushableButton
                     type="button"
+                    size="sm"
+                    variant={draftReminderEnabled ? 'primary' : 'secondary'}
                     disabled={!reminderLoaded || savingReminder}
                     onClick={() => {
                       setDraftReminderEnabled((on) => !on);
                       setReminderSaveMessage(null);
                     }}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium ${draftReminderEnabled ? 'bg-amber-500 text-white' : 'bg-white/10 text-amber-200'} disabled:opacity-50`}
+                    frontClassName={pushableCompactFrontClass}
                   >
                     {draftReminderEnabled ? 'ON' : 'OFF'}
-                  </button>
+                  </PushableButton>
                 </div>
                 <div className={`${draftReminderEnabled ? '' : 'opacity-50'}`}>
                   <label className="text-amber-200/70 text-xs block mb-1">Set time</label>
@@ -684,8 +705,9 @@ export function Settings({ onBack }: SettingsProps) {
                     className="w-full px-3 py-2 rounded-lg bg-black/30 text-white border border-white/10 text-sm"
                   />
                 </div>
-                <button
+                <PushableButton
                   type="button"
+                  fullWidth
                   disabled={!reminderLoaded || savingReminder}
                   onClick={async () => {
                     if (!reminderLoaded) return;
@@ -709,19 +731,19 @@ export function Settings({ onBack }: SettingsProps) {
                       setSavingReminder(false);
                     }
                   }}
-                  className="w-full py-2.5 rounded-xl bg-amber-500 text-white text-sm font-medium disabled:opacity-50"
+                  frontClassName={pushableFullWidthFrontClass}
                 >
                   {savingReminder ? 'Saving…' : 'Save'}
-                </button>
+                </PushableButton>
                 {reminderSaveMessage && (
                   <p className={`text-xs ${reminderSaveMessage.includes('saved') ? 'text-green-400/90' : 'text-amber-200/80'}`}>
                     {reminderSaveMessage}
                   </p>
                 )}
                 {notifPermission === 'granted' && (
-                  <button type="button" disabled={testingNotif} onClick={sendTestNotification} className="w-full py-2 rounded-lg bg-white/10 text-amber-200 text-sm">
+                  <PushableButton type="button" fullWidth variant="secondary" disabled={testingNotif} onClick={sendTestNotification} frontClassName={pushableFullWidthFrontClass}>
                     {testingNotif ? 'Sending…' : 'Test notification'}
-                  </button>
+                  </PushableButton>
                 )}
               </div>
             </SettingsCard>
@@ -737,12 +759,15 @@ export function Settings({ onBack }: SettingsProps) {
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-amber-200/80 text-sm">Background</span>
-                <button
+                <PushableButton
+                  type="button"
+                  size="sm"
+                  variant={backgroundMusicEnabled ? 'primary' : 'secondary'}
                   onClick={() => setBackgroundMusic(!backgroundMusicEnabled)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium ${backgroundMusicEnabled ? 'bg-amber-500 text-white' : 'bg-white/10 text-amber-200'}`}
+                  frontClassName={pushableCompactFrontClass}
                 >
                   {backgroundMusicEnabled ? 'ON' : 'OFF'}
-                </button>
+                </PushableButton>
               </div>
               {backgroundMusicEnabled && (
                 <div className="flex items-center gap-3">
@@ -785,12 +810,16 @@ export function Settings({ onBack }: SettingsProps) {
               </div>
             </a>
           ) : (
-            <button
+            <PushableButton
               type="button"
+              layout="block"
+              fullWidth
+              variant="secondary"
               onClick={() => navigate('/about-apavarga')}
-              className="rounded-2xl bg-black/20 border border-white/10 p-4 flex items-center gap-4 hover:bg-white/5 transition-colors text-left w-full"
+              className="w-full"
+              frontClassName={`${pushableAccordionFrontClass} !flex-row !items-center gap-4`}
             >
-              <div className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400">
+              <div className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400 shrink-0">
                 <Icons.apavarga />
               </div>
               <div className="flex-1 min-w-0">
@@ -800,7 +829,7 @@ export function Settings({ onBack }: SettingsProps) {
                   <AccessBadge variant="pro" label="Pro" />
                 </span>
               </div>
-            </button>
+            </PushableButton>
           )}
 
           <SettingsCard
@@ -825,9 +854,9 @@ export function Settings({ onBack }: SettingsProps) {
                 placeholder="Password"
                 className="w-full px-4 py-2.5 rounded-xl bg-black/30 text-white border border-white/10 text-sm"
               />
-              <button type="submit" disabled={priestLinking || !user} className="w-full py-2.5 rounded-xl bg-amber-500 text-white text-sm font-medium disabled:opacity-50">
+              <PushableButton type="submit" fullWidth disabled={priestLinking || !user} frontClassName={pushableFullWidthFrontClass}>
                 {priestLinking ? 'Linking…' : 'Link'}
-              </button>
+              </PushableButton>
               {priestMessage && <p className="text-amber-200 text-xs">{priestMessage}</p>}
               <Link to="/priest" className="text-amber-400 text-sm block">
                 Priest dashboard (username sign-in) →
@@ -851,8 +880,9 @@ export function Settings({ onBack }: SettingsProps) {
             onToggle={() => toggle('update')}
           >
             <div className="space-y-3">
-              <button
+              <PushableButton
                 type="button"
+                fullWidth
                 disabled={checkingUpdate}
                 onClick={() => {
                   setCheckingUpdate(true);
@@ -860,10 +890,10 @@ export function Settings({ onBack }: SettingsProps) {
                   setUpdateDownloaded(false);
                   window.dispatchEvent(new CustomEvent(JAPAM_CHECK_UPDATES_EVENT));
                 }}
-                className="w-full py-2.5 rounded-xl bg-amber-500/80 text-white text-sm font-medium disabled:opacity-70"
+                frontClassName={pushableFullWidthFrontClass}
               >
                 {checkingUpdate ? t('shared.updating') : t('shared.update_check_button')}
-              </button>
+              </PushableButton>
               {checkUpdateMessage && (
                 <p
                   className={`text-sm leading-relaxed ${
@@ -874,13 +904,14 @@ export function Settings({ onBack }: SettingsProps) {
                 </p>
               )}
               {updateDownloaded && (
-                <button
+                <PushableButton
                   type="button"
+                  fullWidth
                   onClick={() => window.dispatchEvent(new CustomEvent(JAPAM_PWA_APPLY_UPDATE_EVENT))}
-                  className="w-full py-2.5 rounded-xl bg-amber-500 text-white text-sm font-semibold"
+                  frontClassName={pushableFullWidthFrontClass}
                 >
                   {t('shared.update_now')}
-                </button>
+                </PushableButton>
               )}
             </div>
           </SettingsCard>
@@ -888,17 +919,19 @@ export function Settings({ onBack }: SettingsProps) {
 
         <div className="flex justify-center" ref={waMenuRef}>
           <div className="relative">
-            <button
+            <PushableButton
               type="button"
+              layout="icon"
+              variant="success"
               onClick={() => setWaMenuOpen((o) => !o)}
-              className="flex items-center justify-center w-12 h-12 rounded-xl bg-[#25D366]/90 text-white hover:bg-[#25D366] transition-colors"
+              frontClassName={`${pushableIconToggleFrontClass} !bg-[#25D366]`}
               aria-label="WhatsApp options"
               aria-expanded={waMenuOpen}
             >
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
               </svg>
-            </button>
+            </PushableButton>
             {waMenuOpen && (
               <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 py-1 rounded-xl bg-black/95 border border-amber-500/30 shadow-xl z-50 min-w-[200px] text-left">
                 <a
@@ -935,13 +968,14 @@ export function Settings({ onBack }: SettingsProps) {
 
         {user && (
           <div className="flex justify-center pb-2">
-            <button
+            <PushableButton
               type="button"
+              variant="secondary"
               onClick={() => signOut()}
-              className="px-6 py-3 rounded-xl border border-amber-500/40 text-amber-200/90 text-sm font-medium hover:bg-white/5"
+              frontClassName={pushableCompactFrontClass}
             >
               {t('menu.signOut')}
-            </button>
+            </PushableButton>
           </div>
         )}
       </div>

@@ -2,6 +2,8 @@ import { useState, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CTA } from '../../lib/ctaCopy';
 import { motion } from 'framer-motion';
+import { PushableButton } from '../ui/PushableButton';
+import { pushableFullWidthFrontClass } from '../../lib/landingCtaStyles';
 import { RewardVideoModal } from './RewardVideoModal';
 import { useLivesStore } from '../../store/livesStore';
 import { useAuthStore } from '../../store/authStore';
@@ -156,39 +158,44 @@ export function OutOfLivesOverlay({ onClose, onRetryAfterLife, returnMode, retur
         </motion.p>
         <div className="flex flex-col gap-2">
           {lives > 0 && onRetryAfterLife && (
-            <motion.button
-              initial={{ opacity: 0, y: 5 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.15 }}
-              onClick={onRetryAfterLife}
-              className="w-full py-3 rounded-xl bg-gradient-to-b from-emerald-500 to-green-600 text-white font-bold shadow-lg hover:shadow-xl transition-shadow"
+            <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
+              <PushableButton
+                type="button"
+                fullWidth
+                variant="success"
+                onClick={onRetryAfterLife}
+                frontClassName={`${pushableFullWidthFrontClass} font-bold`}
+                style={{ fontFamily: 'serif' }}
+              >
+                {CTA.game.continue}
+              </PushableButton>
+            </motion.div>
+          )}
+          <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+            <PushableButton
+              type="button"
+              fullWidth
+              variant="secondary"
+              onClick={() => setShowVideo(true)}
+              frontClassName={`${pushableFullWidthFrontClass} font-bold !bg-violet-600`}
               style={{ fontFamily: 'serif' }}
             >
-              {CTA.game.continue}
-            </motion.button>
-          )}
-          <motion.button
-            initial={{ opacity: 0, y: 5 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            onClick={() => setShowVideo(true)}
-            className="w-full py-3 rounded-xl bg-gradient-to-b from-violet-500 to-purple-600 text-white font-bold shadow-lg hover:shadow-xl transition-shadow"
-            style={{ fontFamily: 'serif' }}
-          >
-            {CTA.game.watchForLife}
-          </motion.button>
-          <motion.button
-            initial={{ opacity: 0, y: 5 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            onClick={handleBuyLives}
-            disabled={buying || !canBuyLives}
-            className="w-full py-3 rounded-xl bg-gradient-to-b from-rose-500 to-pink-600 text-white font-bold shadow-lg hover:shadow-xl disabled:opacity-50 transition-shadow"
-            style={{ fontFamily: 'serif' }}
-            title={!canBuyLives ? t('game.buyLivesOnlyWhenZero', 'Buy only when you have no lives') : undefined}
-          >
-            {buying ? CTA.common.loading : CTA.game.buyLives(livesPrice)}
-          </motion.button>
+              {CTA.game.watchForLife}
+            </PushableButton>
+          </motion.div>
+          <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+            <PushableButton
+              type="button"
+              fullWidth
+              onClick={handleBuyLives}
+              disabled={buying || !canBuyLives}
+              frontClassName={`${pushableFullWidthFrontClass} font-bold`}
+              title={!canBuyLives ? t('game.buyLivesOnlyWhenZero', 'Buy only when you have no lives') : undefined}
+              style={{ fontFamily: 'serif' }}
+            >
+              {buying ? CTA.common.loading : CTA.game.buyLives(livesPrice)}
+            </PushableButton>
+          </motion.div>
           {refillIn > 0 && (
             <motion.p
               initial={{ opacity: 0 }}
@@ -199,15 +206,17 @@ export function OutOfLivesOverlay({ onClose, onRetryAfterLife, returnMode, retur
               {t('game.refillIn', { hours: refillIn })}
             </motion.p>
           )}
-          <motion.button
-            initial={{ opacity: 0, y: 5 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            onClick={onClose}
-            className="w-full py-3 rounded-xl border-2 border-rose-400/60 text-rose-700 font-semibold hover:bg-rose-100/50 transition-colors"
-          >
-            {CTA.game.menu}
-          </motion.button>
+          <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
+            <PushableButton
+              type="button"
+              fullWidth
+              variant="secondary"
+              onClick={onClose}
+              frontClassName={`${pushableFullWidthFrontClass} !text-rose-700 font-semibold`}
+            >
+              {CTA.game.menu}
+            </PushableButton>
+          </motion.div>
         </div>
         {buyError && <p className="mt-3 text-red-600 text-sm font-medium">{buyError}</p>}
       </motion.div>

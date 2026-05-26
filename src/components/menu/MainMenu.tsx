@@ -14,7 +14,13 @@ import { useUnlockStore } from '../../store/unlockStore';
 import type { GameMode } from '../../store/gameStore';
 import { useProfileStore } from '../../store/profileStore';
 import { getProfileRingFlags } from '../../lib/membershipDisplay';
-import { menuGridPushableClass, menuGridPushableFrontClass } from '../../lib/landingCtaStyles';
+import {
+  menuGridPushableClass,
+  menuGridPushableFrontClass,
+  pushableCompactFrontClass,
+  pushableDeityTileFrontClass,
+  pushableIconToggleFrontClass,
+} from '../../lib/landingCtaStyles';
 import { PushableButton } from '../ui/PushableButton';
 import { CTA } from '../../lib/ctaCopy';
 import { trackProductUsage } from '../../lib/productUsage';
@@ -96,14 +102,16 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
               {showAuthRestoringHint ? (
                 <AuthSessionRestoreHint />
               ) : (
-                <button
+                <PushableButton
                   type="button"
+                  size="sm"
+                  variant="secondary"
                   disabled={signInPending}
                   onClick={() => signInWithGoogle()}
-                  className="text-amber-400/90 text-xs font-medium hover:text-amber-400 whitespace-nowrap disabled:opacity-60"
+                  frontClassName={pushableCompactFrontClass}
                 >
                   {signInPending ? '…' : CTA.menu.signIn}
-                </button>
+                </PushableButton>
               )}
             </div>
           )}
@@ -112,27 +120,33 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
               {!profileLoaded && (
                 <AuthSessionRestoreHint variant="profileSync" className="hidden sm:inline max-w-[min(9rem,36vw)]" />
               )}
-              <button
+              <PushableButton
                 type="button"
+                layout="icon"
+                variant="secondary"
                 onClick={() => {
                   trackProductUsage('action_menu_plans');
                   navigate('/plans');
                 }}
-                className="p-2 rounded-lg text-amber-400/90 hover:bg-white/10 hover:text-amber-400 min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0"
+                className="shrink-0"
+                frontClassName={pushableIconToggleFrontClass}
                 aria-label={t('menu.openPlansA11y')}
               >
                 <HeartIcon />
-              </button>
+              </PushableButton>
               <span className="hidden sm:inline text-amber-200/90 text-xs truncate max-w-[72px] text-right" title={displayName}>
                 {displayName}
               </span>
-              <button
+              <PushableButton
                 type="button"
+                layout="icon"
+                variant="secondary"
                 onClick={() => {
                   trackProductUsage('action_menu_settings');
                   onOpenSettings();
                 }}
-                className="flex items-center justify-center min-h-[44px] min-w-[44px] rounded-lg px-0.5 hover:bg-white/5 transition-colors shrink-0"
+                className="shrink-0"
+                frontClassName={`${pushableIconToggleFrontClass} !p-1`}
                 title={displayName}
                 aria-label={t('menu.settings')}
               >
@@ -148,7 +162,7 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
                   {isPremium && <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-amber-500 flex items-center justify-center text-white text-[9px] font-bold">★</span>}
                   {isPro && !isPremium && <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-green-500 flex items-center justify-center text-white text-[9px] font-bold">✓</span>}
                 </div>
-              </button>
+              </PushableButton>
             </div>
           )}
           </div>
@@ -231,28 +245,32 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
             </p>
             <div id="ista-devata-grid" className="grid grid-cols-2 gap-3 w-full">
               {DEITIES.map((deity, i) => (
-                <motion.button
+                <motion.div
                   key={deity.id}
-                  type="button"
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.98 }}
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.03 }}
-                  className="flex flex-col items-center rounded-2xl overflow-hidden shadow-xl bg-black/40 border-2 border-white/20 hover:border-amber-400/50 transition-colors"
-                  onClick={() => onSelect(deity.id)}
                 >
-                  <div className="w-full aspect-square relative bg-black/30">
-                    <img
-                      src={deity.image}
-                      alt={deity.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <span className="py-2 px-1.5 sm:px-2 text-xs sm:text-sm font-semibold text-white w-full text-center truncate min-w-0" title={t(`deities.${deity.id}`)}>
-                    {t(`deities.${deity.id}`)}
-                  </span>
-                </motion.button>
+                  <PushableButton
+                    type="button"
+                    layout="block"
+                    fullWidth
+                    onClick={() => onSelect(deity.id)}
+                    className="w-full shadow-xl"
+                    frontClassName={pushableDeityTileFrontClass}
+                  >
+                    <div className="w-full aspect-square relative bg-black/30">
+                      <img
+                        src={deity.image}
+                        alt={deity.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <span className="py-2 px-1.5 sm:px-2 text-xs sm:text-sm w-full text-center truncate min-w-0" title={t(`deities.${deity.id}`)}>
+                      {t(`deities.${deity.id}`)}
+                    </span>
+                  </PushableButton>
+                </motion.div>
               ))}
             </div>
           </motion.div>

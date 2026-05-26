@@ -52,7 +52,9 @@
 .pushable-shadow {
   background: hsl(0deg 0% 0% / 0.28);
   transform: translateY(var(--pushable-shadow-offset));
-  transition: transform 34ms cubic-bezier(0.3, 0.7, 0.4, 1);
+  transition:
+    transform 80ms cubic-bezier(0.3, 0.7, 0.4, 1),
+    opacity 80ms cubic-bezier(0.3, 0.7, 0.4, 1);
 }
 
 .pushable-edge {
@@ -81,7 +83,7 @@
   color: var(--pushable-front-color, #fff);
   background: var(--pushable-front-bg, hsl(38deg 96% 47%));
   transform: translateY(calc(-1 * var(--pushable-lift)));
-  transition: transform 34ms cubic-bezier(0.3, 0.7, 0.4, 1);
+  transition: transform 80ms cubic-bezier(0.3, 0.7, 0.4, 1);
   text-align: center;
   gap: 0.125rem;
   user-select: none;
@@ -117,11 +119,104 @@
   padding: 0.5rem 0.5rem;
 }
 
+/* Hub / specials tiles — fixed face height so 3D depth reads the same on every tile */
+.pushable--layout-tile {
+  display: block;
+  width: 100%;
+}
+
 .pushable--layout-tile .pushable-front {
   flex-direction: column;
   gap: 0.375rem;
-  min-height: 5rem;
-  padding: 0.75rem 0.5rem;
+  height: 5.5rem;
+  min-height: 5.5rem;
+  max-height: 5.5rem;
+  padding: 0.625rem 0.5rem;
+  font-size: 0.75rem;
+  line-height: 1.2;
+  border-width: 2px;
+  border-style: solid;
+}
+
+/* Tone palettes — only color/border; lift & shadow offset stay global */
+.pushable--tone-amber .pushable-front {
+  border-color: hsl(43deg 96% 56% / 0.55);
+  background: linear-gradient(
+    to bottom,
+    hsl(38deg 80% 42% / 0.55),
+    hsl(32deg 70% 18% / 0.85)
+  );
+}
+
+.pushable--tone-amber .pushable-edge {
+  --pushable-edge-dark: hsl(28deg 100% 14%);
+  --pushable-edge-mid: hsl(32deg 100% 28%);
+}
+
+.pushable--tone-emerald .pushable-front {
+  border-color: hsl(152deg 55% 45% / 0.55);
+  background: linear-gradient(
+    to bottom,
+    hsl(152deg 55% 38% / 0.5),
+    hsl(158deg 60% 14% / 0.88)
+  );
+}
+
+.pushable--tone-emerald .pushable-edge {
+  --pushable-edge-dark: hsl(152deg 72% 14%);
+  --pushable-edge-mid: hsl(152deg 55% 26%);
+}
+
+.pushable--tone-muted .pushable-front {
+  border-color: hsl(0deg 0% 100% / 0.12);
+  background: hsl(0deg 0% 100% / 0.05);
+  color: hsl(0deg 0% 100% / 0.65);
+}
+
+.pushable--tone-muted .pushable-edge {
+  --pushable-edge-dark: hsl(0deg 0% 6%);
+  --pushable-edge-mid: hsl(0deg 0% 16%);
+}
+
+.pushable--tone-rose .pushable-front {
+  border-color: hsl(350deg 80% 62% / 0.55);
+  background: linear-gradient(
+    to bottom,
+    hsl(350deg 55% 38% / 0.45),
+    hsl(20deg 50% 14% / 0.9)
+  );
+}
+
+.pushable--tone-rose .pushable-edge {
+  --pushable-edge-dark: hsl(350deg 70% 16%);
+  --pushable-edge-mid: hsl(350deg 55% 28%);
+}
+
+/* Featured specials row — taller face, same 4px lift as hub tiles */
+.pushable--featured .pushable-front {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
+  height: auto;
+  min-height: 5.5rem;
+  max-height: none;
+  padding: 0.75rem 0.875rem;
+  font-size: 0.875rem;
+  border-width: 2px;
+  border-style: solid;
+}
+
+.pushable--layout-icon {
+  display: inline-block;
+}
+
+.pushable--layout-icon .pushable-front {
+  min-height: 2.75rem;
+  min-width: 2.75rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0.5rem;
 }
 
 .pushable--sm .pushable-front {
@@ -136,12 +231,14 @@
   font-size: 1.0625rem;
 }
 
-/* Press only — lift is always 4px, never tied to button height */
-.pushable:active:not(:disabled) .pushable-front {
+/* Pressed state — visible before action runs (JS) and while finger is down (:active) */
+.pushable:active:not(:disabled) .pushable-front,
+.pushable--pressed:not(:disabled) .pushable-front {
   transform: translateY(calc(-1 * var(--pushable-lift) + 2px));
 }
 
-.pushable:active:not(:disabled) .pushable-shadow {
+.pushable:active:not(:disabled) .pushable-shadow,
+.pushable--pressed:not(:disabled) .pushable-shadow {
   transform: translateY(1px);
 }
 
@@ -149,5 +246,19 @@
   --pushable-edge-dark: hsl(28deg 100% 16%);
   --pushable-edge-mid: hsl(32deg 100% 32%);
   --pushable-front-bg: hsl(38deg 96% 47%);
+  --pushable-front-color: #fff;
+}
+
+.pushable--secondary {
+  --pushable-edge-dark: hsl(0deg 0% 8%);
+  --pushable-edge-mid: hsl(0deg 0% 22%);
+  --pushable-front-bg: hsl(0deg 0% 0% / 0.45);
+  --pushable-front-color: rgb(253 230 138);
+}
+
+.pushable--success {
+  --pushable-edge-dark: hsl(142deg 72% 18%);
+  --pushable-edge-mid: hsl(142deg 65% 28%);
+  --pushable-front-bg: hsl(142deg 71% 36%);
   --pushable-front-color: #fff;
 }

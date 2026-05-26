@@ -1,7 +1,10 @@
 import type { ReactNode } from 'react';
-import { motion } from 'framer-motion';
 import { PushableButton } from '../ui/PushableButton';
-import { pushableTileFrontClass } from '../../lib/landingCtaStyles';
+import {
+  pushableSpecialsTileFrontClass,
+  pushableSpecialsTileIconClass,
+} from '../../lib/landingCtaStyles';
+import type { PushableTone } from '../ui/PushableButton';
 import { TWO_PLAYER_PNG_SRC } from '../../lib/twoPlayerPng';
 
 type Tone = 'rose' | 'amber' | 'emerald' | 'muted';
@@ -37,27 +40,25 @@ const toneStyles: Record<
   },
 };
 
-const optionActiveStyles: Record<
-  OptionVariant,
-  { tile: string; iconWrap: string; hint: string }
-> = {
+const optionActiveStyles: Record<OptionVariant, { iconWrap: string; hint: string }> = {
   amber: {
-    tile:
-      'border-amber-400/55 bg-gradient-to-b from-amber-500/35 via-amber-600/20 to-amber-950/50 shadow-[0_4px_22px_rgba(245,158,11,0.28)] hover:from-amber-400/45 hover:border-amber-300/70 hover:shadow-[0_6px_28px_rgba(245,158,11,0.38)]',
     iconWrap: 'bg-amber-400/25 border-amber-300/50 text-amber-100',
     hint: 'text-amber-200/80',
   },
   emerald: {
-    tile:
-      'border-emerald-400/55 bg-gradient-to-b from-emerald-500/35 via-emerald-600/20 to-emerald-950/50 shadow-[0_4px_22px_rgba(52,211,153,0.26)] hover:from-emerald-400/45 hover:border-emerald-300/70 hover:shadow-[0_6px_28px_rgba(52,211,153,0.36)]',
     iconWrap: 'bg-emerald-400/25 border-emerald-300/50 text-emerald-100',
     hint: 'text-emerald-200/80',
   },
   muted: {
-    tile: 'border-white/8 bg-white/[0.03]',
     iconWrap: 'bg-white/5 border-white/10 text-white/50',
     hint: 'text-amber-300/80',
   },
+};
+
+const optionTone: Record<OptionVariant, PushableTone> = {
+  amber: 'amber',
+  emerald: 'emerald',
+  muted: 'muted',
 };
 
 export function SpecialsIconManual() {
@@ -142,14 +143,16 @@ export function SpecialsFeaturedCard({
   onClick: () => void;
 }) {
   return (
-    <motion.button
+    <PushableButton
       type="button"
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
+      layout="block"
+      tone="rose"
+      fullWidth
       onClick={onClick}
-      className="w-full text-left rounded-2xl border-2 border-rose-400/50 bg-gradient-to-br from-rose-600/30 via-rose-950/40 to-amber-900/35 p-4 shadow-[0_4px_28px_rgba(244,63,94,0.32)] hover:border-rose-300/70 hover:shadow-[0_6px_32px_rgba(244,63,94,0.4)] ring-1 ring-rose-300/25 transition-shadow"
+      className="w-full pushable--featured"
+      frontClassName={pushableSpecialsTileFrontClass}
     >
-      <div className="flex items-start gap-3">
+      <div className="flex items-start gap-3 w-full">
         <span
           className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-rose-500/35 text-2xl border border-rose-300/45 shadow-inner"
           aria-hidden
@@ -164,7 +167,7 @@ export function SpecialsFeaturedCard({
           ›
         </span>
       </div>
-    </motion.button>
+    </PushableButton>
   );
 }
 
@@ -250,7 +253,7 @@ export function SpecialsOptionTile({
 }) {
   const v = disabled ? optionActiveStyles.muted : optionActiveStyles[variant];
   const shared =
-    'flex flex-col items-center justify-center gap-1.5 min-h-[5rem] rounded-xl border-2 px-2 py-3 text-center transition-all duration-200';
+    'flex flex-col items-center justify-center gap-1.5 h-[5.5rem] rounded-xl border-2 px-2 py-3 text-center';
 
   if (disabled || !onClick) {
     return (
@@ -274,18 +277,16 @@ export function SpecialsOptionTile({
     <PushableButton
       type="button"
       layout="tile"
+      tone={optionTone[variant]}
       fullWidth
       onClick={onClick}
-      frontClassName={pushableTileFrontClass}
+      frontClassName={pushableSpecialsTileFrontClass}
     >
-      <span
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border-2 border-amber-300/50 bg-amber-400/20 text-amber-100 shadow-sm"
-        aria-hidden
-      >
+      <span className={`${pushableSpecialsTileIconClass} ${v.iconWrap}`} aria-hidden>
         {icon}
       </span>
       <span className="text-xs font-bold leading-tight">{label}</span>
-      {hint ? <span className="text-[9px] font-medium leading-none text-amber-200/85">{hint}</span> : null}
+      {hint ? <span className={`text-[9px] font-medium leading-none ${v.hint}`}>{hint}</span> : null}
     </PushableButton>
   );
 }

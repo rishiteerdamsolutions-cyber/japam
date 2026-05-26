@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { CTA } from '../lib/ctaCopy';
+import { PushableButton } from '../components/ui/PushableButton';
+import { pushableCompactFrontClass, pushableFullWidthFrontClass } from '../lib/landingCtaStyles';
 import { MenuMatchChantHeader } from '../components/layout/MenuMatchChantHeader';
 import { BottomNav } from '../components/nav/BottomNav';
 import { Paywall } from '../components/payment/Paywall';
@@ -138,29 +140,33 @@ export function PlansDakshinaPage() {
             )}
             {!isPremiumMember && <p className="text-amber-200/60 text-xs mb-3">{t('plans.proFootnote')}</p>}
             {!user && isFirebaseConfigured && (
-              <button
+              <PushableButton
                 type="button"
+                fullWidth
+                variant="success"
                 disabled={signInPending}
                 onClick={async () => {
                   await signInWithGoogle();
                   if (useAuthStore.getState().user) await refreshUnlock();
                 }}
-                className="w-full py-3 rounded-xl bg-green-600 hover:bg-green-500 text-white font-semibold disabled:opacity-50"
+                frontClassName={pushableFullWidthFrontClass}
               >
                 {signInPending ? '…' : CTA.plans.signInToPayPro}
-              </button>
+              </PushableButton>
             )}
             {user && !isProMember && !isPremiumMember && !accessActive && (
-              <button
+              <PushableButton
                 type="button"
+                fullWidth
+                variant="success"
                 onClick={() => {
                   trackProductUsage('action_plans_pro_open');
                   setShowProPay(true);
                 }}
-                className="w-full py-3 rounded-xl bg-green-600 hover:bg-green-500 text-white font-semibold"
+                frontClassName={pushableFullWidthFrontClass}
               >
                 {CTA.plans.ctaPro}
-              </button>
+              </PushableButton>
             )}
             {user && isProMember && !isPremiumMember && (
               <p className="text-green-300/80 text-sm">{t('plans.proCurrentLine')}</p>
@@ -193,16 +199,17 @@ export function PlansDakshinaPage() {
               <p className="text-amber-200/60 text-sm mb-2">{t('plans.premiumAfterSignIn')}</p>
             )}
             {user && canDonateForPremium && (
-              <button
+              <PushableButton
                 type="button"
+                fullWidth
                 onClick={() => {
                   trackProductUsage('action_plans_premium_open');
                   setShowPremiumDonate(true);
                 }}
-                className="w-full py-3 rounded-xl bg-amber-500 text-white font-semibold"
+                frontClassName={pushableFullWidthFrontClass}
               >
                 {CTA.plans.ctaPremium}
-              </button>
+              </PushableButton>
             )}
             {user && !canDonateForPremium && !isPremiumMember && (
               <p className="text-amber-200/70 text-sm border border-amber-500/30 rounded-xl p-3">
@@ -213,13 +220,15 @@ export function PlansDakshinaPage() {
         </div>
 
         <p className="text-amber-200/50 text-xs mb-8">
-          <button
+          <PushableButton
             type="button"
-            className="text-amber-300 underline underline-offset-2"
+            size="sm"
+            variant="secondary"
             onClick={() => navigate('/terms')}
+            frontClassName={pushableCompactFrontClass}
           >
             {t('landing.terms')}
-          </button>
+          </PushableButton>
           {' · '}
           {t('plans.legalLinkSuffix')}
         </p>

@@ -11,7 +11,7 @@ import { auth } from '../../lib/firebase';
 import { trackProductUsage } from '../../lib/productUsage';
 import type { GameMode } from '../../types';
 import { PushableButton } from '../ui/PushableButton';
-import { pushableFullWidthFrontClass } from '../../lib/landingCtaStyles';
+import { pushableCompactFrontClass, pushableFullWidthFrontClass } from '../../lib/landingCtaStyles';
 import { CTA } from '../../lib/ctaCopy';
 
 interface PaywallProps {
@@ -257,29 +257,33 @@ export function Paywall({ onClose, onUnlocked, gateMode = 'general' }: PaywallPr
         </p>
         <p className="text-amber-200/70 text-xs mb-2">Access is valid for 30 days from the date of payment.</p>
         <p className="text-amber-200/80 text-sm mb-4">
-          <button
+          <PushableButton
             type="button"
+            size="sm"
+            variant="secondary"
             onClick={() => {
               onClose();
               navigate('/plans');
             }}
-            className="text-amber-300 underline underline-offset-2 font-medium hover:text-amber-200"
+            frontClassName={pushableCompactFrontClass}
           >
             {t('menu.plansLink')}
-          </button>
+          </PushableButton>
           <span className="text-amber-200/60"> — {t('plans.paywallLinkHint')}</span>
         </p>
         {!priceLoaded ? (
           <div className="space-y-4">
             <p className="text-amber-200/70 text-sm">{t('menu.loadingPrice')}</p>
-            <button
+            <PushableButton
               type="button"
+              fullWidth
+              variant="secondary"
               aria-label="Close and continue later"
               onClick={onClose}
-              className="w-full py-3 rounded-xl bg-white/10 text-amber-200 font-medium"
+              frontClassName={pushableFullWidthFrontClass}
             >
               {CTA.paywall.later}
-            </button>
+            </PushableButton>
           </div>
         ) : (
           <>
@@ -309,22 +313,25 @@ export function Paywall({ onClose, onUnlocked, gateMode = 'general' }: PaywallPr
                 className="flex-1 min-w-0 px-3 py-2 rounded-lg bg-black/30 text-white placeholder-amber-200/40 border border-amber-500/30 text-sm"
               />
               {coupon == null ? (
-                <button
+                <PushableButton
                   type="button"
+                  size="sm"
                   onClick={handleApplyCoupon}
                   disabled={couponBusy || !couponInput.trim()}
-                  className="px-3 py-2 rounded-lg bg-amber-500/20 text-amber-100 font-medium border border-amber-500/40 disabled:opacity-50 text-sm"
+                  frontClassName={pushableCompactFrontClass}
                 >
                   {couponBusy ? '…' : 'Apply'}
-                </button>
+                </PushableButton>
               ) : (
-                <button
+                <PushableButton
                   type="button"
+                  size="sm"
+                  variant="secondary"
                   onClick={handleRemoveCoupon}
-                  className="px-3 py-2 rounded-lg bg-white/10 text-amber-200 font-medium text-sm"
+                  frontClassName={pushableCompactFrontClass}
                 >
                   Remove
-                </button>
+                </PushableButton>
               )}
             </div>
             {couponNotice && (

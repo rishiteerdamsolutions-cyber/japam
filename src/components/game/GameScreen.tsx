@@ -30,7 +30,11 @@ import type { DeityId } from '../../data/deities';
 import type { GameMode } from '../../types';
 import { GoogleSignIn } from '../auth/GoogleSignIn';
 import { PushableButton } from '../ui/PushableButton';
-import { pushableFullWidthFrontClass } from '../../lib/landingCtaStyles';
+import {
+  pushableCompactFrontClass,
+  pushableFullWidthFrontClass,
+  pushableIconToggleFrontClass,
+} from '../../lib/landingCtaStyles';
 import { CTA } from '../../lib/ctaCopy';
 import { LivesDisplay } from '../lives/LivesDisplay';
 import { LivesModal } from '../lives/LivesModal';
@@ -882,9 +886,17 @@ export function GameScreen({
           data-immersive-ui
           className="w-full max-w-md flex items-center justify-between shrink-0 mb-1 min-w-0 gap-2 min-h-[44px]"
         >
-        <button onClick={handleBack} className="text-amber-400 text-sm font-medium py-2 px-2 -ml-2 min-h-[44px] flex items-center shrink-0" aria-label={CTA.game.back}>
+        <PushableButton
+          type="button"
+          size="sm"
+          variant="secondary"
+          onClick={handleBack}
+          className="-ml-2 shrink-0"
+          frontClassName={pushableCompactFrontClass}
+          aria-label={CTA.game.back}
+        >
           {CTA.game.back}
-        </button>
+        </PushableButton>
         {(useLives || (!!user && !isGuest && isMarathon)) && (
             <LivesDisplay
               onClick={useLives ? () => setShowLivesModal(true) : undefined}
@@ -894,16 +906,17 @@ export function GameScreen({
             />
           )}
         <div className="flex items-center gap-1 sm:gap-2 ml-auto flex-wrap justify-end">
-          <button
+          <PushableButton
             type="button"
+            layout="icon"
+            variant={bgMusicEnabled ? 'primary' : 'secondary'}
             onClick={handleToggleMusic}
-            className={`p-2 rounded-lg min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0 ${
-              bgMusicEnabled ? 'bg-amber-500/80 text-black' : 'bg-black/40 text-amber-200'
-            }`}
+            className="shrink-0"
+            frontClassName={pushableIconToggleFrontClass}
             aria-label={bgMusicEnabled ? 'Music ON' : 'Music OFF'}
           >
             <MusicIcon />
-          </button>
+          </PushableButton>
           <div className={`flex items-center gap-1 shrink-0 ${bgMusicEnabled ? '' : 'opacity-50'}`}>
             <input
               type="range"
@@ -918,12 +931,13 @@ export function GameScreen({
               aria-label="Volume"
             />
           </div>
-          <button
+          <PushableButton
             type="button"
+            layout="icon"
+            variant={candyBorderSpinEnabled ? 'primary' : 'secondary'}
             onClick={handleToggleCandyBorderSpin}
-            className={`p-2 rounded-lg min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0 ${
-              candyBorderSpinEnabled ? 'bg-amber-500/80 text-black' : 'bg-black/40 text-amber-200'
-            }`}
+            className="shrink-0"
+            frontClassName={pushableIconToggleFrontClass}
             aria-label={
               candyBorderSpinEnabled
                 ? t('game.candyBorderSpinTurnOff')
@@ -936,7 +950,7 @@ export function GameScreen({
             }
           >
             <CandySpinIcon />
-          </button>
+          </PushableButton>
         </div>
       </div>
       {pauseError && (
@@ -1019,15 +1033,17 @@ export function GameScreen({
 
       {status === 'playing' && occasionKind !== 'anniversary' && (
         <div className="shrink-0 w-full max-w-md mt-1 flex justify-center">
-          <button
+          <PushableButton
             type="button"
+            size="sm"
             onClick={handleRefreshBoard}
             aria-label={CTA.game.refreshBoard}
             title={CTA.game.refreshBoard}
-            className="px-3 py-1.5 rounded-lg bg-amber-500/75 text-black font-semibold text-[10px] sm:text-xs leading-snug border border-amber-400/50 shadow-sm hover:bg-amber-400/90 active:scale-[0.98] transition-transform max-w-full text-center whitespace-nowrap"
+            className="max-w-full"
+            frontClassName={`${pushableCompactFrontClass} !text-black`}
           >
             {CTA.game.refreshBoard}
-          </button>
+          </PushableButton>
         </div>
       )}
 
@@ -1247,16 +1263,19 @@ export function GameScreen({
       {guestPowerSignInOpen && isGuest && (
         <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center p-4 bg-black/75">
           <div className="bg-[#C2185B]/95 rounded-2xl p-4 sm:p-6 max-w-sm w-full text-center border-2 border-[#5D4037] shadow-xl">
-            <button
+            <PushableButton
               type="button"
+              layout="icon"
+              variant="secondary"
               onClick={() => setGuestPowerSignInOpen(false)}
-              className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full border border-amber-500/45 bg-black/40 text-amber-100 hover:bg-black/60 active:scale-95"
+              className="absolute right-3 top-3"
+              frontClassName={pushableIconToggleFrontClass}
               aria-label="Close"
             >
               <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
                 <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" />
               </svg>
-            </button>
+            </PushableButton>
             <h2 className="text-lg sm:text-xl font-bold text-amber-400 mb-2">{t('game.guestPowersSignInTitle')}</h2>
             <p className="text-amber-200/90 text-sm sm:text-base mb-5">{t('game.guestPowersSignInBody')}</p>
             <div className="mb-3 flex justify-center">

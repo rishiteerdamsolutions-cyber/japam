@@ -16,4 +16,29 @@ export const pushableStackedFrontClass =
 export const pushableFullWidthFrontClass =
   'w-full font-semibold text-sm sm:text-base leading-tight text-white';
 
-export const pushableTileFrontClass = 'font-semibold text-white';
+/** Specials hub tiles — sizing/color from `.pushable--layout-tile` + tone classes. */
+export const pushableSpecialsTileFrontClass =
+  'font-bold text-white !bg-transparent !border-0 shadow-none';
+
+export const pushableSpecialsTileIconClass =
+  'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border-2';
+
+/** @deprecated Use pushableSpecialsTileFrontClass for hub tiles */
+export const pushableTileFrontClass = pushableSpecialsTileFrontClass;
+
+export const pushableIconFrontClass = 'p-0 text-current';
+
+export const pushableCompactFrontClass =
+  'text-xs sm:text-sm font-semibold leading-tight text-white px-3 py-2 min-h-0';
+
+/** Icon / toggle controls (music, settings header). */
+export const pushableIconToggleFrontClass =
+  'min-h-0 min-w-0 w-full h-full p-2 text-current';
+
+/** Full-width settings accordion row — transparent face over card chrome. */
+export const pushableAccordionFrontClass =
+  '!min-h-0 !rounded-none !bg-transparent w-full flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-3 sm:p-4 text-left text-amber-200 font-medium text-sm';
+
+/** Ista devata deity picker tile. */
+export const pushableDeityTileFrontClass =
+  '!min-h-0 !p-0 flex flex-col items-center overflow-hidden !bg-black/40 border-2 border-white/20 text-white font-semibold';

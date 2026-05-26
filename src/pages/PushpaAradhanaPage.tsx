@@ -21,6 +21,7 @@ import {
   trackShareEvent,
   type PushpaAradhanaLeaderboardEntry,
 } from '../lib/firestore';
+import { rankCardAsOfIstLine } from '../lib/japamCounterIst';
 import { normalizeLeaderboardForRankCard, renderRankCardBlob } from '../lib/rankCard';
 import { AccessBadge } from '../components/ui/AccessBadge';
 
@@ -293,6 +294,7 @@ export function PushpaAradhanaPage() {
         rankCardFooterSoloLine: solo ? t('pushpa.rankCardFooterSolo') : undefined,
         rankCardFooterCtaLine: solo ? undefined : t('pushpa.rankCardFooterCommunity'),
         japaSummaryLine: summaryLine,
+        istDateTimeLine: rankCardAsOfIstLine(),
         leaderboardScoreUnit: t('pushpa.rankCardScoreUnit'),
       });
       if (!blob) throw new Error('blob');

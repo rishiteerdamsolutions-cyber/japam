@@ -24,3 +24,20 @@ export function istMonthLabelFromKey(monthKey: string): string {
 export function publicJapamCounterField(mode: 'manual' | 'auto', monthKey: string): string {
   return mode === 'auto' ? `jca_${monthKey}` : `jcm_${monthKey}`;
 }
+
+/** e.g. "24 May 2026, 3:45 pm IST" — for rank cards and session labels. */
+export function formatIstDateTime(d: Date = new Date()): string {
+  return `${new Intl.DateTimeFormat('en-IN', {
+    timeZone: TZ,
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+  }).format(d)} IST`;
+}
+
+export function rankCardAsOfIstLine(d: Date = new Date()): string {
+  return `As of ${formatIstDateTime(d)}`;
+}

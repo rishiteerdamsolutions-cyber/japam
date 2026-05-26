@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { DeityId } from '../../data/deities';
-import { istMonthKeyFromDate, istMonthLabelFromKey } from '../../lib/japamCounterIst';
+import { formatIstDateTime, istMonthKeyFromDate, istMonthLabelFromKey } from '../../lib/japamCounterIst';
 import {
   incrementJapamCounter,
   loadJapamCounterLeaderboard,
@@ -18,8 +18,8 @@ type Props = {
   deityId: DeityId;
   deityLabel: string;
   sessionCount: number;
-  /** Manual: each japa updates the month. Auto: parent commits on Complete/End. */
-  syncMode?: 'live' | 'commit';
+  /** Manual immersive: parent increments; panel only displays and offers rank card. */
+  syncMode?: 'live' | 'commit' | 'external';
   /** When set, adds `delta` japas for this mode (auto sessions). */
   commitRequest?: { id: number; delta: number } | null;
   /** Manual counting screen: one line month total, no scrollable leaderboard. */
@@ -64,15 +64,39 @@ export function JapamCounterLeaderboardPanel({
   );
 
   const refreshLeaderboard = useCallback(async () => {
-    const res = await loadJapamCounterLeaderboard({ monthKey, mode: 'all', deityId });
+    const res = await loadJapamCounterLeaderboard({ monthKey, mode, deityId });
     applyLeaderboardPayload(res.leaderboard, res.viewerManual, res.viewerAuto);
-  }, [monthKey, deityId, applyLeaderboardPayload]);
+  }, [monthKey, mode, deityId, applyLeaderboardPayload]);
 
   useEffect(() => {
     void refreshLeaderboard();
   }, [refreshLeaderboard]);
 
   const prevSessionCount = useRef(0);
+  const externalRefreshTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (syncMode !== 'external') return;
+    if (sessionCount <= prevSessionCount.current) {
+      prevSessionCount.current = sessionCount;
+      return;
+    }
+    const delta = sessionCount - prevSessionCount.current;
+    prevSessionCount.current = sessionCount;
+    if (mode === 'manual') {
+      setMonthManual((v) => v + delta);
+    } else {
+      setMonthAuto((v) => v + delta);
+    }
+    if (externalRefreshTimer.current) clearTimeout(externalRefreshTimer.current);
+    externalRefreshTimer.current = setTimeout(() => {
+      void refreshLeaderboard();
+    }, 450);
+    return () => {
+      if (externalRefreshTimer.current) clearTimeout(externalRefreshTimer.current);
+    };
+  }, [sessionCount, mode, syncMode, refreshLeaderboard]);
+
   useEffect(() => {
     if (syncMode !== 'live') return;
     if (!user?.uid || sessionCount <= prevSessionCount.current) {
@@ -118,26 +142,34 @@ export function JapamCounterLeaderboardPanel({
     setShareNotice(null);
     setSharing(true);
     try {
-      const lbFresh = await loadJapamCounterLeaderboard({ monthKey, mode: 'all', deityId });
+      const lbFresh = await loadJapamCounterLeaderboard({ monthKey, mode, deityId });
       if (lbFresh.leaderboard.length > 0) {
         applyLeaderboardPayload(lbFresh.leaderboard, lbFresh.viewerManual, lbFresh.viewerAuto);
       }
       const lbForCard = lbFresh.leaderboard.length > 0 ? lbFresh.leaderboard : leaderboard;
       const lbNormalized = normalizeLeaderboardForRankCard(
-        mapJapamCounterLeaderboardToRankCardEntries(lbForCard, modeLabel),
+        mapJapamCounterLeaderboardToRankCardEntries(lbForCard, modeLabel, true),
       );
       const monthForCard = mode === 'auto' ? lbFresh.viewerAuto : lbFresh.viewerManual;
-      const participated = monthForCard > 0;
+      const participated = monthForCard > 0 || sessionCount > 0;
       const modeTitle = mode === 'auto' ? t('japamCounter.modeAuto') : t('japamCounter.modeManual');
+      const istWhen = formatIstDateTime();
       const headerName = t('japamCounter.rankCardHeader', { deity: deityLabel, mode: modeTitle });
-      const summaryLine = t('japamCounter.rankCardSummary', {
+      const monthLine = t('japamCounter.rankCardMonthLine', {
         count: monthForCard,
         mode: modeTitle,
         deity: deityLabel,
         month: monthLabel,
       });
+      const sessionLine = t('japamCounter.rankCardSessionLine', {
+        count: sessionCount,
+        mode: modeTitle,
+        datetime: istWhen,
+      });
+      const rankTitle =
+        mode === 'auto' ? t('japamCounter.rankCardTitleAuto') : t('japamCounter.rankCardTitleManual');
       const blob = await renderRankCardBlob({
-        title: 'JAPAM COUNTER',
+        title: rankTitle,
         headerName,
         deityName: deityLabel,
         subtitleLine: t('japamCounter.rankCardSubtitle', { month: monthLabel }),
@@ -149,7 +181,8 @@ export function JapamCounterLeaderboardPanel({
         soloPersonalMarathon: lbNormalized.length === 0,
         rankCardFooterSoloLine: lbNormalized.length === 0 ? t('japamCounter.rankCardFooterSolo') : undefined,
         rankCardFooterCtaLine: lbNormalized.length === 0 ? undefined : t('japamCounter.rankCardFooterCommunity'),
-        japaSummaryLine: summaryLine,
+        japaSummaryLine: monthLine,
+        sessionSummaryLine: sessionLine,
         leaderboardScoreUnit: t('japamCounter.rankCardScoreUnit'),
       });
       if (!blob) throw new Error('blob');
@@ -177,18 +210,21 @@ export function JapamCounterLeaderboardPanel({
     modeLabel,
     monthKey,
     monthLabel,
+    sessionCount,
     sharing,
     t,
     user,
   ]);
 
+  const modeTitle = mode === 'auto' ? t('japamCounter.modeAuto') : t('japamCounter.modeManual');
+
   if (variant === 'minimal') {
     return (
-      <div className="w-full max-w-sm shrink-0 px-1" aria-live="off">
+      <div className="w-full max-w-sm shrink-0 px-1 space-y-1.5" aria-live="polite">
         {user ? (
           <p className="text-amber-200/75 text-[10px] text-center tabular-nums leading-snug">
             {t('japamCounter.yourMonthDeity', {
-              mode: mode === 'auto' ? t('japamCounter.modeAuto') : t('japamCounter.modeManual'),
+              mode: modeTitle,
               deity: deityLabel,
               count: yourMonthTotal,
             })}
@@ -197,6 +233,27 @@ export function JapamCounterLeaderboardPanel({
         ) : (
           <p className="text-amber-200/55 text-[10px] text-center">{t('japamCounter.monthNote', { month: monthLabel })}</p>
         )}
+        <p className="text-amber-200/65 text-[10px] text-center tabular-nums leading-snug">
+          {t('japamCounter.yourSessionDeity', {
+            mode: modeTitle,
+            deity: deityLabel,
+            count: sessionCount,
+          })}
+        </p>
+        {user ? (
+          <button
+            type="button"
+            onClick={() => void handleDownloadRankCard()}
+            disabled={sharing}
+            className="mx-auto block px-3 py-1.5 rounded-lg bg-emerald-600/90 text-white text-[10px] font-semibold shadow-md disabled:opacity-50"
+          >
+            {sharing ? '…' : t('japamCounter.downloadRankCard')}
+          </button>
+        ) : (
+          <p className="text-amber-200/50 text-[9px] text-center">{t('japamCounter.rankCardSignIn')}</p>
+        )}
+        {shareError ? <p className="text-amber-400/95 text-[10px] text-center">{shareError}</p> : null}
+        {shareNotice ? <p className="text-emerald-200/80 text-[10px] text-center">{shareNotice}</p> : null}
       </div>
     );
   }

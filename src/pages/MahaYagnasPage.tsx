@@ -8,6 +8,7 @@ import { DEITIES } from '../data/deities';
 import { useAuthStore } from '../store/authStore';
 import { useUnlockStore } from '../store/unlockStore';
 import { auth } from '../lib/firebase';
+import { rankCardAsOfIstLine } from '../lib/japamCounterIst';
 import { paddedLeaderboard, renderRankCardBlob } from '../lib/rankCard';
 import { trackShareEvent } from '../lib/firestore';
 import {
@@ -246,6 +247,7 @@ export function MahaYagnasPage() {
         currentUserParticipated: participated,
         rankCardFooterCtaLine: t('mahaYagnas.rankCardFooterCta'),
         japaSummaryLine: `You: ${formatNum(myJp)} japas • Collective: ${formatNum(y.currentJapas)} / ${formatNum(y.goalJapas)}`,
+        istDateTimeLine: rankCardAsOfIstLine(),
       });
       if (!blob) throw new Error('Failed to generate image');
       const url = URL.createObjectURL(blob);

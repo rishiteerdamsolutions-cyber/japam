@@ -21,13 +21,14 @@ function HeartIcon() {
 interface MenuMatchChantHeaderProps {
   /** Optional extra control on the right (before profile / sign-in), e.g. Priest link */
   rightElement?: React.ReactNode;
+  className?: string;
 }
 
 /**
  * Same top bar pattern as the main menu: JAPAM + tagline (→ /menu) on the left;
  * profile avatar on the right (→ /settings). Heart → /plans (Pro & Premium). No back, gear, or sign-out.
  */
-export function MenuMatchChantHeader({ rightElement }: MenuMatchChantHeaderProps) {
+export function MenuMatchChantHeader({ rightElement, className }: MenuMatchChantHeaderProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
@@ -60,7 +61,9 @@ export function MenuMatchChantHeader({ rightElement }: MenuMatchChantHeaderProps
   };
 
   return (
-    <header className="flex items-center justify-between gap-2 w-full mb-4 min-h-[44px]">
+    <header
+      className={`flex items-center justify-between gap-2 w-full mb-4 min-h-[44px]${className ? ` ${className}` : ''}`}
+    >
       <button
         type="button"
         onClick={() => navigate(onMenuPage ? '/' : '/menu')}

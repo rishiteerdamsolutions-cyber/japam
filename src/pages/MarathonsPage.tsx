@@ -11,6 +11,7 @@ import { auth } from '../lib/firebase';
 import { DonateThankYouBox } from '../components/donation/DonateThankYouBox';
 import { MenuMatchChantHeader } from '../components/layout/MenuMatchChantHeader';
 import { BottomNav } from '../components/nav/BottomNav';
+import { rankCardAsOfIstLine } from '../lib/japamCounterIst';
 import { paddedLeaderboard, renderRankCardBlob } from '../lib/rankCard';
 import { trackShareEvent } from '../lib/firestore';
 import { AccessBadge } from '../components/ui/AccessBadge';
@@ -432,6 +433,7 @@ export function MarathonsPage() {
         soloPersonalMarathon: isDefaultFreeMarathon,
         rankCardFooterCtaLine: isDefaultFreeMarathon ? undefined : t('rankCardMarathon.footerCta'),
         japaSummaryLine: `Your japas: ${jp.toLocaleString('en-IN')} / ${marathon.targetJapas.toLocaleString('en-IN')} goal`,
+        istDateTimeLine: rankCardAsOfIstLine(),
       });
       if (!blob) throw new Error('Failed to generate image');
 

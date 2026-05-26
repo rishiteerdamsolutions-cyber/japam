@@ -118,11 +118,13 @@ export async function loadJapamCounterLeaderboard(options: {
 export function mapJapamCounterLeaderboardToRankCardEntries(
   rows: JapamCounterLeaderboardRow[],
   modeLabel: (m: JapamCounterMode) => string,
+  /** When the board is already filtered to one counter mode, omit the mode suffix on names. */
+  singleModeBoard = false,
 ): LeaderboardEntry[] {
   return rows.map((r) => ({
     rank: r.rank,
     uid: r.uid,
-    name: `${r.name} · ${modeLabel(r.counterMode)}`,
+    name: singleModeBoard ? r.name : `${r.name} · ${modeLabel(r.counterMode)}`,
     japasCount: r.japasCount,
   }));
 }

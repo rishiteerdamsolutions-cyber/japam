@@ -225,6 +225,10 @@ export interface RenderRankCardOptions {
   rankCardFooterCtaLine?: string;
   /** Goal / progress (e.g. your count vs target, or collective vs goal) — drawn under the deity line */
   japaSummaryLine?: string;
+  /** Japam Counter: current session count with IST date/time (below month line). */
+  sessionSummaryLine?: string;
+  /** IST timestamp for when the card was generated (all rank card types). */
+  istDateTimeLine?: string;
   /** Row score suffix, e.g. `japas` (default) or `flowers offered` for Pushpa Aradhana. */
   leaderboardScoreUnit?: string;
 }
@@ -232,7 +236,7 @@ export interface RenderRankCardOptions {
 export async function renderRankCardBlob(opts: RenderRankCardOptions): Promise<Blob | null> {
   try {
     const width = 720;
-    const height = 1400; // extra space for wrapped text and larger footer
+    const height = 1480; // extra space for month/session/IST lines and footer
     const canvas = document.createElement('canvas');
     canvas.width = width;
     canvas.height = height;
@@ -364,9 +368,27 @@ export async function renderRankCardBlob(opts: RenderRankCardOptions): Promise<B
     if (summary) {
       const sumPx = 22;
       const sumH = wrapAndDraw(summary, maxW, sumPx, '600', 'rgba(255, 255, 255, 0.9)', y, 4);
-      y += (sumH || sumPx + 4) + 20;
+      y += (sumH || sumPx + 4) + 14;
     } else {
-      y += 26;
+      y += 10;
+    }
+
+    const sessionSummary = String(opts.sessionSummaryLine || '').trim();
+    if (sessionSummary) {
+      const sessPx = 20;
+      const sessH = wrapAndDraw(sessionSummary, maxW, sessPx, '600', 'rgba(255, 255, 255, 0.88)', y, 4);
+      y += (sessH || sessPx + 4) + 12;
+    }
+
+    const istLine = String(opts.istDateTimeLine || '').trim();
+    if (istLine) {
+      const istPx = 17;
+      const istH = wrapAndDraw(istLine, maxW, istPx, '500', 'rgba(253, 230, 138, 0.9)', y, 3);
+      y += (istH || istPx + 3) + 18;
+    } else if (summary || sessionSummary) {
+      y += 8;
+    } else {
+      y += 16;
     }
 
     // ——— Leaderboard section label ———

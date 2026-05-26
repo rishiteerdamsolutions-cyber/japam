@@ -402,6 +402,17 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
           </div>
         </div>
 
+        <div className="relative z-20 shrink-0 w-full max-w-md mx-auto px-2 pb-1">
+          <JapamCounterLeaderboardPanel
+            mode="manual"
+            deityId={deity.id}
+            deityLabel={t(`deities.${deity.id}`)}
+            sessionCount={count}
+            syncMode="external"
+            variant="minimal"
+          />
+        </div>
+
         <div
           className="relative z-20 shrink-0 w-full max-w-md mx-auto flex justify-center overflow-visible"
           style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
@@ -544,6 +555,7 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
           sessionCount={count}
           syncMode="commit"
           commitRequest={commitRequest}
+          variant="full"
         />
       </div>
 

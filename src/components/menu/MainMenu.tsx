@@ -81,12 +81,14 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
   });
   const initial = (displayName && displayName.charAt(0).toUpperCase()) || '?';
 
+  const menuSectionGap = 'gap-4';
+
   return (
-    <div className="relative h-[100dvh] max-h-[100dvh] flex flex-col items-center p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] overflow-hidden">
+    <div className="relative h-[100dvh] max-h-[100dvh] flex flex-col items-center px-4 pt-3 pb-[max(0.25rem,env(safe-area-inset-bottom))] overflow-hidden">
       <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
-      <div className="relative z-10 w-full max-w-lg flex flex-col flex-1 min-h-0 items-center">
-        {/* Top: brand (left) and user / Google sign-in (right) */}
-        <div className="w-full flex justify-between items-center gap-2 mt-2 mb-1 min-h-[44px]">
+      <div className={`relative z-10 w-full max-w-lg flex flex-col flex-1 min-h-0 items-center ${menuSectionGap}`}>
+        {/* 1 — Top: brand, heart, profile */}
+        <div className="w-full shrink-0 flex justify-between items-center gap-2 min-h-[44px]">
           <div className="min-w-0 flex-1 pr-2 text-left">
             <JapamBrand as="span" className="block text-lg sm:text-xl leading-tight truncate">
               {t('menu.title')}
@@ -161,15 +163,17 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
           </div>
         </div>
 
-        {/* Equal vertical rhythm between achievers, buttons, demo, and powers. */}
-        <div className="w-full flex flex-col flex-1 min-h-0 gap-4">
-          <div className="relative z-20 shrink-0 w-full mt-1 -mx-1 px-1 py-2 rounded-lg bg-black/20">
-            <ActiveUsersStrip />
-          </div>
+        {!istaDevataRevealed ? (
+          <>
+            {/* 2 — Yesterday’s achievers */}
+            <div className="relative z-20 shrink-0 w-full -mx-1 px-1 py-1.5 rounded-lg bg-black/20">
+              <ActiveUsersStrip />
+            </div>
 
-          {demoNotice}
+            {demoNotice}
 
-          <div className="grid grid-cols-3 gap-2 w-full items-stretch shrink-0">
+            {/* 3 — Main menu buttons */}
+            <div className="grid grid-cols-3 gap-2 w-full items-stretch shrink-0">
           <PushableButton
             type="button"
             layout="grid"
@@ -211,28 +215,91 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
           >
             {CTA.menu.istaDevata}
           </PushableButton>
-          </div>
+            </div>
 
-          {!istaDevataRevealed ? (
-            <div className="w-full shrink-0 flex flex-col items-center">
-            <div className="w-full min-w-0 max-w-full flex justify-center items-center pl-[max(0.25rem,env(safe-area-inset-left,0px))] pr-[max(0.25rem,env(safe-area-inset-right,0px))]">
-              <div className="relative @container max-w-full rounded-2xl border-2 border-amber-400/75 p-0 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.45),0_0_0_1px_rgba(251,191,36,0.2)_inset] bg-black/20 ring-1 ring-amber-300/35 w-full min-w-0 max-w-[min(100%,26rem)] overflow-hidden">
-                {introHeroSlot ?? (
-                  <img
-                    src={ISTA_DEVATA_INTRO_GIF_SRC}
-                    alt={t('menu.istaDevataMalaaVideoAria')}
-                    decoding="async"
-                    className="block h-auto w-full max-w-full max-h-[min(52svh,400px)] object-contain bg-transparent rounded-xl"
-                  />
-                )}
+            {/* 4 — Demo / intro */}
+            <div className="w-full flex-1 min-h-0 flex flex-col items-center justify-center">
+              <div className="w-full min-w-0 max-w-full flex justify-center items-center pl-[max(0.25rem,env(safe-area-inset-left,0px))] pr-[max(0.25rem,env(safe-area-inset-right,0px))]">
+                <div className="relative @container max-w-full rounded-2xl border-2 border-amber-400/75 p-0 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.45),0_0_0_1px_rgba(251,191,36,0.2)_inset] bg-black/20 ring-1 ring-amber-300/35 w-full min-w-0 max-w-[min(100%,26rem)] overflow-hidden">
+                  {introHeroSlot ?? (
+                    <img
+                      src={ISTA_DEVATA_INTRO_GIF_SRC}
+                      alt={t('menu.istaDevataMalaaVideoAria')}
+                      decoding="async"
+                      className="block h-auto w-full max-w-full max-h-[min(42svh,360px)] object-contain bg-transparent rounded-xl"
+                    />
+                  )}
+                </div>
               </div>
             </div>
+
+            {/* 5 — Powers scroll strip */}
+            <motion.div
+              className="w-full shrink-0"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15, duration: 0.28 }}
+            >
+              <MenuPowersScrollStrip />
+            </motion.div>
+
+            {/* 6 — Room for fixed bottom nav (gap above matches other sections) */}
+            <div
+              className="shrink-0 w-full h-[calc(4.75rem+env(safe-area-inset-bottom,0px))]"
+              aria-hidden
+            />
+          </>
+        ) : (
+          <>
+            <div className="relative z-20 shrink-0 w-full -mx-1 px-1 py-1.5 rounded-lg bg-black/20">
+              <ActiveUsersStrip />
             </div>
-          ) : (
+            {demoNotice}
+            <div className="grid grid-cols-3 gap-2 w-full items-stretch shrink-0">
+              <PushableButton
+                type="button"
+                layout="grid"
+                pressBeforeAction={false}
+                aria-label={CTA.menu.allDevatasJapa}
+                onClick={() => onSelect('general')}
+                className={menuGridPushableClass}
+                frontClassName={menuGridPushableFrontClass}
+              >
+                {CTA.menu.allDevatasJapa}
+              </PushableButton>
+              <PushableButton
+                type="button"
+                layout="grid"
+                aria-label={CTA.menu.specials}
+                onClick={() => {
+                  trackProductUsage('action_menu_specials');
+                  navigate('/specials');
+                }}
+                className={menuGridPushableClass}
+                frontClassName={menuGridPushableFrontClass}
+              >
+                {CTA.menu.specials}
+              </PushableButton>
+              <PushableButton
+                type="button"
+                layout="grid"
+                id="ista-devata-reveal"
+                aria-expanded={istaDevataRevealed}
+                aria-controls="ista-devata-grid"
+                onClick={() => {
+                  trackProductUsage('action_menu_ista_reveal');
+                  setIstaDevataRevealed(true);
+                }}
+                className={menuGridPushableClass}
+                frontClassName={menuGridPushableFrontClass}
+              >
+                {CTA.menu.istaDevata}
+              </PushableButton>
+            </div>
             <motion.div
             ref={istaDevataScrollRef}
             tabIndex={-1}
-            className="w-full flex-1 min-h-0 overflow-y-auto overscroll-contain touch-pan-y mb-2 sm:mb-3"
+            className="w-full flex-1 min-h-0 overflow-y-auto overscroll-contain touch-pan-y"
             role="region"
             aria-label={t('menu.istaDevata')}
           >
@@ -270,21 +337,12 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
               ))}
             </div>
             </motion.div>
-          )}
-
-          {!istaDevataRevealed && (
-            <motion.div
-              className="w-full shrink-0"
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.15, duration: 0.28 }}
-            >
-              <MenuPowersScrollStrip />
-            </motion.div>
-          )}
-
-          {!istaDevataRevealed ? <div className="flex-1 min-h-0" aria-hidden /> : null}
-        </div>
+            <div
+              className="shrink-0 w-full h-[calc(4.75rem+env(safe-area-inset-bottom,0px))]"
+              aria-hidden
+            />
+          </>
+        )}
 
         <BottomNav />
       </div>

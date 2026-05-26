@@ -101,7 +101,7 @@ export function MenuPowersScrollStrip() {
         <PowerInfoModal payload={powerInfoModal} onClose={() => setPowerInfoModal(null)} />
       ) : null}
       <div
-        className="w-full flex-1 min-h-[4.5rem] max-h-[5.5rem] flex flex-col justify-end"
+        className="w-full min-h-[4.5rem] max-h-[5.5rem] flex flex-col justify-end"
         aria-label={t('menu.powersPreviewRegion', { defaultValue: 'Game powers preview' })}
       >
         <p className="text-[9px] text-amber-200/65 leading-tight mb-1 px-0.5">

@@ -64,7 +64,7 @@ export function SpecialsPage() {
           <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.04 }}>
             <SpecialsFeaturedCard
               title={CTA.specials.pushpaAradhana}
-              subtitle={t('specials.hubPushpaBlurb')}
+              subtitle={CTA.specials.hubPushpaBlurb}
               icon="🌸"
               onClick={() => void openWithAuth('/pushpa-aradhana', 'action_specials_pushpa')}
             />
@@ -81,7 +81,6 @@ export function SpecialsPage() {
                 variant="amber"
                 left={{
                   label: CTA.specials.hub108OneTime,
-                  hint: CTA.specials.hub108OneTimeHint,
                   icon: <SpecialsIcon108Once />,
                   onClick: () => void openWithAuth('/special-108-japa', 'action_specials_108_once'),
                 }}
@@ -98,14 +97,12 @@ export function SpecialsPage() {
           <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.12 }}>
             <SpecialsCategoryPanel
               title={t('specials.hubCounterTitle')}
-              subtitle={t('specials.hubCounterSubtitle')}
               tone="emerald"
             >
               <SpecialsDualOption
                 variant="emerald"
                 left={{
                   label: CTA.specials.hubCounterManual,
-                  hint: CTA.specials.hubCounterManualHint,
                   icon: <SpecialsIconManual />,
                   onClick: () => void openWithAuth('/special-japam-counter', 'action_specials_counter_manual'),
                 }}

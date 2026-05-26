@@ -180,7 +180,7 @@ export function SpecialsCategoryPanel({
   children,
 }: {
   title: string;
-  subtitle: string;
+  subtitle?: string;
   tone: Tone;
   badge?: string;
   /** Short pill beside the section title (e.g. Two Player Game). */
@@ -204,7 +204,9 @@ export function SpecialsCategoryPanel({
               </span>
             ) : null}
           </div>
-          <p className="text-white/60 text-[10px] leading-snug mt-0.5">{subtitle}</p>
+          {subtitle ? (
+            <p className="text-white/60 text-[10px] leading-snug mt-0.5">{subtitle}</p>
+          ) : null}
         </div>
         {badge ? (
           <span

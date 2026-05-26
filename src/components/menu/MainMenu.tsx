@@ -161,13 +161,15 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
           </div>
         </div>
 
-        <div className="relative z-20 shrink-0 w-full mt-1 -mx-1 px-1 py-2 rounded-lg bg-black/20 mb-2">
-          <ActiveUsersStrip />
-        </div>
+        {/* Equal vertical rhythm between achievers, buttons, demo, and powers. */}
+        <div className="w-full flex flex-col flex-1 min-h-0 gap-4">
+          <div className="relative z-20 shrink-0 w-full mt-1 -mx-1 px-1 py-2 rounded-lg bg-black/20">
+            <ActiveUsersStrip />
+          </div>
 
-        {demoNotice}
+          {demoNotice}
 
-        <div className="grid grid-cols-3 gap-2 w-full mt-3 mb-2 items-stretch shrink-0">
+          <div className="grid grid-cols-3 gap-2 w-full items-stretch shrink-0">
           <PushableButton
             type="button"
             layout="grid"
@@ -209,10 +211,10 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
           >
             {CTA.menu.istaDevata}
           </PushableButton>
-        </div>
+          </div>
 
-        {!istaDevataRevealed ? (
-          <div className="w-full shrink-0 flex flex-col items-center mt-4 sm:mt-6">
+          {!istaDevataRevealed ? (
+            <div className="w-full shrink-0 flex flex-col items-center">
             <div className="w-full min-w-0 max-w-full flex justify-center items-center pl-[max(0.25rem,env(safe-area-inset-left,0px))] pr-[max(0.25rem,env(safe-area-inset-right,0px))]">
               <div className="relative @container max-w-full rounded-2xl border-2 border-amber-400/75 p-0 shadow-[0_4px_24px_-4px_rgba(0,0,0,0.45),0_0_0_1px_rgba(251,191,36,0.2)_inset] bg-black/20 ring-1 ring-amber-300/35 w-full min-w-0 max-w-[min(100%,26rem)] overflow-hidden">
                 {introHeroSlot ?? (
@@ -225,9 +227,9 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
                 )}
               </div>
             </div>
-          </div>
-        ) : (
-          <motion.div
+            </div>
+          ) : (
+            <motion.div
             ref={istaDevataScrollRef}
             tabIndex={-1}
             className="w-full flex-1 min-h-0 overflow-y-auto overscroll-contain touch-pan-y mb-2 sm:mb-3"
@@ -267,19 +269,22 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
                 </motion.div>
               ))}
             </div>
-          </motion.div>
-        )}
+            </motion.div>
+          )}
 
-        {!istaDevataRevealed && (
-          <motion.div
-            className="w-full flex-1 min-h-0 flex flex-col mt-2"
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15, duration: 0.28 }}
-          >
-            <MenuPowersScrollStrip />
-          </motion.div>
-        )}
+          {!istaDevataRevealed && (
+            <motion.div
+              className="w-full shrink-0"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15, duration: 0.28 }}
+            >
+              <MenuPowersScrollStrip />
+            </motion.div>
+          )}
+
+          {!istaDevataRevealed ? <div className="flex-1 min-h-0" aria-hidden /> : null}
+        </div>
 
         <BottomNav />
       </div>

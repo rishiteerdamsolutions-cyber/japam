@@ -35,7 +35,7 @@ export function MenuDemoTestPage() {
       onOpenSettings={() => navigate('/settings', { state: { from: '/test/menu-demo' } })}
       introHeroSlot={<MenuMiniGameDemo key={`${location.key}-${demoMountKey}`} />}
       demoNotice={
-        <p className="w-full text-center text-amber-100/90 text-[11px] sm:text-xs mb-2 px-2 py-1.5 rounded-lg bg-amber-900/25 border border-amber-500/30">
+        <p className="w-full text-center text-amber-100/90 text-[11px] sm:text-xs px-2 py-1.5 rounded-lg bg-amber-900/25 border border-amber-500/30">
           Menu UI demo (mini-game preview).{' '}
           <button
             type="button"

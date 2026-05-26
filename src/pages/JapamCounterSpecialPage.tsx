@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { NaturalBackButton } from '../components/nav/NaturalBackButton';
 import { currentReturnPath, withReturnTo } from '../lib/navigationReturn';
+import { JapamCounterDeityBackdrop } from '../components/japamCounter/JapamCounterDeityBackdrop';
 import { ManualMalaJapaPad } from '../components/japamCounter/ManualMalaJapaPad';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
@@ -69,6 +70,17 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
   const isAuto = mode === 'auto';
   const titleKey = isAuto ? 'specials.autoJapamCounterTitle' : 'specials.japamCounterTitle';
   const blurbKey = isAuto ? 'specials.autoJapamCounterBlurb' : 'specials.japamCounterBlurb';
+
+  // 108 Japa special is match-3 on /game — redirect legacy counter deep links.
+  useEffect(() => {
+    if (!isSpecial108Session || isAuto) return;
+    const deity = parseJapamCounterDeity(searchParams.get('deity'));
+    if (!deity) return;
+    navigate(
+      `/game?mode=${encodeURIComponent(deity)}&level=0&special108=1&target=108`,
+      { replace: true, state: location.state },
+    );
+  }, [isAuto, isSpecial108Session, location.state, navigate, searchParams]);
 
   useEffect(() => {
     return () => {
@@ -337,7 +349,7 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
         className="fixed inset-0 z-0 flex h-[100dvh] max-h-[100dvh] flex-col overflow-x-visible overflow-y-hidden touch-none"
         style={{ overscrollBehavior: 'none' }}
       >
-        <div className="absolute inset-0 bg-gloss-bubblegum pointer-events-none" aria-hidden />
+        <JapamCounterDeityBackdrop imageUrl={deity.image} />
         <div
           data-immersive-ui
           className="relative z-10 flex min-h-0 flex-1 flex-col w-full max-w-md mx-auto px-3 overflow-x-visible overflow-y-hidden touch-manipulation"
@@ -350,24 +362,21 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
               stopAllMantras();
               setSearchParams({}, { replace: true });
             }}
-            className="shrink-0 self-start text-amber-300/90 text-sm mb-1 hover:underline"
+            className="shrink-0 self-start text-amber-300/90 text-sm mb-1 hover:underline drop-shadow-sm"
           >
             {t('specials.japamCounterChangeDeity')}
           </button>
 
           <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-0.5 overflow-visible pb-1">
-            <div className="w-16 h-16 shrink-0 rounded-xl overflow-hidden border border-amber-500/30">
-              <img src={deity.image} alt="" className="w-full h-full object-cover" />
-            </div>
-            <h1 className="shrink-0 text-base font-bold text-amber-300 text-center leading-tight">
+            <h1 className="shrink-0 text-base font-bold text-amber-200 text-center leading-tight drop-shadow-[0_1px_8px_rgba(0,0,0,0.85)]">
               {t(`deities.${deity.id}`)}
             </h1>
-            <p className="shrink-0 text-amber-200/65 text-[10px] text-center max-w-[16rem] leading-snug italic line-clamp-2 px-1">
+            <p className="shrink-0 text-amber-100/80 text-[10px] text-center max-w-[16rem] leading-snug italic line-clamp-2 px-1 drop-shadow-[0_1px_6px_rgba(0,0,0,0.8)]">
               {deity.mantra}
             </p>
 
             <p
-              className="shrink-0 text-[clamp(2.75rem,16vw,4rem)] font-bold text-white tabular-nums leading-none text-center"
+              className="shrink-0 text-[clamp(2.75rem,16vw,4rem)] font-bold text-white tabular-nums leading-none text-center drop-shadow-[0_2px_14px_rgba(0,0,0,0.92)]"
               aria-live="polite"
               aria-atomic="true"
             >
@@ -383,13 +392,9 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
                   className="text-emerald-200/90 text-xs font-semibold text-center leading-snug"
                   role="status"
                 >
-                  {isSpecial108Session
-                    ? t('specials.japamCounterSessionComplete108', {
-                        defaultValue: '108 japas complete — session finished.',
-                      })
-                    : t('specials.japamCounterSessionComplete', {
-                        defaultValue: 'Session complete.',
-                      })}
+                  {t('specials.japamCounterSessionComplete', {
+                    defaultValue: 'Session complete.',
+                  })}
                 </p>
               ) : (
                 <p className="text-amber-200/55 text-[10px] text-center leading-snug max-w-[16rem]">
@@ -432,8 +437,8 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
   }
 
   return (
-    <div className="relative min-h-[100dvh] flex flex-col">
-      <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
+    <div className="relative min-h-[100dvh] flex flex-col overflow-hidden">
+      <JapamCounterDeityBackdrop imageUrl={deity.image} />
       <div className="relative z-10 flex flex-col flex-1 min-h-0 w-full max-w-md mx-auto px-3 pt-3 pb-[max(6rem,env(safe-area-inset-bottom))] overflow-y-auto">
         <MenuMatchChantHeader />
         <button
@@ -442,21 +447,22 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
             stopAllMantras();
             setSearchParams({}, { replace: true });
           }}
-          className="self-start text-amber-300/90 text-sm mb-3 hover:underline"
+          className="self-start text-amber-300/90 text-sm mb-3 hover:underline drop-shadow-sm"
         >
           {t('specials.japamCounterChangeDeity')}
         </button>
-        <div className="w-32 h-32 rounded-2xl overflow-hidden border border-amber-500/30 mb-2 mx-auto">
-          <img src={deity.image} alt="" className="w-full h-full object-cover" />
-        </div>
-        <h1 className="text-lg font-bold text-amber-300 text-center mb-0.5">{t(`deities.${deity.id}`)}</h1>
-        <p className="text-amber-200/70 text-xs text-center mb-1 max-w-sm leading-snug italic mx-auto">
+        <h1 className="text-lg font-bold text-amber-200 text-center mb-0.5 drop-shadow-[0_1px_8px_rgba(0,0,0,0.85)]">
+          {t(`deities.${deity.id}`)}
+        </h1>
+        <p className="text-amber-100/80 text-xs text-center mb-1 max-w-sm leading-snug italic mx-auto drop-shadow-[0_1px_6px_rgba(0,0,0,0.8)]">
           {deity.mantra}
         </p>
-        <p className="text-amber-200/75 text-[11px] text-center mb-3 max-w-sm mx-auto">{t(blurbKey)}</p>
+        <p className="text-amber-200/85 text-[11px] text-center mb-3 max-w-sm mx-auto drop-shadow-sm">
+          {t(blurbKey)}
+        </p>
 
         <p
-          className="text-[clamp(3rem,18vw,4.5rem)] font-bold text-white tabular-nums leading-none mb-1 text-center"
+          className="text-[clamp(3rem,18vw,4.5rem)] font-bold text-white tabular-nums leading-none mb-1 text-center drop-shadow-[0_2px_14px_rgba(0,0,0,0.92)]"
           aria-live="polite"
         >
           {count}

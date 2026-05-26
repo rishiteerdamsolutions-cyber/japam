@@ -85,9 +85,12 @@ export function Japa108SpecialPage() {
       });
       return;
     }
-    navigate(`/special-japam-counter?deity=${encodeURIComponent(deityId)}&special108=1`, {
-      state: withReturnTo(currentReturnPath(location.pathname, location.search)),
-    });
+    navigate(
+      `/game?mode=${encodeURIComponent(deityId)}&level=0&special108=1&target=108`,
+      {
+        state: withReturnTo(currentReturnPath(location.pathname, location.search)),
+      },
+    );
   };
 
   if (!deityId) {

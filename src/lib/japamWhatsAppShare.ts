@@ -1,4 +1,5 @@
 import { getDeity, type PlayableDeityId } from '../data/deities';
+import teLocale from '../../public/locales/te.json';
 
 /** Optional “nama” phrasing for share copy (e.g. Hanuman nama japa). */
 const NAMA_JAPA_LABEL: Partial<Record<PlayableDeityId, string>> = {
@@ -27,7 +28,7 @@ const NAMA_JAPA_LABEL: Partial<Record<PlayableDeityId, string>> = {
 };
 
 function appOrigin(): string {
-  return typeof window !== 'undefined' ? window.location?.origin || 'https://www.japam.digital' : 'https://www.japam.digital';
+  return typeof window !== 'undefined' ? window.location?.origin || 'https://japam.digital' : 'https://japam.digital';
 }
 
 function refCodeFromUid(userUid: string | null | undefined): string | null {
@@ -53,31 +54,76 @@ export function buildDeityLandingInviteUrl(deityId: PlayableDeityId, userUid?: s
   return `${appOrigin()}/?${params.toString()}`;
 }
 
-export function deityDailyJapaHook(deityId: PlayableDeityId): string {
+/** e.g. "Hanuman nama japa" or "Ganesh japa" */
+export function deityJapaPhrase(deityId: PlayableDeityId): string {
   const nama = NAMA_JAPA_LABEL[deityId];
-  if (nama) return `Do your daily ${nama} japa`;
-  const name = getDeity(deityId).name;
-  return `Do your daily ${name} japa`;
+  if (nama) return `${nama} japa`;
+  return `${getDeity(deityId).name} japa`;
+}
+
+/** Short label for the share picker grid. */
+export function deityDailyJapaHook(deityId: PlayableDeityId): string {
+  return `Daily ${deityJapaPhrase(deityId)}`;
 }
 
 export function deityIstaGameLabel(deityId: PlayableDeityId): string {
-  return `Ista Devata ${getDeity(deityId).name} Japa`;
+  return `${getDeity(deityId).name} Ista Devata japa`;
 }
 
 function waShareUrl(message: string): string {
   return `https://wa.me/?text=${encodeURIComponent(message)}`;
 }
 
+const DEITY_TE: Record<string, string> = teLocale.deities;
+
+function deityTeluguName(deityId: PlayableDeityId): string {
+  return DEITY_TE[deityId] ?? getDeity(deityId).name;
+}
+
+function buildTeluguShareBlock(deityId: PlayableDeityId | null, inviteUrl: string): string {
+  const deityLine = deityId
+    ? `ఇప్పుడు Japam.digital లో మీ ఇష్టదైవమైన ${deityTeluguName(deityId)} జపాన్ని ప్రతిరోజూ సులభంగా పూర్తి చేసుకోండి!`
+    : `ఇప్పుడు Japam.digital లో మీ ఇష్టదైవ జపాన్ని ప్రతిరోజూ సులభంగా పూర్తి చేసుకోండి!`;
+
+  return `జపమాలతో జపం చేయడం కుదరట్లేదా?
+
+${deityLine}
+
+ప్రత్యేకత: ఒక పక్క పవిత్రమైన మంత్రాన్ని వింటూనే, మరోపక్క డిజిటల్‌గా జపం పూర్తి చేయవచ్చు.
+
+ప్రయోజనం: రోజుకు కొన్ని నిమిషాలు కేటాయించండి — పుణ్యాన్ని పెంచుకోండి, మనశ్శాంతిని పొందండి.
+
+ఎలా ప్రారంభించాలి?
+కింది లింక్ క్లిక్ చేసి నేరుగా జపం ప్రారంభించవచ్చు (లాగిన్ అవసరం లేదు), లేదా మీ Google అకౌంట్‌తో సైన్-ఇన్ అయి మీ రోజువారీ ప్రగతిని ట్రాక్ చేసుకోవచ్చు.
+
+ఇప్పుడే ప్రారంభించండి: 👉 ${inviteUrl}`;
+}
+
+function buildEnglishShareBlock(deityId: PlayableDeityId | null, inviteUrl: string): string {
+  const energyLine = deityId
+    ? `Transform your daily spiritual routine with Japam.digital! Experience the divine energy of ${getDeity(deityId).name} every day.`
+    : `Transform your daily spiritual routine with Japam.digital! Experience the divine energy of your Ista Devata every day.`;
+
+  return `Finding it hard to take time for traditional Japa Mala?
+
+${energyLine}
+
+Interactive & Engaging: Listen to the powerful mantra while counting your Japa effortlessly with a tap.
+
+Daily Peace: Just a few minutes a day is all it takes to earn Punyam and bring absolute mindfulness to your busy life.
+
+Getting Started is Simple:
+Click the link to start instantly as a guest, or sign in with Google to securely track your daily spiritual journey.
+
+Start your Japa journey now: 👉 ${inviteUrl}`;
+}
+
+function buildBilingualShareMessage(deityId: PlayableDeityId | null, inviteUrl: string): string {
+  return `${buildTeluguShareBlock(deityId, inviteUrl)}\n\n${buildEnglishShareBlock(deityId, inviteUrl)}`;
+}
+
 function buildDeityShareMessage(deityId: PlayableDeityId, inviteUrl: string): string {
-  const hook = deityDailyJapaHook(deityId);
-  const gameLabel = deityIstaGameLabel(deityId);
-  return `🙏 ${hook} on Japam — match candies, hear mantras, and count your japas!
-
-▶️ ${gameLabel}: ${inviteUrl}
-
-Open the link · sign in with Google or try without signing in — both start on Japam.
-
-🕉️ Free to start · Join marathons · Grow your practice daily.`;
+  return buildBilingualShareMessage(deityId, inviteUrl);
 }
 
 /** WhatsApp share for a specific Ista Devata (menu deep link → game). */
@@ -89,31 +135,22 @@ export function buildDeityWhatsAppShareHref(
   return waShareUrl(buildDeityShareMessage(deityId, inviteUrl));
 }
 
-const GENERIC_FALLBACK_PHRASE = 'your favourite deity';
-
-function buildGenericShareMessage(referralLink: string, deityPhrase: string): string {
-  return `🙏 Try Japam — ${deityPhrase} and track your japas on a beautiful match-3 board!
-
-Play here: ${referralLink}
-
-🕉️ Join marathons and grow your spiritual practice daily.`;
+function buildGenericShareMessage(referralLink: string, deityId: PlayableDeityId | null): string {
+  return buildBilingualShareMessage(deityId, referralLink);
 }
 
-function lastPlayedDeityPhrase(): string {
+function lastPlayedDeityId(): PlayableDeityId | null {
   try {
     const raw = localStorage.getItem('japam-last-paused');
     const parsed = raw ? JSON.parse(raw) : null;
     const mode = typeof parsed?.mode === 'string' ? parsed.mode : '';
-    if (mode && mode !== 'general' && mode in NAMA_JAPA_LABEL) {
-      return deityDailyJapaHook(mode as PlayableDeityId).replace(/^Do your daily /i, '').replace(/ japa$/i, '');
-    }
     if (mode && mode !== 'general') {
-      return `${getDeity(mode as PlayableDeityId).name} japa`;
+      return mode as PlayableDeityId;
     }
   } catch {
     /* ignore */
   }
-  return GENERIC_FALLBACK_PHRASE;
+  return null;
 }
 
 export function openDeityWhatsAppShare(deityId: PlayableDeityId, userUid?: string | null): void {
@@ -136,13 +173,7 @@ export function buildJapamWhatsAppShareHref(
   const ref = refCodeFromUid(userUid);
   const baseUrl = appOrigin();
   const referralLink = ref ? `${baseUrl}/?ref=${encodeURIComponent(ref)}` : baseUrl;
+  const lastDeityId = lastPlayedDeityId();
 
-  let phrase = lastPlayedDeityPhrase();
-  if (phrase === GENERIC_FALLBACK_PHRASE) {
-    phrase = `chant ${GENERIC_FALLBACK_PHRASE}'s name`;
-  } else if (!phrase.includes('japa') && !phrase.includes('nama')) {
-    phrase = `${phrase} japa`;
-  }
-
-  return waShareUrl(buildGenericShareMessage(referralLink, phrase));
+  return waShareUrl(buildGenericShareMessage(referralLink, lastDeityId));
 }

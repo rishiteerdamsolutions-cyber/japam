@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { DEITIES, type PlayableDeityId } from '../../data/deities';
-import { deityDailyJapaHook } from '../../lib/japamWhatsAppShare';
+import { deityJapaPhrase } from '../../lib/japamWhatsAppShare';
 import { openDeityWhatsAppShare, openGenericJapamWhatsAppShare } from '../../lib/japamWhatsAppShare';
 import { useAuthStore } from '../../store/authStore';
 import { trackShareEvent } from '../../lib/firestore';
@@ -69,7 +69,7 @@ export function DeityWhatsAppSharePicker({ onClose }: Props) {
                 <div className="px-2 py-2 min-w-0">
                   <p className="text-white text-xs font-semibold truncate">{t(`deities.${deity.id}`)}</p>
                   <p className="text-amber-200/50 text-[9px] leading-tight line-clamp-2 mt-0.5">
-                    {deityDailyJapaHook(deity.id as PlayableDeityId).replace(/^Do your daily /i, '')}
+                    {deityJapaPhrase(deity.id as PlayableDeityId)}
                   </p>
                 </div>
               </motion.button>

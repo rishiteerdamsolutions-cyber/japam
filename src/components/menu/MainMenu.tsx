@@ -41,9 +41,11 @@ interface MainMenuProps {
   introHeroSlot?: ReactNode;
   /** Optional strip under the active-users row (test pages). */
   demoNotice?: ReactNode;
+  /** Open Iṣṭa grid (e.g. deity invite deep link). */
+  forceIstaRevealed?: boolean;
 }
 
-export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }: MainMenuProps) {
+export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice, forceIstaRevealed }: MainMenuProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user, loading, signInWithGoogle, signInPending } = useAuthStore();
@@ -58,6 +60,10 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
   const isDonor = useUnlockStore((s) => s.isDonor);
   const [istaDevataRevealed, setIstaDevataRevealed] = useState(false);
   const istaDevataScrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (forceIstaRevealed) setIstaDevataRevealed(true);
+  }, [forceIstaRevealed]);
 
   useEffect(() => {
     if (!istaDevataRevealed) return;
@@ -303,8 +309,11 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice }
             role="region"
             aria-label={t('menu.istaDevata')}
           >
-            <p className="text-center text-amber-200/90 text-xs sm:text-sm mb-2">
+            <p className="text-center text-amber-200/90 text-xs sm:text-sm mb-1">
               {t('menu.chooseIstaDevata')}
+            </p>
+            <p className="text-center text-amber-200/55 text-[10px] sm:text-xs mb-2 px-2 leading-snug">
+              {t('menu.shareDeityHint')}
             </p>
             <div id="ista-devata-grid" className="grid grid-cols-2 gap-3 w-full">
               {DEITIES.map((deity, i) => (

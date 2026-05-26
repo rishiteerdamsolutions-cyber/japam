@@ -41,6 +41,26 @@
       "Gathering your japa…"
     ]
   },
+  "sharePicker": {
+    "title": "Share Japam on WhatsApp",
+    "subtitle": "Pick the deity your friend worships — they get a personal invite link and message.",
+    "generalInvite": "Share general Japam link (no specific deity)"
+  },
+  "invite": {
+    "deityEyebrow": "You are invited",
+    "deityBody": "Play {{game}} on Japam — the match-3 japa board with mantra audio.",
+    "onPlatform": "Either choice opens Japam on this device — match candies, hear mantras, count japas.",
+    "chooseHow": "Choose how to join",
+    "optionSignIn": "Sign in with Google",
+    "optionSignInBadge": "Recommended",
+    "signInWaiting": "Opening Google sign-in…",
+    "signInWhy": "Your japas, levels, and leaderboard are saved to your account.",
+    "optionTry": "Try without signing in",
+    "optionTryWhy": "Play one session on the game board now. You can sign in later to save progress.",
+    "optionTryPlay": "Play now on Japam",
+    "orDivider": "or",
+    "browseMenu": "Look around the menu first"
+  },
   "menu": {
     "back": "← Back",
     "general": "General",
@@ -58,6 +78,7 @@
     "specials": "Specials",
     "istaDevata": "Ista Devata Japa",
     "chooseIstaDevata": "Choose your Iṣṭa Devatā",
+    "shareDeityHint": "To invite friends, tap the green WhatsApp button (bottom-right) and choose their Iṣṭa Devatā.",
     "istaDevataMalaaVideoAria": "Japa mālā animation — tap Ista Devata Japa below to choose a deity",
     "japaMarathons": "Japa Marathons",
     "mahaJapaYagnas": "Maha Japa Yagnas",

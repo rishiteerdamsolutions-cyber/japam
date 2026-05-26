@@ -1,15 +1,26 @@
-/** Full-screen deity art behind manual / auto japam counter sessions only. */
-export function JapamCounterDeityBackdrop({ imageUrl }: { imageUrl: string }) {
+type Props = {
+  imageUrl: string;
+};
+
+/**
+ * Same deity tiled behind manual / auto japam counter (4+ repeats).
+ * Fixed to the viewport so the grid does not move with the mala.
+ */
+export function JapamCounterDeityBackdrop({ imageUrl }: Props) {
   return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden>
-      <img
-        src={imageUrl}
-        alt=""
-        className="absolute inset-0 h-full w-full object-cover object-[center_20%] scale-105"
+    <div
+      className="fixed inset-0 z-0 pointer-events-none overflow-hidden isolate bg-[#0c0608]"
+      aria-hidden
+    >
+      <div
+        className="absolute inset-0 bg-repeat bg-[length:50%_50%] min-[420px]:bg-[length:33.33%_33.33%] sm:bg-[length:33.33%_33.33%]"
+        style={{
+          backgroundImage: `url(${imageUrl})`,
+          backgroundPosition: 'center',
+        }}
       />
-      <div className="absolute inset-0 bg-black/55" />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/78 via-black/52 to-black/88" />
-      <div className="absolute inset-0 bg-gloss-bubblegum/20 mix-blend-soft-light" />
+      <div className="absolute inset-0 bg-black/58" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/52 to-black/90" />
     </div>
   );
 }

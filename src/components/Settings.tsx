@@ -11,7 +11,7 @@ import { hasActivePaidAccess, getProfileRingFlags } from '../lib/membershipDispl
 import { isFirebaseConfigured } from '../lib/firebase';
 import { DonateThankYouBox } from './donation/DonateThankYouBox';
 import { AccessBadge } from './ui/AccessBadge';
-import { buildJapamWhatsAppShareHref } from '../lib/japamWhatsAppShare';
+import { useDeitySharePicker } from './share/DeitySharePickerContext';
 import { CTA } from '../lib/ctaCopy';
 import { PushableButton } from './ui/PushableButton';
 import {
@@ -177,6 +177,7 @@ interface SettingsProps {
 }
 
 export function Settings({ onBack }: SettingsProps) {
+  const { openDeitySharePicker } = useDeitySharePicker();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
@@ -934,15 +935,16 @@ export function Settings({ onBack }: SettingsProps) {
             </PushableButton>
             {waMenuOpen && (
               <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 py-1 rounded-xl bg-black/95 border border-amber-500/30 shadow-xl z-50 min-w-[200px] text-left">
-                <a
-                  href={buildJapamWhatsAppShareHref(user?.uid)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => setWaMenuOpen(false)}
-                  className="block px-4 py-2.5 text-sm text-amber-200 hover:bg-white/10"
+                <button
+                  type="button"
+                  onClick={() => {
+                    setWaMenuOpen(false);
+                    openDeitySharePicker();
+                  }}
+                  className="block w-full text-left px-4 py-2.5 text-sm text-amber-200 hover:bg-white/10"
                 >
-                  Share Japam on WhatsApp
-                </a>
+                  {t('sharePicker.title')}
+                </button>
                 <a
                   href={WHATSAPP_LINK}
                   target="_blank"

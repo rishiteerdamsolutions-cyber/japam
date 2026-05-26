@@ -80,7 +80,11 @@ export function GamePage() {
     searchParams.get('weeklyStreak') === '1' && !gameContextId && !occasionKind;
   /** Guest quick-play defaults to general, except Special 108 / weekly streak from URL (needs deity mode). */
   const parsedMode = parseGameMode(searchParams.get('mode'));
-  const mode = isGuest && !isSpecial108Url && !isWeeklyStreakUrl ? 'general' : parsedMode;
+  /** Guest without a deity in the URL plays general; invite links use `?mode=hanuman&guest=1`. */
+  const mode =
+    isGuest && !isSpecial108Url && !isWeeklyStreakUrl && parsedMode === 'general'
+      ? 'general'
+      : parsedMode;
   const isSpecial108 = isSpecial108Url && parsedMode !== 'general';
   const isWeeklyStreak = isWeeklyStreakUrl && parsedMode !== 'general';
 

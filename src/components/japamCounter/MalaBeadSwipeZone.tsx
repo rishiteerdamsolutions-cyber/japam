@@ -102,7 +102,7 @@ export function MalaBeadSwipeZone({
   onStrokeDebug,
 }: Props) {
   const zoneRef = useRef<HTMLDivElement>(null);
-  const spinLayerRef = useRef<HTMLDivElement>(null);
+  const spinPaintFrameRef = useRef<number | null>(null);
   const onBeadRef = useRef(onBead);
   const onBeadTouchStartRef = useRef(onBeadTouchStart);
   const onBeadStrokeCancelRef = useRef(onBeadStrokeCancel);
@@ -126,20 +126,16 @@ export function MalaBeadSwipeZone({
   const beadCountedRef = useRef(false);
   const touchActiveRef = useRef(false);
   const activePointerRef = useRef<number | null>(null);
-  const applyLiveSpin = useCallback((deg: number) => {
-    const el = spinLayerRef.current;
-    if (!el) return;
-    el.style.transform = `rotateX(${deg}deg)`;
-  }, []);
-
-  const clearLiveSpin = useCallback(() => {
-    const el = spinLayerRef.current;
-    if (!el) return;
-    el.style.transform = '';
-  }, []);
-
-  const syncCanvasSpin = useCallback(() => {
+  const paintCoreBeadsNow = useCallback(() => {
     paintAllMalaBeadGlobes(spinXRef.current);
+  }, []);
+
+  const scheduleCorePaint = useCallback(() => {
+    if (spinPaintFrameRef.current != null) return;
+    spinPaintFrameRef.current = requestAnimationFrame(() => {
+      spinPaintFrameRef.current = null;
+      paintAllMalaBeadGlobes(spinXRef.current);
+    });
   }, []);
 
   const commitBead = useCallback(
@@ -154,19 +150,15 @@ export function MalaBeadSwipeZone({
       }
       beadCountedRef.current = true;
       spinXRef.current -= BEAD_SWIPE_PX * BEAD_ROLL_SENS;
-      applyLiveSpin(spinXRef.current);
+      paintCoreBeadsNow();
       setSpinX(spinXRef.current);
       onBeadRef.current();
-      requestAnimationFrame(() => {
-        syncCanvasSpin();
-        clearLiveSpin();
-      });
       onStrokeDebugRef.current?.({
         delta: Math.round(Math.max(0, lastYRef.current - startYRef.current)),
         source: `bead:${source}`,
       });
     },
-    [interactionDisabled, sessionTarget, sessionCountRef, sessionCount, applyLiveSpin, clearLiveSpin, syncCanvasSpin],
+    [interactionDisabled, sessionTarget, sessionCountRef, sessionCount, paintCoreBeadsNow],
   );
 
   const applyDrag = useCallback(
@@ -186,7 +178,7 @@ export function MalaBeadSwipeZone({
       if (Math.abs(dx) < 0.05 && Math.abs(dy) < 0.05 && !endStroke) return;
 
       spinXRef.current -= dy * BEAD_ROLL_SENS;
-      applyLiveSpin(spinXRef.current);
+      scheduleCorePaint();
 
       if (fastJapa) {
         const p = Math.min(1, downPx / BEAD_SWIPE_PX);
@@ -217,7 +209,7 @@ export function MalaBeadSwipeZone({
         commitBead(`${source}-end`);
       }
     },
-    [commitBead, fastJapa, applyLiveSpin],
+    [commitBead, fastJapa, scheduleCorePaint],
   );
 
   const resetStroke = useCallback(() => {
@@ -225,9 +217,8 @@ export function MalaBeadSwipeZone({
     const wasOnBead = touchActiveRef.current;
 
     setActive(false);
-    clearLiveSpin();
     setSpinX(spinXRef.current);
-    requestAnimationFrame(syncCanvasSpin);
+    paintCoreBeadsNow();
     beadCountedRef.current = false;
     touchActiveRef.current = false;
     activePointerRef.current = null;
@@ -237,7 +228,7 @@ export function MalaBeadSwipeZone({
       cancelMalaBeadStrokeHaptic();
     }
     resetMalaBeadStrokeHaptic();
-  }, [clearLiveSpin, syncCanvasSpin]);
+  }, [paintCoreBeadsNow]);
 
   const beginStroke = useCallback(
     (clientX: number, clientY: number) => {
@@ -255,7 +246,6 @@ export function MalaBeadSwipeZone({
       lastYRef.current = clientY;
       beadCountedRef.current = false;
       setActive(onBeadPad);
-      if (onBeadPad) applyLiveSpin(spinXRef.current);
 
       if (onBeadPad && onBeadTouchStartRef.current && readSessionCount() < sessionTarget) {
         onBeadTouchStartRef.current();
@@ -266,8 +256,16 @@ export function MalaBeadSwipeZone({
         source: onBeadPad ? 'bead·armed' : 'outside-bead',
       });
     },
-    [interactionDisabled, sessionTarget, sessionCountRef, sessionCount, applyLiveSpin],
+    [interactionDisabled, sessionTarget, sessionCountRef, sessionCount],
   );
+
+  useEffect(() => {
+    return () => {
+      if (spinPaintFrameRef.current != null) {
+        cancelAnimationFrame(spinPaintFrameRef.current);
+      }
+    };
+  }, []);
 
   const strokeHandlersRef = useRef({ beginStroke, applyDrag, resetStroke });
   strokeHandlersRef.current = { beginStroke, applyDrag, resetStroke };
@@ -279,8 +277,8 @@ export function MalaBeadSwipeZone({
     const rollDelta = BEAD_SWIPE_PX * BEAD_ROLL_SENS * 2.2;
     spinXRef.current += rollDelta;
     setSpinX(spinXRef.current);
-    syncCanvasSpin();
-  }, [autoSpinOnCount, syncCanvasSpin]);
+    paintCoreBeadsNow();
+  }, [autoSpinOnCount, paintCoreBeadsNow]);
 
   useEffect(() => {
     const el = zoneRef.current;
@@ -369,14 +367,10 @@ export function MalaBeadSwipeZone({
         height: ZONE_H,
       }}
     >
-      <div
-        className="relative shrink-0"
-        style={{ width: ZONE_W, height: CORE_H, perspective: '900px' }}
-      >
+      <div className="relative z-[1] shrink-0" style={{ width: ZONE_W, height: CORE_H }}>
         <MalaBeadStringVisual
           spinX={spinX}
           columnWidthPx={ZONE_W}
-          coreSpinLayerRef={spinLayerRef}
           mainBead={
             <div
               ref={zoneRef}
@@ -398,7 +392,7 @@ export function MalaBeadSwipeZone({
                     ? 'cursor-default'
                     : 'opacity-50 cursor-not-allowed'
                   : 'cursor-grab active:cursor-grabbing'
-              } ${active && !interactionDisabled ? 'scale-[1.02]' : ''}`}
+              }`}
               style={{
                 touchAction: 'none',
                 WebkitTouchCallout: 'none',

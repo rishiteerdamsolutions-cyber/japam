@@ -15,6 +15,7 @@ import { BlockedOverlay } from './components/BlockedOverlay'
 import { PWAUpdatePrompt } from './components/PWAUpdatePrompt'
 import { OfflineBanner } from './components/OfflineBanner'
 import { RouterChrome } from './components/RouterChrome'
+import { DeitySharePickerProvider } from './components/share/DeitySharePickerContext'
 import { SeoLandingParams } from './components/SeoLandingParams'
 import { GoogleAnalytics } from './components/GoogleAnalytics'
 import { ProductUsageTracker } from './components/ProductUsageTracker'
@@ -100,6 +101,7 @@ createRoot(document.getElementById('root')!).render(
     <ErrorBoundary>
     <BrowserRouter>
       <AuthProvider>
+      <DeitySharePickerProvider>
       <AuthSessionOverlay />
       <PaymentReturnHandler />
       <RefCapture />
@@ -215,6 +217,7 @@ createRoot(document.getElementById('root')!).render(
       </Routes>
       </Suspense>
       <RouterChrome />
+      </DeitySharePickerProvider>
       </AuthProvider>
     </BrowserRouter>
     </ErrorBoundary>

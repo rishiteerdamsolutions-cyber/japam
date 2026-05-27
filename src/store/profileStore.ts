@@ -43,17 +43,6 @@ function writeCachedDisplayName(uid: string, name: string): void {
   }
 }
 
-function clearCachedDisplayName(uid: string): void {
-  try {
-    const raw = localStorage.getItem(PROFILE_NAME_CACHE_KEY);
-    if (!raw) return;
-    const parsed = JSON.parse(raw) as { uid?: string };
-    if (parsed.uid === uid) localStorage.removeItem(PROFILE_NAME_CACHE_KEY);
-  } catch {
-    /* ignore */
-  }
-}
-
 export const useProfileStore = create<ProfileState>((setState, get) => ({
   displayName: null,
   hasSavedDisplayName: false,

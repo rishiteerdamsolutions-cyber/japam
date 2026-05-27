@@ -15,7 +15,7 @@ type HintEntry = { id: DeityId; anchor: { side: VerticalSide; row: number; col: 
  * Anchor labels on the top or bottom edge only (mobile-first).
  * Prefer a column where the deity appears on row 0 or last row; otherwise pick top vs bottom from the gem's row.
  */
-function hintAnchor(board: Board, id: DeityId, rows: number, cols: number): { side: VerticalSide; row: number; col: number } {
+function findEdgeAnchor(board: Board, id: DeityId, rows: number, cols: number): HintEntry['anchor'] | null {
   for (let c = 0; c < cols; c++) {
     if (board[0]?.[c] === id) {
       return { side: 'top', row: 0, col: c };
@@ -26,20 +26,7 @@ function hintAnchor(board: Board, id: DeityId, rows: number, cols: number): { si
       return { side: 'bottom', row: rows - 1, col: c };
     }
   }
-  let fr = 0;
-  let fc = 0;
-  outer: for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      if (board[r]?.[c] === id) {
-        fr = r;
-        fc = c;
-        break outer;
-      }
-    }
-  }
-  return fr < rows / 2
-    ? { side: 'top', row: 0, col: fc }
-    : { side: 'bottom', row: rows - 1, col: fc };
+  return null;
 }
 
 export function BoardDeityHints() {
@@ -63,7 +50,12 @@ export function BoardDeityHints() {
         }
       }
     }
-    const raw: HintEntry[] = ids.map((id) => ({ id, anchor: hintAnchor(board, id, rows, cols) }));
+    const raw: HintEntry[] = ids
+      .map((id) => {
+        const anchor = findEdgeAnchor(board, id, rows, cols);
+        return anchor ? { id, anchor } : null;
+      })
+      .filter((e): e is HintEntry => e != null);
     return compactHintEntries(raw, cols);
   }, [board]);
 

@@ -1,8 +1,14 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { DEITIES, type PlayableDeityId } from '../../data/deities';
-import { deityJapaPhrase } from '../../lib/japamWhatsAppShare';
-import { openDeityWhatsAppShare, openGenericJapamWhatsAppShare } from '../../lib/japamWhatsAppShare';
+import {
+  buildDeityShareMessageText,
+  buildGenericShareMessageText,
+  deityJapaPhrase,
+  openDeityWhatsAppShare,
+  openGenericJapamWhatsAppShare,
+} from '../../lib/japamWhatsAppShare';
 import { useAuthStore } from '../../store/authStore';
 import { trackShareEvent } from '../../lib/firestore';
 
@@ -10,14 +16,65 @@ type Props = {
   onClose: () => void;
 };
 
+async function copyShareText(text: string): Promise<boolean> {
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    return ok;
+  } catch {
+    return false;
+  }
+}
+
+function WhatsAppIcon({ className = 'w-3.5 h-3.5' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden>
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+    </svg>
+  );
+}
+
+function CopyIcon({ className = 'w-3.5 h-3.5' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+      <rect x="9" y="9" width="13" height="13" rx="2" />
+      <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+    </svg>
+  );
+}
+
 export function DeityWhatsAppSharePicker({ onClose }: Props) {
   const { t } = useTranslation();
   const user = useAuthStore((s) => s.user);
+  const [copyNotice, setCopyNotice] = useState<string | null>(null);
 
-  const pickDeity = (id: PlayableDeityId) => {
+  const shareDeity = (id: PlayableDeityId) => {
     trackShareEvent('share_click').catch(() => {});
     openDeityWhatsAppShare(id, user?.uid);
     onClose();
+  };
+
+  const copyDeity = async (id: PlayableDeityId) => {
+    const ok = await copyShareText(buildDeityShareMessageText(id, user?.uid));
+    setCopyNotice(ok ? t('sharePicker.copied') : t('sharePicker.copyFailed'));
+    if (ok) window.setTimeout(() => setCopyNotice(null), 2200);
+  };
+
+  const copyGeneric = async () => {
+    const ok = await copyShareText(buildGenericShareMessageText(user?.uid));
+    setCopyNotice(ok ? t('sharePicker.copied') : t('sharePicker.copyFailed'));
+    if (ok) window.setTimeout(() => setCopyNotice(null), 2200);
   };
 
   return (
@@ -40,31 +97,44 @@ export function DeityWhatsAppSharePicker({ onClose }: Props) {
             {t('sharePicker.title')}
           </h2>
           <p className="text-amber-200/65 text-[11px] mt-1 leading-snug px-2">{t('sharePicker.subtitle')}</p>
+          {copyNotice ? (
+            <p className="text-emerald-200/90 text-[11px] mt-1" role="status">
+              {copyNotice}
+            </p>
+          ) : null}
         </div>
 
         <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-3 py-3">
           <div className="grid grid-cols-2 min-[400px]:grid-cols-3 gap-2">
             {DEITIES.map((deity, i) => (
-              <motion.button
+              <motion.div
                 key={deity.id}
-                type="button"
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: Math.min(i * 0.02, 0.4) }}
-                onClick={() => pickDeity(deity.id as PlayableDeityId)}
-                className="flex flex-col items-stretch rounded-xl overflow-hidden border border-white/15 bg-black/35 hover:border-[#25D366]/60 hover:bg-black/50 text-left transition-colors"
+                className="flex flex-col items-stretch rounded-xl overflow-hidden border border-white/15 bg-black/35"
               >
                 <div className="aspect-square relative bg-black/30">
-                  <img src={deity.image} alt="" className="w-full h-full object-cover" />
-                  <span
-                    className="absolute bottom-1 right-1 flex h-7 w-7 items-center justify-center rounded-full border border-white/20 shadow-md"
-                    style={{ backgroundColor: '#25D366' }}
-                    aria-hidden
-                  >
-                    <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 text-white" fill="currentColor">
-                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-                    </svg>
-                  </span>
+                  <img src={deity.image} alt="" className="w-full h-full object-cover pointer-events-none select-none" draggable={false} />
+                  <div className="absolute bottom-1 left-1 right-1 flex items-center justify-between gap-1">
+                    <button
+                      type="button"
+                      onClick={() => shareDeity(deity.id as PlayableDeityId)}
+                      className="flex h-7 w-7 items-center justify-center rounded-full border border-white/20 shadow-md text-white"
+                      style={{ backgroundColor: '#25D366' }}
+                      aria-label={t('sharePicker.shareWhatsApp', { deity: t(`deities.${deity.id}`) })}
+                    >
+                      <WhatsAppIcon />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => void copyDeity(deity.id as PlayableDeityId)}
+                      className="flex h-7 w-7 items-center justify-center rounded-full border border-white/20 bg-amber-500/90 text-white shadow-md"
+                      aria-label={t('sharePicker.copyMessage', { deity: t(`deities.${deity.id}`) })}
+                    >
+                      <CopyIcon />
+                    </button>
+                  </div>
                 </div>
                 <div className="px-2 py-2 min-w-0">
                   <p className="text-white text-xs font-semibold truncate">{t(`deities.${deity.id}`)}</p>
@@ -72,23 +142,34 @@ export function DeityWhatsAppSharePicker({ onClose }: Props) {
                     {deityJapaPhrase(deity.id as PlayableDeityId)}
                   </p>
                 </div>
-              </motion.button>
+              </motion.div>
             ))}
           </div>
         </div>
 
         <div className="shrink-0 px-4 py-3 border-t border-white/10 flex flex-col gap-2">
-          <button
-            type="button"
-            onClick={() => {
-              trackShareEvent('share_click').catch(() => {});
-              openGenericJapamWhatsAppShare(user?.uid);
-              onClose();
-            }}
-            className="w-full py-2 text-amber-300/80 text-xs hover:underline"
-          >
-            {t('sharePicker.generalInvite')}
-          </button>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                trackShareEvent('share_click').catch(() => {});
+                openGenericJapamWhatsAppShare(user?.uid);
+                onClose();
+              }}
+              className="flex-1 py-2 rounded-lg bg-[#25D366]/90 text-white text-xs font-semibold inline-flex items-center justify-center gap-1.5"
+            >
+              <WhatsAppIcon className="w-3.5 h-3.5" />
+              {t('sharePicker.generalWhatsApp')}
+            </button>
+            <button
+              type="button"
+              onClick={() => void copyGeneric()}
+              className="flex-1 py-2 rounded-lg bg-amber-500/90 text-white text-xs font-semibold inline-flex items-center justify-center gap-1.5"
+            >
+              <CopyIcon className="w-3.5 h-3.5" />
+              {t('sharePicker.generalCopy')}
+            </button>
+          </div>
           <button
             type="button"
             onClick={onClose}

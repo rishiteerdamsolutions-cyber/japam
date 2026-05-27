@@ -22,7 +22,7 @@ export function ProfileNamePrompt() {
       return;
     }
     if (!profileLoaded) return;
-    if (hasSavedDisplayName) {
+    if (hasSavedDisplayName || Boolean(displayName?.trim())) {
       setOpen(false);
       return;
     }

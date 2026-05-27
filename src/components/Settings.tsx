@@ -369,7 +369,9 @@ export function Settings({ onBack }: SettingsProps) {
     setDraftReminderTime(reminder.time || '07:00');
     setReminderSaveMessage(null);
   }, [reminderLoaded, reminder.enabled, reminder.time]);
-  useEffect(() => { setLocalName(displayName ?? ''); }, [displayName]);
+  useEffect(() => {
+    if (displayName) setLocalName(displayName);
+  }, [displayName]);
   useEffect(() => {
     if (!user?.uid) { setAppreciations(null); return; }
     let cancelled = false;

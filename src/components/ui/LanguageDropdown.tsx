@@ -3,9 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { LANGUAGES, setLanguage } from '../../i18n';
 interface LanguageDropdownProps {
   className?: string;
+  /** Smaller control for landing header. */
+  compact?: boolean;
 }
 
-export function LanguageDropdown({ className = '' }: LanguageDropdownProps) {
+export function LanguageDropdown({ className = '', compact = false }: LanguageDropdownProps) {
   const { t, i18n } = useTranslation();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -25,13 +27,17 @@ export function LanguageDropdown({ className = '' }: LanguageDropdownProps) {
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-1.5 py-2 px-3 rounded-lg bg-white/10 hover:bg-white/15 text-amber-200 text-sm font-medium min-h-[44px] touch-manipulation"
+        className={
+          compact
+            ? 'flex items-center gap-0.5 py-1 px-2 rounded-md bg-white/10 hover:bg-white/15 text-amber-200 text-[10px] font-medium touch-manipulation'
+            : 'flex items-center gap-1.5 py-2 px-3 rounded-lg bg-white/10 hover:bg-white/15 text-amber-200 text-sm font-medium min-h-[44px] touch-manipulation'
+        }
         aria-expanded={open}
         aria-haspopup="listbox"
         aria-label="Select language"
       >
-        <span className="truncate max-w-[90px] sm:max-w-[120px] min-w-0">{current.name}</span>
-        <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+        <span className={`truncate min-w-0 ${compact ? 'max-w-[4.5rem]' : 'max-w-[90px] sm:max-w-[120px]'}`}>{current.name}</span>
+        <svg className={`shrink-0 ${compact ? 'w-3 h-3' : 'w-4 h-4'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>

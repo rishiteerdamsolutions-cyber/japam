@@ -90,7 +90,7 @@ export function Landing({
                 <img src="/images/logo.png" alt="Japam" width={56} height={56} className="h-14 w-14 object-contain drop-shadow-[0_2px_10px_rgba(0,0,0,0.28)]" draggable={false} />
               </motion.div>
               <div className="shrink-0 pt-0.5">
-                <LanguageDropdown />
+                <LanguageDropdown compact />
               </div>
             </div>
             <div className="mt-1 w-full min-w-0 text-center">
@@ -98,7 +98,7 @@ export function Landing({
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.45, delay: 0.05 }}
-                className="text-[clamp(1.5rem,6.5vw,2.35rem)] font-bold text-white leading-[1.05] tracking-tight drop-shadow-[0_0_18px_rgba(251,191,36,0.45)] break-words"
+                className="text-[clamp(3rem,13vw,4.7rem)] font-bold text-white leading-[1.02] tracking-tight drop-shadow-[0_0_18px_rgba(251,191,36,0.45)] break-words"
                 style={{ fontFamily: 'serif' }}
               >
                 {t('landing.title')}
@@ -107,7 +107,7 @@ export function Landing({
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.12, duration: 0.35 }}
-                className="text-amber-200 text-[clamp(0.95rem,3.8vw,1.2rem)] font-semibold leading-tight break-words -mt-0.5"
+                className="text-amber-200 text-[clamp(1.9rem,7.6vw,2.4rem)] font-semibold leading-tight break-words -mt-0.5"
               >
                 {t('landing.tagline')}
               </motion.p>

@@ -44,7 +44,13 @@
   "sharePicker": {
     "title": "Share Japam on WhatsApp",
     "subtitle": "Pick the deity your friend worships — they get a personal invite link and message.",
-    "generalInvite": "Share general Japam link (no specific deity)"
+    "generalInvite": "Share general Japam link (no specific deity)",
+    "generalWhatsApp": "WhatsApp",
+    "generalCopy": "Copy message",
+    "copied": "Message copied — paste anywhere you like.",
+    "copyFailed": "Could not copy. Please try again.",
+    "shareWhatsApp": "Share {{deity}} on WhatsApp",
+    "copyMessage": "Copy {{deity}} invite message"
   },
   "invite": {
     "deityTitle": "You are invited to {{deity}} japam",

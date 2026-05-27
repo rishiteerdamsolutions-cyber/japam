@@ -1241,27 +1241,23 @@ export function GameScreen({
             onDownloadBirthdayGreetingCard={handleDownloadInviteIntroJapaCard}
           />
         ) : isGuest ? (
-          <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center z-20 p-4">
-            <div className="bg-[#C2185B]/90 rounded-2xl p-4 sm:p-6 max-w-sm w-full text-center min-w-0">
-              <h2 className="text-xl sm:text-2xl font-bold text-amber-400 mb-3 break-words">Jai!</h2>
-              <p className="text-amber-200/90 mb-6 text-sm sm:text-base break-words">
+          <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center z-20 p-4 overflow-y-auto">
+            <div className="relative bg-[#C2185B]/92 rounded-2xl p-5 sm:p-7 max-w-sm w-full text-center min-w-0 border border-amber-500/25 shadow-[0_24px_64px_rgba(0,0,0,0.45)] max-h-[min(92dvh,520px)] overflow-y-auto">
+              <h2 className="text-xl sm:text-2xl font-bold text-amber-300 mb-2 break-words">{t('game.jai')}</h2>
+              <p className="text-amber-100/85 mb-5 text-sm sm:text-base break-words leading-relaxed">
                 {t('shared.do_your_ista_devata_japa_sign_in_with_google')}
               </p>
-              <div className="mb-4">
-                <GoogleSignIn />
+              <div className="flex flex-col gap-2.5 items-stretch">
+                <div className="flex justify-center min-h-[44px]">
+                  <GoogleSignIn />
+                </div>
+                <PushableButton type="button" fullWidth onClick={reset} frontClassName={pushableFullWidthFrontClass}>
+                  {CTA.game.continueAsGuest}
+                </PushableButton>
+                <PushableButton type="button" fullWidth onClick={exitGame} frontClassName={pushableFullWidthFrontClass}>
+                  {CTA.game.menu}
+                </PushableButton>
               </div>
-              <PushableButton type="button" fullWidth onClick={reset} frontClassName={pushableFullWidthFrontClass}>
-                {CTA.game.continueAsGuest}
-              </PushableButton>
-              <PushableButton
-                type="button"
-                fullWidth
-                onClick={exitGame}
-                className="mt-2"
-                frontClassName={pushableFullWidthFrontClass}
-              >
-                {CTA.game.menu}
-              </PushableButton>
             </div>
           </div>
         ) : !occasionKind ? (

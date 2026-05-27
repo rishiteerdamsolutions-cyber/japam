@@ -153,6 +153,18 @@ function lastPlayedDeityId(): PlayableDeityId | null {
   return null;
 }
 
+/** Plain share text for copy-to-clipboard (no wa.me wrapper). */
+export function buildDeityShareMessageText(deityId: PlayableDeityId, userUid?: string | null): string {
+  return buildDeityShareMessage(deityId, buildDeityInviteUrl(deityId, userUid));
+}
+
+export function buildGenericShareMessageText(userUid?: string | null): string {
+  const ref = refCodeFromUid(userUid);
+  const baseUrl = appOrigin();
+  const referralLink = ref ? `${baseUrl}/?ref=${encodeURIComponent(ref)}` : baseUrl;
+  return buildGenericShareMessage(referralLink, lastPlayedDeityId());
+}
+
 export function openDeityWhatsAppShare(deityId: PlayableDeityId, userUid?: string | null): void {
   if (typeof window === 'undefined') return;
   window.open(buildDeityWhatsAppShareHref(deityId, userUid), '_blank', 'noopener,noreferrer');

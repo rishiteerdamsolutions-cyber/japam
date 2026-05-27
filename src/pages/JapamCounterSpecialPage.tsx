@@ -60,6 +60,8 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
   const [autoRunning, setAutoRunning] = useState(false);
   const [saveNotice, setSaveNotice] = useState<string | null>(null);
   const [commitRequest, setCommitRequest] = useState<{ id: number; delta: number } | null>(null);
+  /** After auto save, UI count resets to 0 but rank card / session line should still show what was just committed. */
+  const [lastCommittedAutoSession, setLastCommittedAutoSession] = useState(0);
   const [showAutoMala, setShowAutoMala] = useState(() => (mode === 'auto' ? readAutoMalaPref() : false));
   const autoRunningRef = useRef(false);
   const countRef = useRef(MANUAL_JAPAM_COUNTER_INITIAL_COUNT);
@@ -112,6 +114,7 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
       setAutoRunning(false);
       setSaveNotice(null);
       setCommitRequest(null);
+      setLastCommittedAutoSession(0);
       autoRunningRef.current = false;
       prevManualSyncCountRef.current = MANUAL_JAPAM_COUNTER_INITIAL_COUNT;
       special108LoggedRef.current = false;
@@ -219,6 +222,7 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
   const saveAutoSession = useCallback(
     (delta: number) => {
       if (delta <= 0) return;
+      setLastCommittedAutoSession(delta);
       setCommitRequest({ id: Date.now(), delta });
       countRef.current = 0;
       setCount(0);
@@ -230,6 +234,7 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
   const onStartAuto = useCallback(() => {
     primeAudio();
     setSaveNotice(null);
+    setLastCommittedAutoSession(0);
     countRef.current = 0;
     setCount(0);
     autoRunningRef.current = true;
@@ -259,7 +264,11 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
     setCount(0);
     special108LoggedRef.current = false;
     setSaveNotice(null);
+    setLastCommittedAutoSession(0);
   }, [autoRunning, stopAutoPlayback]);
+
+  const autoSessionCountForDisplay =
+    count > 0 ? count : lastCommittedAutoSession;
 
   if (!deityId) {
     return (
@@ -543,7 +552,7 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
           mode="auto"
           deityId={deity.id}
           deityLabel={t(`deities.${deity.id}`)}
-          sessionCount={count}
+          sessionCount={autoSessionCountForDisplay}
           syncMode="commit"
           commitRequest={commitRequest}
           variant="full"

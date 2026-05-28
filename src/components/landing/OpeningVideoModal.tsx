@@ -43,7 +43,7 @@ export function OpeningVideoModal({ onClose, videoSrc }: OpeningVideoModalProps)
   }, []);
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center p-4 bg-gloss-bubblegum">
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center p-4 bg-black/80">
       <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px]" aria-hidden />
       <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-full min-w-0 px-4 sm:px-6">
         <motion.div

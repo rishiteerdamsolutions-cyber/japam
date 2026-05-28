@@ -87,7 +87,7 @@ export function AuthSessionOverlay() {
       role="status"
       aria-live="polite"
     >
-      <div className="absolute inset-0 bg-gloss-bubblegum opacity-40 pointer-events-none" aria-hidden />
+      <div className="absolute inset-0 bg-black/50 pointer-events-none" aria-hidden />
       <div className="relative z-10 max-w-sm flex flex-col items-center gap-3">
         {phase === 'checking' ? (
           <>

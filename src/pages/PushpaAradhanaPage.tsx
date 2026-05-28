@@ -401,7 +401,6 @@ export function PushpaAradhanaPage() {
     return (
       <>
       <div className="relative min-h-[100dvh] flex flex-col items-center px-3 pt-3 pb-[max(6rem,env(safe-area-inset-bottom))] sm:p-4 sm:pb-28 overflow-y-auto overflow-x-hidden">
-        <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
         <div className="relative z-10 w-full max-w-[min(100%,28rem)] flex flex-col items-center">
           <NaturalBackButton
             fallback="/specials"
@@ -485,7 +484,6 @@ export function PushpaAradhanaPage() {
   return (
     <>
     <div className="relative min-h-[100dvh] flex flex-col px-[clamp(0.35rem,2vw,0.75rem)] pt-1 sm:pt-2 pb-[calc(6.75rem+env(safe-area-inset-bottom))] sm:pb-[calc(7.25rem+env(safe-area-inset-bottom))] overflow-hidden touch-pan-y">
-      <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10 flex flex-col flex-1 min-h-0 w-full max-w-[min(100%,40rem)] mx-auto">
         <div className="flex items-center justify-between gap-2 shrink-0 mb-0.5 sm:mb-1 px-0.5">
           <button

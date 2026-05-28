@@ -909,7 +909,6 @@ export function GameScreen({
       className="fixed inset-0 flex flex-col items-center overflow-hidden touch-none"
       style={{ overscrollBehavior: 'none' }}
     >
-      <div className="absolute inset-0 bg-gloss-bubblegum pointer-events-none" aria-hidden />
       <div className="relative z-10 flex flex-col items-center w-full flex-1 min-h-0 touch-manipulation" style={{
         paddingTop: 'calc(1rem + env(safe-area-inset-top, 0px))',
         paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom, 0px))',

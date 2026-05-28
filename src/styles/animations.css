@@ -410,6 +410,7 @@
 
 /* Bubblegum Pink – #D81B60 base, shining glossy 3D. Used for video modal, apavarga, menu, game. */
 /* Do NOT add position:relative here – it overrides fixed/absolute on modal and breaks full-screen cover */
+/* Reserved for optional screens — default app fill is GlobalJapamBackdrop mosaic. */
 .bg-gloss-bubblegum {
   background:
     radial-gradient(ellipse 120% 80% at 50% 0%, rgba(255,120,160,0.5) 0%, transparent 50%),

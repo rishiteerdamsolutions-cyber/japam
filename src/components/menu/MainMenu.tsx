@@ -95,7 +95,6 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice, 
 
   return (
     <div className="viewport-shell px-4 pt-3 pb-[max(0.25rem,env(safe-area-inset-bottom))]">
-      <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="viewport-shell__column max-w-lg">
         {/* 1 — Top: brand, heart, profile */}
         <div className="w-full shrink-0 flex justify-between items-center gap-2 min-h-[44px]">

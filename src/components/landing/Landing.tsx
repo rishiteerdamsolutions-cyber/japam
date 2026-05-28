@@ -77,7 +77,6 @@ export function Landing({
       </AnimatePresence>
 
       <div className="viewport-shell px-3 sm:px-4 pb-[max(0.25rem,env(safe-area-inset-bottom))]">
-        <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
         <div className="viewport-shell__column max-w-xl gap-[clamp(0.25rem,0.9vh,0.65rem)]">
           <header className="relative shrink-0 pt-[max(0.6rem,env(safe-area-inset-top,0px))]">
             <div className="flex items-center justify-between gap-2">

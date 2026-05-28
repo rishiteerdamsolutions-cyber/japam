@@ -40,7 +40,6 @@ export function WorldMap({ onSelectLevel }: WorldMapProps) {
 
   return (
     <div className="relative min-h-screen p-4 pb-[calc(5rem+env(safe-area-inset-bottom))] max-w-lg mx-auto overflow-hidden">
-      <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10">
       <MenuMatchChantHeader />
       <NaturalBackButton fallback="/menu" className="self-start text-amber-300/90 text-sm mb-2 hover:underline py-1" />

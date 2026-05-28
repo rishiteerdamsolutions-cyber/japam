@@ -7,7 +7,6 @@ interface SplashProps {
 export function Splash({ onComplete }: SplashProps) {
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center">
-      <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <motion.div
         initial={{ opacity: 1 }}
         animate={{ opacity: 1 }}

@@ -14,7 +14,6 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
   if (loading) {
     return (
       <div className="relative min-h-screen flex flex-col items-center justify-center gap-3 overflow-hidden">
-        <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
         <div className="relative z-10 flex flex-col items-center gap-3">
           <div
             className="w-10 h-10 border-2 border-amber-500 border-t-transparent rounded-full animate-spin"

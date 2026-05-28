@@ -96,7 +96,6 @@ export function Japa108SpecialPage() {
   if (!deityId) {
     return (
       <div className="relative min-h-[100dvh] flex flex-col items-center px-3 pt-3 pb-[max(6rem,env(safe-area-inset-bottom))] sm:p-4 sm:pb-28 overflow-y-auto overflow-x-hidden">
-        <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
         <div className="relative z-10 w-full max-w-[min(100%,28rem)] flex flex-col items-center">
           <MenuMatchChantHeader />
           <NaturalBackButton
@@ -167,7 +166,6 @@ export function Japa108SpecialPage() {
 
   return (
     <div className="relative min-h-[100dvh] flex flex-col items-center px-3 pt-3 pb-[max(6rem,env(safe-area-inset-bottom))] overflow-y-auto">
-      <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10 w-full max-w-md flex flex-col items-center flex-1">
         <MenuMatchChantHeader />
         <button

@@ -15,6 +15,7 @@ import { BlockedOverlay } from './components/BlockedOverlay'
 import { PWAUpdatePrompt } from './components/PWAUpdatePrompt'
 import { OfflineBanner } from './components/OfflineBanner'
 import { RouterChrome } from './components/RouterChrome'
+import { GlobalJapamBackdrop } from './components/layout/GlobalJapamBackdrop'
 import { DeitySharePickerProvider } from './components/share/DeitySharePickerContext'
 import { SeoLandingParams } from './components/SeoLandingParams'
 import { GoogleAnalytics } from './components/GoogleAnalytics'
@@ -88,7 +89,6 @@ const AnniversaryJoinPage = lazy(() =>
 function PageFallback() {
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center gap-3">
-      <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10 flex flex-col items-center gap-3">
       <div className="w-10 h-10 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" aria-hidden />
       <p className="text-amber-400 text-sm">Loading…</p>
@@ -101,6 +101,7 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ErrorBoundary>
     <BrowserRouter>
+      <GlobalJapamBackdrop />
       <AuthProvider>
       <DeitySharePickerProvider>
       <AuthSessionOverlay />

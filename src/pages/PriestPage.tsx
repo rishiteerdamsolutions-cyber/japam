@@ -762,7 +762,6 @@ export function PriestPage() {
   if (!token) {
     return (
       <div className="relative min-h-screen p-6 flex flex-col items-center justify-center">
-        <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
         <div className="relative z-10 flex flex-col items-center">
           <h1 className="text-2xl font-bold text-amber-400 mb-2">Priest Dashboard</h1>
           <p className="text-amber-200/70 text-sm mb-6 text-center max-w-sm">
@@ -786,7 +785,6 @@ export function PriestPage() {
 
   return (
     <div className="relative min-h-screen p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
-      <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10 max-w-3xl mx-auto">
         {toast && (
           <div

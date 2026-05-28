@@ -58,7 +58,6 @@ export function AnniversaryJoinPage() {
   if (!user) {
     return (
       <div className="relative min-h-screen p-4 max-w-lg mx-auto overflow-hidden">
-        <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
         <div className="relative z-10">
           <AppHeader title={t('occasions.anniversaryJoin')} showBack onBack={() => navigate('/')} />
           <p className="text-amber-200/90 text-sm mb-4">{t('occasions.joinSignInFirst')}</p>
@@ -76,7 +75,6 @@ export function AnniversaryJoinPage() {
 
   return (
     <div className="relative min-h-screen p-4 max-w-lg mx-auto overflow-hidden flex items-center justify-center">
-      <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10 text-center">
         {busy && <p className="text-amber-400">{t('occasions.joining')}</p>}
         {err && <p className="text-red-300 text-sm mt-2">{err}</p>}

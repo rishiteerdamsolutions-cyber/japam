@@ -27,7 +27,6 @@ export function BirthdayOccasionPage() {
 
   return (
     <div className="relative min-h-screen p-4 pb-24 max-w-lg mx-auto overflow-hidden">
-      <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10">
         <AppHeader title={t('occasions.birthdayTitle')} showBack onBack={() => navigate('/')} />
         <p className="text-amber-200/85 text-sm mb-4">{t('occasions.birthdayIntro', { count: TARGET })}</p>

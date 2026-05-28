@@ -45,7 +45,6 @@ export function SpecialsPage() {
 
   return (
     <div className="relative min-h-[100dvh] flex flex-col items-center px-3 pt-3 pb-[max(5.5rem,env(safe-area-inset-bottom))] overflow-y-auto overflow-x-hidden">
-      <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10 w-full max-w-sm flex flex-col items-stretch">
         <MenuMatchChantHeader />
         <NaturalBackButton fallback="/menu" className="self-start text-amber-300/90 text-sm mb-3 hover:underline py-1" />

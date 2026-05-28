@@ -412,7 +412,6 @@ export function JapaDashboard() {
 
   return (
     <div className="relative min-h-screen p-4 pb-[calc(6.5rem+env(safe-area-inset-bottom))] md:pb-[calc(7.5rem+env(safe-area-inset-bottom))] max-w-lg mx-auto overflow-hidden">
-      <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10">
       <MenuMatchChantHeader />
       <h2 className="text-base sm:text-xl font-bold text-amber-400 mb-3" style={{ fontFamily: 'serif' }}>

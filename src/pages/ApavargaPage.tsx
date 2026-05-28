@@ -71,7 +71,7 @@ export function ApavargaPage() {
   const showEnter = configLoaded && apavargaLaunched && isProOrPremiumActive;
 
   return (
-    <div className="relative min-h-screen pb-12 bg-gloss-bubblegum">
+    <div className="relative min-h-screen pb-12">
       <div className="absolute inset-0 bg-black/40" aria-hidden />
       <div className="relative z-10 flex flex-col min-h-screen">
         <div className="max-w-lg mx-auto px-4 flex-1">

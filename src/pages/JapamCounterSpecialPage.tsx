@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { NaturalBackButton } from '../components/nav/NaturalBackButton';
 import { currentReturnPath, withReturnTo } from '../lib/navigationReturn';
-import { JapamCounterDeityBackdrop } from '../components/japamCounter/JapamCounterDeityBackdrop';
 import { ManualMalaJapaPad } from '../components/japamCounter/ManualMalaJapaPad';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
@@ -275,7 +274,6 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
       <div
         className={`relative min-h-[100dvh] flex flex-col items-center px-3 pt-3 sm:p-4 overflow-y-auto overflow-x-hidden pb-[max(1rem,env(safe-area-inset-bottom))]`}
       >
-        <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
         <div className="relative z-10 w-full max-w-[min(100%,28rem)] flex flex-col items-center">
           <MenuMatchChantHeader />
           <NaturalBackButton
@@ -344,7 +342,6 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
         className="fixed inset-0 z-0 flex h-[100dvh] max-h-[100dvh] flex-col overflow-x-visible overflow-y-hidden touch-none"
         style={{ overscrollBehavior: 'none' }}
       >
-        <JapamCounterDeityBackdrop imageUrl={deity.image} />
         <div
           data-immersive-ui
           className="relative z-10 flex min-h-0 flex-1 flex-col w-full max-w-md mx-auto px-3 overflow-x-visible overflow-y-hidden touch-manipulation"
@@ -432,7 +429,6 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
 
   return (
     <div className="relative min-h-[100dvh] flex flex-col overflow-hidden">
-      <JapamCounterDeityBackdrop imageUrl={deity.image} />
       <div className="relative z-10 flex flex-col flex-1 min-h-0 w-full max-w-md mx-auto px-3 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] overflow-y-auto">
         <MenuMatchChantHeader />
         <button

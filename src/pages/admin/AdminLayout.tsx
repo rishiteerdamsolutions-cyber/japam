@@ -29,7 +29,6 @@ export function AdminLayout() {
 
   return (
     <div className="relative min-h-screen p-4 pb-[env(safe-area-inset-bottom)]">
-      <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10">
       <div className="flex items-center justify-end mb-6">
         <button type="button" onClick={handleLogout} className="text-amber-200/80 text-sm">

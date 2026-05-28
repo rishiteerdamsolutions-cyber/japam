@@ -6,7 +6,6 @@ export function PriestLoginPage() {
 
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center p-4">
-      <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10 flex flex-col items-center w-full">
         <h1 className="text-2xl font-bold text-amber-400 mb-2">Priest Login</h1>
         <p className="text-amber-200/70 text-sm mb-6">Sign in to manage your temple&apos;s marathons</p>

@@ -433,7 +433,6 @@ export function Settings({ onBack }: SettingsProps) {
 
   return (
     <div className="relative min-h-screen p-4 pb-[env(safe-area-inset-bottom)] overflow-hidden">
-      <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10 max-w-md mx-auto flex flex-col gap-4">
         <header className="grid grid-cols-[auto_1fr_auto] items-center gap-2 w-full min-h-[44px] shrink-0">
           <PushableButton

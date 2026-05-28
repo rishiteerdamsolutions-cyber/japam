@@ -118,7 +118,6 @@ export function PlansDakshinaPage() {
 
   return (
     <div className="relative h-[100dvh] max-h-[100dvh] flex flex-col overflow-hidden">
-      <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
       <div className="relative z-10 flex flex-col flex-1 min-h-0 w-full max-w-lg mx-auto px-4 pt-3 gap-4 overflow-y-auto overscroll-contain">
         <MenuMatchChantHeader className="!mb-0 shrink-0" />
 

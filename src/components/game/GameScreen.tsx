@@ -435,12 +435,14 @@ export function GameScreen({
     const deityName = t(`deities.${deityId}`);
     const blob = await renderBirthdayGreetingCardBlob({
       deityName,
+      topSymbol: null,
+      showBrandUrl: false,
       copy: {
-        headline: t('inviteIntro.cardHeadline'),
-        achievement: t('inviteIntro.cardAchievement', { deity: deityName }),
-        blessing1: t('inviteIntro.cardBlessing1'),
-        blessing2: t('inviteIntro.cardBlessing2'),
-        from: t('inviteIntro.cardFrom'),
+        headline: 'Jai!',
+        achievement: `I completed ${INVITE_INTRO_JAPA_TARGET} japas of ${deityName}.`,
+        blessing1: 'A short, powerful mantra session done with focus and devotion.',
+        blessing2: 'Play, chant, and grow your daily practice one japa at a time.',
+        from: 'Shared from Japam',
       },
     });
     if (!blob) {

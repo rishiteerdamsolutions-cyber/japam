@@ -71,7 +71,7 @@ export function BoardDeityHints() {
   const cols = board[0].length;
 
   return (
-    <div className="pointer-events-none absolute inset-0 z-[1]" aria-hidden>
+    <div className="pointer-events-none absolute inset-0 z-[1] px-1 py-1" aria-hidden>
       {entries.map((e, i) => {
         const { side, col } = e.anchor;
         const name = getDeity(e.id).name;
@@ -86,14 +86,14 @@ export function BoardDeityHints() {
               className={`${base} flex-col gap-0.5`}
               style={{
                 left: `${colPct}%`,
-                top: 0,
-                transform: 'translate(-50%, calc(-100% - 2px))',
+                top: '2px',
+                transform: 'translateX(-50%)',
               }}
             >
               <span className="text-[10px] sm:text-xs font-semibold text-amber-100/95 leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.85)]">
                 {name}
               </span>
-              <span className="text-amber-300 text-sm leading-none" aria-hidden>
+              <span className="text-amber-300 text-[11px] leading-none" aria-hidden>
                 ▼
               </span>
             </div>
@@ -105,14 +105,14 @@ export function BoardDeityHints() {
             className={`${base} flex-col-reverse gap-0.5`}
             style={{
               left: `${colPct}%`,
-              bottom: 0,
-              transform: 'translate(-50%, calc(100% + 2px))',
+              bottom: '2px',
+              transform: 'translateX(-50%)',
             }}
           >
             <span className="text-[10px] sm:text-xs font-semibold text-amber-100/95 leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.85)]">
               {name}
             </span>
-            <span className="text-amber-300 text-sm leading-none" aria-hidden>
+            <span className="text-amber-300 text-[11px] leading-none" aria-hidden>
               ▲
             </span>
           </div>

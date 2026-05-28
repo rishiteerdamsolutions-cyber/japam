@@ -79,8 +79,8 @@ export function Landing({
       <div className="viewport-shell px-3 sm:px-4 pb-[max(0.25rem,env(safe-area-inset-bottom))]">
         <div className="absolute inset-0 bg-gloss-bubblegum" aria-hidden />
         <div className="viewport-shell__column max-w-xl gap-[clamp(0.25rem,0.9vh,0.65rem)]">
-          <header className="relative shrink-0 pt-[max(0.2rem,env(safe-area-inset-top,0px))]">
-            <div className="flex items-start justify-between gap-2">
+          <header className="relative shrink-0 pt-[max(0.6rem,env(safe-area-inset-top,0px))]">
+            <div className="flex items-center justify-between gap-2">
               <motion.div
                 initial={{ scale: 0.92, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
@@ -89,7 +89,7 @@ export function Landing({
               >
                 <img src="/images/logo.png" alt="Japam" width={56} height={56} className="h-14 w-14 object-contain drop-shadow-[0_2px_10px_rgba(0,0,0,0.28)]" draggable={false} />
               </motion.div>
-              <div className="shrink-0 pt-0.5">
+              <div className="shrink-0">
                 <LanguageDropdown compact />
               </div>
             </div>

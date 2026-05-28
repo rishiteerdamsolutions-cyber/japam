@@ -2,43 +2,22 @@ type Props = {
   imageUrl: string;
 };
 
-/** Panel spans for a broken-grid mosaic (sum per row = 4 cols). */
-const MOSAIC_SPAN_PATTERN = [1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1] as const;
-
 const MOSAIC_TILE_COUNT = 48;
 
 type MosaicTile = {
-  colSpan: 1 | 2;
   flipX: boolean;
   dim: boolean;
-  lift: boolean;
 };
 
 function buildMosaicTiles(): MosaicTile[] {
   const tiles: MosaicTile[] = [];
-  let col = 0;
-  let row = 0;
-  let patternIdx = 0;
-
-  while (tiles.length < MOSAIC_TILE_COUNT) {
-    const span = MOSAIC_SPAN_PATTERN[patternIdx % MOSAIC_SPAN_PATTERN.length]!;
-    if (col + span > 4) {
-      col = 0;
-      row += 1;
-      continue;
-    }
-    patternIdx += 1;
+  for (let i = 0; i < MOSAIC_TILE_COUNT; i++) {
+    const row = Math.floor(i / 4);
+    const col = i % 4;
     tiles.push({
-      colSpan: span,
       flipX: (row + col) % 2 === 1,
-      dim: row <= 1 || row >= 7 || col === 0 || col + span >= 4,
-      lift: span === 2 && row % 2 === 0,
+      dim: row <= 1 || row >= 7 || col === 0 || col === 3,
     });
-    col += span;
-    if (col >= 4) {
-      col = 0;
-      row += 1;
-    }
   }
   return tiles;
 }
@@ -76,9 +55,7 @@ export function JapamCounterDeityBackdrop({ imageUrl }: Props) {
         {MOSAIC_TILES.map((tile, i) => (
           <div
             key={i}
-            className={`relative min-h-[5.5rem] overflow-hidden rounded-xl sm:rounded-2xl ${
-              tile.colSpan === 2 ? 'col-span-2' : ''
-            } ${tile.lift ? '-translate-y-1 sm:-translate-y-1.5' : ''} ${tile.dim ? 'opacity-[0.72]' : 'opacity-90'}`}
+            className={`relative min-h-[5.5rem] overflow-hidden rounded-xl sm:rounded-2xl ${tile.dim ? 'opacity-[0.72]' : 'opacity-90'}`}
             style={{
               boxShadow:
                 'inset 0 0 0 1.5px rgba(218, 165, 32, 0.28), inset 0 0 18px rgba(0,0,0,0.45), 0 6px 24px rgba(0,0,0,0.55)',

@@ -21,6 +21,8 @@ export function ProfileNamePrompt() {
       setPromptedUid(null);
       return;
     }
+    // Once shown, keep the prompt stable until user explicitly chooses Save or Later.
+    if (open) return;
     if (!profileLoaded) return;
     if (hasSavedDisplayName || Boolean(displayName?.trim())) {
       setOpen(false);
@@ -31,7 +33,7 @@ export function ProfileNamePrompt() {
     setError(null);
     setOpen(true);
     setPromptedUid(user.uid);
-  }, [user?.uid, user?.displayName, user?.email, profileLoaded, hasSavedDisplayName, displayName, promptedUid]);
+  }, [user?.uid, user?.displayName, user?.email, profileLoaded, hasSavedDisplayName, displayName, promptedUid, open]);
 
   if (!open || !user?.uid) return null;
 

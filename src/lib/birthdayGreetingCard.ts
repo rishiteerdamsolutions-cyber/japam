@@ -9,6 +9,10 @@ export interface BirthdayGreetingCardCopy {
 export interface RenderBirthdayGreetingCardOptions {
   deityName: string;
   copy: BirthdayGreetingCardCopy;
+  /** Optional top symbol (e.g. 🎂). Pass null/empty to hide. */
+  topSymbol?: string | null;
+  /** Keep footer website line for birthday card by default. */
+  showBrandUrl?: boolean;
 }
 
 function dataUrlToBlob(dataUrl: string): Blob | null {
@@ -106,11 +110,13 @@ export async function renderBirthdayGreetingCardBlob(
     };
 
     let y = pad + 72;
-
-    ctx.font = `700 56px ${fontFamily}`;
-    ctx.textAlign = 'center';
-    ctx.fillText('🎂', centerX, y);
-    y += 64;
+    const topSymbol = opts.topSymbol === undefined ? '🎂' : opts.topSymbol;
+    if (topSymbol) {
+      ctx.font = `700 56px ${fontFamily}`;
+      ctx.textAlign = 'center';
+      ctx.fillText(topSymbol, centerX, y);
+      y += 64;
+    }
 
     y += wrapAndDraw(opts.copy.headline, 52, '700', 'rgba(255, 248, 220, 0.98)', y, 1.15, fontFamily) + 28;
 
@@ -129,9 +135,11 @@ export async function renderBirthdayGreetingCardBlob(
     ctx.textAlign = 'center';
     ctx.fillText(opts.copy.from, centerX, height - pad - 56);
 
-    ctx.font = `700 36px ${fontFamily}`;
-    ctx.fillStyle = 'rgba(255, 248, 220, 0.95)';
-    ctx.fillText('www.japam.digital', centerX, height - pad - 16);
+    if (opts.showBrandUrl !== false) {
+      ctx.font = `700 36px ${fontFamily}`;
+      ctx.fillStyle = 'rgba(255, 248, 220, 0.95)';
+      ctx.fillText('www.japam.digital', centerX, height - pad - 16);
+    }
 
     return dataUrlToBlob(canvas.toDataURL('image/png'));
   } catch {

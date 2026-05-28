@@ -148,7 +148,8 @@ export function MenuPage() {
     setPendingInviteDeity(null);
   }, []);
 
-  const showInviteGate = Boolean(pendingInviteDeity && !user && !authLoading);
+  // Show invite gate immediately for shared deity links (don't flash menu first).
+  const showInviteGate = Boolean(pendingInviteDeity && !user);
   const redirectingSignedInInvite =
     Boolean(pendingInviteDeity && user && !authLoading) && !inviteHandledRef.current;
 

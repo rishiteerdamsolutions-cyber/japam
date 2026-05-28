@@ -1,6 +1,12 @@
 import { create } from 'zustand';
-import { loadUserReminder, saveUserReminder, type DailyReminder } from '../lib/firestore';
-import { syncReminderScheduleToServiceWorker, type ReminderConfig } from '../lib/reminderSync';
+import { loadUserReminder, type DailyReminder } from '../lib/firestore';
+import { deviceTimeZone, syncReminderScheduleToServiceWorker, type ReminderConfig } from '../lib/reminderSync';
+import {
+  saveUserReminderWithPush,
+  refreshReminderPushSubscription,
+  subscribeReminderWebPush,
+  unsubscribeReminderWebPush,
+} from '../lib/reminderPush';
 import { useAuthStore } from './authStore';
 import { useProfileStore } from './profileStore';
 
@@ -12,8 +18,33 @@ async function pushReminderToServiceWorker(reminder: DailyReminder): Promise<voi
     time: reminder.time,
     displayName,
     uid,
+    timeZone: deviceTimeZone(),
   };
   await syncReminderScheduleToServiceWorker(config);
+}
+
+async function persistReminder(reminder: DailyReminder): Promise<boolean> {
+  const uid = useAuthStore.getState().user?.uid;
+  if (!uid) {
+    await pushReminderToServiceWorker(reminder);
+    return false;
+  }
+
+  let pushSubscription = null;
+  if (reminder.enabled) {
+    pushSubscription = await subscribeReminderWebPush();
+  } else {
+    await unsubscribeReminderWebPush();
+  }
+
+  const displayName = useProfileStore.getState().displayName;
+  const ok = await saveUserReminderWithPush(reminder, {
+    pushSubscription,
+    displayName,
+    timeZone: deviceTimeZone(),
+  });
+  await pushReminderToServiceWorker(reminder);
+  return ok;
 }
 
 interface ReminderState {
@@ -39,6 +70,10 @@ export const useReminderStore = create<ReminderState>((setState) => ({
     const reminder = r ?? initial;
     setState({ reminder, loaded: true });
     await pushReminderToServiceWorker(reminder).catch(() => {});
+    if (reminder.enabled) {
+      const displayName = useProfileStore.getState().displayName;
+      void refreshReminderPushSubscription(reminder, displayName).catch(() => {});
+    }
   },
 
   setReminder: async (next) => {
@@ -48,13 +83,11 @@ export const useReminderStore = create<ReminderState>((setState) => ({
       await pushReminderToServiceWorker(next).catch(() => {});
       return false;
     }
-    const ok = await saveUserReminder(uid, next);
+    const ok = await persistReminder(next);
     if (!ok) {
       const r = await loadUserReminder(uid);
       setState({ reminder: r ?? initial });
       await pushReminderToServiceWorker(r ?? initial).catch(() => {});
-    } else {
-      await pushReminderToServiceWorker(next).catch(() => {});
     }
     return ok;
   },

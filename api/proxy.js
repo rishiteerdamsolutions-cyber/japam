@@ -151,6 +151,7 @@ import * as apavargaCleanupHandler from './_handlers/apavarga/cleanup.js';
 import * as cronRefreshActiveUsersHandler from './_handlers/cron/refresh-active-users.js';
 import * as cronAnalyticsDailyHandler from './_handlers/cron/analytics-daily.js';
 import * as cronUpdateMahaYagnaCountersHandler from './_handlers/cron/update-maha-yagna-counters.js';
+import * as cronSendDailyRemindersHandler from './_handlers/cron/send-daily-reminders.js';
 import * as mahaYagnasListHandler from './_handlers/maha-yagnas/list.js';
 import * as mahaYagnasMyContributionHandler from './_handlers/maha-yagnas/my-contribution.js';
 import * as mahaYagnasJoinHandler from './_handlers/maha-yagnas/join.js';
@@ -301,6 +302,7 @@ const HANDLERS = {
   'GET cron/refresh-active-users': cronRefreshActiveUsersHandler,
   'GET cron/analytics-daily': cronAnalyticsDailyHandler,
   'GET cron/update-maha-yagna-counters': cronUpdateMahaYagnaCountersHandler,
+  'GET cron/send-daily-reminders': cronSendDailyRemindersHandler,
   'GET admin/analytics-overview': adminAnalyticsOverviewHandler,
   'GET admin/analytics-users': adminAnalyticsUsersHandler,
   'GET admin/analytics-timeseries': adminAnalyticsTimeseriesHandler,

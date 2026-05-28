@@ -344,11 +344,9 @@ export function Settings({ onBack }: SettingsProps) {
       if ('serviceWorker' in navigator) {
         const reg = await navigator.serviceWorker.ready.catch(() => null);
         if (reg) {
-          await reg.showNotification('Japam reminder \uD83D\uDE4F', {
-            body: "Time to chant your favourite God's name.",
-            icon: '/vite.svg',
-            tag: 'japam-test',
-          });
+          const { buildNotificationText, notificationOptions } = await import('../lib/reminderSync');
+          const { title, body } = buildNotificationText(displayName);
+          await reg.showNotification(title, notificationOptions(title, body));
           return;
         }
       }
@@ -666,6 +664,11 @@ export function Settings({ onBack }: SettingsProps) {
                   </div>
                 )}
                 {isInstalled && <p className="text-green-400/90 text-xs">✓ App installed</p>}
+                <p className="text-amber-200/65 text-[11px] leading-snug">
+                  For alarms when your phone is locked, install Japam to your home screen, allow notifications,
+                  and on Android disable battery optimization for Japam. The system plays your notification sound;
+                  open the app once after saving to register the alarm.
+                </p>
                 {notifPermission !== 'unsupported' && notifPermission !== 'granted' && (
                   <div className="rounded-xl bg-black/30 p-3">
                     {notifPermission !== 'denied' && (

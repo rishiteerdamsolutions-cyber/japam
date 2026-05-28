@@ -6,8 +6,11 @@ import { shouldSuppressIncidentalAudio } from '../lib/authAudioGuard';
 import {
   REMINDER_SOUND_URL,
   buildNotificationText,
+  deviceTimeZone,
   isWithinReminderFireWindow,
+  localDateKey,
   nextOccurrenceMs,
+  notificationOptions,
   syncReminderScheduleToServiceWorker,
 } from '../lib/reminderSync';
 
@@ -19,27 +22,11 @@ async function showNotification(title: string, body: string) {
     if ('serviceWorker' in navigator) {
       const reg = await navigator.serviceWorker.ready.catch(() => null);
       if (reg) {
-        await reg.showNotification(title, {
-          body,
-          icon: '/images/favicon.png',
-          badge: '/images/favicon.png',
-          tag: 'japam-daily-reminder',
-          renotify: true,
-          requireInteraction: true,
-          silent: false,
-          vibrate: [300, 120, 300],
-          data: { soundUrl: REMINDER_SOUND_URL },
-        } as NotificationOptions);
+        await reg.showNotification(title, notificationOptions(title, body));
         return;
       }
     }
-    new Notification(title, {
-      body,
-      icon: '/images/favicon.png',
-      tag: 'japam-daily-reminder',
-      renotify: true,
-      silent: false,
-    } as NotificationOptions);
+    new Notification(title, notificationOptions(title, body));
   } catch {
     // ignore
   }
@@ -81,8 +68,14 @@ export function useDailyReminder() {
   useEffect(() => {
     if (!loaded) return;
     const config = uid
-      ? { enabled: reminder.enabled, time: reminder.time, displayName, uid }
-      : { enabled: false, time: null, displayName: null, uid: null };
+      ? {
+          enabled: reminder.enabled,
+          time: reminder.time,
+          displayName,
+          uid,
+          timeZone: deviceTimeZone(),
+        }
+      : { enabled: false, time: null, displayName: null, uid: null, timeZone: deviceTimeZone() };
     syncReminderScheduleToServiceWorker(config).catch(() => {});
   }, [loaded, reminder.enabled, reminder.time, displayName, uid]);
 
@@ -103,7 +96,7 @@ export function useDailyReminder() {
       };
     }
 
-    const dayKey = () => new Date().toISOString().slice(0, 10);
+    const dayKey = () => localDateKey(deviceTimeZone());
     /** Per device + time (not per uid) so sign-in does not re-trigger today's alarm audio. */
     const firedStorageKey = `japam-reminder-fired:${reminder.time ?? 'na'}`;
 

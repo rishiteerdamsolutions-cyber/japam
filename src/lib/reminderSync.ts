@@ -5,24 +5,88 @@ export const REMINDER_FIRED_URL = '/__japam_reminder_fired__';
 
 export const REMINDER_SOUND_URL = '/sounds/notification.mp3';
 
-/** Max ms after HH:MM when a scheduled reminder may fire (no catch-up after this window). */
+/** Max ms after HH:MM when a scheduled reminder may fire while the app is open. */
 export const REMINDER_FIRE_GRACE_MS = 90_000;
 
-/** True only shortly after today's reminder time — not for late app opens or missed alarms. */
-export function isWithinReminderFireWindow(hhmm: string, graceMs = REMINDER_FIRE_GRACE_MS): boolean {
+/** How long after the scheduled minute background sync / push may still deliver today's reminder. */
+export const REMINDER_BACKGROUND_CATCHUP_MS = 6 * 60 * 60 * 1000;
+
+export function parseReminderHHMM(hhmm: string): { hh: number; mm: number } | null {
   const m = hhmm.match(/^(\d{2}):(\d{2})$/);
-  if (!m) return false;
+  if (!m) return null;
   const hh = Number(m[1]);
   const mm = Number(m[2]);
-  if (!Number.isFinite(hh) || !Number.isFinite(mm) || hh < 0 || hh > 23 || mm < 0 || mm > 59) return false;
+  if (!Number.isFinite(hh) || !Number.isFinite(mm) || hh < 0 || hh > 23 || mm < 0 || mm > 59) return null;
+  return { hh, mm };
+}
 
-  const now = new Date();
+function scheduledTimeTodayMs(hhmm: string, now = new Date()): number | null {
+  const p = parseReminderHHMM(hhmm);
+  if (!p) return null;
   const target = new Date(now);
   target.setSeconds(0, 0);
   target.setMilliseconds(0);
-  target.setHours(hh, mm, 0, 0);
-  const delta = now.getTime() - target.getTime();
+  target.setHours(p.hh, p.mm, 0, 0);
+  return target.getTime();
+}
+
+/** True only shortly after today's reminder time — used when the app tab is open. */
+export function isWithinReminderFireWindow(hhmm: string, graceMs = REMINDER_FIRE_GRACE_MS): boolean {
+  const targetMs = scheduledTimeTodayMs(hhmm);
+  if (targetMs == null) return false;
+  const delta = Date.now() - targetMs;
   return delta >= 0 && delta <= graceMs;
+}
+
+/** True after today's reminder time until catch-up window ends (service worker / periodic sync). */
+export function isWithinReminderBackgroundCatchup(hhmm: string, catchupMs = REMINDER_BACKGROUND_CATCHUP_MS): boolean {
+  const targetMs = scheduledTimeTodayMs(hhmm);
+  if (targetMs == null) return false;
+  const delta = Date.now() - targetMs;
+  return delta >= 0 && delta <= catchupMs;
+}
+
+export function deviceTimeZone(): string {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+  } catch {
+    return 'UTC';
+  }
+}
+
+export function localDateKey(timeZone = deviceTimeZone(), now = new Date()): string {
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(now);
+}
+
+export function localHHMM(timeZone = deviceTimeZone(), now = new Date()): string {
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    timeZone,
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).formatToParts(now);
+  const hh = parts.find((p) => p.type === 'hour')?.value ?? '00';
+  const mm = parts.find((p) => p.type === 'minute')?.value ?? '00';
+  return `${hh}:${mm}`;
+}
+
+export function notificationOptions(_title: string, body: string): NotificationOptions {
+  return {
+    body,
+    icon: '/images/favicon.png',
+    badge: '/images/favicon.png',
+    tag: 'japam-daily-reminder',
+    renotify: true,
+    requireInteraction: true,
+    silent: false,
+    vibrate: [300, 120, 300],
+    data: { soundUrl: REMINDER_SOUND_URL },
+  } as NotificationOptions;
 }
 
 export type ReminderConfig = {
@@ -30,16 +94,16 @@ export type ReminderConfig = {
   time: string | null;
   displayName?: string | null;
   uid?: string | null;
+  timeZone?: string | null;
 };
 
 export function nextOccurrenceMs(hhmm: string): number | null {
-  const m = hhmm.match(/^(\d{2}):(\d{2})$/);
-  if (!m) return null;
-  const hh = Number(m[1]);
-  const mm = Number(m[2]);
-  if (!Number.isFinite(hh) || !Number.isFinite(mm) || hh < 0 || hh > 23 || mm < 0 || mm > 59) return null;
+  if (!parseReminderHHMM(hhmm)) return null;
 
   const now = new Date();
+  const p = parseReminderHHMM(hhmm)!;
+  const hh = p.hh;
+  const mm = p.mm;
   const next = new Date(now);
   next.setSeconds(0, 0);
   next.setHours(hh, mm, 0, 0);
@@ -93,7 +157,11 @@ export async function syncReminderScheduleToServiceWorker(config: ReminderConfig
 
   try {
     if (reg.periodicSync) {
-      await reg.periodicSync.register('japam-reminder', { minInterval: 60 * 60 * 1000 });
+      try {
+        await reg.periodicSync.register('japam-reminder', { minInterval: 15 * 60 * 1000 });
+      } catch {
+        await reg.periodicSync.register('japam-reminder', { minInterval: 60 * 60 * 1000 });
+      }
     }
   } catch {
     // periodicSync requires permission; one-off sync is registered on save as fallback

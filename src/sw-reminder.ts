@@ -4,10 +4,12 @@
 import {
   REMINDER_CACHE_NAME,
   REMINDER_FIRED_URL,
-  REMINDER_SOUND_URL,
   buildNotificationText,
+  isWithinReminderBackgroundCatchup,
   isWithinReminderFireWindow,
+  localDateKey,
   nextOccurrenceMs,
+  notificationOptions,
   readReminderConfig,
   type ReminderConfig,
 } from './lib/reminderSync';
@@ -27,7 +29,8 @@ async function alreadyFiredToday(config: ReminderConfig): Promise<boolean> {
   if (!firedRes) return false;
   try {
     const fired = (await firedRes.json()) as { date?: string; time?: string };
-    const today = new Date().toISOString().slice(0, 10);
+    const tz = config.timeZone || undefined;
+    const today = localDateKey(tz);
     return fired.date === today && fired.time === config.time;
   } catch {
     return false;
@@ -36,7 +39,8 @@ async function alreadyFiredToday(config: ReminderConfig): Promise<boolean> {
 
 async function markFiredToday(config: ReminderConfig): Promise<void> {
   const cache = await caches.open(REMINDER_CACHE_NAME);
-  const today = new Date().toISOString().slice(0, 10);
+  const tz = config.timeZone || undefined;
+  const today = localDateKey(tz);
   await cache.put(
     REMINDER_FIRED_URL,
     new Response(JSON.stringify({ date: today, time: config.time }), {
@@ -47,23 +51,15 @@ async function markFiredToday(config: ReminderConfig): Promise<void> {
 
 async function showReminderNotification(config: ReminderConfig): Promise<void> {
   const { title, body } = buildNotificationText(config.displayName);
-  await self.registration.showNotification(title, {
-    body,
-    icon: '/images/favicon.png',
-    badge: '/images/favicon.png',
-    tag: 'japam-daily-reminder',
-    renotify: true,
-    requireInteraction: true,
-    silent: false,
-    vibrate: [300, 120, 300],
-    data: { soundUrl: REMINDER_SOUND_URL },
-  } as NotificationOptions);
+  await self.registration.showNotification(title, notificationOptions(title, body));
 }
 
 async function fireIfDue(): Promise<boolean> {
   const config = await readReminderConfig();
   if (!config?.enabled || !config.time || !config.uid) return false;
-  if (!isWithinReminderFireWindow(config.time)) return false;
+  const due =
+    isWithinReminderFireWindow(config.time) || isWithinReminderBackgroundCatchup(config.time);
+  if (!due) return false;
   if (await alreadyFiredToday(config)) return false;
 
   await markFiredToday(config);
@@ -90,6 +86,10 @@ export async function scheduleReminderFromCache(): Promise<void> {
 }
 
 export function installReminderListeners(sw: ServiceWorkerGlobalScope): void {
+  sw.addEventListener('install', () => {
+    void scheduleReminderFromCache();
+  });
+
   sw.addEventListener('activate', (event) => {
     event.waitUntil(scheduleReminderFromCache());
   });
@@ -115,4 +115,26 @@ export function handleReminderMessage(data: unknown): boolean {
     return true;
   }
   return false;
+}
+
+/** Web Push payload from server cron — wakes SW when the app is fully closed (Android / iOS 16.4+ PWA). */
+export async function handleReminderPushEvent(event: PushEvent): Promise<void> {
+  let payload: { title?: string; body?: string; displayName?: string | null } = {};
+  try {
+    payload = event.data ? (event.data.json() as typeof payload) : {};
+  } catch {
+    // ignore malformed payload
+  }
+
+  const config = await readReminderConfig();
+  if (config?.enabled && config.time) {
+    if (await alreadyFiredToday(config)) return;
+    await markFiredToday(config);
+  }
+
+  const { title, body } =
+    payload.title && payload.body
+      ? { title: payload.title, body: payload.body }
+      : buildNotificationText(payload.displayName ?? config?.displayName);
+  await self.registration.showNotification(title, notificationOptions(title, body));
 }

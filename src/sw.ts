@@ -1,7 +1,7 @@
 import { registerRoute } from 'workbox-routing'
 import { NetworkOnly } from 'workbox-strategies'
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching'
-import { handleReminderMessage, installReminderListeners } from './sw-reminder'
+import { handleReminderMessage, handleReminderPushEvent, installReminderListeners } from './sw-reminder'
 
 declare let self: ServiceWorkerGlobalScope
 
@@ -37,6 +37,10 @@ precacheAndRoute(self.__WB_MANIFEST)
 self.addEventListener('message', (event: ExtendableMessageEvent) => {
   if (event.data?.type === 'SKIP_WAITING') self.skipWaiting()
   if (handleReminderMessage(event.data)) return
+})
+
+self.addEventListener('push', (event: PushEvent) => {
+  event.waitUntil(handleReminderPushEvent(event))
 })
 
 // Notification click: focus existing app window or open new one

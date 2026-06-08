@@ -121,6 +121,10 @@ export function MenuPage() {
 
     if (user && pendingInviteDeity) {
       const deity = pendingInviteDeity;
+      // Wait for unlock status before deciding Pro vs invite gate.
+      if (levelsUnlocked === null) return;
+      // Shared links: non-Pro users stay on the invite gate (sign in / try 11 japas).
+      if (!istaDevataDeityAllowed(deity, proOrPremiumActive)) return;
       clearPendingInviteDeity();
       setPendingInviteDeity(null);
       setInviteHandled(true);
@@ -149,11 +153,19 @@ export function MenuPage() {
     if (!pendingInviteDeity) {
       clearSeoDeityHint();
     }
-  }, [authLoading, inviteHandled, launchDeityGame, location.state, pendingInviteDeity, user]);
+  }, [
+    authLoading,
+    inviteHandled,
+    launchDeityGame,
+    levelsUnlocked,
+    location.state,
+    pendingInviteDeity,
+    proOrPremiumActive,
+    user,
+  ]);
 
   const tryInviteAsGuest = useCallback(() => {
     if (!pendingInviteDeity) return;
-    if (redirectToPlansIfDeityLocked(pendingInviteDeity)) return;
     const deity = pendingInviteDeity;
     clearPendingInviteDeity();
     setPendingInviteDeity(null);
@@ -161,7 +173,7 @@ export function MenuPage() {
     navigate(`/game${buildInviteIntroGameSearch(deity)}`, {
       state: withReturnTo('/menu'),
     });
-  }, [navigate, pendingInviteDeity, redirectToPlansIfDeityLocked]);
+  }, [navigate, pendingInviteDeity]);
 
   const handleInviteSignIn = useCallback(() => {
     clearAuthError();
@@ -173,10 +185,23 @@ export function MenuPage() {
     setPendingInviteDeity(null);
   }, []);
 
-  // Show invite gate immediately for shared deity links (don't flash menu first).
-  const showInviteGate = Boolean(pendingInviteDeity && !user);
+  // Shared deity links: invite gate until Pro user is signed in and unlock is active.
+  const inviteDeityNeedsGate =
+    Boolean(pendingInviteDeity) &&
+    (!user || !istaDevataDeityAllowed(pendingInviteDeity!, proOrPremiumActive));
+  const showInviteGate = inviteDeityNeedsGate && !(user && levelsUnlocked === null);
   const redirectingSignedInInvite =
-    Boolean(pendingInviteDeity && user && !authLoading) && !inviteHandled;
+    Boolean(pendingInviteDeity && user && !authLoading && levelsUnlocked !== null) &&
+    !inviteHandled &&
+    istaDevataDeityAllowed(pendingInviteDeity!, proOrPremiumActive);
+
+  if (pendingInviteDeity && user && !authLoading && levelsUnlocked === null) {
+    return (
+      <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <p className="relative z-10 text-amber-400 text-sm">Loading…</p>
+      </div>
+    );
+  }
 
   if (redirectingSignedInInvite) {
     return (

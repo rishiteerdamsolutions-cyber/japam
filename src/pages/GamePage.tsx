@@ -190,7 +190,12 @@ export function GamePage() {
     (tier === 'pro' || tier === 'premium') &&
     hasActivePaidAccess(levelsUnlocked === true, unlockExpiresAt);
   const isIstaDevataPlay =
-    isPlayableDeityMode(mode) && !isMarathon && !occasionKind && !isSpecial108 && !isWeeklyStreak;
+    isPlayableDeityMode(mode) &&
+    !isMarathon &&
+    !occasionKind &&
+    !isSpecial108 &&
+    !isWeeklyStreak &&
+    !isInviteIntro;
   const deityProBlocked =
     isIstaDevataPlay && !istaDevataDeityAllowed(mode, proOrPremiumActive);
   const japa108ProBlocked =

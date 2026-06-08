@@ -29,7 +29,9 @@ import { pushableFullWidthFrontClass } from '../lib/landingCtaStyles';
 import { CTA } from '../lib/ctaCopy';
 import { shouldOfferResumePausedGame } from '../lib/pausedGameResume';
 import { hasActivePaidAccess } from '../lib/membershipDisplay';
+import { japa108DeityAllowed } from '../lib/japa108Special';
 import { istaDevataDeityAllowed, isPlayableDeityMode } from '../lib/istaDevataAccess';
+import { weeklyStreakDeityAllowed } from '../lib/weeklyStreakPlan';
 import { withReturnTo } from '../lib/navigationReturn';
 
 function parseGameMode(rawMode: string | null): GameMode {
@@ -191,15 +193,30 @@ export function GamePage() {
     isPlayableDeityMode(mode) && !isMarathon && !occasionKind && !isSpecial108 && !isWeeklyStreak;
   const deityProBlocked =
     isIstaDevataPlay && !istaDevataDeityAllowed(mode, proOrPremiumActive);
+  const japa108ProBlocked =
+    isSpecial108 && isPlayableDeityMode(mode) && !japa108DeityAllowed(mode, proOrPremiumActive);
+  const weeklyStreakProBlocked =
+    isWeeklyStreak && isPlayableDeityMode(mode) && !weeklyStreakDeityAllowed(mode, proOrPremiumActive);
+  const specialDeityProBlocked = deityProBlocked || japa108ProBlocked || weeklyStreakProBlocked;
 
-  /** Ista Devata japa: Shakthi free; other deities need Pro (blocks direct `/game?mode=…` URLs). */
+  /** Per-special free deity gates (blocks direct `/game?mode=…` URLs). */
   useEffect(() => {
-    if (!deityProBlocked) return;
+    if (!specialDeityProBlocked) return;
     if (!isGuest && user?.uid && levelsUnlocked === null) return;
     const returnPath =
-      normalizeReturnPath((location.state as { returnTo?: string } | null)?.returnTo) ?? '/menu';
+      normalizeReturnPath((location.state as { returnTo?: string } | null)?.returnTo) ??
+      (isSpecial108 ? '/special-108-japa' : isWeeklyStreak ? '/weekly-streak' : '/menu');
     navigate('/plans', { replace: true, state: withReturnTo(returnPath) });
-  }, [deityProBlocked, isGuest, user?.uid, levelsUnlocked, navigate, location.state]);
+  }, [
+    specialDeityProBlocked,
+    isGuest,
+    user?.uid,
+    levelsUnlocked,
+    navigate,
+    location.state,
+    isSpecial108,
+    isWeeklyStreak,
+  ]);
 
   const profileDisplayName = useProfileStore((s) => s.displayName);
   const profileLoaded = useProfileStore((s) => s.loaded);
@@ -526,7 +543,11 @@ export function GamePage() {
     !isMarathon &&
     levelIndex >= firstLock &&
     levelsUnlocked === null;
-  const waitingDeityUnlock = !isGuest && !!user?.uid && isIstaDevataPlay && levelsUnlocked === null;
+  const waitingDeityUnlock =
+    !isGuest &&
+    !!user?.uid &&
+    (isIstaDevataPlay || (isSpecial108 && isPlayableDeityMode(mode)) || (isWeeklyStreak && isPlayableDeityMode(mode))) &&
+    levelsUnlocked === null;
 
   // Do not flash signed-out or guest UI while Firebase restores the persisted session.
   if (!isGuest && authLoading) {

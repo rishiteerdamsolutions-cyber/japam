@@ -3,10 +3,10 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { JapamCounterDeityBackdrop } from '../components/japamCounter/JapamCounterDeityBackdrop';
 import { ManualMalaJapaPad } from '../components/japamCounter/ManualMalaJapaPad';
 import { DEITIES, getDeity, type DeityId } from '../data/deities';
-import { AUTO_JAPAM_SESSION_TARGET, FREE_JAPAM_COUNTER_DEITY } from '../lib/japamCounterSpecial';
+import { AUTO_JAPAM_SESSION_TARGET, FREE_JAPAM_COUNTER_MANUAL_DEITY } from '../lib/japamCounterSpecial';
 import { primeAudio } from '../hooks/useSound';
 
-const DEFAULT_DEITY: DeityId = FREE_JAPAM_COUNTER_DEITY;
+const DEFAULT_DEITY: DeityId = FREE_JAPAM_COUNTER_MANUAL_DEITY;
 
 /**
  * Full manual japam counter + mosaic deity backdrop (no auth).

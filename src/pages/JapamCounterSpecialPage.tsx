@@ -11,10 +11,11 @@ import { useUnlockStore } from '../store/unlockStore';
 import { hasActivePaidAccess } from '../lib/membershipDisplay';
 import {
   AUTO_JAPAM_SESSION_TARGET,
-  FREE_JAPAM_COUNTER_DEITY,
+  freeJapamCounterDeity,
   japamCounterDeityAllowed,
   MANUAL_JAPAM_COUNTER_INITIAL_COUNT,
   parseJapamCounterDeity,
+  type JapamCounterMode,
 } from '../lib/japamCounterSpecial';
 import { AccessBadge } from '../components/ui/AccessBadge';
 import { MenuMatchChantHeader } from '../components/layout/MenuMatchChantHeader';
@@ -24,8 +25,6 @@ import { useManualJapaTouchLock } from '../hooks/useManualJapaTouchLock';
 import { ensureMantraPreloaded, playMantraOnce, primeAudio, stopAllMantras } from '../hooks/useSound';
 import { pulseMalaBeadTouchHaptic } from '../lib/malaHaptics';
 import { useJapaStore } from '../store/japaStore';
-
-type JapamCounterMode = 'manual' | 'auto';
 
 const AUTO_MALA_PREF_KEY = 'japam_auto_counter_show_mala';
 
@@ -129,7 +128,7 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
   const handleDeityCardClick = useCallback(
     (id: DeityId) => {
       if (unlockPending) return;
-      if (!japamCounterDeityAllowed(id, proOrPremiumActive)) {
+      if (!japamCounterDeityAllowed(id, proOrPremiumActive, mode)) {
         navigate('/plans', {
           state: withReturnTo(currentReturnPath(location.pathname, location.search)),
         });
@@ -137,7 +136,7 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
       }
       setDeity(id);
     },
-    [location.pathname, location.search, navigate, proOrPremiumActive, unlockPending, setDeity],
+    [location.pathname, location.search, mode, navigate, proOrPremiumActive, unlockPending, setDeity],
   );
 
   const toggleShowAutoMala = useCallback(() => {
@@ -286,13 +285,15 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
           <p className="text-amber-200/80 text-[clamp(0.7rem,3.2vw,0.8rem)] text-center mb-2 max-w-sm px-1">
             {t('specials.japamCounterChooseDeity')}
           </p>
-          <p className="text-amber-200/70 text-[10px] text-center mb-2 max-w-sm">{t('specials.japamCounterProGate')}</p>
+          <p className="text-amber-200/70 text-[10px] text-center mb-2 max-w-sm">
+            {t(isAuto ? 'specials.autoJapamCounterProGate' : 'specials.japamCounterProGate')}
+          </p>
           {user && unlockPending ? (
             <p className="text-amber-200/75 text-[11px] text-center py-10 w-full">{t('common.loading')}</p>
           ) : (
             <div className="grid grid-cols-2 min-[400px]:grid-cols-3 gap-2 sm:gap-3 w-full">
               {DEITIES.map((d, i) => {
-                const locked = !japamCounterDeityAllowed(d.id, proOrPremiumActive);
+                const locked = !japamCounterDeityAllowed(d.id, proOrPremiumActive, mode);
                 return (
                   <motion.button
                     key={d.id}
@@ -311,7 +312,7 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
                         label={t('pushpa.proGateCard')}
                         className="absolute top-2 right-2 z-[2]"
                       />
-                    ) : d.id === FREE_JAPAM_COUNTER_DEITY && !proOrPremiumActive ? (
+                    ) : d.id === freeJapamCounterDeity(mode) && !proOrPremiumActive ? (
                       <AccessBadge
                         variant="free"
                         label={t('common.free')}

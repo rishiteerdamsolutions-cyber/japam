@@ -4,16 +4,24 @@ import { istIsoWeekdayMon1Sun7FromYmd } from './weeklyStreakIst';
 /** Monday=1 … Sunday=7 (IST). */
 export type StreakIsoWeekday = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
-/** Free default: Mon–Sun mapping from product spec. */
+/** Free weekly streak path (Pro unlocks custom deity per weekday). */
+export const FREE_WEEKLY_STREAK_DEITY_ID: DeityId = 'shanmukha';
+
+/** Shown in UI: free users follow Shanmukha every IST day. */
 export const FREE_WEEKLY_STREAK_DEITY: Record<StreakIsoWeekday, DeityId> = {
-  1: 'shiva',
-  2: 'hanuman',
-  3: 'shanmukha',
-  4: 'lakshmi',
-  5: 'venkateswara',
-  6: 'ganesh',
-  7: 'surya',
+  1: FREE_WEEKLY_STREAK_DEITY_ID,
+  2: FREE_WEEKLY_STREAK_DEITY_ID,
+  3: FREE_WEEKLY_STREAK_DEITY_ID,
+  4: FREE_WEEKLY_STREAK_DEITY_ID,
+  5: FREE_WEEKLY_STREAK_DEITY_ID,
+  6: FREE_WEEKLY_STREAK_DEITY_ID,
+  7: FREE_WEEKLY_STREAK_DEITY_ID,
 };
+
+export function weeklyStreakDeityAllowed(deityId: DeityId, proOrPremiumActive: boolean): boolean {
+  if (deityId === FREE_WEEKLY_STREAK_DEITY_ID) return true;
+  return proOrPremiumActive;
+}
 
 export function defaultDeityForWeekday(wd: StreakIsoWeekday): DeityId {
   return FREE_WEEKLY_STREAK_DEITY[wd];

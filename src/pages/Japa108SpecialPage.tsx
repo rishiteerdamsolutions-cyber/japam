@@ -15,27 +15,18 @@ import { MenuMatchChantHeader } from '../components/layout/MenuMatchChantHeader'
 import { PushableButton } from '../components/ui/PushableButton';
 import { pushableFullWidthFrontClass } from '../lib/landingCtaStyles';
 import { CTA } from '../lib/ctaCopy';
-
-/** Free path for 108 Japa special (Pro unlocks all deities). */
-const FREE_JAPA_108_DEITY: DeityId = 'shakthi';
-
-function japa108DeityAllowedForUser(deityId: DeityId, proOrPremiumActive: boolean): boolean {
-  if (deityId === FREE_JAPA_108_DEITY) return true;
-  return proOrPremiumActive;
-}
-
-function parseDeity(raw: string | null): DeityId | null {
-  if (!raw || typeof raw !== 'string') return null;
-  const id = raw.trim().toLowerCase() as DeityId;
-  return DEITIES.some((d) => d.id === id) ? id : null;
-}
+import {
+  FREE_JAPA_108_DEITY,
+  japa108DeityAllowed,
+  parseJapa108Deity,
+} from '../lib/japa108Special';
 
 export function Japa108SpecialPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const deityId = useMemo(() => parseDeity(searchParams.get('deity')), [searchParams]);
+  const deityId = useMemo(() => parseJapa108Deity(searchParams.get('deity')), [searchParams]);
   const user = useAuthStore((s) => s.user);
   const tier = useUnlockStore((s) => s.tier);
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
@@ -66,7 +57,7 @@ export function Japa108SpecialPage() {
   const handleDeityCardClick = useCallback(
     (id: DeityId) => {
       if (unlockPending) return;
-      if (!japa108DeityAllowedForUser(id, proOrPremiumActive)) {
+      if (!japa108DeityAllowed(id, proOrPremiumActive)) {
         navigate('/plans', {
           state: withReturnTo(currentReturnPath(location.pathname, location.search)),
         });
@@ -79,7 +70,7 @@ export function Japa108SpecialPage() {
 
   const startGame = () => {
     if (!deityId || unlockPending) return;
-    if (!japa108DeityAllowedForUser(deityId, proOrPremiumActive)) {
+    if (!japa108DeityAllowed(deityId, proOrPremiumActive)) {
       navigate('/plans', {
         state: withReturnTo(currentReturnPath(location.pathname, location.search)),
       });
@@ -119,7 +110,7 @@ export function Japa108SpecialPage() {
           ) : (
             <div className="grid grid-cols-2 min-[400px]:grid-cols-3 gap-2 sm:gap-3 w-full">
               {DEITIES.map((d, i) => {
-                const locked = !japa108DeityAllowedForUser(d.id, proOrPremiumActive);
+                const locked = !japa108DeityAllowed(d.id, proOrPremiumActive);
                 return (
                   <motion.button
                     key={d.id}

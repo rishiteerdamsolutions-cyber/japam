@@ -28,7 +28,7 @@ export function MenuPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const menuHistoryArmedRef = useRef(false);
-  const inviteHandledRef = useRef(false);
+  const [inviteHandled, setInviteHandled] = useState(false);
 
   const [pendingInviteDeity, setPendingInviteDeity] = useState<PlayableDeityId | null>(() =>
     peekPendingInviteDeity(),
@@ -123,7 +123,7 @@ export function MenuPage() {
       const deity = pendingInviteDeity;
       clearPendingInviteDeity();
       setPendingInviteDeity(null);
-      inviteHandledRef.current = true;
+      setInviteHandled(true);
       launchDeityGame(deity, { inviteFresh: true });
       return;
     }
@@ -138,8 +138,8 @@ export function MenuPage() {
           setPendingInviteDeity(playable);
           return;
         }
-        if (!inviteHandledRef.current) {
-          inviteHandledRef.current = true;
+        if (!inviteHandled) {
+          setInviteHandled(true);
           launchDeityGame(playable);
         }
       }
@@ -149,7 +149,7 @@ export function MenuPage() {
     if (!pendingInviteDeity) {
       clearSeoDeityHint();
     }
-  }, [authLoading, launchDeityGame, location.state, pendingInviteDeity, user]);
+  }, [authLoading, inviteHandled, launchDeityGame, location.state, pendingInviteDeity, user]);
 
   const tryInviteAsGuest = useCallback(() => {
     if (!pendingInviteDeity) return;
@@ -157,7 +157,7 @@ export function MenuPage() {
     const deity = pendingInviteDeity;
     clearPendingInviteDeity();
     setPendingInviteDeity(null);
-    inviteHandledRef.current = true;
+    setInviteHandled(true);
     navigate(`/game${buildInviteIntroGameSearch(deity)}`, {
       state: withReturnTo('/menu'),
     });
@@ -176,7 +176,7 @@ export function MenuPage() {
   // Show invite gate immediately for shared deity links (don't flash menu first).
   const showInviteGate = Boolean(pendingInviteDeity && !user);
   const redirectingSignedInInvite =
-    Boolean(pendingInviteDeity && user && !authLoading) && !inviteHandledRef.current;
+    Boolean(pendingInviteDeity && user && !authLoading) && !inviteHandled;
 
   if (redirectingSignedInInvite) {
     return (

@@ -107,10 +107,13 @@ export function MalaBeadSwipeZone({
   const onBeadTouchStartRef = useRef(onBeadTouchStart);
   const onBeadStrokeCancelRef = useRef(onBeadStrokeCancel);
   const onStrokeDebugRef = useRef(onStrokeDebug);
-  onBeadRef.current = onBead;
-  onBeadTouchStartRef.current = onBeadTouchStart;
-  onBeadStrokeCancelRef.current = onBeadStrokeCancel;
-  onStrokeDebugRef.current = onStrokeDebug;
+
+  useEffect(() => {
+    onBeadRef.current = onBead;
+    onBeadTouchStartRef.current = onBeadTouchStart;
+    onBeadStrokeCancelRef.current = onBeadStrokeCancel;
+    onStrokeDebugRef.current = onStrokeDebug;
+  }, [onBead, onBeadTouchStart, onBeadStrokeCancel, onStrokeDebug]);
 
   const readSessionCount = () => sessionCountRef?.current ?? sessionCount;
   const [active, setActive] = useState(false);
@@ -269,7 +272,10 @@ export function MalaBeadSwipeZone({
   }, []);
 
   const strokeHandlersRef = useRef({ beginStroke, applyDrag, resetStroke });
-  strokeHandlersRef.current = { beginStroke, applyDrag, resetStroke };
+
+  useEffect(() => {
+    strokeHandlersRef.current = { beginStroke, applyDrag, resetStroke };
+  }, [beginStroke, applyDrag, resetStroke]);
 
   useEffect(() => {
     if (autoSpinOnCount == null) return;

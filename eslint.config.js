@@ -36,6 +36,8 @@ export default defineConfig([
       'react-hooks/purity': 'warn',
       // Manual memoization preservation warnings — informational only, not blocking
       'react-hooks/preserve-manual-memoization': 'warn',
+      // Utility exports alongside components are intentional across japamCounter and share modules.
+      'react-refresh/only-export-components': 'off',
     },
   },
 ])

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { BottomNav } from '../nav/BottomNav';
 import { ActiveUsersStrip } from '../game/ActiveUsersStrip';
 import { MenuPowersScrollStrip } from './MenuPowersScrollStrip';
-import { DEITIES, type PlayableDeityId } from '../../data/deities';
+import { DEITIES, type DeityId } from '../../data/deities';
 import { JapamBrand } from '../ui/JapamBrand';
 import { useAuthStore } from '../../store/authStore';
 import { auth, isFirebaseConfigured } from '../../lib/firebase';
@@ -98,7 +98,7 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice, 
   const initial = (displayName && displayName.charAt(0).toUpperCase()) || '?';
 
   const handleDeityCardClick = useCallback(
-    (deityId: PlayableDeityId) => {
+    (deityId: DeityId) => {
       if (unlockPending) return;
       if (!istaDevataDeityAllowed(deityId, proOrPremiumActive)) {
         navigate('/plans', { state: { returnTo: '/menu' } });

@@ -1,0 +1,31 @@
+name: Send Daily Reminders
+
+on:
+  schedule:
+    # Every 5 minutes — Vercel Hobby allows at most one cron per day.
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+jobs:
+  send-daily-reminders:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger reminder push endpoint
+        env:
+          REMINDER_CRON_URL: ${{ secrets.REMINDER_CRON_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          if [ -z "$REMINDER_CRON_URL" ]; then
+            echo "Missing REMINDER_CRON_URL secret"
+            exit 1
+          fi
+          if [ -z "$CRON_SECRET" ]; then
+            echo "Missing CRON_SECRET secret"
+            exit 1
+          fi
+          curl --fail --show-error --silent \
+            --max-time 60 \
+            --retry 2 \
+            --retry-delay 5 \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            "$REMINDER_CRON_URL"

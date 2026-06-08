@@ -33,14 +33,26 @@ function localHHMM(timeZone, now = new Date()) {
   return `${hh}:${mm}`;
 }
 
-function shouldSendNow(time, timeZone, lastFiredDate) {
-  if (!time || !/^\d{2}:\d{2}$/.test(time)) return false;
-  const today = localDateKey(timeZone);
-  if (lastFiredDate === today) return false;
-  return localHHMM(timeZone) === time;
+/** Match client `REMINDER_BACKGROUND_CATCHUP_MS` in src/lib/reminderSync.ts. */
+const REMINDER_CATCHUP_MS = 6 * 60 * 60 * 1000;
+
+function minutesSinceMidnight(hhmm) {
+  const [hh, mm] = hhmm.split(':').map(Number);
+  return hh * 60 + mm;
 }
 
-/** GET /api/cron/send-daily-reminders — Web Push at user's local reminder time (every minute via Vercel cron). */
+/** True after the user's local reminder time until the catch-up window ends (for 5-min GitHub cron). */
+function shouldSendNow(time, timeZone, lastFiredDate, now = new Date()) {
+  if (!time || !/^\d{2}:\d{2}$/.test(time)) return false;
+  const today = localDateKey(timeZone, now);
+  if (lastFiredDate === today) return false;
+  const targetMins = minutesSinceMidnight(time);
+  const nowMins = minutesSinceMidnight(localHHMM(timeZone, now));
+  const elapsedMs = (nowMins - targetMins) * 60 * 1000;
+  return elapsedMs >= 0 && elapsedMs <= REMINDER_CATCHUP_MS;
+}
+
+/** GET /api/cron/send-daily-reminders — Web Push at user's local reminder time (GitHub Actions cron). */
 export async function GET(request) {
   try {
     const secret = process.env.CRON_SECRET || process.env.ADMIN_SECRET;

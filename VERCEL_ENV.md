@@ -26,6 +26,16 @@ Set these in **Vercel → Project → Settings → Environment Variables**:
 | `CASHFREE_SECRET` | Cashfree Secret Key |
 | `CRON_SECRET` or `ADMIN_SECRET` | Required for cron jobs (`refresh-active-users` at 3 AM IST). Vercel injects `CRON_SECRET` for scheduled crons on Pro; otherwise set it manually. |
 
+## GitHub Actions secrets (reminders & analytics)
+
+Vercel **Hobby** crons may run at most once per day, so Web Push reminders are triggered from GitHub Actions every 5 minutes instead.
+
+| Name | Value |
+|------|--------|
+| `REMINDER_CRON_URL` | `https://japam.digital/api/cron/send-daily-reminders` (or your production URL) |
+| `CRON_SECRET` | Same value as Vercel `CRON_SECRET` / `ADMIN_SECRET` |
+| `ANALYTICS_CRON_URL` | `https://japam.digital/api/cron/analytics-daily` |
+
 **Total: 11–12 variables** (no `ADMIN_ID` or `ADMIN_PASSWORD`).
 
 To change the unlock price: edit `api/_lib.js`, update `UNLOCK_PRICE_PAISE` (e.g. `9900` = ₹99), then push and redeploy.

@@ -1,11 +1,11 @@
-import { useState, useRef, useEffect, type ReactNode } from 'react';
+import { useState, useRef, useEffect, useCallback, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { BottomNav } from '../nav/BottomNav';
 import { ActiveUsersStrip } from '../game/ActiveUsersStrip';
 import { MenuPowersScrollStrip } from './MenuPowersScrollStrip';
-import { DEITIES } from '../../data/deities';
+import { DEITIES, type PlayableDeityId } from '../../data/deities';
 import { JapamBrand } from '../ui/JapamBrand';
 import { useAuthStore } from '../../store/authStore';
 import { auth, isFirebaseConfigured } from '../../lib/firebase';
@@ -13,7 +13,12 @@ import { AuthSessionRestoreHint } from '../auth/AuthSessionRestoreHint';
 import { useUnlockStore } from '../../store/unlockStore';
 import type { GameMode } from '../../store/gameStore';
 import { useProfileStore } from '../../store/profileStore';
-import { getProfileRingFlags } from '../../lib/membershipDisplay';
+import { getProfileRingFlags, hasActivePaidAccess } from '../../lib/membershipDisplay';
+import { AccessBadge } from '../ui/AccessBadge';
+import {
+  FREE_ISTA_DEVATA_DEITY,
+  istaDevataDeityAllowed,
+} from '../../lib/istaDevataAccess';
 import {
   menuGridPushableClass,
   menuGridPushableFrontClass,
@@ -86,7 +91,23 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice, 
     unlockExpiresAt,
     isDonor,
   });
+  const proOrPremiumActive =
+    (tier === 'pro' || tier === 'premium') &&
+    hasActivePaidAccess(levelsUnlocked === true, unlockExpiresAt);
+  const unlockPending = Boolean(user?.uid && levelsUnlocked === null);
   const initial = (displayName && displayName.charAt(0).toUpperCase()) || '?';
+
+  const handleDeityCardClick = useCallback(
+    (deityId: PlayableDeityId) => {
+      if (unlockPending) return;
+      if (!istaDevataDeityAllowed(deityId, proOrPremiumActive)) {
+        navigate('/plans', { state: { returnTo: '/menu' } });
+        return;
+      }
+      onSelect(deityId);
+    },
+    [navigate, onSelect, proOrPremiumActive, unlockPending],
+  );
 
   useViewportLock(true);
 
@@ -313,11 +334,19 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice, 
             <p className="text-center text-amber-200/90 text-xs sm:text-sm mb-1">
               {t('menu.chooseIstaDevata')}
             </p>
-            <p className="text-center text-amber-200/55 text-[10px] sm:text-xs mb-2 px-2 leading-snug">
+            <p className="text-center text-amber-200/55 text-[10px] sm:text-xs mb-1 px-2 leading-snug">
               {t('menu.shareDeityHint')}
             </p>
+            <p className="text-center text-amber-200/70 text-[10px] sm:text-xs mb-2 px-2 leading-snug">
+              {t('specials.japamCounterProGate')}
+            </p>
+            {user && unlockPending ? (
+              <p className="text-amber-200/75 text-[11px] text-center py-10 w-full">{t('common.loading')}</p>
+            ) : (
             <div id="ista-devata-grid" className="grid grid-cols-2 gap-3 w-full">
-              {DEITIES.map((deity, i) => (
+              {DEITIES.map((deity, i) => {
+                const locked = !istaDevataDeityAllowed(deity.id, proOrPremiumActive);
+                return (
                 <motion.div
                   key={deity.id}
                   initial={{ opacity: 0, y: 8 }}
@@ -328,15 +357,28 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice, 
                     type="button"
                     layout="block"
                     fullWidth
-                    onClick={() => onSelect(deity.id)}
+                    onClick={() => handleDeityCardClick(deity.id)}
                     className="w-full shadow-xl"
                     frontClassName={pushableDeityTileFrontClass}
                   >
                     <div className="w-full aspect-square relative bg-black/30">
+                      {locked ? (
+                        <AccessBadge
+                          variant="pro"
+                          label={t('pushpa.proGateCard')}
+                          className="absolute top-2 right-2 z-[2]"
+                        />
+                      ) : deity.id === FREE_ISTA_DEVATA_DEITY && !proOrPremiumActive ? (
+                        <AccessBadge
+                          variant="free"
+                          label={t('common.free')}
+                          className="absolute top-2 right-2 z-[2]"
+                        />
+                      ) : null}
                       <img
                         src={deity.image}
                         alt={deity.name}
-                        className="w-full h-full object-cover"
+                        className={`w-full h-full object-cover ${locked ? 'opacity-55' : ''}`}
                       />
                     </div>
                     <span className="py-2 px-1.5 sm:px-2 text-xs sm:text-sm w-full text-center truncate min-w-0" title={t(`deities.${deity.id}`)}>
@@ -344,8 +386,10 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice, 
                     </span>
                   </PushableButton>
                 </motion.div>
-              ))}
+                );
+              })}
             </div>
+            )}
             </motion.div>
             <div
               className="shrink-0 w-full h-[calc(4.75rem+env(safe-area-inset-bottom,0px))]"

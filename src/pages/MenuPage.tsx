@@ -17,6 +17,12 @@ import {
   storePendingInviteDeity,
 } from '../lib/deityInvite';
 import { trackProductUsage } from '../lib/productUsage';
+import { useUnlockStore } from '../store/unlockStore';
+import { hasActivePaidAccess } from '../lib/membershipDisplay';
+import {
+  istaDevataDeityAllowed,
+  isPlayableDeityMode,
+} from '../lib/istaDevataAccess';
 
 export function MenuPage() {
   const navigate = useNavigate();
@@ -48,9 +54,26 @@ export function MenuPage() {
   const authLoading = useAuthStore((s) => s.loading);
   const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle);
   const clearAuthError = useAuthStore((s) => s.clearError);
+  const tier = useUnlockStore((s) => s.tier);
+  const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
+  const unlockExpiresAt = useUnlockStore((s) => s.unlockExpiresAt);
+  const proOrPremiumActive =
+    (tier === 'pro' || tier === 'premium') &&
+    hasActivePaidAccess(levelsUnlocked === true, unlockExpiresAt);
+
+  const redirectToPlansIfDeityLocked = useCallback(
+    (mode: GameMode): boolean => {
+      if (!isPlayableDeityMode(mode)) return false;
+      if (istaDevataDeityAllowed(mode, proOrPremiumActive)) return false;
+      navigate('/plans', { state: withReturnTo('/menu') });
+      return true;
+    },
+    [navigate, proOrPremiumActive],
+  );
 
   const launchDeityGame = useCallback(
     (mode: PlayableDeityId, opts?: { inviteFresh?: boolean }) => {
+      if (redirectToPlansIfDeityLocked(mode)) return;
       const level = opts?.inviteFresh ? 0 : getCurrentLevelIndex(mode);
       trackProductUsage('action_menu_ista_select');
       const params = new URLSearchParams({
@@ -62,11 +85,12 @@ export function MenuPage() {
         state: withReturnTo('/menu'),
       });
     },
-    [getCurrentLevelIndex, navigate],
+    [getCurrentLevelIndex, navigate, redirectToPlansIfDeityLocked],
   );
 
   const handleSelect = useCallback(
     (mode: GameMode) => {
+      if (redirectToPlansIfDeityLocked(mode)) return;
       const level = getCurrentLevelIndex(mode);
       if (mode === 'general') trackProductUsage('action_menu_all_devatas');
       else trackProductUsage('action_menu_ista_select');
@@ -77,7 +101,7 @@ export function MenuPage() {
         void signInWithGoogle();
       }
     },
-    [getCurrentLevelIndex, navigate, signInWithGoogle, user],
+    [getCurrentLevelIndex, navigate, redirectToPlansIfDeityLocked, signInWithGoogle, user],
   );
 
   useEffect(() => {
@@ -129,6 +153,7 @@ export function MenuPage() {
 
   const tryInviteAsGuest = useCallback(() => {
     if (!pendingInviteDeity) return;
+    if (redirectToPlansIfDeityLocked(pendingInviteDeity)) return;
     const deity = pendingInviteDeity;
     clearPendingInviteDeity();
     setPendingInviteDeity(null);
@@ -136,7 +161,7 @@ export function MenuPage() {
     navigate(`/game${buildInviteIntroGameSearch(deity)}`, {
       state: withReturnTo('/menu'),
     });
-  }, [navigate, pendingInviteDeity]);
+  }, [navigate, pendingInviteDeity, redirectToPlansIfDeityLocked]);
 
   const handleInviteSignIn = useCallback(() => {
     clearAuthError();

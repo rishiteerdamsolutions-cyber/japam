@@ -28,6 +28,9 @@ import { PushableButton } from '../components/ui/PushableButton';
 import { pushableFullWidthFrontClass } from '../lib/landingCtaStyles';
 import { CTA } from '../lib/ctaCopy';
 import { shouldOfferResumePausedGame } from '../lib/pausedGameResume';
+import { hasActivePaidAccess } from '../lib/membershipDisplay';
+import { istaDevataDeityAllowed, isPlayableDeityMode } from '../lib/istaDevataAccess';
+import { withReturnTo } from '../lib/navigationReturn';
 
 function parseGameMode(rawMode: string | null): GameMode {
   if (!rawMode) return 'general';
@@ -179,6 +182,25 @@ export function GamePage() {
   const restoreGame = useGameStore((s) => s.restoreGame);
   const loadUnlock = useUnlockStore((s) => s.load);
   const levelsUnlocked = useUnlockStore((s) => s.levelsUnlocked);
+  const tier = useUnlockStore((s) => s.tier);
+  const unlockExpiresAt = useUnlockStore((s) => s.unlockExpiresAt);
+  const proOrPremiumActive =
+    (tier === 'pro' || tier === 'premium') &&
+    hasActivePaidAccess(levelsUnlocked === true, unlockExpiresAt);
+  const isIstaDevataPlay =
+    isPlayableDeityMode(mode) && !isMarathon && !occasionKind && !isSpecial108 && !isWeeklyStreak;
+  const deityProBlocked =
+    isIstaDevataPlay && !istaDevataDeityAllowed(mode, proOrPremiumActive);
+
+  /** Ista Devata japa: Shakthi free; other deities need Pro (blocks direct `/game?mode=…` URLs). */
+  useEffect(() => {
+    if (!deityProBlocked) return;
+    if (!isGuest && user?.uid && levelsUnlocked === null) return;
+    const returnPath =
+      normalizeReturnPath((location.state as { returnTo?: string } | null)?.returnTo) ?? '/menu';
+    navigate('/plans', { replace: true, state: withReturnTo(returnPath) });
+  }, [deityProBlocked, isGuest, user?.uid, levelsUnlocked, navigate, location.state]);
+
   const profileDisplayName = useProfileStore((s) => s.displayName);
   const profileLoaded = useProfileStore((s) => s.loaded);
   const setProfileDisplayName = useProfileStore((s) => s.setDisplayName);
@@ -504,6 +526,7 @@ export function GamePage() {
     !isMarathon &&
     levelIndex >= firstLock &&
     levelsUnlocked === null;
+  const waitingDeityUnlock = !isGuest && !!user?.uid && isIstaDevataPlay && levelsUnlocked === null;
 
   // Do not flash signed-out or guest UI while Firebase restores the persisted session.
   if (!isGuest && authLoading) {
@@ -519,6 +542,7 @@ export function GamePage() {
     !isGuest &&
     (waitingProfile ||
       waitingUnlock ||
+      waitingDeityUnlock ||
       !pauseCheckDone ||
       (!!user?.uid &&
         !isMarathon &&

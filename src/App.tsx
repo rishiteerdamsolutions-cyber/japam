@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { clearSeoDeityHint, hasDeityInSearchParams } from './lib/seoAttribution';
 import { Splash } from './components/Splash';
@@ -7,6 +7,15 @@ import { InstallPrompt } from './components/ui/InstallPrompt';
 import { useAuthStore } from './store/authStore';
 import { LAUNCH_FEATURE_MULTIPLAYER_ASURA, LAUNCH_FEATURE_OCCASION_GAMES } from './config/launchFeatures';
 import { trackProductUsage } from './lib/productUsage';
+import {
+  fetchSatsangLandingOpen,
+  peekFestivalLandingOpen,
+  rememberFestivalLandingOpen,
+} from './lib/satsangApi';
+
+const GaneshotsavPage = lazy(() =>
+  import('./pages/GaneshotsavPage').then((m) => ({ default: m.GaneshotsavPage })),
+);
 
 function multiplayerAsuraHref(): string {
   let base = import.meta.env.BASE_URL || '/';
@@ -18,10 +27,47 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const [screen, setScreen] = useState<'splash' | 'landing'>('splash');
+  const [festivalOpen, setFestivalOpen] = useState<boolean | null>(() => peekFestivalLandingOpen());
 
   // Auth + data stores are bootstrapped globally in AuthProvider (mounted for all routes).
   // App is just the splash/landing entry route.
   useAuthStore((s) => s.user);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchSatsangLandingOpen().then((open) => {
+      if (cancelled || open === null) return;
+      rememberFestivalLandingOpen(open);
+      setFestivalOpen(open);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (festivalOpen === true) {
+    return (
+      <Suspense
+        fallback={
+          <div className="relative min-h-screen flex flex-col items-center justify-center gap-3">
+            <div className="w-10 h-10 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" aria-hidden />
+            <p className="text-amber-400 text-sm">Loading…</p>
+          </div>
+        }
+      >
+        <GaneshotsavPage />
+      </Suspense>
+    );
+  }
+
+  if (festivalOpen === null) {
+    return (
+      <div className="relative min-h-screen flex flex-col items-center justify-center gap-3">
+        <div className="w-10 h-10 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" aria-hidden />
+        <p className="text-amber-400 text-sm">Loading…</p>
+      </div>
+    );
+  }
 
   return (
     <>

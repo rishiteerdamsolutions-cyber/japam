@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { OpeningVideoModal } from '../components/landing/OpeningVideoModal';
@@ -228,7 +228,18 @@ export function GaneshotsavPage() {
   };
 
   if (status && status.open !== true) {
-    return <Navigate to="/" replace />;
+    return (
+      <div className="min-h-[100dvh] flex flex-col items-center justify-center px-6 text-center">
+        <p className="text-amber-200/80 text-sm max-w-sm">{t('ganeshotsav.closed')}</p>
+        <button
+          type="button"
+          onClick={() => navigate('/menu', { replace: true })}
+          className="mt-6 w-full max-w-sm py-3 rounded-2xl bg-emerald-600 text-white font-semibold"
+        >
+          {t('ganeshotsav.enterMain')}
+        </button>
+      </div>
+    );
   }
 
   if (step === 'boot' || !status) {
@@ -419,7 +430,7 @@ export function GaneshotsavPage() {
           ) : null}
           <button
             type="button"
-            onClick={() => navigate('/', { replace: true })}
+            onClick={() => navigate('/menu', { replace: true })}
             className="w-full max-w-sm py-3 rounded-2xl bg-emerald-600 text-white font-semibold"
           >
             {t('ganeshotsav.enterMain')}

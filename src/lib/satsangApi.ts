@@ -54,11 +54,60 @@ export type SatsangReport = {
   names: string[];
 };
 
+const FESTIVAL_LANDING_KEY = 'japam_satsang_landing_open';
+const festivalLandingListeners = new Set<() => void>();
+
+export function peekFestivalLandingOpen(): boolean | null {
+  try {
+    const v = localStorage.getItem(FESTIVAL_LANDING_KEY);
+    if (v === '1') return true;
+    if (v === '0') return false;
+  } catch {
+    /* ignore */
+  }
+  return null;
+}
+
+export function rememberFestivalLandingOpen(open: boolean) {
+  try {
+    localStorage.setItem(FESTIVAL_LANDING_KEY, open ? '1' : '0');
+  } catch {
+    /* ignore */
+  }
+  festivalLandingListeners.forEach((listener) => listener());
+}
+
+export function subscribeFestivalLandingOpen(onStoreChange: () => void): () => void {
+  festivalLandingListeners.add(onStoreChange);
+  return () => {
+    festivalLandingListeners.delete(onStoreChange);
+  };
+}
+
+export function getFestivalLandingOpenSnapshot(): boolean {
+  return peekFestivalLandingOpen() === true;
+}
+
+/** Network/API failure returns null so the home switch can keep the last known festival landing. */
+export async function fetchSatsangLandingOpen(): Promise<boolean | null> {
+  try {
+    const res = await fetch(apiUrl('/api/public/satsang-status'));
+    const data = (await res.json().catch(() => ({}))) as SatsangStatus;
+    if (!res.ok || !data) return null;
+    return data.open === true;
+  } catch {
+    return null;
+  }
+}
+
 export async function loadSatsangStatus(): Promise<SatsangStatus> {
   try {
     const res = await fetch(apiUrl('/api/public/satsang-status'));
     const data = (await res.json().catch(() => ({}))) as SatsangStatus;
-    if (!res.ok || !data || data.open !== true) return { open: false };
+    if (!res.ok || !data) return { open: false };
+    const isOpen = data.open === true;
+    rememberFestivalLandingOpen(isOpen);
+    if (!isOpen) return { open: false };
     return data;
   } catch {
     return { open: false };

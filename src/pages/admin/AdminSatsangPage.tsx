@@ -181,8 +181,8 @@ export function AdminSatsangPage() {
       }
       setMessage(
         status === 'open'
-          ? 'This mandap is OPEN. Same QR /ganeshotsav — today’s spoken code sends people into this event (cap 50).'
-          : 'This mandap is CLOSED. Its codes will not join. QR stays festival until every mandap is closed.',
+          ? 'This mandap is OPEN. japam.digital (and /ganeshotsav) is the Ganeshotsav landing. Today’s spoken code sends people into this event (cap 50).'
+          : 'This mandap is CLOSED. Its codes will not join. The public site stays festival until every mandap is closed.',
       );
       await load();
     } catch {
@@ -196,10 +196,11 @@ export function AdminSatsangPage() {
     <div>
       <h1 className="text-xl font-bold text-amber-400 mb-2">Ganeshotsav satsang</h1>
       <p className="text-amber-200/70 text-sm mb-4 max-w-xl">
-        One event per mandap. All mandaps share the same QR:{' '}
+        One event per mandap. While any mandap is OPEN, japam.digital itself is the Ganeshotsav landing (PWA install
+        included). Leftover QR posters can still use{' '}
         <span className="text-amber-100">{origin}/ganeshotsav</span>. The spoken code (not on the QR) chooses the
         organisation, event name, and that mandap’s 50 seats. Codes must be unique across mandaps. Open several
-        mandaps at once. When every event is closed, the QR opens the normal Japam home. Organizer report:{' '}
+        mandaps at once. When every event is closed, home returns to the normal Japam landing. Organizer report:{' '}
         <span className="text-amber-100">{origin}/satsang-report</span> — same page, that mandap’s code.
       </p>
 

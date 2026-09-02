@@ -48,7 +48,6 @@ const AdminAnalyticsPage = lazy(() => import('./pages/admin/AdminAnalyticsPage')
 const AdminProductUsagePage = lazy(() => import('./pages/admin/AdminProductUsagePage').then(m => ({ default: m.AdminProductUsagePage })))
 const AdminAppConfigPage = lazy(() => import('./pages/admin/AdminAppConfigPage').then((m) => ({ default: m.AdminAppConfigPage })))
 const AdminSatsangPage = lazy(() => import('./pages/admin/AdminSatsangPage').then((m) => ({ default: m.AdminSatsangPage })))
-const GaneshotsavPage = lazy(() => import('./pages/GaneshotsavPage').then((m) => ({ default: m.GaneshotsavPage })))
 const SatsangReportPage = lazy(() => import('./pages/SatsangReportPage').then((m) => ({ default: m.SatsangReportPage })))
 const PriestPage = lazy(() => import('./pages/PriestPage').then(m => ({ default: m.PriestPage })))
 const PriestLoginPage = lazy(() => import('./pages/PriestLoginPage').then(m => ({ default: m.PriestLoginPage })))
@@ -119,7 +118,7 @@ createRoot(document.getElementById('root')!).render(
       <Suspense fallback={<PageFallback />}>
       <Routes>
         <Route path="/" element={<App />} />
-        <Route path="/ganeshotsav" element={<GaneshotsavPage />} />
+        <Route path="/ganeshotsav" element={<App />} />
         <Route path="/satsang-report" element={<SatsangReportPage />} />
         <Route path="/menu" element={<MenuPage />} />
         <Route

@@ -1,13 +1,14 @@
 import type { DeityId } from '../data/deities';
+import { FREE_STARTER_DEITY } from './freeStarterDeity';
 import { istIsoWeekdayMon1Sun7FromYmd } from './weeklyStreakIst';
 
 /** Monday=1 … Sunday=7 (IST). */
 export type StreakIsoWeekday = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
-/** Free weekly streak path (Pro unlocks custom deity per weekday). */
-export const FREE_WEEKLY_STREAK_DEITY_ID: DeityId = 'shanmukha';
+/** Free weekly streak path (Pro unlocks custom deity per weekday). Shanmukha is Pro-gated here. */
+export const FREE_WEEKLY_STREAK_DEITY_ID: DeityId = FREE_STARTER_DEITY;
 
-/** Shown in UI: free users follow Shanmukha every IST day. */
+/** Shown in UI: free users follow Ganesh every IST day. */
 export const FREE_WEEKLY_STREAK_DEITY: Record<StreakIsoWeekday, DeityId> = {
   1: FREE_WEEKLY_STREAK_DEITY_ID,
   2: FREE_WEEKLY_STREAK_DEITY_ID,

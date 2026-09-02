@@ -24,11 +24,12 @@ import {
 import { rankCardAsOfIstLine } from '../lib/japamCounterIst';
 import { normalizeLeaderboardForRankCard, renderRankCardBlob } from '../lib/rankCard';
 import { AccessBadge } from '../components/ui/AccessBadge';
+import { FREE_STARTER_DEITY } from '../lib/freeStarterDeity';
 
 const PUSHPA_CUSTOM_DEITY_PHOTO_ENABLED = false;
 
 const FLYING_SIZE = 44;
-const STARTER_PUSHPA_DEITY: DeityId = 'ganesh';
+const STARTER_PUSHPA_DEITY: DeityId = FREE_STARTER_DEITY;
 
 type Flight = {
   key: number;

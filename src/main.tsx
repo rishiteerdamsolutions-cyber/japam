@@ -46,7 +46,10 @@ const AdminVideosPage = lazy(() => import('./pages/admin/AdminVideosPage').then(
 const AdminVideoAnalyticsPage = lazy(() => import('./pages/admin/AdminVideoAnalyticsPage').then(m => ({ default: m.AdminVideoAnalyticsPage })))
 const AdminAnalyticsPage = lazy(() => import('./pages/admin/AdminAnalyticsPage').then(m => ({ default: m.AdminAnalyticsPage })))
 const AdminProductUsagePage = lazy(() => import('./pages/admin/AdminProductUsagePage').then(m => ({ default: m.AdminProductUsagePage })))
-const AdminAppConfigPage = lazy(() => import('./pages/admin/AdminAppConfigPage').then(m => ({ default: m.AdminAppConfigPage })))
+const AdminAppConfigPage = lazy(() => import('./pages/admin/AdminAppConfigPage').then((m) => ({ default: m.AdminAppConfigPage })))
+const AdminSatsangPage = lazy(() => import('./pages/admin/AdminSatsangPage').then((m) => ({ default: m.AdminSatsangPage })))
+const GaneshotsavPage = lazy(() => import('./pages/GaneshotsavPage').then((m) => ({ default: m.GaneshotsavPage })))
+const SatsangReportPage = lazy(() => import('./pages/SatsangReportPage').then((m) => ({ default: m.SatsangReportPage })))
 const PriestPage = lazy(() => import('./pages/PriestPage').then(m => ({ default: m.PriestPage })))
 const PriestLoginPage = lazy(() => import('./pages/PriestLoginPage').then(m => ({ default: m.PriestLoginPage })))
 const MarathonsPage = lazy(() => import('./pages/MarathonsPage').then(m => ({ default: m.MarathonsPage })))
@@ -116,6 +119,8 @@ createRoot(document.getElementById('root')!).render(
       <Suspense fallback={<PageFallback />}>
       <Routes>
         <Route path="/" element={<App />} />
+        <Route path="/ganeshotsav" element={<GaneshotsavPage />} />
+        <Route path="/satsang-report" element={<SatsangReportPage />} />
         <Route path="/menu" element={<MenuPage />} />
         <Route
           path="/pushpa-aradhana"
@@ -199,6 +204,7 @@ createRoot(document.getElementById('root')!).render(
             <Route path="analytics" element={<AdminAnalyticsPage />} />
             <Route path="product-usage" element={<AdminProductUsagePage />} />
             <Route path="app-config" element={<AdminAppConfigPage />} />
+            <Route path="satsang" element={<AdminSatsangPage />} />
           </Route>
         </Route>
         <Route path="/priest-login" element={<PriestLoginPage />} />

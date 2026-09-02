@@ -178,6 +178,11 @@ import * as userExportDataHandler from './_handlers/user/export-data.js';
 import * as couponsApplyHandler from './_handlers/coupons/apply.js';
 import * as adminCouponsHandler from './_handlers/admin/coupons.js';
 import * as cashfreeWebhookHandler from './_handlers/cashfree-webhook.js';
+import * as adminSatsangEventsHandler from './_handlers/admin/satsang-events.js';
+import * as publicSatsangStatusHandler from './_handlers/public/satsang-status.js';
+import * as publicSatsangReportHandler from './_handlers/public/satsang-report.js';
+import * as satsangJoinHandler from './_handlers/satsang/join.js';
+import * as satsangCompleteHandler from './_handlers/satsang/complete.js';
 
 function getPathSegments(request) {
   const url = new URL(request.url);
@@ -333,6 +338,12 @@ const HANDLERS = {
   'POST admin/coupons': adminCouponsHandler,
   'DELETE admin/coupons': adminCouponsHandler,
   'POST cashfree-webhook': cashfreeWebhookHandler,
+  'GET admin/satsang-events': adminSatsangEventsHandler,
+  'POST admin/satsang-events': adminSatsangEventsHandler,
+  'GET public/satsang-status': publicSatsangStatusHandler,
+  'GET public/satsang-report': publicSatsangReportHandler,
+  'POST satsang/join': satsangJoinHandler,
+  'POST satsang/complete': satsangCompleteHandler,
 };
 
 async function route(request, method, pathSegments) {

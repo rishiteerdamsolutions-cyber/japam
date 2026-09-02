@@ -140,6 +140,8 @@ export interface MantraPdfOptions {
   matchTierNote?: string;
   /** Base filename without `.pdf` (ASCII-safe recommended). */
   fileStem?: string;
+  /** Festival satsang only — extra credit under japam.digital. Existing dashboard PDFs omit this. */
+  festivalCredit?: boolean;
 }
 
 function safePdfFileStem(stem: string): string {
@@ -166,7 +168,7 @@ export async function downloadMantraPdf(
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
   const contentTopY = margin + 58;
-  const contentBottomY = pageHeight - margin - 28;
+  const contentBottomY = pageHeight - margin - (options?.festivalCredit ? 48 : 28);
 
   const logoDataUrl = await fetchImageAsDataUrl('/images/favicon.png');
   const logoSize = 22;
@@ -196,10 +198,15 @@ export async function downloadMantraPdf(
     doc.text('JAPAM', centerX, headerY + 24, { align: 'center' });
     doc.setTextColor(0, 0, 0);
 
-    // Footer: website centered
+    // Footer: website centered (festival credit is extra and must not change dashboard PDFs)
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(9);
     doc.setTextColor(90, 90, 90);
+    if (options?.festivalCredit) {
+      doc.setFontSize(8);
+      doc.text('Built by AI Developer India : Aditya Nandagiri', centerX, pageHeight - 28, { align: 'center' });
+      doc.setFontSize(9);
+    }
     doc.text('www.japam.digital', centerX, pageHeight - 14, { align: 'center' });
     doc.setTextColor(0, 0, 0);
   };

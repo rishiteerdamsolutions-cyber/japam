@@ -99,7 +99,9 @@ export function Japa108SpecialPage() {
           <p className="text-amber-200/80 text-[clamp(0.7rem,3.2vw,0.8rem)] text-center mb-2 max-w-sm px-1">
             {t('specials.japa108ChooseDeity')}
           </p>
-          <p className="text-amber-200/70 text-[10px] text-center mb-2 max-w-sm">{t('specials.japa108ProGate')}</p>
+          <p className="text-amber-200/70 text-[10px] text-center mb-2 max-w-sm">
+            {t('specials.japa108ProGate', { deity: t(`deities.${FREE_JAPA_108_DEITY}`) })}
+          </p>
           {user ? (
             <p className="text-amber-200/80 text-[11px] text-center mb-3 tabular-nums">
               {t('specials.japa108TotalSessions', { n: special108Total })}

@@ -286,7 +286,9 @@ function JapamCounterSession({ mode }: { mode: JapamCounterMode }) {
             {t('specials.japamCounterChooseDeity')}
           </p>
           <p className="text-amber-200/70 text-[10px] text-center mb-2 max-w-sm">
-            {t(isAuto ? 'specials.autoJapamCounterProGate' : 'specials.japamCounterProGate')}
+            {t(isAuto ? 'specials.autoJapamCounterProGate' : 'specials.japamCounterProGate', {
+              deity: t(`deities.${freeJapamCounterDeity(mode)}`),
+            })}
           </p>
           {user && unlockPending ? (
             <p className="text-amber-200/75 text-[11px] text-center py-10 w-full">{t('common.loading')}</p>

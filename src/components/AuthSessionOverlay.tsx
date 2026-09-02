@@ -30,6 +30,8 @@ function skipBlockingAuthOverlay(pathname: string): boolean {
     '/occasion',
     '/contact',
     '/test',
+    '/ganeshotsav',
+    '/satsang-report',
   ];
   return prefixes.some((p) => pathname === p || pathname.startsWith(`${p}/`));
 }

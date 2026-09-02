@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { DEITY_IDS, type DeityId } from '../data/deities';
 import { istWeekYmdsFromMonday, istYmdFromDate, istWeekdayShortFromYmd, istIsoWeekdayMon1Sun7FromYmd } from '../lib/weeklyStreakIst';
 import type { StreakIsoWeekday } from '../lib/weeklyStreakPlan';
-import { FREE_WEEKLY_STREAK_DEITY } from '../lib/weeklyStreakPlan';
+import { FREE_WEEKLY_STREAK_DEITY, FREE_WEEKLY_STREAK_DEITY_ID } from '../lib/weeklyStreakPlan';
 import { hasActivePaidAccess } from '../lib/membershipDisplay';
 import { useUnlockStore } from '../store/unlockStore';
 import { useWeeklyStreakStore, type WeeklyStreakProPlan } from '../store/weeklyStreakStore';
@@ -88,7 +88,9 @@ export function WeeklyStreakPage() {
             <AccessBadge variant="free" label={t('common.free')} size="sm" />
             <h2 className="text-emerald-100/95 text-sm font-bold">{t('weeklyStreak.freeSectionTitle')}</h2>
           </div>
-          <p className="text-amber-200/75 text-[11px] leading-snug mb-3">{t('weeklyStreak.freeSectionBody')}</p>
+          <p className="text-amber-200/75 text-[11px] leading-snug mb-3">
+            {t('weeklyStreak.freeSectionBody', { deity: t(`deities.${FREE_WEEKLY_STREAK_DEITY_ID}`) })}
+          </p>
           <p className="text-amber-300/90 text-[10px] font-semibold mb-1.5">{t('weeklyStreak.defaultMapHeading')}</p>
           <ul className="space-y-1 text-amber-200/85 text-[11px]">
             {WEEKDAYS.map(({ key, label }) => (

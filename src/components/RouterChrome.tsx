@@ -7,7 +7,12 @@ import { AuthErrorToast } from './auth/AuthErrorToast';
 export function RouterChrome() {
   const { pathname } = useLocation();
   const isLearn = pathname.startsWith('/learn');
-  const hideWhatsApp = isLearn || pathname === '/game' || pathname === '/settings';
+  const hideWhatsApp =
+    isLearn ||
+    pathname === '/game' ||
+    pathname === '/settings' ||
+    pathname === '/ganeshotsav' ||
+    pathname === '/satsang-report';
 
   if (isLearn) {
     return (

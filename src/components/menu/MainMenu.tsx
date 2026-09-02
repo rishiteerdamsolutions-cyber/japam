@@ -338,7 +338,7 @@ export function MainMenu({ onSelect, onOpenSettings, introHeroSlot, demoNotice, 
               {t('menu.shareDeityHint')}
             </p>
             <p className="text-center text-amber-200/70 text-[10px] sm:text-xs mb-2 px-2 leading-snug">
-              {t('menu.istaDevataProGate')}
+              {t('menu.istaDevataProGate', { deity: t(`deities.${FREE_ISTA_DEVATA_DEITY}`) })}
             </p>
             {user && unlockPending ? (
               <p className="text-amber-200/75 text-[11px] text-center py-10 w-full">{t('common.loading')}</p>

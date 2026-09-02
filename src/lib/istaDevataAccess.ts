@@ -1,8 +1,9 @@
 import { DEITY_IDS, type DeityId, type PlayableDeityId } from '../data/deities';
 import type { GameMode } from '../types';
+import { FREE_STARTER_DEITY } from './freeStarterDeity';
 
-/** Free path for Ista Devata japa (Pro unlocks all deities). */
-export const FREE_ISTA_DEVATA_DEITY: DeityId = 'shakthi';
+/** Free path for Ista Devata japa (Pro unlocks all deities). Shakthi is Pro-gated here. */
+export const FREE_ISTA_DEVATA_DEITY: DeityId = FREE_STARTER_DEITY;
 
 export function istaDevataDeityAllowed(deityId: DeityId, proOrPremiumActive: boolean): boolean {
   if (deityId === FREE_ISTA_DEVATA_DEITY) return true;

@@ -1,7 +1,8 @@
 import { DEITIES, type DeityId } from '../data/deities';
+import { FREE_STARTER_DEITY } from './freeStarterDeity';
 
-/** Free path for 108 Japa special (Pro unlocks all deities). */
-export const FREE_JAPA_108_DEITY: DeityId = 'surya';
+/** Free path for 108 Japa special (Pro unlocks all deities). Surya is Pro-gated here. */
+export const FREE_JAPA_108_DEITY: DeityId = FREE_STARTER_DEITY;
 
 export function japa108DeityAllowed(deityId: DeityId, proOrPremiumActive: boolean): boolean {
   if (deityId === FREE_JAPA_108_DEITY) return true;

@@ -183,7 +183,7 @@ export async function renderSatsangDevoteeCardBlob(opts: {
   const name = (opts.devoteeName || 'Devotee').trim();
   const org = (opts.orgName || 'the organiser').trim();
   const appreciation =
-    `This is to certify that ${name} has successfully participated in and completed ${MANTRA_LINE} at Ganeshotsav, organised by ${org}.`;
+    `This is to certify that ${name} has successfully participated and completed ${MANTRA_LINE} at Ganesh Utsav, organised by ${org}.`;
 
   ctx.fillStyle = '#fff';
   ctx.font = `600 27px ${font}`;

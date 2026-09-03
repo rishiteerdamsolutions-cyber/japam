@@ -1139,6 +1139,8 @@
     "reportHint": "Enter today's satsang code to download the names card. View only.",
     "reportLoad": "Load report",
     "reportEmpty": "No participants yet for this sitting.",
-    "signedInAs": "Signed in as {{name}}"
+    "signedInAs": "Signed in as {{name}}",
+    "restoringSignIn": "Restoring your Google sign-in…",
+    "resumingSession": "Resuming your satsang…"
   }
 }

@@ -6,6 +6,7 @@ import { OpeningVideoModal } from '../components/landing/OpeningVideoModal';
 import { InstallPrompt } from '../components/ui/InstallPrompt';
 import { ManualMalaJapaPad } from '../components/japamCounter/ManualMalaJapaPad';
 import { GoogleSignIn } from '../components/auth/GoogleSignIn';
+import { AuthSessionRestoreHint } from '../components/auth/AuthSessionRestoreHint';
 import { useAuthStore } from '../store/authStore';
 import { useManualJapaTouchLock } from '../hooks/useManualJapaTouchLock';
 import { ensureMantraPreloaded, playMantraOnce, primeAudio, stopAllMantras } from '../hooks/useSound';
@@ -20,11 +21,18 @@ import {
   type SatsangJoinResult,
   type SatsangStatus,
 } from '../lib/satsangApi';
+import {
+  clearGaneshotsavDraft,
+  draftMatchesUid,
+  readGaneshotsavDraft,
+  writeGaneshotsavDraft,
+  type GaneshotsavDraftStep,
+} from '../lib/ganeshotsavDraft';
 import { downloadBlobPng, renderSatsangDevoteeCardBlob } from '../lib/satsangShareCard';
 import { downloadMantraPdf } from '../utils/pdfExport';
 import { removeBackgroundFromImage } from '../utils/removeBackground';
 import { formatIstDateTime } from '../lib/japamCounterIst';
-import { isFirebaseConfigured } from '../lib/firebase';
+import { auth, isFirebaseConfigured } from '../lib/firebase';
 
 const VIDEO_SEEN_KEY = 'japam_ganeshotsav_video';
 const HANDWRITING_SAMPLE_SRC = '/SAMPLE%20NAMA%20IMAGE.png';
@@ -48,11 +56,55 @@ function markVideoSeen() {
   }
 }
 
+function stepAfterJoin(result: SatsangJoinResult, localCount: number): Step {
+  if (result.completed108 || localCount >= AUTO_JAPAM_SESSION_TARGET) return 'pdf';
+  return 'mala';
+}
+
+function applyDraftToState(
+  draft: ReturnType<typeof readGaneshotsavDraft>,
+  setters: {
+    setCode: (v: string) => void;
+    setSession: (v: SatsangJoinResult | null) => void;
+    setCount: (v: number) => void;
+    countRef: { current: number };
+    setName: (v: string) => void;
+    setGotram: (v: string) => void;
+    setMobileNumber: (v: string) => void;
+    setHandwritingDataUrl: (v: string | null) => void;
+    setStep: (v: Step) => void;
+  },
+) {
+  if (!draft) return false;
+  const count = Math.max(0, Math.min(AUTO_JAPAM_SESSION_TARGET, draft.count));
+  setters.setCode(draft.code);
+  setters.setSession(draft.session);
+  setters.setCount(count);
+  setters.countRef.current = count;
+  setters.setName(draft.name);
+  setters.setGotram(draft.gotram);
+  setters.setMobileNumber(draft.mobileNumber);
+  setters.setHandwritingDataUrl(draft.handwritingDataUrl);
+  if (!draft.session) {
+    setters.setStep('gate');
+    return true;
+  }
+  if (draft.step === 'share') {
+    setters.setStep('pdf');
+    return true;
+  }
+  setters.setStep(stepAfterJoin(draft.session, count));
+  return true;
+}
+
 export function GaneshotsavPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
   const authLoading = useAuthStore((s) => s.loading);
+  const signInPending = useAuthStore((s) => s.signInPending);
+  const firebaseUser = auth?.currentUser ?? null;
+  const authRestoring = authLoading || signInPending || (!user && !!firebaseUser);
   const [status, setStatus] = useState<SatsangStatus | null>(null);
   const [step, setStep] = useState<Step>('boot');
   const [code, setCode] = useState('');
@@ -69,8 +121,33 @@ export function GaneshotsavPage() {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [shareUrl, setShareUrl] = useState<string | null>(null);
+  const [resuming, setResuming] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const resumedRef = useRef(false);
   const deity = getDeity(DEITY);
+
+  const persistableStep = (current: Step): GaneshotsavDraftStep | null => {
+    if (current === 'gate' || current === 'mala' || current === 'pdf' || current === 'share') return current;
+    return null;
+  };
+
+  const persistDraft = useCallback(() => {
+    const draftStep = persistableStep(step);
+    if (!draftStep || !status?.open) return;
+    writeGaneshotsavDraft({
+      v: 1,
+      uid: user?.uid ?? null,
+      step: draftStep,
+      code,
+      session,
+      count: countRef.current,
+      name,
+      gotram,
+      mobileNumber,
+      handwritingDataUrl,
+      updatedAt: Date.now(),
+    });
+  }, [step, status?.open, user?.uid, code, session, name, gotram, mobileNumber, handwritingDataUrl]);
 
   useManualJapaTouchLock(step === 'mala');
 
@@ -80,12 +157,76 @@ export function GaneshotsavPage() {
       if (cancelled) return;
       setStatus(s);
       if (!s.open) return;
+      const draft = readGaneshotsavDraft();
+      if (draft && draftMatchesUid(draft, user?.uid)) {
+        applyDraftToState(draft, {
+          setCode,
+          setSession,
+          setCount,
+          countRef,
+          setName,
+          setGotram,
+          setMobileNumber,
+          setHandwritingDataUrl,
+          setStep,
+        });
+        return;
+      }
       setStep(videoAlreadySeen() ? 'gate' : 'video');
     });
     return () => {
       cancelled = true;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- boot once; draft restore must not re-run on sign-in
   }, []);
+
+  useEffect(() => {
+    persistDraft();
+  }, [persistDraft]);
+
+  useEffect(() => {
+    const flush = () => persistDraft();
+    const onHide = () => {
+      if (document.visibilityState === 'hidden') flush();
+    };
+    window.addEventListener('pagehide', flush);
+    document.addEventListener('visibilitychange', onHide);
+    return () => {
+      window.removeEventListener('pagehide', flush);
+      document.removeEventListener('visibilitychange', onHide);
+    };
+  }, [persistDraft]);
+
+  useEffect(() => {
+    if (authRestoring || !user?.uid || resumedRef.current) return;
+    const draft = readGaneshotsavDraft();
+    if (!draft?.code?.trim() || !draft.session) return;
+    if (!draftMatchesUid(draft, user.uid)) return;
+    resumedRef.current = true;
+    setResuming(true);
+    void joinSatsang(draft.code)
+      .then((res) => {
+        if (!res.ok) return;
+        const localCount = Math.max(0, Math.min(AUTO_JAPAM_SESSION_TARGET, draft.count));
+        setSession(res.result);
+        setName((n) => n || res.result.displayName || user.displayName || '');
+        if (res.result.completed108 || localCount >= AUTO_JAPAM_SESSION_TARGET) {
+          setCount(AUTO_JAPAM_SESSION_TARGET);
+          countRef.current = AUTO_JAPAM_SESSION_TARGET;
+          setStep('pdf');
+          return;
+        }
+        setCount(localCount);
+        countRef.current = localCount;
+        setStep('mala');
+      })
+      .finally(() => setResuming(false));
+  }, [authRestoring, user?.uid, user?.displayName]);
+
+  useEffect(() => {
+    if (authRestoring || !user || step !== 'gate' || !session || joining || resuming) return;
+    setStep(stepAfterJoin(session, countRef.current));
+  }, [authRestoring, user, step, session, joining, resuming]);
 
   useEffect(() => {
     if (!user?.uid || step === 'boot' || step === 'video') return;
@@ -134,9 +275,27 @@ export function GaneshotsavPage() {
     setCount(next);
     pulseMalaBeadTouchHaptic();
     void playMantraOnce(DEITY);
-  }, []);
+    writeGaneshotsavDraft({
+      v: 1,
+      uid: user?.uid ?? null,
+      step: 'mala',
+      code,
+      session,
+      count: next,
+      name,
+      gotram,
+      mobileNumber,
+      handwritingDataUrl,
+      updatedAt: Date.now(),
+    });
+  }, [user?.uid, code, session, name, gotram, mobileNumber, handwritingDataUrl]);
+
+  const onFileInputClick = () => {
+    persistDraft();
+  };
 
   const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    persistDraft();
     setUploadError(null);
     setHandwritingDataUrl(null);
     const file = e.target.files?.[0];
@@ -221,6 +380,7 @@ export function GaneshotsavPage() {
         if (shareUrl) URL.revokeObjectURL(shareUrl);
         setShareUrl(URL.createObjectURL(blob));
       }
+      clearGaneshotsavDraft();
       setStep('share');
     } finally {
       setSaving(false);
@@ -283,12 +443,23 @@ export function GaneshotsavPage() {
         <div className="relative z-10 flex flex-col flex-1 items-center justify-center px-4 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
           {banner}
           <p className="text-amber-200/80 text-sm text-center max-w-sm mb-4">{t('ganeshotsav.yagnaBlurb')}</p>
-          {!user ? (
+          {!authRestoring && !user ? (
             <>
               <p className="text-amber-300 text-xs text-center mb-3 max-w-xs">{t('ganeshotsav.signInSticky')}</p>
               {isFirebaseConfigured ? <GoogleSignIn /> : <p className="text-red-300 text-sm">Sign-in is not configured.</p>}
             </>
-          ) : (
+          ) : authRestoring ? (
+            <div className="flex flex-col items-center gap-3 max-w-xs text-center">
+              <div className="w-10 h-10 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" aria-hidden />
+              <AuthSessionRestoreHint className="max-w-xs text-center animate-none" />
+              <p className="text-amber-200/75 text-xs">{t('ganeshotsav.restoringSignIn')}</p>
+            </div>
+          ) : resuming ? (
+            <div className="flex flex-col items-center gap-3 max-w-xs text-center">
+              <div className="w-10 h-10 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" aria-hidden />
+              <p className="text-amber-200/75 text-xs">{t('ganeshotsav.resumingSession')}</p>
+            </div>
+          ) : user ? (
             <>
               <p className="text-amber-200/80 text-xs mb-3">
                 {t('ganeshotsav.signedInAs', { name: user.displayName || user.email || 'devotee' })}
@@ -313,7 +484,7 @@ export function GaneshotsavPage() {
                 {joining ? t('ganeshotsav.joining') : t('ganeshotsav.join')}
               </motion.button>
             </>
-          )}
+          ) : null}
         </div>
       ) : null}
 
@@ -372,6 +543,8 @@ export function GaneshotsavPage() {
               ref={fileInputRef}
               type="file"
               accept="image/*"
+              capture="environment"
+              onClick={onFileInputClick}
               onChange={(e) => void onFileChange(e)}
               disabled={processingImage}
               className="block w-full text-amber-200/80 text-xs file:mr-2 file:py-1.5 file:px-3 file:rounded file:border-0 file:bg-amber-500/80 file:text-white file:text-xs disabled:opacity-60"

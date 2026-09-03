@@ -8,6 +8,7 @@ import {
   type PwaCheckUpdateResultDetail,
   type PwaCheckUpdateStatus,
 } from '../lib/pwaUpdate';
+import { hasActiveGaneshotsavDraft } from '../lib/ganeshotsavDraft';
 
 function waitForServiceWorkerInstalled(sw: ServiceWorker, timeoutMs: number): Promise<void> {
   if (sw.state === 'installed' || sw.state === 'redundant') return Promise.resolve();
@@ -70,6 +71,7 @@ export function PWAUpdatePrompt() {
       /** Registers before `window` "load" so slow assets (video, fonts) do not delay SW / update checks. */
       immediate: true,
       onNeedRefresh() {
+        if (hasActiveGaneshotsavDraft()) return;
         setNeedRefresh(true);
       },
       onOfflineReady() {
@@ -133,7 +135,7 @@ export function PWAUpdatePrompt() {
         if (!reg) return;
         await reg.update();
         const outcome = await resolveUpdateStatusAfterCheck(reg);
-        if (outcome === 'available') setNeedRefresh(true);
+        if (outcome === 'available' && !hasActiveGaneshotsavDraft()) setNeedRefresh(true);
       } catch {
         /* ignore — offline, throttled, etc. */
       }

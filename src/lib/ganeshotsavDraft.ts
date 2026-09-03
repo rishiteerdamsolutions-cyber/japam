@@ -13,6 +13,10 @@ export type GaneshotsavDraft = {
   gotram: string;
   mobileNumber: string;
   handwritingDataUrl: string | null;
+  /** Server save at 108 succeeded (completeSatsang). */
+  completed108Saved?: boolean;
+  pdfDownloaded?: boolean;
+  shareImageDownloaded?: boolean;
   updatedAt: number;
 };
 
@@ -70,4 +74,12 @@ export function draftMatchesUid(draft: GaneshotsavDraft, uid: string | null | un
   if (!draft.uid) return true;
   if (!uid) return true;
   return draft.uid === uid;
+}
+
+/** True while a devotee is mid-flow — defer PWA update prompts until PDF + share image are done. */
+export function hasActiveGaneshotsavDraft(): boolean {
+  const draft = readGaneshotsavDraft();
+  if (!draft?.session) return false;
+  if (draft.pdfDownloaded && draft.shareImageDownloaded) return false;
+  return true;
 }

@@ -72,6 +72,9 @@ function applyDraftToState(
     setGotram: (v: string) => void;
     setMobileNumber: (v: string) => void;
     setHandwritingDataUrl: (v: string | null) => void;
+    setPdfDownloaded: (v: boolean) => void;
+    setShareImageDownloaded: (v: boolean) => void;
+    setCompleted108Saved: (v: boolean) => void;
     setStep: (v: Step) => void;
   },
 ) {
@@ -85,15 +88,22 @@ function applyDraftToState(
   setters.setGotram(draft.gotram);
   setters.setMobileNumber(draft.mobileNumber);
   setters.setHandwritingDataUrl(draft.handwritingDataUrl);
+  setters.setPdfDownloaded(draft.pdfDownloaded === true);
+  setters.setShareImageDownloaded(draft.shareImageDownloaded === true);
+  setters.setCompleted108Saved(draft.completed108Saved === true);
   if (!draft.session) {
     setters.setStep('gate');
     return true;
   }
-  if (draft.step === 'share') {
+  if (draft.step === 'share' || (draft.pdfDownloaded && !draft.shareImageDownloaded)) {
+    setters.setStep('share');
+    return true;
+  }
+  if (draft.completed108Saved || draft.session.completed108 || count >= AUTO_JAPAM_SESSION_TARGET) {
     setters.setStep('pdf');
     return true;
   }
-  setters.setStep(stepAfterJoin(draft.session, count));
+  setters.setStep(draft.step === 'gate' ? 'gate' : stepAfterJoin(draft.session, count));
   return true;
 }
 
@@ -119,9 +129,13 @@ export function GaneshotsavPage() {
   const [handwritingDataUrl, setHandwritingDataUrl] = useState<string | null>(null);
   const [processingImage, setProcessingImage] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [uploadNotice, setUploadNotice] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [shareUrl, setShareUrl] = useState<string | null>(null);
   const [resuming, setResuming] = useState(false);
+  const [pdfDownloaded, setPdfDownloaded] = useState(false);
+  const [shareImageDownloaded, setShareImageDownloaded] = useState(false);
+  const [completed108Saved, setCompleted108Saved] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const resumedRef = useRef(false);
   const deity = getDeity(DEITY);
@@ -145,9 +159,25 @@ export function GaneshotsavPage() {
       gotram,
       mobileNumber,
       handwritingDataUrl,
+      completed108Saved,
+      pdfDownloaded,
+      shareImageDownloaded,
       updatedAt: Date.now(),
     });
-  }, [step, status?.open, user?.uid, code, session, name, gotram, mobileNumber, handwritingDataUrl]);
+  }, [
+    step,
+    status?.open,
+    user?.uid,
+    code,
+    session,
+    name,
+    gotram,
+    mobileNumber,
+    handwritingDataUrl,
+    completed108Saved,
+    pdfDownloaded,
+    shareImageDownloaded,
+  ]);
 
   useManualJapaTouchLock(step === 'mala');
 
@@ -168,6 +198,9 @@ export function GaneshotsavPage() {
           setGotram,
           setMobileNumber,
           setHandwritingDataUrl,
+          setPdfDownloaded,
+          setShareImageDownloaded,
+          setCompleted108Saved,
           setStep,
         });
         return;
@@ -213,7 +246,8 @@ export function GaneshotsavPage() {
         if (res.result.completed108 || localCount >= AUTO_JAPAM_SESSION_TARGET) {
           setCount(AUTO_JAPAM_SESSION_TARGET);
           countRef.current = AUTO_JAPAM_SESSION_TARGET;
-          setStep('pdf');
+          setCompleted108Saved(true);
+          setStep(draft.pdfDownloaded ? 'share' : 'pdf');
           return;
         }
         setCount(localCount);
@@ -227,6 +261,22 @@ export function GaneshotsavPage() {
     if (authRestoring || !user || step !== 'gate' || !session || joining || resuming) return;
     setStep(stepAfterJoin(session, countRef.current));
   }, [authRestoring, user, step, session, joining, resuming]);
+
+  useEffect(() => {
+    if (step !== 'share' || !session || shareUrl) return;
+    void renderSatsangDevoteeCardBlob({
+      orgName: session.orgName,
+      eventName: session.eventName,
+      devoteeName: name.trim() || session.displayName,
+      dateLabel: formatIstDateTime(),
+    }).then((blob) => {
+      if (!blob) return;
+      setShareUrl((prev) => {
+        if (prev) URL.revokeObjectURL(prev);
+        return URL.createObjectURL(blob);
+      });
+    });
+  }, [step, session, name, shareUrl]);
 
   useEffect(() => {
     if (!user?.uid || step === 'boot' || step === 'video') return;
@@ -260,6 +310,7 @@ export function GaneshotsavPage() {
     if (res.result.completed108) {
       setCount(AUTO_JAPAM_SESSION_TARGET);
       countRef.current = AUTO_JAPAM_SESSION_TARGET;
+      setCompleted108Saved(true);
       setStep('pdf');
       return;
     }
@@ -286,24 +337,48 @@ export function GaneshotsavPage() {
       gotram,
       mobileNumber,
       handwritingDataUrl,
+      completed108Saved,
+      pdfDownloaded,
+      shareImageDownloaded,
       updatedAt: Date.now(),
     });
-  }, [user?.uid, code, session, name, gotram, mobileNumber, handwritingDataUrl]);
+  }, [
+    user?.uid,
+    code,
+    session,
+    name,
+    gotram,
+    mobileNumber,
+    handwritingDataUrl,
+    completed108Saved,
+    pdfDownloaded,
+    shareImageDownloaded,
+  ]);
 
   const onFileInputClick = () => {
     persistDraft();
   };
 
-  const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const openPhotoPicker = () => {
+    if (processingImage) return;
     persistDraft();
     setUploadError(null);
-    setHandwritingDataUrl(null);
+    fileInputRef.current?.click();
+  };
+
+  const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    if (fileInputRef.current) fileInputRef.current.value = '';
     if (!file) return;
+
     if (!file.type.startsWith('image/')) {
-      setUploadError('Please upload an image file (PNG, JPG, etc.)');
+      setUploadNotice(null);
+      setUploadError(t('ganeshotsav.imageTypeRequired'));
       return;
     }
+
+    setUploadError(null);
+    setUploadNotice(null);
     setProcessingImage(true);
     try {
       const dataUrl = await new Promise<string>((resolve, reject) => {
@@ -316,13 +391,18 @@ export function GaneshotsavPage() {
         reader.onerror = () => reject(new Error('Could not read file'));
         reader.readAsDataURL(file);
       });
-      const cleaned = await removeBackgroundFromImage(dataUrl);
+      let cleaned = dataUrl;
+      try {
+        cleaned = await removeBackgroundFromImage(dataUrl);
+      } catch {
+        setUploadNotice(t('ganeshotsav.imageTrimSkipped'));
+      }
       setHandwritingDataUrl(cleaned);
+      persistDraft();
     } catch (err) {
-      setUploadError(err instanceof Error ? err.message : 'Network error. Please try again.');
+      setUploadError(err instanceof Error ? err.message : t('ganeshotsav.imageReadFailed'));
     } finally {
       setProcessingImage(false);
-      if (fileInputRef.current) fileInputRef.current.value = '';
     }
   };
 
@@ -358,6 +438,7 @@ export function GaneshotsavPage() {
         setUploadError(saved.error);
         return;
       }
+      setCompleted108Saved(true);
       await downloadMantraPdf(
         deity.mantra,
         AUTO_JAPAM_SESSION_TARGET,
@@ -370,6 +451,7 @@ export function GaneshotsavPage() {
           festivalCredit: true,
         },
       );
+      setPdfDownloaded(true);
       const blob = await renderSatsangDevoteeCardBlob({
         orgName: session.orgName,
         eventName: session.eventName,
@@ -380,7 +462,22 @@ export function GaneshotsavPage() {
         if (shareUrl) URL.revokeObjectURL(shareUrl);
         setShareUrl(URL.createObjectURL(blob));
       }
-      clearGaneshotsavDraft();
+      writeGaneshotsavDraft({
+        v: 1,
+        uid: user?.uid ?? null,
+        step: 'share',
+        code,
+        session,
+        count: AUTO_JAPAM_SESSION_TARGET,
+        name: name.trim(),
+        gotram: gotram.trim(),
+        mobileNumber: mobileNumber.trim(),
+        handwritingDataUrl,
+        completed108Saved: true,
+        pdfDownloaded: true,
+        shareImageDownloaded: false,
+        updatedAt: Date.now(),
+      });
       setStep('share');
     } finally {
       setSaving(false);
@@ -543,14 +640,33 @@ export function GaneshotsavPage() {
               ref={fileInputRef}
               type="file"
               accept="image/*"
-              capture="environment"
               onClick={onFileInputClick}
               onChange={(e) => void onFileChange(e)}
               disabled={processingImage}
-              className="block w-full text-amber-200/80 text-xs file:mr-2 file:py-1.5 file:px-3 file:rounded file:border-0 file:bg-amber-500/80 file:text-white file:text-xs disabled:opacity-60"
+              className="sr-only"
+              aria-hidden
+              tabIndex={-1}
             />
-            {processingImage ? <p className="text-amber-400 text-xs mt-2">Removing background…</p> : null}
-            {handwritingDataUrl && !processingImage ? <p className="text-emerald-400 text-xs mt-2">Image ready</p> : null}
+            <button
+              type="button"
+              onClick={openPhotoPicker}
+              disabled={processingImage}
+              className="w-full py-3 rounded-xl bg-amber-500/90 text-white text-sm font-semibold disabled:opacity-50"
+            >
+              {processingImage ? t('ganeshotsav.processingPhoto') : t('ganeshotsav.choosePhoto')}
+            </button>
+            {handwritingDataUrl ? (
+              <img
+                src={handwritingDataUrl}
+                alt=""
+                className="mt-3 max-h-24 object-contain border border-emerald-500/30 rounded bg-white/5 mx-auto"
+              />
+            ) : null}
+            {processingImage ? <p className="text-amber-400 text-xs mt-2">{t('ganeshotsav.processingPhoto')}</p> : null}
+            {handwritingDataUrl && !processingImage ? (
+              <p className="text-emerald-400 text-xs mt-2">{t('ganeshotsav.imageReady')}</p>
+            ) : null}
+            {uploadNotice ? <p className="text-amber-200/80 text-xs mt-2">{uploadNotice}</p> : null}
           </div>
           <label className="block text-amber-200/80 text-xs mb-1">Name</label>
           <input
@@ -594,7 +710,26 @@ export function GaneshotsavPage() {
               onClick={() => {
                 void fetch(shareUrl)
                   .then((r) => r.blob())
-                  .then((b) => downloadBlobPng(b, 'ganeshotsav-satsang.png'));
+                  .then((b) => {
+                    downloadBlobPng(b, 'ganeshotsav-satsang.png');
+                    setShareImageDownloaded(true);
+                    writeGaneshotsavDraft({
+                      v: 1,
+                      uid: user?.uid ?? null,
+                      step: 'share',
+                      code,
+                      session,
+                      count: countRef.current,
+                      name,
+                      gotram,
+                      mobileNumber,
+                      handwritingDataUrl,
+                      completed108Saved: true,
+                      pdfDownloaded: true,
+                      shareImageDownloaded: true,
+                      updatedAt: Date.now(),
+                    });
+                  });
               }}
               className="w-full max-w-sm py-3 rounded-2xl bg-amber-500 text-white font-semibold mb-3"
             >
@@ -603,7 +738,10 @@ export function GaneshotsavPage() {
           ) : null}
           <button
             type="button"
-            onClick={() => navigate('/menu', { replace: true })}
+            onClick={() => {
+              clearGaneshotsavDraft();
+              navigate('/menu', { replace: true });
+            }}
             className="w-full max-w-sm py-3 rounded-2xl bg-emerald-600 text-white font-semibold"
           >
             {t('ganeshotsav.enterMain')}

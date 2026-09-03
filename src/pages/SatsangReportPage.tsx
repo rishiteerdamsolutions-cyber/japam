@@ -36,7 +36,7 @@ export function SatsangReportPage() {
       setError('Could not draw the report image.');
       return;
     }
-    downloadBlobPng(blob, `satsang-report-${res.report.date}.png`);
+    downloadBlobPng(blob, `satsang-report-${res.report.date}.jpg`);
     setNotice(
       res.report.names.length
         ? `${res.report.participantCount} / ${res.report.cap} names`

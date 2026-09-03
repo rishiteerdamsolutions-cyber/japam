@@ -619,7 +619,7 @@ export function GaneshotsavPage() {
         setShareError(t('ganeshotsav.shareDownloadFailed'));
         return;
       }
-      const result = await downloadBlobPngAsync(blob, 'ganeshotsav-satsang.png');
+      const result = await downloadBlobPngAsync(blob, 'ganeshotsav-satsang.jpg');
       if (result === 'failed') {
         setShareError(t('ganeshotsav.shareDownloadFailed'));
         return;

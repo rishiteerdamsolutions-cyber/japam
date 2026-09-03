@@ -7,22 +7,40 @@ const A_LOGO_FALLBACK_SRC = '/images/A-logo.png';
 const JAPAM_LOGO_SRC = '/images/logo.png';
 const BOARD_DEMO_SRC = encodeURI('/JAPAM DEMO BOARD.jpeg');
 const MANTRA_QUOTED = '"108 Om Ganeshaya Namaha"';
+/** Logical layout size × this = pixel size. Keeps text sharp after WhatsApp downscales. */
+const CERT_EXPORT_SCALE = 3;
+/** iOS Safari canvas area limit (approx); dial scale down if needed. */
+const MAX_CANVAS_PIXELS = 16_777_216;
+/** Cap board height so the card isn’t a tall strip (WhatsApp scales by longest side). */
+const BOARD_MAX_H = 300;
 
-function dataUrlToBlob(dataUrl: string): Blob | null {
-  try {
-    const parts = dataUrl.split(',');
-    if (parts.length < 2) return null;
-    const header = parts[0] || '';
-    const base64 = parts.slice(1).join(',');
-    const mimeMatch = header.match(/data:([^;]+);base64/i);
-    const mime = mimeMatch?.[1] || 'image/png';
-    const bin = atob(base64);
-    const bytes = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-    return new Blob([bytes], { type: mime });
-  } catch {
-    return null;
-  }
+function exportScaleFor(logicalW: number, logicalH: number): number {
+  const pixelsAtWanted = logicalW * logicalH * CERT_EXPORT_SCALE * CERT_EXPORT_SCALE;
+  if (pixelsAtWanted <= MAX_CANVAS_PIXELS) return CERT_EXPORT_SCALE;
+  return Math.max(2, Math.sqrt(MAX_CANVAS_PIXELS / Math.max(1, logicalW * logicalH)));
+}
+
+function prepareHdCanvas(
+  logicalW: number,
+  logicalH: number,
+): { canvas: HTMLCanvasElement; ctx: CanvasRenderingContext2D } | null {
+  const scale = exportScaleFor(logicalW, logicalH);
+  const canvas = document.createElement('canvas');
+  canvas.width = Math.max(1, Math.round(logicalW * scale));
+  canvas.height = Math.max(1, Math.round(logicalH * scale));
+  const ctx = canvas.getContext('2d', { alpha: false });
+  if (!ctx) return null;
+  ctx.setTransform(scale, 0, 0, scale, 0, 0);
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+  return { canvas, ctx };
+}
+
+function canvasToShareBlob(canvas: HTMLCanvasElement): Promise<Blob | null> {
+  return new Promise((resolve) => {
+    // JPEG survives WhatsApp photo compression better than PNG→JPEG conversion.
+    canvas.toBlob((blob) => resolve(blob), 'image/jpeg', 0.95);
+  });
 }
 
 function loadImage(src: string): Promise<HTMLImageElement | null> {
@@ -268,19 +286,6 @@ function drawCenteredSpans(
   ctx.textAlign = 'center';
 }
 
-function fillGradientText(
-  ctx: CanvasRenderingContext2D,
-  text: string,
-  centerX: number,
-  y: number,
-  kind: CertSpanKind,
-) {
-  const w = ctx.measureText(text).width;
-  ctx.textAlign = 'center';
-  ctx.fillStyle = gradientForKind(ctx, kind, centerX - w / 2, y, w);
-  ctx.fillText(text, centerX, y);
-}
-
 async function drawFestivalCredit(
   ctx: CanvasRenderingContext2D,
   width: number,
@@ -370,16 +375,14 @@ export async function renderSatsangDevoteeCardBlob(opts: {
   if (boardDemo) {
     const aspect = boardDemo.naturalWidth / Math.max(1, boardDemo.naturalHeight);
     const boardW = contentWidth;
-    boardH = boardW / aspect;
+    boardH = Math.min(boardW / aspect, BOARD_MAX_H);
     y += boardH + 16;
   }
 
   const height = Math.ceil(y + footerReserve);
-  const canvas = document.createElement('canvas');
-  canvas.width = width;
-  canvas.height = height;
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return null;
+  const prepared = prepareHdCanvas(width, height);
+  if (!prepared) return null;
+  const { canvas, ctx } = prepared;
 
   drawGlossBackground(ctx, width, height);
   drawCertificateFrame(ctx, width, height);
@@ -408,11 +411,12 @@ export async function renderSatsangDevoteeCardBlob(opts: {
 
   ctx.fillStyle = '#FBBF24';
   ctx.font = `700 28px Georgia, serif`;
-  fillGradientText(ctx, 'Ganesha Utsav', width / 2, drawY, 'event');
+  ctx.fillText('Ganesha Utsav', width / 2, drawY);
   drawY += 34;
 
+  ctx.fillStyle = 'rgba(255,255,255,0.92)';
   ctx.font = `700 22px ${font}`;
-  fillGradientText(ctx, MANTRA_QUOTED, width / 2, drawY, 'mantra');
+  ctx.fillText(MANTRA_QUOTED, width / 2, drawY);
   drawY += 36;
 
   ctx.font = bodyFont;
@@ -445,7 +449,7 @@ export async function renderSatsangDevoteeCardBlob(opts: {
   ctx.font = `600 18px ${font}`;
   ctx.fillText('www.japam.digital', width / 2, height - 60);
 
-  return dataUrlToBlob(canvas.toDataURL('image/png'));
+  return canvasToShareBlob(canvas);
 }
 
 export async function renderSatsangReportCardBlob(opts: {
@@ -460,15 +464,16 @@ export async function renderSatsangReportCardBlob(opts: {
   const boardDemo = await loadImage(BOARD_DEMO_SRC);
   const contentWidth = width - 168;
   const boardH = boardDemo
-    ? contentWidth / (boardDemo.naturalWidth / Math.max(1, boardDemo.naturalHeight))
+    ? Math.min(
+        contentWidth / (boardDemo.naturalWidth / Math.max(1, boardDemo.naturalHeight)),
+        BOARD_MAX_H,
+      )
     : 0;
   const nameBlock = Math.max(opts.names.length, 1) * 36;
   const height = Math.max(1280, 520 + nameBlock + 180 + (boardH ? boardH + 48 : 0));
-  const canvas = document.createElement('canvas');
-  canvas.width = width;
-  canvas.height = height;
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return null;
+  const prepared = prepareHdCanvas(width, height);
+  if (!prepared) return null;
+  const { canvas, ctx } = prepared;
 
   const logo = await loadImageWithFallback(A_LOGO_SRC, A_LOGO_FALLBACK_SRC);
   const japamLogo = await loadImage(JAPAM_LOGO_SRC);
@@ -499,22 +504,25 @@ export async function renderSatsangReportCardBlob(opts: {
 
   ctx.fillStyle = '#FBBF24';
   ctx.font = `800 34px Georgia, serif`;
-  fillGradientText(ctx, 'Ganesha Utsav', width / 2, y, 'event');
+  ctx.fillText('Ganesha Utsav', width / 2, y);
   y += 40;
 
+  ctx.fillStyle = 'rgba(255,255,255,0.92)';
   ctx.font = `700 26px ${font}`;
-  fillGradientText(ctx, MANTRA_QUOTED, width / 2, y, 'mantra');
+  ctx.fillText(MANTRA_QUOTED, width / 2, y);
   y += 40;
 
+  ctx.fillStyle = '#FBBF24';
   ctx.font = `600 24px ${font}`;
   for (const line of wrapLines(ctx, opts.eventName || 'Satsang report', contentWidth)) {
-    fillGradientText(ctx, line, width / 2, y, 'event');
+    ctx.fillText(line, width / 2, y);
     y += 32;
   }
 
+  ctx.fillStyle = 'rgba(255,255,255,0.92)';
   ctx.font = `700 22px ${font}`;
   for (const line of wrapLines(ctx, opts.orgName, contentWidth)) {
-    fillGradientText(ctx, line, width / 2, y, 'org');
+    ctx.fillText(line, width / 2, y);
     y += 30;
   }
 
@@ -554,7 +562,7 @@ export async function renderSatsangReportCardBlob(opts: {
   ctx.fillStyle = 'rgba(255,255,255,0.8)';
   ctx.font = `600 18px ${font}`;
   ctx.fillText('www.japam.digital', width / 2, height - 60);
-  return dataUrlToBlob(canvas.toDataURL('image/png'));
+  return canvasToShareBlob(canvas);
 }
 
 export function downloadBlobPng(blob: Blob, filename: string) {

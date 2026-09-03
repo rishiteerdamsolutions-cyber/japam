@@ -3,6 +3,7 @@ import { downloadOrSaveBlob } from './downloadBlob';
 export const FESTIVAL_CREDIT_LINE = 'Built by AI Developer India: Aditya Nandagiri';
 export const FESTIVAL_CREDIT_AFTER_LOGO = 'AI Developer India: Aditya Nandagiri';
 const A_LOGO_SRC = '/A-logo.png';
+const JAPAM_LOGO_SRC = '/images/logo.png';
 const MANTRA_LINE = '108 Om Ganeshaya Namaha Japam';
 
 function dataUrlToBlob(dataUrl: string): Blob | null {
@@ -33,59 +34,59 @@ function loadImage(src: string): Promise<HTMLImageElement | null> {
 
 function drawGlossBackground(ctx: CanvasRenderingContext2D, width: number, height: number) {
   const bg = ctx.createLinearGradient(0, 0, width, height * 1.2);
-  bg.addColorStop(0, '#E91E63');
-  bg.addColorStop(0.25, '#D81B60');
-  bg.addColorStop(0.5, '#E91E63');
-  bg.addColorStop(0.75, '#D81B60');
-  bg.addColorStop(1, '#C2185B');
+  // Brown / certificate-like palette (replaces the older pink gloss).
+  bg.addColorStop(0, '#8B5E3C');
+  bg.addColorStop(0.25, '#7A4A2A');
+  bg.addColorStop(0.5, '#8B5E3C');
+  bg.addColorStop(0.75, '#6B3F2A');
+  bg.addColorStop(1, '#5B321F');
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, width, height);
 }
 
-/** Shared gold + white certificate border for devotee WhatsApp cards and organiser reports. */
+function roundedRectPath(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  r: number,
+) {
+  const rr = Math.min(r, Math.floor(Math.min(w, h) / 2));
+  ctx.beginPath();
+  ctx.moveTo(x + rr, y);
+  ctx.arcTo(x + w, y, x + w, y + h, rr);
+  ctx.arcTo(x + w, y + h, x, y + h, rr);
+  ctx.arcTo(x, y + h, x, y, rr);
+  ctx.arcTo(x, y, x + w, y, rr);
+  ctx.closePath();
+}
+
+/** Shared smooth gold + white certificate border for WhatsApp cards and organiser reports. */
 function drawCertificateFrame(ctx: CanvasRenderingContext2D, width: number, height: number) {
-  const m1 = 22;
-  const m2 = 34;
-  const m3 = 46;
-  const m4 = 56;
+  const rOuter = 26;
+  const rMid = 20;
+  const rInner = 16;
 
   // Outer gold band
+  ctx.save();
   ctx.strokeStyle = '#FBBF24';
   ctx.lineWidth = 10;
-  ctx.strokeRect(m1, m1, width - m1 * 2, height - m1 * 2);
+  roundedRectPath(ctx, 14, 14, width - 28, height - 28, rOuter);
+  ctx.stroke();
 
   // White band
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.95)';
-  ctx.lineWidth = 5;
-  ctx.strokeRect(m2, m2, width - m2 * 2, height - m2 * 2);
+  ctx.strokeStyle = 'rgba(255,255,255,0.96)';
+  ctx.lineWidth = 6;
+  roundedRectPath(ctx, 30, 30, width - 60, height - 60, rMid);
+  ctx.stroke();
 
   // Inner gold line
   ctx.strokeStyle = '#FBBF24';
   ctx.lineWidth = 3;
-  ctx.strokeRect(m3, m3, width - m3 * 2, height - m3 * 2);
-
-  // Fine inner white edge
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.75)';
-  ctx.lineWidth = 1.5;
-  ctx.strokeRect(m4, m4, width - m4 * 2, height - m4 * 2);
-
-  const cornerR = 9;
-  const corners: Array<[number, number]> = [
-    [m1 + 18, m1 + 18],
-    [width - m1 - 18, m1 + 18],
-    [m1 + 18, height - m1 - 18],
-    [width - m1 - 18, height - m1 - 18],
-  ];
-  for (const [x, y] of corners) {
-    ctx.beginPath();
-    ctx.arc(x, y, cornerR, 0, Math.PI * 2);
-    ctx.fillStyle = '#FBBF24';
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(x, y, cornerR - 3.5, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(255,255,255,0.95)';
-    ctx.fill();
-  }
+  roundedRectPath(ctx, 46, 46, width - 92, height - 92, rInner);
+  ctx.stroke();
+  ctx.restore();
 }
 
 function wrapLines(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): string[] {
@@ -151,13 +152,22 @@ export async function renderSatsangDevoteeCardBlob(opts: {
   if (!ctx) return null;
 
   const logo = await loadImage(A_LOGO_SRC);
+  const japamLogo = await loadImage(JAPAM_LOGO_SRC);
   drawGlossBackground(ctx, width, height);
   drawCertificateFrame(ctx, width, height);
 
   const font = '"Segoe UI", system-ui, sans-serif';
   const contentLeft = 84;
   const contentWidth = width - contentLeft * 2;
-  let y = 118;
+  let y = 150;
+
+  if (japamLogo) {
+    const logoSize = 86;
+    ctx.save();
+    ctx.globalAlpha = 0.92;
+    ctx.drawImage(japamLogo, width / 2 - logoSize / 2, 38, logoSize, logoSize);
+    ctx.restore();
+  }
 
   ctx.textAlign = 'center';
   ctx.fillStyle = '#FBBF24';
@@ -210,11 +220,12 @@ export async function renderSatsangDevoteeCardBlob(opts: {
     y += 34;
   }
 
-  await drawFestivalCredit(ctx, width, height - 88, logo);
+  // Keep clear of the bottom border strokes so "www.japam.digital" does not get overlapped.
+  await drawFestivalCredit(ctx, width, height - 104, logo);
   ctx.textAlign = 'center';
   ctx.fillStyle = 'rgba(255,255,255,0.8)';
   ctx.font = `600 18px ${font}`;
-  ctx.fillText('www.japam.digital', width / 2, height - 48);
+  ctx.fillText('www.japam.digital', width / 2, height - 60);
 
   return dataUrlToBlob(canvas.toDataURL('image/png'));
 }
@@ -237,12 +248,21 @@ export async function renderSatsangReportCardBlob(opts: {
   if (!ctx) return null;
 
   const logo = await loadImage(A_LOGO_SRC);
+  const japamLogo = await loadImage(JAPAM_LOGO_SRC);
   drawGlossBackground(ctx, width, height);
   drawCertificateFrame(ctx, width, height);
 
   const font = '"Segoe UI", system-ui, sans-serif';
   const contentWidth = width - 168;
-  let y = 118;
+  let y = 150;
+
+  if (japamLogo) {
+    const logoSize = 86;
+    ctx.save();
+    ctx.globalAlpha = 0.92;
+    ctx.drawImage(japamLogo, width / 2 - logoSize / 2, 38, logoSize, logoSize);
+    ctx.restore();
+  }
 
   ctx.textAlign = 'center';
   ctx.fillStyle = '#FBBF24';
@@ -301,11 +321,11 @@ export async function renderSatsangReportCardBlob(opts: {
     });
   }
 
-  await drawFestivalCredit(ctx, width, height - 88, logo);
+  await drawFestivalCredit(ctx, width, height - 104, logo);
   ctx.textAlign = 'center';
   ctx.fillStyle = 'rgba(255,255,255,0.8)';
   ctx.font = `600 18px ${font}`;
-  ctx.fillText('www.japam.digital', width / 2, height - 48);
+  ctx.fillText('www.japam.digital', width / 2, height - 60);
   return dataUrlToBlob(canvas.toDataURL('image/png'));
 }
 

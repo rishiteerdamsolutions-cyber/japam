@@ -6,7 +6,7 @@ const A_LOGO_SRC = '/A-logo.png';
 const A_LOGO_FALLBACK_SRC = '/images/A-logo.png';
 const JAPAM_LOGO_SRC = '/images/logo.png';
 const BOARD_DEMO_SRC = encodeURI('/JAPAM DEMO BOARD.jpeg');
-const MANTRA_LINE = '108 Om Ganeshaya Namaha Japam';
+const MANTRA_QUOTED = '"108 Om Ganeshaya Namaha"';
 
 function dataUrlToBlob(dataUrl: string): Blob | null {
   try {
@@ -146,6 +146,141 @@ function wrapLines(ctx: CanvasRenderingContext2D, text: string, maxWidth: number
   return lines.length ? lines : [text];
 }
 
+type CertSpanKind = 'plain' | 'name' | 'mantra' | 'event' | 'org';
+type CertSpan = { text: string; kind: CertSpanKind };
+
+function gradientForKind(
+  ctx: CanvasRenderingContext2D,
+  kind: CertSpanKind,
+  x: number,
+  y: number,
+  w: number,
+): CanvasGradient | string {
+  const g = ctx.createLinearGradient(x, y - 22, x + Math.max(w, 8), y + 6);
+  if (kind === 'name') {
+    g.addColorStop(0, '#FED7AA');
+    g.addColorStop(0.45, '#FB923C');
+    g.addColorStop(1, '#EA580C');
+    return g;
+  }
+  if (kind === 'mantra') {
+    g.addColorStop(0, '#BBF7D0');
+    g.addColorStop(0.45, '#4ADE80');
+    g.addColorStop(1, '#15803D');
+    return g;
+  }
+  if (kind === 'event') {
+    g.addColorStop(0, '#BFDBFE');
+    g.addColorStop(0.45, '#3B82F6');
+    g.addColorStop(1, '#1D4ED8');
+    return g;
+  }
+  if (kind === 'org') {
+    g.addColorStop(0, '#FDE68A');
+    g.addColorStop(0.4, '#F59E0B');
+    g.addColorStop(0.75, '#E11D48');
+    g.addColorStop(1, '#9F1239');
+    return g;
+  }
+  return 'rgba(255,255,255,0.96)';
+}
+
+function wrapSpans(ctx: CanvasRenderingContext2D, spans: CertSpan[], maxWidth: number): CertSpan[][] {
+  const lines: CertSpan[][] = [];
+  let line: CertSpan[] = [];
+  let lineW = 0;
+
+  const pushPiece = (text: string, kind: CertSpanKind) => {
+    if (!text) return;
+    const w = ctx.measureText(text).width;
+    if (lineW + w > maxWidth && line.length) {
+      lines.push(line);
+      line = [];
+      lineW = 0;
+    }
+    line.push({ text, kind });
+    lineW += w;
+  };
+
+  for (const span of spans) {
+    const wholeW = ctx.measureText(span.text).width;
+    if (span.kind !== 'plain' && wholeW <= maxWidth) {
+      if (lineW + wholeW > maxWidth && line.length) {
+        lines.push(line);
+        line = [];
+        lineW = 0;
+      }
+      line.push(span);
+      lineW += wholeW;
+      continue;
+    }
+    const parts = span.text.split(/(\s+)/);
+    for (const part of parts) {
+      if (!part) continue;
+      if (ctx.measureText(part).width > maxWidth) {
+        let chunk = '';
+        for (const ch of part) {
+          const next = chunk + ch;
+          if (ctx.measureText(next).width > maxWidth && chunk) {
+            pushPiece(chunk, span.kind);
+            chunk = ch;
+          } else {
+            chunk = next;
+          }
+        }
+        if (chunk) pushPiece(chunk, span.kind);
+      } else {
+        pushPiece(part, span.kind);
+      }
+    }
+  }
+  if (line.length) lines.push(line);
+  return lines;
+}
+
+function drawCenteredSpans(
+  ctx: CanvasRenderingContext2D,
+  centerX: number,
+  y: number,
+  spans: CertSpan[],
+) {
+  const total = spans.reduce((sum, s) => sum + ctx.measureText(s.text).width, 0);
+  let x = centerX - total / 2;
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'alphabetic';
+  for (const span of spans) {
+    const w = ctx.measureText(span.text).width;
+    ctx.fillStyle = gradientForKind(ctx, span.kind, x, y, w);
+    ctx.fillText(span.text, x, y);
+    if (span.kind === 'name' && span.text.trim()) {
+      ctx.save();
+      ctx.strokeStyle = gradientForKind(ctx, 'name', x, y, w);
+      ctx.lineWidth = 2;
+      ctx.setLineDash([3, 4]);
+      ctx.beginPath();
+      ctx.moveTo(x, y + 6);
+      ctx.lineTo(x + w, y + 6);
+      ctx.stroke();
+      ctx.restore();
+    }
+    x += w;
+  }
+  ctx.textAlign = 'center';
+}
+
+function fillGradientText(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  centerX: number,
+  y: number,
+  kind: CertSpanKind,
+) {
+  const w = ctx.measureText(text).width;
+  ctx.textAlign = 'center';
+  ctx.fillStyle = gradientForKind(ctx, kind, centerX - w / 2, y, w);
+  ctx.fillText(text, centerX, y);
+}
+
 async function drawFestivalCredit(
   ctx: CanvasRenderingContext2D,
   width: number,
@@ -198,13 +333,24 @@ export async function renderSatsangDevoteeCardBlob(opts: {
   const footerReserve = 128;
   const name = (opts.devoteeName || 'Devotee').trim();
   const org = (opts.orgName || 'the organiser').trim();
-  const appreciation =
-    `This is to certify that ${name} has successfully participated and completed ${MANTRA_LINE} at Ganesha Utsav, organised by ${org}.`;
+  const eventName = (opts.eventName || 'Ganesha Utsav').trim();
   const blessing =
     'Continue receiving the blessings of Lord Ganesha by practising Japa on the Japam Web App.';
 
-  mctx.font = `600 24px ${font}`;
-  const appreciationLines = wrapLines(mctx, appreciation, contentWidth);
+  const bodyFont = `600 24px ${font}`;
+  mctx.font = bodyFont;
+  const bodySpans: CertSpan[] = [
+    { text: 'This is to certify that ', kind: 'plain' },
+    { text: name, kind: 'name' },
+    { text: ' has successfully participated and completed ', kind: 'plain' },
+    { text: MANTRA_QUOTED, kind: 'mantra' },
+    { text: ' Japam at ', kind: 'plain' },
+    { text: eventName, kind: 'event' },
+    { text: ', organised by ', kind: 'plain' },
+    { text: org, kind: 'org' },
+    { text: '.', kind: 'plain' },
+  ];
+  const bodyLines = wrapSpans(mctx, bodySpans, contentWidth);
   mctx.font = `600 22px ${font}`;
   const blessingLines = wrapLines(mctx, blessing, contentWidth);
 
@@ -213,7 +359,7 @@ export async function renderSatsangDevoteeCardBlob(opts: {
   y += 30; // JAPAM
   y += 34; // Ganesha Utsav
   y += 36; // mantra
-  y += appreciationLines.length * 34;
+  y += bodyLines.length * 38;
   y += 22;
   y += 28; // date
   y += 22;
@@ -262,19 +408,17 @@ export async function renderSatsangDevoteeCardBlob(opts: {
 
   ctx.fillStyle = '#FBBF24';
   ctx.font = `700 28px Georgia, serif`;
-  ctx.fillText('Ganesha Utsav', width / 2, drawY);
+  fillGradientText(ctx, 'Ganesha Utsav', width / 2, drawY, 'event');
   drawY += 34;
 
-  ctx.fillStyle = 'rgba(255,255,255,0.96)';
-  ctx.font = `600 22px ${font}`;
-  ctx.fillText(MANTRA_LINE, width / 2, drawY);
+  ctx.font = `700 22px ${font}`;
+  fillGradientText(ctx, MANTRA_QUOTED, width / 2, drawY, 'mantra');
   drawY += 36;
 
-  ctx.fillStyle = '#fff';
-  ctx.font = `600 24px ${font}`;
-  for (const line of appreciationLines) {
-    ctx.fillText(line, width / 2, drawY);
-    drawY += 34;
+  ctx.font = bodyFont;
+  for (const line of bodyLines) {
+    drawCenteredSpans(ctx, width / 2, drawY, line);
+    drawY += 38;
   }
 
   drawY += 18;
@@ -355,24 +499,22 @@ export async function renderSatsangReportCardBlob(opts: {
 
   ctx.fillStyle = '#FBBF24';
   ctx.font = `800 34px Georgia, serif`;
-  ctx.fillText('Ganesha Utsav', width / 2, y);
+  fillGradientText(ctx, 'Ganesha Utsav', width / 2, y, 'event');
   y += 40;
 
-  ctx.fillStyle = '#fff';
   ctx.font = `700 26px ${font}`;
-  ctx.fillText(MANTRA_LINE, width / 2, y);
+  fillGradientText(ctx, MANTRA_QUOTED, width / 2, y, 'mantra');
   y += 40;
 
-  ctx.fillStyle = 'rgba(255,255,255,0.95)';
   ctx.font = `600 24px ${font}`;
   for (const line of wrapLines(ctx, opts.eventName || 'Satsang report', contentWidth)) {
-    ctx.fillText(line, width / 2, y);
+    fillGradientText(ctx, line, width / 2, y, 'event');
     y += 32;
   }
 
-  ctx.font = `600 22px ${font}`;
+  ctx.font = `700 22px ${font}`;
   for (const line of wrapLines(ctx, opts.orgName, contentWidth)) {
-    ctx.fillText(line, width / 2, y);
+    fillGradientText(ctx, line, width / 2, y, 'org');
     y += 30;
   }
 

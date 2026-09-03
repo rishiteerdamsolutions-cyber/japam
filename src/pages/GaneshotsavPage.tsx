@@ -387,10 +387,7 @@ export function GaneshotsavPage() {
 
   useEffect(() => {
     if (step === 'pdf') {
-      void preloadBackgroundRemovalModel((info) => {
-        setBgProgress(info);
-        setUploadNotice(info.message);
-      });
+      void preloadBackgroundRemovalModel();
     }
   }, [step]);
 
@@ -535,12 +532,12 @@ export function GaneshotsavPage() {
 
   const onBgProgress = (info: BackgroundRemovalProgress) => {
     setBgProgress(info);
-    setUploadNotice(info.message);
+    setUploadNotice(null);
   };
 
   const processHandwritingPhoto = async (dataUrl: string) => {
     setUploadError(null);
-    setUploadNotice(t('ganeshotsav.pdfGettingReady'));
+    setUploadNotice(null);
     setBgProgress({ step: 'downloading', progress: 1, message: t('ganeshotsav.pdfGettingReady') });
     setProcessingImage(true);
     pendingPhotoRef.current = dataUrl;
@@ -548,10 +545,10 @@ export function GaneshotsavPage() {
       const cleaned = await removeBackgroundFromImage(dataUrl, { onProgress: onBgProgress });
       pendingPhotoRef.current = null;
       setHandwritingDataUrl(cleaned);
-      setUploadNotice(t('ganeshotsav.imageReady'));
+      setUploadNotice(null);
       setBgProgress({ step: 'complete', progress: 100, message: t('ganeshotsav.imageReady') });
-    } catch (err) {
-      setUploadError(err instanceof Error ? err.message : t('ganeshotsav.backgroundFailed'));
+    } catch {
+      setUploadError(t('ganeshotsav.backgroundFailed'));
       setBgProgress(null);
     } finally {
       setProcessingImage(false);
@@ -687,8 +684,8 @@ export function GaneshotsavPage() {
           });
           setHandwritingDataUrl(finalHandwriting);
           pendingPhotoRef.current = null;
-        } catch (err) {
-          setUploadError(err instanceof Error ? err.message : t('ganeshotsav.backgroundFailed'));
+        } catch {
+          setUploadError(t('ganeshotsav.backgroundFailed'));
           setBgProgress(null);
           return;
         }
@@ -716,7 +713,7 @@ export function GaneshotsavPage() {
         finalHandwriting,
         {
           matchTierNote: `${session.orgName} · ${session.eventName}`,
-          fileStem: `ganeshotsav-ganesh-${AUTO_JAPAM_SESSION_TARGET}`,
+          fileStem: `ganesha-utsav-likhita-japa-patra-${AUTO_JAPAM_SESSION_TARGET}`,
           festivalCredit: true,
         },
       );
@@ -961,8 +958,10 @@ export function GaneshotsavPage() {
             {handwritingDataUrl && !processingImage && !saving ? (
               <p className="text-emerald-400 text-xs mt-2">{t('ganeshotsav.imageReady')}</p>
             ) : null}
-            {uploadError ? <p className="text-red-400 text-xs mt-2">{uploadError}</p> : null}
-            {uploadError && (pendingPhotoRef.current || handwritingDataUrl) && !processingImage ? (
+            {uploadError && !processingImage && !saving ? (
+              <p className="text-red-400 text-xs mt-2">{uploadError}</p>
+            ) : null}
+            {uploadError && (pendingPhotoRef.current || handwritingDataUrl) && !processingImage && !saving ? (
               <button
                 type="button"
                 onClick={retryBackgroundRemoval}
@@ -992,8 +991,9 @@ export function GaneshotsavPage() {
             onChange={(e) => setMobileNumber(e.target.value)}
             className="w-full px-3 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30 mb-3"
           />
-          {uploadNotice ? <p className="text-amber-200/80 text-xs mb-3">{uploadNotice}</p> : null}
-          {uploadError ? <p className="text-red-400 text-xs mb-3">{uploadError}</p> : null}
+          {uploadNotice && !processingImage && !saving ? (
+            <p className="text-amber-200/80 text-xs mb-3">{uploadNotice}</p>
+          ) : null}
           <button
             type="button"
             disabled={saving || processingImage || !handwritingDataUrl}

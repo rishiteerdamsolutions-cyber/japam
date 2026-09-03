@@ -194,7 +194,7 @@ export function AdminUsersPage() {
             <p>Pushpa Aradhana: {analytics.modePlayers.pushpaAradhana}</p>
             <p>Marathons: {analytics.modePlayers.marathons}</p>
             <p>Yagnas: {analytics.modePlayers.yagnas}</p>
-            <p className="mt-1 text-amber-200/75">PDF contacts saved: {analytics.pdfContactsCount}</p>
+            <p className="mt-1 text-amber-200/75">Digital Likhita Japa Patra contacts saved: {analytics.pdfContactsCount}</p>
           </div>
         </div>
       )}

@@ -6,7 +6,7 @@ import {
   type AuthError,
   type User
 } from 'firebase/auth';
-import { auth, googleProvider, isFirebaseConfigured } from '../lib/firebase';
+import { auth, googleProvider, isFirebaseConfigured, isStandalonePwa } from '../lib/firebase';
 import { onAuthUidChanged, silenceActiveGameAudio, suppressIncidentalAudioAfterAuth } from '../lib/authAudioGuard';
 
 /**
@@ -16,7 +16,7 @@ import { onAuthUidChanged, silenceActiveGameAudio, suppressIncidentalAudioAfterA
  */
 const LISTENER_FLAG = '__japam_firebase_auth_listener_attached__';
 
-/** Ignore `onAuthStateChanged` until IndexedDB persistence has been applied (avoids transient null + “Sign in” flash). */
+/** Ignore `onAuthStateChanged` until persistence has been applied (avoids transient null + “Sign in” flash). */
 let authPersistenceHydrated = false;
 
 function attachFirebaseAuthListeners() {
@@ -70,21 +70,32 @@ function attachFirebaseAuthListeners() {
 function getAuthErrorMessage(err: unknown): string {
   const authErr = err as AuthError | undefined;
   const code = authErr?.code;
+  const pwaHint =
+    ' If you opened Japam from the home-screen app, close it and open www.japam.digital in Chrome or Safari, sign in once, then reopen the app.';
+
   switch (code) {
     case 'auth/popup-closed-by-user':
       return 'Sign-in was cancelled. Please try again.';
     case 'auth/popup-blocked':
-      return 'Popup was blocked by the browser. Please allow popups and try again.';
+      return (
+        'Google sign-in window was blocked.' +
+        (isStandalonePwa()
+          ? pwaHint
+          : ' Allow popups for this site, then try again.')
+      );
     case 'auth/cancelled-popup-request':
       return 'Sign-in was interrupted. Please try once more.';
     case 'auth/unauthorized-domain':
       return 'This site’s domain is not listed under Firebase Authentication → Settings → Authorized domains.';
     case 'auth/operation-not-supported-in-this-environment':
-      return 'This environment does not support that sign-in method. Try another browser or update the app.';
+      return 'Google sign-in is not available in this installed app window.' + pwaHint;
     case 'auth/network-request-failed':
       return 'Network error while contacting Google. Check your connection and try again.';
     case 'auth/internal-error':
-      return 'Sign-in service had a temporary error. Please try again in a moment.';
+      return (
+        'Sign-in could not finish in this window.' +
+        (isStandalonePwa() ? pwaHint : ' Please try again in a moment.')
+      );
     case 'auth/timeout':
       return 'Sign-in timed out. Check your connection and try again.';
     case 'auth/too-many-requests':
@@ -97,7 +108,10 @@ function getAuthErrorMessage(err: unknown): string {
       return 'This account has been disabled.';
     default:
       if (typeof code === 'string' && code.startsWith('auth/')) {
-        return 'Sign-in could not complete. Please try again.';
+        return (
+          'Sign-in could not complete.' +
+          (isStandalonePwa() ? pwaHint : ' Please try again.')
+        );
       }
       return err instanceof Error ? err.message : 'Sign-in failed';
   }
@@ -136,6 +150,8 @@ export const useAuthStore = create<AuthState>((set) => ({
     try {
       suppressIncidentalAudioAfterAuth();
       silenceActiveGameAudio();
+      // Ensure persistence/hydration finished before opening the Google popup.
+      await auth.authStateReady();
       await signInWithPopup(auth, googleProvider);
       // Sync immediately so callers (e.g. menu → game) see `user` without waiting for the next listener tick.
       set({ user: auth.currentUser, signInPending: false, error: null });

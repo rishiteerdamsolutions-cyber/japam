@@ -373,12 +373,12 @@ export function JapaDashboard() {
                     retro: downloadModal.special108RetrospectiveSessions,
                     total: downloadModal.count,
                     defaultValue:
-                      'Special 108: {{saved}} saved session(s) + {{retro}} from lifetime (÷108); PDF {{total}} japas',
+                      'Special 108: {{saved}} saved session(s) + {{retro}} from lifetime (÷108); Digital Likhita Japa Patra {{total}} japas',
                   })
                 : t('japaDashboard.special108PdfNoteSavedOnly', {
                     sessions: downloadModal.special108SavedSessions ?? 0,
                     total: downloadModal.count,
-                    defaultValue: 'Special 108: {{sessions}} session(s); PDF {{total}} japas',
+                    defaultValue: 'Special 108: {{sessions}} session(s); Digital Likhita Japa Patra {{total}} japas',
                   });
       const fileStem =
         downloadModal.source === 'lifetime'
@@ -647,7 +647,7 @@ export function JapaDashboard() {
               </div>
               <p className="text-amber-200/70 text-[10px] mb-1.5 tabular-nums">
                 {r.totalJapasForPdf.toLocaleString()}{' '}
-                {t('japaDashboard.special108JapasForPdf', { defaultValue: 'japas in PDF' })}
+                {t('japaDashboard.special108JapasForPdf', { defaultValue: 'japas in Digital Likhita Japa Patra' })}
                 {r.retrospectiveSessions > 0 ? (
                   <span className="block text-amber-200/55 mt-0.5">
                     {t('japaDashboard.special108RetroExplainShort', {
@@ -702,7 +702,7 @@ export function JapaDashboard() {
                     aria-label={t('japaDashboard.weeklyStreakDownload108Aria', {
                       day: STREAK_WEEKDAY_LABELS[idx],
                       deity: t(`deities.${deityId}`),
-                      defaultValue: 'Download 108 japas PDF for {{day}} {{deity}}',
+                      defaultValue: 'Download 108 japas Digital Likhita Japa Patra for {{day}} {{deity}}',
                     })}
                   >
                     <DownloadPdfIcon className="w-5 h-5 shrink-0" />
@@ -767,7 +767,7 @@ export function JapaDashboard() {
                         saved: downloadModal.special108SavedSessions ?? 0,
                         retro: downloadModal.special108RetrospectiveSessions,
                         defaultValue:
-                          '{{deity}} · Special 108 PDF — {{total}} japas ({{saved}} saved + {{retro}} retrospective from lifetime)',
+                          '{{deity}} · Special 108 Digital Likhita Japa Patra — {{total}} japas ({{saved}} saved + {{retro}} retrospective from lifetime)',
                       })
                     : `${downloadModal.deityName} · Special 108 (${downloadModal.count} japas)`}
             </p>
@@ -786,7 +786,7 @@ export function JapaDashboard() {
                     ? t('japaDashboard.special108HandwritingRetro', {
                         count: downloadModal.count,
                         defaultValue:
-                          'Your handwritten nama is repeated once per japa in this PDF total ({{count}}), including retrospective blocks from lifetime where saved Special 108 was lower.',
+                          'Your handwritten nama is repeated once per japa in this Digital Likhita Japa Patra total ({{count}}), including retrospective blocks from lifetime where saved Special 108 was lower.',
                       })
                     : `Your handwritten nama will be repeated ${downloadModal.count} times for Special 108.`}
             </p>
@@ -827,7 +827,7 @@ export function JapaDashboard() {
               )}
             </div>
 
-            <p className="text-amber-200/80 text-sm mb-3">Details for PDF (optional)</p>
+            <p className="text-amber-200/80 text-sm mb-3">Details for Digital Likhita Japa Patra (optional)</p>
             <div className="space-y-3 mb-6">
               <div>
                 <label className="block text-amber-200/80 text-xs mb-1">Name</label>

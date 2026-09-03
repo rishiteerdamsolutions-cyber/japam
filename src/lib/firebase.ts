@@ -1,10 +1,8 @@
 import { initializeApp } from 'firebase/app';
 import {
-  initializeAuth,
   getAuth,
-  indexedDBLocalPersistence,
+  setPersistence,
   browserLocalPersistence,
-  browserSessionPersistence,
   GoogleAuthProvider,
   type Auth,
 } from 'firebase/auth';
@@ -37,14 +35,12 @@ let googleProvider: GoogleAuthProvider | null = null;
 
 if (isFirebaseConfigured) {
   app = initializeApp(firebaseConfig);
-  try {
-    // Prefer durable persistence so PWA / Safari keep Google sign-in across visits.
-    auth = initializeAuth(app, {
-      persistence: [indexedDBLocalPersistence, browserLocalPersistence, browserSessionPersistence],
-    });
-  } catch {
-    auth = getAuth(app);
-  }
+  // getAuth + localStorage persistence is more reliable in installed PWAs than
+  // initializeAuth(indexedDB), which often breaks Google sign-in on mobile.
+  auth = getAuth(app);
+  void setPersistence(auth, browserLocalPersistence).catch(() => {
+    /* Private mode / storage blocked — SDK will still attempt in-memory session. */
+  });
   firestore = getFirestore(app);
   storage = getStorage(app);
   googleProvider = new GoogleAuthProvider();
@@ -83,6 +79,21 @@ if (isFirebaseConfigured) {
       console.warn('[AppCheck] Failed to initialise:', e);
     }
   }
+}
+
+/** True when running as an installed home-screen / standalone PWA. */
+export function isStandalonePwa(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    if (window.matchMedia('(display-mode: standalone)').matches) return true;
+    if (window.matchMedia('(display-mode: fullscreen)').matches) return true;
+    // iOS Safari "Add to Home Screen"
+    const nav = window.navigator as Navigator & { standalone?: boolean };
+    if (nav.standalone === true) return true;
+  } catch {
+    /* ignore */
+  }
+  return false;
 }
 
 export { auth, app, firestore, storage, googleProvider };

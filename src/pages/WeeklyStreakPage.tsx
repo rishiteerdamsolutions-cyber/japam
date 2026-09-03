@@ -158,7 +158,7 @@ export function WeeklyStreakPage() {
         <p className="w-full mb-4 text-amber-200/70 text-[11px] text-center leading-snug px-1">
           {t('weeklyStreak.downloadOnJapaDashboard', {
             defaultValue:
-              'Download 108-japa PDFs (your handwriting) and the week progress card from Japa count → Weekly streak at the bottom.',
+              'Download 108-japa Digital Likhita Japa Patra (your handwriting) and the week progress card from Japa count → Weekly streak at the bottom.',
           })}
         </p>
 

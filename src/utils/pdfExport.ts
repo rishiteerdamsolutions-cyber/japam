@@ -11,7 +11,8 @@ async function fetchImageAsDataUrl(url: string): Promise<string | null> {
     const res = await fetch(url, { cache: 'force-cache' });
     if (!res.ok) return null;
     const blob = await res.blob();
-    if (!blob.type.startsWith('image/')) return null;
+    // Some hosts serve PNG as octet-stream; still decode if the URL is clearly an image.
+    if (blob.type && !blob.type.startsWith('image/') && !blob.type.includes('octet-stream')) return null;
     return await new Promise<string>((resolve, reject) => {
       const r = new FileReader();
       r.onerror = () => reject(new Error('Failed to read image'));
@@ -168,9 +169,19 @@ export async function downloadMantraPdf(
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
   const contentTopY = margin + 58;
-  const contentBottomY = pageHeight - margin - (options?.festivalCredit ? 48 : 28);
+  const contentBottomY = pageHeight - margin - (options?.festivalCredit ? 62 : 28);
 
   const logoDataUrl = await fetchImageAsDataUrl('/images/favicon.png');
+  const aLogoRaw =
+    (await fetchImageAsDataUrl('/A-logo.png')) || (await fetchImageAsDataUrl('/images/A-logo.png'));
+  let aLogoDataUrl = aLogoRaw;
+  if (aLogoRaw) {
+    try {
+      aLogoDataUrl = await compositeOnWhiteAsJpeg(aLogoRaw);
+    } catch {
+      aLogoDataUrl = aLogoRaw;
+    }
+  }
   const logoSize = 22;
 
   const drawChromeForPage = (pageNumber: number, totalPages: number) => {
@@ -203,8 +214,30 @@ export async function downloadMantraPdf(
     doc.setFontSize(9);
     doc.setTextColor(90, 90, 90);
     if (options?.festivalCredit) {
+      const creditY = pageHeight - 36;
+      const mark = 22;
+      const gap = 5;
+      doc.setFont('helvetica', 'normal');
       doc.setFontSize(8);
-      doc.text('Built by AI Developer India: Aditya Nandagiri', centerX, pageHeight - 28, { align: 'center' });
+      const before = 'Built by ';
+      const after = 'AI Developer India: Aditya Nandagiri';
+      const beforeW = doc.getTextWidth(before);
+      const afterW = doc.getTextWidth(after);
+      const logoW = aLogoDataUrl ? mark : 0;
+      const total = beforeW + logoW + (aLogoDataUrl ? gap : 0) + afterW;
+      let x = centerX - total / 2;
+      doc.text(before, x, creditY);
+      x += beforeW;
+      if (aLogoDataUrl) {
+        try {
+          const fmt = aLogoDataUrl.startsWith('data:image/jpeg') ? 'JPEG' : 'PNG';
+          doc.addImage(aLogoDataUrl, fmt, x, creditY - mark + 3, mark, mark, undefined, 'FAST');
+          x += mark + gap;
+        } catch {
+          /* keep credit text even if the mark cannot draw */
+        }
+      }
+      doc.text(after, x, creditY);
       doc.setFontSize(9);
     }
     doc.text('www.japam.digital', centerX, pageHeight - 14, { align: 'center' });
@@ -212,6 +245,16 @@ export async function downloadMantraPdf(
   };
 
   let y = contentTopY;
+
+  if (options?.festivalCredit) {
+    doc.setFont('times', 'bold');
+    doc.setFontSize(14);
+    doc.setTextColor(90, 50, 20);
+    doc.text('Digital Likhita Japa Patra', pageWidth / 2, y, { align: 'center' });
+    doc.setTextColor(0, 0, 0);
+    doc.setFont('helvetica', 'normal');
+    y += lineHeight * 2.4;
+  }
 
   // User details if provided
   if (details?.name || details?.gotram || details?.mobileNumber) {

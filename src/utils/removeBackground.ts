@@ -13,6 +13,48 @@ export type BackgroundRemovalProgress = {
   message: string;
 };
 
+function isTechnicalProgressMessage(raw: string): boolean {
+  const msg = raw.toLowerCase();
+  if (msg.startsWith('error:')) return true;
+  return (
+    msg.includes('onnx') ||
+    msg.includes('wasm') ||
+    msg.includes('webgl') ||
+    msg.includes('webgpu') ||
+    msg.includes('backend') ||
+    msg.includes('execution provider') ||
+    msg.includes('failed to create') ||
+    msg.includes('unable to')
+  );
+}
+
+function friendlyProgress(
+  step: string,
+  progress: number,
+  rawMessage?: string,
+): BackgroundRemovalProgress | null {
+  const pct = Math.max(0, Math.min(100, progress));
+  if (rawMessage && isTechnicalProgressMessage(rawMessage)) return null;
+  if (step === 'complete' && pct < 10) return null;
+  if (step === 'processing') {
+    return { step: 'processing', progress: pct, message: `Removing background… ${Math.round(pct)}%` };
+  }
+  if (step === 'postprocessing') {
+    return { step: 'postprocessing', progress: Math.max(pct, 85), message: 'Finishing your nāma photo…' };
+  }
+  if (step === 'complete') {
+    return { step: 'complete', progress: 100, message: 'Background removed — photo ready.' };
+  }
+  if (step === 'fallback') {
+    return { step: 'fallback', progress: pct, message: 'Cleaning the photo on this device…' };
+  }
+  return {
+    step: 'downloading',
+    progress: pct,
+    message: pct < 8 ? 'Your Digital Likhita Japa Patra is getting ready…' : `Preparing photo tools… ${Math.round(pct)}%`,
+  };
+}
+
 export type RemoveBackgroundOptions = {
   onProgress?: (info: BackgroundRemovalProgress) => void;
   /** Prefer AI model; if it fails, fall back to white-paper cleanup. Default true. */
@@ -226,9 +268,24 @@ async function getOrCreateSession(onProgress?: (info: BackgroundRemovalProgress)
       progress: 5,
       message: 'Preparing photo tools (first time may take a minute)…',
     });
-    sessionPromise = newSession('u2netp');
+    sessionPromise = newSession('u2netp', undefined, {
+      executionProviders: ['wasm'],
+      simd: true,
+      proxy: false,
+      numThreads: 1,
+    });
   }
   return sessionPromise;
+}
+
+function emitFriendlyProgress(
+  onProgress: ((info: BackgroundRemovalProgress) => void) | undefined,
+  step: string,
+  progress: number,
+  rawMessage?: string,
+) {
+  const next = friendlyProgress(step, progress, rawMessage);
+  if (next) onProgress?.(next);
 }
 
 async function removeWithAi(
@@ -241,22 +298,11 @@ async function removeWithAi(
   const blob = await remove(img, {
     session,
     onProgress: (info: ProgressInfo) => {
-      onProgress?.({
-        step: info.step,
-        progress: Math.max(0, Math.min(100, info.progress)),
-        message:
-          info.step === 'downloading'
-            ? `Downloading photo tools… ${Math.round(info.progress)}%`
-            : info.step === 'processing'
-              ? `Removing background… ${Math.round(info.progress)}%`
-              : info.step === 'postprocessing'
-                ? 'Finishing your nāma photo…'
-                : info.message || 'Almost ready…',
-      });
+      emitFriendlyProgress(onProgress, info.step, info.progress, info.message);
     },
   });
   const withBgRemoved = await blobToDataUrl(blob);
-  onProgress?.({ step: 'postprocessing', progress: 95, message: 'Your Japa PDF is getting ready…' });
+  onProgress?.({ step: 'postprocessing', progress: 95, message: 'Your Digital Likhita Japa Patra is getting ready…' });
   return cropToContentBounds(withBgRemoved);
 }
 
@@ -290,31 +336,28 @@ export async function removeBackgroundFromImage(
         progress: 2 + attempt * 3,
         message:
           attempt === 0
-            ? 'Your Japa PDF is getting ready…'
+            ? 'Your Digital Likhita Japa Patra is getting ready…'
             : `Still preparing your photo (attempt ${attempt + 1})…`,
       });
       const result = await removeWithAi(dataUrl, onProgress);
-      onProgress?.({ step: 'complete', progress: 100, message: 'Background removed — PDF almost ready.' });
+      onProgress?.({ step: 'complete', progress: 100, message: 'Background removed — Digital Likhita Japa Patra almost ready.' });
       return result;
     } catch (err) {
       lastErr = err;
       sessionPromise = null;
-      await sleep(700 * (attempt + 1));
+      emitFriendlyProgress(onProgress, 'downloading', 12 + attempt * 8);
+      await sleep(400 * (attempt + 1));
     }
   }
 
   if (allowFallback) {
-    onProgress?.({
-      step: 'fallback',
-      progress: 70,
-      message: 'Using on-device cleanup while the model finishes caching…',
-    });
+    emitFriendlyProgress(onProgress, 'fallback', 70);
     try {
       const offline = await removeWhitePaperBackground(dataUrl);
       onProgress?.({
         step: 'complete',
         progress: 100,
-        message: 'Photo ready — your Japa PDF is getting ready.',
+        message: 'Photo ready — your Digital Likhita Japa Patra is getting ready.',
       });
       return offline;
     } catch {

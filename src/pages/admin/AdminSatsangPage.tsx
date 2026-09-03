@@ -181,7 +181,7 @@ export function AdminSatsangPage() {
       }
       setMessage(
         status === 'open'
-          ? 'This mandap is OPEN. japam.digital (and /ganeshotsav) is the Ganeshotsav landing. Today’s spoken code sends people into this event (cap 50).'
+          ? 'This mandap is OPEN. japam.digital (and /ganeshotsav) is the Ganesha Utsav landing. Today’s spoken code sends people into this event (cap 50).'
           : 'This mandap is CLOSED. Its codes will not join. The public site stays festival until every mandap is closed.',
       );
       await load();
@@ -194,9 +194,9 @@ export function AdminSatsangPage() {
 
   return (
     <div>
-      <h1 className="text-xl font-bold text-amber-400 mb-2">Ganeshotsav satsang</h1>
+      <h1 className="text-xl font-bold text-amber-400 mb-2">Ganesha Utsav satsang</h1>
       <p className="text-amber-200/70 text-sm mb-4 max-w-xl">
-        One event per mandap. While any mandap is OPEN, japam.digital itself is the Ganeshotsav landing (PWA install
+        One event per mandap. While any mandap is OPEN, japam.digital itself is the Ganesha Utsav landing (PWA install
         included). Leftover QR posters can still use{' '}
         <span className="text-amber-100">{origin}/ganeshotsav</span>. The spoken code (not on the QR) chooses the
         organisation, event name, and that mandap’s 50 seats. Codes must be unique across mandaps. Open several
@@ -217,7 +217,7 @@ export function AdminSatsangPage() {
         <input
           value={form.eventName}
           onChange={(e) => setForm((f) => ({ ...f, eventName: e.target.value }))}
-          placeholder="Event name (e.g. Ganeshotsav Japa Yagna)"
+          placeholder="Event name (e.g. Ganesha Utsav Japa Yagna)"
           className="w-full px-3 py-2 rounded-lg bg-black/40 text-white border border-amber-500/30"
         />
         <input

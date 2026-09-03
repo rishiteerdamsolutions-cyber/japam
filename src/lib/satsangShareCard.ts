@@ -3,7 +3,9 @@ import { downloadOrSaveBlob } from './downloadBlob';
 export const FESTIVAL_CREDIT_LINE = 'Built by AI Developer India: Aditya Nandagiri';
 export const FESTIVAL_CREDIT_AFTER_LOGO = 'AI Developer India: Aditya Nandagiri';
 const A_LOGO_SRC = '/A-logo.png';
+const A_LOGO_FALLBACK_SRC = '/images/A-logo.png';
 const JAPAM_LOGO_SRC = '/images/logo.png';
+const BOARD_DEMO_SRC = '/images/japam-board-demo.jpg';
 const MANTRA_LINE = '108 Om Ganeshaya Namaha Japam';
 
 function dataUrlToBlob(dataUrl: string): Blob | null {
@@ -30,6 +32,38 @@ function loadImage(src: string): Promise<HTMLImageElement | null> {
     img.onerror = () => resolve(null);
     img.src = src;
   });
+}
+
+async function loadImageWithFallback(src: string, fallback?: string): Promise<HTMLImageElement | null> {
+  const first = await loadImage(src);
+  if (first) return first;
+  if (fallback) return loadImage(fallback);
+  return null;
+}
+
+function drawRoundedImage(
+  ctx: CanvasRenderingContext2D,
+  img: HTMLImageElement,
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  r = 18,
+) {
+  ctx.save();
+  roundedRectPath(ctx, x, y, w, h, r);
+  ctx.clip();
+  const scale = Math.max(w / img.naturalWidth, h / img.naturalHeight);
+  const dw = img.naturalWidth * scale;
+  const dh = img.naturalHeight * scale;
+  ctx.drawImage(img, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh);
+  ctx.restore();
+  ctx.save();
+  ctx.strokeStyle = 'rgba(251, 191, 36, 0.9)';
+  ctx.lineWidth = 3;
+  roundedRectPath(ctx, x, y, w, h, r);
+  ctx.stroke();
+  ctx.restore();
 }
 
 function drawGlossBackground(ctx: CanvasRenderingContext2D, width: number, height: number) {
@@ -151,8 +185,9 @@ export async function renderSatsangDevoteeCardBlob(opts: {
   const ctx = canvas.getContext('2d');
   if (!ctx) return null;
 
-  const logo = await loadImage(A_LOGO_SRC);
+  const logo = await loadImageWithFallback(A_LOGO_SRC, A_LOGO_FALLBACK_SRC);
   const japamLogo = await loadImage(JAPAM_LOGO_SRC);
+  const boardDemo = await loadImage(BOARD_DEMO_SRC);
   drawGlossBackground(ctx, width, height);
   drawCertificateFrame(ctx, width, height);
 
@@ -182,7 +217,7 @@ export async function renderSatsangDevoteeCardBlob(opts: {
 
   ctx.fillStyle = '#FBBF24';
   ctx.font = `700 30px Georgia, serif`;
-  ctx.fillText('Ganeshotsav', width / 2, y);
+  ctx.fillText('Ganesha Utsav', width / 2, y);
   y += 40;
 
   ctx.fillStyle = 'rgba(255,255,255,0.96)';
@@ -193,7 +228,7 @@ export async function renderSatsangDevoteeCardBlob(opts: {
   const name = (opts.devoteeName || 'Devotee').trim();
   const org = (opts.orgName || 'the organiser').trim();
   const appreciation =
-    `This is to certify that ${name} has successfully participated and completed ${MANTRA_LINE} at Ganesh Utsav, organised by ${org}.`;
+    `This is to certify that ${name} has successfully participated and completed ${MANTRA_LINE} at Ganesha Utsav, organised by ${org}.`;
 
   ctx.fillStyle = '#fff';
   ctx.font = `600 27px ${font}`;
@@ -218,6 +253,24 @@ export async function renderSatsangDevoteeCardBlob(opts: {
   )) {
     ctx.fillText(line, width / 2, y);
     y += 34;
+  }
+
+  y += 28;
+  if (boardDemo) {
+    const maxW = contentWidth;
+    const maxH = Math.max(160, height - 150 - y);
+    const aspect = boardDemo.naturalWidth / Math.max(1, boardDemo.naturalHeight);
+    let drawW = maxW;
+    let drawH = drawW / aspect;
+    if (drawH > maxH) {
+      drawH = maxH;
+      drawW = drawH * aspect;
+    }
+    drawRoundedImage(ctx, boardDemo, (width - drawW) / 2, y, drawW, drawH, 20);
+    y += drawH + 18;
+    ctx.fillStyle = 'rgba(255,255,255,0.82)';
+    ctx.font = `600 16px ${font}`;
+    ctx.fillText('Japam board — continue your japa here', width / 2, y);
   }
 
   // Keep clear of the bottom border strokes so "www.japam.digital" does not get overlapped.
@@ -247,7 +300,7 @@ export async function renderSatsangReportCardBlob(opts: {
   const ctx = canvas.getContext('2d');
   if (!ctx) return null;
 
-  const logo = await loadImage(A_LOGO_SRC);
+  const logo = await loadImageWithFallback(A_LOGO_SRC, A_LOGO_FALLBACK_SRC);
   const japamLogo = await loadImage(JAPAM_LOGO_SRC);
   drawGlossBackground(ctx, width, height);
   drawCertificateFrame(ctx, width, height);
@@ -277,7 +330,7 @@ export async function renderSatsangReportCardBlob(opts: {
 
   ctx.fillStyle = '#FBBF24';
   ctx.font = `800 34px Georgia, serif`;
-  ctx.fillText('Ganeshotsav', width / 2, y);
+  ctx.fillText('Ganesha Utsav', width / 2, y);
   y += 40;
 
   ctx.fillStyle = '#fff';

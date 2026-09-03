@@ -157,9 +157,9 @@ export function AdminAnalyticsPage() {
           subtitle="Rank card downloads from Pushpa Aradhana"
         />
         <MetricCard
-          title="Japa PDF (Handwritten Naamas)"
+          title="Digital Likhita Japa Patra"
           value={cards.japaPdfDownloads}
-          subtitle="PDF downloads with handwritten deity names"
+          subtitle="Downloads of handwritten nāma Digital Likhita Japa Patra"
         />
       </div>
 

@@ -1,14 +1,43 @@
-/** Works offline — no model download. For handwritten nāma photographed on white paper. */
+import { remove, newSession, rembgConfig, type ProgressInfo } from '@bunnio/rembg-web';
+import * as ort from 'onnxruntime-web';
 
 export const REMBG_PROCESSING_ERROR =
   'Could not prepare your photo. Use a clear photo of the nāma on plain white paper.';
 
-export const REMBG_NETWORK_ERROR = REMBG_PROCESSING_ERROR;
+export const REMBG_NETWORK_ERROR =
+  'Still downloading the photo tools. Stay on this page — slow network is OK. Tap try again if needed.';
+
+export type BackgroundRemovalProgress = {
+  step: 'downloading' | 'processing' | 'postprocessing' | 'complete' | 'fallback';
+  progress: number;
+  message: string;
+};
+
+export type RemoveBackgroundOptions = {
+  onProgress?: (info: BackgroundRemovalProgress) => void;
+  /** Prefer AI model; if it fails, fall back to white-paper cleanup. Default true. */
+  allowOfflineFallback?: boolean;
+};
 
 type Rgb = { r: number; g: number; b: number };
 
+const ONNX_WASM_CDN = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.23.0/dist/';
+
+let configured = false;
+let sessionPromise: Promise<Awaited<ReturnType<typeof newSession>>> | null = null;
+
 function sleep(ms: number) {
   return new Promise((r) => setTimeout(r, ms));
+}
+
+function ensureRembgConfig(): void {
+  if (configured) return;
+  ort.env.wasm.wasmPaths = ONNX_WASM_CDN;
+  ort.env.wasm.numThreads = 1;
+  // Default rembg path is /models/u2netp.onnx — we ship that file from public/models.
+  rembgConfig.setBaseUrl('');
+  rembgConfig.setCustomModelPath('u2netp', '/models/u2netp.onnx');
+  configured = true;
 }
 
 async function loadImage(dataUrl: string): Promise<HTMLImageElement> {
@@ -20,7 +49,7 @@ async function loadImage(dataUrl: string): Promise<HTMLImageElement> {
   });
 }
 
-async function downscaleDataUrl(dataUrl: string, maxSide = 1600): Promise<string> {
+async function downscaleDataUrl(dataUrl: string, maxSide = 1280): Promise<string> {
   const img = await loadImage(dataUrl);
   const longest = Math.max(img.width, img.height);
   if (longest <= maxSide) return dataUrl;
@@ -43,7 +72,6 @@ function colorDistance(r: number, g: number, b: number, ref: Rgb): number {
   return Math.sqrt(dr * dr + dg * dg + db * db);
 }
 
-/** Sample border pixels to learn the paper colour (handles cream/off-white paper). */
 function estimatePaperFromBorder(data: Uint8ClampedArray, width: number, height: number): Rgb {
   let rSum = 0;
   let gSum = 0;
@@ -136,7 +164,15 @@ function cropToContentBounds(dataUrl: string, padding = 8): Promise<string> {
   });
 }
 
-/** True when the image already has transparent pixels (background already removed). */
+function blobToDataUrl(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(new Error('Failed to read blob'));
+    reader.readAsDataURL(blob);
+  });
+}
+
 export async function imageHasTransparentBackground(dataUrl: string): Promise<boolean> {
   const img = await loadImage(dataUrl);
   const canvas = document.createElement('canvas');
@@ -153,11 +189,8 @@ export async function imageHasTransparentBackground(dataUrl: string): Promise<bo
   return false;
 }
 
-/**
- * Remove white/cream paper background — runs entirely on-device (no network, no AI model).
- */
 export async function removeWhitePaperBackground(dataUrl: string): Promise<string> {
-  const scaled = await downscaleDataUrl(dataUrl);
+  const scaled = await downscaleDataUrl(dataUrl, 1600);
   const img = await loadImage(scaled);
   const canvas = document.createElement('canvas');
   canvas.width = img.width;
@@ -167,7 +200,6 @@ export async function removeWhitePaperBackground(dataUrl: string): Promise<strin
   ctx.drawImage(img, 0, 0);
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
   const { data, width, height } = imageData;
-
   const paper = estimatePaperFromBorder(data, width, height);
   const threshold = 52;
 
@@ -179,26 +211,120 @@ export async function removeWhitePaperBackground(dataUrl: string): Promise<strin
     const chroma = Math.max(r, g, b) - Math.min(r, g, b);
     const nearPaper = colorDistance(r, g, b, paper) < threshold;
     const looksLikePaper = nearPaper || (lum > 195 && chroma < 55);
-    if (looksLikePaper) {
-      data[i + 3] = 0;
-    } else {
-      data[i + 3] = 255;
-    }
+    data[i + 3] = looksLikePaper ? 0 : 255;
   }
 
   ctx.putImageData(imageData, 0, 0);
   return cropToContentBounds(canvas.toDataURL('image/png'));
 }
 
-/** No-op — kept so callers can warm up without downloading anything. */
-export function preloadBackgroundRemovalModel() {
-  return Promise.resolve();
+async function getOrCreateSession(onProgress?: (info: BackgroundRemovalProgress) => void) {
+  ensureRembgConfig();
+  if (!sessionPromise) {
+    onProgress?.({
+      step: 'downloading',
+      progress: 5,
+      message: 'Preparing photo tools (first time may take a minute)…',
+    });
+    sessionPromise = newSession('u2netp');
+  }
+  return sessionPromise;
 }
 
-export async function removeBackgroundFromImage(dataUrl: string): Promise<string> {
+async function removeWithAi(
+  dataUrl: string,
+  onProgress?: (info: BackgroundRemovalProgress) => void,
+): Promise<string> {
+  const scaled = await downscaleDataUrl(dataUrl);
+  const img = await loadImage(scaled);
+  const session = await getOrCreateSession(onProgress);
+  const blob = await remove(img, {
+    session,
+    onProgress: (info: ProgressInfo) => {
+      onProgress?.({
+        step: info.step,
+        progress: Math.max(0, Math.min(100, info.progress)),
+        message:
+          info.step === 'downloading'
+            ? `Downloading photo tools… ${Math.round(info.progress)}%`
+            : info.step === 'processing'
+              ? `Removing background… ${Math.round(info.progress)}%`
+              : info.step === 'postprocessing'
+                ? 'Finishing your nāma photo…'
+                : info.message || 'Almost ready…',
+      });
+    },
+  });
+  const withBgRemoved = await blobToDataUrl(blob);
+  onProgress?.({ step: 'postprocessing', progress: 95, message: 'Your Japa PDF is getting ready…' });
+  return cropToContentBounds(withBgRemoved);
+}
+
+/** Warm the model while the devotee fills name/gotram (best effort). */
+export function preloadBackgroundRemovalModel(onProgress?: (info: BackgroundRemovalProgress) => void) {
+  return getOrCreateSession(onProgress).catch(() => {
+    sessionPromise = null;
+  });
+}
+
+/**
+ * Prefer AI model (self-hosted u2netp + progress). On failure, clean white paper offline.
+ */
+export async function removeBackgroundFromImage(
+  dataUrl: string,
+  options?: RemoveBackgroundOptions,
+): Promise<string> {
+  const onProgress = options?.onProgress;
+  const allowFallback = options?.allowOfflineFallback !== false;
+
   if (await imageHasTransparentBackground(dataUrl)) {
+    onProgress?.({ step: 'complete', progress: 100, message: 'Photo ready.' });
     return cropToContentBounds(dataUrl);
   }
-  await sleep(0);
-  return removeWhitePaperBackground(dataUrl);
+
+  let lastErr: unknown = null;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      onProgress?.({
+        step: 'downloading',
+        progress: 2 + attempt * 3,
+        message:
+          attempt === 0
+            ? 'Your Japa PDF is getting ready…'
+            : `Still preparing your photo (attempt ${attempt + 1})…`,
+      });
+      const result = await removeWithAi(dataUrl, onProgress);
+      onProgress?.({ step: 'complete', progress: 100, message: 'Background removed — PDF almost ready.' });
+      return result;
+    } catch (err) {
+      lastErr = err;
+      sessionPromise = null;
+      await sleep(700 * (attempt + 1));
+    }
+  }
+
+  if (allowFallback) {
+    onProgress?.({
+      step: 'fallback',
+      progress: 70,
+      message: 'Using on-device cleanup while the model finishes caching…',
+    });
+    try {
+      const offline = await removeWhitePaperBackground(dataUrl);
+      onProgress?.({
+        step: 'complete',
+        progress: 100,
+        message: 'Photo ready — your Japa PDF is getting ready.',
+      });
+      return offline;
+    } catch {
+      /* fall through */
+    }
+  }
+
+  const msg = lastErr instanceof Error ? lastErr.message.toLowerCase() : '';
+  if (msg.includes('fetch') || msg.includes('network') || msg.includes('wasm') || msg.includes('download')) {
+    throw new Error(REMBG_NETWORK_ERROR);
+  }
+  throw new Error(REMBG_PROCESSING_ERROR);
 }

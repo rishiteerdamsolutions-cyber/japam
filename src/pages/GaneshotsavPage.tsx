@@ -30,7 +30,12 @@ import {
 } from '../lib/ganeshotsavDraft';
 import { downloadBlobPngAsync, renderSatsangDevoteeCardBlob } from '../lib/satsangShareCard';
 import { downloadMantraPdf } from '../utils/pdfExport';
-import { preloadBackgroundRemovalModel, removeBackgroundFromImage, imageHasTransparentBackground } from '../utils/removeBackground';
+import {
+  preloadBackgroundRemovalModel,
+  removeBackgroundFromImage,
+  imageHasTransparentBackground,
+  type BackgroundRemovalProgress,
+} from '../utils/removeBackground';
 import { formatIstDateTime } from '../lib/japamCounterIst';
 import { auth, isFirebaseConfigured } from '../lib/firebase';
 
@@ -130,6 +135,7 @@ export function GaneshotsavPage() {
   const [processingImage, setProcessingImage] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [uploadNotice, setUploadNotice] = useState<string | null>(null);
+  const [bgProgress, setBgProgress] = useState<BackgroundRemovalProgress | null>(null);
   const [shareError, setShareError] = useState<string | null>(null);
   const [shareNotice, setShareNotice] = useState<string | null>(null);
   const [shareGenerating, setShareGenerating] = useState(false);
@@ -295,7 +301,12 @@ export function GaneshotsavPage() {
   }, [step, session, name, t]);
 
   useEffect(() => {
-    if (step === 'pdf') void preloadBackgroundRemovalModel();
+    if (step === 'pdf') {
+      void preloadBackgroundRemovalModel((info) => {
+        setBgProgress(info);
+        setUploadNotice(info.message);
+      });
+    }
   }, [step]);
 
   useEffect(() => {
@@ -386,17 +397,26 @@ export function GaneshotsavPage() {
     fileInputRef.current?.click();
   };
 
+  const onBgProgress = (info: BackgroundRemovalProgress) => {
+    setBgProgress(info);
+    setUploadNotice(info.message);
+  };
+
   const processHandwritingPhoto = async (dataUrl: string) => {
     setUploadError(null);
-    setUploadNotice(null);
+    setUploadNotice(t('ganeshotsav.pdfGettingReady'));
+    setBgProgress({ step: 'downloading', progress: 1, message: t('ganeshotsav.pdfGettingReady') });
     setProcessingImage(true);
     pendingPhotoRef.current = dataUrl;
     try {
-      const cleaned = await removeBackgroundFromImage(dataUrl);
+      const cleaned = await removeBackgroundFromImage(dataUrl, { onProgress: onBgProgress });
       pendingPhotoRef.current = null;
       setHandwritingDataUrl(cleaned);
+      setUploadNotice(t('ganeshotsav.imageReady'));
+      setBgProgress({ step: 'complete', progress: 100, message: t('ganeshotsav.imageReady') });
     } catch (err) {
       setUploadError(err instanceof Error ? err.message : t('ganeshotsav.backgroundFailed'));
+      setBgProgress(null);
     } finally {
       setProcessingImage(false);
     }
@@ -522,18 +542,22 @@ export function GaneshotsavPage() {
       let finalHandwriting = handwritingDataUrl;
       const alreadyClean = await imageHasTransparentBackground(handwritingDataUrl);
       if (!alreadyClean) {
-        setUploadNotice(t('ganeshotsav.processingPhoto'));
+        setUploadNotice(t('ganeshotsav.pdfGettingReady'));
+        setBgProgress({ step: 'processing', progress: 5, message: t('ganeshotsav.pdfGettingReady') });
         try {
-          finalHandwriting = await removeBackgroundFromImage(handwritingDataUrl);
+          finalHandwriting = await removeBackgroundFromImage(handwritingDataUrl, {
+            onProgress: onBgProgress,
+          });
           setHandwritingDataUrl(finalHandwriting);
           pendingPhotoRef.current = null;
         } catch (err) {
           setUploadError(err instanceof Error ? err.message : t('ganeshotsav.backgroundFailed'));
+          setBgProgress(null);
           return;
-        } finally {
-          setUploadNotice(null);
         }
       }
+      setUploadNotice(t('ganeshotsav.pdfGettingReady'));
+      setBgProgress({ step: 'postprocessing', progress: 90, message: t('ganeshotsav.pdfGettingReady') });
 
       const saved = await completeSatsang({
         eventId: session.eventId,
@@ -590,6 +614,8 @@ export function GaneshotsavPage() {
       setStep('share');
     } finally {
       setSaving(false);
+      setUploadNotice(null);
+      setBgProgress(null);
     }
   };
 
@@ -759,11 +785,26 @@ export function GaneshotsavPage() {
             <button
               type="button"
               onClick={openPhotoPicker}
-              disabled={processingImage}
+              disabled={processingImage || saving}
               className="w-full py-3 rounded-xl bg-amber-500/90 text-white text-sm font-semibold disabled:opacity-50"
             >
               {processingImage ? t('ganeshotsav.processingPhoto') : t('ganeshotsav.choosePhoto')}
             </button>
+            {(processingImage || saving) && bgProgress ? (
+              <div className="mt-3 space-y-2">
+                <p className="text-amber-200 text-xs font-medium text-center">{t('ganeshotsav.pdfGettingReady')}</p>
+                <p className="text-amber-200/70 text-[11px] text-center">{bgProgress.message}</p>
+                <div className="h-2 rounded-full bg-black/40 overflow-hidden">
+                  <div
+                    className="h-full bg-amber-400 transition-[width] duration-300 ease-out"
+                    style={{ width: `${Math.max(4, Math.min(100, bgProgress.progress))}%` }}
+                  />
+                </div>
+                <p className="text-amber-200/50 text-[10px] text-center tabular-nums">
+                  {Math.round(bgProgress.progress)}%
+                </p>
+              </div>
+            ) : null}
             {handwritingDataUrl ? (
               <img
                 src={handwritingDataUrl}
@@ -771,12 +812,11 @@ export function GaneshotsavPage() {
                 className="mt-3 max-h-24 object-contain border border-emerald-500/30 rounded bg-white/5 mx-auto"
               />
             ) : null}
-            {processingImage ? <p className="text-amber-400 text-xs mt-2">{t('ganeshotsav.processingPhoto')}</p> : null}
-            {handwritingDataUrl && !processingImage ? (
+            {handwritingDataUrl && !processingImage && !saving ? (
               <p className="text-emerald-400 text-xs mt-2">{t('ganeshotsav.imageReady')}</p>
             ) : null}
             {uploadError ? <p className="text-red-400 text-xs mt-2">{uploadError}</p> : null}
-            {uploadError && (pendingPhotoRef.current || handwritingDataUrl) ? (
+            {uploadError && (pendingPhotoRef.current || handwritingDataUrl) && !processingImage ? (
               <button
                 type="button"
                 onClick={retryBackgroundRemoval}

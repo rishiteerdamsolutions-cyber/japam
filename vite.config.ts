@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => {
     copyPublicDir: false,
   },
   optimizeDeps: {
-    exclude: [],
+    exclude: ['onnxruntime-web', '@bunnio/rembg-web'],
   },
   server: {
     port: Number(process.env.VITE_DEV_PORT) || 5173,
@@ -41,7 +41,7 @@ export default defineConfig(({ mode }) => {
         const outDir = path.join(root, 'dist');
 
         // Copy only what's referenced by the app at runtime.
-        const copyDirs = ['images', 'sounds', 'locales', 'videos', 'weapons', 'asura', 'content'];
+        const copyDirs = ['images', 'sounds', 'locales', 'videos', 'weapons', 'asura', 'content', 'models'];
         const copyFiles = [
           'vite.svg',
           'openapi.json',

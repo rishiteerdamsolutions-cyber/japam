@@ -59,6 +59,7 @@ export default defineConfig(({ mode }) => {
           'asura-combat-test.html',
           'SAMPLE NAMA IMAGE.png',
           'A-logo.png',
+          'JAPAM DEMO BOARD.jpeg',
         ];
 
         async function exists(p: string) {

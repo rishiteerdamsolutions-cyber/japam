@@ -5,7 +5,7 @@ export const FESTIVAL_CREDIT_AFTER_LOGO = 'AI Developer India: Aditya Nandagiri'
 const A_LOGO_SRC = '/A-logo.png';
 const A_LOGO_FALLBACK_SRC = '/images/A-logo.png';
 const JAPAM_LOGO_SRC = '/images/logo.png';
-const BOARD_DEMO_SRC = '/images/japam-board-demo.jpg';
+const BOARD_DEMO_SRC = encodeURI('/JAPAM DEMO BOARD.jpeg');
 const MANTRA_LINE = '108 Om Ganeshaya Namaha Japam';
 
 function dataUrlToBlob(dataUrl: string): Blob | null {
@@ -41,29 +41,35 @@ async function loadImageWithFallback(src: string, fallback?: string): Promise<HT
   return null;
 }
 
-function drawRoundedImage(
+function drawContainedRoundedImage(
   ctx: CanvasRenderingContext2D,
   img: HTMLImageElement,
-  x: number,
+  centerX: number,
   y: number,
-  w: number,
-  h: number,
+  maxW: number,
+  maxH: number,
   r = 18,
-) {
+): number {
+  const aspect = img.naturalWidth / Math.max(1, img.naturalHeight);
+  let w = maxW;
+  let h = w / aspect;
+  if (h > maxH) {
+    h = maxH;
+    w = h * aspect;
+  }
+  const x = centerX - w / 2;
   ctx.save();
   roundedRectPath(ctx, x, y, w, h, r);
   ctx.clip();
-  const scale = Math.max(w / img.naturalWidth, h / img.naturalHeight);
-  const dw = img.naturalWidth * scale;
-  const dh = img.naturalHeight * scale;
-  ctx.drawImage(img, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh);
+  ctx.drawImage(img, x, y, w, h);
   ctx.restore();
   ctx.save();
-  ctx.strokeStyle = 'rgba(251, 191, 36, 0.9)';
+  ctx.strokeStyle = 'rgba(251, 191, 36, 0.95)';
   ctx.lineWidth = 3;
   roundedRectPath(ctx, x, y, w, h, r);
   ctx.stroke();
   ctx.restore();
+  return h;
 }
 
 function drawGlossBackground(ctx: CanvasRenderingContext2D, width: number, height: number) {
@@ -178,102 +184,117 @@ export async function renderSatsangDevoteeCardBlob(opts: {
   dateLabel: string;
 }): Promise<Blob | null> {
   const width = 720;
-  const height = 1280;
+  const measure = document.createElement('canvas');
+  const mctx = measure.getContext('2d');
+  if (!mctx) return null;
+
+  const logo = await loadImageWithFallback(A_LOGO_SRC, A_LOGO_FALLBACK_SRC);
+  const japamLogo = await loadImage(JAPAM_LOGO_SRC);
+  const boardDemo = await loadImage(BOARD_DEMO_SRC);
+
+  const font = '"Segoe UI", system-ui, sans-serif';
+  const contentLeft = 84;
+  const contentWidth = width - contentLeft * 2;
+  const footerReserve = 128;
+  const name = (opts.devoteeName || 'Devotee').trim();
+  const org = (opts.orgName || 'the organiser').trim();
+  const appreciation =
+    `This is to certify that ${name} has successfully participated and completed ${MANTRA_LINE} at Ganesha Utsav, organised by ${org}.`;
+  const blessing =
+    'Continue receiving the blessings of Lord Ganesha by practising Japa on the Japam Web App.';
+
+  mctx.font = `600 24px ${font}`;
+  const appreciationLines = wrapLines(mctx, appreciation, contentWidth);
+  mctx.font = `600 22px ${font}`;
+  const blessingLines = wrapLines(mctx, blessing, contentWidth);
+
+  let y = 132;
+  y += 34; // title
+  y += 30; // JAPAM
+  y += 34; // Ganesha Utsav
+  y += 36; // mantra
+  y += appreciationLines.length * 34;
+  y += 22;
+  y += 28; // date
+  y += 22;
+  y += blessingLines.length * 30;
+  y += 22;
+
+  let boardH = 0;
+  if (boardDemo) {
+    const aspect = boardDemo.naturalWidth / Math.max(1, boardDemo.naturalHeight);
+    const boardW = contentWidth;
+    boardH = boardW / aspect;
+    y += boardH + 16;
+  }
+
+  const height = Math.ceil(y + footerReserve);
   const canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;
   const ctx = canvas.getContext('2d');
   if (!ctx) return null;
 
-  const logo = await loadImageWithFallback(A_LOGO_SRC, A_LOGO_FALLBACK_SRC);
-  const japamLogo = await loadImage(JAPAM_LOGO_SRC);
-  const boardDemo = await loadImage(BOARD_DEMO_SRC);
   drawGlossBackground(ctx, width, height);
   drawCertificateFrame(ctx, width, height);
 
-  const font = '"Segoe UI", system-ui, sans-serif';
-  const contentLeft = 84;
-  const contentWidth = width - contentLeft * 2;
-  let y = 150;
-
+  let drawY = 132;
   if (japamLogo) {
-    const logoSize = 86;
+    const logoSize = 72;
     ctx.save();
     ctx.globalAlpha = 0.92;
-    ctx.drawImage(japamLogo, width / 2 - logoSize / 2, 38, logoSize, logoSize);
+    ctx.drawImage(japamLogo, width / 2 - logoSize / 2, 42, logoSize, logoSize);
     ctx.restore();
+    drawY = 128;
   }
 
   ctx.textAlign = 'center';
+  ctx.textBaseline = 'alphabetic';
   ctx.fillStyle = '#FBBF24';
-  ctx.font = `800 44px Georgia, "Times New Roman", serif`;
-  ctx.fillText('Certificate of Appreciation', width / 2, y);
-  y += 40;
+  ctx.font = `800 38px Georgia, "Times New Roman", serif`;
+  ctx.fillText('Certificate of Appreciation', width / 2, drawY);
+  drawY += 34;
 
   ctx.fillStyle = 'rgba(255,255,255,0.92)';
-  ctx.font = `700 26px ${font}`;
-  ctx.fillText('JAPAM', width / 2, y);
-  y += 36;
+  ctx.font = `700 24px ${font}`;
+  ctx.fillText('JAPAM', width / 2, drawY);
+  drawY += 30;
 
   ctx.fillStyle = '#FBBF24';
-  ctx.font = `700 30px Georgia, serif`;
-  ctx.fillText('Ganesha Utsav', width / 2, y);
-  y += 40;
+  ctx.font = `700 28px Georgia, serif`;
+  ctx.fillText('Ganesha Utsav', width / 2, drawY);
+  drawY += 34;
 
   ctx.fillStyle = 'rgba(255,255,255,0.96)';
-  ctx.font = `600 24px ${font}`;
-  ctx.fillText(MANTRA_LINE, width / 2, y);
-  y += 52;
-
-  const name = (opts.devoteeName || 'Devotee').trim();
-  const org = (opts.orgName || 'the organiser').trim();
-  const appreciation =
-    `This is to certify that ${name} has successfully participated and completed ${MANTRA_LINE} at Ganesha Utsav, organised by ${org}.`;
+  ctx.font = `600 22px ${font}`;
+  ctx.fillText(MANTRA_LINE, width / 2, drawY);
+  drawY += 36;
 
   ctx.fillStyle = '#fff';
-  ctx.font = `600 27px ${font}`;
-  ctx.textAlign = 'center';
-  for (const line of wrapLines(ctx, appreciation, contentWidth)) {
-    ctx.fillText(line, width / 2, y);
-    y += 38;
+  ctx.font = `600 24px ${font}`;
+  for (const line of appreciationLines) {
+    ctx.fillText(line, width / 2, drawY);
+    drawY += 34;
   }
 
-  y += 30;
+  drawY += 18;
   ctx.fillStyle = '#FBBF24';
-  ctx.font = `700 24px ${font}`;
-  ctx.fillText(opts.dateLabel, width / 2, y);
-  y += 52;
+  ctx.font = `700 22px ${font}`;
+  ctx.fillText(opts.dateLabel, width / 2, drawY);
+  drawY += 28;
 
   ctx.fillStyle = 'rgba(255,255,255,0.95)';
-  ctx.font = `600 24px ${font}`;
-  for (const line of wrapLines(
-    ctx,
-    'Continue receiving the blessings of Lord Ganesha by practising Japa on the Japam Web App.',
-    contentWidth,
-  )) {
-    ctx.fillText(line, width / 2, y);
-    y += 34;
+  ctx.font = `600 22px ${font}`;
+  for (const line of blessingLines) {
+    ctx.fillText(line, width / 2, drawY);
+    drawY += 30;
   }
 
-  y += 28;
+  drawY += 20;
   if (boardDemo) {
-    const maxW = contentWidth;
-    const maxH = Math.max(160, height - 150 - y);
-    const aspect = boardDemo.naturalWidth / Math.max(1, boardDemo.naturalHeight);
-    let drawW = maxW;
-    let drawH = drawW / aspect;
-    if (drawH > maxH) {
-      drawH = maxH;
-      drawW = drawH * aspect;
-    }
-    drawRoundedImage(ctx, boardDemo, (width - drawW) / 2, y, drawW, drawH, 20);
-    y += drawH + 18;
-    ctx.fillStyle = 'rgba(255,255,255,0.82)';
-    ctx.font = `600 16px ${font}`;
-    ctx.fillText('Japam board — continue your japa here', width / 2, y);
+    drawContainedRoundedImage(ctx, boardDemo, width / 2, drawY, contentWidth, boardH + 4, 18);
   }
 
-  // Keep clear of the bottom border strokes so "www.japam.digital" does not get overlapped.
   await drawFestivalCredit(ctx, width, height - 104, logo);
   ctx.textAlign = 'center';
   ctx.fillStyle = 'rgba(255,255,255,0.8)';
@@ -292,8 +313,13 @@ export async function renderSatsangReportCardBlob(opts: {
   cap: number;
 }): Promise<Blob | null> {
   const width = 720;
+  const boardDemo = await loadImage(BOARD_DEMO_SRC);
+  const contentWidth = width - 168;
+  const boardH = boardDemo
+    ? contentWidth / (boardDemo.naturalWidth / Math.max(1, boardDemo.naturalHeight))
+    : 0;
   const nameBlock = Math.max(opts.names.length, 1) * 36;
-  const height = Math.max(1280, 520 + nameBlock + 180);
+  const height = Math.max(1280, 520 + nameBlock + 180 + (boardH ? boardH + 48 : 0));
   const canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;
@@ -306,7 +332,6 @@ export async function renderSatsangReportCardBlob(opts: {
   drawCertificateFrame(ctx, width, height);
 
   const font = '"Segoe UI", system-ui, sans-serif';
-  const contentWidth = width - 168;
   let y = 150;
 
   if (japamLogo) {
@@ -368,10 +393,18 @@ export async function renderSatsangReportCardBlob(opts: {
   if (names.length === 0) {
     ctx.textAlign = 'center';
     ctx.fillText('No participants yet', width / 2, y + 20);
+    y += 56;
   } else {
     names.forEach((n, i) => {
       ctx.fillText(`${i + 1}. ${n}`, 88, y + i * 36);
     });
+    y += names.length * 36;
+  }
+
+  if (boardDemo) {
+    y += 24;
+    ctx.textAlign = 'center';
+    drawContainedRoundedImage(ctx, boardDemo, width / 2, y, contentWidth, boardH + 4, 18);
   }
 
   await drawFestivalCredit(ctx, width, height - 104, logo);

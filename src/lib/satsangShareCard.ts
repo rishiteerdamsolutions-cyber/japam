@@ -1,6 +1,9 @@
 import { downloadOrSaveBlob } from './downloadBlob';
 
-export const FESTIVAL_CREDIT_LINE = 'Built by AI Developer India : Aditya Nandagiri';
+export const FESTIVAL_CREDIT_LINE = 'Built by AI Developer India: Aditya Nandagiri';
+export const FESTIVAL_CREDIT_AFTER_LOGO = 'AI Developer India: Aditya Nandagiri';
+const A_LOGO_SRC = '/A-logo.png';
+const MANTRA_LINE = '108 Om Ganeshaya Namaha Japam';
 
 function dataUrlToBlob(dataUrl: string): Blob | null {
   try {
@@ -19,6 +22,15 @@ function dataUrlToBlob(dataUrl: string): Blob | null {
   }
 }
 
+function loadImage(src: string): Promise<HTMLImageElement | null> {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => resolve(null);
+    img.src = src;
+  });
+}
+
 function drawGlossBackground(ctx: CanvasRenderingContext2D, width: number, height: number) {
   const bg = ctx.createLinearGradient(0, 0, width, height * 1.2);
   bg.addColorStop(0, '#E91E63');
@@ -30,30 +42,50 @@ function drawGlossBackground(ctx: CanvasRenderingContext2D, width: number, heigh
   ctx.fillRect(0, 0, width, height);
 }
 
-function drawAMark(ctx: CanvasRenderingContext2D, x: number, y: number, size: number) {
-  ctx.beginPath();
-  ctx.arc(x, y, size / 2, 0, Math.PI * 2);
-  ctx.fillStyle = '#FBBF24';
-  ctx.fill();
-  ctx.fillStyle = '#1a1a1a';
-  ctx.font = `700 ${Math.round(size * 0.62)}px Georgia, serif`;
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText('A', x, y + 1);
-}
+/** Shared gold + white certificate border for devotee WhatsApp cards and organiser reports. */
+function drawCertificateFrame(ctx: CanvasRenderingContext2D, width: number, height: number) {
+  const m1 = 22;
+  const m2 = 34;
+  const m3 = 46;
+  const m4 = 56;
 
-function drawFestivalCredit(ctx: CanvasRenderingContext2D, width: number, y: number) {
-  const mark = 22;
-  const text = FESTIVAL_CREDIT_LINE;
-  ctx.font = '500 16px "Segoe UI", system-ui, sans-serif';
-  const tw = ctx.measureText(text).width;
-  const total = mark + 10 + tw;
-  const start = (width - total) / 2;
-  drawAMark(ctx, start + mark / 2, y, mark);
-  ctx.fillStyle = 'rgba(255,255,255,0.92)';
-  ctx.textAlign = 'left';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(text, start + mark + 10, y);
+  // Outer gold band
+  ctx.strokeStyle = '#FBBF24';
+  ctx.lineWidth = 10;
+  ctx.strokeRect(m1, m1, width - m1 * 2, height - m1 * 2);
+
+  // White band
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.95)';
+  ctx.lineWidth = 5;
+  ctx.strokeRect(m2, m2, width - m2 * 2, height - m2 * 2);
+
+  // Inner gold line
+  ctx.strokeStyle = '#FBBF24';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(m3, m3, width - m3 * 2, height - m3 * 2);
+
+  // Fine inner white edge
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.75)';
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(m4, m4, width - m4 * 2, height - m4 * 2);
+
+  const cornerR = 9;
+  const corners: Array<[number, number]> = [
+    [m1 + 18, m1 + 18],
+    [width - m1 - 18, m1 + 18],
+    [m1 + 18, height - m1 - 18],
+    [width - m1 - 18, height - m1 - 18],
+  ];
+  for (const [x, y] of corners) {
+    ctx.beginPath();
+    ctx.arc(x, y, cornerR, 0, Math.PI * 2);
+    ctx.fillStyle = '#FBBF24';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(x, y, cornerR - 3.5, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255,255,255,0.95)';
+    ctx.fill();
+  }
 }
 
 function wrapLines(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): string[] {
@@ -73,6 +105,37 @@ function wrapLines(ctx: CanvasRenderingContext2D, text: string, maxWidth: number
   return lines.length ? lines : [text];
 }
 
+async function drawFestivalCredit(
+  ctx: CanvasRenderingContext2D,
+  width: number,
+  y: number,
+  logo: HTMLImageElement | null,
+) {
+  const mark = 28;
+  const gap = 10;
+  const before = 'Built by ';
+  const after = FESTIVAL_CREDIT_AFTER_LOGO;
+  ctx.font = '600 17px "Segoe UI", system-ui, sans-serif';
+  const beforeW = ctx.measureText(before).width;
+  const afterW = ctx.measureText(after).width;
+  const logoW = logo ? mark : 0;
+  const total = beforeW + logoW + (logo ? gap : 0) + afterW;
+  let x = (width - total) / 2;
+
+  ctx.fillStyle = 'rgba(255,255,255,0.95)';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(before, x, y);
+  x += beforeW;
+
+  if (logo) {
+    ctx.drawImage(logo, x, y - mark / 2, mark, mark);
+    x += mark + gap;
+  }
+
+  ctx.fillText(after, x, y);
+}
+
 export async function renderSatsangDevoteeCardBlob(opts: {
   orgName: string;
   eventName: string;
@@ -86,52 +149,72 @@ export async function renderSatsangDevoteeCardBlob(opts: {
   canvas.height = height;
   const ctx = canvas.getContext('2d');
   if (!ctx) return null;
+
+  const logo = await loadImage(A_LOGO_SRC);
   drawGlossBackground(ctx, width, height);
+  drawCertificateFrame(ctx, width, height);
+
   const font = '"Segoe UI", system-ui, sans-serif';
+  const contentLeft = 84;
+  const contentWidth = width - contentLeft * 2;
+  let y = 118;
+
   ctx.textAlign = 'center';
   ctx.fillStyle = '#FBBF24';
-  ctx.font = `800 42px Georgia, serif`;
-  ctx.fillText('JAPAM', width / 2, 88);
-  ctx.fillStyle = 'rgba(255,255,255,0.85)';
-  ctx.font = `600 18px ${font}`;
-  ctx.fillText('japam.digital', width / 2, 122);
-
-  ctx.fillStyle = '#fff';
-  ctx.font = `700 34px ${font}`;
-  ctx.fillText('Ganeshotsav Japa Yagna (1080)', width / 2, 210);
+  ctx.font = `800 44px Georgia, "Times New Roman", serif`;
+  ctx.fillText('Certificate of Appreciation', width / 2, y);
+  y += 40;
 
   ctx.fillStyle = 'rgba(255,255,255,0.92)';
-  ctx.font = `600 22px ${font}`;
-  const orgLines = wrapLines(ctx, opts.orgName, width - 80);
-  let y = 270;
-  for (const line of orgLines) {
-    ctx.fillText(line, width / 2, y);
-    y += 30;
-  }
-  ctx.font = `500 20px ${font}`;
-  for (const line of wrapLines(ctx, opts.eventName, width - 80)) {
-    ctx.fillText(line, width / 2, y);
-    y += 28;
-  }
+  ctx.font = `700 26px ${font}`;
+  ctx.fillText('JAPAM', width / 2, y);
+  y += 36;
 
-  y += 40;
   ctx.fillStyle = '#FBBF24';
-  ctx.font = `700 28px ${font}`;
-  ctx.fillText('108 Ganesh japas complete', width / 2, y);
-  y += 56;
-  ctx.fillStyle = '#fff';
-  ctx.font = `700 32px ${font}`;
-  ctx.fillText(opts.devoteeName || 'Devotee', width / 2, y);
+  ctx.font = `700 30px Georgia, serif`;
+  ctx.fillText('Ganeshotsav', width / 2, y);
   y += 40;
-  ctx.fillStyle = 'rgba(255,255,255,0.8)';
-  ctx.font = `500 18px ${font}`;
-  ctx.fillText(opts.dateLabel, width / 2, y);
 
-  drawFestivalCredit(ctx, width, height - 72);
+  ctx.fillStyle = 'rgba(255,255,255,0.96)';
+  ctx.font = `600 24px ${font}`;
+  ctx.fillText(MANTRA_LINE, width / 2, y);
+  y += 52;
+
+  const name = (opts.devoteeName || 'Devotee').trim();
+  const org = (opts.orgName || 'the organiser').trim();
+  const appreciation =
+    `This is to certify that ${name} has successfully participated in and completed ${MANTRA_LINE} at Ganeshotsav, organised by ${org}.`;
+
+  ctx.fillStyle = '#fff';
+  ctx.font = `600 27px ${font}`;
   ctx.textAlign = 'center';
-  ctx.fillStyle = 'rgba(255,255,255,0.7)';
-  ctx.font = `500 16px ${font}`;
-  ctx.fillText('www.japam.digital', width / 2, height - 36);
+  for (const line of wrapLines(ctx, appreciation, contentWidth)) {
+    ctx.fillText(line, width / 2, y);
+    y += 38;
+  }
+
+  y += 30;
+  ctx.fillStyle = '#FBBF24';
+  ctx.font = `700 24px ${font}`;
+  ctx.fillText(opts.dateLabel, width / 2, y);
+  y += 52;
+
+  ctx.fillStyle = 'rgba(255,255,255,0.95)';
+  ctx.font = `600 24px ${font}`;
+  for (const line of wrapLines(
+    ctx,
+    'Continue receiving the blessings of Lord Ganesha by practising Japa on the Japam Web App.',
+    contentWidth,
+  )) {
+    ctx.fillText(line, width / 2, y);
+    y += 34;
+  }
+
+  await drawFestivalCredit(ctx, width, height - 88, logo);
+  ctx.textAlign = 'center';
+  ctx.fillStyle = 'rgba(255,255,255,0.8)';
+  ctx.font = `600 18px ${font}`;
+  ctx.fillText('www.japam.digital', width / 2, height - 48);
 
   return dataUrlToBlob(canvas.toDataURL('image/png'));
 }
@@ -145,62 +228,84 @@ export async function renderSatsangReportCardBlob(opts: {
   cap: number;
 }): Promise<Blob | null> {
   const width = 720;
-  const nameBlock = Math.max(opts.names.length, 1) * 34;
-  const height = Math.max(1280, 420 + nameBlock + 160);
+  const nameBlock = Math.max(opts.names.length, 1) * 36;
+  const height = Math.max(1280, 520 + nameBlock + 180);
   const canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;
   const ctx = canvas.getContext('2d');
   if (!ctx) return null;
+
+  const logo = await loadImage(A_LOGO_SRC);
   drawGlossBackground(ctx, width, height);
+  drawCertificateFrame(ctx, width, height);
+
   const font = '"Segoe UI", system-ui, sans-serif';
+  const contentWidth = width - 168;
+  let y = 118;
+
   ctx.textAlign = 'center';
   ctx.fillStyle = '#FBBF24';
   ctx.font = `800 42px Georgia, serif`;
-  ctx.fillText('JAPAM', width / 2, 80);
-  ctx.fillStyle = 'rgba(255,255,255,0.85)';
-  ctx.font = `600 18px ${font}`;
-  ctx.fillText('japam.digital', width / 2, 112);
+  ctx.fillText('JAPAM', width / 2, y);
+  y += 38;
+
+  ctx.fillStyle = 'rgba(255,255,255,0.9)';
+  ctx.font = `600 20px ${font}`;
+  ctx.fillText('japam.digital', width / 2, y);
+  y += 44;
+
+  ctx.fillStyle = '#FBBF24';
+  ctx.font = `800 34px Georgia, serif`;
+  ctx.fillText('Ganeshotsav', width / 2, y);
+  y += 40;
 
   ctx.fillStyle = '#fff';
-  ctx.font = `700 30px ${font}`;
-  let y = 180;
-  for (const line of wrapLines(ctx, opts.eventName, width - 80)) {
+  ctx.font = `700 26px ${font}`;
+  ctx.fillText(MANTRA_LINE, width / 2, y);
+  y += 40;
+
+  ctx.fillStyle = 'rgba(255,255,255,0.95)';
+  ctx.font = `600 24px ${font}`;
+  for (const line of wrapLines(ctx, opts.eventName || 'Satsang report', contentWidth)) {
     ctx.fillText(line, width / 2, y);
-    y += 36;
+    y += 32;
   }
+
   ctx.font = `600 22px ${font}`;
-  ctx.fillStyle = 'rgba(255,255,255,0.92)';
-  for (const line of wrapLines(ctx, opts.orgName, width - 80)) {
+  for (const line of wrapLines(ctx, opts.orgName, contentWidth)) {
     ctx.fillText(line, width / 2, y);
     y += 30;
   }
-  ctx.font = `500 18px ${font}`;
+
+  ctx.font = `500 20px ${font}`;
+  ctx.fillStyle = 'rgba(255,255,255,0.88)';
   ctx.fillText(opts.dateLabel, width / 2, y + 8);
   y += 48;
+
   ctx.fillStyle = '#FBBF24';
-  ctx.font = `700 24px ${font}`;
+  ctx.font = `700 26px ${font}`;
   ctx.fillText(`${opts.participantCount} / ${opts.cap} participants`, width / 2, y);
-  y += 36;
+  y += 42;
 
   ctx.textAlign = 'left';
-  ctx.fillStyle = 'rgba(255,255,255,0.95)';
-  ctx.font = `500 20px ${font}`;
+  ctx.fillStyle = 'rgba(255,255,255,0.96)';
+  ctx.font = `600 22px ${font}`;
   const names = opts.names.slice(0, opts.cap);
   if (names.length === 0) {
     ctx.textAlign = 'center';
     ctx.fillText('No participants yet', width / 2, y + 20);
   } else {
     names.forEach((n, i) => {
-      ctx.fillText(`${i + 1}. ${n}`, 64, y + i * 34);
+      ctx.fillText(`${i + 1}. ${n}`, 88, y + i * 36);
     });
   }
 
-  drawFestivalCredit(ctx, width, height - 72);
+  await drawFestivalCredit(ctx, width, height - 88, logo);
   ctx.textAlign = 'center';
-  ctx.fillStyle = 'rgba(255,255,255,0.7)';
-  ctx.font = `500 16px ${font}`;
-  ctx.fillText('www.japam.digital', width / 2, height - 36);
+  ctx.fillStyle = 'rgba(255,255,255,0.8)';
+  ctx.font = `600 18px ${font}`;
+  ctx.fillText('www.japam.digital', width / 2, height - 48);
   return dataUrlToBlob(canvas.toDataURL('image/png'));
 }
 

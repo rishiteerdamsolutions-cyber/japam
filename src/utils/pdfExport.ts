@@ -204,7 +204,7 @@ export async function downloadMantraPdf(
     doc.setTextColor(90, 90, 90);
     if (options?.festivalCredit) {
       doc.setFontSize(8);
-      doc.text('Built by AI Developer India : Aditya Nandagiri', centerX, pageHeight - 28, { align: 'center' });
+      doc.text('Built by AI Developer India: Aditya Nandagiri', centerX, pageHeight - 28, { align: 'center' });
       doc.setFontSize(9);
     }
     doc.text('www.japam.digital', centerX, pageHeight - 14, { align: 'center' });

@@ -1,5 +1,13 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, type Auth } from 'firebase/auth';
+import {
+  initializeAuth,
+  getAuth,
+  indexedDBLocalPersistence,
+  browserLocalPersistence,
+  browserSessionPersistence,
+  GoogleAuthProvider,
+  type Auth,
+} from 'firebase/auth';
 import { getFirestore, type Firestore } from 'firebase/firestore';
 import { getStorage, type FirebaseStorage } from 'firebase/storage';
 import {
@@ -29,7 +37,14 @@ let googleProvider: GoogleAuthProvider | null = null;
 
 if (isFirebaseConfigured) {
   app = initializeApp(firebaseConfig);
-  auth = getAuth(app);
+  try {
+    // Prefer durable persistence so PWA / Safari keep Google sign-in across visits.
+    auth = initializeAuth(app, {
+      persistence: [indexedDBLocalPersistence, browserLocalPersistence, browserSessionPersistence],
+    });
+  } catch {
+    auth = getAuth(app);
+  }
   firestore = getFirestore(app);
   storage = getStorage(app);
   googleProvider = new GoogleAuthProvider();

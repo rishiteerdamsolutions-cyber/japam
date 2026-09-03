@@ -3,8 +3,9 @@ import type { SatsangJoinResult } from './satsangApi';
 export type GaneshotsavDraftStep = 'gate' | 'mala' | 'pdf' | 'share';
 
 export type GaneshotsavDraft = {
-  v: 1;
-  uid: string | null;
+  /** v2: drafts are always bound to a signed-in uid; unsigned drafts are ignored. */
+  v: 2;
+  uid: string;
   step: GaneshotsavDraftStep;
   code: string;
   session: SatsangJoinResult | null;
@@ -36,10 +37,21 @@ export function readGaneshotsavDraft(): GaneshotsavDraft | null {
   try {
     const raw = store.getItem(DRAFT_KEY);
     if (!raw) return null;
-    const parsed = JSON.parse(raw) as GaneshotsavDraft;
-    if (parsed?.v !== 1) return null;
-    if (!parsed.step || typeof parsed.count !== 'number') return null;
-    return parsed;
+    const parsed = JSON.parse(raw) as Partial<GaneshotsavDraft> & { v?: number; uid?: string | null };
+    // Drop v1 drafts — they were restored while signed out and leaked across Gmail accounts.
+    if (parsed?.v !== 2) {
+      store.removeItem(DRAFT_KEY);
+      return null;
+    }
+    if (!parsed.uid || typeof parsed.uid !== 'string') {
+      store.removeItem(DRAFT_KEY);
+      return null;
+    }
+    if (!parsed.step || typeof parsed.count !== 'number') {
+      store.removeItem(DRAFT_KEY);
+      return null;
+    }
+    return parsed as GaneshotsavDraft;
   } catch {
     return null;
   }
@@ -48,7 +60,8 @@ export function readGaneshotsavDraft(): GaneshotsavDraft | null {
 export function writeGaneshotsavDraft(draft: GaneshotsavDraft) {
   const store = storage();
   if (!store) return;
-  const payload = { ...draft, updatedAt: Date.now() };
+  if (!draft.uid) return;
+  const payload = { ...draft, v: 2 as const, updatedAt: Date.now() };
   try {
     store.setItem(DRAFT_KEY, JSON.stringify(payload));
   } catch {
@@ -70,9 +83,21 @@ export function clearGaneshotsavDraft() {
   }
 }
 
+/** True when a saved draft still belongs to today's sitting (IST ymd / trial_ymd). */
+export function draftMatchesSitting(
+  draft: GaneshotsavDraft,
+  session: Pick<SatsangJoinResult, 'eventId' | 'sittingYmd' | 'isTrial'> | null | undefined,
+): boolean {
+  if (!draft.session || !session) return false;
+  if (draft.session.eventId !== session.eventId) return false;
+  if (draft.session.sittingYmd !== session.sittingYmd) return false;
+  if (draft.session.isTrial !== session.isTrial) return false;
+  return true;
+}
+
+/** Draft belongs only to the currently signed-in Firebase uid. Never match while signed out. */
 export function draftMatchesUid(draft: GaneshotsavDraft, uid: string | null | undefined): boolean {
-  if (!draft.uid) return true;
-  if (!uid) return true;
+  if (!uid) return false;
   return draft.uid === uid;
 }
 

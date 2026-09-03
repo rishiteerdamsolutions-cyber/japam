@@ -23,6 +23,7 @@ import {
 } from '../lib/satsangApi';
 import {
   clearGaneshotsavDraft,
+  draftMatchesSitting,
   draftMatchesUid,
   readGaneshotsavDraft,
   writeGaneshotsavDraft,
@@ -61,11 +62,6 @@ function markVideoSeen() {
   }
 }
 
-function stepAfterJoin(result: SatsangJoinResult, localCount: number): Step {
-  if (result.completed108 || localCount >= AUTO_JAPAM_SESSION_TARGET) return 'pdf';
-  return 'mala';
-}
-
 function applyDraftToState(
   draft: ReturnType<typeof readGaneshotsavDraft>,
   setters: {
@@ -100,15 +96,21 @@ function applyDraftToState(
     setters.setStep('gate');
     return true;
   }
-  if (draft.step === 'share' || (draft.pdfDownloaded && !draft.shareImageDownloaded)) {
+  // Stay on gate until server revalidation (resume) confirms this uid's completion.
+  // Only jump past gate for an in-progress mala, or mid pdf/share after beads.
+  if (draft.step === 'share' && draft.pdfDownloaded) {
     setters.setStep('share');
     return true;
   }
-  if (draft.completed108Saved || draft.session.completed108 || count >= AUTO_JAPAM_SESSION_TARGET) {
+  if (draft.step === 'pdf' || draft.step === 'share') {
     setters.setStep('pdf');
     return true;
   }
-  setters.setStep(draft.step === 'gate' ? 'gate' : stepAfterJoin(draft.session, count));
+  if (draft.step === 'mala') {
+    setters.setStep('mala');
+    return true;
+  }
+  setters.setStep('gate');
   return true;
 }
 
@@ -150,6 +152,7 @@ export function GaneshotsavPage() {
   const shareBlobRef = useRef<Blob | null>(null);
   const pendingPhotoRef = useRef<string | null>(null);
   const resumedRef = useRef(false);
+  const lastUidRef = useRef<string | null>(null);
   const deity = getDeity(DEITY);
 
   const persistableStep = (current: Step): GaneshotsavDraftStep | null => {
@@ -157,12 +160,36 @@ export function GaneshotsavPage() {
     return null;
   };
 
+  const resetFestivalProgress = useCallback((nextStep: Step = 'gate') => {
+    setSession(null);
+    setCount(0);
+    countRef.current = 0;
+    setName('');
+    setGotram('');
+    setMobileNumber('');
+    setHandwritingDataUrl(null);
+    setPdfDownloaded(false);
+    setShareImageDownloaded(false);
+    setCompleted108Saved(false);
+    setJoinError(null);
+    setUploadError(null);
+    setUploadNotice(null);
+    setShareError(null);
+    setShareNotice(null);
+    shareBlobRef.current = null;
+    setShareUrl((prev) => {
+      if (prev) URL.revokeObjectURL(prev);
+      return null;
+    });
+    setStep(nextStep);
+  }, []);
+
   const persistDraft = useCallback(() => {
     const draftStep = persistableStep(step);
-    if (!draftStep || !status?.open) return;
+    if (!draftStep || !status?.open || !user?.uid) return;
     writeGaneshotsavDraft({
-      v: 1,
-      uid: user?.uid ?? null,
+      v: 2,
+      uid: user.uid,
       step: draftStep,
       code,
       session,
@@ -193,37 +220,67 @@ export function GaneshotsavPage() {
 
   useManualJapaTouchLock(step === 'mala');
 
+  // Load festival open/closed once.
   useEffect(() => {
     let cancelled = false;
     void loadSatsangStatus().then((s) => {
       if (cancelled) return;
       setStatus(s);
-      if (!s.open) return;
-      const draft = readGaneshotsavDraft();
-      if (draft && draftMatchesUid(draft, user?.uid)) {
-        applyDraftToState(draft, {
-          setCode,
-          setSession,
-          setCount,
-          countRef,
-          setName,
-          setGotram,
-          setMobileNumber,
-          setHandwritingDataUrl,
-          setPdfDownloaded,
-          setShareImageDownloaded,
-          setCompleted108Saved,
-          setStep,
-        });
-        return;
-      }
-      setStep(videoAlreadySeen() ? 'gate' : 'video');
     });
     return () => {
       cancelled = true;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- boot once; draft restore must not re-run on sign-in
   }, []);
+
+  // After auth + status are known, restore only this Google account's draft (never while signed out).
+  useEffect(() => {
+    if (authLoading || status == null) return;
+    if (!status.open) return;
+
+    const uid = user?.uid ?? null;
+    if (lastUidRef.current !== uid) {
+      lastUidRef.current = uid;
+      resumedRef.current = false;
+    }
+
+    const draft = readGaneshotsavDraft();
+
+    if (!uid) {
+      if (draft) clearGaneshotsavDraft();
+      if (step === 'boot' || step === 'mala' || step === 'pdf' || step === 'share' || session) {
+        resetFestivalProgress(videoAlreadySeen() ? 'gate' : 'video');
+      }
+      return;
+    }
+
+    if (draft && !draftMatchesUid(draft, uid)) {
+      clearGaneshotsavDraft();
+      resetFestivalProgress('gate');
+      return;
+    }
+
+    if (draft && draftMatchesUid(draft, uid) && (step === 'boot' || step === 'video' || step === 'gate') && !session) {
+      applyDraftToState(draft, {
+        setCode,
+        setSession,
+        setCount,
+        countRef,
+        setName,
+        setGotram,
+        setMobileNumber,
+        setHandwritingDataUrl,
+        setPdfDownloaded,
+        setShareImageDownloaded,
+        setCompleted108Saved,
+        setStep,
+      });
+      return;
+    }
+
+    if (step === 'boot') {
+      resetFestivalProgress(videoAlreadySeen() ? 'gate' : 'video');
+    }
+  }, [authLoading, status, user?.uid]); // eslint-disable-line react-hooks/exhaustive-deps -- intentional: restore once per auth identity
 
   useEffect(() => {
     persistDraft();
@@ -246,33 +303,61 @@ export function GaneshotsavPage() {
     if (authRestoring || !user?.uid || resumedRef.current) return;
     const draft = readGaneshotsavDraft();
     if (!draft?.code?.trim() || !draft.session) return;
-    if (!draftMatchesUid(draft, user.uid)) return;
+    if (!draftMatchesUid(draft, user.uid)) {
+      clearGaneshotsavDraft();
+      return;
+    }
     resumedRef.current = true;
     setResuming(true);
     void joinSatsang(draft.code)
       .then((res) => {
-        if (!res.ok) return;
-        const localCount = Math.max(0, Math.min(AUTO_JAPAM_SESSION_TARGET, draft.count));
+        if (!res.ok) {
+          clearGaneshotsavDraft();
+          resetFestivalProgress('gate');
+          return;
+        }
+        const sameSitting = draftMatchesSitting(draft, res.result);
+        const localCount = sameSitting
+          ? Math.max(0, Math.min(AUTO_JAPAM_SESSION_TARGET, draft.count))
+          : 0;
         setSession(res.result);
         setName((n) => n || res.result.displayName || user.displayName || '');
-        if (res.result.completed108 || localCount >= AUTO_JAPAM_SESSION_TARGET) {
+
+        if (res.result.completed108) {
           setCount(AUTO_JAPAM_SESSION_TARGET);
           countRef.current = AUTO_JAPAM_SESSION_TARGET;
           setCompleted108Saved(true);
+          setPdfDownloaded(sameSitting && draft.pdfDownloaded === true);
+          setShareImageDownloaded(sameSitting && draft.shareImageDownloaded === true);
+          setHandwritingDataUrl(sameSitting ? draft.handwritingDataUrl : null);
+          setStep(sameSitting && draft.pdfDownloaded ? 'share' : 'pdf');
+          return;
+        }
+
+        setCompleted108Saved(false);
+        if (
+          sameSitting &&
+          localCount >= AUTO_JAPAM_SESSION_TARGET &&
+          (draft.step === 'pdf' || draft.step === 'share')
+        ) {
+          setCount(AUTO_JAPAM_SESSION_TARGET);
+          countRef.current = AUTO_JAPAM_SESSION_TARGET;
+          setPdfDownloaded(draft.pdfDownloaded === true);
+          setShareImageDownloaded(draft.shareImageDownloaded === true);
+          setHandwritingDataUrl(draft.handwritingDataUrl);
           setStep(draft.pdfDownloaded ? 'share' : 'pdf');
           return;
         }
+
+        setPdfDownloaded(false);
+        setShareImageDownloaded(false);
+        setHandwritingDataUrl(sameSitting ? draft.handwritingDataUrl : null);
         setCount(localCount);
         countRef.current = localCount;
         setStep('mala');
       })
       .finally(() => setResuming(false));
-  }, [authRestoring, user?.uid, user?.displayName]);
-
-  useEffect(() => {
-    if (authRestoring || !user || step !== 'gate' || !session || joining || resuming) return;
-    setStep(stepAfterJoin(session, countRef.current));
-  }, [authRestoring, user, step, session, joining, resuming]);
+  }, [authRestoring, user?.uid, user?.displayName, resetFestivalProgress]);
 
   useEffect(() => {
     if (step !== 'share' || !session) return;
@@ -328,6 +413,10 @@ export function GaneshotsavPage() {
   };
 
   const onJoin = async () => {
+    if (!user?.uid) {
+      setJoinError(t('ganeshotsav.signInSticky'));
+      return;
+    }
     setJoinError(null);
     setJoining(true);
     const res = await joinSatsang(code);
@@ -337,17 +426,63 @@ export function GaneshotsavPage() {
       return;
     }
     setSession(res.result);
-    setName((n) => n || res.result.displayName || user?.displayName || '');
+    setName((n) => n || res.result.displayName || user.displayName || '');
     if (res.result.completed108) {
       setCount(AUTO_JAPAM_SESSION_TARGET);
       countRef.current = AUTO_JAPAM_SESSION_TARGET;
       setCompleted108Saved(true);
       setStep('pdf');
+      writeGaneshotsavDraft({
+        v: 2,
+        uid: user.uid,
+        step: 'pdf',
+        code: code.trim().toUpperCase(),
+        session: res.result,
+        count: AUTO_JAPAM_SESSION_TARGET,
+        name: res.result.displayName || user.displayName || '',
+        gotram,
+        mobileNumber,
+        handwritingDataUrl,
+        completed108Saved: true,
+        pdfDownloaded,
+        shareImageDownloaded,
+        updatedAt: Date.now(),
+      });
       return;
     }
+    // Fresh sitting for this account — wipe stale progress so mala always shows.
+    setCompleted108Saved(false);
+    setPdfDownloaded(false);
+    setShareImageDownloaded(false);
+    setHandwritingDataUrl(null);
+    setUploadError(null);
+    setUploadNotice(null);
+    setShareError(null);
+    setShareNotice(null);
+    shareBlobRef.current = null;
+    setShareUrl((prev) => {
+      if (prev) URL.revokeObjectURL(prev);
+      return null;
+    });
     setCount(0);
     countRef.current = 0;
     setStep('mala');
+    writeGaneshotsavDraft({
+      v: 2,
+      uid: user.uid,
+      step: 'mala',
+      code: code.trim().toUpperCase(),
+      session: res.result,
+      count: 0,
+      name: res.result.displayName || user.displayName || '',
+      gotram: '',
+      mobileNumber: '',
+      handwritingDataUrl: null,
+      completed108Saved: false,
+      pdfDownloaded: false,
+      shareImageDownloaded: false,
+      updatedAt: Date.now(),
+    });
   };
 
   const onBead = useCallback(() => {
@@ -357,9 +492,10 @@ export function GaneshotsavPage() {
     setCount(next);
     pulseMalaBeadTouchHaptic();
     void playMantraOnce(DEITY);
+    if (!user?.uid) return;
     writeGaneshotsavDraft({
-      v: 1,
-      uid: user?.uid ?? null,
+      v: 2,
+      uid: user.uid,
       step: 'mala',
       code,
       session,
@@ -493,9 +629,10 @@ export function GaneshotsavPage() {
       }
       setShareNotice(t('ganeshotsav.shareSaved'));
       setShareImageDownloaded(true);
+      if (!user?.uid) return;
       writeGaneshotsavDraft({
-        v: 1,
-        uid: user?.uid ?? null,
+        v: 2,
+        uid: user.uid,
         step: 'share',
         code,
         session,
@@ -595,9 +732,13 @@ export function GaneshotsavPage() {
         if (shareUrl) URL.revokeObjectURL(shareUrl);
         setShareUrl(URL.createObjectURL(blob));
       }
+      if (!user?.uid) {
+        setStep('share');
+        return;
+      }
       writeGaneshotsavDraft({
-        v: 1,
-        uid: user?.uid ?? null,
+        v: 2,
+        uid: user.uid,
         step: 'share',
         code,
         session,
@@ -720,7 +861,7 @@ export function GaneshotsavPage() {
         </div>
       ) : null}
 
-      {step === 'mala' && session ? (
+      {step === 'mala' && session && user ? (
         <div className="relative z-10 flex min-h-[100dvh] flex-col overflow-hidden">
           <div className="relative z-20 shrink-0 px-3 pt-3">
             {banner}
@@ -760,9 +901,14 @@ export function GaneshotsavPage() {
         </div>
       ) : null}
 
-      {step === 'pdf' && session ? (
+      {step === 'pdf' && session && user ? (
         <div className="relative z-10 flex-1 overflow-y-auto px-4 py-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] max-w-md mx-auto w-full">
           {banner}
+          {session.completed108 || completed108Saved ? (
+            <p className="text-amber-100/90 text-xs mb-3 rounded-lg border border-amber-500/30 bg-black/30 px-3 py-2">
+              {t('ganeshotsav.alreadyCompletedToday')}
+            </p>
+          ) : null}
           <h2 className="text-lg font-bold text-amber-400 mb-1">{t('ganeshotsav.pdfTitle')}</h2>
           <p className="text-amber-200/80 text-xs mb-4">{t('ganeshotsav.pdfBlurb')}</p>
           <div className="mb-4 p-3 rounded-lg bg-black/30 border border-amber-500/20">
@@ -859,7 +1005,7 @@ export function GaneshotsavPage() {
         </div>
       ) : null}
 
-      {step === 'share' ? (
+      {step === 'share' && user ? (
         <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-4 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
           {banner}
           <p className="text-emerald-300 text-sm font-semibold text-center max-w-sm mb-2">

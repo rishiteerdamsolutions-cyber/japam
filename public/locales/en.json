@@ -1155,6 +1155,7 @@
     "reportEmpty": "No participants yet for this sitting.",
     "signedInAs": "Signed in as {{name}}",
     "restoringSignIn": "Restoring your Google sign-in…",
-    "resumingSession": "Resuming your satsang…"
+    "resumingSession": "Resuming your satsang…",
+    "alreadyCompletedToday": "This Google account already completed today's 108 for this satsang. You can download the PDF and WhatsApp image below. Each account can complete once per day (up to 50 devotees per sitting)."
   }
 }

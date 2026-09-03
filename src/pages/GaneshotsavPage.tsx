@@ -30,7 +30,7 @@ import {
 } from '../lib/ganeshotsavDraft';
 import { downloadBlobPngAsync, renderSatsangDevoteeCardBlob } from '../lib/satsangShareCard';
 import { downloadMantraPdf } from '../utils/pdfExport';
-import { preloadBackgroundRemovalModel, removeBackgroundFromImage } from '../utils/removeBackground';
+import { preloadBackgroundRemovalModel, removeBackgroundFromImage, imageHasTransparentBackground } from '../utils/removeBackground';
 import { formatIstDateTime } from '../lib/japamCounterIst';
 import { auth, isFirebaseConfigured } from '../lib/firebase';
 
@@ -520,16 +520,19 @@ export function GaneshotsavPage() {
     setUploadError(null);
     try {
       let finalHandwriting = handwritingDataUrl;
-      setUploadNotice(t('ganeshotsav.processingPhoto'));
-      try {
-        finalHandwriting = await removeBackgroundFromImage(handwritingDataUrl);
-        setHandwritingDataUrl(finalHandwriting);
-        pendingPhotoRef.current = null;
-      } catch (err) {
-        setUploadError(err instanceof Error ? err.message : t('ganeshotsav.backgroundFailed'));
-        return;
-      } finally {
-        setUploadNotice(null);
+      const alreadyClean = await imageHasTransparentBackground(handwritingDataUrl);
+      if (!alreadyClean) {
+        setUploadNotice(t('ganeshotsav.processingPhoto'));
+        try {
+          finalHandwriting = await removeBackgroundFromImage(handwritingDataUrl);
+          setHandwritingDataUrl(finalHandwriting);
+          pendingPhotoRef.current = null;
+        } catch (err) {
+          setUploadError(err instanceof Error ? err.message : t('ganeshotsav.backgroundFailed'));
+          return;
+        } finally {
+          setUploadNotice(null);
+        }
       }
 
       const saved = await completeSatsang({

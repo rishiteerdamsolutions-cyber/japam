@@ -1,29 +1,14 @@
-import { remove, newSession, rembgConfig } from '@bunnio/rembg-web';
-import * as ort from 'onnxruntime-web';
-
-/** User-facing error for network/model load failures */
-export const REMBG_NETWORK_ERROR =
-  'Could not prepare your photo (model download failed). Check connection and try again.';
+/** Works offline — no model download. For handwritten nāma photographed on white paper. */
 
 export const REMBG_PROCESSING_ERROR =
-  'Could not remove the background from this photo. Try again with a clear photo on white paper.';
+  'Could not prepare your photo. Use a clear photo of the nāma on plain white paper.';
 
-const REMBG_MODELS = ['u2netp', 'u2net'] as const;
-const ONNX_WASM_CDN = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.23.0/dist/';
+export const REMBG_NETWORK_ERROR = REMBG_PROCESSING_ERROR;
 
-let configured = false;
-let sessionPromise: ReturnType<typeof sessionForModel> | null = null;
+type Rgb = { r: number; g: number; b: number };
 
 function sleep(ms: number) {
   return new Promise((r) => setTimeout(r, ms));
-}
-
-function ensureRembgConfig(): void {
-  if (configured) return;
-  ort.env.wasm.wasmPaths = ONNX_WASM_CDN;
-  ort.env.wasm.numThreads = 1;
-  rembgConfig.setBaseUrl('https://huggingface.co/bunnio/dis_anime/resolve/main');
-  configured = true;
 }
 
 async function loadImage(dataUrl: string): Promise<HTMLImageElement> {
@@ -35,8 +20,7 @@ async function loadImage(dataUrl: string): Promise<HTMLImageElement> {
   });
 }
 
-/** Shrink large phone photos so rembg + WASM stay within mobile memory limits. */
-async function downscaleDataUrl(dataUrl: string, maxSide = 1280): Promise<string> {
+async function downscaleDataUrl(dataUrl: string, maxSide = 1600): Promise<string> {
   const img = await loadImage(dataUrl);
   const longest = Math.max(img.width, img.height);
   if (longest <= maxSide) return dataUrl;
@@ -52,10 +36,43 @@ async function downscaleDataUrl(dataUrl: string, maxSide = 1280): Promise<string
   return canvas.toDataURL('image/jpeg', 0.92);
 }
 
-/**
- * Crop image to content bounding box, trimming transparent/empty edges.
- */
-function cropToContentBounds(dataUrl: string, padding = 6): Promise<string> {
+function colorDistance(r: number, g: number, b: number, ref: Rgb): number {
+  const dr = r - ref.r;
+  const dg = g - ref.g;
+  const db = b - ref.b;
+  return Math.sqrt(dr * dr + dg * dg + db * db);
+}
+
+/** Sample border pixels to learn the paper colour (handles cream/off-white paper). */
+function estimatePaperFromBorder(data: Uint8ClampedArray, width: number, height: number): Rgb {
+  let rSum = 0;
+  let gSum = 0;
+  let bSum = 0;
+  let n = 0;
+  const band = Math.max(4, Math.round(Math.min(width, height) * 0.06));
+
+  const sample = (x: number, y: number) => {
+    const i = (y * width + x) * 4;
+    rSum += data[i]!;
+    gSum += data[i + 1]!;
+    bSum += data[i + 2]!;
+    n += 1;
+  };
+
+  for (let x = 0; x < width; x++) {
+    for (let y = 0; y < band; y++) sample(x, y);
+    for (let y = height - band; y < height; y++) sample(x, y);
+  }
+  for (let y = band; y < height - band; y++) {
+    for (let x = 0; x < band; x++) sample(x, y);
+    for (let x = width - band; x < width; x++) sample(x, y);
+  }
+
+  if (!n) return { r: 250, g: 250, b: 250 };
+  return { r: rSum / n, g: gSum / n, b: bSum / n };
+}
+
+function cropToContentBounds(dataUrl: string, padding = 8): Promise<string> {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = () => {
@@ -81,7 +98,7 @@ function cropToContentBounds(dataUrl: string, padding = 6): Promise<string> {
       for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
           const alpha = data[(y * width + x) * 4 + 3]!;
-          if (alpha > 10) {
+          if (alpha > 20) {
             minX = Math.min(minX, x);
             minY = Math.min(minY, y);
             maxX = Math.max(maxX, x);
@@ -119,60 +136,69 @@ function cropToContentBounds(dataUrl: string, padding = 6): Promise<string> {
   });
 }
 
-function blobToDataUrl(blob: Blob): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = () => reject(new Error('Failed to read blob'));
-    reader.readAsDataURL(blob);
-  });
-}
-
-async function sessionForModel(model: (typeof REMBG_MODELS)[number]) {
-  ensureRembgConfig();
-  return newSession(model);
-}
-
-async function removeWithModel(dataUrl: string, model: (typeof REMBG_MODELS)[number]): Promise<string> {
+/** True when the image already has transparent pixels (background already removed). */
+export async function imageHasTransparentBackground(dataUrl: string): Promise<boolean> {
   const img = await loadImage(dataUrl);
-  const session = await sessionForModel(model);
-  const blob = await remove(img, { session });
-  const withBgRemoved = await blobToDataUrl(blob);
-  return cropToContentBounds(withBgRemoved);
-}
-
-/** Warm ONNX + model while the user fills the form (optional). */
-export function preloadBackgroundRemovalModel() {
-  ensureRembgConfig();
-  if (!sessionPromise) {
-    sessionPromise = sessionForModel('u2netp');
+  const canvas = document.createElement('canvas');
+  canvas.width = img.width;
+  canvas.height = img.height;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return false;
+  ctx.drawImage(img, 0, 0);
+  const { data } = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const step = Math.max(4, Math.floor(data.length / 4 / 8000));
+  for (let i = 3; i < data.length; i += step * 4) {
+    if (data[i]! < 240) return true;
   }
-  return sessionPromise;
+  return false;
 }
 
 /**
- * Remove background using in-browser AI. Retries models and attempts — not a silent skip.
+ * Remove white/cream paper background — runs entirely on-device (no network, no AI model).
  */
-export async function removeBackgroundFromImage(dataUrl: string): Promise<string> {
-  ensureRembgConfig();
+export async function removeWhitePaperBackground(dataUrl: string): Promise<string> {
   const scaled = await downscaleDataUrl(dataUrl);
-  let lastErr: unknown = null;
+  const img = await loadImage(scaled);
+  const canvas = document.createElement('canvas');
+  canvas.width = img.width;
+  canvas.height = img.height;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error(REMBG_PROCESSING_ERROR);
+  ctx.drawImage(img, 0, 0);
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const { data, width, height } = imageData;
 
-  for (const model of REMBG_MODELS) {
-    for (let attempt = 0; attempt < 2; attempt++) {
-      try {
-        return await removeWithModel(scaled, model);
-      } catch (err) {
-        lastErr = err;
-        sessionPromise = null;
-        await sleep(400 * (attempt + 1));
-      }
+  const paper = estimatePaperFromBorder(data, width, height);
+  const threshold = 52;
+
+  for (let i = 0; i < data.length; i += 4) {
+    const r = data[i]!;
+    const g = data[i + 1]!;
+    const b = data[i + 2]!;
+    const lum = 0.299 * r + 0.587 * g + 0.114 * b;
+    const chroma = Math.max(r, g, b) - Math.min(r, g, b);
+    const nearPaper = colorDistance(r, g, b, paper) < threshold;
+    const looksLikePaper = nearPaper || (lum > 195 && chroma < 55);
+    if (looksLikePaper) {
+      data[i + 3] = 0;
+    } else {
+      data[i + 3] = 255;
     }
   }
 
-  const msg = lastErr instanceof Error ? lastErr.message.toLowerCase() : '';
-  if (msg.includes('fetch') || msg.includes('network') || msg.includes('wasm') || msg.includes('backend')) {
-    throw new Error(REMBG_NETWORK_ERROR);
+  ctx.putImageData(imageData, 0, 0);
+  return cropToContentBounds(canvas.toDataURL('image/png'));
+}
+
+/** No-op — kept so callers can warm up without downloading anything. */
+export function preloadBackgroundRemovalModel() {
+  return Promise.resolve();
+}
+
+export async function removeBackgroundFromImage(dataUrl: string): Promise<string> {
+  if (await imageHasTransparentBackground(dataUrl)) {
+    return cropToContentBounds(dataUrl);
   }
-  throw new Error(REMBG_PROCESSING_ERROR);
+  await sleep(0);
+  return removeWhitePaperBackground(dataUrl);
 }

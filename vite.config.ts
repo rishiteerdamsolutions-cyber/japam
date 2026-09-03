@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => {
     copyPublicDir: false,
   },
   optimizeDeps: {
-    exclude: ['onnxruntime-web', '@bunnio/rembg-web'],
+    exclude: [],
   },
   server: {
     port: Number(process.env.VITE_DEV_PORT) || 5173,

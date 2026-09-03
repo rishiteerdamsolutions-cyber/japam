@@ -1,3 +1,5 @@
+import { downloadOrSaveBlob } from './downloadBlob';
+
 export const FESTIVAL_CREDIT_LINE = 'Built by AI Developer India : Aditya Nandagiri';
 
 function dataUrlToBlob(dataUrl: string): Blob | null {
@@ -203,12 +205,9 @@ export async function renderSatsangReportCardBlob(opts: {
 }
 
 export function downloadBlobPng(blob: Blob, filename: string) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  void downloadOrSaveBlob(blob, filename);
+}
+
+export async function downloadBlobPngAsync(blob: Blob, filename: string) {
+  return downloadOrSaveBlob(blob, filename);
 }

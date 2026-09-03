@@ -19,6 +19,9 @@ export default defineConfig(({ mode }) => {
     // We selectively copy only the assets the app actually references.
     copyPublicDir: false,
   },
+  optimizeDeps: {
+    exclude: ['onnxruntime-web', '@bunnio/rembg-web'],
+  },
   server: {
     port: Number(process.env.VITE_DEV_PORT) || 5173,
     // Default localhost — avoids uv_interface_addresses crashes on some systems.

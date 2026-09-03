@@ -28,9 +28,9 @@ import {
   writeGaneshotsavDraft,
   type GaneshotsavDraftStep,
 } from '../lib/ganeshotsavDraft';
-import { downloadBlobPng, renderSatsangDevoteeCardBlob } from '../lib/satsangShareCard';
+import { downloadBlobPngAsync, renderSatsangDevoteeCardBlob } from '../lib/satsangShareCard';
 import { downloadMantraPdf } from '../utils/pdfExport';
-import { removeBackgroundFromImage } from '../utils/removeBackground';
+import { preloadBackgroundRemovalModel, removeBackgroundFromImage } from '../utils/removeBackground';
 import { formatIstDateTime } from '../lib/japamCounterIst';
 import { auth, isFirebaseConfigured } from '../lib/firebase';
 
@@ -130,6 +130,10 @@ export function GaneshotsavPage() {
   const [processingImage, setProcessingImage] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [uploadNotice, setUploadNotice] = useState<string | null>(null);
+  const [shareError, setShareError] = useState<string | null>(null);
+  const [shareNotice, setShareNotice] = useState<string | null>(null);
+  const [shareGenerating, setShareGenerating] = useState(false);
+  const [shareDownloading, setShareDownloading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [shareUrl, setShareUrl] = useState<string | null>(null);
   const [resuming, setResuming] = useState(false);
@@ -137,6 +141,8 @@ export function GaneshotsavPage() {
   const [shareImageDownloaded, setShareImageDownloaded] = useState(false);
   const [completed108Saved, setCompleted108Saved] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const shareBlobRef = useRef<Blob | null>(null);
+  const pendingPhotoRef = useRef<string | null>(null);
   const resumedRef = useRef(false);
   const deity = getDeity(DEITY);
 
@@ -263,20 +269,34 @@ export function GaneshotsavPage() {
   }, [authRestoring, user, step, session, joining, resuming]);
 
   useEffect(() => {
-    if (step !== 'share' || !session || shareUrl) return;
+    if (step !== 'share' || !session) return;
+    if (shareBlobRef.current) return;
+    setShareGenerating(true);
+    setShareError(null);
     void renderSatsangDevoteeCardBlob({
       orgName: session.orgName,
       eventName: session.eventName,
       devoteeName: name.trim() || session.displayName,
       dateLabel: formatIstDateTime(),
-    }).then((blob) => {
-      if (!blob) return;
-      setShareUrl((prev) => {
-        if (prev) URL.revokeObjectURL(prev);
-        return URL.createObjectURL(blob);
-      });
-    });
-  }, [step, session, name, shareUrl]);
+    })
+      .then((blob) => {
+        if (!blob) {
+          setShareError(t('ganeshotsav.shareDownloadFailed'));
+          return;
+        }
+        shareBlobRef.current = blob;
+        setShareUrl((prev) => {
+          if (prev) URL.revokeObjectURL(prev);
+          return URL.createObjectURL(blob);
+        });
+      })
+      .catch(() => setShareError(t('ganeshotsav.shareDownloadFailed')))
+      .finally(() => setShareGenerating(false));
+  }, [step, session, name, t]);
+
+  useEffect(() => {
+    if (step === 'pdf') void preloadBackgroundRemovalModel();
+  }, [step]);
 
   useEffect(() => {
     if (!user?.uid || step === 'boot' || step === 'video') return;
@@ -366,6 +386,22 @@ export function GaneshotsavPage() {
     fileInputRef.current?.click();
   };
 
+  const processHandwritingPhoto = async (dataUrl: string) => {
+    setUploadError(null);
+    setUploadNotice(null);
+    setProcessingImage(true);
+    pendingPhotoRef.current = dataUrl;
+    try {
+      const cleaned = await removeBackgroundFromImage(dataUrl);
+      pendingPhotoRef.current = null;
+      setHandwritingDataUrl(cleaned);
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : t('ganeshotsav.backgroundFailed'));
+    } finally {
+      setProcessingImage(false);
+    }
+  };
+
   const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (fileInputRef.current) fileInputRef.current.value = '';
@@ -377,9 +413,6 @@ export function GaneshotsavPage() {
       return;
     }
 
-    setUploadError(null);
-    setUploadNotice(null);
-    setProcessingImage(true);
     try {
       const dataUrl = await new Promise<string>((resolve, reject) => {
         const reader = new FileReader();
@@ -391,18 +424,73 @@ export function GaneshotsavPage() {
         reader.onerror = () => reject(new Error('Could not read file'));
         reader.readAsDataURL(file);
       });
-      let cleaned = dataUrl;
-      try {
-        cleaned = await removeBackgroundFromImage(dataUrl);
-      } catch {
-        setUploadNotice(t('ganeshotsav.imageTrimSkipped'));
-      }
-      setHandwritingDataUrl(cleaned);
-      persistDraft();
+      await processHandwritingPhoto(dataUrl);
     } catch (err) {
       setUploadError(err instanceof Error ? err.message : t('ganeshotsav.imageReadFailed'));
+    }
+  };
+
+  const retryBackgroundRemoval = () => {
+    if (!pendingPhotoRef.current && !handwritingDataUrl) return;
+    const source = pendingPhotoRef.current ?? handwritingDataUrl;
+    if (!source) return;
+    void processHandwritingPhoto(source);
+  };
+
+  const ensureShareBlob = async (): Promise<Blob | null> => {
+    if (shareBlobRef.current) return shareBlobRef.current;
+    if (!session) return null;
+    const blob = await renderSatsangDevoteeCardBlob({
+      orgName: session.orgName,
+      eventName: session.eventName,
+      devoteeName: name.trim() || session.displayName,
+      dateLabel: formatIstDateTime(),
+    });
+    if (blob) {
+      shareBlobRef.current = blob;
+      setShareUrl((prev) => {
+        if (prev) URL.revokeObjectURL(prev);
+        return URL.createObjectURL(blob);
+      });
+    }
+    return blob;
+  };
+
+  const onDownloadShareImage = async () => {
+    setShareError(null);
+    setShareNotice(null);
+    setShareDownloading(true);
+    try {
+      const blob = await ensureShareBlob();
+      if (!blob) {
+        setShareError(t('ganeshotsav.shareDownloadFailed'));
+        return;
+      }
+      const result = await downloadBlobPngAsync(blob, 'ganeshotsav-satsang.png');
+      if (result === 'failed') {
+        setShareError(t('ganeshotsav.shareDownloadFailed'));
+        return;
+      }
+      setShareNotice(t('ganeshotsav.shareSaved'));
+      setShareImageDownloaded(true);
+      writeGaneshotsavDraft({
+        v: 1,
+        uid: user?.uid ?? null,
+        step: 'share',
+        code,
+        session,
+        count: countRef.current,
+        name,
+        gotram,
+        mobileNumber,
+        handwritingDataUrl,
+        completed108Saved: true,
+        pdfDownloaded: true,
+        shareImageDownloaded: true,
+        updatedAt: Date.now(),
+      });
     } finally {
-      setProcessingImage(false);
+      setShareDownloading(false);
     }
   };
 
@@ -424,9 +512,26 @@ export function GaneshotsavPage() {
       setUploadError(t('ganeshotsav.handwritingRequired'));
       return;
     }
+    if (processingImage) {
+      setUploadError(t('ganeshotsav.processingPhoto'));
+      return;
+    }
     setSaving(true);
     setUploadError(null);
     try {
+      let finalHandwriting = handwritingDataUrl;
+      setUploadNotice(t('ganeshotsav.processingPhoto'));
+      try {
+        finalHandwriting = await removeBackgroundFromImage(handwritingDataUrl);
+        setHandwritingDataUrl(finalHandwriting);
+        pendingPhotoRef.current = null;
+      } catch (err) {
+        setUploadError(err instanceof Error ? err.message : t('ganeshotsav.backgroundFailed'));
+        return;
+      } finally {
+        setUploadNotice(null);
+      }
+
       const saved = await completeSatsang({
         eventId: session.eventId,
         isTrial: session.isTrial,
@@ -444,7 +549,7 @@ export function GaneshotsavPage() {
         AUTO_JAPAM_SESSION_TARGET,
         deity.name,
         { name: name.trim(), gotram: gotram.trim(), mobileNumber: mobileNumber.trim() },
-        handwritingDataUrl,
+        finalHandwriting,
         {
           matchTierNote: `${session.orgName} · ${session.eventName}`,
           fileStem: `ganeshotsav-ganesh-${AUTO_JAPAM_SESSION_TARGET}`,
@@ -459,6 +564,7 @@ export function GaneshotsavPage() {
         dateLabel: formatIstDateTime(),
       });
       if (blob) {
+        shareBlobRef.current = blob;
         if (shareUrl) URL.revokeObjectURL(shareUrl);
         setShareUrl(URL.createObjectURL(blob));
       }
@@ -666,7 +772,17 @@ export function GaneshotsavPage() {
             {handwritingDataUrl && !processingImage ? (
               <p className="text-emerald-400 text-xs mt-2">{t('ganeshotsav.imageReady')}</p>
             ) : null}
-            {uploadNotice ? <p className="text-amber-200/80 text-xs mt-2">{uploadNotice}</p> : null}
+            {uploadError ? <p className="text-red-400 text-xs mt-2">{uploadError}</p> : null}
+            {uploadError && (pendingPhotoRef.current || handwritingDataUrl) ? (
+              <button
+                type="button"
+                onClick={retryBackgroundRemoval}
+                disabled={processingImage}
+                className="mt-2 w-full py-2 rounded-lg border border-amber-500/40 text-amber-200 text-xs disabled:opacity-50"
+              >
+                {t('ganeshotsav.retryBackground')}
+              </button>
+            ) : null}
           </div>
           <label className="block text-amber-200/80 text-xs mb-1">Name</label>
           <input
@@ -687,10 +803,11 @@ export function GaneshotsavPage() {
             onChange={(e) => setMobileNumber(e.target.value)}
             className="w-full px-3 py-2 rounded-lg bg-black/30 text-white border border-amber-500/30 mb-3"
           />
+          {uploadNotice ? <p className="text-amber-200/80 text-xs mb-3">{uploadNotice}</p> : null}
           {uploadError ? <p className="text-red-400 text-xs mb-3">{uploadError}</p> : null}
           <button
             type="button"
-            disabled={saving || processingImage}
+            disabled={saving || processingImage || !handwritingDataUrl}
             onClick={() => void onPdfAndShare()}
             className="w-full py-3 rounded-2xl bg-amber-500 text-white font-semibold disabled:opacity-50"
           >
@@ -702,40 +819,32 @@ export function GaneshotsavPage() {
       {step === 'share' ? (
         <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-4 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
           {banner}
+          <p className="text-emerald-300 text-sm font-semibold text-center max-w-sm mb-2">
+            {t('ganeshotsav.pdfDownloadedSuccess')}
+          </p>
           <h2 className="text-lg font-bold text-amber-400 mb-1">{t('ganeshotsav.shareTitle')}</h2>
-          <p className="text-amber-200/80 text-sm text-center max-w-sm mb-4">{t('ganeshotsav.shareReady')}</p>
-          {shareUrl ? (
-            <button
-              type="button"
-              onClick={() => {
-                void fetch(shareUrl)
-                  .then((r) => r.blob())
-                  .then((b) => {
-                    downloadBlobPng(b, 'ganeshotsav-satsang.png');
-                    setShareImageDownloaded(true);
-                    writeGaneshotsavDraft({
-                      v: 1,
-                      uid: user?.uid ?? null,
-                      step: 'share',
-                      code,
-                      session,
-                      count: countRef.current,
-                      name,
-                      gotram,
-                      mobileNumber,
-                      handwritingDataUrl,
-                      completed108Saved: true,
-                      pdfDownloaded: true,
-                      shareImageDownloaded: true,
-                      updatedAt: Date.now(),
-                    });
-                  });
-              }}
-              className="w-full max-w-sm py-3 rounded-2xl bg-amber-500 text-white font-semibold mb-3"
-            >
-              {t('ganeshotsav.downloadImage')}
-            </button>
+          <p className="text-amber-200/80 text-sm text-center max-w-sm mb-4">{t('ganeshotsav.shareWhatsAppPrompt')}</p>
+          {shareGenerating ? (
+            <p className="text-amber-200/70 text-xs mb-4">{t('ganeshotsav.shareGenerating')}</p>
           ) : null}
+          {shareUrl ? (
+            <img
+              src={shareUrl}
+              alt=""
+              className="w-full max-w-sm rounded-2xl border border-amber-500/30 mb-3 shadow-lg"
+            />
+          ) : null}
+          <p className="text-amber-200/60 text-[11px] text-center max-w-sm mb-3">{t('ganeshotsav.shareLongPressHint')}</p>
+          {shareError ? <p className="text-red-300 text-xs mb-2 max-w-sm text-center">{shareError}</p> : null}
+          {shareNotice ? <p className="text-emerald-300 text-xs mb-2 max-w-sm text-center">{shareNotice}</p> : null}
+          <button
+            type="button"
+            disabled={shareDownloading || shareGenerating}
+            onClick={() => void onDownloadShareImage()}
+            className="w-full max-w-sm py-3 rounded-2xl bg-amber-500 text-white font-semibold mb-3 disabled:opacity-50"
+          >
+            {shareDownloading ? t('ganeshotsav.generating') : t('ganeshotsav.downloadImage')}
+          </button>
           <button
             type="button"
             onClick={() => {

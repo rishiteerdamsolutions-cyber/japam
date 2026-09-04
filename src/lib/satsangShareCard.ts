@@ -461,16 +461,10 @@ export async function renderSatsangReportCardBlob(opts: {
   cap: number;
 }): Promise<Blob | null> {
   const width = 720;
-  const boardDemo = await loadImage(BOARD_DEMO_SRC);
   const contentWidth = width - 168;
-  const boardH = boardDemo
-    ? Math.min(
-        contentWidth / (boardDemo.naturalWidth / Math.max(1, boardDemo.naturalHeight)),
-        BOARD_MAX_H,
-      )
-    : 0;
+  // No demo-board image on organiser reports — names need the vertical space.
   const nameBlock = Math.max(opts.names.length, 1) * 36;
-  const height = Math.max(1280, 520 + nameBlock + 180 + (boardH ? boardH + 48 : 0));
+  const height = Math.max(1100, 480 + nameBlock + 180);
   const prepared = prepareHdCanvas(width, height);
   if (!prepared) return null;
   const { canvas, ctx } = prepared;
@@ -543,18 +537,10 @@ export async function renderSatsangReportCardBlob(opts: {
   if (names.length === 0) {
     ctx.textAlign = 'center';
     ctx.fillText('No participants yet', width / 2, y + 20);
-    y += 56;
   } else {
     names.forEach((n, i) => {
       ctx.fillText(`${i + 1}. ${n}`, 88, y + i * 36);
     });
-    y += names.length * 36;
-  }
-
-  if (boardDemo) {
-    y += 24;
-    ctx.textAlign = 'center';
-    drawContainedRoundedImage(ctx, boardDemo, width / 2, y, contentWidth, boardH + 4, 18);
   }
 
   await drawFestivalCredit(ctx, width, height - 104, logo);

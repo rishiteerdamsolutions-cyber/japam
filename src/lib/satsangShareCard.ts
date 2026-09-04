@@ -565,10 +565,18 @@ export async function renderSatsangReportCardBlob(opts: {
   return canvasToShareBlob(canvas);
 }
 
-export function downloadBlobPng(blob: Blob, filename: string) {
-  void downloadOrSaveBlob(blob, filename);
+export function downloadBlobPng(
+  blob: Blob,
+  filename: string,
+  options?: Parameters<typeof downloadOrSaveBlob>[2],
+) {
+  void downloadOrSaveBlob(blob, filename, options);
 }
 
-export async function downloadBlobPngAsync(blob: Blob, filename: string) {
-  return downloadOrSaveBlob(blob, filename);
+export async function downloadBlobPngAsync(
+  blob: Blob,
+  filename: string,
+  options?: Parameters<typeof downloadOrSaveBlob>[2],
+) {
+  return downloadOrSaveBlob(blob, filename, options);
 }

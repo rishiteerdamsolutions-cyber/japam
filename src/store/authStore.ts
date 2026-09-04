@@ -1,10 +1,12 @@
 import { create } from 'zustand';
 import {
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signOut as firebaseSignOut,
   onAuthStateChanged,
   type AuthError,
-  type User
+  type User,
 } from 'firebase/auth';
 import { auth, googleProvider, isFirebaseConfigured, isStandalonePwa } from '../lib/firebase';
 import { onAuthUidChanged, silenceActiveGameAudio, suppressIncidentalAudioAfterAuth } from '../lib/authAudioGuard';
@@ -16,6 +18,7 @@ import { onAuthUidChanged, silenceActiveGameAudio, suppressIncidentalAudioAfterA
  */
 const LISTENER_FLAG = '__japam_firebase_auth_listener_attached__';
 const HYDRATED_FLAG = '__japam_firebase_auth_persistence_hydrated__';
+const REDIRECT_FLAG = '__japam_firebase_redirect_result_promise__';
 
 function isAuthHydrated(): boolean {
   const g = globalThis as unknown as Record<string, unknown>;
@@ -27,15 +30,36 @@ function markAuthHydrated(): void {
   g[HYDRATED_FLAG] = true;
 }
 
-function syncAuthFromSdk(a: NonNullable<typeof auth>) {
+function syncAuthFromSdk(a: NonNullable<typeof auth>, user?: User | null) {
+  const next = user === undefined ? a.currentUser : user;
   const prevUid = useAuthStore.getState().user?.uid ?? null;
-  const nextUid = a.currentUser?.uid ?? null;
+  const nextUid = next?.uid ?? null;
   onAuthUidChanged(prevUid, nextUid);
   useAuthStore.setState({
-    user: a.currentUser,
+    user: next,
     loading: false,
     signInPending: false,
   });
+}
+
+function getRedirectResultOnce(a: NonNullable<typeof auth>) {
+  const g = globalThis as unknown as Record<string, unknown>;
+  const existing = g[REDIRECT_FLAG] as ReturnType<typeof getRedirectResult> | undefined;
+  if (existing) return existing;
+  const promise = getRedirectResult(a);
+  g[REDIRECT_FLAG] = promise;
+  return promise;
+}
+
+function shouldUseRedirectFallback(err: unknown): boolean {
+  const code = (err as AuthError | undefined)?.code;
+  return (
+    code === 'auth/popup-blocked' ||
+    code === 'auth/operation-not-supported-in-this-environment' ||
+    code === 'auth/internal-error' ||
+    // Some WebViews report this when the popup cannot finish.
+    code === 'auth/argument-error'
+  );
 }
 
 function attachFirebaseAuthListeners() {
@@ -43,7 +67,6 @@ function attachFirebaseAuthListeners() {
   const a = auth;
   const g = globalThis as unknown as Record<string, unknown>;
   if (g[LISTENER_FLAG]) {
-    // HMR / remount: listener already attached — still sync current SDK user.
     if (isAuthHydrated()) {
       syncAuthFromSdk(a);
     }
@@ -51,32 +74,46 @@ function attachFirebaseAuthListeners() {
   }
   g[LISTENER_FLAG] = true;
 
-  onAuthStateChanged(a, (user) => {
-    if (!isAuthHydrated()) return;
-    const prevUid = useAuthStore.getState().user?.uid ?? null;
-    const nextUid = user?.uid ?? null;
-    onAuthUidChanged(prevUid, nextUid);
-    useAuthStore.setState({
-      user,
-      loading: false,
-      signInPending: false,
+  // Capture redirect result once per page load (Strict Mode / HMR safe).
+  void getRedirectResultOnce(a)
+    .then((cred) => {
+      if (cred?.user) {
+        markAuthHydrated();
+        syncAuthFromSdk(a, cred.user);
+      }
+    })
+    .catch((err) => {
+      useAuthStore.setState({
+        error: getAuthErrorMessage(err),
+        signInPending: false,
+        loading: false,
+      });
     });
+
+  onAuthStateChanged(a, (user) => {
+    // Ignore only the transient signed-out flash before persistence hydrates.
+    // Never drop a real signed-in user (popup / redirect just completed).
+    if (!isAuthHydrated()) {
+      if (!user) return;
+      markAuthHydrated();
+    }
+    syncAuthFromSdk(a, user);
   });
 
-  /** Single source of truth for first paint after cold start — then listener handles later sign-in/out. */
   void a
     .authStateReady()
     .then(() => {
       markAuthHydrated();
-      syncAuthFromSdk(a);
+      // Don't wipe a user we already applied from redirect/popup.
+      const existing = useAuthStore.getState().user;
+      syncAuthFromSdk(a, existing ?? a.currentUser);
     })
     .catch(() => {
       markAuthHydrated();
       syncAuthFromSdk(a);
     });
 
-  // Last resort if authStateReady / listener hang (IndexedDB lock, flaky network).
-  // Also clears stuck signInPending and store↔SDK desync (!user && currentUser).
+  // Clear stuck loading / pending / store↔SDK desync.
   setTimeout(() => {
     markAuthHydrated();
     const state = useAuthStore.getState();
@@ -85,7 +122,7 @@ function attachFirebaseAuthListeners() {
       state.loading ||
       state.signInPending ||
       (!state.user && !!sdkUser) ||
-      (state.user?.uid !== sdkUser?.uid)
+      state.user?.uid !== sdkUser?.uid
     ) {
       syncAuthFromSdk(a);
     }
@@ -142,20 +179,6 @@ function getAuthErrorMessage(err: unknown): string {
   }
 }
 
-async function waitForAuthReady(a: NonNullable<typeof auth>, ms = 5000): Promise<void> {
-  try {
-    await Promise.race([
-      a.authStateReady(),
-      new Promise<void>((resolve) => {
-        window.setTimeout(resolve, ms);
-      }),
-    ]);
-  } catch {
-    /* ignore — proceed to popup anyway */
-  }
-  markAuthHydrated();
-}
-
 interface AuthState {
   user: User | null;
   loading: boolean;
@@ -186,14 +209,20 @@ export const useAuthStore = create<AuthState>((set) => ({
     });
     if (!started) return;
 
+    let redirectStarted = false;
     try {
       suppressIncidentalAudioAfterAuth();
       silenceActiveGameAudio();
-      // Don't hang forever if authStateReady never resolves (PWA / storage quirks).
-      await waitForAuthReady(auth);
-      await signInWithPopup(auth, googleProvider);
-      // Sync immediately so callers (e.g. menu → game) see `user` without waiting for the next listener tick.
-      set({ user: auth.currentUser, loading: false, signInPending: false, error: null });
+      // IMPORTANT: do not await anything before opening the popup — that breaks the
+      // browser user-gesture chain and causes popup-blocked / “could not sign in”.
+      const cred = await signInWithPopup(auth, googleProvider);
+      markAuthHydrated();
+      set({
+        user: cred.user ?? auth.currentUser,
+        loading: false,
+        signInPending: false,
+        error: null,
+      });
     } catch (err) {
       const authErr = err as AuthError;
       if (
@@ -203,10 +232,24 @@ export const useAuthStore = create<AuthState>((set) => ({
         set({ signInPending: false });
         return;
       }
+
+      // Installed PWA / WebView: popup often fails — fall back to full-page redirect.
+      if (shouldUseRedirectFallback(err)) {
+        try {
+          redirectStarted = true;
+          await signInWithRedirect(auth, googleProvider);
+          // Page navigates away; keep signInPending until return.
+          return;
+        } catch (redirectErr) {
+          redirectStarted = false;
+          set({ error: getAuthErrorMessage(redirectErr), signInPending: false });
+          return;
+        }
+      }
+
       set({ error: getAuthErrorMessage(err), signInPending: false });
     } finally {
-      // Belt-and-suspenders: never leave the UI spinning on “Opening Google…”.
-      if (useAuthStore.getState().signInPending) {
+      if (!redirectStarted && useAuthStore.getState().signInPending) {
         set({ signInPending: false, loading: false, user: auth.currentUser });
       }
     }
@@ -232,5 +275,5 @@ export const useAuthStore = create<AuthState>((set) => ({
     }
     attachFirebaseAuthListeners();
     return () => {};
-  }
+  },
 }));

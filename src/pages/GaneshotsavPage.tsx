@@ -234,7 +234,8 @@ export function GaneshotsavPage() {
 
   // After auth + status are known, restore only this Google account's draft (never while signed out).
   useEffect(() => {
-    if (authLoading || status == null) return;
+    // Wait for full restore (loading + pending + SDK↔store sync), not just `loading`.
+    if (authRestoring || status == null) return;
     if (!status.open) return;
 
     const uid = user?.uid ?? null;
@@ -280,7 +281,7 @@ export function GaneshotsavPage() {
     if (step === 'boot') {
       resetFestivalProgress(videoAlreadySeen() ? 'gate' : 'video');
     }
-  }, [authLoading, status, user?.uid]); // eslint-disable-line react-hooks/exhaustive-deps -- intentional: restore once per auth identity
+  }, [authRestoring, status, user?.uid]); // eslint-disable-line react-hooks/exhaustive-deps -- intentional: restore once per auth identity
 
   useEffect(() => {
     persistDraft();

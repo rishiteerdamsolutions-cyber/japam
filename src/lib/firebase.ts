@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import {
+  initializeAuth,
   getAuth,
-  setPersistence,
   browserLocalPersistence,
   GoogleAuthProvider,
   type Auth,
@@ -35,12 +35,14 @@ let googleProvider: GoogleAuthProvider | null = null;
 
 if (isFirebaseConfigured) {
   app = initializeApp(firebaseConfig);
-  // getAuth + localStorage persistence is more reliable in installed PWAs than
-  // initializeAuth(indexedDB), which often breaks Google sign-in on mobile.
-  auth = getAuth(app);
-  void setPersistence(auth, browserLocalPersistence).catch(() => {
-    /* Private mode / storage blocked — SDK will still attempt in-memory session. */
-  });
+  // Use localStorage-only persistence from the first Auth instance.
+  // getAuth() + later setPersistence races IndexedDB hydrate and often leaves
+  // PWAs stuck on “restoring / sign in” after Google sign-in.
+  try {
+    auth = initializeAuth(app, { persistence: browserLocalPersistence });
+  } catch {
+    auth = getAuth(app);
+  }
   firestore = getFirestore(app);
   storage = getStorage(app);
   googleProvider = new GoogleAuthProvider();

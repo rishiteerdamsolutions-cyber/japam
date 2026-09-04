@@ -11,23 +11,48 @@ import { onAuthUidChanged, silenceActiveGameAudio, suppressIncidentalAudioAfterA
 
 /**
  * In dev (Vite HMR + React 18 Strict Mode), modules can be re-evaluated while the Firebase
- * `auth` singleton stays alive. Store the "attached" flag on `globalThis` so we don't add
- * duplicate listeners after a hot reload.
+ * `auth` singleton stays alive. Store flags on `globalThis` so we don't add
+ * duplicate listeners / reset hydration after a hot reload.
  */
 const LISTENER_FLAG = '__japam_firebase_auth_listener_attached__';
+const HYDRATED_FLAG = '__japam_firebase_auth_persistence_hydrated__';
 
-/** Ignore `onAuthStateChanged` until persistence has been applied (avoids transient null + “Sign in” flash). */
-let authPersistenceHydrated = false;
+function isAuthHydrated(): boolean {
+  const g = globalThis as unknown as Record<string, unknown>;
+  return g[HYDRATED_FLAG] === true;
+}
+
+function markAuthHydrated(): void {
+  const g = globalThis as unknown as Record<string, unknown>;
+  g[HYDRATED_FLAG] = true;
+}
+
+function syncAuthFromSdk(a: NonNullable<typeof auth>) {
+  const prevUid = useAuthStore.getState().user?.uid ?? null;
+  const nextUid = a.currentUser?.uid ?? null;
+  onAuthUidChanged(prevUid, nextUid);
+  useAuthStore.setState({
+    user: a.currentUser,
+    loading: false,
+    signInPending: false,
+  });
+}
 
 function attachFirebaseAuthListeners() {
   if (!isFirebaseConfigured || !auth) return;
   const a = auth;
   const g = globalThis as unknown as Record<string, unknown>;
-  if (g[LISTENER_FLAG]) return;
+  if (g[LISTENER_FLAG]) {
+    // HMR / remount: listener already attached — still sync current SDK user.
+    if (isAuthHydrated()) {
+      syncAuthFromSdk(a);
+    }
+    return;
+  }
   g[LISTENER_FLAG] = true;
 
   onAuthStateChanged(a, (user) => {
-    if (!authPersistenceHydrated) return;
+    if (!isAuthHydrated()) return;
     const prevUid = useAuthStore.getState().user?.uid ?? null;
     const nextUid = user?.uid ?? null;
     onAuthUidChanged(prevUid, nextUid);
@@ -42,29 +67,29 @@ function attachFirebaseAuthListeners() {
   void a
     .authStateReady()
     .then(() => {
-      authPersistenceHydrated = true;
-      useAuthStore.setState({
-        user: a.currentUser,
-        loading: false,
-        signInPending: false,
-      });
+      markAuthHydrated();
+      syncAuthFromSdk(a);
     })
     .catch(() => {
-      authPersistenceHydrated = true;
-      useAuthStore.setState({
-        user: a.currentUser,
-        loading: false,
-        signInPending: false,
-      });
+      markAuthHydrated();
+      syncAuthFromSdk(a);
     });
 
-  // Last resort if neither listener nor authStateReady clears loading (network / SDK hang)
+  // Last resort if authStateReady / listener hang (IndexedDB lock, flaky network).
+  // Also clears stuck signInPending and store↔SDK desync (!user && currentUser).
   setTimeout(() => {
-    if (useAuthStore.getState().loading) {
-      authPersistenceHydrated = true;
-      useAuthStore.setState({ user: a.currentUser, loading: false, signInPending: false });
+    markAuthHydrated();
+    const state = useAuthStore.getState();
+    const sdkUser = a.currentUser;
+    if (
+      state.loading ||
+      state.signInPending ||
+      (!state.user && !!sdkUser) ||
+      (state.user?.uid !== sdkUser?.uid)
+    ) {
+      syncAuthFromSdk(a);
     }
-  }, 10000);
+  }, 8000);
 }
 
 function getAuthErrorMessage(err: unknown): string {
@@ -117,6 +142,20 @@ function getAuthErrorMessage(err: unknown): string {
   }
 }
 
+async function waitForAuthReady(a: NonNullable<typeof auth>, ms = 5000): Promise<void> {
+  try {
+    await Promise.race([
+      a.authStateReady(),
+      new Promise<void>((resolve) => {
+        window.setTimeout(resolve, ms);
+      }),
+    ]);
+  } catch {
+    /* ignore — proceed to popup anyway */
+  }
+  markAuthHydrated();
+}
+
 interface AuthState {
   user: User | null;
   loading: boolean;
@@ -150,11 +189,11 @@ export const useAuthStore = create<AuthState>((set) => ({
     try {
       suppressIncidentalAudioAfterAuth();
       silenceActiveGameAudio();
-      // Ensure persistence/hydration finished before opening the Google popup.
-      await auth.authStateReady();
+      // Don't hang forever if authStateReady never resolves (PWA / storage quirks).
+      await waitForAuthReady(auth);
       await signInWithPopup(auth, googleProvider);
       // Sync immediately so callers (e.g. menu → game) see `user` without waiting for the next listener tick.
-      set({ user: auth.currentUser, signInPending: false, error: null });
+      set({ user: auth.currentUser, loading: false, signInPending: false, error: null });
     } catch (err) {
       const authErr = err as AuthError;
       if (
@@ -165,6 +204,11 @@ export const useAuthStore = create<AuthState>((set) => ({
         return;
       }
       set({ error: getAuthErrorMessage(err), signInPending: false });
+    } finally {
+      // Belt-and-suspenders: never leave the UI spinning on “Opening Google…”.
+      if (useAuthStore.getState().signInPending) {
+        set({ signInPending: false, loading: false, user: auth.currentUser });
+      }
     }
   },
 

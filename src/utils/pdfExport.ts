@@ -27,6 +27,7 @@ async function fetchImageAsDataUrl(url: string): Promise<string | null> {
 /**
  * Composites a transparent image onto white and exports as JPEG.
  * Opaque JPEG avoids PDF viewer issues with transparent PNGs (e.g. colored boxes).
+ * Near-white residual pixels are forced to pure white so soft shadows don't print as boxes.
  */
 async function compositeOnWhiteAsJpeg(dataUrl: string): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -44,6 +45,22 @@ async function compositeOnWhiteAsJpeg(dataUrl: string): Promise<string> {
       ctx.fillStyle = '#FFFFFF';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(img, 0, 0);
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const { data } = imageData;
+      for (let i = 0; i < data.length; i += 4) {
+        const r = data[i]!;
+        const g = data[i + 1]!;
+        const b = data[i + 2]!;
+        const lum = 0.299 * r + 0.587 * g + 0.114 * b;
+        const chroma = Math.max(r, g, b) - Math.min(r, g, b);
+        // Soft paper/shadow leftovers → pure white so PDF cells aren't gray boxes.
+        if (lum > 232 && chroma < 28) {
+          data[i] = 255;
+          data[i + 1] = 255;
+          data[i + 2] = 255;
+        }
+      }
+      ctx.putImageData(imageData, 0, 0);
       resolve(canvas.toDataURL('image/jpeg', 0.95));
     };
     img.onerror = () => reject(new Error('Failed to load image'));

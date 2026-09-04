@@ -142,7 +142,85 @@ function estimatePaperFromBorder(data: Uint8ClampedArray, width: number, height:
   return { r: rSum / n, g: gSum / n, b: bSum / n };
 }
 
-function cropToContentBounds(dataUrl: string, padding = 8): Promise<string> {
+/** True for ink / handwriting — not paper and not soft page shadow. */
+function isInkRgb(r: number, g: number, b: number, paper: Rgb): boolean {
+  const lum = 0.299 * r + 0.587 * g + 0.114 * b;
+  const chroma = Math.max(r, g, b) - Math.min(r, g, b);
+  const dist = colorDistance(r, g, b, paper);
+
+  // Soft gray/brown page shadows: still light, low color, near paper tone.
+  if (lum > 150 && chroma < 42 && dist < 95) return false;
+  // Residual white / off-white paper.
+  if (lum > 205 && chroma < 50) return false;
+  if (dist < 48) return false;
+  // Keep dark marks and coloured ink (blue/red/green pens).
+  if (lum < 165) return true;
+  if (chroma >= 38 && lum < 210) return true;
+  return dist >= 72 && lum < 185;
+}
+
+/**
+ * Punch out paper + shadow pixels left by rembg / phone cameras, then crop tightly to ink.
+ * Fixes gray “boxes” around each nāma on the PDF.
+ */
+async function refineNamaCutout(dataUrl: string): Promise<string> {
+  const img = await loadImage(dataUrl);
+  const canvas = document.createElement('canvas');
+  canvas.width = img.width;
+  canvas.height = img.height;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return dataUrl;
+  ctx.drawImage(img, 0, 0);
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const { data, width, height } = imageData;
+
+  // Prefer paper estimate from still-visible light pixels; fall back to border.
+  let rSum = 0;
+  let gSum = 0;
+  let bSum = 0;
+  let n = 0;
+  for (let i = 0; i < data.length; i += 4) {
+    const a = data[i + 3]!;
+    if (a < 8) continue;
+    const r = data[i]!;
+    const g = data[i + 1]!;
+    const b = data[i + 2]!;
+    const lum = 0.299 * r + 0.587 * g + 0.114 * b;
+    const chroma = Math.max(r, g, b) - Math.min(r, g, b);
+    if (lum > 200 && chroma < 45) {
+      rSum += r;
+      gSum += g;
+      bSum += b;
+      n += 1;
+    }
+  }
+  const paper =
+    n > 40
+      ? { r: rSum / n, g: gSum / n, b: bSum / n }
+      : estimatePaperFromBorder(data, width, height);
+
+  for (let i = 0; i < data.length; i += 4) {
+    const a = data[i + 3]!;
+    if (a < 8) {
+      data[i + 3] = 0;
+      continue;
+    }
+    const r = data[i]!;
+    const g = data[i + 1]!;
+    const b = data[i + 2]!;
+    if (!isInkRgb(r, g, b, paper)) {
+      data[i + 3] = 0;
+      continue;
+    }
+    // Fully opaque ink — soft rembg fringes become gray boxes when scaled in PDF.
+    data[i + 3] = 255;
+  }
+
+  ctx.putImageData(imageData, 0, 0);
+  return cropToInkBounds(canvas.toDataURL('image/png'), paper);
+}
+
+function cropToInkBounds(dataUrl: string, paperHint?: Rgb, padding = 6): Promise<string> {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = () => {
@@ -159,6 +237,7 @@ function cropToContentBounds(dataUrl: string, padding = 8): Promise<string> {
       ctx.drawImage(img, 0, 0);
       const imageData = ctx.getImageData(0, 0, width, height);
       const { data } = imageData;
+      const paper = paperHint ?? estimatePaperFromBorder(data, width, height);
 
       let minX = width;
       let minY = height;
@@ -167,13 +246,17 @@ function cropToContentBounds(dataUrl: string, padding = 8): Promise<string> {
 
       for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
-          const alpha = data[(y * width + x) * 4 + 3]!;
-          if (alpha > 20) {
-            minX = Math.min(minX, x);
-            minY = Math.min(minY, y);
-            maxX = Math.max(maxX, x);
-            maxY = Math.max(maxY, y);
-          }
+          const i = (y * width + x) * 4;
+          const a = data[i + 3]!;
+          if (a < 40) continue;
+          const r = data[i]!;
+          const g = data[i + 1]!;
+          const b = data[i + 2]!;
+          if (!isInkRgb(r, g, b, paper)) continue;
+          minX = Math.min(minX, x);
+          minY = Math.min(minY, y);
+          maxX = Math.max(maxX, x);
+          maxY = Math.max(maxY, y);
         }
       }
 
@@ -182,7 +265,7 @@ function cropToContentBounds(dataUrl: string, padding = 8): Promise<string> {
         return;
       }
 
-      const pad = Math.min(padding, Math.floor(Math.min(maxX - minX + 1, maxY - minY + 1) * 0.08));
+      const pad = Math.min(padding, Math.floor(Math.min(maxX - minX + 1, maxY - minY + 1) * 0.06));
       const left = Math.max(0, minX - pad);
       const top = Math.max(0, minY - pad);
       const right = Math.min(width, maxX + 1 + pad);
@@ -198,6 +281,7 @@ function cropToContentBounds(dataUrl: string, padding = 8): Promise<string> {
         reject(new Error('Could not get crop canvas context'));
         return;
       }
+      cropCtx.clearRect(0, 0, w, h);
       cropCtx.drawImage(img, left, top, w, h, 0, 0, w, h);
       resolve(cropCanvas.toDataURL('image/png'));
     };
@@ -243,21 +327,16 @@ export async function removeWhitePaperBackground(dataUrl: string): Promise<strin
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
   const { data, width, height } = imageData;
   const paper = estimatePaperFromBorder(data, width, height);
-  const threshold = 52;
 
   for (let i = 0; i < data.length; i += 4) {
     const r = data[i]!;
     const g = data[i + 1]!;
     const b = data[i + 2]!;
-    const lum = 0.299 * r + 0.587 * g + 0.114 * b;
-    const chroma = Math.max(r, g, b) - Math.min(r, g, b);
-    const nearPaper = colorDistance(r, g, b, paper) < threshold;
-    const looksLikePaper = nearPaper || (lum > 195 && chroma < 55);
-    data[i + 3] = looksLikePaper ? 0 : 255;
+    data[i + 3] = isInkRgb(r, g, b, paper) ? 255 : 0;
   }
 
   ctx.putImageData(imageData, 0, 0);
-  return cropToContentBounds(canvas.toDataURL('image/png'));
+  return refineNamaCutout(canvas.toDataURL('image/png'));
 }
 
 async function getOrCreateSession(onProgress?: (info: BackgroundRemovalProgress) => void) {
@@ -303,7 +382,8 @@ async function removeWithAi(
   });
   const withBgRemoved = await blobToDataUrl(blob);
   onProgress?.({ step: 'postprocessing', progress: 95, message: 'Your Digital Likhita Japa Patra is getting ready…' });
-  return cropToContentBounds(withBgRemoved);
+  // rembg often keeps page shadows; punch those out and crop to ink only.
+  return refineNamaCutout(withBgRemoved);
 }
 
 /** Warm the model while the devotee fills name/gotram (best effort). */
@@ -325,7 +405,7 @@ export async function removeBackgroundFromImage(
 
   if (await imageHasTransparentBackground(dataUrl)) {
     onProgress?.({ step: 'complete', progress: 100, message: 'Photo ready.' });
-    return cropToContentBounds(dataUrl);
+    return refineNamaCutout(dataUrl);
   }
 
   let lastErr: unknown = null;

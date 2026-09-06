@@ -818,6 +818,13 @@ export function GaneshotsavPage() {
             <>
               <p className="text-amber-300 text-xs text-center mb-3 max-w-xs">{t('ganeshotsav.signInSticky')}</p>
               {isFirebaseConfigured ? <GoogleSignIn /> : <p className="text-red-300 text-sm">Sign-in is not configured.</p>}
+              <button
+                type="button"
+                onClick={() => navigate('/menu', { replace: true })}
+                className="mt-4 w-full max-w-sm py-2.5 text-sm font-medium text-amber-200/75 hover:text-amber-100 underline-offset-4 hover:underline"
+              >
+                {t('ganeshotsav.skip')}
+              </button>
             </>
           ) : authRestoring ? (
             <div className="flex flex-col items-center gap-3 max-w-xs text-center">
@@ -854,6 +861,13 @@ export function GaneshotsavPage() {
               >
                 {joining ? t('ganeshotsav.joining') : t('ganeshotsav.join')}
               </motion.button>
+              <button
+                type="button"
+                onClick={() => navigate('/menu', { replace: true })}
+                className="mt-3 w-full max-w-sm py-2.5 text-sm font-medium text-amber-200/75 hover:text-amber-100 underline-offset-4 hover:underline"
+              >
+                {t('ganeshotsav.skip')}
+              </button>
             </>
           ) : null}
         </div>

@@ -1110,11 +1110,12 @@
   "ganeshotsav": {
     "yagnaTitle": "Ganesha Utsav Japa Yagna (1080)",
     "yagnaBlurb": "One sitting is 108 Ganesh japas. Sign in with Google, then enter the satsang code spoken at your mandap.",
-    "signInSticky": "Sign in with Google to continue. This step cannot be skipped.",
+    "signInSticky": "Sign in with Google to join the satsang.",
     "codeLabel": "Today's satsang code",
     "codeHint": "Ask at your mandap. Each mandap has its own code. It is not on the QR.",
     "codePlaceholder": "Enter code",
     "join": "Join satsang",
+    "skip": "Skip — see the main Japam",
     "joining": "Joining…",
     "full": "Today's satsang is full.",
     "badCode": "This satsang code is not live today.",

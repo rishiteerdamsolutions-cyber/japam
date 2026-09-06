@@ -83,7 +83,7 @@ export const DEITIES: Deity[] = [
     name: 'Ganesh',
     color: '#E53935',
     mantraAudio: matchMantraAudioPath('ganesh'),
-    mantra: 'Om Gan Ganapataye Namah',
+    mantra: 'Om Ganeshaya Namaha',
     image: '/images/deities/ganesh.png',
     imageGame: '/images/deities/game/ganesh-face.png',
   },

@@ -2,6 +2,46 @@ import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
+import fs from 'node:fs'
+import path from 'node:path'
+import type { IncomingMessage, ServerResponse } from 'node:http'
+
+function kidsWorldDir() {
+  return path.resolve(process.cwd(), 'VIRTUAL WORLD FOR KIDS');
+}
+
+function serveKidsWorld(req: IncomingMessage, res: ServerResponse, next: () => void) {
+  const raw = req.url || '';
+  const q = raw.indexOf('?');
+  const pathname = decodeURIComponent((q >= 0 ? raw.slice(0, q) : raw).split('#')[0] || '');
+  if (!pathname.startsWith('/kids-world')) return next();
+  let rel = pathname.slice('/kids-world'.length).replace(/^\/+/, '');
+  if (!rel || rel.endsWith('/')) rel += 'ganesh-utsav.html';
+  const root = kidsWorldDir();
+  const dest = path.normalize(path.join(root, rel));
+  const prefix = root.endsWith(path.sep) ? root : root + path.sep;
+  if (dest !== root && !dest.startsWith(prefix)) {
+    res.statusCode = 403;
+    res.end();
+    return;
+  }
+  fs.stat(dest, (err, st) => {
+    if (err || !st.isFile()) return next();
+    const ext = path.extname(dest).toLowerCase();
+    const types: Record<string, string> = {
+      '.html': 'text/html; charset=utf-8',
+      '.json': 'application/json',
+      '.png': 'image/png',
+      '.ico': 'image/x-icon',
+      '.mp3': 'audio/mpeg',
+      '.m4a': 'audio/mp4',
+      '.ogg': 'audio/ogg',
+      '.wav': 'audio/wav',
+    };
+    res.setHeader('Content-Type', types[ext] || 'application/octet-stream');
+    fs.createReadStream(dest).pipe(res);
+  });
+}
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
@@ -123,6 +163,16 @@ export default defineConfig(({ mode }) => {
         for (const f of copyFiles) {
           await copyIfPresent(path.join(publicDir, f), path.join(outDir, f));
         }
+        await copyIfPresent(path.join(root, 'VIRTUAL WORLD FOR KIDS'), path.join(outDir, 'kids-world'));
+      },
+    },
+    {
+      name: 'japam-kids-world-static',
+      configureServer(viteServer) {
+        viteServer.middlewares.use(serveKidsWorld);
+      },
+      configurePreviewServer(viteServer) {
+        viteServer.middlewares.use(serveKidsWorld);
       },
     },
     {

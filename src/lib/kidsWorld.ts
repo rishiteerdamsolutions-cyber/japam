@@ -32,8 +32,8 @@ export function colorFromId(id: string): number {
 }
 
 export function kidsWorldHref(opts: { uid: string; displayName: string | null; token: string }): string {
-  const base = (import.meta.env.VITE_KIDS_WORLD_URL as string | undefined)?.trim()
-    || 'http://127.0.0.1:8765/ganesh-utsav.html';
+  const env = (import.meta.env.VITE_KIDS_WORLD_URL as string | undefined)?.trim();
+  const base = env || `${window.location.origin}/kids-world/ganesh-utsav.html`;
   const n = firstHalfName(opts.displayName || '');
   const f = familyFromName(opts.displayName || '');
   const presence = `${window.location.origin}/api/kids-world/presence`;

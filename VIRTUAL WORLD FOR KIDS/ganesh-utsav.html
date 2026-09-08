@@ -74,7 +74,7 @@
   #err{display:none;background:rgba(120,10,10,.88);border:1px solid #ff8080;color:#ffe0e0;font-size:12px;padding:10px 14px;border-radius:10px;max-width:600px;white-space:pre-wrap;text-align:left;font-family:system-ui}
   footer{text-align:center;font-family:system-ui;font-size:11px;color:var(--muted);padding:18px}
   /* ---- Utsav City: admin / queue board / stalls / taken ---- */
-  #adminBtn,#freshBtn{border:1px solid var(--line);background:rgba(232,182,76,.08);color:var(--goldlt);border-radius:999px;padding:6px 12px;font-family:system-ui;font-size:13px;cursor:pointer;flex:0 0 auto}
+  #adminBtn,#freshBtn,#bgmBtn{border:1px solid var(--line);background:rgba(232,182,76,.08);color:var(--goldlt);border-radius:999px;padding:6px 12px;font-family:system-ui;font-size:13px;cursor:pointer;flex:0 0 auto}
   #adminPanel{display:none;position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.62);align-items:center;justify-content:center;padding:16px}
   #adminPanel.open{display:flex}
   .ap-card{width:100%;max-width:430px;max-height:88vh;overflow:auto;background:linear-gradient(180deg,#241407,#160c04);border:1px solid var(--line);border-radius:16px;padding:16px}
@@ -125,7 +125,7 @@
   #screenCard .avpick button.active{border-color:var(--gold);background:rgba(232,182,76,.15)}
   #steps{display:none!important}
   #keys{display:none!important}
-  #adminBtn,#freshBtn{width:36px!important;height:36px!important;padding:0!important;display:inline-grid!important;place-items:center;border-radius:50%!important;font-size:17px}
+  #adminBtn,#freshBtn,#bgmBtn{width:36px!important;height:36px!important;padding:0!important;display:inline-grid!important;place-items:center;border-radius:50%!important;font-size:17px}
   .rbtn{width:64px;height:64px;border-radius:50%!important;border:2px solid var(--gold)!important;background:radial-gradient(circle at 35% 30%,#3a2410,#160c04)!important;color:#fff!important;font-size:28px!important;cursor:pointer;display:inline-grid!important;place-items:center;padding:0!important;min-height:0!important;font-family:system-ui}
   .rbtn.big{width:86px;height:86px;font-size:38px;box-shadow:0 0 22px rgba(232,182,76,.45)}
   .rbtn.small{width:50px;height:50px;font-size:21px;opacity:.92}
@@ -186,7 +186,7 @@ window.addEventListener('load',function(){ setTimeout(function(){
 <div id="loader"><div class="spin"></div><div id="loadmsg">Building Utsav World… v37</div><div id="err"></div>
 <small style="font-family:system-ui;opacity:.7;max-width:560px">Needs internet once (3D library via CDN). Open via <b>http://localhost:8000/ganesh-utsav.html</b> — run <b>python3 -m http.server 8000</b> in this folder.</small></div>
 
-<header><div class="om">ॐ</div><h1>Ganesh Utsav World<small>Home Pooja → Yatra → Nimarjanam</small></h1><button id="freshBtn" title="Start fresh from the road">↺</button><button id="adminBtn" title="Admin timings">⚙️</button><div class="pill" id="pill">…</div></header>
+<header><div class="om">ॐ</div><h1>Ganesh Utsav World<small>Home Pooja → Yatra → Nimarjanam</small></h1><button id="freshBtn" title="Start fresh from the road">↺</button><button id="bgmBtn" title="Music" style="display:none">🎵</button><button id="adminBtn" title="Admin timings">⚙️</button><div class="pill" id="pill">…</div></header>
 <div id="adminPanel"><div class="ap-card">
   <h2>⚙️ Admin — Utsav Schedule</h2>
   <p class="sub">Pooja & Nimarjanam open only in these windows, so the whole city celebrates together. Times are device-local. (Prototype panel — enforced by backend in JAPAM.)</p>
@@ -335,6 +335,47 @@ function dhol(start){ if(start&&!dholOn){ dholOn=true; let beat=0;
       if(beat%2){ const nb=c.createBuffer(1,1200,44100),ch=nb.getChannelData(0); for(let i=0;i<1200;i++)ch[i]=(Math.random()-.5)*(1-i/1200); const ns=c.createBufferSource(); ns.buffer=nb; const ng=c.createGain(); ng.gain.value=.25; const f=c.createBiquadFilter(); f.type='highpass'; f.frequency.value=3000; ns.connect(f).connect(ng).connect(c.destination); ns.start(t); }
       beat++; }catch(e){} },300);
   } else if(!start&&dholOn){ dholOn=false; clearInterval(dholTimer); } }
+
+/* Background songs: drop mp3/m4a/ogg into Songs/ and list them in Songs/playlist.json.
+   Starts on first tap (browser rule). 🎵 in the header mutes. */
+const BGM={ dir:'Songs', files:[], i:0, el:null, on:true, started:false, tapped:false, vol:0.32,
+  paint(){ const b=document.getElementById('bgmBtn'); if(!b) return;
+    b.style.display=this.files.length?'':'none';
+    b.textContent=this.on?'🎵':'🔇'; b.title=this.on?'Mute music':'Play music'; },
+  async exists(name){ return await new Promise(res=>{ const a=new Audio(); a.preload='metadata';
+    const done=ok=>{ a.onloadedmetadata=a.onerror=null; a.src=''; res(ok); };
+    a.onloadedmetadata=()=>done(true); a.onerror=()=>done(false);
+    a.src=this.dir+'/'+encodeURI(name); }); },
+  async load(){
+    try{ if(localStorage.getItem('ganesh_utsav_bgm_off')==='1') this.on=false; }catch(e){}
+    let listed=[];
+    try{ const r=await fetch(this.dir+'/playlist.json',{cache:'no-store'}); if(r.ok){ const j=await r.json();
+      if(Array.isArray(j)) listed=j;
+      else { if(Array.isArray(j.files)) listed=j.files; if(typeof j.volume==='number') this.vol=Math.max(0.05,Math.min(0.8,j.volume)); }
+    } }catch(e){}
+    if(!listed.length) listed=['1.mp3','2.mp3','3.mp3','4.mp3','5.mp3','6.mp3'];
+    const ok=[];
+    for(const f of listed){ const name=String(f||'').replace(/^.*[\\/]/,'').trim(); if(!name) continue;
+      try{ if(await this.exists(name)) ok.push(name); }catch(e){} }
+    this.files=ok; this.paint(); this.tryPlay();
+  },
+  start(){ this.tapped=true; try{ac();}catch(e){} this.tryPlay(); },
+  tryPlay(){ if(!this.tapped||this.started||!this.on||!this.files.length) return;
+    this.started=true; this.play(this.i); },
+  play(i){ if(!this.files.length) return;
+    this.i=((i%this.files.length)+this.files.length)%this.files.length;
+    try{ if(this.el){ this.el.onended=null; this.el.pause(); this.el.src=''; } }catch(e){}
+    const a=new Audio(this.dir+'/'+encodeURI(this.files[this.i]));
+    a.loop=this.files.length===1; a.volume=this.vol; a.preload='auto';
+    a.onended=()=>{ this.play(this.i+1); };
+    this.el=a; if(this.on) a.play().catch(()=>{ this.started=false; }); },
+  toggle(){ this.on=!this.on; try{ localStorage.setItem('ganesh_utsav_bgm_off',this.on?'0':'1'); }catch(e){}
+    this.paint();
+    if(!this.on){ try{ if(this.el) this.el.pause(); }catch(e){} }
+    else { this.tapped=true; if(this.el) this.el.play().catch(()=>{ this.started=false; this.tryPlay(); }); else { this.started=false; this.tryPlay(); } } }
+};
+BGM.load();
+try{ document.getElementById('bgmBtn').onclick=()=>BGM.toggle(); }catch(e){}
 
 /* ============ images + background removal ============ */
 const cutCache=new Map();
@@ -1174,7 +1215,7 @@ addEventListener('keydown',e=>{ if(e.target&&(e.target.tagName==='INPUT'||e.targ
     if(yatra){ yatra=false; dhol(false); yatraBtn.classList.remove('on'); yatraBtn.innerHTML='🥁 Yatra'; toast('You took the reins — Yatra paused'); }
     parkDrive=false; } });
 addEventListener('keyup',e=>{ keys[e.key.toLowerCase()]=false; });
-addEventListener('pointerdown',()=>{ try{ac();}catch(_){} },{passive:true});
+addEventListener('pointerdown',()=>{ try{ac();}catch(_){} try{BGM.start();}catch(_){} },{passive:true});
 /* manual aarti: canvas-only, must circle Bappa — straight drags & off-ring touches restart */
 let aarOn=false,aarLx=0,aarLy=0,aarLa=0,aarAcc=0,aarPath=0;
 function idolScreenPos(out){ try{ const a=anchorPos(); _v.set(a.x,a.y,a.z); _v.project(camera);

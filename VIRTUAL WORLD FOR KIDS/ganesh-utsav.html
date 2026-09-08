@@ -96,9 +96,11 @@
   /* ---- screen-by-screen: only one step visible ---- */
   #hud{display:none!important}
   #guideBar{display:none!important}
-  #drivePad{display:none;position:absolute;right:10px;bottom:10px;z-index:6;display:none;grid-template-columns:repeat(3,58px);grid-template-rows:repeat(2,58px);gap:6px;font-family:system-ui;filter:drop-shadow(0 0 10px rgba(232,182,76,.35))}
-  #drivePad button{border-radius:14px;border:1px solid var(--line);background:rgba(20,10,3,.82);color:var(--goldlt);font-size:22px;touch-action:none}
+  #drivePad{display:none;position:absolute;right:10px;bottom:10px;z-index:6;display:none;grid-template-columns:repeat(3,58px);grid-template-rows:repeat(2,58px);gap:6px;font-family:system-ui;filter:drop-shadow(0 0 10px rgba(232,182,76,.35));-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+  #drivePad button{border-radius:14px;border:1px solid var(--line);background:rgba(20,10,3,.82);color:var(--goldlt);font-size:22px;touch-action:none;display:grid;place-items:center;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-user-drag:none}
   #drivePad button:nth-child(1){grid-column:2}#drivePad button:nth-child(2){grid-column:1;grid-row:2}#drivePad button:nth-child(3){grid-column:2;grid-row:2}#drivePad button:nth-child(4){grid-column:3;grid-row:2}
+  #drivePad button::after{pointer-events:none;-webkit-user-select:none;user-select:none}
+  #drivePad button:nth-child(1)::after{content:'▲'}#drivePad button:nth-child(2)::after{content:'◀'}#drivePad button:nth-child(3)::after{content:'▼'}#drivePad button:nth-child(4)::after{content:'▶'}
   #skyBtn{position:absolute;top:8px;right:8px;z-index:6;border:1px solid var(--line);background:rgba(20,10,3,.85);color:var(--goldlt);border-radius:999px;padding:7px 13px;font-family:system-ui;font-size:12px;font-weight:700;cursor:pointer}
   #skyBtn.on{background:rgba(232,182,76,.3);outline:2px solid var(--goldlt)}
   #skyBar{display:none;position:absolute;top:92px;right:8px;z-index:6;flex-direction:column;gap:6px;max-width:46vw}
@@ -116,7 +118,9 @@
   #wirePanel{display:none;position:absolute;left:50%;bottom:74px;transform:translateX(-50%);z-index:7;background:rgba(30,8,4,.94);border:1px solid #ff6a5a;border-radius:14px;padding:12px 18px;text-align:center;font-family:system-ui;max-width:88%}
   #wirePanel .se{font-size:30px} #wirePanel b{color:#ffb0a0;font-size:14px} #wirePanel small{color:var(--muted);display:block;font-size:11px;margin-bottom:8px}
   #wirePanel .wrow{display:flex;gap:8px;justify-content:center}
-  #wirePanel .wrow button{width:52px;height:52px;border-radius:50%;border:2px solid #ff6a5a;background:rgba(60,12,8,.9);color:#fff;font-size:20px;font-family:system-ui}
+  #wirePanel .wrow button{width:52px;height:52px;border-radius:50%;border:2px solid #ff6a5a;background:rgba(60,12,8,.9);color:#fff;font-size:20px;font-family:system-ui;display:grid;place-items:center;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-user-drag:none}
+  #wirePanel .wrow button::after{pointer-events:none;-webkit-user-select:none;user-select:none}
+  #wirePanel .wrow button[data-w=l]::after{content:'◀'}#wirePanel .wrow button[data-w=f]::after{content:'▲'}#wirePanel .wrow button[data-w=b]::after{content:'▼'}#wirePanel .wrow button[data-w=r]::after{content:'▶'}
   #screenCard .meter{height:9px;border-radius:999px;background:rgba(255,255,255,.1);overflow:hidden;margin:8px 0}
   #screenCard .meter>div{height:100%;width:0;background:linear-gradient(90deg,#e8b64c,#ff7a3c)}
   #screenCard input[type=text]{width:100%;background:#0f0803;border:1px solid var(--line);color:var(--cream);border-radius:10px;padding:11px 12px;font-size:14px;font-family:Georgia,serif;margin:8px 0}
@@ -126,6 +130,10 @@
   #steps{display:none!important}
   #keys{display:none!important}
   #adminBtn,#freshBtn,#bgmBtn{width:36px!important;height:36px!important;padding:0!important;display:inline-grid!important;place-items:center;border-radius:50%!important;font-size:17px}
+  button,#skyBtn,#rockBtn,#normBtn,#fsBtn,.rbtn,#hud button,#guideBtn,#guideSkip{
+    -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-user-drag:none
+  }
+  input,textarea,select{-webkit-user-select:text;user-select:text}
   .rbtn{width:64px;height:64px;border-radius:50%!important;border:2px solid var(--gold)!important;background:radial-gradient(circle at 35% 30%,#3a2410,#160c04)!important;color:#fff!important;font-size:28px!important;cursor:pointer;display:inline-grid!important;place-items:center;padding:0!important;min-height:0!important;font-family:system-ui}
   .rbtn.big{width:86px;height:86px;font-size:38px;box-shadow:0 0 22px rgba(232,182,76,.45)}
   .rbtn.small{width:50px;height:50px;font-size:21px;opacity:.92}
@@ -139,15 +147,39 @@
   #stallPop b,#stallPop small,#stallPop p{display:none!important}
   #wirePanel b,#wirePanel small{display:none!important}
   .schint{text-align:center;font-size:16px;color:var(--goldlt);margin:2px 0 6px;line-height:1.6}
-  #screenCard.center{position:fixed;inset:0;z-index:70;background:rgba(5,2,0,.74);display:grid!important;place-items:center;border:none;border-radius:0}
-  #screenCard.center #screenBody{width:min(92vw,340px);background:linear-gradient(180deg,#241407,#160c04);border:1px solid var(--line);border-radius:20px;padding:26px 22px;text-align:center}
+  #screenCard.center{position:fixed;inset:0;z-index:70;background:rgba(5,2,0,.74);display:grid!important;place-items:center;border:none;border-radius:0;padding:max(8px,env(safe-area-inset-top)) 12px max(12px,env(safe-area-inset-bottom))}
+  #screenCard.center #screenBody{width:min(92vw,340px);max-height:86dvh;overflow:auto;background:linear-gradient(180deg,#241407,#160c04);border:1px solid var(--line);border-radius:20px;padding:26px 22px;text-align:center}
   #screenCard.center input[type=text]{text-align:center}
+  #rotateGate{display:none;position:fixed;inset:0;z-index:210;background:#0d0602;color:var(--goldlt);flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:28px 22px;font-family:system-ui,sans-serif;gap:10px}
+  #rotateGate.show{display:flex}
+  #rotateGate .rg-icon{width:72px;height:118px;border:3px solid var(--gold);border-radius:14px;position:relative;margin-bottom:8px;animation:rgtilt 1.5s ease-in-out infinite}
+  #rotateGate .rg-icon::after{content:'';position:absolute;bottom:10px;left:50%;width:18px;height:4px;margin-left:-9px;background:var(--gold);border-radius:4px}
+  @keyframes rgtilt{0%,18%{transform:rotate(0)}42%,68%{transform:rotate(90deg)}100%{transform:rotate(0)}}
+  #rotateGate h2{font-size:22px;font-weight:800;margin:0;color:var(--goldlt)}
+  #rotateGate p{font-size:14px;color:var(--muted);max-width:280px;line-height:1.45;margin:0}
   #inspectBar{display:none;position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:8;gap:16px;align-items:center;background:rgba(20,10,3,.88);border:1px solid var(--gold);border-radius:999px;padding:8px 16px}
   #wirePanel .wrow button.hot{outline:3px solid #ffd93c;box-shadow:0 0 16px rgba(255,217,60,.7)}
   #skyBar{max-height:52vh;overflow-y:auto}
   /* Phone: fill the screen proportionally; desktop layout unchanged */
   html,body{width:100%;max-width:100%}
   header{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right));padding-top:max(8px,env(safe-area-inset-top))}
+  html.phone-portrait,html.phone-portrait body{overflow:hidden;height:100dvh}
+  html.phone-landscape,html.phone-landscape body{height:100dvh;overflow:hidden;max-width:100%}
+  html.phone-landscape header{position:fixed;top:0;left:0;right:0;z-index:40;padding:4px 10px 4px max(10px,env(safe-area-inset-left))}
+  html.phone-landscape footer{display:none}
+  html.phone-landscape main{padding:0;max-width:none;margin:0;height:100dvh;display:block}
+  html.phone-landscape main>.card:first-child{border:none;border-radius:0;padding:0;height:100dvh;background:#050302}
+  html.phone-landscape #sceneTitle{display:none}
+  html.phone-landscape #view{position:fixed;inset:0;z-index:1;height:100dvh!important;width:100%!important;min-height:0!important;margin:0!important;border:none;border-radius:0}
+  html.phone-landscape #skyBtn{top:max(48px, env(safe-area-inset-top) + 38px)}
+  html.phone-landscape #normBtn{top:max(88px, env(safe-area-inset-top) + 78px)}
+  html.phone-landscape #rockBtn{top:max(128px, env(safe-area-inset-top) + 118px)}
+  html.phone-landscape #skyBar{top:max(168px, env(safe-area-inset-top) + 158px)}
+  html.phone-landscape #drivePad{right:max(10px,env(safe-area-inset-right));bottom:max(10px,env(safe-area-inset-bottom))}
+  html.phone-landscape #fsBtn{left:max(10px,env(safe-area-inset-left));bottom:max(10px,env(safe-area-inset-bottom))}
+  html.phone-landscape #screenCard.center{z-index:80}
+  html.phone-landscape #screenCard.center #screenBody{width:min(86vw,420px);max-height:86dvh}
+  html.phone-landscape #screenCard.plain{bottom:max(8px,env(safe-area-inset-bottom));z-index:45}
   @media(max-width:959px){
     #view{height:min(calc(100dvh - 78px),100%);min-height:220px;margin-top:8px}
     main{padding:8px 10px max(16px,env(safe-area-inset-bottom))}
@@ -167,6 +199,40 @@
     #screenCard.plain{bottom:max(8px,env(safe-area-inset-bottom))}
   }
 </style>
+<script>
+(function(){
+  function phone(){
+    try{ if(window.matchMedia('(pointer:coarse)').matches) return true; }catch(e){}
+    return ('ontouchstart' in window) && Math.min(screen.width, screen.height) < 820;
+  }
+  function portrait(){
+    try{ return window.matchMedia('(orientation: portrait)').matches; }catch(e){}
+    return innerHeight > innerWidth;
+  }
+  window.__utsavOrient=function(){
+    var p=phone(), por=portrait();
+    document.documentElement.classList.toggle('phone-portrait', !!(p&&por));
+    document.documentElement.classList.toggle('phone-landscape', !!(p&&!por));
+    var g=document.getElementById('rotateGate');
+    if(g) g.classList.toggle('show', !!(p&&por));
+    if(p&&!por){
+      try{ if(screen.orientation&&screen.orientation.lock) screen.orientation.lock('landscape').catch(function(){}); }catch(e){}
+    }
+    try{ if(typeof resize==='function') resize(); }catch(e){}
+  };
+  window.addEventListener('orientationchange', function(){ setTimeout(window.__utsavOrient, 80); });
+  window.addEventListener('resize', window.__utsavOrient);
+  try{ if(window.visualViewport) visualViewport.addEventListener('resize', window.__utsavOrient); }catch(e){}
+  window.__utsavOrient();
+  document.addEventListener('DOMContentLoaded', function(){
+    window.__utsavOrient();
+    var g=document.getElementById('rotateGate');
+    if(g) g.addEventListener('click', function(){
+      try{ if(screen.orientation&&screen.orientation.lock) screen.orientation.lock('landscape').catch(function(){}); }catch(e){}
+    });
+  });
+})();
+</script>
 <script async src="https://cdn.jsdelivr.net/npm/es-module-shims@1.10.0/dist/es-module-shims.js"></script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 <script>
@@ -183,6 +249,11 @@ window.addEventListener('load',function(){ setTimeout(function(){
 </script>
 </head>
 <body>
+<div id="rotateGate" aria-live="polite">
+  <div class="rg-icon" aria-hidden="true"></div>
+  <h2>Rotate your phone</h2>
+  <p>Utsav World opens in landscape. Turn your phone sideways to enter.</p>
+</div>
 <div id="loader"><div class="spin"></div><div id="loadmsg">Building Utsav World… v37</div><div id="err"></div>
 <small style="font-family:system-ui;opacity:.7;max-width:560px">Needs internet once (3D library via CDN). Open via <b>http://localhost:8000/ganesh-utsav.html</b> — run <b>python3 -m http.server 8000</b> in this folder.</small></div>
 
@@ -210,7 +281,7 @@ window.addEventListener('load',function(){ setTimeout(function(){
       <div id="st-yatra"><b>🥁</b>Yatra</div>
       <div id="st-nim"><b>🌊</b>Nimarjanam</div>
     </div>
-    <div id="view"><div id="keys">🖱️ drag = 360° view • 🔍 zoom<br>⬆️⬇️⬅️➡️ / WASD drive ratha<br>🔥 Aarti mode: drag to circle flame</div><div id="aartiBadge">🔥<span id="abRound">○○○</span><div class="bar"><div id="abFill"></div></div></div><div id="guideBar"><span id="guideText">🙏 Welcome</span><button id="guideBtn" style="display:none"></button><button id="guideSkip" style="display:none"></button></div><div id="hud"></div><div id="qBoard"><div id="qHead">📋 <span id="qToken"></span></div><div id="qList"></div></div><button id="skyBtn" title="Sky view — watch the whole city live">🌍 Sky</button><button id="rockBtn" title="Asteroid view — the rock our city rides">☄️ Rock</button><button id="normBtn" title="Normal view">🏙️</button><div id="skyBar"></div><button id="fsBtn" title="Fullscreen">⛶</button><div id="wirePanel"><div class="se">⚡</div><b>Live wire on the road!</b><small>Move it aside with the V-stick ◀ ▶, then inch past ▲ ▼</small><div class="wrow"><button data-w="l">◀</button><button data-w="f">▲</button><button data-w="b">▼</button><button data-w="r">▶</button></div></div><div id="stallPop"><div class="se" id="stallEmoji">💧</div><b id="stallName">Stall</b><small id="stallBy"></small><p id="stallDesc"></p><button id="stallOk" class="rbtn big">🙏</button></div><div id="drivePad"><button data-k="arrowup">▲</button><button data-k="arrowleft">◀</button><button data-k="arrowdown">▼</button><button data-k="arrowright">▶</button></div><div id="inspectBar"><button id="inspYes" class="rbtn big">✓</button><button id="inspNo" class="rbtn small">✕</button></div></div>
+    <div id="view"><div id="keys">🖱️ drag = 360° view • 🔍 zoom<br>⬆️⬇️⬅️➡️ / WASD drive ratha<br>🔥 Aarti mode: drag to circle flame</div><div id="aartiBadge">🔥<span id="abRound">○○○</span><div class="bar"><div id="abFill"></div></div></div><div id="guideBar"><span id="guideText">🙏 Welcome</span><button id="guideBtn" style="display:none"></button><button id="guideSkip" style="display:none"></button></div><div id="hud"></div><div id="qBoard"><div id="qHead">📋 <span id="qToken"></span></div><div id="qList"></div></div><button id="skyBtn" title="Sky view — watch the whole city live">🌍 Sky</button><button id="rockBtn" title="Asteroid view — the rock our city rides">☄️ Rock</button><button id="normBtn" title="Normal view">🏙️</button><div id="skyBar"></div><button id="fsBtn" title="Fullscreen">⛶</button><div id="wirePanel"><div class="se">⚡</div><b>Live wire on the road!</b><small>Move it aside with the V-stick ◀ ▶, then inch past ▲ ▼</small><div class="wrow"><button type="button" data-w="l" aria-label="Left"></button><button type="button" data-w="f" aria-label="Forward"></button><button type="button" data-w="b" aria-label="Back"></button><button type="button" data-w="r" aria-label="Right"></button></div></div><div id="stallPop"><div class="se" id="stallEmoji">💧</div><b id="stallName">Stall</b><small id="stallBy"></small><p id="stallDesc"></p><button id="stallOk" class="rbtn big">🙏</button></div><div id="drivePad"><button type="button" data-k="arrowup" aria-label="Forward"></button><button type="button" data-k="arrowleft" aria-label="Left"></button><button type="button" data-k="arrowdown" aria-label="Back"></button><button type="button" data-k="arrowright" aria-label="Right"></button></div><div id="inspectBar"><button id="inspYes" class="rbtn big">✓</button><button id="inspNo" class="rbtn small">✕</button></div></div>
   </section>
 
   <section class="card" id="screenCard"><div id="screenBody"><h2>🙏 Loading…</h2></div></section>
@@ -281,7 +352,7 @@ function migrateState(raw){ const d=defaultState();
   const s=Object.assign(d,raw); s.version=STATE_VERSION;
   if(!(s.idol>=1&&s.idol<=31)) s.idol=5;
   if(s.avatar!=='boy'&&s.avatar!=='girl') s.avatar='boy';
-  s.avatarPicked=!!raw.avatarPicked||!!(raw.name&&String(raw.name).trim());
+  s.avatarPicked=!!raw.avatarPicked;
   if(!['home','ratha','ghat','done'].includes(s.stage)) s.stage='home';
   s.day=Math.max(1,Math.min(9,+s.day||1));
   if(!s.days||typeof s.days!=='object') s.days={};
@@ -296,6 +367,13 @@ function migrateState(raw){ const d=defaultState();
 try{ if(new URLSearchParams(location.search).has('fresh')) localStorage.removeItem(KEY); }catch(e){}
 let S=null; try{ S=migrateState(JSON.parse(localStorage.getItem(KEY))); }catch(e){ S=null; }
 if(!S) S=defaultState();
+try{
+  const _kq=new URLSearchParams(location.search);
+  if((_kq.get('id')||_kq.get('n')) && !S.murtiChosen){
+    S.avatarPicked=false;
+    if(!(S.name&&String(S.name).trim()) && _kq.get('n')) S.name=String(_kq.get('n'));
+  }
+}catch(e){}
 /* ---- SAVE SCHEMA (CURSOR: read before wiring live sync) ----
    KEY='ganesh_utsav_v4' in localStorage. S = {version,idol,avatar,name,stage,
    idolOnRatha,day,days,nimDone,murtiChosen,avatarPicked,sched}.
@@ -1172,37 +1250,48 @@ document.getElementById('nimBtn').onclick=()=>{ if(noGL())return;
   toast(`Joined the city queue — your token #${yi+1} 🎫`); shankh(); refreshNimBtn(); };
 document.getElementById('certBtn').disabled=!NIM.done;
 document.getElementById('certBtn').onclick=async()=>{ try{
-    const c=document.createElement('canvas'); c.width=1000; c.height=880; const x=c.getContext('2d');
-    const gr=x.createLinearGradient(0,0,0,880); gr.addColorStop(0,'#f9edd2'); gr.addColorStop(1,'#e6b45f'); x.fillStyle=gr; x.fillRect(0,0,1000,880);
-    x.strokeStyle='#7a4a10'; x.lineWidth=10; x.strokeRect(24,24,952,832);
-    x.strokeStyle='#a3762a'; x.lineWidth=3; x.strokeRect(40,40,920,800);
+    const W=1000, H=1140;
+    const c=document.createElement('canvas'); c.width=W; c.height=H; const x=c.getContext('2d');
+    x.imageSmoothingEnabled=true; try{ x.imageSmoothingQuality='high'; }catch(e){}
+    const gr=x.createLinearGradient(0,0,0,H); gr.addColorStop(0,'#f9edd2'); gr.addColorStop(1,'#e6b45f'); x.fillStyle=gr; x.fillRect(0,0,W,H);
+    x.strokeStyle='#7a4a10'; x.lineWidth=10; x.strokeRect(24,24,W-48,H-48);
+    x.strokeStyle='#a3762a'; x.lineWidth=3; x.strokeRect(40,40,W-80,H-80);
     x.textAlign='center'; x.fillStyle='#4a2405';
-    x.font='600 54px Georgia'; x.fillText('Ganesh Utsav — Nimarjanam',500,105);
-    x.fillStyle='#7a4a10'; x.font='26px Georgia'; x.fillText('|| Ganapati Bappa Morya ||',500,152);
-    x.fillStyle='#1a6a2a'; x.font='bold 40px Georgia'; x.fillText('Nimarjanam Completed',500,228);
+    x.font='600 48px Georgia'; x.fillText('Ganesh Utsav — Nimarjanam',500,108);
+    x.fillStyle='#7a4a10'; x.font='24px Georgia'; x.fillText('|| Ganapati Bappa Morya ||',500,152);
+    x.fillStyle='#1a6a2a'; x.font='bold 36px Georgia'; x.fillText('Nimarjanam Completed',500,204);
     x.strokeStyle='#a3762a'; x.lineWidth=2;
-    x.beginPath(); x.moveTo(300,258); x.lineTo(700,258); x.stroke();
-    x.fillStyle='#3a1c05'; x.font='bold 46px Georgia'; x.fillText(S.name||'Devotee Parivar',500,338);
-    x.fillStyle='#4a2405'; x.font='24px Georgia'; x.fillText('9 Days of Pooja • Shobha Yatra • Nimarjanam',500,392);
-    x.fillText(new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'}),500,442);
-    try{ const iimg=await loadImg(S.idol); const iw=iimg.naturalWidth||iimg.width||1, ih=iimg.naturalHeight||iimg.height||1;
-      const sc=Math.min(190/iw,190/ih), dw=iw*sc, dh=ih*sc;
-      x.drawImage(iimg,115+(190-dw)/2,295+(190-dh)/2,dw,dh);
-      x.fillStyle='#4a2405'; x.font='20px Georgia'; x.fillText('Murti '+S.idol,210,512);
+    x.beginPath(); x.moveTo(300,228); x.lineTo(700,228); x.stroke();
+    const cx=500, cy=412, R=148;
+    x.save();
+    x.beginPath(); x.arc(cx,cy,R,0,Math.PI*2); x.closePath();
+    x.fillStyle='#fff8ea'; x.fill();
+    try{
+      const iimg=await loadImg(S.idol);
+      const iw=iimg.naturalWidth||iimg.width||1, ih=iimg.naturalHeight||iimg.height||1;
+      const inner=R*2*0.88, sc=Math.min(inner/iw, inner/ih), dw=iw*sc, dh=ih*sc;
+      x.beginPath(); x.arc(cx,cy,R,0,Math.PI*2); x.closePath(); x.clip();
+      x.drawImage(iimg, cx-dw/2, cy-dh/2, dw, dh);
     }catch(e){}
-    x.fillStyle='#b81f2d'; x.font='bold 30px Georgia'; x.fillText('Jai Ganesha 🙏',500,508);
-    x.fillStyle='#1f6eb8'; x.font='22px Georgia'; x.fillText('www.japam.digital',500,558);
-    x.fillStyle='#6a5a48'; x.font='10px Georgia'; x.fillText('Built by',500,606);
-    try{ const logo=await new Promise((res,rej)=>{ const im=new Image(); im.onload=()=>res(im); im.onerror=rej; im.src='Images/A-logo.png'; });
-      x.drawImage(logo,430,616,140,140);
-    }catch(e){ x.fillStyle='#e11d2e'; x.font='italic 700 104px Georgia'; x.fillText('A',492,712);
-      x.strokeStyle='#e11d2e'; x.lineWidth=4;
-      x.beginPath(); x.arc(588,622,15,0,7); x.stroke();
-      x.font='bold 19px Georgia'; x.fillText('R',588,629); }
-    x.fillStyle='#e11d2e'; x.fillRect(382,730,236,13);
-    x.strokeStyle='#e11d2e'; x.lineWidth=3;
-    x.beginPath(); x.arc(636,736,10,0,7); x.stroke();
-    x.fillStyle='#4a2405'; x.font='bold 14px Georgia'; x.fillText('AI Developer India — Aditya Nandagiri',500,792);
+    x.restore();
+    x.beginPath(); x.arc(cx,cy,R,0,Math.PI*2);
+    x.strokeStyle='#7a4a10'; x.lineWidth=7; x.stroke();
+    x.beginPath(); x.arc(cx,cy,R-11,0,Math.PI*2);
+    x.strokeStyle='#e8b64c'; x.lineWidth=3; x.stroke();
+    x.fillStyle='#4a2405'; x.font='20px Georgia'; x.fillText('Murti '+S.idol,500,592);
+    x.fillStyle='#3a1c05'; x.font='bold 44px Georgia'; x.fillText(S.name||'Devotee Parivar',500,650);
+    x.fillStyle='#4a2405'; x.font='22px Georgia'; x.fillText('9 Days of Pooja • Shobha Yatra • Nimarjanam',500,698);
+    x.fillText(new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'}),500,738);
+    x.fillStyle='#b81f2d'; x.font='bold 28px Georgia'; x.fillText('Jai Ganesha 🙏',500,788);
+    x.fillStyle='#1f6eb8'; x.font='20px Georgia'; x.fillText('www.japam.digital',500,828);
+    x.fillStyle='#6a5a48'; x.font='12px Georgia'; x.fillText('Built by',500,872);
+    try{
+      const logo=await new Promise((res,rej)=>{ const im=new Image(); im.onload=()=>res(im); im.onerror=rej; im.src='Images/A-logo.png'; });
+      const lw=logo.naturalWidth||logo.width||1, lh=logo.naturalHeight||logo.height||1;
+      const maxS=168, sc=Math.min(maxS/lw, maxS/lh), dw=lw*sc, dh=lh*sc;
+      x.drawImage(logo, 500-dw/2, 888, dw, dh);
+    }catch(e){}
+    x.fillStyle='#4a2405'; x.font='bold 14px Georgia'; x.fillText('AI Developer India — Aditya Nandagiri',500,1092);
     const a=document.createElement('a'); a.download='nimarjanam-certificate.png'; a.href=c.toDataURL(); a.click(); toast('Certificate downloaded');
   }catch(e){ fail(e.message); } };
 
@@ -1562,10 +1651,11 @@ const LivePresence={ _live:[], connected:false, _url:'', _me:null, _token:'', _s
     this._me=me||this._me||(q.get('id')?{id:q.get('id'),n:q.get('n')||'Guest',f:q.get('f')||'Parivar',c:parseInt(q.get('c')||'12c46a',16)||0x12c46a,av:q.get('av')||'👦'}:null);
     this._url=String(url||q.get('presence')||this._url||'').replace(/\/$/,'');
     if(!this._url){ try{ if(location.port!=='8765') this._url=location.origin+'/api/kids-world/presence'; }catch(e){} }
-    if(this._me&&this._me.n&&!(S.name&&String(S.name).trim())){
-      S.name=String(this._me.n); S.avatarPicked=true; if(this._me.av==='👧') S.avatar='girl';
+    if(this._me){
+      if(this._me.n&&!(S.name&&String(S.name).trim())) S.name=String(this._me.n);
+      if(!S.murtiChosen) S.avatarPicked=false;
       try{ localStorage.setItem(KEY,JSON.stringify(S)); }catch(e){}
-      try{ const ni=document.getElementById('nameIn'); if(ni) ni.value=S.name;
+      try{ const ni=document.getElementById('scName')||document.getElementById('nameIn'); if(ni) ni.value=S.name;
         const mn=document.getElementById('murtiName'); if(mn) mn.textContent='Murti '+S.idol+' • '+S.name; }catch(e){}
       try{ SCKEY=''; renderScreen(); }catch(e){} try{pill();}catch(e){} }
     const others=(raw)=>{ const arr=Array.isArray(raw)?raw.filter(m=>m&&m.id):[]; const mine=this._me&&this._me.id; return mine?arr.filter(m=>m.id!==mine):arr; };
@@ -2025,30 +2115,31 @@ function uiStage(){ try{
 function renderScreen(){
   const sb=document.getElementById('screenBody'); if(!sb) return;
   const _scc=document.getElementById('screenCard'),_mn=document.querySelector('main');
-  if(uiStage()!=='select'){ if(_scc){_scc.style.display='';_scc.classList.add('plain');} if(_mn)_mn.classList.add('full'); }
+  if(uiStage()!=='select'){ if(_scc){_scc.style.display='';_scc.classList.add('plain');_scc.classList.remove('center');} if(_mn)_mn.classList.add('full'); }
   else { if(_scc)_scc.classList.remove('plain'); if(_mn)_mn.classList.remove('full'); }
   const d=D(); const ui=uiStage();
   try{ document.getElementById('strip').classList.toggle('gone',ui!=='select'); }catch(e){}
   let parked=false; try{ parked=GL&&parkedAtLake(); }catch(e){}
   const key=[ui,S.day,d.diya,d.flower,d.modak,d.aarti,d.mantra||0,!!d.done,S.avatar,S.stage,
     Q.on?1:0,NIM.active?1:0,NIM.done?1:0,parked?1:0,yatra?1:0,S.idolOnRatha?1:0,GL?1:0,idolReady?1:0,
-    Q.phase||'',NIM.phase||''].join('|');
+    Q.phase||'',NIM.phase||'',S.avatarPicked?1:0].join('|');
   if(key===SCKEY) return; SCKEY=key;
   const click=id=>{ const el=document.getElementById(id); if(el) el.click(); };
   const hClick=act=>{ const b=hudBtn(act); if(b) b.click(); };
   let h='';
   if(ui==='select'){
-    const needForm=!(S.name&&S.name.trim()&&S.avatarPicked)||!GL;
+    const needName=!(S.name&&S.name.trim()&&S.avatarPicked);
+    const needForm=needName||!GL;
     const _sc2=document.getElementById('screenCard'),_mn2=document.querySelector('main');
-    if(!needForm){ sb.innerHTML=''; if(_sc2){_sc2.style.display='none';_sc2.classList.remove('plain');} if(_mn2)_mn2.classList.add('full'); return; }
-    if(_sc2){_sc2.style.display='';_sc2.classList.remove('plain');} if(_mn2)_mn2.classList.remove('full');
+    if(!needForm){ sb.innerHTML=''; if(_sc2){_sc2.style.display='none';_sc2.classList.remove('plain','center');} if(_mn2)_mn2.classList.add('full'); return; }
+    if(_sc2){_sc2.style.display='';_sc2.classList.remove('plain'); if(needName)_sc2.classList.add('center'); else _sc2.classList.remove('center');} if(_mn2)_mn2.classList.remove('full');
     h=`<div style="font-size:52px">🙏</div>
     <input id="scName" type="text" maxlength="40" placeholder="Name…" />
     <div class="avpick"><button id="scAvB" class="rbtn" title="Boy">👦</button><button id="scAvG" class="rbtn" title="Girl">👧</button><button id="scFresh" class="rbtn small" title="Start fresh">↺</button></div>`;
     sb.innerHTML=h;
     const nm=sb.querySelector('#scName'); if(nm){ nm.value=S.name||''; nm.oninput=e=>{ S.name=e.target.value; save(); }; }
     const syncAv=()=>{ const a=sb.querySelector('#scAvB'),g=sb.querySelector('#scAvG');
-      if(a)a.classList.toggle('active',S.avatar==='boy'); if(g)g.classList.toggle('active',S.avatar==='girl'); };
+      if(a)a.classList.toggle('active',!!S.avatarPicked&&S.avatar==='boy'); if(g)g.classList.toggle('active',!!S.avatarPicked&&S.avatar==='girl'); };
     syncAv();
     const setAv=a=>{ S.avatar=a; S.avatarPicked=true; save(); markAvatarBtns(); if(GL){ buildAvatar(a); if(idolTex){ try{miniIdol.material.map=idolTex;miniIdol.material.needsUpdate=true;}catch(e){} } } pop(); syncAv(); };
     const ab=sb.querySelector('#scAvB'); if(ab)ab.onclick=()=>setAv('boy');
@@ -2268,10 +2359,22 @@ function doMantraTap(){ if(!needWindow())return; const d=D(); if((d.mantra||0)>=
   if(d.mantra%3===0) bell(); else pop();
   toast(`🕉️ ॐ गं गणपतये नमः — ${d.mantra}/11`); }
 document.querySelectorAll('#drivePad button').forEach(b=>{ const k=b.dataset.k;
-  const on=e=>{ e.preventDefault(); keys[k]=true; try{ac();}catch(_){} };
+  const on=e=>{ e.preventDefault(); try{ b.setPointerCapture(e.pointerId); }catch(_){} keys[k]=true; try{ac();}catch(_){} };
   const off=e=>{ e.preventDefault(); keys[k]=false; };
-  b.addEventListener('pointerdown',on); b.addEventListener('pointerup',off);
+  b.addEventListener('pointerdown',on,{passive:false}); b.addEventListener('pointerup',off);
   b.addEventListener('pointerleave',off); b.addEventListener('pointercancel',off); });
+(function(){
+  const block=e=>{ e.preventDefault(); e.stopPropagation(); };
+  document.querySelectorAll('#drivePad button, #wirePanel .wrow button, #skyBtn, #rockBtn, #normBtn, #fsBtn').forEach(b=>{
+    b.addEventListener('contextmenu', block);
+    b.addEventListener('selectstart', block);
+    b.addEventListener('dragstart', block);
+  });
+  document.addEventListener('contextmenu', e=>{
+    const t=e.target;
+    if(t&&t.closest&&t.closest('#drivePad, #wirePanel .wrow, #skyBtn, #rockBtn, #normBtn, #fsBtn, .rbtn')) e.preventDefault();
+  });
+})();
 syncAdminBtn();
 
 /* ---- sky watch + live neighbour yatras + serving stall crews ---- */
@@ -2467,8 +2570,8 @@ function ytourPos(e,out){ const d=e*YTOURTOT; let i=1;
   out.set(YTOUR[i-1][0]+(YTOUR[i][0]-YTOUR[i-1][0])*t,0,YTOUR[i-1][1]+(YTOUR[i][1]-YTOUR[i-1][1])*t); return out; }
 let lakeWaves=[], lakeFx={};
 document.querySelectorAll('#wirePanel button').forEach(b=>{ const k=b.dataset.w;
-  const on=e=>{ e.preventDefault(); WIRE[k]=1; }; const off=e=>{ e.preventDefault(); WIRE[k]=0; };
-  b.addEventListener('pointerdown',on); b.addEventListener('pointerup',off);
+  const on=e=>{ e.preventDefault(); try{ b.setPointerCapture(e.pointerId); }catch(_){} WIRE[k]=1; }; const off=e=>{ e.preventDefault(); WIRE[k]=0; };
+  b.addEventListener('pointerdown',on,{passive:false}); b.addEventListener('pointerup',off);
   b.addEventListener('pointerleave',off); b.addEventListener('pointercancel',off); });
 document.getElementById('fsBtn').onclick=()=>{ try{
   if(document.fullscreenElement) document.exitFullscreen();

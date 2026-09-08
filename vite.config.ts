@@ -137,7 +137,8 @@ export default defineConfig(({ mode }) => {
             const apiProxy = (await import('./api/proxy.js')) as any;
 
             const method = (req.method || 'GET').toUpperCase();
-            if (method !== 'GET' && method !== 'POST') return next();
+            // OPTIONS so the standalone kids world (port 8765) can CORS-call /api/kids-world/presence.
+            if (method !== 'GET' && method !== 'POST' && method !== 'OPTIONS') return next();
 
             const host = req.headers.host || 'localhost:5173';
             const suffix = req.url || '';
@@ -161,10 +162,18 @@ export default defineConfig(({ mode }) => {
               body: method === 'POST' ? bodyText : undefined,
             });
 
-            type ApiProxyModule = { POST?: (r: Request) => Promise<Response>; GET?: (r: Request) => Promise<Response> };
+            type ApiProxyModule = {
+              POST?: (r: Request) => Promise<Response>;
+              GET?: (r: Request) => Promise<Response>;
+              OPTIONS?: (r: Request) => Promise<Response>;
+            };
             const proxy = apiProxy as ApiProxyModule;
             const response: Response =
-              method === 'POST' ? await proxy.POST!(request) : await proxy.GET!(request);
+              method === 'OPTIONS'
+                ? await proxy.OPTIONS!(request)
+                : method === 'POST'
+                  ? await proxy.POST!(request)
+                  : await proxy.GET!(request);
 
             res.statusCode = response.status;
             response.headers.forEach((value, key) => {

@@ -10,7 +10,7 @@ import { getAdminTokenFromRequest, verifyAdminToken } from './_handlers/_lib.js'
 function parseAllowedOrigins() {
   const raw =
     process.env.CORS_ORIGINS ||
-    'http://localhost:5173,http://localhost:5174,https://japam.digital,https://www.japam.digital';
+    'http://localhost:5173,http://localhost:5174,http://127.0.0.1:8765,http://localhost:8765,https://japam.digital,https://www.japam.digital';
   return raw
     .split(',')
     .map((o) => o.trim())
@@ -107,6 +107,7 @@ import * as userJapaPdfContactHandler from './_handlers/user/japa-pdf-contact.js
 import * as userReferralEventHandler from './_handlers/user/referral-event.js';
 import * as userReferralAttributeHandler from './_handlers/user/referral-attribute.js';
 import * as publicActiveUsersHandler from './_handlers/public/active-users.js';
+import * as kidsWorldPresenceHandler from './_handlers/kids-world/presence.js';
 import * as publicPushpaAradhanaLeaderboardHandler from './_handlers/public/pushpa-abhisheka-leaderboard.js';
 import * as publicJapamCounterLeaderboardHandler from './_handlers/public/japam-counter-leaderboard.js';
 import * as userJapamCounterIncrementHandler from './_handlers/user/japam-counter-increment.js';
@@ -265,6 +266,8 @@ const HANDLERS = {
   'POST user/referral-event': userReferralEventHandler,
   'POST user/referral-attribute': userReferralAttributeHandler,
   'GET public/active-users': publicActiveUsersHandler,
+  'GET kids-world/presence': kidsWorldPresenceHandler,
+  'POST kids-world/presence': kidsWorldPresenceHandler,
   'GET public/pushpa-abhisheka-leaderboard': publicPushpaAradhanaLeaderboardHandler,
   'GET public/japam-counter-leaderboard': publicJapamCounterLeaderboardHandler,
   'POST user/japam-counter-increment': userJapamCounterIncrementHandler,

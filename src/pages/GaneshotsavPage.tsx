@@ -39,6 +39,7 @@ import {
 } from '../utils/removeBackground';
 import { formatIstDateTime } from '../lib/japamCounterIst';
 import { auth, isFirebaseConfigured } from '../lib/firebase';
+import { isKidsWorldEnabled, kidsWorldHref } from '../lib/kidsWorld';
 
 const VIDEO_SEEN_KEY = 'japam_ganeshotsav_video';
 const HANDWRITING_SAMPLE_SRC = '/SAMPLE%20NAMA%20IMAGE.png';
@@ -122,6 +123,7 @@ export function GaneshotsavPage() {
   const signInPending = useAuthStore((s) => s.signInPending);
   const firebaseUser = auth?.currentUser ?? null;
   const authRestoring = authLoading || signInPending || (!user && !!firebaseUser);
+  const showForKids = isKidsWorldEnabled();
   const [status, setStatus] = useState<SatsangStatus | null>(null);
   const [step, setStep] = useState<Step>('boot');
   const [code, setCode] = useState('');
@@ -861,13 +863,36 @@ export function GaneshotsavPage() {
               >
                 {joining ? t('ganeshotsav.joining') : t('ganeshotsav.join')}
               </motion.button>
-              <button
-                type="button"
-                onClick={() => navigate('/menu', { replace: true })}
-                className="mt-3 w-full max-w-sm py-2.5 text-sm font-medium text-amber-200/75 hover:text-amber-100 underline-offset-4 hover:underline"
-              >
-                {t('ganeshotsav.skip')}
-              </button>
+              <div className={`mt-3 w-full max-w-sm ${showForKids ? 'flex gap-2' : ''}`}>
+                <button
+                  type="button"
+                  onClick={() => navigate('/menu', { replace: true })}
+                  className={`${showForKids ? 'flex-1' : 'w-full'} py-2.5 text-sm font-medium text-amber-200/75 hover:text-amber-100 underline-offset-4 hover:underline`}
+                >
+                  {t('ganeshotsav.skip')}
+                </button>
+                {showForKids ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    void (async () => {
+                      const token = await user.getIdToken();
+                      window.location.href = kidsWorldHref({
+                        uid: user.uid,
+                        displayName: user.displayName,
+                        token,
+                      });
+                    })();
+                  }}
+                  className="ganeshotsav-for-kids relative isolate flex-[1.2] overflow-hidden rounded-xl p-[2px] text-sm font-bold tracking-wide text-white"
+                >
+                  <span className="ganeshotsav-for-kids-bolt" aria-hidden />
+                  <span className="ganeshotsav-for-kids-face relative z-10 block rounded-[10px] py-2.5">
+                    {t('ganeshotsav.forKids', { defaultValue: 'For KIDS' })}
+                  </span>
+                </button>
+                ) : null}
+              </div>
             </>
           ) : null}
         </div>

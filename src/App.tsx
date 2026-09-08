@@ -27,7 +27,11 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const [screen, setScreen] = useState<'splash' | 'landing'>('splash');
-  const [festivalOpen, setFestivalOpen] = useState<boolean | null>(() => peekFestivalLandingOpen());
+  // Only trust a cached "open" for instant paint. A cached "closed" must wait for the
+  // network — otherwise a stale localStorage value keeps showing the main site during Utsav.
+  const [festivalOpen, setFestivalOpen] = useState<boolean | null>(() =>
+    peekFestivalLandingOpen() === true ? true : null,
+  );
 
   // Auth + data stores are bootstrapped globally in AuthProvider (mounted for all routes).
   // App is just the splash/landing entry route.
@@ -36,7 +40,12 @@ function App() {
   useEffect(() => {
     let cancelled = false;
     fetchSatsangLandingOpen().then((open) => {
-      if (cancelled || open === null) return;
+      if (cancelled) return;
+      if (open === null) {
+        const peek = peekFestivalLandingOpen();
+        setFestivalOpen(peek === true);
+        return;
+      }
       rememberFestivalLandingOpen(open);
       setFestivalOpen(open);
     });

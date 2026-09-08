@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useProfileStore } from '../../store/profileStore';
 import { useAuthStore } from '../../store/authStore';
 
 export function ProfileNamePrompt() {
+  const { pathname } = useLocation();
+  // Festival home + /ganeshotsav collect devotee name in-flow; never block those screens.
+  const onFestivalEntry = pathname === '/' || pathname === '/ganeshotsav';
+
   const user = useAuthStore((s) => s.user);
   const profileLoaded = useProfileStore((s) => s.loaded);
   const displayName = useProfileStore((s) => s.displayName);
@@ -16,6 +21,10 @@ export function ProfileNamePrompt() {
   const [promptedUid, setPromptedUid] = useState<string | null>(null);
 
   useEffect(() => {
+    if (onFestivalEntry) {
+      setOpen(false);
+      return;
+    }
     if (!user?.uid) {
       setOpen(false);
       setPromptedUid(null);
@@ -33,9 +42,19 @@ export function ProfileNamePrompt() {
     setError(null);
     setOpen(true);
     setPromptedUid(user.uid);
-  }, [user?.uid, user?.displayName, user?.email, profileLoaded, hasSavedDisplayName, displayName, promptedUid, open]);
+  }, [
+    onFestivalEntry,
+    user?.uid,
+    user?.displayName,
+    user?.email,
+    profileLoaded,
+    hasSavedDisplayName,
+    displayName,
+    promptedUid,
+    open,
+  ]);
 
-  if (!open || !user?.uid) return null;
+  if (onFestivalEntry || !open || !user?.uid) return null;
 
   const onSave = async (e: React.FormEvent) => {
     e.preventDefault();

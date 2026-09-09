@@ -39,5 +39,6 @@ export function pathnameToUsageKey(pathname: string): string | null {
   if (pathname === '/occasion/anniversary/join') return 'page_anniversary_join';
   if (pathname === '/priest') return 'page_priest';
   if (pathname === '/priest-login') return 'page_priest_login';
+  if (pathname === '/ganeshotsav' || pathname === '/ganeshotsav/') return 'page_ganeshotsav';
   return null;
 }

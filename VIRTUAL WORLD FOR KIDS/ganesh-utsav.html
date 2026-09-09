@@ -7,9 +7,10 @@
 <meta name="theme-color" content="#0d0602" />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪔</text></svg>" />
 <style>
-  :root{--gold:#e8b64c;--goldlt:#f5d67b;--cream:#f3e2c2;--muted:#b89a6e;--line:rgba(232,182,76,.28)}
+  :root{--gold:#e8b64c;--goldlt:#f5d67b;--cream:#f3e2c2;--muted:#b89a6e;--line:rgba(232,182,76,.28);--hdr:52px;--pad:clamp(44px,12vmin,58px)}
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  body{background:#0d0602;color:var(--cream);font-family:Georgia,Palatino,serif;overflow-x:hidden}
+  html{height:100%}
+  body{background:#0d0602;color:var(--cream);font-family:Georgia,Palatino,serif;overflow-x:hidden;min-height:100%;min-height:100dvh}
   header{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:12px;padding:10px 16px;background:rgba(13,6,2,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
   header .om{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-size:22px;background:radial-gradient(circle at 35% 30%,#ffe9a8,#c47a12);color:#3a1500;flex:0 0 auto}
   header h1{font-size:17px;font-weight:600} header h1 small{display:block;font-family:system-ui;font-size:10.5px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
@@ -29,7 +30,7 @@
   #steps div{flex:1;font-family:system-ui;font-size:10px;text-align:center;border:1px solid var(--line);border-radius:9px;padding:6px 1px;color:var(--muted);background:rgba(255,255,255,.02)}
   #steps div b{display:block;font-size:16px} #steps div.now{border-color:var(--gold);color:var(--goldlt);background:rgba(232,182,76,.13)} #steps div.done{border-color:#3fae62;color:#9fe8b8}
   #view{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line);height:min(66vh,560px);min-height:420px;background:#050302;margin-top:10px}
-  #view canvas{display:block}
+  #view canvas{display:block;width:100%!important;height:100%!important;touch-action:none}
   #hud{position:absolute;left:8px;right:8px;bottom:76px;display:flex;gap:6px;flex-wrap:wrap;z-index:5}
   #strip.gone{display:none}
   #strip{display:none!important}
@@ -88,7 +89,7 @@
   .qrow b{color:var(--goldlt);font-size:8px} .qrow small{margin-left:auto;color:var(--muted);white-space:nowrap;font-size:9px}
   .qrow.now{background:rgba(232,182,76,.14);border-radius:5px} .qrow.done{opacity:.6}
   .qrow.me{border:1px solid var(--gold);border-radius:5px}
-  #stallPop{display:none;position:absolute;left:50%;bottom:74px;transform:translateX(-50%);z-index:7;background:rgba(20,10,3,.94);border:1px solid var(--gold);border-radius:14px;padding:12px 18px;text-align:center;font-family:system-ui;max-width:88%}
+  #stallPop{display:none;position:absolute;left:50%;bottom:74px;transform:translateX(-50%);z-index:70;background:rgba(20,10,3,.94);border:1px solid var(--gold);border-radius:14px;padding:12px 18px;text-align:center;font-family:system-ui;max-width:88%}
   #stallPop .se{font-size:32px} #stallPop b{color:var(--goldlt);font-size:14px} #stallPop small{color:var(--muted);display:block;font-size:11px} #stallPop p{font-size:12px;color:var(--cream);margin:4px 0 8px}
   #stallOk{border:none;border-radius:11px;padding:11px 22px;font-size:13px;font-weight:700;cursor:pointer;font-family:system-ui;background:linear-gradient(180deg,#f0c35e,#b97a1a);color:#241102}
   .th{position:relative} .th.taken{opacity:.5}
@@ -96,8 +97,9 @@
   /* ---- screen-by-screen: only one step visible ---- */
   #hud{display:none!important}
   #guideBar{display:none!important}
-  #drivePad{display:none;position:absolute;right:10px;bottom:10px;z-index:6;display:none;grid-template-columns:repeat(3,58px);grid-template-rows:repeat(2,58px);gap:6px;font-family:system-ui;filter:drop-shadow(0 0 10px rgba(232,182,76,.35))}
-  #drivePad button{border-radius:14px;border:1px solid var(--line);background:rgba(20,10,3,.82);color:var(--goldlt);font-size:22px;touch-action:none}
+  #drivePad{display:none;position:absolute;right:10px;bottom:10px;z-index:60;grid-template-columns:repeat(3,var(--pad));grid-template-rows:repeat(2,var(--pad));gap:6px;font-family:system-ui;filter:drop-shadow(0 0 10px rgba(232,182,76,.35));pointer-events:auto}
+  #drivePad.on{display:grid}
+  #drivePad button{border-radius:14px;border:1px solid var(--line);background:rgba(20,10,3,.82);color:var(--goldlt);font-size:22px;touch-action:none;min-width:44px;min-height:44px}
   #drivePad button:nth-child(1){grid-column:2}#drivePad button:nth-child(2){grid-column:1;grid-row:2}#drivePad button:nth-child(3){grid-column:2;grid-row:2}#drivePad button:nth-child(4){grid-column:3;grid-row:2}
   #drivePad,#drivePad button,#wirePanel,#wirePanel button{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
   #skyBtn{position:absolute;top:8px;right:8px;z-index:6;border:1px solid var(--line);background:rgba(20,10,3,.85);color:var(--goldlt);border-radius:999px;padding:7px 13px;font-family:system-ui;font-size:12px;font-weight:700;cursor:pointer}
@@ -108,18 +110,21 @@
   #normBtn{position:absolute;top:48px;right:8px;z-index:6;border:1px solid var(--line);background:rgba(20,10,3,.85);color:var(--goldlt);border-radius:999px;padding:7px 12px;font-family:system-ui;font-size:13px;cursor:pointer}
   #rockBtn{position:absolute;top:88px;right:8px;z-index:6;border:1px solid var(--line);background:rgba(20,10,3,.85);color:var(--goldlt);border-radius:999px;padding:7px 12px;font-family:system-ui;font-size:13px;font-weight:700;cursor:pointer}
   #rockBtn.on{background:rgba(232,182,76,.3);outline:2px solid var(--goldlt)}
-  #screenCard.plain{position:fixed;left:50%;bottom:12px;transform:translateX(-50%);z-index:45;background:transparent!important;border:none!important;box-shadow:none!important;width:auto;max-width:94vw;padding:0}
+  #screenCard.plain{position:fixed;left:50%;bottom:12px;transform:translateX(-50%);z-index:45;background:transparent!important;border:none!important;box-shadow:none!important;width:auto;max-width:94vw;padding:0;pointer-events:none}
+  #screenCard.plain #screenBody,#screenCard.plain button,#screenCard.plain input,#screenCard.plain .meter,#screenCard.plain .rbtnrow,#screenCard.plain .schint{pointer-events:auto}
   main.full{grid-template-columns:1fr!important}
   #screenCard.plain .meter{max-width:220px;margin:6px auto}
   #screenCard.plain .schint{text-shadow:0 2px 6px #000}
   #screenCard.plain .rbtnrow{margin-top:6px}
   #skyBar button{border:1px solid var(--line);background:rgba(20,10,3,.88);color:var(--cream);border-radius:999px;padding:8px 13px;font-family:system-ui;font-size:11.5px;cursor:pointer;text-align:left;white-space:nowrap}
   #skyBar button.on{border-color:var(--gold);background:rgba(232,182,76,.22);color:var(--goldlt)}
-  #fsBtn{position:absolute;left:10px;bottom:10px;z-index:6;border:1px solid var(--line);background:rgba(20,10,3,.85);color:var(--goldlt);border-radius:999px;padding:7px 12px;font-family:system-ui;font-size:13px;cursor:pointer}
-  #volBar{position:absolute;left:10px;bottom:48px;z-index:6;display:flex;align-items:center;gap:4px;background:rgba(20,10,3,.85);border:1px solid var(--line);border-radius:999px;padding:3px 10px 3px 3px;font-family:system-ui;touch-action:none}
+  #fsBtn{position:absolute;left:10px;bottom:10px;z-index:80;border:1px solid var(--line);background:rgba(20,10,3,.85);color:var(--goldlt);border-radius:999px;padding:7px 12px;font-family:system-ui;font-size:13px;cursor:pointer}
+  #volBar{position:absolute;left:10px;bottom:48px;z-index:80;display:flex;align-items:center;gap:4px;background:rgba(20,10,3,.85);border:1px solid var(--line);border-radius:999px;padding:3px 8px 3px 3px;font-family:system-ui;touch-action:none}
   #volMute{border:none;background:transparent;color:var(--goldlt);font-size:16px;cursor:pointer;width:30px;height:30px;padding:0;line-height:1}
-  #volSlider{width:92px;height:18px;accent-color:var(--gold);cursor:pointer;margin:0}
-  #wirePanel{display:none;position:absolute;left:50%;bottom:74px;transform:translateX(-50%);z-index:7;background:rgba(30,8,4,.94);border:1px solid #ff6a5a;border-radius:14px;padding:12px 18px;text-align:center;font-family:system-ui;max-width:88%}
+  #volSlider{width:84px;height:18px;accent-color:var(--gold);cursor:pointer;margin:0}
+  #djBtn{border:1px solid var(--line);background:transparent;color:var(--goldlt);border-radius:999px;padding:0 9px;height:26px;font-family:system-ui;font-size:11px;font-weight:800;letter-spacing:.06em;cursor:pointer;line-height:1}
+  #djBtn.on{background:linear-gradient(180deg,#f0c35e,#b97a1a);color:#241102;border-color:#ffe9a8}
+  #wirePanel{display:none;position:absolute;left:50%;bottom:74px;transform:translateX(-50%);z-index:70;background:rgba(30,8,4,.94);border:1px solid #ff6a5a;border-radius:14px;padding:12px 18px;text-align:center;font-family:system-ui;max-width:88%}
   #wirePanel .se{font-size:30px} #wirePanel b{color:#ffb0a0;font-size:14px} #wirePanel small{color:var(--muted);display:block;font-size:11px;margin-bottom:8px}
   #wirePanel .wrow{display:flex;gap:8px;justify-content:center}
   #wirePanel .wrow button{width:52px;height:52px;border-radius:50%;border:2px solid #ff6a5a;background:rgba(60,12,8,.9);color:#fff;font-size:20px;font-family:system-ui}
@@ -148,9 +153,42 @@
   #screenCard.center{position:fixed;inset:0;z-index:70;background:rgba(5,2,0,.74);display:grid!important;place-items:center;border:none;border-radius:0}
   #screenCard.center #screenBody{width:min(92vw,340px);background:linear-gradient(180deg,#241407,#160c04);border:1px solid var(--line);border-radius:20px;padding:26px 22px;text-align:center}
   #screenCard.center input[type=text]{text-align:center}
-  #inspectBar{display:none;position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:8;gap:16px;align-items:center;background:rgba(20,10,3,.88);border:1px solid var(--gold);border-radius:999px;padding:8px 16px}
+  #inspectBar{display:none;position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:65;gap:16px;align-items:center;background:rgba(20,10,3,.88);border:1px solid var(--gold);border-radius:999px;padding:8px 16px}
   #wirePanel .wrow button.hot{outline:3px solid #ffd93c;box-shadow:0 0 16px rgba(255,217,60,.7)}
   #skyBar{max-height:52vh;overflow-y:auto}
+  @media (min-width:960px) and (max-height:700px){
+    #view{height:min(72dvh,520px);min-height:240px}
+  }
+  @media (max-width:959px){
+    html,body{height:100%;height:100dvh;overflow:hidden;overscroll-behavior:none}
+    header{padding:6px 10px;padding-top:max(6px,env(safe-area-inset-top));gap:8px}
+    header .om{width:34px;height:34px;font-size:18px}
+    header .pill{font-size:10px;padding:4px 8px;max-width:44vw;overflow:hidden;text-overflow:ellipsis}
+    main{max-width:none;margin:0;padding:0;height:calc(100vh - var(--hdr,52px));height:calc(100dvh - var(--hdr,52px));display:block;overflow:hidden}
+    main>.card:first-of-type{height:100%;display:flex;flex-direction:column;margin:0;border-radius:0;border:none;padding:0;background:#050302}
+    #sceneTitle{display:none}
+    #view{flex:1 1 auto;width:100%;height:auto!important;min-height:0!important;max-height:none;margin:0;border-radius:0;border:none}
+    footer{display:none}
+    #volBar{top:8px;left:max(8px,env(safe-area-inset-left));bottom:auto}
+    #fsBtn{top:46px;left:max(8px,env(safe-area-inset-left));bottom:auto}
+    #qBoard{top:86px;left:max(6px,env(safe-area-inset-left))}
+    #drivePad{position:fixed;right:max(8px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom))}
+    #screenCard.plain{left:max(8px,env(safe-area-inset-left));right:calc(16px + 3 * var(--pad) + 12px + env(safe-area-inset-right,0px));transform:none;max-width:none;width:auto;bottom:max(10px,env(safe-area-inset-bottom))}
+    #screenCard.plain .rbtnrow{justify-content:flex-start;flex-wrap:wrap;gap:10px}
+    #screenCard.center #screenBody{width:min(92vw,340px);max-height:min(88dvh,92svh);overflow-y:auto;-webkit-overflow-scrolling:touch}
+    .rbtn.big{width:72px;height:72px;font-size:32px}
+    .rbtn{width:56px;height:56px;font-size:24px}
+    .rbtn.small{width:46px;height:46px;font-size:18px}
+    #toast{bottom:max(16px,env(safe-area-inset-bottom))}
+  }
+  @media (max-width:959px) and (max-height:430px){
+    :root{--pad:clamp(44px,10vmin,48px)}
+    header{padding:4px 8px}
+    #volBar #volSlider{width:64px}
+    .rbtn.big{width:56px;height:56px;font-size:26px}
+    .rbtn{width:44px;height:44px;font-size:20px}
+    .rbtn.small{width:40px;height:40px;font-size:16px}
+  }
 </style>
 <script async src="https://cdn.jsdelivr.net/npm/es-module-shims@1.10.0/dist/es-module-shims.js"></script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
@@ -195,7 +233,7 @@ window.addEventListener('load',function(){ setTimeout(function(){
       <div id="st-yatra"><b>🥁</b>Yatra</div>
       <div id="st-nim"><b>🌊</b>Nimarjanam</div>
     </div>
-    <div id="view"><div id="keys">🖱️ drag = 360° view • 🔍 zoom<br>⬆️⬇️⬅️➡️ / WASD drive ratha<br>🔥 Aarti mode: drag to circle flame</div><div id="aartiBadge">🔥<span id="abRound">○○○</span><div class="bar"><div id="abFill"></div></div></div><div id="guideBar"><span id="guideText">🙏 Welcome</span><button id="guideBtn" style="display:none"></button><button id="guideSkip" style="display:none"></button></div><div id="hud"></div><div id="qBoard"><div id="qHead">📋 <span id="qToken"></span></div><div id="qList"></div></div><button id="skyBtn" title="Sky view — watch the whole city live">🌍 Sky</button><button id="rockBtn" title="Asteroid view — the rock our city rides">☄️ Rock</button><button id="normBtn" title="Normal view">🏙️</button><div id="skyBar"></div><button id="fsBtn" title="Fullscreen">⛶</button><div id="volBar"><button type="button" id="volMute" title="Mute" aria-label="Mute">🔊</button><input id="volSlider" type="range" min="0" max="100" step="1" value="32" aria-label="Volume" /></div><div id="wirePanel"><div class="se">⚡</div><b>Live wire on the road!</b><small>Move it aside with the V-stick ◀ ▶, then inch past ▲ ▼</small><div class="wrow"><button data-w="l">◀</button><button data-w="f">▲</button><button data-w="b">▼</button><button data-w="r">▶</button></div></div><div id="stallPop"><div class="se" id="stallEmoji">💧</div><b id="stallName">Stall</b><small id="stallBy"></small><p id="stallDesc"></p><button id="stallOk" class="rbtn big">🙏</button></div><div id="drivePad"><button data-k="arrowup">▲</button><button data-k="arrowleft">◀</button><button data-k="arrowdown">▼</button><button data-k="arrowright">▶</button></div><div id="inspectBar"><button id="inspYes" class="rbtn big">✓</button><button id="inspNo" class="rbtn small">✕</button></div></div>
+    <div id="view"><div id="keys">🖱️ drag = 360° view • 🔍 zoom<br>⬆️⬇️⬅️➡️ / WASD drive ratha<br>🔥 Aarti mode: drag to circle flame</div><div id="aartiBadge">🔥<span id="abRound">○○○</span><div class="bar"><div id="abFill"></div></div></div><div id="guideBar"><span id="guideText">🙏 Welcome</span><button id="guideBtn" style="display:none"></button><button id="guideSkip" style="display:none"></button></div><div id="hud"></div><div id="qBoard"><div id="qHead">📋 <span id="qToken"></span></div><div id="qList"></div></div><button id="skyBtn" title="Sky view — watch the whole city live">🌍 Sky</button><button id="rockBtn" title="Asteroid view — the rock our city rides">☄️ Rock</button><button id="normBtn" title="Normal view">🏙️</button><div id="skyBar"></div><button id="fsBtn" title="Fullscreen">⛶</button><div id="volBar"><button type="button" id="volMute" title="Mute" aria-label="Mute">🔊</button><input id="volSlider" type="range" min="0" max="100" step="1" value="32" aria-label="Volume" /><button type="button" id="djBtn" title="Classical music — tap for DJ" aria-label="DJ music" aria-pressed="false">DJ</button></div><div id="wirePanel"><div class="se">⚡</div><b>Live wire on the road!</b><small>Move it aside with the V-stick ◀ ▶, then inch past ▲ ▼</small><div class="wrow"><button data-w="l">◀</button><button data-w="f">▲</button><button data-w="b">▼</button><button data-w="r">▶</button></div></div><div id="stallPop"><div class="se" id="stallEmoji">💧</div><b id="stallName">Stall</b><small id="stallBy"></small><p id="stallDesc"></p><button id="stallOk" class="rbtn big">🙏</button></div><div id="drivePad"><button data-k="arrowup" aria-label="Forward">▲</button><button data-k="arrowleft" aria-label="Left">◀</button><button data-k="arrowdown" aria-label="Back">▼</button><button data-k="arrowright" aria-label="Right">▶</button></div><div id="inspectBar"><button id="inspYes" class="rbtn big">✓</button><button id="inspNo" class="rbtn small">✕</button></div></div>
   </section>
 
   <section class="card" id="screenCard"><div id="screenBody"><h2>🙏 Loading…</h2></div></section>
@@ -333,38 +371,61 @@ function renderSteps(){ const order=['home','ratha','ghat','nim']; const idx={ho
 /* ============ audio ============ */
 let AC=null; const ac=()=>{ if(!AC) AC=new (window.AudioContext||window.webkitAudioContext)(); if(AC.state==='suspended')AC.resume(); return AC; };
 const VOL_KEY='ganesh_utsav_vol';
+const PACK_KEY='ganesh_utsav_pack';
 function readVol(){ try{ const raw=localStorage.getItem(VOL_KEY); if(!raw) return {level:0.32, muted:false};
   if(raw[0]==='{'){ const o=JSON.parse(raw); const level=Math.max(0,Math.min(1, Number(o.level))); return {level:Number.isFinite(level)?level:0.32, muted:!!o.muted}; }
   const n=parseFloat(raw); if(Number.isFinite(n)) return {level:Math.max(0,Math.min(1,n)), muted:false}; }catch(e){}
   return {level:0.32, muted:false}; }
+function readPack(){ try{ const p=String(localStorage.getItem(PACK_KEY)||'').toLowerCase(); if(p==='dj') return 'dj'; }catch(e){} return 'classical'; }
 const _vol0=readVol();
 const BGM={
   files:{ world:'BG music 1 .mp3', sky:'BG MUSIC SKY.mp3', crane:'cranenimarjanam.mp3', yatra1:'YATRA STARTS1.mp3', yatra2:'YATRA STARTS2.mp3' },
   world:null, sky:null, crane:null, yatra1:null, yatra2:null,
+  pack:readPack(),
   level:_vol0.level, muted:_vol0.muted, mode:'world', tok:0, craneOn:false, skyWant:false, yatraWant:false, yatraIdx:0, current:null,
   keys(){ return ['world','sky','crane','yatra1','yatra2']; },
+  folder(){ return this.pack==='dj'?'DJ':'classical'; },
+  fileOf(which){ return this.files[which]||this.files.world; },
+  src(which, folder){ return encodeURI((folder||this.folder())+'/'+this.fileOf(which)); },
   out(){ return (this.muted||this.level<=0.001)?0:this.level; },
   craneOut(){ return Math.min(1, this.out()*1.3); },
   desired(){ if(this.craneOn) return 'crane'; if(this.skyWant) return 'sky'; if(this.yatraWant) return this.yatraIdx===1?'yatra2':'yatra1'; return 'world'; },
   apply(){ const v=this.out(), c=this.craneOut();
     this.keys().forEach(k=>{ const a=this[k]; if(a) a.volume=k==='crane'?c:v; }); },
   save(){ try{ localStorage.setItem(VOL_KEY, JSON.stringify({level:this.level, muted:this.muted})); }catch(e){} },
-  syncUi(){ const s=document.getElementById('volSlider'), m=document.getElementById('volMute');
+  savePack(){ try{ localStorage.setItem(PACK_KEY, this.pack); }catch(e){} },
+  syncUi(){ const s=document.getElementById('volSlider'), m=document.getElementById('volMute'), d=document.getElementById('djBtn');
     if(s) s.value=String(Math.round(this.level*100));
-    if(m){ const off=!this.out(); m.textContent=off?'🔇':'🔊'; m.title=off?'Unmute':'Mute'; m.setAttribute('aria-pressed', off?'true':'false'); } },
+    if(m){ const off=!this.out(); m.textContent=off?'🔇':'🔊'; m.title=off?'Unmute':'Mute'; m.setAttribute('aria-pressed', off?'true':'false'); }
+    if(d){ const on=this.pack==='dj'; d.classList.toggle('on', on); d.setAttribute('aria-pressed', on?'true':'false');
+      d.title=on?'DJ music — tap for classical':'Classical music — tap for DJ'; } },
   setLevel(n){ this.level=Math.max(0,Math.min(1,+n||0)); this.muted=this.level<=0.001; this.apply(); this.save(); this.syncUi(); if(this.out()) this.refresh(); },
   toggleMute(){ if(!this.out()){ this.muted=false; if(this.level<=0.001) this.level=0.32; } else this.muted=true;
     this.apply(); this.save(); this.syncUi(); if(this.out()) this.refresh(); },
+  dump(){ this.keys().forEach(k=>{ const a=this[k]; if(!a) return; this.stop(a);
+    try{ a.removeAttribute('src'); a.load(); }catch(e){} this[k]=null; }); this.current=null; },
+  setPack(pack){ const next=pack==='dj'?'dj':'classical'; if(next===this.pack&&this[this.desired()]) return;
+    this.pack=next; this._djMiss=0; this.savePack(); this.dump(); this.syncUi(); this.refresh(); },
+  togglePack(){ this.setPack(this.pack==='dj'?'classical':'dj'); },
   stop(a){ if(!a) return; a.want=false; try{a.pause();}catch(e){} try{a.currentTime=0;}catch(e){} },
   pauseKeep(a){ if(!a) return; a.want=false; try{a.pause();}catch(e){} },
   el(which){ let a=this[which]; if(a) return a;
-    const file=this.files[which]||this.files.world;
-    a=new Audio(encodeURI(file)); a.loop=!(which==='yatra1'||which==='yatra2'); a.preload='auto';
+    const file=this.fileOf(which);
+    a=new Audio(); a.loop=!(which==='yatra1'||which==='yatra2'); a.preload='auto';
     a.volume=which==='crane'?this.craneOut():this.out();
+    a.addEventListener('error',()=>{
+      if(this.pack==='dj'&&a.dataset.fb!=='c'&&a.dataset.fb!=='r'){
+        a.dataset.fb='c';
+        try{ if(!this._djMiss){ this._djMiss=1; toast('DJ songs not in yet — playing classical'); } }catch(e){}
+        try{ a.src=this.src(which,'classical'); }catch(e){}
+        return;
+      }
+      if(a.dataset.fb!=='r'){ a.dataset.fb='r'; try{ a.src=encodeURI(file); }catch(e){} }
+    });
     if(which==='yatra1'||which==='yatra2'){
       a.addEventListener('ended',()=>{ if(!this.yatraWant||this.craneOn||this.skyWant) return;
         this.yatraIdx=which==='yatra1'?1:0; this.current=null; this.refresh(); }); }
-    this[which]=a; return a; },
+    a.src=this.src(which); this[which]=a; return a; },
   go(which){ const tok=++this.tok; this.current=which; this.mode=which==='yatra2'||which==='yatra1'?'yatra':which;
     this.keys().forEach(k=>{ if(k===which) return; const a=this[k]; if(!a) return;
       if(k==='crane'||((k==='yatra1'||k==='yatra2')&&!this.yatraWant)) this.stop(a); else this.pauseKeep(a); });
@@ -384,11 +445,12 @@ const BGM={
   playCrane(){ if(this.craneOn) return; this.craneOn=true; this.refresh(); },
   stopCrane(){ const was=this.craneOn; this.craneOn=false; this.stop(this.crane); if(was) this.refresh(); } };
 window.BGM=BGM;
-(function bindVol(){ const s=document.getElementById('volSlider'), m=document.getElementById('volMute'), bar=document.getElementById('volBar');
+(function bindVol(){ const s=document.getElementById('volSlider'), m=document.getElementById('volMute'), bar=document.getElementById('volBar'), d=document.getElementById('djBtn');
   if(!s||!m) return; BGM.syncUi();
   const set=()=>BGM.setLevel((+s.value||0)/100);
   s.addEventListener('input', set); s.addEventListener('change', set);
   m.addEventListener('click', e=>{ e.preventDefault(); e.stopPropagation(); BGM.toggleMute(); });
+  if(d) d.addEventListener('click', e=>{ e.preventDefault(); e.stopPropagation(); try{ac();}catch(_){} BGM.togglePack(); });
   if(bar){ ['pointerdown','pointermove','touchstart'].forEach(ev=>bar.addEventListener(ev,e=>e.stopPropagation(), {passive:true})); }
 })();
 function sfxAmp(base){ return Math.max(0, base*(BGM.out()/0.32)); }
@@ -938,9 +1000,16 @@ function stepSys(sys,dt,grav){ if(!sys) return; for(let i=0;i<sys.n;i++){ if(sys
     sys.vel[i*3+1]-=grav*dt; sys.pos[i*3]+=sys.vel[i*3]*dt; sys.pos[i*3+1]+=sys.vel[i*3+1]*dt; sys.pos[i*3+2]+=sys.vel[i*3+2]*dt;
     if(sys.pos[i*3+1]<0){ sys.pos[i*3+1]=0; sys.vel[i*3+1]*=-.3; } }
   sys.pts.geometry.attributes.position.needsUpdate=true; sys.pts.geometry.attributes.color.needsUpdate=true; }
-function resize(){ if(!renderer) return; const view=document.getElementById('view');
-  const w=view.clientWidth,h=view.clientHeight; renderer.setSize(w,h); camera.aspect=w/h; camera.updateProjectionMatrix(); }
+function fitHdr(){ const h=document.querySelector('header');
+  if(h) document.documentElement.style.setProperty('--hdr',h.offsetHeight+'px'); }
+function resize(){ fitHdr(); if(!renderer) return; const view=document.getElementById('view');
+  if(!view) return;
+  const w=Math.max(1,view.clientWidth), h=Math.max(1,view.clientHeight);
+  renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); }
 addEventListener('resize',resize);
+addEventListener('orientationchange',()=>setTimeout(resize,280));
+document.addEventListener('fullscreenchange',resize);
+if(window.visualViewport){ visualViewport.addEventListener('resize',resize); }
 
 /* ---------- little devotee avatar (traditional wear, faces +z) ---------- */
 function buildAvatar(kind){
@@ -1092,7 +1161,7 @@ function refreshNimBtn(){
   cb.innerHTML=S.stage!=='home'?'🙏 Bappa is on the Ratha ✓':(doneCount()>=9?'🙏 Get the idol on the Ratha':day1done?'🙏 Carry Bappa to the Ratha':'🙏 Carry Bappa (finish Day-1 pooja first)');
   pill(); renderScreen();
   const pad=document.getElementById('drivePad');
-  if(pad) pad.style.display=(GL&&S.murtiChosen&&(S.stage==='ratha'||S.stage==='ghat')&&!NIM.active&&!Q.on&&!stallPause&&!carrying&&!aartiMode)?'grid':'none';
+  if(pad) pad.classList.toggle('on',!!(GL&&S.murtiChosen&&(S.stage==='ratha'||S.stage==='ghat')&&!NIM.active&&!Q.on&&!stallPause&&!carrying&&!aartiMode));
 }
 function renderSeva(){ const d=D();
   const set=(id,v)=>document.getElementById(id).classList.toggle('done',!!v);
@@ -1212,38 +1281,56 @@ document.getElementById('nimBtn').onclick=()=>{ if(noGL())return;
   shankh(); refreshNimBtn(); };
 document.getElementById('certBtn').disabled=!NIM.done;
 document.getElementById('certBtn').onclick=async()=>{ try{
-    const c=document.createElement('canvas'); c.width=1000; c.height=880; const x=c.getContext('2d');
-    const gr=x.createLinearGradient(0,0,0,880); gr.addColorStop(0,'#f9edd2'); gr.addColorStop(1,'#e6b45f'); x.fillStyle=gr; x.fillRect(0,0,1000,880);
-    x.strokeStyle='#7a4a10'; x.lineWidth=10; x.strokeRect(24,24,952,832);
-    x.strokeStyle='#a3762a'; x.lineWidth=3; x.strokeRect(40,40,920,800);
+    const W=1000, H=1140;
+    const c=document.createElement('canvas'); c.width=W; c.height=H; const x=c.getContext('2d');
+    x.imageSmoothingEnabled=true; try{ x.imageSmoothingQuality='high'; }catch(e){}
+    const gr=x.createLinearGradient(0,0,0,H); gr.addColorStop(0,'#f9edd2'); gr.addColorStop(1,'#e6b45f'); x.fillStyle=gr; x.fillRect(0,0,W,H);
+    x.strokeStyle='#7a4a10'; x.lineWidth=10; x.strokeRect(24,24,W-48,H-48);
+    x.strokeStyle='#a3762a'; x.lineWidth=3; x.strokeRect(40,40,W-80,H-80);
     x.textAlign='center'; x.fillStyle='#4a2405';
-    x.font='600 54px Georgia'; x.fillText('Ganesh Utsav — Nimarjanam',500,105);
-    x.fillStyle='#7a4a10'; x.font='26px Georgia'; x.fillText('|| Ganapati Bappa Morya ||',500,152);
-    x.fillStyle='#1a6a2a'; x.font='bold 40px Georgia'; x.fillText('Nimarjanam Completed',500,228);
+    x.font='600 48px Georgia'; x.fillText('Ganesh Utsav — Nimarjanam',500,108);
+    x.fillStyle='#7a4a10'; x.font='24px Georgia'; x.fillText('|| Ganapati Bappa Morya ||',500,152);
+    x.fillStyle='#1a6a2a'; x.font='bold 36px Georgia'; x.fillText('Nimarjanam Completed',500,204);
     x.strokeStyle='#a3762a'; x.lineWidth=2;
-    x.beginPath(); x.moveTo(300,258); x.lineTo(700,258); x.stroke();
-    x.fillStyle='#3a1c05'; x.font='bold 46px Georgia'; x.fillText(S.name||'Devotee Parivar',500,338);
-    x.fillStyle='#4a2405'; x.font='24px Georgia'; x.fillText('9 Days of Pooja • Shobha Yatra • Nimarjanam',500,392);
-    x.fillText(new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'}),500,442);
-    try{ const iimg=await loadImg(S.idol); const iw=iimg.naturalWidth||iimg.width||1, ih=iimg.naturalHeight||iimg.height||1;
-      const sc=Math.min(190/iw,190/ih), dw=iw*sc, dh=ih*sc;
-      x.drawImage(iimg,115+(190-dw)/2,295+(190-dh)/2,dw,dh);
-      x.fillStyle='#4a2405'; x.font='20px Georgia'; x.fillText('Murti '+S.idol,210,512);
+    x.beginPath(); x.moveTo(300,228); x.lineTo(700,228); x.stroke();
+    const cx=500, cy=412, R=148;
+    x.save();
+    x.beginPath(); x.arc(cx,cy,R,0,Math.PI*2); x.closePath();
+    x.fillStyle='#fff8ea'; x.fill();
+    try{
+      const iimg=await loadImg(S.idol);
+      const iw=iimg.naturalWidth||iimg.width||1, ih=iimg.naturalHeight||iimg.height||1;
+      const inner=R*2*0.88, sc=Math.min(inner/iw, inner/ih), dw=iw*sc, dh=ih*sc;
+      x.beginPath(); x.arc(cx,cy,R,0,Math.PI*2); x.closePath(); x.clip();
+      x.drawImage(iimg, cx-dw/2, cy-dh/2, dw, dh);
     }catch(e){}
-    x.fillStyle='#b81f2d'; x.font='bold 30px Georgia'; x.fillText('Jai Ganesha 🙏',500,508);
-    x.fillStyle='#1f6eb8'; x.font='22px Georgia'; x.fillText('www.japam.digital',500,558);
-    x.fillStyle='#6a5a48'; x.font='10px Georgia'; x.fillText('Built by',500,606);
-    try{ const logo=await new Promise((res,rej)=>{ const im=new Image(); im.onload=()=>res(im); im.onerror=rej; im.src='Images/A-logo.png'; });
-      x.drawImage(logo,430,616,140,140);
-    }catch(e){ x.fillStyle='#e11d2e'; x.font='italic 700 104px Georgia'; x.fillText('A',492,712);
-      x.strokeStyle='#e11d2e'; x.lineWidth=4;
-      x.beginPath(); x.arc(588,622,15,0,7); x.stroke();
-      x.font='bold 19px Georgia'; x.fillText('R',588,629); }
-    x.fillStyle='#e11d2e'; x.fillRect(382,730,236,13);
-    x.strokeStyle='#e11d2e'; x.lineWidth=3;
-    x.beginPath(); x.arc(636,736,10,0,7); x.stroke();
-    x.fillStyle='#4a2405'; x.font='bold 14px Georgia'; x.fillText('AI Developer India — Aditya Nandagiri',500,792);
+    x.restore();
+    x.beginPath(); x.arc(cx,cy,R,0,Math.PI*2);
+    x.strokeStyle='#7a4a10'; x.lineWidth=7; x.stroke();
+    x.beginPath(); x.arc(cx,cy,R-11,0,Math.PI*2);
+    x.strokeStyle='#e8b64c'; x.lineWidth=3; x.stroke();
+    x.fillStyle='#4a2405'; x.font='20px Georgia'; x.fillText('Murti '+S.idol,500,592);
+    x.fillStyle='#3a1c05'; x.font='bold 44px Georgia'; x.fillText(S.name||'Devotee Parivar',500,650);
+    x.fillStyle='#4a2405'; x.font='22px Georgia'; x.fillText('9 Days of Pooja • Shobha Yatra • Nimarjanam',500,698);
+    x.fillText(new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'}),500,738);
+    x.fillStyle='#b81f2d'; x.font='bold 28px Georgia'; x.fillText('Jai Ganesha 🙏',500,788);
+    x.fillStyle='#1f6eb8'; x.font='20px Georgia'; x.fillText('www.japam.digital',500,828);
+    x.fillStyle='#6a5a48'; x.font='12px Georgia'; x.fillText('Built by',500,872);
+    try{
+      const logo=await new Promise((res,rej)=>{ const im=new Image(); im.onload=()=>res(im); im.onerror=rej; im.src='Images/A-logo.png'; });
+      const lw=logo.naturalWidth||logo.width||1, lh=logo.naturalHeight||logo.height||1;
+      const maxS=168, sc=Math.min(maxS/lw, maxS/lh), dw=lw*sc, dh=lh*sc;
+      x.drawImage(logo, 500-dw/2, 888, dw, dh);
+    }catch(e){}
+    x.fillStyle='#4a2405'; x.font='bold 14px Georgia'; x.fillText('AI Developer India — Aditya Nandagiri',500,1088);
     const a=document.createElement('a'); a.download='nimarjanam-certificate.png'; a.href=c.toDataURL(); a.click(); toast('Certificate downloaded');
+    try{
+      const q=new URLSearchParams(location.search); const presence=q.get('presence');
+      let tok=''; const h=location.hash||'';
+      if(h.indexOf('tok=')>=0) tok=decodeURIComponent((h.split('tok=')[1]||'').split('&')[0]);
+      if(presence&&tok){ const ev=presence.replace(/\/presence\/?$/,'/event');
+        fetch(ev,{ method:'POST', headers:{'Content-Type':'application/json', Authorization:'Bearer '+tok}, body:JSON.stringify({type:'cert_download'}), keepalive:true }).catch(()=>{}); }
+    }catch(e){}
   }catch(e){ fail(e.message); } };
 
 /* ---------- input ---------- */
@@ -1615,10 +1702,24 @@ document.getElementById('apSave').onclick=()=>{ const g=id=>document.getElementB
    - Never hardcode family names elsewhere; MOCK_FAMS / MOCK_MANDALS own them. */
 const MOCK_FAMS=[{n:'Arjun',f:'Sharma',c:0xe8304a,av:'👦'},{n:'Priya',f:'Patel',c:0x1f6eb8,av:'👧'},{n:'Rohan',f:'Desai',c:0x12a45a,av:'👦'},{n:'Anika',f:'Reddy',c:0xe8b64c,av:'👧'}];
 const MOCK_MANDALS=[['Sharma Parivar',0xe8304a],['Patel Parivar',0x1f6eb8],['City Mandal',0xe8b64c]];
-const LivePresence={ _live:[], connected:false,
-  connect(url,me){ /* TODO(Cursor): WebSocket/Supabase here; on roster → Presence.ingest(arr) */
-    console.warn('[presence] LivePresence.connect not wired yet — mocks active',url,me); },
-  announce(summary){ /* TODO(Cursor): push daySummary() to server on every save; no-op until wired */ },
+const LivePresence={ _live:[], connected:false, _url:'', _tok:'', _me:null, _iv:null,
+  connect(url,me,tok){
+    this._url=url||''; this._me=me||{}; this._tok=tok||'';
+    const beat=()=>{
+      if(!this._url||!this._tok) return;
+      let done=0, day=1, stage='home', nim=false;
+      try{ done=doneCount(); day=S.day; stage=S.stage||'home'; nim=!!((typeof NIM!=='undefined'&&NIM.done)||S.nimDone); }catch(e){}
+      const av=(S&&S.avatar==='girl')?'👧':(this._me.av||'👦');
+      fetch(this._url,{ method:'POST', headers:{'Content-Type':'application/json', Authorization:'Bearer '+this._tok},
+        body:JSON.stringify({ n:this._me.n, f:this._me.f, c:this._me.c, av, day, doneCount:done, stage, eventId:this._me.eventId||'', nimDone:nim }), keepalive:true })
+        .then(r=>r.json()).then(j=>{ if(j&&Array.isArray(j.members)) Presence.ingest(j.members,true); }).catch(()=>{});
+    };
+    this.announce=beat;
+    beat();
+    if(this._iv) clearInterval(this._iv);
+    this._iv=setInterval(beat,25000);
+  },
+  announce(){},
   members(){ return this._live; } };
 const Presence={
   families(){ const live=LivePresence.members().filter(m=>!m.mandal).slice(0,4);
@@ -1631,12 +1732,12 @@ const Presence={
     const used=new Set(out.map(o=>o[0]));
     for(const m of MOCK_MANDALS){ if(out.length>=3) break; if(!used.has(m[0])) out.push([m[0],m[1]]); }
     return out; },
-  ingest(liveArray){ LivePresence._live=Array.isArray(liveArray)?liveArray:[]; LivePresence.connected=true;
+  ingest(liveArray,quiet){ LivePresence._live=Array.isArray(liveArray)?liveArray:[]; LivePresence.connected=true;
     try{
       const fams=this.families();
       bots.forEach((b,i)=>{ if(fams[i]){ b.def={...fams[i]}; updateBotLabel(b); } });
       markStripTaken(); renderQueue();
-      toast(LivePresence._live.length?('🌐 '+LivePresence._live.length+' live devotee(s) joined the city'):'🌐 Live empty — mock families keep the city alive');
+      if(!quiet&&!this._told){ this._told=true; toast(LivePresence._live.length?('🌐 '+LivePresence._live.length+' live devotee(s) joined the city'):'🌐 Live empty — mock families keep the city alive'); }
     }catch(e){} }
 };
 const BOTHUTS=[[-9.8,20],[9.8,12],[-9.8,2],[9.8,-14]];
@@ -2071,8 +2172,11 @@ function uiStage(){ try{
 function renderScreen(){
   const sb=document.getElementById('screenBody'); if(!sb) return;
   const _scc=document.getElementById('screenCard'),_mn=document.querySelector('main');
-  if(uiStage()!=='select'){ if(_scc){_scc.style.display='';_scc.classList.add('plain');} if(_mn)_mn.classList.add('full'); }
+  const wantFull=uiStage()!=='select';
+  const wasFull=!_mn||_mn.classList.contains('full');
+  if(wantFull){ if(_scc){_scc.style.display='';_scc.classList.add('plain');_scc.classList.remove('center');} if(_mn)_mn.classList.add('full'); }
   else { if(_scc)_scc.classList.remove('plain'); if(_mn)_mn.classList.remove('full'); }
+  if(!!wantFull!==!!wasFull){ try{ requestAnimationFrame(resize); }catch(e){} }
   const d=D(); const ui=uiStage();
   try{ document.getElementById('strip').classList.toggle('gone',ui!=='select'); }catch(e){}
   let parked=false; try{ parked=GL&&parkedAtLake(); }catch(e){}
@@ -2086,8 +2190,8 @@ function renderScreen(){
   if(ui==='select'){
     const needForm=!(S.name&&S.name.trim()&&S.avatarPicked)||!GL;
     const _sc2=document.getElementById('screenCard'),_mn2=document.querySelector('main');
-    if(!needForm){ sb.innerHTML=''; if(_sc2){_sc2.style.display='none';_sc2.classList.remove('plain');} if(_mn2)_mn2.classList.add('full'); return; }
-    if(_sc2){_sc2.style.display='';_sc2.classList.remove('plain');} if(_mn2)_mn2.classList.remove('full');
+    if(!needForm){ sb.innerHTML=''; if(_sc2){_sc2.style.display='none';_sc2.classList.remove('plain','center');} if(_mn2)_mn2.classList.add('full'); try{ requestAnimationFrame(resize); }catch(e){} return; }
+    if(_sc2){_sc2.style.display='';_sc2.classList.remove('plain');_sc2.classList.add('center');} if(_mn2)_mn2.classList.remove('full');
     h=`<div style="font-size:52px">🙏</div>
     <input id="scName" type="text" maxlength="40" placeholder="Name…" />
     <div class="avpick"><button id="scAvB" class="rbtn" title="Boy">👦</button><button id="scAvG" class="rbtn" title="Girl">👧</button><button id="scFresh" class="rbtn small" title="Start fresh">↺</button></div>`;
@@ -2313,10 +2417,10 @@ function doMantraTap(){ if(!needWindow())return; const d=D(); if((d.mantra||0)>=
   d.mantra=Math.min(11,(d.mantra||0)+1); save(); renderSeva(); ac();
   if(d.mantra%3===0) bell(); else pop(); }
 document.querySelectorAll('#drivePad button').forEach(b=>{ const k=b.dataset.k;
-  const on=e=>{ e.preventDefault(); keys[k]=true; try{ac();}catch(_){} };
+  const on=e=>{ e.preventDefault(); try{b.setPointerCapture(e.pointerId);}catch(_){} keys[k]=true; try{ac();}catch(_){} };
   const off=e=>{ e.preventDefault(); keys[k]=false; };
   b.addEventListener('pointerdown',on); b.addEventListener('pointerup',off);
-  b.addEventListener('pointerleave',off); b.addEventListener('pointercancel',off); });
+  b.addEventListener('pointercancel',off); b.addEventListener('lostpointercapture',off); });
 syncAdminBtn();
 
 /* ---- sky watch + live neighbour yatras + serving stall crews ---- */
@@ -2817,13 +2921,14 @@ function giantShowTick(dt){ if(!GL) return;
 /* ---------- boot ---------- */
 renderStatus();
 (async function boot(){
-  pill(); renderSeva(); renderSteps();
+  fitHdr(); pill(); renderSeva(); renderSteps();
   try{ buildWorld(); GL=true; stat.world='✓ live 3D'; }
   catch(e){ GL=false; stat.world='✗ '+e.message; window.__glErr=e.message||String(e);
     fail('3D world failed: '+e.message+' — pooja panel below still works.');
     toast('3D unavailable: '+String(e.message||e).slice(0,120));
     try{ SCKEY=''; renderScreen(); }catch(_){} }
   renderStatus(); resize(); setTimeout(resize,400);
+  try{ SCKEY=''; renderScreen(); }catch(_){}
   if(GL){ clock=new THREE.Clock(); placeAartiRing(); refreshIdolVisibility();
     renderer.domElement.addEventListener('pointerdown',()=>{ bootHold=0; },{passive:true});
     renderer.domElement.addEventListener('pointerdown',aartiDown);
@@ -2832,6 +2937,13 @@ renderStatus();
     renderer.domElement.addEventListener('pointercancel',aartiUp);
     animate(); }
   document.getElementById('loader').style.display='none'; window.__utsavBooted=true;
+  try{
+    const q=new URLSearchParams(location.search); const presence=q.get('presence'); const id=q.get('id');
+    if(presence&&id){ let tok=''; const h=location.hash||'';
+      if(h.indexOf('tok=')>=0) tok=decodeURIComponent((h.split('tok=')[1]||'').split('&')[0]);
+      if(tok){ const c=parseInt(q.get('c')||'',16);
+        LivePresence.connect(presence,{ id, n:q.get('n')||'Guest', f:q.get('f')||'Parivar', c:Number.isFinite(c)?c:0x12c46a, av:q.get('av')||'👦', eventId:q.get('eventId')||'' }, tok); } }
+  }catch(e){}
   try{ if(S.idolOnRatha&&!S.nimDone&&!NIM.done) BGM.setYatra(true); else BGM.play('world'); }catch(e){}
   if(!GL){ toast('3D unavailable — murti photo + pooja panel work below'); return; }
   if(S.murtiChosen) setIdol(S.idol,true);

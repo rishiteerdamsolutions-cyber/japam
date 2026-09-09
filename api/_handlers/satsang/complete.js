@@ -103,6 +103,20 @@ export async function POST(request) {
       });
     } catch {}
 
+    if (!result.alreadyComplete) {
+      try {
+        const { recordFunnelEvent } = await import('../_utsavAnalytics.js');
+        const ev = eventSnap.data() || {};
+        await recordFunnelEvent(db, {
+          type: 'complete',
+          eventId,
+          orgName: ev.orgName || '',
+          uid,
+          isTrial,
+        });
+      } catch {}
+    }
+
     return jsonResponse({
       ok: true,
       alreadyComplete: result.alreadyComplete,

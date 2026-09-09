@@ -102,6 +102,19 @@ export async function POST(request) {
       };
     });
 
+    if (!result.alreadyJoined) {
+      try {
+        const { recordFunnelEvent } = await import('../_utsavAnalytics.js');
+        await recordFunnelEvent(db, {
+          type: 'join',
+          eventId,
+          orgName: event.orgName || '',
+          uid,
+          isTrial: kind === 'trial',
+        });
+      } catch {}
+    }
+
     return jsonResponse({
       ok: true,
       eventId,

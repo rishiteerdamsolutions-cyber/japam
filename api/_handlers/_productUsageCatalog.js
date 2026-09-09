@@ -24,6 +24,11 @@ export const PRODUCT_USAGE_CATALOG = [
   { key: 'page_anniversary_join', label: 'Anniversary join', category: 'page' },
   { key: 'page_priest', label: 'Priest portal', category: 'page' },
   { key: 'page_priest_login', label: 'Priest login', category: 'page' },
+  { key: 'page_ganeshotsav', label: 'Ganesha Utsav landing', category: 'page' },
+  { key: 'action_ganeshotsav_skip', label: 'Ganesha Utsav — Skip', category: 'action' },
+  { key: 'action_ganeshotsav_for_kids', label: 'Ganesha Utsav — For KIDS', category: 'action' },
+  { key: 'action_ganeshotsav_share', label: 'Ganesha Utsav — Share card', category: 'action' },
+  { key: 'action_ganeshotsav_pdf', label: 'Ganesha Utsav — Likhita PDF', category: 'action' },
   // Landing & entry actions
   { key: 'action_landing_start', label: 'Landing — Start Japam', category: 'action' },
   { key: 'action_landing_guest', label: 'Landing — Try without login', category: 'action' },
@@ -102,5 +107,6 @@ export function pathnameToUsageKey(pathname) {
   if (pathname === '/occasion/anniversary/join') return 'page_anniversary_join';
   if (pathname === '/priest') return 'page_priest';
   if (pathname === '/priest-login') return 'page_priest_login';
+  if (pathname === '/ganeshotsav' || pathname === '/ganeshotsav/') return 'page_ganeshotsav';
   return null;
 }

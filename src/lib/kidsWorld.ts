@@ -31,7 +31,12 @@ export function colorFromId(id: string): number {
   return pal[Math.abs(h) % pal.length];
 }
 
-export function kidsWorldHref(opts: { uid: string; displayName: string | null; token: string }): string {
+export function kidsWorldHref(opts: {
+  uid: string;
+  displayName: string | null;
+  token: string;
+  eventId?: string;
+}): string {
   const env = (import.meta.env.VITE_KIDS_WORLD_URL as string | undefined)?.trim();
   const base = env || `${window.location.origin}/kids-world/ganesh-utsav.html`;
   const n = firstHalfName(opts.displayName || '');
@@ -44,6 +49,7 @@ export function kidsWorldHref(opts: { uid: string; displayName: string | null; t
   u.searchParams.set('f', f);
   u.searchParams.set('c', colorFromId(opts.uid).toString(16));
   u.searchParams.set('av', '👦');
+  if (opts.eventId) u.searchParams.set('eventId', opts.eventId);
   u.hash = `tok=${encodeURIComponent(opts.token)}`;
   return u.toString();
 }

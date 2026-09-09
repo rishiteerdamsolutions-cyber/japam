@@ -184,6 +184,9 @@ import * as publicSatsangStatusHandler from './_handlers/public/satsang-status.j
 import * as publicSatsangReportHandler from './_handlers/public/satsang-report.js';
 import * as satsangJoinHandler from './_handlers/satsang/join.js';
 import * as satsangCompleteHandler from './_handlers/satsang/complete.js';
+import * as satsangAnalyticsEventHandler from './_handlers/satsang/analytics-event.js';
+import * as kidsWorldEventHandler from './_handlers/kids-world/event.js';
+import * as adminUtsavAnalyticsHandler from './_handlers/admin/utsav-analytics.js';
 
 function getPathSegments(request) {
   const url = new URL(request.url);
@@ -268,6 +271,7 @@ const HANDLERS = {
   'GET public/active-users': publicActiveUsersHandler,
   'GET kids-world/presence': kidsWorldPresenceHandler,
   'POST kids-world/presence': kidsWorldPresenceHandler,
+  'POST kids-world/event': kidsWorldEventHandler,
   'GET public/pushpa-abhisheka-leaderboard': publicPushpaAradhanaLeaderboardHandler,
   'GET public/japam-counter-leaderboard': publicJapamCounterLeaderboardHandler,
   'POST user/japam-counter-increment': userJapamCounterIncrementHandler,
@@ -347,6 +351,8 @@ const HANDLERS = {
   'GET public/satsang-report': publicSatsangReportHandler,
   'POST satsang/join': satsangJoinHandler,
   'POST satsang/complete': satsangCompleteHandler,
+  'POST satsang/analytics-event': satsangAnalyticsEventHandler,
+  'GET admin/utsav-analytics': adminUtsavAnalyticsHandler,
 };
 
 async function route(request, method, pathSegments) {

@@ -40,6 +40,8 @@ import {
 import { formatIstDateTime } from '../lib/japamCounterIst';
 import { auth, isFirebaseConfigured } from '../lib/firebase';
 import { isKidsWorldEnabled, kidsWorldHref } from '../lib/kidsWorld';
+import { trackUtsavFunnel } from '../lib/utsavFunnel';
+import { trackProductUsage } from '../lib/productUsage';
 
 const VIDEO_SEEN_KEY = 'japam_ganeshotsav_video';
 const HANDWRITING_SAMPLE_SRC = '/SAMPLE%20NAMA%20IMAGE.png';
@@ -228,6 +230,10 @@ export function GaneshotsavPage() {
     void loadSatsangStatus().then((s) => {
       if (cancelled) return;
       setStatus(s);
+      if (s.open === true) {
+        trackUtsavFunnel('landing');
+        trackProductUsage('page_ganeshotsav');
+      }
     });
     return () => {
       cancelled = true;
@@ -627,6 +633,8 @@ export function GaneshotsavPage() {
         setShareError(t('ganeshotsav.shareDownloadFailed'));
         return;
       }
+      trackUtsavFunnel('share', { eventId: session?.eventId, orgName: session?.orgName });
+      trackProductUsage('action_ganeshotsav_share');
       setShareNotice(t('ganeshotsav.shareSaved'));
       setShareImageDownloaded(true);
       if (!user?.uid) return;
@@ -721,6 +729,8 @@ export function GaneshotsavPage() {
         },
       );
       setPdfDownloaded(true);
+      trackUtsavFunnel('pdf', { eventId: session.eventId, orgName: session.orgName });
+      trackProductUsage('action_ganeshotsav_pdf');
       const blob = await renderSatsangDevoteeCardBlob({
         orgName: session.orgName,
         eventName: session.eventName,
@@ -822,7 +832,11 @@ export function GaneshotsavPage() {
               {isFirebaseConfigured ? <GoogleSignIn /> : <p className="text-red-300 text-sm">Sign-in is not configured.</p>}
               <button
                 type="button"
-                onClick={() => navigate('/menu', { replace: true })}
+                onClick={() => {
+                  trackUtsavFunnel('skip');
+                  trackProductUsage('action_ganeshotsav_skip');
+                  navigate('/menu', { replace: true });
+                }}
                 className="mt-4 w-full max-w-sm py-2.5 text-sm font-medium text-amber-200/75 hover:text-amber-100 underline-offset-4 hover:underline"
               >
                 {t('ganeshotsav.skip')}
@@ -866,7 +880,11 @@ export function GaneshotsavPage() {
               <div className={`mt-3 w-full max-w-sm ${showForKids ? 'flex gap-2' : ''}`}>
                 <button
                   type="button"
-                  onClick={() => navigate('/menu', { replace: true })}
+                  onClick={() => {
+                    trackUtsavFunnel('skip', { eventId: session?.eventId, orgName: session?.orgName });
+                    trackProductUsage('action_ganeshotsav_skip');
+                    navigate('/menu', { replace: true });
+                  }}
                   className={`${showForKids ? 'flex-1' : 'w-full'} py-2.5 text-sm font-medium text-amber-200/75 hover:text-amber-100 underline-offset-4 hover:underline`}
                 >
                   {t('ganeshotsav.skip')}
@@ -876,11 +894,14 @@ export function GaneshotsavPage() {
                   type="button"
                   onClick={() => {
                     void (async () => {
+                      trackUtsavFunnel('kids_enter', { eventId: session?.eventId, orgName: session?.orgName });
+                      trackProductUsage('action_ganeshotsav_for_kids');
                       const token = await user.getIdToken();
                       window.location.href = kidsWorldHref({
                         uid: user.uid,
                         displayName: user.displayName,
                         token,
+                        eventId: session?.eventId,
                       });
                     })();
                   }}

@@ -49,6 +49,7 @@ export function AdminLayout() {
         <NavLink to="/admin/product-usage">Product usage</NavLink>
         <NavLink to="/admin/app-config">App config</NavLink>
         <NavLink to="/admin/satsang">Ganesha Utsav</NavLink>
+        <NavLink to="/admin/satsang-analytics">Utsav analytics</NavLink>
       </nav>
       <Outlet />
       </div>

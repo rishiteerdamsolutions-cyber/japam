@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { getStoredAdminToken } from '../../lib/adminAuth';
 import { generateSatsangCodePreview } from '../../lib/satsangAdminCodes';
 import { istYmdFromDate } from '../../lib/weeklyStreakIst';
@@ -201,7 +202,11 @@ export function AdminSatsangPage() {
         <span className="text-amber-100">{origin}/ganeshotsav</span>. The spoken code (not on the QR) chooses the
         organisation, event name, and that mandap’s 50 seats. Codes must be unique across mandaps. Open several
         mandaps at once. When every event is closed, home returns to the normal Japam landing. Organizer report:{' '}
-        <span className="text-amber-100">{origin}/satsang-report</span> — same page, that mandap’s code.
+        <span className="text-amber-100">{origin}/satsang-report</span> — same page, that mandap’s code.{' '}
+        <Link to="/admin/satsang-analytics" className="text-amber-300 underline">
+          Utsav analytics
+        </Link>{' '}
+        (joins, 108s, For KIDS / Virtual World).
       </p>
 
       {message ? <p className="text-amber-200 text-sm mb-4">{message}</p> : null}

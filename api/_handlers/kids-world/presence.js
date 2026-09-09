@@ -5,6 +5,7 @@
  */
 import admin from 'firebase-admin';
 import { getDb, jsonResponse, verifyFirebaseUser } from '../_lib.js';
+import { upsertKidsVisit } from '../_utsavAnalytics.js';
 
 const COL = 'kidsWorldLive';
 const TTL_MS = 90 * 1000;
@@ -77,6 +78,10 @@ export async function POST(request) {
     const n = (rawName.includes(' ') ? firstHalfName(rawName) : rawName.trim()) || 'Guest';
     const f = String(body.f || '').trim() || familyFromName(rawName);
     const c = typeof body.c === 'number' ? body.c : parseInt(String(body.c || ''), 16);
+    const day = typeof body.day === 'number' ? body.day : 1;
+    const doneCount = typeof body.doneCount === 'number' ? body.doneCount : 0;
+    const stage = typeof body.stage === 'string' ? body.stage : 'home';
+    const eventId = typeof body.eventId === 'string' ? body.eventId.trim().slice(0, 80) : '';
     await db.collection(COL).doc(uid).set(
       {
         id: uid,
@@ -84,14 +89,27 @@ export async function POST(request) {
         f: f || 'Parivar',
         c: Number.isFinite(c) ? c : 0x12c46a,
         av: body.av === '👧' ? '👧' : '👦',
-        day: typeof body.day === 'number' ? body.day : 1,
-        doneCount: typeof body.doneCount === 'number' ? body.doneCount : 0,
-        stage: typeof body.stage === 'string' ? body.stage : 'home',
+        day,
+        doneCount,
+        stage,
+        eventId: eventId || null,
         seenAtMs: Date.now(),
         updatedAt: admin.firestore.FieldValue.serverTimestamp(),
       },
       { merge: true },
     );
+    try {
+      await upsertKidsVisit(db, {
+        uid,
+        n,
+        f: f || 'Parivar',
+        day,
+        doneCount,
+        stage,
+        eventId: body.eventId,
+        nimDone: body.nimDone === true || stage === 'done',
+      });
+    } catch {}
     return jsonResponse({ members: await listLive(db) }, 200);
   } catch {
     return jsonResponse({ members: [] }, 200);

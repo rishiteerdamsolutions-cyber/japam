@@ -544,8 +544,6 @@ let petals=null, gulal=null, splash=null, fw=null;
 let idolReady=false, idolTex=null;
 const LAKE_Z=-493, CHARIOT_START=28, CHARIOT_LAKE=-400, DROP={x:1.0,z:-461};
 const HOME={x:0,z:36};
-const WORLD_X=90, WORLD_Z_MIN=LAKE_Z+18, WORLD_Z_MAX=CHARIOT_START+48;
-const CAM_MAX_DIST=360, CAM_MAX_POLAR=Math.PI*0.92;
 const NIM={active:false,phase:'',pt:0,done:!!S.nimDone,hookIdolDy:1.4,splashed:false,carrying:false};
 let yatra=false, yatraT=0, yatraFrom={x:0,z:CHARIOT_START}, parkDrive=false, followCam=true, spin360=false;
 let aartiMode=false, aartiAuto=false, aartiAng=Math.PI/2, aartiAcc=0, aartiRig=null, aartiRing=null;
@@ -575,11 +573,10 @@ function buildWorld(){
   renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
   view.insertBefore(renderer.domElement,view.firstChild);
   scene=new THREE.Scene(); scene.background=new THREE.Color(0x070412); scene.fog=new THREE.Fog(0x070412,60,700);
-  camera=new THREE.PerspectiveCamera(50,1,0.1,1400); camera.position.set(10,8,48);
+  camera=new THREE.PerspectiveCamera(50,1,0.1,900); camera.position.set(10,6,41);
   controls=new OrbitControls(camera,renderer.domElement);
-  controls.enableDamping=true; controls.enablePan=true; controls.enableRotate=true; controls.enableZoom=true;
-  controls.minPolarAngle=0.08; controls.maxPolarAngle=CAM_MAX_POLAR; controls.minDistance=4; controls.maxDistance=CAM_MAX_DIST;
-  controls.autoRotateSpeed=1.4; controls.rotateSpeed=.85; controls.zoomSpeed=1.15; controls.panSpeed=.8; controls.screenSpacePanning=true;
+  controls.enableDamping=true; controls.maxPolarAngle=Math.PI*0.52; controls.minDistance=3.5; controls.maxDistance=160;
+  controls.autoRotateSpeed=1.4;
   controls.target.set(5,2,27);
   controls.addEventListener('start',()=>{ userHold=true; });
   controls.addEventListener('end',()=>{ userHold=false; lastTouch=performance.now(); });
@@ -1048,19 +1045,10 @@ function stepSys(sys,dt,grav){ if(!sys) return; for(let i=0;i<sys.n;i++){ if(sys
   sys.pts.geometry.attributes.position.needsUpdate=true; sys.pts.geometry.attributes.color.needsUpdate=true; }
 function fitHdr(){ const h=document.querySelector('header');
   if(h) document.documentElement.style.setProperty('--hdr',h.offsetHeight+'px'); }
-function resize(){ fitHdr(); if(!renderer||!camera) return; const view=document.getElementById('view');
+function resize(){ fitHdr(); if(!renderer) return; const view=document.getElementById('view');
   if(!view) return;
-  let w=view.clientWidth, h=view.clientHeight;
-  if(w<32||h<32){
-    const vv=window.visualViewport, hdr=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--hdr'))||52;
-    w=Math.max(w, Math.round((vv&&vv.width)||window.innerWidth||1));
-    h=Math.max(h, Math.round(((vv&&vv.height)||window.innerHeight||1)-hdr));
-  }
-  w=Math.max(1,w); h=Math.max(1,h);
-  renderer.setSize(w,h,false);
-  camera.aspect=w/h;
-  camera.fov=w<h?58:50;
-  camera.updateProjectionMatrix(); }
+  const w=Math.max(1,view.clientWidth), h=Math.max(1,view.clientHeight);
+  renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); }
 addEventListener('resize',resize);
 addEventListener('orientationchange',()=>setTimeout(resize,280));
 document.addEventListener('fullscreenchange',resize);
@@ -1152,8 +1140,7 @@ async function setIdol(n,first=false){
     }catch(e2){ stat.murti='✗ '+e2.message; renderStatus(); fail(e2.message); }
   }
   renderHomeDiyas();
-  if(!first&&GL){ try{ const pull=typeof viewPull==='function'?viewPull():{back:16,up:7};
-    camera.position.set(0,pull.up,HOME.z-pull.back); controls.target.set(0,2.3,39.3); lastTouch=performance.now(); }catch(e){} }
+  if(!first&&GL){ try{ camera.position.set(0,2.6,27.5); controls.target.set(0,2.1,39.3); lastTouch=performance.now(); }catch(e){} }
 }
 function renderHomeDiyas(){ if(!GL) return; const lit=Math.min(7,Math.max(1+doneCount(),(S.days[S.day]&&S.days[S.day].diya)||0)); homeDiyas.forEach((f,i)=>f.visible=i<lit); }
 
@@ -1637,8 +1624,8 @@ function animate(){
   } else if(canDrive){
     const sp=12*dt; let mx=0,mz=0;
     if(keys.w||keys.arrowup)mz-=sp; if(keys.s||keys.arrowdown)mz+=sp; if(keys.a||keys.arrowleft)mx-=sp; if(keys.d||keys.arrowright)mx+=sp;
-    if(mx||mz){ chart.position.x=Math.max(-WORLD_X,Math.min(WORLD_X,chart.position.x+mx));
-      chart.position.z=Math.max(WORLD_Z_MIN,Math.min(WORLD_Z_MAX,chart.position.z+mz));
+    if(mx||mz){ chart.position.x=Math.max(-8.5,Math.min(8.5,chart.position.x+mx));
+      chart.position.z=Math.max(CHARIOT_LAKE+1,Math.min(CHARIOT_START+10,chart.position.z+mz));
       chartYawTarget=Math.atan2(mx,mz); wheels.forEach(w=>w.rotation.x+=(Math.abs(mx)+Math.abs(mz))*3);
       if(chart.position.z<CHARIOT_LAKE+6&&S.stage==='ratha') setStage('ghat');
     } else if(S.stage==='ghat'||S.stage==='done'||parkedAtLake()) chartYawTarget=0; // face devotees when parked
@@ -1685,35 +1672,37 @@ function animate(){
   wireTick(dt);
   collideTick();
   stepSys(petals,dt,2.2); stepSys(gulal,dt,1.2); stepSys(splash,dt,7); stepSys(fw,dt,3.5);
-  /* follow: pull back to the screen, never lock the city, never fight a drag */
-  if(bootHold>0){ bootHold-=dt; if(GL){ camera.position.set(-10,7.2,52); controls.target.set(4,2.4,36); } }
+  /* follow: road opening first, then stage views */
+  if(bootHold>0){ bootHold-=dt; if(GL){ camera.position.set(-8,3.5,42); controls.target.set(8,2.2,37); } }
   else {
   if(!S.murtiChosen){ _v.set(8,0,24);
-    if(GL&&!shopCamInit){ shopCamInit=true; camera.position.set(-4,6.2,38); controls.target.set(8,2.1,24); }
+    if(!shopCamInit&&GL){ shopCamInit=true; }
+    if(GL&&!shopUserMoved){ camera.position.set(-1.5,2.5,24.5); controls.target.set(8,2.1,24); }
     if(inspectN&&GL&&!userHold){ const _im=shopPickMeshes.find(m=>m.userData.n===inspectN);
-      if(_im){ _im.getWorldPosition(_v); camera.position.lerp(_c1.set(_v.x-4.4,_v.y+1.2,_v.z+3.6),1-Math.pow(.02,dt)); controls.target.lerp(_c2.copy(_v),1-Math.pow(.02,dt)); } } }
+      if(_im){ _im.getWorldPosition(_v); camera.position.lerp(_c1.set(_v.x-3.0,_v.y+0.35,_v.z+0.4),1-Math.pow(.005,dt)); controls.target.lerp(_c2.copy(_v),1-Math.pow(.005,dt)); } } }
   else if(SHOPW.on&&avatar){ _v.set(avatar.position.x,0,avatar.position.z); }
   else _v.set(S.stage==='home'?HOME.x:chart.position.x,0,S.stage==='home'?HOME.z-1:chart.position.z);
   const homeClose=(S.murtiChosen&&S.stage==='home'&&!SHOPW.on);
   if(homeClose){ _v.set(0,0,39.3); }
-  const pull=viewPull();
-  const fx=!S.murtiChosen?_v.x-8:(SHOPW.on?_v.x+6:(homeClose?0:_v.x+3));
-  const fy=pull.up, fz=!S.murtiChosen?_v.z+12:(homeClose?HOME.z-pull.back:_v.z+pull.back);
-  if(aartiMode&&idolReady&&GL){ if(S.stage==='home'){ camera.position.lerp(_c1.set(0,2.4,34.2),1-Math.pow(.008,dt)); controls.target.lerp(_c2.set(0,1.9,39.3),1-Math.pow(.006,dt)); }
+  const fx=!S.murtiChosen?_v.x-9.5:(SHOPW.on?_v.x+6:(homeClose?0:(S.stage==='home'?_v.x+3:_v.x+4.5)));
+  const fy=!S.murtiChosen?2.5:(homeClose?2.6:8), fz=!S.murtiChosen?_v.z+0.5:(homeClose?35.6:_v.z+15);
+  if(aartiMode&&idolReady&&GL){ if(S.stage==='home'){ camera.position.lerp(_c1.set(0,2.0,35.4),1-Math.pow(.001,dt)); controls.target.lerp(_c2.set(0,1.9,39.3),1-Math.pow(.0005,dt)); }
     else if(chart){ const ry=chart.rotation.y;
-      camera.position.lerp(_c1.set(chart.position.x+Math.sin(ry)*8.5,3.4,chart.position.z+Math.cos(ry)*8.5),1-Math.pow(.008,dt));
-      controls.target.lerp(_c2.set(chart.position.x,2.4,chart.position.z),1-Math.pow(.006,dt)); } }
+      camera.position.lerp(_c1.set(chart.position.x+Math.sin(ry)*6.5,2.6,chart.position.z+Math.cos(ry)*6.5),1-Math.pow(.001,dt));
+      controls.target.lerp(_c2.set(chart.position.x,2.4,chart.position.z),1-Math.pow(.0005,dt)); } }
   else   if(rockView){ if(idleOk())camera.position.lerp(_c1.set(320,-110,240),1-Math.pow(.01,dt)); controls.target.lerp(_c2.set(0,-60,-20),1-Math.pow(.005,dt)); }
   else   if(skyMode){ const wp=skyPos(_sv); if(idleOk())camera.position.lerp(_c1.set(wp.x,wp.y+65,wp.z+24),1-Math.pow(.01,dt)); controls.target.lerp(_c2.set(wp.x,wp.y,wp.z),1-Math.pow(.005,dt)); }
-  else if(!userHold&&followCam&&S.murtiChosen&&(isDriving()||idleOk())){
-    const k=isDriving()?1-Math.pow(.012,dt):1-Math.pow(.03,dt);
-    if(carrying&&GL&&carryVeil&&carryCrew.length){ camera.position.lerp(_c1.set(carryVeil.position.x,6.2,carryVeil.position.z-12),k);
-      controls.target.lerp(_c2.set(carryVeil.position.x,1.2,carryVeil.position.z),k*0.85); }
-    else if(((sevaB&&STALLS[sevaB.si])||anna||(stallPause&&curStall>=0))&&GL&&chart){ const ry2=chart.rotation.y, fx2=Math.sin(ry2), fz2=Math.cos(ry2);
-      camera.position.lerp(_c1.set(chart.position.x+fx2*10-fz2*4,5.2,chart.position.z+fz2*10+fx2*4),k);
-      controls.target.lerp(_c2.set(chart.position.x+fx2*2,1.8,chart.position.z+fz2*2),k*0.85); }
-    else { camera.position.lerp(_c1.set(fx,fy,fz),k);
-      controls.target.lerp(_c2.set(_v.x,2.3,_v.z),k*0.8); }
+  else{
+  if(idleOk()&&S.murtiChosen){
+  if(carrying&&GL&&carryVeil&&carryCrew.length){ camera.position.lerp(_c1.set(carryVeil.position.x,5.5,carryVeil.position.z-9),1-Math.pow(.001,dt));
+  controls.target.lerp(_c2.set(carryVeil.position.x,1.2,carryVeil.position.z),1-Math.pow(.0005,dt)); }
+  else if(((sevaB&&STALLS[sevaB.si])||anna||(stallPause&&curStall>=0))&&GL&&chart){ const ry2=chart.rotation.y, fx2=Math.sin(ry2), fz2=Math.cos(ry2);
+  camera.position.lerp(_c1.set(chart.position.x+fx2*8-fz2*3,3.9,chart.position.z+fz2*8+fx2*3),1-Math.pow(.002,dt));
+  controls.target.lerp(_c2.set(chart.position.x+fx2*2,1.8,chart.position.z+fz2*2),1-Math.pow(.001,dt)); }
+  else if(followCam){ camera.position.lerp(_c1.set(Math.max(-8,Math.min(8,fx)),fy,fz),1-Math.pow(.001,dt));
+  if(camera.position.y<4.5) camera.position.y=4.5; }
+  if(!(carrying&&carryCrew.length)&&!((sevaB&&STALLS[sevaB.si])||anna||(stallPause&&curStall>=0))) controls.target.lerp(_c2.set(_v.x,(S.murtiChosen&&S.stage==='home'&&!SHOPW.on)?2.2:2.2,_v.z),1-Math.pow(.0005,dt));
+  }
   }
   }
   controls.update();
@@ -2440,10 +2429,7 @@ let homeGlowT=0;
 let shopCamInit=false;
 let shopUserMoved=false;
 let userHold=false,lastTouch=-99999;
-function idleOk(){ try{ return !userHold&&(performance.now()-lastTouch>6000); }catch(e){ return true; } }
-function viewPull(){ const a=(camera&&camera.aspect>0)?camera.aspect:1, portrait=a<0.92;
-  return { back:portrait?24:16, up:portrait?10:7.2 }; }
-function isDriving(){ return !!(yatra||parkDrive||keys.w||keys.a||keys.s||keys.d||keys.arrowup||keys.arrowdown||keys.arrowleft||keys.arrowright); }
+function idleOk(){ try{ return !userHold&&(performance.now()-lastTouch>4000); }catch(e){ return true; } }
 const SHOP_PATH=[[7.2,25],[5,27],[2.5,29.5],[0.5,31.5],[0,33.5],[0,34.6],[0,36.6],[0,37.8]];
 function startShopWalk(){ if(!GL||!avatar||SHOPW.on) return;
   if(!idolReady){ toast('Preparing Bappa — one moment 🙏'); let n=0;
@@ -2493,7 +2479,7 @@ function makeEmojiSprite(e,sc){ const c=document.createElement('canvas'); c.widt
 let skyMode=false,skyWatch={k:'you'},rockView=false;
 function toggleRock(){ rockView=!rockView; if(rockView&&skyMode) toggleSky();
   document.getElementById('rockBtn').classList.toggle('on',rockView);
-  controls.maxDistance=rockView?900:CAM_MAX_DIST; controls.maxPolarAngle=rockView?Math.PI*0.92:CAM_MAX_POLAR;
+  controls.maxDistance=rockView?700:160; controls.maxPolarAngle=rockView?Math.PI*0.62:Math.PI*0.52;
   try{ BGM.play(rockView?'rock':'world'); }catch(e){}
   }
 document.getElementById('rockBtn').onclick=()=>toggleRock();
@@ -2513,7 +2499,7 @@ function renderSkyChips(){ const bar=document.getElementById('skyBar'); if(!bar)
     b.onclick=()=>{ skyWatch={k}; if(!skyMode)toggleSky(); renderSkyChips(); }; bar.appendChild(b); };
   mk('🙏','you',S.name||'You'); mk('🌊','queue','Nimarjan queue'); mk('🏘️','west','West district'); mk('🗿','east','Giant Vinayak — East district'); }
 function toggleSky(){ skyMode=!skyMode; if(skyMode&&rockView){ rockView=false;
-  try{ controls.maxDistance=CAM_MAX_DIST; controls.maxPolarAngle=CAM_MAX_POLAR; document.getElementById('rockBtn').classList.remove('on'); }catch(e){} }
+  try{ controls.maxDistance=160; controls.maxPolarAngle=Math.PI*0.52; document.getElementById('rockBtn').classList.remove('on'); }catch(e){} }
   document.getElementById('skyBtn').classList.toggle('on',skyMode);
   document.getElementById('skyBar').style.display=skyMode?'flex':'none';
   try{controls.enabled=!aartiMode;}catch(e){}
@@ -2711,7 +2697,7 @@ function debutBot(b,snap){ if(!b.ratha) return;
   if(b.crew)b.crew.forEach(f=>f.g.visible=true); }
 
 document.getElementById('normBtn').onclick=()=>{ skyMode=false; rockView=false;
-  try{ controls.maxDistance=CAM_MAX_DIST; controls.maxPolarAngle=CAM_MAX_POLAR; document.getElementById('rockBtn').classList.remove('on'); }catch(e){}
+  try{ controls.maxDistance=160; controls.maxPolarAngle=Math.PI*0.52; document.getElementById('rockBtn').classList.remove('on'); }catch(e){}
   document.getElementById('skyBtn').classList.remove('on');
   document.getElementById('skyBar').style.display='none';
   try{controls.enabled=!aartiMode;}catch(e){}

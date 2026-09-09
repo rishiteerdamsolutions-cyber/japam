@@ -806,6 +806,14 @@ export function GaneshotsavPage() {
 
   const banner = (
     <div className="text-center px-3 mb-3">
+      <img
+        src="/images/logo.png"
+        alt="Japam Digital"
+        width={88}
+        height={88}
+        className="mx-auto mb-2 h-20 w-20 sm:h-24 sm:w-24 object-contain drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)]"
+        draggable={false}
+      />
       <h1 className="text-xl sm:text-2xl font-bold text-amber-400" style={{ fontFamily: 'serif' }}>
         {t('ganeshotsav.yagnaTitle')}
       </h1>

@@ -447,7 +447,8 @@
   100% { transform: translateX(320%) skewX(-18deg); }
 }
 .ganeshotsav-for-kids {
-  background: linear-gradient(180deg, #34d399 0%, #059669 55%, #047857 100%);
+  background: linear-gradient(180deg, #ffd6e7 0%, #ffc0cb 48%, #f7a8bc 100%);
+  color: #7a2048;
 }
 .ganeshotsav-for-kids:hover {
   filter: brightness(1.08);

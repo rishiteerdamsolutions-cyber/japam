@@ -82,12 +82,12 @@
   .ap-card input{width:100%;background:#0f0803;border:1px solid var(--line);color:var(--cream);border-radius:10px;padding:10px;font-size:14px;margin-top:4px;font-family:system-ui}
   .ap-row{display:flex;gap:8px;margin-top:10px}.ap-row>*{flex:1}
   .ap-check{display:flex!important;gap:8px;align-items:center}.ap-check input{width:auto!important}
-  #qBoard{display:none;position:absolute;top:46px;left:8px;z-index:6;width:236px;max-height:52%;overflow:auto;background:rgba(10,5,2,.85);border:1px solid var(--line);border-radius:12px;padding:8px 10px;font-family:system-ui}
-  #qHead{font-size:12px;color:var(--goldlt);font-weight:700}#qToken{color:#fff}
-  .qrow{display:flex;gap:6px;align-items:center;font-size:11px;color:var(--cream);padding:5px 4px;border-bottom:1px solid rgba(232,182,76,.12)}
-  .qrow b{color:var(--goldlt)} .qrow small{margin-left:auto;color:var(--muted);white-space:nowrap}
-  .qrow.now{background:rgba(232,182,76,.14);border-radius:8px} .qrow.done{opacity:.6}
-  .qrow.me{border:1px solid var(--gold);border-radius:8px}
+  #qBoard{display:none;position:absolute;top:6px;left:6px;z-index:6;width:92px;max-height:34%;overflow:auto;background:rgba(10,5,2,.82);border:1px solid var(--line);border-radius:8px;padding:3px 4px;font-family:system-ui}
+  #qHead{font-size:8px;color:var(--goldlt);font-weight:700;line-height:1.2}#qToken{color:#fff}
+  .qrow{display:flex;gap:2px;align-items:center;font-size:8px;color:var(--cream);padding:1px 1px;border-bottom:1px solid rgba(232,182,76,.1)}
+  .qrow b{color:var(--goldlt);font-size:8px} .qrow small{margin-left:auto;color:var(--muted);white-space:nowrap;font-size:9px}
+  .qrow.now{background:rgba(232,182,76,.14);border-radius:5px} .qrow.done{opacity:.6}
+  .qrow.me{border:1px solid var(--gold);border-radius:5px}
   #stallPop{display:none;position:absolute;left:50%;bottom:74px;transform:translateX(-50%);z-index:7;background:rgba(20,10,3,.94);border:1px solid var(--gold);border-radius:14px;padding:12px 18px;text-align:center;font-family:system-ui;max-width:88%}
   #stallPop .se{font-size:32px} #stallPop b{color:var(--goldlt);font-size:14px} #stallPop small{color:var(--muted);display:block;font-size:11px} #stallPop p{font-size:12px;color:var(--cream);margin:4px 0 8px}
   #stallOk{border:none;border-radius:11px;padding:11px 22px;font-size:13px;font-weight:700;cursor:pointer;font-family:system-ui;background:linear-gradient(180deg,#f0c35e,#b97a1a);color:#241102}
@@ -101,6 +101,8 @@
   #drivePad button:nth-child(1){grid-column:2}#drivePad button:nth-child(2){grid-column:1;grid-row:2}#drivePad button:nth-child(3){grid-column:2;grid-row:2}#drivePad button:nth-child(4){grid-column:3;grid-row:2}
   #skyBtn{position:absolute;top:8px;right:8px;z-index:6;border:1px solid var(--line);background:rgba(20,10,3,.85);color:var(--goldlt);border-radius:999px;padding:7px 13px;font-family:system-ui;font-size:12px;font-weight:700;cursor:pointer}
   #skyBtn.on{background:rgba(232,182,76,.3);outline:2px solid var(--goldlt)}
+  .glow{outline:2px solid var(--goldlt)!important;box-shadow:0 0 14px 3px rgba(232,182,76,.55)!important;animation:glPulse 1.2s infinite}
+  @keyframes glPulse{0%,100%{box-shadow:0 0 8px 2px rgba(232,182,76,.4)}50%{box-shadow:0 0 18px 5px rgba(232,182,76,.7)}}
   #skyBar{display:none;position:absolute;top:92px;right:8px;z-index:6;flex-direction:column;gap:6px;max-width:46vw}
   #normBtn{position:absolute;top:48px;right:8px;z-index:6;border:1px solid var(--line);background:rgba(20,10,3,.85);color:var(--goldlt);border-radius:999px;padding:7px 12px;font-family:system-ui;font-size:13px;cursor:pointer}
   #rockBtn{position:absolute;top:88px;right:8px;z-index:6;border:1px solid var(--line);background:rgba(20,10,3,.85);color:var(--goldlt);border-radius:999px;padding:7px 12px;font-family:system-ui;font-size:13px;font-weight:700;cursor:pointer}
@@ -110,14 +112,12 @@
   #screenCard.plain .meter{max-width:220px;margin:6px auto}
   #screenCard.plain .schint{text-shadow:0 2px 6px #000}
   #screenCard.plain .rbtnrow{margin-top:6px}
-  #screenCard .drow{display:flex;gap:4px;justify-content:center;margin:0 0 6px}
-  #screenCard .dchip{width:28px;height:28px;border-radius:8px;border:1px solid var(--line);background:rgba(20,10,3,.82);color:var(--cream);font-size:11px;font-family:system-ui;font-weight:700;cursor:pointer;padding:0}
-  #screenCard .dchip.on{border-color:var(--gold);color:var(--goldlt);background:rgba(232,182,76,.22)}
-  #screenCard .dchip.ok{color:#9fe8b8;border-color:#3fae62}
-  #screenCard .savehint{text-align:center;font-family:system-ui;font-size:10px;color:var(--muted);margin-top:4px;text-shadow:0 1px 4px #000}
   #skyBar button{border:1px solid var(--line);background:rgba(20,10,3,.88);color:var(--cream);border-radius:999px;padding:8px 13px;font-family:system-ui;font-size:11.5px;cursor:pointer;text-align:left;white-space:nowrap}
   #skyBar button.on{border-color:var(--gold);background:rgba(232,182,76,.22);color:var(--goldlt)}
   #fsBtn{position:absolute;left:10px;bottom:10px;z-index:6;border:1px solid var(--line);background:rgba(20,10,3,.85);color:var(--goldlt);border-radius:999px;padding:7px 12px;font-family:system-ui;font-size:13px;cursor:pointer}
+  #volBar{position:absolute;left:10px;bottom:48px;z-index:6;display:flex;align-items:center;gap:4px;background:rgba(20,10,3,.85);border:1px solid var(--line);border-radius:999px;padding:3px 10px 3px 3px;font-family:system-ui;touch-action:none}
+  #volMute{border:none;background:transparent;color:var(--goldlt);font-size:16px;cursor:pointer;width:30px;height:30px;padding:0;line-height:1}
+  #volSlider{width:92px;height:18px;accent-color:var(--gold);cursor:pointer;margin:0}
   #wirePanel{display:none;position:absolute;left:50%;bottom:74px;transform:translateX(-50%);z-index:7;background:rgba(30,8,4,.94);border:1px solid #ff6a5a;border-radius:14px;padding:12px 18px;text-align:center;font-family:system-ui;max-width:88%}
   #wirePanel .se{font-size:30px} #wirePanel b{color:#ffb0a0;font-size:14px} #wirePanel small{color:var(--muted);display:block;font-size:11px;margin-bottom:8px}
   #wirePanel .wrow{display:flex;gap:8px;justify-content:center}
@@ -167,7 +167,7 @@ window.addEventListener('load',function(){ setTimeout(function(){
 </script>
 </head>
 <body>
-<div id="loader"><div class="spin"></div><div id="loadmsg">Building Utsav World… v39</div><div id="err"></div>
+<div id="loader"><div class="spin"></div><div id="loadmsg">Building Utsav World… v44</div><div id="err"></div>
 <small style="font-family:system-ui;opacity:.7;max-width:560px">Needs internet once (3D library via CDN). Open via <b>http://localhost:8000/ganesh-utsav.html</b> — run <b>python3 -m http.server 8000</b> in this folder.</small></div>
 
 <header><div class="om">ॐ</div><h1>Ganesh Utsav World<small>Home Pooja → Yatra → Nimarjanam</small></h1><button id="freshBtn" title="Start fresh from the road">↺</button><button id="adminBtn" title="Admin timings">⚙️</button><div class="pill" id="pill">…</div></header>
@@ -194,7 +194,7 @@ window.addEventListener('load',function(){ setTimeout(function(){
       <div id="st-yatra"><b>🥁</b>Yatra</div>
       <div id="st-nim"><b>🌊</b>Nimarjanam</div>
     </div>
-    <div id="view"><div id="keys">🖱️ drag = 360° view • 🔍 zoom<br>⬆️⬇️⬅️➡️ / WASD drive ratha<br>🔥 Aarti mode: drag to circle flame</div><div id="aartiBadge">🔥<span id="abRound">○○○</span><div class="bar"><div id="abFill"></div></div></div><div id="guideBar"><span id="guideText">🙏 Welcome</span><button id="guideBtn" style="display:none"></button><button id="guideSkip" style="display:none"></button></div><div id="hud"></div><div id="qBoard"><div id="qHead">📋 <span id="qToken"></span></div><div id="qList"></div></div><button id="skyBtn" title="Sky view — watch the whole city live">🌍 Sky</button><button id="rockBtn" title="Asteroid view — the rock our city rides">☄️ Rock</button><button id="normBtn" title="Normal view">🏙️</button><div id="skyBar"></div><button id="fsBtn" title="Fullscreen">⛶</button><div id="wirePanel"><div class="se">⚡</div><b>Live wire on the road!</b><small>Move it aside with the V-stick ◀ ▶, then inch past ▲ ▼</small><div class="wrow"><button data-w="l">◀</button><button data-w="f">▲</button><button data-w="b">▼</button><button data-w="r">▶</button></div></div><div id="stallPop"><div class="se" id="stallEmoji">💧</div><b id="stallName">Stall</b><small id="stallBy"></small><p id="stallDesc"></p><button id="stallOk" class="rbtn big">🙏</button></div><div id="drivePad"><button data-k="arrowup">▲</button><button data-k="arrowleft">◀</button><button data-k="arrowdown">▼</button><button data-k="arrowright">▶</button></div><div id="inspectBar"><button id="inspYes" class="rbtn big">✓</button><button id="inspNo" class="rbtn small">✕</button></div></div>
+    <div id="view"><div id="keys">🖱️ drag = 360° view • 🔍 zoom<br>⬆️⬇️⬅️➡️ / WASD drive ratha<br>🔥 Aarti mode: drag to circle flame</div><div id="aartiBadge">🔥<span id="abRound">○○○</span><div class="bar"><div id="abFill"></div></div></div><div id="guideBar"><span id="guideText">🙏 Welcome</span><button id="guideBtn" style="display:none"></button><button id="guideSkip" style="display:none"></button></div><div id="hud"></div><div id="qBoard"><div id="qHead">📋 <span id="qToken"></span></div><div id="qList"></div></div><button id="skyBtn" title="Sky view — watch the whole city live">🌍 Sky</button><button id="rockBtn" title="Asteroid view — the rock our city rides">☄️ Rock</button><button id="normBtn" title="Normal view">🏙️</button><div id="skyBar"></div><button id="fsBtn" title="Fullscreen">⛶</button><div id="volBar"><button type="button" id="volMute" title="Mute" aria-label="Mute">🔊</button><input id="volSlider" type="range" min="0" max="100" step="1" value="32" aria-label="Volume" /></div><div id="wirePanel"><div class="se">⚡</div><b>Live wire on the road!</b><small>Move it aside with the V-stick ◀ ▶, then inch past ▲ ▼</small><div class="wrow"><button data-w="l">◀</button><button data-w="f">▲</button><button data-w="b">▼</button><button data-w="r">▶</button></div></div><div id="stallPop"><div class="se" id="stallEmoji">💧</div><b id="stallName">Stall</b><small id="stallBy"></small><p id="stallDesc"></p><button id="stallOk" class="rbtn big">🙏</button></div><div id="drivePad"><button data-k="arrowup">▲</button><button data-k="arrowleft">◀</button><button data-k="arrowdown">▼</button><button data-k="arrowright">▶</button></div><div id="inspectBar"><button id="inspYes" class="rbtn big">✓</button><button id="inspNo" class="rbtn small">✕</button></div></div>
   </section>
 
   <section class="card" id="screenCard"><div id="screenBody"><h2>🙏 Loading…</h2></div></section>
@@ -256,13 +256,6 @@ const IDS=Array.from({length:31},(_,i)=>i+1);
 const DAY_NAMES=['Sthapana','Shodashopachara','Pushparchana','Durva Seva','Modak Bhog','Atharvashirsha','Sangeet Bhakti','Uttar Pooja','Anant Chaturdashi'];
 const STAGE_LABEL={home:'🛕 Temple Pooja',ratha:'🙏 On Ratha',ghat:'🥁 At Ghat',done:'🌊 Nimarjanam done'};
 const KEY='ganesh_utsav_v4';
-function storageKey(){
-  try{
-    const id=new URLSearchParams(location.search).get('id');
-    if(id){ const u=String(id).trim().replace(/[^a-zA-Z0-9_-]/g,'').slice(0,80); if(u) return KEY+'_u_'+u; }
-  }catch(e){}
-  return KEY;
-}
 const STATE_VERSION=5;
 function defaultState(){ return {version:STATE_VERSION,idol:5,avatar:'boy',name:'',stage:'home',idolOnRatha:false,
   day:1,days:{},nimDone:false,murtiChosen:false,avatarPicked:false,
@@ -284,8 +277,8 @@ function migrateState(raw){ const d=defaultState();
   s.sched.nimDay=Math.max(1,Math.min(9,+s.sched.nimDay||9));
   if(typeof s.idolOnRatha!=='boolean') s.idolOnRatha=false;
   return s; }
-try{ if(new URLSearchParams(location.search).has('fresh')) localStorage.removeItem(storageKey()); }catch(e){}
-let S=null; try{ S=migrateState(JSON.parse(localStorage.getItem(storageKey()))); }catch(e){ S=null; }
+try{ if(new URLSearchParams(location.search).has('fresh')) localStorage.removeItem(KEY); }catch(e){}
+let S=null; try{ S=migrateState(JSON.parse(localStorage.getItem(KEY))); }catch(e){ S=null; }
 if(!S) S=defaultState();
 /* ---- SAVE SCHEMA (CURSOR: read before wiring live sync) ----
    KEY='ganesh_utsav_v4' in localStorage. S = {version,idol,avatar,name,stage,
@@ -299,7 +292,7 @@ if(!S) S=defaultState();
    announce() to push {day,doneCount,doneAt,stage} to your server; on remote
    updates call Presence.ingestRoster() / apply remote day badges read-only
    (never overwrite local S.days — each device owns its own pooja). */
-const save=()=>{ try{localStorage.setItem(storageKey(),JSON.stringify(S));}catch(e){}
+const save=()=>{ try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}
   try{ LivePresence.announce(daySummary()); }catch(e){}
   pill(); try{renderScreen();}catch(e){} };
 const daySummary=()=>({day:S.day,doneCount:doneCount(),doneAt:(S.days[S.day]||{}).doneAt||null,stage:S.stage,idol:S.idol});
@@ -307,7 +300,29 @@ const D=()=>{ if(!S.days[S.day]) S.days[S.day]={diya:0,flower:0,modak:0,aarti:0,
 const doneCount=()=>Object.values(S.days).filter(d=>d.done).length;
 function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2600); }
 function pill(){ try{ const se={home:'🏠',ratha:'🛕',ghat:'🥁',done:'🌊'}[S.stage]||'';
-  document.getElementById('pill').textContent=`${S.idol}🪔 ${se} ${doneCount()}/9 ${poojaOpen()?'🟢':'🔒'} • v39`; }catch(e){} }
+  document.getElementById('pill').textContent=`${S.idol}🪔 ${se} ${doneCount()}/9 ${poojaOpen()?'🟢':'🔒'} • v44`; }catch(e){} guideGlow(); }
+/* guide-by-glow: highlight the single next button instead of narrating sentences */
+function guideGlow(){ try{
+  document.querySelectorAll('.glow').forEach(e=>e.classList.remove('glow'));
+  const G=s=>{ try{ const el=typeof s==='string'?document.querySelector(s):s; if(el)el.classList.add('glow'); }catch(e){} };
+  const GP=()=>G('#scPrimary');
+  if(!S.murtiChosen){ G('#strip'); return; }
+  if(!(S.name&&S.name.trim())){ G('#nameIn'); return; }
+  if(!S.avatarPicked){ G('#avGirl'); G('#avBoy'); return; }
+  if(S.stage==='home'){ const d=D();
+    if((d.diya||0)<7){ G(hudBtn('🪔 Diya')); GP(); }
+    else if(!d.flower){ G(hudBtn('🌺 Flower')); GP(); }
+    else if(!d.modak){ G(hudBtn('🍬 Modak')); GP(); }
+    else if((d.mantra||0)<11){ G(hudBtn('🕉️ Mantra')); GP(); }
+    else if(!d.done){ G('#doneBtn'); GP(); }
+    else if(doneCount()<9){ G('#days'); }
+    else G('#carryBtn');
+    return; }
+  if(NIM.done){ G('#certBtn'); return; }
+  if(Q.on||NIM.active) return;
+  if(!parkedAtLake()){ try{ G(yatraBtn); }catch(e){} GP(); }
+  else G('#nimBtn');
+}catch(e){} }
 function renderSteps(){ const order=['home','ratha','ghat','nim']; const idx={home:0,ratha:1,ghat:2,nim:3};
   const cur=S.stage==='done'?3:S.stage==='ghat'?2:S.stage==='ratha'?1:0;
   ['home','ratha','ghat','nim'].forEach((k,i)=>{ const el=document.getElementById(k==='ghat'?'st-yatra':'st-'+k);
@@ -316,24 +331,71 @@ function renderSteps(){ const order=['home','ratha','ghat','nim']; const idx={ho
 
 /* ============ audio ============ */
 let AC=null; const ac=()=>{ if(!AC) AC=new (window.AudioContext||window.webkitAudioContext)(); if(AC.state==='suspended')AC.resume(); return AC; };
-const BGM={ worldFile:'BG music 1.mp3', skyFile:'BG MUSIC SKY.mp3', world:null, sky:null, vol:0.32, mode:'world',
+const VOL_KEY='ganesh_utsav_vol';
+function readVol(){ try{ const raw=localStorage.getItem(VOL_KEY); if(!raw) return {level:0.32, muted:false};
+  if(raw[0]==='{'){ const o=JSON.parse(raw); const level=Math.max(0,Math.min(1, Number(o.level))); return {level:Number.isFinite(level)?level:0.32, muted:!!o.muted}; }
+  const n=parseFloat(raw); if(Number.isFinite(n)) return {level:Math.max(0,Math.min(1,n)), muted:false}; }catch(e){}
+  return {level:0.32, muted:false}; }
+const _vol0=readVol();
+const BGM={
+  files:{ world:'BG music 1 .mp3', sky:'BG MUSIC SKY.mp3', crane:'cranenimarjanam.mp3', yatra1:'YATRA STARTS1.mp3', yatra2:'YATRA STARTS2.mp3' },
+  world:null, sky:null, crane:null, yatra1:null, yatra2:null,
+  level:_vol0.level, muted:_vol0.muted, mode:'world', tok:0, craneOn:false, skyWant:false, yatraWant:false, yatraIdx:0, current:null,
+  keys(){ return ['world','sky','crane','yatra1','yatra2']; },
+  out(){ return (this.muted||this.level<=0.001)?0:this.level; },
+  craneOut(){ return Math.min(1, this.out()*1.3); },
+  desired(){ if(this.craneOn) return 'crane'; if(this.skyWant) return 'sky'; if(this.yatraWant) return this.yatraIdx===1?'yatra2':'yatra1'; return 'world'; },
+  apply(){ const v=this.out(), c=this.craneOut();
+    this.keys().forEach(k=>{ const a=this[k]; if(a) a.volume=k==='crane'?c:v; }); },
+  save(){ try{ localStorage.setItem(VOL_KEY, JSON.stringify({level:this.level, muted:this.muted})); }catch(e){} },
+  syncUi(){ const s=document.getElementById('volSlider'), m=document.getElementById('volMute');
+    if(s) s.value=String(Math.round(this.level*100));
+    if(m){ const off=!this.out(); m.textContent=off?'🔇':'🔊'; m.title=off?'Unmute':'Mute'; m.setAttribute('aria-pressed', off?'true':'false'); } },
+  setLevel(n){ this.level=Math.max(0,Math.min(1,+n||0)); this.muted=this.level<=0.001; this.apply(); this.save(); this.syncUi(); if(this.out()) this.refresh(); },
+  toggleMute(){ if(!this.out()){ this.muted=false; if(this.level<=0.001) this.level=0.32; } else this.muted=true;
+    this.apply(); this.save(); this.syncUi(); if(this.out()) this.refresh(); },
+  stop(a){ if(!a) return; a.want=false; try{a.pause();}catch(e){} try{a.currentTime=0;}catch(e){} },
+  pauseKeep(a){ if(!a) return; a.want=false; try{a.pause();}catch(e){} },
   el(which){ let a=this[which]; if(a) return a;
-    a=new Audio(encodeURI(which==='sky'?this.skyFile:this.worldFile)); a.loop=true; a.preload='auto'; a.volume=this.vol; this[which]=a; return a; },
-  play(which){ this.mode=which==='sky'?'sky':'world';
-    try{ const on=this.el(this.mode), off=this.mode==='sky'?this.world:this.sky;
-      if(off){ try{off.pause();}catch(e){} }
-      const p=on.play(); if(p&&p.catch) p.catch(()=>{}); }catch(e){} },
-  start(){ this.play(this.mode); } };
-function bell(){ try{ const c=ac(),t=c.currentTime; [392,523,659,784].forEach((f,i)=>{ const o=c.createOscillator(),g=c.createGain(); o.type='sine'; o.frequency.value=f; g.gain.setValueAtTime(.16/(i+1),t); g.gain.exponentialRampToValueAtTime(.001,t+1.6); o.connect(g).connect(c.destination); o.start(t); o.stop(t+1.7); }); }catch(e){} }
-function pop(){ try{ const c=ac(),o=c.createOscillator(),g=c.createGain(); o.type='triangle'; o.frequency.setValueAtTime(480,c.currentTime); o.frequency.exponentialRampToValueAtTime(880,c.currentTime+.12); g.gain.setValueAtTime(.2,c.currentTime); g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.2); o.connect(g).connect(c.destination); o.start(); o.stop(c.currentTime+.22);}catch(e){} }
-function shankh(){ try{ const c=ac(),o=c.createOscillator(),g=c.createGain(); o.type='sine'; o.frequency.setValueAtTime(140,c.currentTime); o.frequency.linearRampToValueAtTime(280,c.currentTime+1.2); g.gain.setValueAtTime(.13,c.currentTime); g.gain.exponentialRampToValueAtTime(.001,c.currentTime+1.5); o.connect(g).connect(c.destination); o.start(); o.stop(c.currentTime+1.6);}catch(e){} }
+    const file=this.files[which]||this.files.world;
+    a=new Audio(encodeURI(file)); a.loop=!(which==='yatra1'||which==='yatra2'); a.preload='auto';
+    a.volume=which==='crane'?this.craneOut():this.out();
+    if(which==='yatra1'||which==='yatra2'){
+      a.addEventListener('ended',()=>{ if(!this.yatraWant||this.craneOn||this.skyWant) return;
+        this.yatraIdx=which==='yatra1'?1:0; this.current=null; this.refresh(); }); }
+    this[which]=a; return a; },
+  go(which){ const tok=++this.tok; this.current=which; this.mode=which==='yatra2'||which==='yatra1'?'yatra':which;
+    this.keys().forEach(k=>{ if(k===which) return; const a=this[k]; if(!a) return;
+      if(k==='crane'||((k==='yatra1'||k==='yatra2')&&!this.yatraWant)) this.stop(a); else this.pauseKeep(a); });
+    if(!this.out()) return;
+    const on=this.el(which); on.want=true; on.volume=which==='crane'?this.craneOut():this.out();
+    try{ if(which==='crane') on.currentTime=0;
+      else if((which==='yatra1'||which==='yatra2')&&(on.ended||(on.duration&&on.currentTime>=on.duration-0.2))) on.currentTime=0; }catch(e){}
+    try{ const p=on.play(); if(p&&p.then) p.then(()=>{ if(!on.want||tok!==this.tok) this.pauseKeep(on); }).catch(()=>{}); }catch(e){} },
+  refresh(){ const next=this.desired(); const a=this[next];
+    if(this.current===next&&a&&a.want&&!a.paused){ this.apply(); return; }
+    this.go(next); },
+  start(){ this.refresh(); },
+  play(which){ if(which==='sky') this.setSky(true); else this.setSky(false); },
+  setSky(on){ this.skyWant=!!on; this.refresh(); },
+  setYatra(on){ this.yatraWant=!!on; if(on){ this.el('yatra1'); this.el('yatra2'); } else { this.yatraIdx=0; this.stop(this.yatra1); this.stop(this.yatra2); }
+    this.refresh(); },
+  playCrane(){ if(this.craneOn) return; this.craneOn=true; this.refresh(); },
+  stopCrane(){ const was=this.craneOn; this.craneOn=false; this.stop(this.crane); if(was) this.refresh(); } };
+window.BGM=BGM;
+(function bindVol(){ const s=document.getElementById('volSlider'), m=document.getElementById('volMute'), bar=document.getElementById('volBar');
+  if(!s||!m) return; BGM.syncUi();
+  const set=()=>BGM.setLevel((+s.value||0)/100);
+  s.addEventListener('input', set); s.addEventListener('change', set);
+  m.addEventListener('click', e=>{ e.preventDefault(); e.stopPropagation(); BGM.toggleMute(); });
+  if(bar){ ['pointerdown','pointermove','touchstart'].forEach(ev=>bar.addEventListener(ev,e=>e.stopPropagation(), {passive:true})); }
+})();
+function sfxAmp(base){ return Math.max(0, base*(BGM.out()/0.32)); }
+function bell(){ if(!BGM.out()) return; try{ const c=ac(),t=c.currentTime; [392,523,659,784].forEach((f,i)=>{ const o=c.createOscillator(),g=c.createGain(); o.type='sine'; o.frequency.value=f; g.gain.setValueAtTime(sfxAmp(.16)/(i+1),t); g.gain.exponentialRampToValueAtTime(.001,t+1.6); o.connect(g).connect(c.destination); o.start(t); o.stop(t+1.7); }); }catch(e){} }
+function pop(){ if(!BGM.out()) return; try{ const c=ac(),o=c.createOscillator(),g=c.createGain(); o.type='triangle'; o.frequency.setValueAtTime(480,c.currentTime); o.frequency.exponentialRampToValueAtTime(880,c.currentTime+.12); g.gain.setValueAtTime(sfxAmp(.2),c.currentTime); g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.2); o.connect(g).connect(c.destination); o.start(); o.stop(c.currentTime+.22);}catch(e){} }
+function shankh(){ if(!BGM.out()) return; try{ const c=ac(),o=c.createOscillator(),g=c.createGain(); o.type='sine'; o.frequency.setValueAtTime(140,c.currentTime); o.frequency.linearRampToValueAtTime(280,c.currentTime+1.2); g.gain.setValueAtTime(sfxAmp(.13),c.currentTime); g.gain.exponentialRampToValueAtTime(.001,c.currentTime+1.5); o.connect(g).connect(c.destination); o.start(); o.stop(c.currentTime+1.6);}catch(e){} }
 let dholOn=false,dholTimer=null;
-function dhol(start){ if(start&&!dholOn){ dholOn=true; let beat=0;
-    dholTimer=setInterval(()=>{ try{ const c=ac(),t=c.currentTime;
-      const o=c.createOscillator(),g=c.createGain(); o.type='sine'; o.frequency.setValueAtTime(beat%2?120:90,t); o.frequency.exponentialRampToValueAtTime(45,t+.18); g.gain.setValueAtTime(.5,t); g.gain.exponentialRampToValueAtTime(.001,t+.22); o.connect(g).connect(c.destination); o.start(t); o.stop(t+.25);
-      if(beat%2){ const nb=c.createBuffer(1,1200,44100),ch=nb.getChannelData(0); for(let i=0;i<1200;i++)ch[i]=(Math.random()-.5)*(1-i/1200); const ns=c.createBufferSource(); ns.buffer=nb; const ng=c.createGain(); ng.gain.value=.25; const f=c.createBiquadFilter(); f.type='highpass'; f.frequency.value=3000; ns.connect(f).connect(ng).connect(c.destination); ns.start(t); }
-      beat++; }catch(e){} },300);
-  } else if(!start&&dholOn){ dholOn=false; clearInterval(dholTimer); } }
+function dhol(start){ if(start) dholOn=true; else if(dholOn){ dholOn=false; if(dholTimer){ clearInterval(dholTimer); dholTimer=null; } } }
 
 /* ============ images + background removal ============ */
 const cutCache=new Map();
@@ -374,7 +436,7 @@ let crane=null, craneTurret=null, craneTip=null, craneCable=null, craneHook=null
 let crowd=[], lampGlows=[], ripples=[], dholis=[];
 let petals=null, gulal=null, splash=null, fw=null;
 let idolReady=false, idolTex=null;
-const LAKE_Z=-78, CHARIOT_START=28, CHARIOT_LAKE=-56, DROP={x:1.0,z:-73};
+const LAKE_Z=-493, CHARIOT_START=28, CHARIOT_LAKE=-400, DROP={x:1.0,z:-461};
 const HOME={x:0,z:36};
 const NIM={active:false,phase:'',pt:0,done:!!S.nimDone,hookIdolDy:1.4,splashed:false,carrying:false};
 let yatra=false, yatraT=0, yatraFrom={x:0,z:CHARIOT_START}, parkDrive=false, followCam=true, spin360=false;
@@ -422,14 +484,14 @@ function buildWorld(){
   homeAnchorLight=new THREE.PointLight(0xffb050,26,20,1.8); homeAnchorLight.position.set(HOME.x,2.8,HOME.z+1.8); scene.add(homeAnchorLight);
 
   /* ground + road */
-  const gnd=new THREE.Mesh(new THREE.PlaneGeometry(470,260),new THREE.MeshStandardMaterial({color:0x14240f,roughness:1}));
-  gnd.rotation.x=-Math.PI/2; gnd.position.set(0,-0.02,-20); gnd.receiveShadow=true; scene.add(gnd);
+  const gnd=new THREE.Mesh(new THREE.PlaneGeometry(560,720),new THREE.MeshStandardMaterial({color:0x14240f,roughness:1}));
+  gnd.rotation.x=-Math.PI/2; gnd.position.set(0,-0.02,-240); gnd.receiveShadow=true; scene.add(gnd);
   const rockM=new THREE.MeshStandardMaterial({color:0x4a3a32,roughness:1,flatShading:true,fog:false});
   rockM.emissive=new THREE.Color(0x2a1408); rockM.emissiveIntensity=.55;
   const atmo=sprite(glowTex,0xff9a50,700,.14); atmo.position.set(0,-6,-20); scene.add(atmo);
-  const rockGeo=new THREE.ConeGeometry(280,320,30,12);
+  const rockGeo=new THREE.ConeGeometry(330,380,30,12);
   { const p=rockGeo.attributes.position;
-    const craters=[]; for(let c=0;c<7;c++){ const a=Math.random()*Math.PI*2, y=-120+Math.random()*200;
+    const craters=[]; for(let c=0;c<7;c++){ const a=Math.random()*Math.PI*2, y=-150+Math.random()*260;
       craters.push([Math.cos(a),y,Math.sin(a),14+Math.random()*22]); }
     const colArr=new Float32Array(p.count*3); const cA=new THREE.Color(0x5a4a3c), cB=new THREE.Color(0x2e2620), cC=new THREE.Color(0x8a5a30), tmpC=new THREE.Color();
     for(let i=0;i<p.count;i++){ const vx=p.getX(i),vy=p.getY(i),vz=p.getZ(i);
@@ -449,26 +511,27 @@ function buildWorld(){
   const rockMat=new THREE.MeshStandardMaterial({vertexColors:true,roughness:1,flatShading:true,fog:false});
   rockMat.emissive=new THREE.Color(0x1a0d05); rockMat.emissiveIntensity=.5;
   const rock=new THREE.Mesh(rockGeo,rockMat);
-  rock.position.set(0,-162,-20); rock.rotation.x=Math.PI; scene.add(rock);
+  rock.position.set(0,-192,-20); rock.rotation.x=Math.PI; scene.add(rock);
   { const rimM=[0x4a3a2c,0x5a4a38,0x3a2e24].map(c=>new THREE.MeshStandardMaterial({color:c,roughness:1,flatShading:true,fog:false}));
-    for(let i=0;i<30;i++){ const t=i/30, side=Math.floor(t*4)%4, u=(t*4)%1;
-      const ex=side===0?235-(u*470):(side===1?-235:(side===2?-235+u*470:235));
-      const ez=side===0?-150:(side===1?-150+u*260:(side===2?110:110-u*260));
+    for(let i=0;i<60;i++){ const t=i/60, side=Math.floor(t*4)%4, u=(t*4)%1;
+      const ex=side===0?280-(u*560):(side===1?-280:(side===2?-280+u*560:280));
+      const ez=side===0?-600:(side===1?-600+u*720:(side===2?120:120-u*720));
       const rk=new THREE.Mesh(new THREE.DodecahedronGeometry(7+Math.random()*15,0),rimM[i%3]);
       rk.position.set(ex+(Math.random()-.5)*22,-6-Math.random()*14,ez+(Math.random()-.5)*22);
       rk.rotation.set(Math.random()*3,Math.random()*3,Math.random()*3); scene.add(rk); } }
   const floaters=[];
   for(let i=0;i<14;i++){ const fr=new THREE.Mesh(new THREE.DodecahedronGeometry(2+Math.random()*5,0),rockM);
-    const a=Math.random()*Math.PI*2, rr=280+Math.random()*150;
-    fr.position.set(Math.cos(a)*rr,(i<4?6+Math.random()*22:-8-Math.random()*55),-20+Math.sin(a)*rr);
+    const a=Math.random()*Math.PI*2, rr=370+Math.random()*150;
+    fr.position.set(Math.cos(a)*rr,(i<4?6+Math.random()*22:-10-Math.random()*60),-20+Math.sin(a)*rr);
     fr.rotation.set(Math.random()*3,Math.random()*3,0);
     fr.userData={rs:(Math.random()-.5)*.3,by:fr.position.y,ph:Math.random()*7};
     scene.add(fr); floaters.push(fr); }
   window.__floaters=floaters;
   const roadTex=canvasTex(256,256,(g,w,h)=>{ g.fillStyle='#23232c'; g.fillRect(0,0,w,h);
-    g.fillStyle='#f5d67b'; g.fillRect(w/2-4,20,8,60); g.fillRect(w/2-4,140,8,60);
-    g.fillStyle='#e8b64c'; g.fillRect(6,0,6,h); g.fillRect(w-12,0,6,h); },1,9);
-  { const curvePts=[[0,28],[0,22],[-6,16],[-8,10],[-8,2],[-5,-6],[0,-11],[5,-16],[8,-22],[8,-30],[5,-36],[3,-42],[0,-48],[0,-52],[0,-56]];
+    g.fillStyle='#f5d67b'; g.fillRect(w/2-4,20,8,60); g.fillRect(w/2-4,140,8,60); },1,9);
+  const roadTexH=canvasTex(256,256,(g,w,h)=>{ g.fillStyle='#23232c'; g.fillRect(0,0,w,h);
+    g.fillStyle='#f5d67b'; g.fillRect(20,h/2-4,60,8); g.fillRect(140,h/2-4,60,8); },1,1);
+  { const curvePts=[[0,28],[0,-10],[-6,-40],[-8,-70],[-8,-110],[-5,-150],[0,-175],[5,-200],[8,-230],[8,-270],[5,-300],[3,-330],[0,-360],[0,-380],[0,-400]];
     for(let i=0;i<curvePts.length-1;i++){ const [x1,z1]=curvePts[i],[x2,z2]=curvePts[i+1];
       const dx=x2-x1,dz=z2-z1,L=Math.hypot(dx,dz);
       const stx=roadTex.clone(); stx.needsUpdate=true; stx.repeat.set(1,Math.max(1,L/13));
@@ -476,34 +539,57 @@ function buildWorld(){
       seg.rotation.x=-Math.PI/2; seg.rotation.z=-Math.atan2(dx,dz);
       seg.position.set((x1+x2)/2,0.015+i*0.0009,(z1+z2)/2); seg.receiveShadow=true; scene.add(seg); } }
   [-8.2,8.2].forEach(x=>{ const p=new THREE.Mesh(new THREE.BoxGeometry(3.4,.18,120),new THREE.MeshStandardMaterial({color:0x4a3a28,roughness:1})); p.position.set(x,0.09,-12); p.receiveShadow=true; scene.add(p); });
-  [10,-14].forEach(z=>{ const tx=roadTex.clone(); tx.needsUpdate=true; tx.repeat.set(9,1);
+  [-70,-190].forEach(z=>{ const tx=roadTexH.clone(); tx.needsUpdate=true; tx.repeat.set(3,1);
     const c=new THREE.Mesh(new THREE.PlaneGeometry(44,7),new THREE.MeshStandardMaterial({map:tx,roughness:.9,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2}));
     c.rotation.x=-Math.PI/2; c.position.set(0,0.02,z); c.receiveShadow=true; scene.add(c); });
-  { const avetx=roadTex.clone(); avetx.needsUpdate=true; avetx.repeat.set(1,9);
-  const ave=new THREE.Mesh(new THREE.PlaneGeometry(7,72),new THREE.MeshStandardMaterial({map:avetx,roughness:.9,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2}));
-    ave.rotation.x=-Math.PI/2; ave.position.set(-18,0.02,-6); ave.receiveShadow=true; scene.add(ave);
-    for(let i=0;i<5;i++){ const z=26-i*13;
+  { const avetx=roadTex.clone(); avetx.needsUpdate=true; avetx.repeat.set(1,33);
+  const ave=new THREE.Mesh(new THREE.PlaneGeometry(7,430),new THREE.MeshStandardMaterial({map:avetx,roughness:.9,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2}));
+    ave.rotation.x=-Math.PI/2; ave.position.set(-18,0.02,-185); ave.receiveShadow=true; scene.add(ave);
+    for(let i=0;i<16;i++){ const z=26-i*27;
       const pole=new THREE.Mesh(new THREE.CylinderGeometry(.09,.12,5.4,8),new THREE.MeshStandardMaterial({color:0x222226,roughness:.6})); pole.position.set(-16.5,2.7,z); scene.add(pole);
       const bulb=new THREE.Mesh(new THREE.SphereGeometry(.16,10,10),new THREE.MeshBasicMaterial({color:0xffd98a})); bulb.position.set(-16.5,5.4,z); scene.add(bulb);
       const gl2=sprite(glowTex,0xffb050,3.2,.8); gl2.position.set(-16.5,5.4,z); scene.add(gl2); lampGlows.push(gl2); } }
-  { const avetx2=roadTex.clone(); avetx2.needsUpdate=true; avetx2.repeat.set(1,9);
-  const ave2=new THREE.Mesh(new THREE.PlaneGeometry(7,72),new THREE.MeshStandardMaterial({map:avetx2,roughness:.9,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2}));
-    ave2.rotation.x=-Math.PI/2; ave2.position.set(20,0.02,-6); ave2.receiveShadow=true; scene.add(ave2);
-    const cr3tx=roadTex.clone(); cr3tx.needsUpdate=true; cr3tx.repeat.set(10,1);
+  { const avetx2=roadTex.clone(); avetx2.needsUpdate=true; avetx2.repeat.set(1,33);
+  const ave2=new THREE.Mesh(new THREE.PlaneGeometry(7,430),new THREE.MeshStandardMaterial({map:avetx2,roughness:.9,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2}));
+  ave2.rotation.x=-Math.PI/2; ave2.position.set(20,0.02,-185); ave2.receiveShadow=true; scene.add(ave2);
+    const cr3tx=roadTexH.clone(); cr3tx.needsUpdate=true; cr3tx.repeat.set(4,1);
     const cr3=new THREE.Mesh(new THREE.PlaneGeometry(50,7),new THREE.MeshStandardMaterial({map:cr3tx,roughness:.9,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2}));
-    cr3.rotation.x=-Math.PI/2; cr3.position.set(0,0.02,-30); cr3.receiveShadow=true; scene.add(cr3);
-    for(let i=0;i<5;i++){ const z=26-i*13;
+    cr3.rotation.x=-Math.PI/2; cr3.position.set(0,0.02,-270); cr3.receiveShadow=true; scene.add(cr3);
+    for(let i=0;i<16;i++){ const z=26-i*27;
       const pole=new THREE.Mesh(new THREE.CylinderGeometry(.09,.12,5.4,8),new THREE.MeshStandardMaterial({color:0x222226,roughness:.6})); pole.position.set(18.5,2.7,z); scene.add(pole);
       const bulb=new THREE.Mesh(new THREE.SphereGeometry(.16,10,10),new THREE.MeshBasicMaterial({color:0xffd98a})); bulb.position.set(18.5,5.4,z); scene.add(bulb);
       const gl3=sprite(glowTex,0xffb050,3.2,.8); gl3.position.set(18.5,5.4,z); scene.add(gl3); lampGlows.push(gl3); } }
-  { const crossRoad=(z,halfW,lamps=true)=>{ const tx=roadTex.clone(); tx.needsUpdate=true; tx.repeat.set(Math.max(2,halfW*2/5),1);
+  { const crossRoad=(z,halfW,lamps=true)=>{ const tx=roadTexH.clone(); tx.needsUpdate=true; tx.repeat.set(Math.max(2,Math.round(halfW*2/13)),1);
       const c=new THREE.Mesh(new THREE.PlaneGeometry(halfW*2,7),new THREE.MeshStandardMaterial({map:tx,roughness:.9,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2}));
       c.rotation.x=-Math.PI/2; c.position.set(0,0.028,z); c.receiveShadow=true; scene.add(c);
       if(lamps) [-1,1].forEach(s=>{ const pole=new THREE.Mesh(new THREE.CylinderGeometry(.09,.12,5.4,8),new THREE.MeshStandardMaterial({color:0x222226,roughness:.6}));
         pole.position.set(s*(halfW-1.5),2.7,z+4.6); scene.add(pole);
         const bulb=new THREE.Mesh(new THREE.SphereGeometry(.16,10,10),new THREE.MeshBasicMaterial({color:0xffd98a})); bulb.position.set(s*(halfW-1.5),5.4,z+4.6); scene.add(bulb);
         const glx=sprite(glowTex,0xffb050,3.2,.8); glx.position.set(s*(halfW-1.5),5.4,z+4.6); scene.add(glx); lampGlows.push(glx); }); };
-    crossRoad(22,30); crossRoad(-26,30); crossRoad(-66,34); }
+    crossRoad(-10,30); crossRoad(-250,30); crossRoad(-450,34); }
+  { const carCols=[0xb81f2d,0x1f6eb8,0xe8e8e8,0x2a2a2e,0x12a45a,0xe8b64c];
+    const mkCar=(x,z,ry,ci)=>{ const g=new THREE.Group(); g.position.set(x,0,z); g.rotation.y=ry; scene.add(g);
+      const bm=new THREE.MeshStandardMaterial({color:carCols[ci%carCols.length],roughness:.35,metalness:.5});
+      const body=new THREE.Mesh(new THREE.BoxGeometry(4.2,.9,1.9),bm); body.position.y=.75; body.castShadow=true; g.add(body);
+      const cab=new THREE.Mesh(new THREE.BoxGeometry(2.2,.7,1.7),new THREE.MeshStandardMaterial({color:0x9ad0e8,roughness:.2,metalness:.6}));
+      cab.position.set(-.2,1.45,0); cab.castShadow=true; g.add(cab);
+      const wg=new THREE.CylinderGeometry(.38,.38,.3,12);
+      const wm=new THREE.MeshStandardMaterial({color:0x141414,roughness:.9});
+      [[-1.4,-.85],[1.4,-.85],[-1.4,.85],[1.4,.85]].forEach(([wx,wz])=>{
+        const w=new THREE.Mesh(wg,wm); w.rotation.x=Math.PI/2; w.position.set(wx,.38,wz); g.add(w); }); };
+    mkCar(-24,-60,Math.PI/2,0); mkCar(24,-182,-Math.PI/2,1); mkCar(-17,-280,Math.PI/2,2);
+    mkCar(24,-78,-Math.PI/2,3); mkCar(-24,20,Math.PI/2,4); mkCar(12,44,Math.PI/2,5); mkCar(-11,30,Math.PI/2,1); }
+  { const mkUFO=(x,y,z)=>{ const g=new THREE.Group(); g.position.set(x,y,z); scene.add(g);
+      const hull=new THREE.Mesh(new THREE.CylinderGeometry(2.2,2.9,.9,20),
+        new THREE.MeshStandardMaterial({color:0x9aa4b5,metalness:.9,roughness:.25})); hull.castShadow=true; g.add(hull);
+      const dome=new THREE.Mesh(new THREE.SphereGeometry(1.1,16,12,0,Math.PI*2,0,Math.PI/2),
+        new THREE.MeshStandardMaterial({color:0x9adcff,metalness:.4,roughness:.1,emissive:0x1a4a5a,emissiveIntensity:.6})); dome.position.y=.45; g.add(dome);
+      for(let i=0;i<6;i++){ const a=i/6*Math.PI*2;
+        const lt=new THREE.Mesh(new THREE.SphereGeometry(.16,8,8),new THREE.MeshBasicMaterial({color:[0xff5f7e,0x12e46a,0xffd93c][i%3]}));
+        lt.position.set(Math.cos(a)*2.5,-.1,Math.sin(a)*2.5); g.add(lt); }
+      const beam=sprite(glowTex,0x9adcff,5,.35); beam.position.y=-1.4; g.add(beam);
+      g.userData={rs:.4,by:y,ph:Math.random()*7}; if(window.__floaters)window.__floaters.push(g); };
+    mkUFO(-26,4,-176); mkUFO(26,4.5,-272); }
   /* home driveway */
   const drive=new THREE.Mesh(new THREE.PlaneGeometry(5,10),new THREE.MeshStandardMaterial({color:0x3a3227,roughness:1}));
   drive.rotation.x=-Math.PI/2; drive.position.set(6.5,0.005,17); drive.receiveShadow=true; scene.add(drive);
@@ -580,13 +666,13 @@ function buildWorld(){
   const fac=canvasTex(128,256,(g,w,h)=>{ g.fillStyle='#2c2138'; g.fillRect(0,0,w,h);
       for(let y=14;y<h-10;y+=28) for(let x=10;x<w-10;x+=26){ g.fillStyle=Math.random()<.55?'#ffd97a':'#1a2438'; g.fillRect(x,y,16,18); } });
     const cols=[0x8a4a6e,0x3c5a8a,0x6e7a3c,0x7a4a2c,0x5a3c7a];
-    { for(let i=0;i<16;i++){ const side=i%2?1:-1, z=28-i*5+Math.random()*2;
+    { for(let i=0;i<16;i++){ const side=i%2?1:-1, z=30-i*25+Math.random()*2;
       const bw=4+Math.random()*2, bh=5+Math.random()*7;
       const b=new THREE.Mesh(new THREE.BoxGeometry(bw,bh,5),new THREE.MeshStandardMaterial({map:fac,color:cols[i%cols.length],roughness:.85,emissive:0xffca6a,emissiveMap:fac,emissiveIntensity:.55}));
       b.position.set(side*(16+Math.random()*2),bh/2,z); scene.add(b);
       const awn=new THREE.Mesh(new THREE.BoxGeometry(bw+.6,.3,1.6),new THREE.MeshStandardMaterial({color:i%2?0xb81f2d:0x1f6eb8,roughness:.7}));
       awn.position.set(side*12.4,3.1,z+2.6); scene.add(awn); } }
-  [[-19,10],[19,10],[-19,-14],[19,-14],[-12.5,-33.5],[12.5,-33.5]].forEach(([hx,hz],hi)=>{
+  [[-19,-70],[19,-70],[-19,-190],[19,-190],[-12.5,-287],[12.5,-287]].forEach(([hx,hz],hi)=>{
     const hw=4+((hi*37)%3), hh=5+((hi*53)%5);
     const hb=new THREE.Mesh(new THREE.BoxGeometry(hw,hh,5),new THREE.MeshStandardMaterial({map:fac,color:cols[(hi+2)%cols.length],roughness:.85,emissive:0xffca6a,emissiveMap:fac,emissiveIntensity:.55}));
     hb.position.set(hx,hh/2,hz); hb.castShadow=true; scene.add(hb);
@@ -660,7 +746,7 @@ function buildWorld(){
       g.fillStyle='#7a1e00'; g.font='bold 30px serif'; g.fillText('श्री गणेश',w/2,128); });
     flagTex.wrapS=flagTex.wrapT=THREE.ClampToEdgeWrapping;
     window._flags=[];
-    [[-5.5,32],[5.5,32],[-5.5,-60],[5.5,-60]].forEach(([x,z])=>{
+    [[-5.5,32],[5.5,32],[-5.5,-420],[5.5,-420]].forEach(([x,z])=>{
       const pole=new THREE.Mesh(new THREE.CylinderGeometry(.07,.09,7,8),new THREE.MeshStandardMaterial({color:0x8a6a3a,roughness:.6})); pole.position.set(x,3.5,z); pole.castShadow=true; scene.add(pole);
       const f=new THREE.Mesh(new THREE.PlaneGeometry(1.9,1.15),new THREE.MeshStandardMaterial({map:flagTex,side:THREE.DoubleSide,roughness:.8}));
       f.position.set(x+0.95,6.2,z); scene.add(f); window._flags.push(f); }); }
@@ -698,24 +784,24 @@ function buildWorld(){
         const r=new THREE.Mesh(new THREE.PlaneGeometry(5,L+2),wm);
         r.rotation.x=-Math.PI/2; r.rotation.z=-Math.atan2(dx,dz);
         r.position.set((x1+x2)/2,0.04,(z1+z2)/2); scene.add(r); } };
-      run([[0,-78],[-90,-86],[-182,-44]]);
-      run([[0,-78],[90,-86],[158,-44]]); }
+      run([[0,-493],[-90,-100],[-182,-44]]);
+      run([[0,-493],[90,-100],[158,-44]]); }
     lakeFx={foam,glint};
     const gl=sprite(glowTex,0x3fa9e0,26,.35); gl.position.set(0,1,LAKE_Z); scene.add(gl);
     for(let i=0;i<4;i++){ const st=new THREE.Mesh(new THREE.BoxGeometry(20-i*1.2,.5,1.4),new THREE.MeshStandardMaterial({color:0x8a7a5c,roughness:.9}));
-      st.position.set(0,.25-i*.5,-64.5-i*1.5); st.receiveShadow=true; scene.add(st); }
+      st.position.set(0,.25-i*.5,-489.5-i*1.5); st.receiveShadow=true; scene.add(st); }
     for(let r=0;r<3;r++){ const ring=new THREE.Mesh(new THREE.RingGeometry(1,1.25,48),new THREE.MeshBasicMaterial({color:0xbfe6ff,transparent:true,opacity:0,side:THREE.DoubleSide}));
       ring.rotation.x=-Math.PI/2; ring.position.set(0,.06,LAKE_Z); scene.add(ring); ripples.push({m:ring,t:Math.random()}); }
     for(let i=0;i<6;i++){ const x=-5+i*2;
-      const cup=new THREE.Mesh(new THREE.CylinderGeometry(.13,.09,.15,8),new THREE.MeshStandardMaterial({color:0x7a3c18})); cup.position.set(x,.62,-64.6); scene.add(cup);
-      const fl=new THREE.Sprite(new THREE.SpriteMaterial({map:flameTex,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending})); fl.scale.set(.32,.46,1); fl.position.set(x,.92,-64.6); fl.userData.base={x:.32,y:.46}; scene.add(fl); diyaFlames.push(fl); }
-    const gl2=sprite(glowTex,0xff9a3c,6,.4); gl2.position.set(0,1.2,-64.6); scene.add(gl2);
-    { const par=new THREE.Mesh(new THREE.BoxGeometry(17,1,1.2),new THREE.MeshStandardMaterial({color:0x9a8a6c,roughness:.9}));
-      par.position.set(0,.5,-59.5); par.castShadow=true; scene.add(par);
+      const cup=new THREE.Mesh(new THREE.CylinderGeometry(.13,.09,.15,8),new THREE.MeshStandardMaterial({color:0x7a3c18})); cup.position.set(x,.62,-489.6); scene.add(cup);
+      const fl=new THREE.Sprite(new THREE.SpriteMaterial({map:flameTex,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending})); fl.scale.set(.32,.46,1); fl.position.set(x,.92,-489.6); fl.userData.base={x:.32,y:.46}; scene.add(fl); diyaFlames.push(fl); }
+    const gl2=sprite(glowTex,0xff9a3c,6,.4); gl2.position.set(0,1.2,-489.6); scene.add(gl2);
+    { const par=new THREE.Mesh(new THREE.BoxGeometry(17,.55,1.2),new THREE.MeshStandardMaterial({color:0x9a8a6c,roughness:.9}));
+      par.position.set(0,.28,-412); par.castShadow=true; scene.add(par);
       [-8.5,8.5].forEach(x=>{ const pil=new THREE.Mesh(new THREE.BoxGeometry(.8,2.2,.8),new THREE.MeshStandardMaterial({color:0x8a7a5c,roughness:.9}));
-        pil.position.set(x,1.1,-59.5); pil.castShadow=true; scene.add(pil);
-        const lamp=new THREE.Mesh(new THREE.SphereGeometry(.22,10,10),new THREE.MeshBasicMaterial({color:0xffd98a})); lamp.position.set(x,2.5,-59.5); scene.add(lamp);
-        const lgl=sprite(glowTex,0xffb050,3.5,.8); lgl.position.set(x,2.5,-59.5); scene.add(lgl); lampGlows.push(lgl); }); } }
+        pil.position.set(x,1.1,-412); pil.castShadow=true; scene.add(pil);
+        const lamp=new THREE.Mesh(new THREE.SphereGeometry(.22,10,10),new THREE.MeshBasicMaterial({color:0xffd98a})); lamp.position.set(x,2.5,-412); scene.add(lamp);
+        const lgl=sprite(glowTex,0xffb050,3.5,.8); lgl.position.set(x,2.5,-412); scene.add(lgl); lampGlows.push(lgl); }); } }
 
   buildChariot(); buildCrane(); buildCrowd(); buildParticles();
   buildAvatar(S.avatar); buildPeds();
@@ -802,7 +888,7 @@ function mountFreshIdol(silent){
 
 /* ---------- crane ---------- */
 function buildCrane(){
-  crane=new THREE.Group(); crane.position.set(4.5,0,-67); scene.add(crane);
+  crane=new THREE.Group(); crane.position.set(4.5,0,-455); scene.add(crane);
   const yellow=new THREE.MeshStandardMaterial({color:0xf2a900,roughness:.5,metalness:.25});
   const dark=new THREE.MeshStandardMaterial({color:0x23232a,roughness:.8});
   [-0.85,0.85].forEach(x=>{ const tr=new THREE.Mesh(new THREE.BoxGeometry(.75,.55,3.4),dark); tr.position.set(x,.3,0); tr.castShadow=true; crane.add(tr); });
@@ -927,13 +1013,12 @@ async function setIdol(n,first=false){
   document.getElementById('murtiPreview').src=imgURL(n);
   document.querySelectorAll('.th').forEach(el=>el.classList.toggle('active',+el.dataset.n===n));
   if(!GL) return;
-  if(!first) toast('Preparing murti…');
   stat.murti='loading…'; renderStatus();
   try{
     const cv=await cutout(n);
     applyIdolTexture(new THREE.CanvasTexture(cv));
     stat.murti='✓ background removed'; renderStatus();
-    if(!first){ pop(); toast(`Murti ${n} at your home mandap`); }
+    if(!first){ pop(); }
   }catch(e){
     try{ const img=await loadImg(n);
       applyIdolTexture(new THREE.CanvasTexture(img));
@@ -941,8 +1026,7 @@ async function setIdol(n,first=false){
     }catch(e2){ stat.murti='✗ '+e2.message; renderStatus(); fail(e2.message); }
   }
   renderHomeDiyas();
-  if(!first&&GL){ try{ camera.position.set(0,2.6,27.5); controls.target.set(0,2.1,39.3); lastTouch=performance.now(); }catch(e){}
-    toast('Bappa virajman in the temple — front darshan 🙏'); }
+  if(!first&&GL){ try{ camera.position.set(0,2.6,27.5); controls.target.set(0,2.1,39.3); lastTouch=performance.now(); }catch(e){} }
 }
 function renderHomeDiyas(){ if(!GL) return; const lit=Math.min(7,Math.max(1+doneCount(),(S.days[S.day]&&S.days[S.day].diya)||0)); homeDiyas.forEach((f,i)=>f.visible=i<lit); }
 
@@ -986,7 +1070,8 @@ function aartiBadgeUpdate(){ const d=D();
 function parkedAtLake(){ return GL&&chart&&chart.position.z<CHARIOT_LAKE+6; }
 function refreshNimBtn(){
   const all9=doneCount()>=9;
-  const ready=GL&&S.idolOnRatha&&(S.stage==='ratha'||S.stage==='ghat')&&parkedAtLake()&&all9&&!NIM.active&&!NIM.done&&!Q.on;
+  const nimDay=(S.sched&&S.sched.nimDay)||9;
+  const ready=GL&&S.idolOnRatha&&(S.stage==='ratha'||S.stage==='ghat')&&parkedAtLake()&&all9&&!NIM.active&&!NIM.done&&!Q.on&&S.day>=nimDay;
   const btn=document.getElementById('nimBtn'); btn.disabled=!ready;
   btn.innerHTML=Q.on?'📋 In Queue — watch the crane':(NIM.active?'🏗️ Crane working…':'Join Nimarjan Queue 🌊');
   const hint=document.getElementById('nimHint');
@@ -996,6 +1081,7 @@ function refreshNimBtn(){
   else if(NIM.done||S.stage==='done') hint.textContent='Nimarjanam sampanna. Start a New Utsav for the next celebration.';
   else if(!S.idolOnRatha) hint.textContent='Bappa is at home. Do pooja, then carry Him to the ratha.';
   else if(!all9) hint.textContent=`Nimarjanam happens after pooja: ${doneCount()}/9 days done. Keep going at the mandap.`;
+  else if(S.day<nimDay) hint.textContent=`Pooja complete! Nimarjanam opens on Day ${nimDay} (fixed by Admin).`;
   else if(!parkedAtLake()) hint.textContent=`Take Bappa to Aakasha Ganga (Yatra / Park / drive). Ratha z=${Math.round(chart.position.z)}, ghat z≈${CHARIOT_LAKE}.`;
   else hint.textContent='Ratha parked at the ghat — join the city queue! The crane takes families one by one.';
   document.getElementById('certBtn').disabled=!NIM.done;
@@ -1024,11 +1110,10 @@ document.getElementById('doneBtn').onclick=()=>{ if(!needWindow())return; const 
   if((d.mantra||0)<11)return toast(`Step 4: chant with Bappa (🕉️ Mantra) — ${d.mantra||0}/11`);
   d.done=true; d.doneAt=new Date().toISOString(); save(); renderSeva(); shankh();
   const a=anchorPos(); burst(fw,a.x,a.y+2,a.z,120,6,7,['#ffd93c','#ff7a3c','#fff','#8fd6a0']);
-  toast(`Day ${S.day} sampanna — ${DAY_NAMES[S.day-1]} ✓`);
   if(S.day<9){ S.day++; save(); renderSeva(); } };
 document.getElementById('carryBtn').onclick=()=>{
   if(!(S.stage==='home'&&!carrying&&S.days[1]&&S.days[1].done&&idolReady)) return;
-  carrying=true; carryT=0; refreshNimBtn();
+  carrying=true; carryT=0; refreshNimBtn(); shankh();
   if(GL){ chart.visible=true; chart.position.set(0,0,CHARIOT_START); chartYawTarget=0;
     if(homeMurtiMesh) homeMurtiMesh.visible=false;
     carryCrew.forEach(c=>{ try{scene.remove(c);}catch(e){} }); carryCrew.length=0;
@@ -1037,15 +1122,16 @@ document.getElementById('carryBtn').onclick=()=>{
     carryVeil.visible=true; carryVeil.scale.setScalar(1.6); carryVeil.position.set(0,1.1,39.0);
     if(carrier&&carrierMat){ carrier.scale.setScalar(2.2); carrierMat.opacity=0;
       if(idolTex){ carrierMat.map=idolTex; carrierMat.needsUpdate=true; } carrier.visible=false; } }
-  toast('Four sevaks lift heavy Bappa Himself… to the ratha 🙏'); };
+};
 function newUtsav(){ S.stage='home'; S.idolOnRatha=false; S.day=1; S.days={}; S.nimDone=false;
   NIM.done=false; NIM.active=false; NIM.carrying=false; carrying=false; yatra=false; parkDrive=false; yatraT=0;
+  try{ BGM.setYatra(false); BGM.setSky(false); BGM.stopCrane(); }catch(e){}
   if(GL){ chart.visible=false; chart.position.set(0,0,CHARIOT_START); chartYawTarget=0; mountFreshIdol(true);
     altarHidden=false;
     if(homeMurtiMesh){ homeMurtiMesh.visible=true; homeMurtiMesh.scale.setScalar(1); }
     carryCrew.forEach(c=>{ try{scene.remove(c);}catch(e){} }); carryCrew.length=0; }
   resetCityForNewUtsav();
-  save(); setStage('home'); toast('New Utsav — Bappa is in the temple. Begin Day-1 pooja.'); }
+  save(); setStage('home'); }
 function resetCityForNewUtsav(){
   Q.on=false; Q.idx=0; Q.phase=''; Q.carrying=false; Q.carryObj=null;
   stallPause=false; stallDone={}; curStall=-1;
@@ -1063,16 +1149,16 @@ function resetCityForNewUtsav(){
   if(window.__drig) Object.values(window.__drig).forEach(R=>{ if(R.cable)R.cable.visible=false; if(R.hook)R.hook.visible=false; });
   DN.active=null; DN.idle=0; DN.e={done:false,phase:'',t:0}; DN.w={done:false,phase:'',t:0};
   bots.forEach(b=>{ b.day=1+Math.floor(Math.random()*5); updateBotLabel(b);
-    if(b.ratha)b.ratha.g.visible=false;
+    if(b.ratha)parkBotHome(b);
     if(b.crew)b.crew.forEach(f=>f.g.visible=false);
-    b.mode='road'; b.goneT=0; });
-  mandals.forEach(m=>{ if(m.ratha)m.ratha.g.visible=false; if(m.crew)m.crew.forEach(f=>f.g.visible=false); });
+    b.goneT=0; });
+  mandals.forEach(m=>{ if(m.ratha){ m.ratha.g.visible=true; m.ratha.idols.forEach(x=>x.visible=true); } if(m.crew)m.crew.forEach(f=>f.g.visible=true); });
   WIRE.active=false; WIRE.done=false; WIRE.lift=0; WIRE.ang=0; WIRE.f=WIRE.b=WIRE.l=WIRE.r=0;
   if(WIRE.wg){WIRE.wg.position.x=0;WIRE.wg.position.y=0;}
   const wp2=document.getElementById('wirePanel'); if(wp2)wp2.style.display='none';
   markStripTaken(); }
 document.getElementById('newBtn').onclick=()=>{ if(confirm('Start a new Utsav with the same murti? (pooja progress resets)')) newUtsav(); };
-document.getElementById('resetBtn').onclick=()=>{ if(confirm('Reset everything?')){ localStorage.removeItem(storageKey()); location.reload(); } };
+document.getElementById('resetBtn').onclick=()=>{ if(confirm('Reset everything?')){ localStorage.removeItem(KEY); location.reload(); } };
 
 /* ---------- HUD ---------- */
 const hud=document.getElementById('hud');
@@ -1085,45 +1171,44 @@ const canMove=()=>{ if(S.stage==='home'||carrying){ toast(S.stage==='home'?'Firs
 const yatraBtn=hbtn('🥁 Yatra',b=>{ if(noGL()||!canMove())return; ac();
   yatra=!yatra; parkDrive=false; dhol(yatra);
   if(yatra){ yatraFrom={x:chart.position.x,z:chart.position.z}; yatraT=0; }
-  b.classList.toggle('on',yatra); b.innerHTML=yatra?'⏹ Stop Ratha':'🥁 Yatra';
-  toast(yatra?'Shobha Yatra — Bappa faces forward, dhol roars':'Ratha stopped. Parked right here.'); },'gold');
+  b.classList.toggle('on',yatra); b.innerHTML=yatra?'⏹ Stop Ratha':'🥁 Yatra'; },'gold');
 hbtn('🅿️ Park at Ghat',()=>{ if(noGL()||!canMove())return;
   yatra=false; dhol(false); yatraBtn.classList.remove('on'); yatraBtn.innerHTML='🥁 Yatra';
-  parkDrive=true; toast('Driving to Aakasha Ganga parking… (WASD takes over)'); });
+  parkDrive=true; });
 const spinBtn=hbtn('🔄 360°',b=>{ if(noGL())return; spin360=!spin360; controls.autoRotate=spin360; b.classList.toggle('on',spin360);
-  toast(spin360?'Cinematic 360° spin — drag anytime to take over':'360° spin off'); });
+  });
 const aartiBtn=hbtn('🔥 Aarti',b=>{ if(noGL())return;
   aartiMode=!aartiMode; controls.enabled=!aartiMode; if(spin360&&aartiMode){spin360=false;controls.autoRotate=false;spinBtn.classList.remove('on');}
   b.classList.toggle('on',aartiMode);
   if(aartiRig) aartiRig.visible=aartiMode; if(aartiRing) aartiRing.visible=false;
-  aartiBadgeUpdate(); toast(aartiMode?'Aarti mode — gold ring shows the path. Drag to circle the flame.':'Orbit mode'); });
+  aartiBadgeUpdate(); });
 hbtn('🪔 Diya',()=>{ if(!needWindow())return; const d=D(); d.diya=Math.min(7,(d.diya||0)+1); save(); renderSeva(); bell(); homeGlowT=1.2;
   if(GL){ const a=anchorPos();
     diyaFlames.forEach(f=>f.scale.set(f.userData.base.x*1.45,f.userData.base.y*1.45,1));
     setTimeout(()=>diyaFlames.forEach(f=>f.scale.set(f.userData.base.x,f.userData.base.y,1)),900);
     burst(petals,a.x,a.y,a.z,20,1.5,2,['#ffd93c','#ff9a3c']); }
-  toast(d.diya>=7?'All 7 lamps glowing before Bappa 🪔✨':`Lamp ${d.diya} of 7 lit 🪔`); });
-hbtn('🌺 Flower',()=>{ if(!needWindow())return; const d=D(); if(d.flower){ toast('Pushpa already offered today 🌺'); return; } d.flower=1; save(); renderSeva(); pop();
+  });
+hbtn('🌺 Flower',()=>{ if(!needWindow())return; const d=D(); if(d.flower){ return; } d.flower=1; save(); renderSeva(); pop();
   const a=anchorPos(); burst(petals,a.x,a.y+1.5,a.z,60,2.5,1,['#ff5f7e','#ff9db0','#ffd9e8','#fff']);
   if(S.stage==='home'){ burst(petals,a.x,a.y+3,a.z,50,3,1.2,['#ff5f7e','#ffd93c','#fff']); homeGlowT=Math.max(homeGlowT,.7); } });
-hbtn('🍬 Modak',()=>{ if(!needWindow())return; const d=D(); if(d.modak){ toast('Modak already offered today 🍬'); return; } d.modak=1; save(); renderSeva(); pop();
-  const a=anchorPos(); burst(gulal,a.x,a.y,a.z,40,2,3,['#e8b64c','#f5d67b','#fff']); toast('Modak bhog offered'); });
+hbtn('🍬 Modak',()=>{ if(!needWindow())return; const d=D(); if(d.modak){ return; } d.modak=1; save(); renderSeva(); pop();
+  const a=anchorPos(); burst(gulal,a.x,a.y,a.z,40,2,3,['#e8b64c','#f5d67b','#fff']); });
 hbtn('🟣 Gulal',()=>{ pop(); if(GL){ const a=anchorPos();
   burst(gulal,a.x,a.y,a.z,90,4,4,['#ff3d68','#e8b64c','#12c46a','#6C3CE0','#fff']); } });
 hbtn('🧨 Crackers',()=>{ if(S.stage==='home'||carrying){ toast('🧨 Crackers burst when Bappa is on the ratha'); return; }
   if(!GL){ toast('3D world not loaded'); return; } ac();
   const px=chart.position.x,pz=chart.position.z;
-  for(let i=0;i<6;i++) setTimeout(()=>{ burst(fw,px+(Math.random()-.5)*9,3+Math.random()*4,pz+(Math.random()-.5)*9,45,4,6,['#ffd93c','#ff7a3c','#fff','#ff3d68']); pop(); },i*300);
-  toast('🧨 Kala-kala crackers for Bappa!'); });
+  for(let i=0;i<6;i++) setTimeout(()=>{ burst(fw,px+(Math.random()-.5)*9,3+Math.random()*4,pz+(Math.random()-.5)*9,45,4,6,['#ffd93c','#ff7a3c','#fff','#ff3d68']); pop(); },i*300); });
 hbtn('🎥 Follow',b=>{ followCam=!followCam; b.classList.toggle('on',followCam); });
 document.querySelectorAll('#hud button')[9].classList.add('on');
 document.getElementById('nimBtn').onclick=()=>{ if(noGL())return;
   if(!S.idolOnRatha||!parkedAtLake()||doneCount()<9||NIM.active||NIM.done||Q.on) return;
+  if(S.day<((S.sched&&S.sched.nimDay)||9)){ return; }
   yatra=false; parkDrive=false; dhol(false);
   yatraBtn.classList.remove('on'); yatraBtn.innerHTML='🥁 Yatra';
   if(!buildQueue()) return;
   const yi=Q.list.findIndex(e=>e.k==='you');
-  toast(`Joined the city queue — your token #${yi+1} 🎫`); shankh(); refreshNimBtn(); };
+  shankh(); refreshNimBtn(); };
 document.getElementById('certBtn').disabled=!NIM.done;
 document.getElementById('certBtn').onclick=async()=>{ try{
     const c=document.createElement('canvas'); c.width=1000; c.height=880; const x=c.getContext('2d');
@@ -1169,7 +1254,9 @@ addEventListener('keydown',e=>{ if(e.target&&(e.target.tagName==='INPUT'||e.targ
     if(yatra){ yatra=false; dhol(false); yatraBtn.classList.remove('on'); yatraBtn.innerHTML='🥁 Yatra'; toast('You took the reins — Yatra paused'); }
     parkDrive=false; } });
 addEventListener('keyup',e=>{ keys[e.key.toLowerCase()]=false; });
-addEventListener('pointerdown',()=>{ try{ac();}catch(_){} try{BGM.start();}catch(_){} },{passive:true});
+addEventListener('pointerdown',e=>{ try{ac();}catch(_){}
+  try{ const t=e.target; if(t&&t.closest&&t.closest('#skyBtn,#normBtn,#rockBtn,#skyBar,#volBar,#fsBtn')) return;
+    BGM.start(); }catch(_){} },{passive:true});
 /* manual aarti: canvas-only, must circle Bappa — straight drags & off-ring touches restart */
 let aarOn=false,aarLx=0,aarLy=0,aarLa=0,aarAcc=0,aarPath=0;
 function idolScreenPos(out){ try{ const a=anchorPos(); _v.set(a.x,a.y,a.z); _v.project(camera);
@@ -1196,7 +1283,7 @@ function aartiDown(e){ try{ac();}catch(_){}
   const bd=ringBand(ip);
   if(dist<bd.lo||dist>bd.hi) return;
   aarOn=true; aarLx=e.clientX; aarLy=e.clientY; aarLa=Math.atan2(dy,dx); aarAcc=0; aarPath=0;
-  toast('🔥 Caught — circle around Bappa!'); }
+  }
 function aartiMove(e){ if(!aarOn||!aartiMode) return;
   const ip={}; if(!idolScreenPos(ip)){ aarOn=false; return; }
   const dx=e.clientX-ip.x,dy=e.clientY-ip.y,dist=Math.hypot(dx,dy);
@@ -1211,15 +1298,21 @@ function aartiMove(e){ if(!aarOn||!aartiMode) return;
 function aartiUp(){ aarOn=false; }
 function countAarti(){ if(Math.abs(aartiAcc)>=Math.PI*2){ aartiAcc=0; if(!needWindow())return; aartiReward(); } }
 function aartiReward(){ const d=D(); if(d.aarti<9){ d.aarti++; save(); } renderSeva(); bell();
-  const a=anchorPos(); toast(`Aarti round ${Math.min(d.aarti,3)}/3 sampanna`);
+  const a=anchorPos(); burst(gulal,a.x,a.y,a.z,30,2,2,['#ffd93c','#ff9a3c']);
   if(d.aarti===3){ shankh(); burst(fw,a.x,a.y+2,a.z,80,5,6,['#ffd93c','#fff']);
     if(aartiMode&&!aartiAuto){ aartiMode=false; try{controls.enabled=true;}catch(e){}
-      if(aartiRig)aartiRig.visible=false; if(aartiRing)aartiRing.visible=false; toast('Aarti sampanna — orbit mode 🙏'); } } }
+      if(aartiRig)aartiRig.visible=false; if(aartiRing)aartiRing.visible=false; } } }
 
 /* ---------- crane Nimarjanam: idol stays immersed, hook returns EMPTY ---------- */
 function yawTo(tx,tz,px,pz){ return Math.atan2(tx-px,tz-pz); }
+let craneDest=null;
+function driveCraneTo(gx,gz,sp,dt){ if(!crane) return true;
+  const dx=gx-crane.position.x,dz=gz-crane.position.z,d=Math.hypot(dx,dz);
+  if(d<0.5) return true;
+  const s=Math.min(sp*dt,d); crane.position.x+=dx/d*s; crane.position.z+=dz/d*s;
+  crane.rotation.y=Math.atan2(dx,dz); return false; }
 function startNimarjanam(){
-  NIM.active=true; NIM.phase='crane turning to ratha'; NIM.pt=0; NIM.splashed=false;
+  NIM.active=true; NIM.phase='crane driving to ratha'; NIM.pt=0; NIM.splashed=false; craneDest=null;
   yatra=false; parkDrive=false; dhol(false);
   yatraBtn.classList.remove('on'); yatraBtn.innerHTML='🥁 Yatra';
   cableLen=2.2; yawTarget=yawTo(chart.position.x,chart.position.z,crane.position.x,crane.position.z);
@@ -1230,6 +1323,8 @@ const _c1=new THREE.Vector3(), _c2=new THREE.Vector3(), _sv={x:0,y:0,z:0};
 const _ar1=new THREE.Vector3(), _ar2=new THREE.Vector3();
 const _fr=new THREE.Raycaster(), _fv=new THREE.Vector2(), _fp=new THREE.Plane(), _fw=new THREE.Vector3(), _fh=new THREE.Vector3();
 function craneUpdate(dt){
+  if(!crane) return;
+  if(craneDest&&!NIM.active){ if(driveCraneTo(craneDest.x,craneDest.z,6,dt)) craneDest=null; }
   craneTurret.rotation.y+=(yawTarget-craneTurret.rotation.y)*Math.min(1,dt*1.6);
   craneTip.getWorldPosition(_tip);
   const sway=(NIM.active&&NIM.phase==='slew to lake')?Math.sin(performance.now()/300)*.18:0;
@@ -1242,6 +1337,10 @@ function craneUpdate(dt){
   idolHolder.getWorldPosition(_idolW);
   const frameTop=_idolW.y+3.0;
   switch(NIM.phase){
+    case 'crane driving to ratha':
+      yawTarget=yawTo(chart.position.x,chart.position.z,crane.position.x,crane.position.z);
+      if(driveCraneTo(chart.position.x+5,chart.position.z,7,dt)){ NIM.phase='crane turning to ratha'; NIM.pt=0; refreshNimBtn(); }
+      break;
     case 'crane turning to ratha':
       if(NIM.pt>1.4){ NIM.phase='lowering hook'; NIM.pt=0; refreshNimBtn(); }
       break;
@@ -1253,7 +1352,8 @@ function craneUpdate(dt){
         idolHolder.visible=false; NIM.carrying=true;
         if(playerCarrierMat){ playerCarrierMat.map=idolTex; playerCarrierMat.opacity=1; playerCarrierMat.needsUpdate=true; }
         if(playerCarrier)playerCarrier.visible=true;
-        toast('Idol secured with slings — lifting'); refreshNimBtn(); }
+        try{ BGM.playCrane(); }catch(e){}
+        refreshNimBtn(); }
       break; }
     case 'idol secured — lifting':
       cableLen+=(2.4-cableLen)*Math.min(1,dt*1.4);
@@ -1263,7 +1363,8 @@ function craneUpdate(dt){
       break;
     case 'slew to lake':
       if(playerCarrier)playerCarrier.rotation.z=Math.sin(performance.now()/280)*.07;
-      if(NIM.pt>3.4){ NIM.phase='slowly lowering into the lake'; NIM.pt=0; refreshNimBtn(); shankh(); }
+      yawTarget=yawTo(DROP.x,DROP.z,crane.position.x,crane.position.z);
+      if(driveCraneTo(4.5,-470,6,dt)&&NIM.pt>1.2){ NIM.phase='slowly lowering into the lake'; NIM.pt=0; refreshNimBtn(); shankh(); }
       break;
     case 'slowly lowering into the lake': {
       const idolY=craneHook.position.y-NIM.hookIdolDy;
@@ -1282,7 +1383,8 @@ function craneUpdate(dt){
         if(playerCarrier)playerCarrier.visible=false; NIM.carrying=false;
         idolHolder.visible=false; S.idolOnRatha=false; // stays immersed — a fresh idol mounts on New Utsav
         NIM.active=false; NIM.done=true; S.nimDone=true; save();
-        yawTarget=0.6; cableLen=2.2;
+        try{ BGM.setYatra(false); BGM.stopCrane(); }catch(e){}
+        yawTarget=0.6; cableLen=2.2; craneDest={x:4.5,z:-455};
         setStage('done');
         document.getElementById('certBtn').disabled=false;
         burst(fw,DROP.x,8,DROP.z,120,6,7,['#ffd93c','#fff','#8fd6a0']);
@@ -1309,7 +1411,7 @@ function avatarUpdate(dt,t){
   } else if(S.stage==='home'){ tx=HOME.x-1.2; tz=HOME.z+1.8; faceYaw=0; } // inside sanctum, facing altar
   else if(yatra){ tx=chart.position.x+2.8; tz=chart.position.z+0.5; faceYaw=Math.PI; walking=true; }
   else if(S.stage==='done'){ tx=chart.position.x+2.4; tz=chart.position.z+2.2; faceYaw=Math.atan2(camera.position.x-tx,camera.position.z-tz); }
-  else if(NIM.active||S.stage==='ghat'){ tx=3.0; tz=-63.2; faceYaw=Math.PI; }
+  else if(NIM.active||S.stage==='ghat'){ tx=3.0; tz=-451; faceYaw=Math.PI; }
   else { tx=chart.position.x+2.8; tz=chart.position.z+1.4; faceYaw=Math.atan2(chart.position.x-tx,chart.position.z-tz); }
   _av.set(tx-avatar.position.x,0,tz-avatar.position.z);
   const dist=_av.length();
@@ -1345,15 +1447,15 @@ function carryUpdate(dt){
     if(GL){ carryCrew.forEach(c=>{ try{scene.remove(c);}catch(e){} }); carryCrew.length=0; if(carryVeil)carryVeil.visible=false;
       if(carrier){ carrier.visible=false; carrier.scale.setScalar(1); } if(carrierMat) carrierMat.opacity=1; }
     S.idolOnRatha=true; save();
+    try{ BGM.setYatra(true); }catch(e){}
     mountFreshIdol(); refreshIdolVisibility(); placeAartiRing();
     setStage('ratha');
     bots.forEach(b=>{ if(b.day<9){ b.day=9; updateBotLabel(b); } if(b.mode!=='gone') debutBot(b,false); });
     mandals.forEach(m=>{ if(m.ratha)m.ratha.g.visible=true; if(m.crew)m.crew.forEach(f=>f.g.visible=true); });
-    toast('🥁 The whole city rolls out with you!');
     const p=chart.position;
     burst(fw,p.x,6,p.z,130,6,7,['#ffd93c','#ff7a3c','#fff']);
     burst(petals,p.x,5,p.z,70,3,2,['#ff5f7e','#ffd9e8','#fff']);
-    shankh(); toast('Bappa virajman on the ratha — Shobha Yatra can begin'); }
+    shankh(); }
 }
 
 /* ---------- main loop ---------- */
@@ -1364,7 +1466,7 @@ function animate(){
   const canDrive=S.stage!=='home'&&!carrying&&!NIM.active&&!stallPause;
   if(yatra&&canDrive){ yatraT+=dt/50; if(yatraT>=1){ yatraT=1; yatra=false; dhol(false);
       yatraBtn.classList.remove('on'); yatraBtn.innerHTML='🥁 Yatra';
-      setStage('ghat'); shankh(); toast('Aakasha Ganga reached — Bappa faces His devotees. Nimarjanam when YOU are ready'); }
+      setStage('ghat'); shankh(); }
     const e=yatraT<.5?2*yatraT*yatraT:1-Math.pow(-2*yatraT+2,2)/2;
     const px=chart.position.x, pz=chart.position.z;
     ytourPos(e,_yp);
@@ -1378,13 +1480,13 @@ function animate(){
   } else if(parkDrive&&canDrive){
     _v.set(0-chart.position.x,0,CHARIOT_LAKE-chart.position.z);
     const dist=_v.length();
-    if(dist<.4){ parkDrive=false; if(S.stage==='ratha') setStage('ghat'); toast('Parked at Aakasha Ganga ghat — Nimarjanam on your command'); }
-    else{ _v.normalize(); const sp=Math.min(7,dist*2)*dt;
+    if(dist<.4){ parkDrive=false; if(S.stage==='ratha') setStage('ghat'); shankh(); }
+    else{ _v.normalize(); const sp=Math.min(12,dist*2)*dt;
       const px=chart.position.x, pz=chart.position.z;
       chart.position.x+=_v.x*sp; chart.position.z+=_v.z*sp; wheels.forEach(w=>w.rotation.x+=dt*4);
       chartYawTarget=Math.atan2(chart.position.x-px,chart.position.z-pz); }
   } else if(canDrive){
-    const sp=7*dt; let mx=0,mz=0;
+    const sp=12*dt; let mx=0,mz=0;
     if(keys.w||keys.arrowup)mz-=sp; if(keys.s||keys.arrowdown)mz+=sp; if(keys.a||keys.arrowleft)mx-=sp; if(keys.d||keys.arrowright)mx+=sp;
     if(mx||mz){ chart.position.x=Math.max(-8.5,Math.min(8.5,chart.position.x+mx));
       chart.position.z=Math.max(CHARIOT_LAKE+1,Math.min(CHARIOT_START+10,chart.position.z+mz));
@@ -1478,7 +1580,10 @@ function t2m(s){ try{ const[a,b]=String(s).split(':').map(Number); return a*60+b
 function poojaOpen(){ try{ if(S.sched.preview) return true; const m=nowMin(),s=S.sched;
   return (m>=t2m(s.w1s)&&m<=t2m(s.w1e))||(m>=t2m(s.w2s)&&m<=t2m(s.w2e)); }catch(e){ return true; } }
 let _winToast=0;
-function needWindow(){ return true; }
+function needWindow(){ if(poojaOpen()) return true;
+  if(performance.now()-_winToast>4000){ _winToast=performance.now(); const s=S.sched;
+    toast(`🔒 Pooja window closed — open ${s.w1s}–${s.w1e} & ${s.w2s}–${s.w2e} (Admin fixes timings)`); }
+  return false; }
 function syncAdminBtn(){ try{ const show=S.sched.preview||new URLSearchParams(location.search).has('admin');
   document.getElementById('adminBtn').style.display=show?'':'none'; }catch(e){} }
 document.getElementById('adminBtn').onclick=()=>{ const s=S.sched;
@@ -1530,7 +1635,7 @@ const Presence={
     }catch(e){} }
 };
 const BOTHUTS=[[-9.8,20],[9.8,12],[-9.8,2],[9.8,-14]];
-const QSLOTS=[{x:-8,z:-49.5},{x:-10.5,z:-50},{x:8,z:-49.5},{x:10.5,z:-50}];
+const QSLOTS=[{x:-8,z:-435},{x:-10.5,z:-436},{x:8,z:-435},{x:10.5,z:-436}];
 let bots=[];
 let mandals=[];
 function chooseBots(){ const pool=IDS.filter(n=>n!==S.idol); bots=Presence.families().map((def,i)=>{
@@ -1621,12 +1726,15 @@ function updateModakMesh(){ const d=D(),mo=!!d.modak,fl=!!d.flower,home=S.stage=
   if(flowerHome)flowerHome.visible=fl&&home;
   if(flowerRatha)flowerRatha.visible=fl&&!home; }
 async function initBots(){ if(botsInit) return; botsInit=true;
-  for(const b of bots){ buildBotHome(b); buildBotRatha(b); followerCrew(b); }
+  for(const b of bots){ buildBotHome(b); buildBotRatha(b); followerCrew(b); parkBotHome(b); }
   buildStalls(); buildStallCrew(); buildWire(); buildPlayerCrew();
   Presence.mandals().forEach(([nm,col],i)=>{
     const pool=IDS.filter(m=>m!==S.idol&&!bots.some(b=>b.murti===m)&&!mandals.some(p=>p.murti===m));
     const murti=pool.length?pool.splice(Math.floor(Math.random()*pool.length),1)[0]:((i*11+5)%31+1);
-    mandals.push(buildMandal(nm,col,murti,i,[MAINLOOP,WESTLOOP,EASTLOOP][i])); });
+    mandals.push(buildMandal(nm,col,murti,i,[MAINLOOP,WESTLOOP,EASTLOOP][i]));
+    const mm=mandals[mandals.length-1];
+    if(mm.ratha){ mm.ratha.g.visible=true; mm.ratha.idols.forEach(x=>x.visible=true); }
+    if(mm.crew) mm.crew.forEach(f=>f.g.visible=true); });
   markStripTaken();
   carrierMat=new THREE.MeshBasicMaterial({transparent:true,side:THREE.DoubleSide});
   carrier=new THREE.Mesh(new THREE.PlaneGeometry(1.7,1.7),carrierMat); carrier.visible=false; scene.add(carrier);
@@ -1642,7 +1750,7 @@ function botTick(dt,t){ if(!GL||!bots.length) return; if(!S.murtiChosen) return;
   botAmbT-=dt;
   if(botAmbT<=0){ botAmbT=4+Math.random()*3; const b=bots[Math.floor(Math.random()*bots.length)];
     if(b&&b.hut){ b.poojaT=3; if(b.day<9&&Math.random()<.25){ b.day++; updateBotLabel(b);
-      if(b.day>=9){ debutBot(b,false); toast(`🥁 ${b.def.n} family's ratha rolls out!`); } } } }
+      if(b.day>=9){ debutBot(b,false); } } } }
   bots.forEach(b=>{ if(!b.hut) return;
     if(b.poojaT>0){ b.poojaT-=dt;
       animPerson(b.dev,t,'cheer');
@@ -1661,7 +1769,7 @@ function renderQueue(){ const h=document.getElementById('qToken'),L=document.get
     d.className='qrow'+(e.k==='you'?' me':'')+(i<Q.idx?' done':(i===Q.idx?' now':''));
     const av=e.k==='you'?(S.avatar==='girl'?'👧':'👦'):(e.b&&e.b.def.av?e.b.def.av:'👦');
     const st=i<Q.idx?'✨':(i===Q.idx?'🏗️':'⏳');
-    d.innerHTML=`<b>#${i+1}</b><span style="font-size:16px">${av}</span><small style="font-size:14px">${st}</small>`;
+    d.innerHTML=`<b>#${i+1}</b><span style="font-size:11px">${av}</span><small>${st}</small>`;
     L.appendChild(d); }); }
 function buildQueue(){
   if(!bots.length||!bots[0].ratha){ toast('City families still arriving — press again in a moment 🙏'); return false; }
@@ -1675,7 +1783,7 @@ function buildQueue(){
     {k:'you',name:(S.name||'Devotee')},
     ...behind.map(b=>({k:'bot',b,name:`${b.def.n} ${b.def.f}`}))];
   Q.idx=0; Q.on=true; Q.phase='queue forming'; Q.pt=0; Q.carrying=false;
-  { const slots=[[4.5,-52],[-4.5,-46],[8,-40],[-8,-40],[8,-34],[-8,-34],[4.5,-28],[-4.5,-28]];
+  { const slots=[[4.5,-440],[-4.5,-440],[8,-434],[-8,-434],[8,-428],[-8,-428],[4.5,-422],[-4.5,-422]];
     let si=0;
     Q.list.forEach(e=>{ if(e.k!=='bot'||!e.b.ratha) return;
       const sl=slots[Math.min(si++,slots.length-1)];
@@ -1686,7 +1794,7 @@ function buildQueue(){
   renderQueue(); return true; }
 function queueTick(dt){
   if(!Q.on||!GL||NIM.active) return;
-  if(Q.idx>=Q.list.length){ Q.on=false; Q.phase='';
+  if(Q.idx>=Q.list.length){ Q.on=false; Q.phase=''; craneDest={x:4.5,z:-455};
     document.getElementById('qBoard').style.display='none';
     shankh(); toast('City nimarjanam complete — Pudhchya Varshi Lavkar Ya 🙏');
     burst(fw,DROP.x,8,DROP.z,150,7,7,['#ffd93c','#fff']); refreshNimBtn(); return; }
@@ -1699,8 +1807,11 @@ function queueTick(dt){
   const b=e.b; if(!b.ratha){ Q.idx++; renderQueue(); return; }
   const slot=b.ratha.g.position;
   Q.pt+=dt; const P=Q.phase;
-  if(P===''||P==='idle'||P==='queue forming'){ Q.phase='yaw to ratha'; Q.pt=0;
-    yawTarget=yawTo(slot.x,slot.z,crane.position.x,crane.position.z); renderQueue(); }
+  if(P===''||P==='idle'||P==='queue forming'){ Q.phase='drive to ratha'; Q.pt=0; craneDest=null; renderQueue(); }
+  else if(P==='drive to ratha'){
+    yawTarget=yawTo(slot.x,slot.z,crane.position.x,crane.position.z);
+    if(driveCraneTo(slot.x+5,slot.z,7,dt)){ Q.phase='yaw to ratha'; Q.pt=0;
+      yawTarget=yawTo(slot.x,slot.z,crane.position.x,crane.position.z); } }
   else if(P==='yaw to ratha'){ if(Q.pt>1.4){ Q.phase='lowering hook'; Q.pt=0; } }
   else if(P==='lowering hook'){ craneTip.getWorldPosition(_tip);
     const need=(_tip.y-(slot.y+2.75))+0.15;
@@ -1712,13 +1823,14 @@ function queueTick(dt){
     if(Q.pt>1.4){ b.ratha.idols.forEach(m=>m.visible=false); Q.phase='slew to lake'; Q.pt=0;
       yawTarget=yawTo(DROP.x,DROP.z,crane.position.x,crane.position.z);
       ripples.forEach(r=>r.m.position.set(DROP.x,.06,DROP.z)); shankh(); renderQueue(); } }
-  else if(P==='slew to lake'){ if(Q.pt>2.8){ Q.phase='immersion'; Q.pt=0; renderQueue(); } }
+  else if(P==='slew to lake'){ yawTarget=yawTo(DROP.x,DROP.z,crane.position.x,crane.position.z);
+    if(driveCraneTo(4.5,-468,6,dt)&&Q.pt>1.2){ Q.phase='immersion'; Q.pt=0; renderQueue(); } }
   else if(P==='immersion'){ cableLen+=dt*0.55;
     if(Math.random()<.6) burst(splash,DROP.x,.4,DROP.z,3,2.2,3.5,['#bfe6ff','#fff']);
     if(craneHook.position.y-Q.dy<=0.8||Q.pt>13){ Q.phase='farewell'; Q.pt=0;
       burst(splash,DROP.x,.5,DROP.z,110,4.5,5,['#bfe6ff','#fff']);
       burst(petals,DROP.x,1.5,DROP.z,70,3,2,['#ff5f7e','#ffd9e8','#fff']);
-      shankh(); toast(`${e.name} — nimarjanam sampanna ✨`); renderQueue(); } }
+      shankh(); renderQueue(); } }
   else if(P==='farewell'){ if(Q.carryObj===carryVeil){ const s=Math.max(.01,carryVeil.scale.x-dt*.4); carryVeil.scale.setScalar(s); carryVeil.position.y-=dt*.4; }
     else if(Q.carryObj===carrier){ carrierMat.opacity=Math.max(0,carrierMat.opacity-dt*.35); }
     if(Q.pt>3){ if(Q.carryObj)Q.carryObj.visible=false; Q.carrying=false; Q.carryObj=null;
@@ -1729,11 +1841,11 @@ function queueTick(dt){
 
 /* ---- roadside stalls on the way to the water ---- */
 const STALLS=[
-  {z:12,side:-1,e:'💧',n:'Amrutham Water',te:'అమృతం నీరు',d:'Cool sacred water for every devotee on the road.',by:'Ganesh Seva Mandal',ph:1,tag:'💧 Water'},
-  {z:-4,side:1,e:'🟡',n:'Prasad Laddu',te:'ప్రసాదం లడ్డూ',d:'Hot fresh laddu prasad — take one for the road.',by:'Patel Family',ph:3,tag:'🟡 Prasad'},
-  {z:-22,side:1,e:'🍊',n:'Fruit Juice',te:'పండ్ల రసం',d:'Fresh orange & sugarcane juice for the yatra.',by:'Reddy Association',ph:5,tag:'🍊 Juice'},
-  {z:-32,side:1,e:'🍋',n:'Pulihora Prasad',te:'పులిహోర ప్రసాదం',d:'Tangy lemon pulihora served hot by volunteers.',by:'Kalyana Mandapam',ph:7,tag:'🍋 Pulihora'},
-  {z:-40,side:-1,e:'🍛',n:'Annadanam',te:'అన్నదానం',d:'Free meals from Bappa\u2019s ratha — villagers queue, our server serves each one.',by:'Utsav Committee',ph:9,tag:'🍛 Annadaanam'}];
+  {z:-60,side:-1,e:'💧',n:'Amrutham Water',te:'అమృతం నీరు',d:'Cool sacred water for every devotee on the road.',by:'Ganesh Seva Mandal',ph:1,tag:'💧 Water'},
+  {z:-200,side:1,e:'🟡',n:'Prasad Laddu',te:'ప్రసాదం లడ్డూ',d:'Hot fresh laddu prasad — take one for the road.',by:'Patel Family',ph:3,tag:'🟡 Prasad'},
+  {z:-290,side:1,e:'🍊',n:'Fruit Juice',te:'పండ్ల రసం',d:'Fresh orange & sugarcane juice for the yatra.',by:'Reddy Association',ph:5,tag:'🍊 Juice'},
+  {z:-340,side:1,e:'🍋',n:'Pulihora Prasad',te:'పులిహోర ప్రసాదం',d:'Tangy lemon pulihora served hot by volunteers.',by:'Kalyana Mandapam',ph:7,tag:'🍋 Pulihora'},
+  {z:-380,side:-1,e:'🍛',n:'Annadanam',te:'అన్నదానం',d:'Free meals from Bappa\u2019s ratha — villagers queue, our server serves each one.',by:'Utsav Committee',ph:9,tag:'🍛 Annadaanam'}];
 function headLabel(text){ const c=document.createElement('canvas'); c.width=256; c.height=64;
   const g=c.getContext('2d'); g.fillStyle='rgba(10,5,2,.72)'; g.fillRect(0,6,256,52);
   g.strokeStyle='rgba(232,182,76,.6)'; g.lineWidth=3; g.strokeRect(2,8,252,48);
@@ -1745,8 +1857,8 @@ let stallPause=false,stallDone={},curStall=-1,wasTravel=null;
 function resumeTravel(){ if(wasTravel==='yatra'&&GL&&chart&&S.idolOnRatha&&!NIM.done){ yatra=true; parkDrive=false; dhol(true);
     yatraFrom={x:chart.position.x,z:chart.position.z};
     try{ yatraBtn.classList.add('on'); yatraBtn.innerHTML='⏹ Stop Ratha'; }catch(e){}
-    toast('🥁 Yatra resumes — onward'); }
-  else if(wasTravel==='park'&&GL&&chart&&S.idolOnRatha&&!NIM.done){ parkDrive=true; toast('Driving on to Aakasha Ganga…'); }
+    }
+  else if(wasTravel==='park'&&GL&&chart&&S.idolOnRatha&&!NIM.done){ parkDrive=true; }
   wasTravel=null; }
 function buildStalls(){ STALLS.forEach(s=>{ const g=new THREE.Group();
   g.position.set(s.side*11.5,0,s.z); g.rotation.y=s.side>0?-0.4:0.4; scene.add(g);
@@ -1793,7 +1905,7 @@ function openStall(i){ const s=STALLS[i];
   document.getElementById('stallBy').textContent='Offered with love by '+s.by;
   document.getElementById('stallDesc').textContent=s.d;
   document.getElementById('stallPop').style.display='block';
-  toast(`${s.e} ${s.n} — mandatory halt, ratha waits 🙏`); }
+  }
 function stallBlock(){ if(!GL||!chart||!S.idolOnRatha||NIM.active||Q.on||stallPause) return;
   if(S.stage==='ghat'||S.stage==='done'||S.stage==='home') return;
   for(let i=0;i<STALLS.length;i++){ if(stallDone[i]) continue; const s=STALLS[i];
@@ -1831,7 +1943,7 @@ function updateSeva(dt,t){ if(!sevaB) return; const b=sevaB, s=STALLS[b.si];
       offerMesh.children.forEach(ch=>{ if(ch.name==='mound') ch.material.color.set(FOOD_COL[b.si]||0xffffff);
         if(ch.name==='dot') ch.visible=(b.si===3); });
       offerMesh.visible=true;
-      pop(); toast(s.e+' offered before Bappa on the ratha 🙏'); } }
+      pop(); } }
   else { const hx=s.side*11.5, hz=s.z+1.5, qx=hx-b.folk.position.x, qz=hz-b.folk.position.z, dd=Math.hypot(qx,qz);
     b.folk.rotation.x=0;
     if(dd<0.5){ scene.remove(b.folk); sevaB=null; stallPause=false; resumeTravel(); }
@@ -1851,7 +1963,7 @@ function startAnna(){ if(!GL||!chart){ stallPause=false; return; }
     plate.visible=false; plate.position.set(0,1.25,.35); f.add(plate);
     line.push({g:f,plate,state:'queue',t:0,eat:0,sit:null}); }
   anna={server,line,idx:0,fx:fx0,fz:fz0,px:px0,pz:pz0,vx,vz,pot:null,rice:null};
-  toast('🍛 Annadanam — villagers queue before Bappa, our server serves each one 🙏'); }
+  shankh(); }
 function updateAnna(dt,t){ if(!anna||!chart) return; const A=anna;
   const sx=A.server.position.x, sz=A.server.position.z;
   animPerson(A.server,t,'serve');
@@ -1877,13 +1989,13 @@ function updateAnna(dt,t){ if(!anna||!chart) return; const A=anna;
   if(cur&&(cur.state==='tosit'||cur.state==='eat'||cur.state==='leave'||cur.state==='left')) A.idx++;
   if(A.idx>=A.line.length&&A.line.every(p=>p.state==='left')){
     A.line.forEach(p=>scene.remove(p.g)); scene.remove(A.server);
-    anna=null; stallPause=false; resumeTravel(); toast('🍛 Annadanam complete — onward to the lake 🙏'); } }
+    anna=null; stallPause=false; resumeTravel(); shankh(); } }
 document.getElementById('stallOk').onclick=()=>{ const s=STALLS[curStall];
   document.getElementById('stallPop').style.display='none';
   if(s){ stallDone[curStall]=1;
     burst(fw,chart.position.x,4,chart.position.z,60,4,5,['#ffd93c','#fff']);
     if(curStall===4){ startAnna(); }
-    else { startSevaBearer(curStall); toast(`${s.e} ${s.n} accepted — bearer brings it to Bappa 🙏`); } }
+    else { startSevaBearer(curStall); } }
   curStall=-1; };
 
 /* (city reset lives in resetCityForNewUtsav, called by newUtsav above) */
@@ -1894,14 +2006,15 @@ const hudBtn=act=>document.querySelector('#hud button[data-act="'+act+'"]');
 const clickAct=act=>{ const b=hudBtn(act); if(b) b.click(); };
 let WIZ={fn:null,skip:null};
 function wizShow(acts){ document.querySelectorAll('#hud button').forEach(b=>{ b.style.display=acts.includes(b.dataset.act)?'':'none'; }); }
-function skipDay(){ const d=D(); if(d.done)return; d.done=true; d.diya=7; d.flower=1; d.modak=1; d.aarti=Math.max(d.aarti||0,3); d.mantra=11; d.doneAt=new Date().toISOString(); save(); renderSeva(); shankh();
-  toast(`Day ${S.day} saved ✓ (${doneCount()}/9)`); if(S.day<9){ S.day++; save(); renderSeva(); } }
+function skipDay(){ const d=D(); if(d.done||S.stage!=='home')return; d.done=true; d.mantra=11; d.doneAt=new Date().toISOString(); save(); renderSeva(); shankh();
+  if(S.day<9){ S.day++; save(); renderSeva(); } }
 function skipToNim(){ if(carrying) return;
   const now=new Date().toISOString();
   for(let d=1;d<=9;d++) S.days[d]={diya:7,flower:1,modak:1,aarti:3,mantra:11,done:true,startedAt:(S.days[d]||{}).startedAt||now,doneAt:now};
   S.day=9; S.idolOnRatha=false; save(); if(GL&&chart)chart.visible=false;
+  try{ BGM.setYatra(false); }catch(e){}
   altarHidden=false; if(GL&&homeMurtiMesh){ homeMurtiMesh.visible=true; homeMurtiMesh.scale.setScalar(1); }
-  setStage('home'); toast('Nimarjan day — Bappa is in the temple. Carry Him to the ratha 🙏'); }
+  setStage('home'); }
 function renderWizard(){
   const t=document.getElementById('guideText'),b=document.getElementById('guideBtn'),s=document.getElementById('guideSkip');
   if(!t) return; WIZ.fn=null; WIZ.skip=null; b.style.display='none'; s.style.display='none';
@@ -1976,7 +2089,7 @@ function renderScreen(){
     const setAv=a=>{ S.avatar=a; S.avatarPicked=true; save(); markAvatarBtns(); if(GL){ buildAvatar(a); if(idolTex){ try{miniIdol.material.map=idolTex;miniIdol.material.needsUpdate=true;}catch(e){} } } pop(); syncAv(); };
     const ab=sb.querySelector('#scAvB'); if(ab)ab.onclick=()=>setAv('boy');
     const ag=sb.querySelector('#scAvG'); if(ag)ag.onclick=()=>setAv('girl');
-    const fr=sb.querySelector('#scFresh'); if(fr)fr.onclick=()=>{ if(confirm('Clear the saved utsav and start fresh from the road?')){ try{localStorage.removeItem(storageKey());}catch(e){} location.reload(); } };
+    const fr=sb.querySelector('#scFresh'); if(fr)fr.onclick=()=>{ if(confirm('Clear the saved utsav and start fresh from the road?')){ try{localStorage.removeItem(KEY);}catch(e){} location.reload(); } };
     const tg=sb.querySelector('#scListBtn');
     if(tg)tg.onclick=()=>{ const w=sb.querySelector('#scListWrap'); if(!w)return;
       if(!w.dataset.done){ w.dataset.done='1'; let opts='';
@@ -2004,22 +2117,14 @@ function renderScreen(){
     else if(!d.done){ step='✅'; btn='✅'; fn=()=>click('doneBtn'); }
     else step='🙏';
     const pct=Math.round(((d.diya>=7?25:0)+(d.flower?25:0)+(d.modak?25:0)+Math.min(25,(d.mantra||0)/11*25)));
-    let days='';
-    for(let i=1;i<=9;i++){ const ok=!!(S.days[i]&&S.days[i].done);
-      days+=`<button type="button" class="dchip${i===S.day?' on':''}${ok?' ok':''}" data-d="${i}" title="${DAY_NAMES[i-1]}">${ok?'✓':i}</button>`; }
-    h=`<div class="drow">${days}</div>
-    <div class="meter"><div style="width:${pct}%"></div></div>
+    h=`<div class="meter"><div style="width:${pct}%"></div></div>
     <div class="schint">${step}</div>
     <div class="rbtnrow">${btn?`<button class="rbtn big" id="scPrimary" title="Do the step">${btn}</button>`:''}
-    <button class="rbtn small" id="scSave" title="Save progress">💾</button>
-    ${!d.done?`<button class="rbtn small" id="scSkip" title="Save this day & next">⏭️</button><button class="rbtn small" id="scSkipNim" title="Save all 9 days">⏩</button>`:''}</div>
-    <div class="savehint">Progress saved on this device${doneCount()?(' • '+doneCount()+'/9 days'):''}</div>`;
+    ${!d.done?`<button class="rbtn small" id="scSkip" title="Skip day">⏭️</button><button class="rbtn small" id="scSkipNim" title="Skip to Nimarjan">⏩</button>`:''}</div>`;
     sb.innerHTML=h;
-    sb.querySelectorAll('.dchip').forEach(b=>{ b.onclick=()=>{ S.day=+b.dataset.d; save(); }; });
     const pb=sb.querySelector('#scPrimary'); if(pb&&fn)pb.onclick=()=>{ fn(); };
-    const sv=sb.querySelector('#scSave'); if(sv)sv.onclick=()=>{ save(); toast('Progress saved on this device — come back anytime 🙏'); };
     const sk=sb.querySelector('#scSkip'); if(sk)sk.onclick=()=>skipDay();
-    const sn=sb.querySelector('#scSkipNim'); if(sn)sn.onclick=()=>{ skipToNim(); };
+    const sn=sb.querySelector('#scSkipNim'); if(sn)sn.onclick=()=>{ if(confirm('Skip to Nimarjan day? (all 9 poojas marked done & saved)')) skipToNim(); };
     return; }
   if(ui==='carry'){
     const ok=GL&&!carrying&&(S.days[1]&&S.days[1].done)&&idolReady;
@@ -2189,15 +2294,14 @@ function shopWalkUpdate(dt){ if(!SHOPW.on||!avatar) return; SHOPW.t+=dt/7;
     altarHidden=false;
     if(homeMurtiMesh){ homeMurtiMesh.visible=true; homeMurtiMesh.scale.setScalar(1); }
     bell(); burst(petals,0,2.6,38.5,60,2.5,1,['#ff5f7e','#ffd9e8','#fff']);
-    toast('🙏 Bappa placed on the altar — 9 days of pooja begin'); shankh(); } }
+    shankh(); } }
 
 /* ---- mantra taps + drive pad + admin visibility ---- */
 function canPick(){ if(!(S.name&&S.name.trim())){ toast('🙏 First type your name above'); return false; }
   if(!S.avatarPicked){ toast('👦👧 First tap Boy or Girl above'); return false; } return true; }
 function doMantraTap(){ if(!needWindow())return; const d=D(); if((d.mantra||0)>=11)return;
   d.mantra=Math.min(11,(d.mantra||0)+1); save(); renderSeva(); ac();
-  if(d.mantra%3===0) bell(); else pop();
-  toast(`🕉️ ॐ गं गणपतये नमः — ${d.mantra}/11`); }
+  if(d.mantra%3===0) bell(); else pop(); }
 document.querySelectorAll('#drivePad button').forEach(b=>{ const k=b.dataset.k;
   const on=e=>{ e.preventDefault(); keys[k]=true; try{ac();}catch(_){} };
   const off=e=>{ e.preventDefault(); keys[k]=false; };
@@ -2215,11 +2319,11 @@ let skyMode=false,skyWatch={k:'you'},rockView=false;
 function toggleRock(){ rockView=!rockView; if(rockView&&skyMode) toggleSky();
   document.getElementById('rockBtn').classList.toggle('on',rockView);
   controls.maxDistance=rockView?700:160; controls.maxPolarAngle=rockView?Math.PI*0.62:Math.PI*0.52;
-  if(rockView) toast('☄️ Our asteroid — the whole city rides this rock'); }
+  }
 document.getElementById('rockBtn').onclick=()=>toggleRock();
 function skyPos(out){ let x=0,z=-10;
   if(!skyWatch||skyWatch.k==='you'){ if(S.idolOnRatha&&typeof chart!=='undefined'&&chart){ x=chart.position.x; z=chart.position.z; } else { x=HOME.x; z=HOME.z+4; } }
-  else if(skyWatch.k==='queue'){ x=4.5; z=-64; }
+  else if(skyWatch.k==='queue'){ x=4.5; z=-448; }
   else if(skyWatch.k[0]==='b'){ const b=bots[+skyWatch.k.slice(1)];
     if(b){ if(b.ratha&&b.ratha.g.visible){ x=b.ratha.g.position.x; z=b.ratha.g.position.z; } else { x=b.hx; z=b.hz; } } }
   else if(skyWatch.k[0]==='m'){ const p=mandals[+skyWatch.k.slice(1)];
@@ -2237,7 +2341,7 @@ function toggleSky(){ skyMode=!skyMode; if(skyMode&&rockView){ rockView=false;
   document.getElementById('skyBtn').classList.toggle('on',skyMode);
   document.getElementById('skyBar').style.display=skyMode?'flex':'none';
   try{controls.enabled=!aartiMode;}catch(e){}
-  if(skyMode){ renderSkyChips(); toast('🌍 Sky view — pick a yatra below, camera follows it live'); try{BGM.play('sky');}catch(e){} }
+  if(skyMode){ renderSkyChips(); try{BGM.play('sky');}catch(e){} }
   else { try{BGM.play('world');}catch(e){} } }
 document.getElementById('skyBtn').onclick=()=>toggleSky();
 /*irc traffic + people systems live just above the boot section (driveTraffic, makeFolk, animPerson, followerCrew) */
@@ -2272,7 +2376,7 @@ function flightsTick(dt){ if(!GL||!flights.length) return;
     const e=f.t<.5?2*f.t*f.t:1-Math.pow(-2*f.t+2,2)/2;
     f.m.position.set(f.fx+(f.tx-f.fx)*e,2.0+Math.sin(e*Math.PI)*.6,f.fz+(f.tz-f.fz)*e); } }
 
-document.getElementById('freshBtn').onclick=()=>{ if(confirm('Start fresh from the road? (clears the saved utsav)')){ try{localStorage.removeItem(storageKey());}catch(e){} location.reload(); } };
+document.getElementById('freshBtn').onclick=()=>{ if(confirm('Start fresh from the road? (clears the saved utsav)')){ try{localStorage.removeItem(KEY);}catch(e){} location.reload(); } };
 
 /* ---- living city: people, traffic, wire event, tour, water anim ---- */
 function makeFolk(shirt,skin,female){ const g=new THREE.Group();
@@ -2329,12 +2433,14 @@ function driveTraffic(dt,t){
         if(b.crew)b.crew.forEach(f=>f.g.visible=true);
         b.x=b.sx>0?2.5:-2.5; b.z=34; b.mode='road'; } } return; }
     if(!Q.on&&b.mode==='road'){
-      if(Math.abs(b.z-b.sz)>0.6){ b.z-=3*dt; g.rotation.y=Math.PI; }
-      else { b.x+=(b.sx-b.x)*Math.min(1,dt*1.5); if(Math.abs(b.x-b.sx)<0.3){ b.mode='wait'; g.rotation.y=Math.PI; } }
-      if(chart&&chart.visible&&S.idolOnRatha&&Math.abs(b.z-chart.position.z)<10&&Math.abs(b.x-chart.position.x)<5)
-        b.x+=(b.x>=chart.position.x?1:-1)*4*dt;
-      g.position.set(b.x,0,b.z);
-      if(b.ratha.wheels)b.ratha.wheels.forEach(w=>w.rotation.x+=dt*3);
+      if(!stallPause){
+        if(Math.abs(b.z-b.sz)>0.6){ b.z-=10*dt; g.rotation.y=Math.PI; }
+        else { b.x+=(b.sx-b.x)*Math.min(1,dt*1.5); if(Math.abs(b.x-b.sx)<0.3){ b.mode='wait'; g.rotation.y=Math.PI; } }
+        if(chart&&chart.visible&&S.idolOnRatha&&Math.abs(b.z-chart.position.z)<10&&Math.abs(b.x-chart.position.x)<5)
+          b.x+=(b.x>=chart.position.x?1:-1)*4*dt;
+        g.position.set(b.x,0,b.z);
+        if(b.ratha.wheels)b.ratha.wheels.forEach(w=>w.rotation.x+=dt*3);
+      }
     }
     if(b.crew)b.crew.forEach(f=>{ f.g.position.set(g.position.x+f.side,0,g.position.z+2.6);
       f.g.rotation.y=Math.atan2(g.position.x-f.g.position.x,g.position.z-f.g.position.z);
@@ -2384,13 +2490,13 @@ function wireTick(dt){ if(!GL) return;
   if(WIRE.lift>0.8&&chart.position.z<0.5){
     WIRE.done=true; WIRE.active=false;
     document.getElementById('wirePanel').style.display='none';
-    shankh(); toast('⚡ Wire moved aside with the V-stick — road clear, Ganpati Bappa Morya! 🙏');
+    shankh();
     burst(fw,chart.position.x,5,chart.position.z,80,5,6,['#ffd93c','#fff']);
     if(WIRE.wasYatra){ yatra=true; parkDrive=false; dhol(true);
       yatraFrom={x:chart.position.x,z:chart.position.z}; yatraT=0;
       try{ yatraBtn.classList.add('on'); yatraBtn.innerHTML='⏹ Stop Ratha'; }catch(e){} }
     refreshNimBtn(); } }
-const YTOUR=[[0,28],[0,22],[-6,16],[-8,10],[-8,2],[-5,-6],[0,-11],[5,-16],[8,-22],[8,-30],[5,-36],[3,-42],[0,-48],[0,-52],[0,-56]];
+const YTOUR=[[0,28],[0,-10],[-6,-40],[-8,-70],[-8,-110],[-5,-150],[0,-175],[5,-200],[8,-230],[8,-270],[5,-300],[3,-330],[0,-360],[0,-380],[0,-400]];
 const YTOURLEN=(()=>{ const L=[0]; for(let i=1;i<YTOUR.length;i++) L.push(L[i-1]+Math.hypot(YTOUR[i][0]-YTOUR[i-1][0],YTOUR[i][1]-YTOUR[i-1][1])); return L; })();
 const YTOURTOT=YTOURLEN[YTOURLEN.length-1];
 const _yp=new THREE.Vector3();
@@ -2417,6 +2523,10 @@ document.getElementById('inspNo').onclick=()=>{ inspectN=0;
   document.getElementById('inspectBar').style.display='none'; };
 
 /* ---- ratha debuts only when its family reaches Day 9 ---- */
+function parkBotHome(b){ if(!b.ratha) return; b.mode='wait';
+  b.x=b.hx+(b.hx>0?-4:4); b.z=b.hz-3;
+  b.ratha.g.visible=true; b.ratha.g.rotation.y=Math.PI; b.ratha.g.position.set(b.x,0,b.z);
+  b.ratha.idols.forEach(m=>m.visible=true); }
 function debutBot(b,snap){ if(!b.ratha) return;
   if(snap){ b.x=b.sx; b.z=b.sz; b.mode='wait'; }
   else { b.x=b.sx>0?2.5:-2.5; b.z=34; b.mode='road'; }
@@ -2429,7 +2539,7 @@ document.getElementById('normBtn').onclick=()=>{ skyMode=false; rockView=false;
   document.getElementById('skyBtn').classList.remove('on');
   document.getElementById('skyBar').style.display='none';
   try{controls.enabled=!aartiMode;}catch(e){}
-  followCam=true; toast('🏙️ Normal view — drag to see any part of the city'); try{BGM.play('world');}catch(e){} };
+  followCam=true; try{BGM.play('world');}catch(e){} };
 function numberPlaque(n){ const c=document.createElement('canvas'); c.width=c.height=128;
   const x=c.getContext('2d'); x.fillStyle='#2a1500'; x.fillRect(0,0,128,128);
   x.strokeStyle='#e8b64c'; x.lineWidth=6; x.strokeRect(6,6,116,116);
@@ -2462,13 +2572,15 @@ function buildMandal(nm,col,murti,idx,route){
 function tickMandals(dt,t){ if(!GL) return;
   mandals.forEach(m=>{ if(!m.ratha) return; const g=m.ratha.g;
     const L=m.route,tx=L[m.wp][0],tz=L[m.wp][1],dx=tx-m.x,dz=tz-m.z,d=Math.hypot(dx,dz);
-    if(d<1.0){ m.wp=(m.wp+1)%L.length; }
-    else { const sp=2.6*dt; m.x+=dx/d*Math.min(sp,d); m.z+=dz/d*Math.min(sp,d);
-      g.rotation.y=Math.atan2(dx,dz); }
-    if(chart&&chart.visible&&S.idolOnRatha){ const ax=g.position.x-chart.position.x,az=g.position.z-chart.position.z,ad=Math.hypot(ax,az);
-      if(ad<7&&ad>0.01){ const px=az/ad,pz=-ax/ad,side=(px*(m.x-chart.position.x)+pz*(m.z-chart.position.z))>=0?1:-1;
-        m.x+=px*side*dt*3.2; m.z+=pz*side*dt*3.2; } }
-    g.position.set(m.x,0,m.z);
+    if(!stallPause){
+      if(d<1.0){ m.wp=(m.wp+1)%L.length; }
+      else { const sp=2.6*dt; m.x+=dx/d*Math.min(sp,d); m.z+=dz/d*Math.min(sp,d);
+        g.rotation.y=Math.atan2(dx,dz); }
+      if(chart&&chart.visible&&S.idolOnRatha){ const ax=g.position.x-chart.position.x,az=g.position.z-chart.position.z,ad=Math.hypot(ax,az);
+        if(ad<7&&ad>0.01){ const px=az/ad,pz=-ax/ad,side=(px*(m.x-chart.position.x)+pz*(m.z-chart.position.z))>=0?1:-1;
+          m.x+=px*side*dt*3.2; m.z+=pz*side*dt*3.2; } }
+      g.position.set(m.x,0,m.z);
+    }
     if(m.ratha.wheels)m.ratha.wheels.forEach(w=>w.rotation.x+=dt*3);
     if(m.crew)m.crew.forEach(f=>{ f.g.position.set(g.position.x+f.side,0,g.position.z+2.6);
       f.g.rotation.y=Math.atan2(g.position.x-f.g.position.x,g.position.z-f.g.position.z);
@@ -2533,7 +2645,7 @@ function buildPeds(){
     [[-20,-14],[20,-14],[20,-17],[-20,-17]],
     [[-18,26],[-18,-38],[-21,-38],[-21,26]],
     [[20,24],[20,-36],[23,-36],[23,24]],
-    [[-6,-58],[8,-58],[8,-61],[-6,-61]],
+    [[-6,-404],[8,-404],[8,-407],[-6,-407]],
     [[-4,30],[6,30],[6,27],[-4,27]]
   ];
   const cols=[0xe8304a,0x1f6eb8,0xe8b64c,0x12a45a,0x8a4de8,0xff7a1a,0xc21730,0x2f9d4a];
@@ -2710,7 +2822,7 @@ renderStatus();
     renderer.domElement.addEventListener('pointercancel',aartiUp);
     animate(); }
   document.getElementById('loader').style.display='none'; window.__utsavBooted=true;
-  try{ BGM.play('world'); }catch(e){}
+  try{ if(S.idolOnRatha&&!S.nimDone&&!NIM.done) BGM.setYatra(true); else BGM.play('world'); }catch(e){}
   if(!GL){ toast('3D unavailable — murti photo + pooja panel work below'); return; }
   if(S.murtiChosen) setIdol(S.idol,true);
   if(S.stage==='home') toast('Welcome to the temple — do Day-1 pooja, then carry Bappa to the ratha');

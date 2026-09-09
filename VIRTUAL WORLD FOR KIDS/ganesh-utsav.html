@@ -99,6 +99,7 @@
   #drivePad{display:none;position:absolute;right:10px;bottom:10px;z-index:6;display:none;grid-template-columns:repeat(3,58px);grid-template-rows:repeat(2,58px);gap:6px;font-family:system-ui;filter:drop-shadow(0 0 10px rgba(232,182,76,.35))}
   #drivePad button{border-radius:14px;border:1px solid var(--line);background:rgba(20,10,3,.82);color:var(--goldlt);font-size:22px;touch-action:none}
   #drivePad button:nth-child(1){grid-column:2}#drivePad button:nth-child(2){grid-column:1;grid-row:2}#drivePad button:nth-child(3){grid-column:2;grid-row:2}#drivePad button:nth-child(4){grid-column:3;grid-row:2}
+  #drivePad,#drivePad button,#wirePanel,#wirePanel button{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
   #skyBtn{position:absolute;top:8px;right:8px;z-index:6;border:1px solid var(--line);background:rgba(20,10,3,.85);color:var(--goldlt);border-radius:999px;padding:7px 13px;font-family:system-ui;font-size:12px;font-weight:700;cursor:pointer}
   #skyBtn.on{background:rgba(232,182,76,.3);outline:2px solid var(--goldlt)}
   .glow{outline:2px solid var(--goldlt)!important;box-shadow:0 0 14px 3px rgba(232,182,76,.55)!important;animation:glPulse 1.2s infinite}
@@ -167,7 +168,7 @@ window.addEventListener('load',function(){ setTimeout(function(){
 </script>
 </head>
 <body>
-<div id="loader"><div class="spin"></div><div id="loadmsg">Building Utsav World… v44</div><div id="err"></div>
+<div id="loader"><div class="spin"></div><div id="loadmsg">Building Utsav World… v45</div><div id="err"></div>
 <small style="font-family:system-ui;opacity:.7;max-width:560px">Needs internet once (3D library via CDN). Open via <b>http://localhost:8000/ganesh-utsav.html</b> — run <b>python3 -m http.server 8000</b> in this folder.</small></div>
 
 <header><div class="om">ॐ</div><h1>Ganesh Utsav World<small>Home Pooja → Yatra → Nimarjanam</small></h1><button id="freshBtn" title="Start fresh from the road">↺</button><button id="adminBtn" title="Admin timings">⚙️</button><div class="pill" id="pill">…</div></header>
@@ -300,7 +301,7 @@ const D=()=>{ if(!S.days[S.day]) S.days[S.day]={diya:0,flower:0,modak:0,aarti:0,
 const doneCount=()=>Object.values(S.days).filter(d=>d.done).length;
 function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2600); }
 function pill(){ try{ const se={home:'🏠',ratha:'🛕',ghat:'🥁',done:'🌊'}[S.stage]||'';
-  document.getElementById('pill').textContent=`${S.idol}🪔 ${se} ${doneCount()}/9 ${poojaOpen()?'🟢':'🔒'} • v44`; }catch(e){} guideGlow(); }
+  document.getElementById('pill').textContent=`${S.idol}🪔 ${se} ${doneCount()}/9 ${poojaOpen()?'🟢':'🔒'} • v45`; }catch(e){} guideGlow(); }
 /* guide-by-glow: highlight the single next button instead of narrating sentences */
 function guideGlow(){ try{
   document.querySelectorAll('.glow').forEach(e=>e.classList.remove('glow'));
@@ -1345,6 +1346,8 @@ function craneUpdate(dt){
       if(NIM.pt>1.4){ NIM.phase='lowering hook'; NIM.pt=0; refreshNimBtn(); }
       break;
     case 'lowering hook': {
+      const ex=_idolW.x-_tip.x, ez=_idolW.z-_tip.z, ed=Math.hypot(ex,ez);
+      if(ed>0.25&&NIM.pt<8){ crane.position.x+=ex*Math.min(1,dt*2); crane.position.z+=ez*Math.min(1,dt*2); break; }
       const need=(_tip.y-frameTop)+0.15;
       cableLen+=(need-cableLen)*Math.min(1,dt*1.2);
       if(Math.abs(need-cableLen)<.12||NIM.pt>6){ NIM.phase='idol secured — lifting'; NIM.pt=0;
@@ -1368,6 +1371,8 @@ function craneUpdate(dt){
       break;
     case 'slowly lowering into the lake': {
       const idolY=craneHook.position.y-NIM.hookIdolDy;
+      { const dx2=DROP.x-craneHook.position.x, dz2=DROP.z-craneHook.position.z, dd2=Math.hypot(dx2,dz2);
+        if(dd2>0.3){ crane.position.x+=dx2*Math.min(1,dt*1.5); crane.position.z+=dz2*Math.min(1,dt*1.5); } }
       cableLen+=dt*0.55;
       if(idolY<1.6&&Math.random()<.6) burst(splash,DROP.x,.4,DROP.z,3,2.2,3.5,['#bfe6ff','#fff']);
       if(idolY<=0.75||NIM.pt>14){ NIM.phase='immersion — Bappa merges with the waters'; NIM.pt=0; refreshNimBtn(); }
@@ -1814,11 +1819,14 @@ function queueTick(dt){
       yawTarget=yawTo(slot.x,slot.z,crane.position.x,crane.position.z); } }
   else if(P==='yaw to ratha'){ if(Q.pt>1.4){ Q.phase='lowering hook'; Q.pt=0; } }
   else if(P==='lowering hook'){ craneTip.getWorldPosition(_tip);
-    const need=(_tip.y-(slot.y+2.75))+0.15;
-    cableLen+=(need-cableLen)*Math.min(1,dt*1.2);
-    if(Math.abs(need-cableLen)<.15||Q.pt>6){ Q.phase='lifting'; Q.pt=0;
+    const ex=slot.x-_tip.x, ez=slot.z-_tip.z, ed=Math.hypot(ex,ez);
+    if(ed>0.25&&Q.pt<8){ crane.position.x+=ex*Math.min(1,dt*2); crane.position.z+=ez*Math.min(1,dt*2);
+      yawTarget=yawTo(slot.x,slot.z,crane.position.x,crane.position.z); }
+    else { const need=(_tip.y-(slot.y+2.75))+0.15;
+      cableLen+=(need-cableLen)*Math.min(1,dt*1.2);
+      if(Math.abs(need-cableLen)<.15||Q.pt>6){ Q.phase='lifting'; Q.pt=0;
       if(b.tex){ carrier.scale.setScalar(1); carrierMat.map=b.tex; carrierMat.opacity=1; carrierMat.needsUpdate=true; carrier.visible=true; Q.carrying=true; Q.carryObj=carrier; }
-      else { carryVeil.visible=true; carryVeil.scale.setScalar(1); Q.carrying=true; Q.carryObj=carryVeil; } } }
+      else { carryVeil.visible=true; carryVeil.scale.setScalar(1); Q.carrying=true; Q.carryObj=carryVeil; } } } }
   else if(P==='lifting'){ cableLen+=(2.4-cableLen)*Math.min(1,dt*1.4);
     if(Q.pt>1.4){ b.ratha.idols.forEach(m=>m.visible=false); Q.phase='slew to lake'; Q.pt=0;
       yawTarget=yawTo(DROP.x,DROP.z,crane.position.x,crane.position.z);
@@ -1826,6 +1834,8 @@ function queueTick(dt){
   else if(P==='slew to lake'){ yawTarget=yawTo(DROP.x,DROP.z,crane.position.x,crane.position.z);
     if(driveCraneTo(4.5,-468,6,dt)&&Q.pt>1.2){ Q.phase='immersion'; Q.pt=0; renderQueue(); } }
   else if(P==='immersion'){ cableLen+=dt*0.55;
+    { const dx3=DROP.x-craneHook.position.x, dz3=DROP.z-craneHook.position.z, dd3=Math.hypot(dx3,dz3);
+      if(dd3>0.3){ crane.position.x+=dx3*Math.min(1,dt*1.5); crane.position.z+=dz3*Math.min(1,dt*1.5); } }
     if(Math.random()<.6) burst(splash,DROP.x,.4,DROP.z,3,2.2,3.5,['#bfe6ff','#fff']);
     if(craneHook.position.y-Q.dy<=0.8||Q.pt>13){ Q.phase='farewell'; Q.pt=0;
       burst(splash,DROP.x,.5,DROP.z,110,4.5,5,['#bfe6ff','#fff']);

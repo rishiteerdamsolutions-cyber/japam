@@ -2227,7 +2227,7 @@ function renderScreen(){
   const d=D(); const ui=uiStage();
   try{ document.getElementById('strip').classList.toggle('gone',ui!=='select'); }catch(e){}
   let parked=false; try{ parked=GL&&parkedAtLake(); }catch(e){}
-  const key=[ui,S.day,d.diya,d.flower,d.modak,d.aarti,d.mantra||0,!!d.done,S.avatar,S.stage,
+  const key=[ui,S.day,d.diya,d.flower,d.modak,d.aarti,d.mantra||0,!!d.done,S.avatar,S.avatarPicked?1:0,S.stage,
     Q.on?1:0,NIM.active?1:0,NIM.done?1:0,parked?1:0,yatra?1:0,S.idolOnRatha?1:0,GL?1:0,idolReady?1:0,
     Q.phase||'',NIM.phase||''].join('|');
   if(key===SCKEY) return; SCKEY=key;
@@ -2243,11 +2243,13 @@ function renderScreen(){
     <input id="scName" type="text" maxlength="40" placeholder="Name…" />
     <div class="avpick"><button id="scAvB" class="rbtn" title="Boy">👦</button><button id="scAvG" class="rbtn" title="Girl">👧</button><button id="scFresh" class="rbtn small" title="Start fresh">↺</button></div>`;
     sb.innerHTML=h;
-    const nm=sb.querySelector('#scName'); if(nm){ nm.value=S.name||''; nm.oninput=e=>{ S.name=e.target.value; save(); }; }
+    const nm=sb.querySelector('#scName'); if(nm){ nm.value=S.name||''; nm.oninput=e=>{ S.name=e.target.value;
+      if(S.name.trim()&&S.avatarPicked&&GL) SCKEY=''; save(); }; }
     const syncAv=()=>{ const a=sb.querySelector('#scAvB'),g=sb.querySelector('#scAvG');
-      if(a)a.classList.toggle('active',S.avatar==='boy'); if(g)g.classList.toggle('active',S.avatar==='girl'); };
+      if(a)a.classList.toggle('active',!!S.avatarPicked&&S.avatar==='boy');
+      if(g)g.classList.toggle('active',!!S.avatarPicked&&S.avatar==='girl'); };
     syncAv();
-    const setAv=a=>{ S.avatar=a; S.avatarPicked=true; save(); markAvatarBtns(); if(GL){ buildAvatar(a); if(idolTex){ try{miniIdol.material.map=idolTex;miniIdol.material.needsUpdate=true;}catch(e){} } } pop(); syncAv(); };
+    const setAv=a=>{ S.avatar=a; S.avatarPicked=true; SCKEY=''; save(); markAvatarBtns(); if(GL){ buildAvatar(a); if(idolTex){ try{miniIdol.material.map=idolTex;miniIdol.material.needsUpdate=true;}catch(e){} } } pop(); syncAv(); };
     const ab=sb.querySelector('#scAvB'); if(ab)ab.onclick=()=>setAv('boy');
     const ag=sb.querySelector('#scAvG'); if(ag)ag.onclick=()=>setAv('girl');
     const fr=sb.querySelector('#scFresh'); if(fr)fr.onclick=()=>{ if(confirm('Clear the saved utsav and start fresh from the road?')){ try{localStorage.removeItem(KEY);}catch(e){} location.reload(); } };

@@ -544,6 +544,7 @@ let petals=null, gulal=null, splash=null, fw=null;
 let idolReady=false, idolTex=null;
 const LAKE_Z=-493, CHARIOT_START=28, CHARIOT_LAKE=-400, DROP={x:1.0,z:-461};
 const HOME={x:0,z:36};
+const CRANE_HOME={x:4.5,z:-455};
 const NIM={active:false,phase:'',pt:0,done:!!S.nimDone,hookIdolDy:1.4,splashed:false,carrying:false};
 let yatra=false, yatraT=0, yatraFrom={x:0,z:CHARIOT_START}, parkDrive=false, followCam=true, spin360=false;
 let aartiMode=false, aartiAuto=false, aartiAng=Math.PI/2, aartiAcc=0, aartiRig=null, aartiRing=null;
@@ -575,7 +576,7 @@ function buildWorld(){
   scene=new THREE.Scene(); scene.background=new THREE.Color(0x070412); scene.fog=new THREE.Fog(0x070412,60,700);
   camera=new THREE.PerspectiveCamera(50,1,0.1,900); camera.position.set(10,6,41);
   controls=new OrbitControls(camera,renderer.domElement);
-  controls.enableDamping=true; controls.maxPolarAngle=Math.PI*0.52; controls.minDistance=3.5; controls.maxDistance=160;
+  controls.enableDamping=true; controls.maxPolarAngle=Math.PI*0.52; controls.minDistance=7; controls.maxDistance=160;
   controls.autoRotateSpeed=1.4;
   controls.target.set(5,2,27);
   controls.addEventListener('start',()=>{ userHold=true; });
@@ -994,7 +995,7 @@ function mountFreshIdol(silent){
 
 /* ---------- crane ---------- */
 function buildCrane(){
-  crane=new THREE.Group(); crane.position.set(4.5,0,-455); scene.add(crane);
+  crane=new THREE.Group(); crane.position.set(CRANE_HOME.x,0,CRANE_HOME.z); scene.add(crane);
   const yellow=new THREE.MeshStandardMaterial({color:0xf2a900,roughness:.5,metalness:.25});
   const dark=new THREE.MeshStandardMaterial({color:0x23232a,roughness:.8});
   [-0.85,0.85].forEach(x=>{ const tr=new THREE.Mesh(new THREE.BoxGeometry(.75,.55,3.4),dark); tr.position.set(x,.3,0); tr.castShadow=true; crane.add(tr); });
@@ -1140,7 +1141,7 @@ async function setIdol(n,first=false){
     }catch(e2){ stat.murti='✗ '+e2.message; renderStatus(); fail(e2.message); }
   }
   renderHomeDiyas();
-  if(!first&&GL){ try{ camera.position.set(0,2.6,27.5); controls.target.set(0,2.1,39.3); lastTouch=performance.now(); }catch(e){} }
+  if(!first&&GL){ try{ camera.position.set(0,6.5,31.9); controls.target.set(0,2.1,39.3); lastTouch=performance.now(); }catch(e){} }
 }
 function renderHomeDiyas(){ if(!GL) return; const lit=Math.min(7,Math.max(1+doneCount(),(S.days[S.day]&&S.days[S.day].diya)||0)); homeDiyas.forEach((f,i)=>f.visible=i<lit); }
 
@@ -1437,14 +1438,38 @@ function aartiReward(){ const d=D(); if(d.aarti<9){ d.aarti++; save(); } renderS
 
 /* ---------- crane Nimarjanam: idol stays immersed, hook returns EMPTY ---------- */
 function yawTo(tx,tz,px,pz){ return Math.atan2(tx-px,tz-pz); }
-let craneDest=null;
+let craneDest=null, _craneGoal='', _craneWay=[];
+const GHAT={x0:-9.4,x1:9.4,z0:-416.5,z1:-407.5}, LAKE_KEEP=18.2;
+function inGhat(x,z){ return x>GHAT.x0&&x<GHAT.x1&&z>GHAT.z0&&z<GHAT.z1; }
+function lakePush(x,z){ const dx=x, dz=z-LAKE_Z, d=Math.hypot(dx,dz)||0.001;
+  if(d>=LAKE_KEEP) return {x,z}; const k=LAKE_KEEP/d; return {x:dx*k,z:LAKE_Z+dz*k}; }
+function ghatBlocks(x1,z1,x2,z2){
+  if(inGhat(x1,z1)||inGhat(x2,z2)) return true;
+  const mid=-412; if((z1-mid)*(z2-mid)>=0) return false;
+  const t=(mid-z1)/(z2-z1||1), x=x1+(x2-x1)*t; return x>GHAT.x0&&x<GHAT.x1; }
+function craneWaypoints(gx,gz){
+  const t=lakePush(gx,gz); gx=t.x; gz=t.z;
+  const x=crane.position.x, z=crane.position.z;
+  if(!ghatBlocks(x,z,gx,gz)) return [{x:gx,z:gz}];
+  const side=(x>=0?1:-1)*11.8, zLake=-418, zRoad=-405;
+  if(z<-412) return [{x:side,z:z},{x:side,z:zLake},{x:side,z:zRoad},{x:gx,z:gz}];
+  return [{x:side,z:z},{x:side,z:zRoad},{x:side,z:zLake},{x:gx,z:gz}]; }
+function placeCrane(nx,nz){ const p=lakePush(nx,nz); nx=p.x; nz=p.z;
+  if(inGhat(nx,nz)){ const left=nx-GHAT.x0, right=GHAT.x1-nx, south=nz-GHAT.z0, north=GHAT.z1-nz, m=Math.min(left,right,south,north);
+    if(m===left) nx=GHAT.x0; else if(m===right) nx=GHAT.x1; else if(m===south) nz=GHAT.z0; else nz=GHAT.z1; }
+  crane.position.x=nx; crane.position.z=nz; }
 function driveCraneTo(gx,gz,sp,dt){ if(!crane) return true;
-  const dx=gx-crane.position.x,dz=gz-crane.position.z,d=Math.hypot(dx,dz);
-  if(d<0.5) return true;
-  const s=Math.min(sp*dt,d); crane.position.x+=dx/d*s; crane.position.z+=dz/d*s;
-  crane.rotation.y=Math.atan2(dx,dz); return false; }
+  const key=gx.toFixed(2)+'|'+gz.toFixed(2);
+  if(_craneGoal!==key){ _craneGoal=key; _craneWay=craneWaypoints(gx,gz); }
+  while(_craneWay.length){
+    const w=_craneWay[0], dx=w.x-crane.position.x, dz=w.z-crane.position.z, d=Math.hypot(dx,dz);
+    if(d<0.55){ _craneWay.shift(); continue; }
+    const s=Math.min(sp*dt,d); placeCrane(crane.position.x+dx/d*s, crane.position.z+dz/d*s);
+    crane.rotation.y=Math.atan2(dx,dz); return false; }
+  return true; }
 function startNimarjanam(){
   NIM.active=true; NIM.phase='crane driving to ratha'; NIM.pt=0; NIM.splashed=false; craneDest=null;
+  _craneGoal=''; _craneWay=[];
   yatra=false; parkDrive=false; dhol(false);
   yatraBtn.classList.remove('on'); yatraBtn.innerHTML='🥁 Yatra';
   cableLen=2.2; yawTarget=yawTo(chart.position.x,chart.position.z,crane.position.x,crane.position.z);
@@ -1478,7 +1503,7 @@ function craneUpdate(dt){
       break;
     case 'lowering hook': {
       const ex=_idolW.x-_tip.x, ez=_idolW.z-_tip.z, ed=Math.hypot(ex,ez);
-      if(ed>0.25&&NIM.pt<8){ crane.position.x+=ex*Math.min(1,dt*2); crane.position.z+=ez*Math.min(1,dt*2); break; }
+      if(ed>0.25&&NIM.pt<8){ placeCrane(crane.position.x+ex*Math.min(1,dt*2), crane.position.z+ez*Math.min(1,dt*2)); break; }
       const need=(_tip.y-frameTop)+0.15;
       cableLen+=(need-cableLen)*Math.min(1,dt*1.2);
       if(Math.abs(need-cableLen)<.12||NIM.pt>6){ NIM.phase='idol secured — lifting'; NIM.pt=0;
@@ -1503,7 +1528,7 @@ function craneUpdate(dt){
     case 'slowly lowering into the lake': {
       const idolY=craneHook.position.y-NIM.hookIdolDy;
       { const dx2=DROP.x-craneHook.position.x, dz2=DROP.z-craneHook.position.z, dd2=Math.hypot(dx2,dz2);
-        if(dd2>0.3){ crane.position.x+=dx2*Math.min(1,dt*1.5); crane.position.z+=dz2*Math.min(1,dt*1.5); } }
+        if(dd2>0.3){ placeCrane(crane.position.x+dx2*Math.min(1,dt*1.5), crane.position.z+dz2*Math.min(1,dt*1.5)); } }
       cableLen+=dt*0.55;
       if(idolY<1.6&&Math.random()<.6) burst(splash,DROP.x,.4,DROP.z,3,2.2,3.5,['#bfe6ff','#fff']);
       if(idolY<=0.75||NIM.pt>14){ NIM.phase='immersion — Bappa merges with the waters'; NIM.pt=0; refreshNimBtn(); }
@@ -1520,7 +1545,7 @@ function craneUpdate(dt){
         idolHolder.visible=false; S.idolOnRatha=false; // stays immersed — a fresh idol mounts on New Utsav
         NIM.active=false; NIM.done=true; S.nimDone=true; save();
         try{ BGM.setYatra(false); }catch(e){}
-        yawTarget=0.6; cableLen=2.2; craneDest={x:4.5,z:-455};
+        yawTarget=0.6; cableLen=2.2; craneDest={x:CRANE_HOME.x,z:CRANE_HOME.z};
         setStage('done');
         document.getElementById('certBtn').disabled=false;
         burst(fw,DROP.x,8,DROP.z,120,6,7,['#ffd93c','#fff','#8fd6a0']);
@@ -1679,16 +1704,16 @@ function animate(){
     if(!shopCamInit&&GL){ shopCamInit=true; }
     if(GL&&!shopUserMoved){ camera.position.set(-1.5,2.5,24.5); controls.target.set(8,2.1,24); }
     if(inspectN&&GL&&!userHold){ const _im=shopPickMeshes.find(m=>m.userData.n===inspectN);
-      if(_im){ _im.getWorldPosition(_v); camera.position.lerp(_c1.set(_v.x-3.0,_v.y+0.35,_v.z+0.4),1-Math.pow(.005,dt)); controls.target.lerp(_c2.copy(_v),1-Math.pow(.005,dt)); } } }
+      if(_im){ _im.getWorldPosition(_v); camera.position.lerp(_c1.set(_v.x-6.0,_v.y+1.0,_v.z+0.8),1-Math.pow(.005,dt)); controls.target.lerp(_c2.copy(_v),1-Math.pow(.005,dt)); } } }
   else if(SHOPW.on&&avatar){ _v.set(avatar.position.x,0,avatar.position.z); }
   else _v.set(S.stage==='home'?HOME.x:chart.position.x,0,S.stage==='home'?HOME.z-1:chart.position.z);
   const homeClose=(S.murtiChosen&&S.stage==='home'&&!SHOPW.on);
   if(homeClose){ _v.set(0,0,39.3); }
   const fx=!S.murtiChosen?_v.x-9.5:(SHOPW.on?_v.x+6:(homeClose?0:(S.stage==='home'?_v.x+3:_v.x+4.5)));
-  const fy=!S.murtiChosen?2.5:(homeClose?2.6:8), fz=!S.murtiChosen?_v.z+0.5:(homeClose?35.6:_v.z+15);
-  if(aartiMode&&idolReady&&GL){ if(S.stage==='home'){ camera.position.lerp(_c1.set(0,2.0,35.4),1-Math.pow(.001,dt)); controls.target.lerp(_c2.set(0,1.9,39.3),1-Math.pow(.0005,dt)); }
+  const fy=!S.murtiChosen?2.5:(homeClose?6.5:8), fz=!S.murtiChosen?_v.z+0.5:(homeClose?31.9:_v.z+15);
+  if(aartiMode&&idolReady&&GL){ if(S.stage==='home'){ camera.position.lerp(_c1.set(0,4.2,31.5),1-Math.pow(.001,dt)); controls.target.lerp(_c2.set(0,1.9,39.3),1-Math.pow(.0005,dt)); }
     else if(chart){ const ry=chart.rotation.y;
-      camera.position.lerp(_c1.set(chart.position.x+Math.sin(ry)*6.5,2.6,chart.position.z+Math.cos(ry)*6.5),1-Math.pow(.001,dt));
+      camera.position.lerp(_c1.set(chart.position.x+Math.sin(ry)*13,4.5,chart.position.z+Math.cos(ry)*13),1-Math.pow(.001,dt));
       controls.target.lerp(_c2.set(chart.position.x,2.4,chart.position.z),1-Math.pow(.0005,dt)); } }
   else   if(rockView){ if(idleOk())camera.position.lerp(_c1.set(320,-110,240),1-Math.pow(.01,dt)); controls.target.lerp(_c2.set(0,-60,-20),1-Math.pow(.005,dt)); }
   else   if(skyMode){ const wp=skyPos(_sv); if(idleOk())camera.position.lerp(_c1.set(wp.x,wp.y+65,wp.z+24),1-Math.pow(.01,dt)); controls.target.lerp(_c2.set(wp.x,wp.y,wp.z),1-Math.pow(.005,dt)); }
@@ -1946,7 +1971,7 @@ function buildQueue(){
   return true; }
 function queueTick(dt){
   if(!Q.on||!GL||NIM.active) return;
-  if(Q.idx>=Q.list.length){ Q.on=false; Q.phase=''; craneDest={x:4.5,z:-455};
+  if(Q.idx>=Q.list.length){ Q.on=false; Q.phase=''; craneDest={x:CRANE_HOME.x,z:CRANE_HOME.z};
     document.getElementById('qBoard').style.display='none';
     try{ BGM.setNim(false); }catch(e){}
     shankh(); toast('City nimarjanam complete — Pudhchya Varshi Lavkar Ya 🙏');
@@ -1968,7 +1993,7 @@ function queueTick(dt){
   else if(P==='yaw to ratha'){ if(Q.pt>1.4){ Q.phase='lowering hook'; Q.pt=0; } }
   else if(P==='lowering hook'){ craneTip.getWorldPosition(_tip);
     const ex=slot.x-_tip.x, ez=slot.z-_tip.z, ed=Math.hypot(ex,ez);
-    if(ed>0.25&&Q.pt<8){ crane.position.x+=ex*Math.min(1,dt*2); crane.position.z+=ez*Math.min(1,dt*2);
+    if(ed>0.25&&Q.pt<8){ placeCrane(crane.position.x+ex*Math.min(1,dt*2), crane.position.z+ez*Math.min(1,dt*2));
       yawTarget=yawTo(slot.x,slot.z,crane.position.x,crane.position.z); }
     else { const need=(_tip.y-(slot.y+2.75))+0.15;
       cableLen+=(need-cableLen)*Math.min(1,dt*1.2);
@@ -1983,7 +2008,7 @@ function queueTick(dt){
     if(driveCraneTo(4.5,-468,6,dt)&&Q.pt>1.2){ Q.phase='immersion'; Q.pt=0; renderQueue(); } }
   else if(P==='immersion'){ cableLen+=dt*0.55;
     { const dx3=DROP.x-craneHook.position.x, dz3=DROP.z-craneHook.position.z, dd3=Math.hypot(dx3,dz3);
-      if(dd3>0.3){ crane.position.x+=dx3*Math.min(1,dt*1.5); crane.position.z+=dz3*Math.min(1,dt*1.5); } }
+      if(dd3>0.3){ placeCrane(crane.position.x+dx3*Math.min(1,dt*1.5), crane.position.z+dz3*Math.min(1,dt*1.5)); } }
     if(Math.random()<.6) burst(splash,DROP.x,.4,DROP.z,3,2.2,3.5,['#bfe6ff','#fff']);
     if(craneHook.position.y-Q.dy<=0.8||Q.pt>13){ Q.phase='farewell'; Q.pt=0;
       burst(splash,DROP.x,.5,DROP.z,110,4.5,5,['#bfe6ff','#fff']);

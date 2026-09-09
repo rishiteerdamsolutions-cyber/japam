@@ -316,6 +316,14 @@ function renderSteps(){ const order=['home','ratha','ghat','nim']; const idx={ho
 
 /* ============ audio ============ */
 let AC=null; const ac=()=>{ if(!AC) AC=new (window.AudioContext||window.webkitAudioContext)(); if(AC.state==='suspended')AC.resume(); return AC; };
+const BGM={ worldFile:'BG music 1.mp3', skyFile:'BG MUSIC SKY.mp3', world:null, sky:null, vol:0.32, mode:'world',
+  el(which){ let a=this[which]; if(a) return a;
+    a=new Audio(encodeURI(which==='sky'?this.skyFile:this.worldFile)); a.loop=true; a.preload='auto'; a.volume=this.vol; this[which]=a; return a; },
+  play(which){ this.mode=which==='sky'?'sky':'world';
+    try{ const on=this.el(this.mode), off=this.mode==='sky'?this.world:this.sky;
+      if(off){ try{off.pause();}catch(e){} }
+      const p=on.play(); if(p&&p.catch) p.catch(()=>{}); }catch(e){} },
+  start(){ this.play(this.mode); } };
 function bell(){ try{ const c=ac(),t=c.currentTime; [392,523,659,784].forEach((f,i)=>{ const o=c.createOscillator(),g=c.createGain(); o.type='sine'; o.frequency.value=f; g.gain.setValueAtTime(.16/(i+1),t); g.gain.exponentialRampToValueAtTime(.001,t+1.6); o.connect(g).connect(c.destination); o.start(t); o.stop(t+1.7); }); }catch(e){} }
 function pop(){ try{ const c=ac(),o=c.createOscillator(),g=c.createGain(); o.type='triangle'; o.frequency.setValueAtTime(480,c.currentTime); o.frequency.exponentialRampToValueAtTime(880,c.currentTime+.12); g.gain.setValueAtTime(.2,c.currentTime); g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.2); o.connect(g).connect(c.destination); o.start(); o.stop(c.currentTime+.22);}catch(e){} }
 function shankh(){ try{ const c=ac(),o=c.createOscillator(),g=c.createGain(); o.type='sine'; o.frequency.setValueAtTime(140,c.currentTime); o.frequency.linearRampToValueAtTime(280,c.currentTime+1.2); g.gain.setValueAtTime(.13,c.currentTime); g.gain.exponentialRampToValueAtTime(.001,c.currentTime+1.5); o.connect(g).connect(c.destination); o.start(); o.stop(c.currentTime+1.6);}catch(e){} }
@@ -1161,7 +1169,7 @@ addEventListener('keydown',e=>{ if(e.target&&(e.target.tagName==='INPUT'||e.targ
     if(yatra){ yatra=false; dhol(false); yatraBtn.classList.remove('on'); yatraBtn.innerHTML='🥁 Yatra'; toast('You took the reins — Yatra paused'); }
     parkDrive=false; } });
 addEventListener('keyup',e=>{ keys[e.key.toLowerCase()]=false; });
-addEventListener('pointerdown',()=>{ try{ac();}catch(_){} },{passive:true});
+addEventListener('pointerdown',()=>{ try{ac();}catch(_){} try{BGM.start();}catch(_){} },{passive:true});
 /* manual aarti: canvas-only, must circle Bappa — straight drags & off-ring touches restart */
 let aarOn=false,aarLx=0,aarLy=0,aarLa=0,aarAcc=0,aarPath=0;
 function idolScreenPos(out){ try{ const a=anchorPos(); _v.set(a.x,a.y,a.z); _v.project(camera);
@@ -2229,7 +2237,8 @@ function toggleSky(){ skyMode=!skyMode; if(skyMode&&rockView){ rockView=false;
   document.getElementById('skyBtn').classList.toggle('on',skyMode);
   document.getElementById('skyBar').style.display=skyMode?'flex':'none';
   try{controls.enabled=!aartiMode;}catch(e){}
-  if(skyMode){ renderSkyChips(); toast('🌍 Sky view — pick a yatra below, camera follows it live'); } }
+  if(skyMode){ renderSkyChips(); toast('🌍 Sky view — pick a yatra below, camera follows it live'); try{BGM.play('sky');}catch(e){} }
+  else { try{BGM.play('world');}catch(e){} } }
 document.getElementById('skyBtn').onclick=()=>toggleSky();
 /*irc traffic + people systems live just above the boot section (driveTraffic, makeFolk, animPerson, followerCrew) */
 function buildStallCrew(){ STALLS.forEach(s=>{ if(!s.g||s.crew) return;
@@ -2420,7 +2429,7 @@ document.getElementById('normBtn').onclick=()=>{ skyMode=false; rockView=false;
   document.getElementById('skyBtn').classList.remove('on');
   document.getElementById('skyBar').style.display='none';
   try{controls.enabled=!aartiMode;}catch(e){}
-  followCam=true; toast('🏙️ Normal view — drag to see any part of the city'); };
+  followCam=true; toast('🏙️ Normal view — drag to see any part of the city'); try{BGM.play('world');}catch(e){} };
 function numberPlaque(n){ const c=document.createElement('canvas'); c.width=c.height=128;
   const x=c.getContext('2d'); x.fillStyle='#2a1500'; x.fillRect(0,0,128,128);
   x.strokeStyle='#e8b64c'; x.lineWidth=6; x.strokeRect(6,6,116,116);
@@ -2701,6 +2710,7 @@ renderStatus();
     renderer.domElement.addEventListener('pointercancel',aartiUp);
     animate(); }
   document.getElementById('loader').style.display='none'; window.__utsavBooted=true;
+  try{ BGM.play('world'); }catch(e){}
   if(!GL){ toast('3D unavailable — murti photo + pooja panel work below'); return; }
   if(S.murtiChosen) setIdol(S.idol,true);
   if(S.stage==='home') toast('Welcome to the temple — do Day-1 pooja, then carry Bappa to the ratha');

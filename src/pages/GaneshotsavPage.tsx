@@ -884,12 +884,9 @@ export function GaneshotsavPage() {
                       });
                     })();
                   }}
-                  className="ganeshotsav-for-kids relative isolate flex-[1.2] overflow-hidden rounded-xl p-[2px] text-sm font-bold tracking-wide text-white"
+                  className="ganeshotsav-for-kids relative isolate flex-[1.2] overflow-hidden rounded-xl py-2.5 text-sm font-bold tracking-wide text-white"
                 >
-                  <span className="ganeshotsav-for-kids-bolt" aria-hidden />
-                  <span className="ganeshotsav-for-kids-face relative z-10 block rounded-[10px] py-2.5">
-                    {t('ganeshotsav.forKids', { defaultValue: 'For KIDS' })}
-                  </span>
+                  <span className="relative z-10">{t('ganeshotsav.forKids', { defaultValue: 'For KIDS' })}</span>
                 </button>
                 ) : null}
               </div>

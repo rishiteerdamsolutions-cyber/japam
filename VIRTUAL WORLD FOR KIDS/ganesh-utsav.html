@@ -74,7 +74,7 @@
   #err{display:none;background:rgba(120,10,10,.88);border:1px solid #ff8080;color:#ffe0e0;font-size:12px;padding:10px 14px;border-radius:10px;max-width:600px;white-space:pre-wrap;text-align:left;font-family:system-ui}
   footer{text-align:center;font-family:system-ui;font-size:11px;color:var(--muted);padding:18px}
   /* ---- Utsav City: admin / queue board / stalls / taken ---- */
-  #adminBtn,#freshBtn,#bgmBtn{border:1px solid var(--line);background:rgba(232,182,76,.08);color:var(--goldlt);border-radius:999px;padding:6px 12px;font-family:system-ui;font-size:13px;cursor:pointer;flex:0 0 auto}
+  #adminBtn,#freshBtn{border:1px solid var(--line);background:rgba(232,182,76,.08);color:var(--goldlt);border-radius:999px;padding:6px 12px;font-family:system-ui;font-size:13px;cursor:pointer;flex:0 0 auto}
   #adminPanel{display:none;position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.62);align-items:center;justify-content:center;padding:16px}
   #adminPanel.open{display:flex}
   .ap-card{width:100%;max-width:430px;max-height:88vh;overflow:auto;background:linear-gradient(180deg,#241407,#160c04);border:1px solid var(--line);border-radius:16px;padding:16px}
@@ -96,11 +96,9 @@
   /* ---- screen-by-screen: only one step visible ---- */
   #hud{display:none!important}
   #guideBar{display:none!important}
-  #drivePad{display:none;position:absolute;right:10px;bottom:10px;z-index:6;display:none;grid-template-columns:repeat(3,58px);grid-template-rows:repeat(2,58px);gap:6px;font-family:system-ui;filter:drop-shadow(0 0 10px rgba(232,182,76,.35));-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
-  #drivePad button{border-radius:14px;border:1px solid var(--line);background:rgba(20,10,3,.82);color:var(--goldlt);font-size:22px;touch-action:none;display:grid;place-items:center;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-user-drag:none}
+  #drivePad{display:none;position:absolute;right:10px;bottom:10px;z-index:6;display:none;grid-template-columns:repeat(3,58px);grid-template-rows:repeat(2,58px);gap:6px;font-family:system-ui;filter:drop-shadow(0 0 10px rgba(232,182,76,.35))}
+  #drivePad button{border-radius:14px;border:1px solid var(--line);background:rgba(20,10,3,.82);color:var(--goldlt);font-size:22px;touch-action:none}
   #drivePad button:nth-child(1){grid-column:2}#drivePad button:nth-child(2){grid-column:1;grid-row:2}#drivePad button:nth-child(3){grid-column:2;grid-row:2}#drivePad button:nth-child(4){grid-column:3;grid-row:2}
-  #drivePad button::after{pointer-events:none;-webkit-user-select:none;user-select:none}
-  #drivePad button:nth-child(1)::after{content:'▲'}#drivePad button:nth-child(2)::after{content:'◀'}#drivePad button:nth-child(3)::after{content:'▼'}#drivePad button:nth-child(4)::after{content:'▶'}
   #skyBtn{position:absolute;top:8px;right:8px;z-index:6;border:1px solid var(--line);background:rgba(20,10,3,.85);color:var(--goldlt);border-radius:999px;padding:7px 13px;font-family:system-ui;font-size:12px;font-weight:700;cursor:pointer}
   #skyBtn.on{background:rgba(232,182,76,.3);outline:2px solid var(--goldlt)}
   #skyBar{display:none;position:absolute;top:92px;right:8px;z-index:6;flex-direction:column;gap:6px;max-width:46vw}
@@ -112,15 +110,18 @@
   #screenCard.plain .meter{max-width:220px;margin:6px auto}
   #screenCard.plain .schint{text-shadow:0 2px 6px #000}
   #screenCard.plain .rbtnrow{margin-top:6px}
+  #screenCard .drow{display:flex;gap:4px;justify-content:center;margin:0 0 6px}
+  #screenCard .dchip{width:28px;height:28px;border-radius:8px;border:1px solid var(--line);background:rgba(20,10,3,.82);color:var(--cream);font-size:11px;font-family:system-ui;font-weight:700;cursor:pointer;padding:0}
+  #screenCard .dchip.on{border-color:var(--gold);color:var(--goldlt);background:rgba(232,182,76,.22)}
+  #screenCard .dchip.ok{color:#9fe8b8;border-color:#3fae62}
+  #screenCard .savehint{text-align:center;font-family:system-ui;font-size:10px;color:var(--muted);margin-top:4px;text-shadow:0 1px 4px #000}
   #skyBar button{border:1px solid var(--line);background:rgba(20,10,3,.88);color:var(--cream);border-radius:999px;padding:8px 13px;font-family:system-ui;font-size:11.5px;cursor:pointer;text-align:left;white-space:nowrap}
   #skyBar button.on{border-color:var(--gold);background:rgba(232,182,76,.22);color:var(--goldlt)}
   #fsBtn{position:absolute;left:10px;bottom:10px;z-index:6;border:1px solid var(--line);background:rgba(20,10,3,.85);color:var(--goldlt);border-radius:999px;padding:7px 12px;font-family:system-ui;font-size:13px;cursor:pointer}
   #wirePanel{display:none;position:absolute;left:50%;bottom:74px;transform:translateX(-50%);z-index:7;background:rgba(30,8,4,.94);border:1px solid #ff6a5a;border-radius:14px;padding:12px 18px;text-align:center;font-family:system-ui;max-width:88%}
   #wirePanel .se{font-size:30px} #wirePanel b{color:#ffb0a0;font-size:14px} #wirePanel small{color:var(--muted);display:block;font-size:11px;margin-bottom:8px}
   #wirePanel .wrow{display:flex;gap:8px;justify-content:center}
-  #wirePanel .wrow button{width:52px;height:52px;border-radius:50%;border:2px solid #ff6a5a;background:rgba(60,12,8,.9);color:#fff;font-size:20px;font-family:system-ui;display:grid;place-items:center;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-user-drag:none}
-  #wirePanel .wrow button::after{pointer-events:none;-webkit-user-select:none;user-select:none}
-  #wirePanel .wrow button[data-w=l]::after{content:'◀'}#wirePanel .wrow button[data-w=f]::after{content:'▲'}#wirePanel .wrow button[data-w=b]::after{content:'▼'}#wirePanel .wrow button[data-w=r]::after{content:'▶'}
+  #wirePanel .wrow button{width:52px;height:52px;border-radius:50%;border:2px solid #ff6a5a;background:rgba(60,12,8,.9);color:#fff;font-size:20px;font-family:system-ui}
   #screenCard .meter{height:9px;border-radius:999px;background:rgba(255,255,255,.1);overflow:hidden;margin:8px 0}
   #screenCard .meter>div{height:100%;width:0;background:linear-gradient(90deg,#e8b64c,#ff7a3c)}
   #screenCard input[type=text]{width:100%;background:#0f0803;border:1px solid var(--line);color:var(--cream);border-radius:10px;padding:11px 12px;font-size:14px;font-family:Georgia,serif;margin:8px 0}
@@ -129,11 +130,7 @@
   #screenCard .avpick button.active{border-color:var(--gold);background:rgba(232,182,76,.15)}
   #steps{display:none!important}
   #keys{display:none!important}
-  #adminBtn,#freshBtn,#bgmBtn{width:36px!important;height:36px!important;padding:0!important;display:inline-grid!important;place-items:center;border-radius:50%!important;font-size:17px}
-  button,#skyBtn,#rockBtn,#normBtn,#fsBtn,.rbtn,#hud button,#guideBtn,#guideSkip{
-    -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-user-drag:none
-  }
-  input,textarea,select{-webkit-user-select:text;user-select:text}
+  #adminBtn,#freshBtn{width:36px!important;height:36px!important;padding:0!important;display:inline-grid!important;place-items:center;border-radius:50%!important;font-size:17px}
   .rbtn{width:64px;height:64px;border-radius:50%!important;border:2px solid var(--gold)!important;background:radial-gradient(circle at 35% 30%,#3a2410,#160c04)!important;color:#fff!important;font-size:28px!important;cursor:pointer;display:inline-grid!important;place-items:center;padding:0!important;min-height:0!important;font-family:system-ui}
   .rbtn.big{width:86px;height:86px;font-size:38px;box-shadow:0 0 22px rgba(232,182,76,.45)}
   .rbtn.small{width:50px;height:50px;font-size:21px;opacity:.92}
@@ -147,92 +144,13 @@
   #stallPop b,#stallPop small,#stallPop p{display:none!important}
   #wirePanel b,#wirePanel small{display:none!important}
   .schint{text-align:center;font-size:16px;color:var(--goldlt);margin:2px 0 6px;line-height:1.6}
-  #screenCard.center{position:fixed;inset:0;z-index:70;background:rgba(5,2,0,.74);display:grid!important;place-items:center;border:none;border-radius:0;padding:max(8px,env(safe-area-inset-top)) 12px max(12px,env(safe-area-inset-bottom))}
-  #screenCard.center #screenBody{width:min(92vw,340px);max-height:86dvh;overflow:auto;background:linear-gradient(180deg,#241407,#160c04);border:1px solid var(--line);border-radius:20px;padding:26px 22px;text-align:center}
+  #screenCard.center{position:fixed;inset:0;z-index:70;background:rgba(5,2,0,.74);display:grid!important;place-items:center;border:none;border-radius:0}
+  #screenCard.center #screenBody{width:min(92vw,340px);background:linear-gradient(180deg,#241407,#160c04);border:1px solid var(--line);border-radius:20px;padding:26px 22px;text-align:center}
   #screenCard.center input[type=text]{text-align:center}
-  #rotateGate{display:none;position:fixed;inset:0;z-index:210;background:#0d0602;color:var(--goldlt);flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:28px 22px;font-family:system-ui,sans-serif;gap:10px}
-  #rotateGate.show{display:flex}
-  #rotateGate .rg-icon{width:72px;height:118px;border:3px solid var(--gold);border-radius:14px;position:relative;margin-bottom:8px;animation:rgtilt 1.5s ease-in-out infinite}
-  #rotateGate .rg-icon::after{content:'';position:absolute;bottom:10px;left:50%;width:18px;height:4px;margin-left:-9px;background:var(--gold);border-radius:4px}
-  @keyframes rgtilt{0%,18%{transform:rotate(0)}42%,68%{transform:rotate(90deg)}100%{transform:rotate(0)}}
-  #rotateGate h2{font-size:22px;font-weight:800;margin:0;color:var(--goldlt)}
-  #rotateGate p{font-size:14px;color:var(--muted);max-width:280px;line-height:1.45;margin:0}
   #inspectBar{display:none;position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:8;gap:16px;align-items:center;background:rgba(20,10,3,.88);border:1px solid var(--gold);border-radius:999px;padding:8px 16px}
   #wirePanel .wrow button.hot{outline:3px solid #ffd93c;box-shadow:0 0 16px rgba(255,217,60,.7)}
   #skyBar{max-height:52vh;overflow-y:auto}
-  /* Phone: fill the screen proportionally; desktop layout unchanged */
-  html,body{width:100%;max-width:100%}
-  header{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right));padding-top:max(8px,env(safe-area-inset-top))}
-  html.phone-portrait,html.phone-portrait body{overflow:hidden;height:100dvh}
-  html.phone-landscape,html.phone-landscape body{height:100dvh;overflow:hidden;max-width:100%}
-  html.phone-landscape header{position:fixed;top:0;left:0;right:0;z-index:40;padding:4px 10px 4px max(10px,env(safe-area-inset-left))}
-  html.phone-landscape footer{display:none}
-  html.phone-landscape main{padding:0;max-width:none;margin:0;height:100dvh;display:block}
-  html.phone-landscape main>.card:first-child{border:none;border-radius:0;padding:0;height:100dvh;background:#050302}
-  html.phone-landscape #sceneTitle{display:none}
-  html.phone-landscape #view{position:fixed;inset:0;z-index:1;height:100dvh!important;width:100%!important;min-height:0!important;margin:0!important;border:none;border-radius:0}
-  html.phone-landscape #skyBtn{top:max(48px, env(safe-area-inset-top) + 38px)}
-  html.phone-landscape #normBtn{top:max(88px, env(safe-area-inset-top) + 78px)}
-  html.phone-landscape #rockBtn{top:max(128px, env(safe-area-inset-top) + 118px)}
-  html.phone-landscape #skyBar{top:max(168px, env(safe-area-inset-top) + 158px)}
-  html.phone-landscape #drivePad{right:max(10px,env(safe-area-inset-right));bottom:max(10px,env(safe-area-inset-bottom))}
-  html.phone-landscape #fsBtn{left:max(10px,env(safe-area-inset-left));bottom:max(10px,env(safe-area-inset-bottom))}
-  html.phone-landscape #screenCard.center{z-index:80}
-  html.phone-landscape #screenCard.center #screenBody{width:min(86vw,420px);max-height:86dvh}
-  html.phone-landscape #screenCard.plain{bottom:max(8px,env(safe-area-inset-bottom));z-index:45}
-  @media(max-width:959px){
-    #view{height:min(calc(100dvh - 78px),100%);min-height:220px;margin-top:8px}
-    main{padding:8px 10px max(16px,env(safe-area-inset-bottom))}
-    header .pill{font-size:10px;padding:5px 9px;max-width:46vw;overflow:hidden;text-overflow:ellipsis}
-    #days{gap:3px}
-    .day{padding:5px 0;font-size:8px}
-    .day b{font-size:11px}
-    #screenCard.center #screenBody{width:min(94vw,340px);padding:22px 16px}
-    .rbtn{width:56px;height:56px;font-size:24px}
-    .rbtn.big{width:74px;height:74px;font-size:32px}
-    #skyBtn,#rockBtn,#normBtn,#fsBtn{padding:6px 10px;font-size:11px}
-    #qBoard{width:min(70vw,236px);max-height:44%}
-  }
-  @media(max-height:500px) and (orientation:landscape){
-    header{padding-top:6px;padding-bottom:6px}
-    #view{height:min(calc(100dvh - 52px),100%);min-height:160px}
-    #screenCard.plain{bottom:max(8px,env(safe-area-inset-bottom))}
-  }
 </style>
-<script>
-(function(){
-  function phone(){
-    try{ if(window.matchMedia('(pointer:coarse)').matches) return true; }catch(e){}
-    return ('ontouchstart' in window) && Math.min(screen.width, screen.height) < 820;
-  }
-  function portrait(){
-    try{ return window.matchMedia('(orientation: portrait)').matches; }catch(e){}
-    return innerHeight > innerWidth;
-  }
-  window.__utsavOrient=function(){
-    var p=phone(), por=portrait();
-    document.documentElement.classList.toggle('phone-portrait', !!(p&&por));
-    document.documentElement.classList.toggle('phone-landscape', !!(p&&!por));
-    var g=document.getElementById('rotateGate');
-    if(g) g.classList.toggle('show', !!(p&&por));
-    if(p&&!por){
-      try{ if(screen.orientation&&screen.orientation.lock) screen.orientation.lock('landscape').catch(function(){}); }catch(e){}
-    }
-    try{ if(typeof resize==='function') resize(); }catch(e){}
-  };
-  window.addEventListener('orientationchange', function(){ setTimeout(window.__utsavOrient, 80); });
-  window.addEventListener('resize', window.__utsavOrient);
-  try{ if(window.visualViewport) visualViewport.addEventListener('resize', window.__utsavOrient); }catch(e){}
-  window.__utsavOrient();
-  document.addEventListener('DOMContentLoaded', function(){
-    window.__utsavOrient();
-    var g=document.getElementById('rotateGate');
-    if(g) g.addEventListener('click', function(){
-      try{ if(screen.orientation&&screen.orientation.lock) screen.orientation.lock('landscape').catch(function(){}); }catch(e){}
-    });
-  });
-})();
-</script>
 <script async src="https://cdn.jsdelivr.net/npm/es-module-shims@1.10.0/dist/es-module-shims.js"></script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 <script>
@@ -249,15 +167,10 @@ window.addEventListener('load',function(){ setTimeout(function(){
 </script>
 </head>
 <body>
-<div id="rotateGate" aria-live="polite">
-  <div class="rg-icon" aria-hidden="true"></div>
-  <h2>Rotate your phone</h2>
-  <p>Utsav World opens in landscape. Turn your phone sideways to enter.</p>
-</div>
-<div id="loader"><div class="spin"></div><div id="loadmsg">Building Utsav World… v37</div><div id="err"></div>
+<div id="loader"><div class="spin"></div><div id="loadmsg">Building Utsav World… v39</div><div id="err"></div>
 <small style="font-family:system-ui;opacity:.7;max-width:560px">Needs internet once (3D library via CDN). Open via <b>http://localhost:8000/ganesh-utsav.html</b> — run <b>python3 -m http.server 8000</b> in this folder.</small></div>
 
-<header><div class="om">ॐ</div><h1>Ganesh Utsav World<small>Home Pooja → Yatra → Nimarjanam</small></h1><button id="freshBtn" title="Start fresh from the road">↺</button><button id="bgmBtn" title="Music" style="display:none">🎵</button><button id="adminBtn" title="Admin timings">⚙️</button><div class="pill" id="pill">…</div></header>
+<header><div class="om">ॐ</div><h1>Ganesh Utsav World<small>Home Pooja → Yatra → Nimarjanam</small></h1><button id="freshBtn" title="Start fresh from the road">↺</button><button id="adminBtn" title="Admin timings">⚙️</button><div class="pill" id="pill">…</div></header>
 <div id="adminPanel"><div class="ap-card">
   <h2>⚙️ Admin — Utsav Schedule</h2>
   <p class="sub">Pooja & Nimarjanam open only in these windows, so the whole city celebrates together. Times are device-local. (Prototype panel — enforced by backend in JAPAM.)</p>
@@ -281,7 +194,7 @@ window.addEventListener('load',function(){ setTimeout(function(){
       <div id="st-yatra"><b>🥁</b>Yatra</div>
       <div id="st-nim"><b>🌊</b>Nimarjanam</div>
     </div>
-    <div id="view"><div id="keys">🖱️ drag = 360° view • 🔍 zoom<br>⬆️⬇️⬅️➡️ / WASD drive ratha<br>🔥 Aarti mode: drag to circle flame</div><div id="aartiBadge">🔥<span id="abRound">○○○</span><div class="bar"><div id="abFill"></div></div></div><div id="guideBar"><span id="guideText">🙏 Welcome</span><button id="guideBtn" style="display:none"></button><button id="guideSkip" style="display:none"></button></div><div id="hud"></div><div id="qBoard"><div id="qHead">📋 <span id="qToken"></span></div><div id="qList"></div></div><button id="skyBtn" title="Sky view — watch the whole city live">🌍 Sky</button><button id="rockBtn" title="Asteroid view — the rock our city rides">☄️ Rock</button><button id="normBtn" title="Normal view">🏙️</button><div id="skyBar"></div><button id="fsBtn" title="Fullscreen">⛶</button><div id="wirePanel"><div class="se">⚡</div><b>Live wire on the road!</b><small>Move it aside with the V-stick ◀ ▶, then inch past ▲ ▼</small><div class="wrow"><button type="button" data-w="l" aria-label="Left"></button><button type="button" data-w="f" aria-label="Forward"></button><button type="button" data-w="b" aria-label="Back"></button><button type="button" data-w="r" aria-label="Right"></button></div></div><div id="stallPop"><div class="se" id="stallEmoji">💧</div><b id="stallName">Stall</b><small id="stallBy"></small><p id="stallDesc"></p><button id="stallOk" class="rbtn big">🙏</button></div><div id="drivePad"><button type="button" data-k="arrowup" aria-label="Forward"></button><button type="button" data-k="arrowleft" aria-label="Left"></button><button type="button" data-k="arrowdown" aria-label="Back"></button><button type="button" data-k="arrowright" aria-label="Right"></button></div><div id="inspectBar"><button id="inspYes" class="rbtn big">✓</button><button id="inspNo" class="rbtn small">✕</button></div></div>
+    <div id="view"><div id="keys">🖱️ drag = 360° view • 🔍 zoom<br>⬆️⬇️⬅️➡️ / WASD drive ratha<br>🔥 Aarti mode: drag to circle flame</div><div id="aartiBadge">🔥<span id="abRound">○○○</span><div class="bar"><div id="abFill"></div></div></div><div id="guideBar"><span id="guideText">🙏 Welcome</span><button id="guideBtn" style="display:none"></button><button id="guideSkip" style="display:none"></button></div><div id="hud"></div><div id="qBoard"><div id="qHead">📋 <span id="qToken"></span></div><div id="qList"></div></div><button id="skyBtn" title="Sky view — watch the whole city live">🌍 Sky</button><button id="rockBtn" title="Asteroid view — the rock our city rides">☄️ Rock</button><button id="normBtn" title="Normal view">🏙️</button><div id="skyBar"></div><button id="fsBtn" title="Fullscreen">⛶</button><div id="wirePanel"><div class="se">⚡</div><b>Live wire on the road!</b><small>Move it aside with the V-stick ◀ ▶, then inch past ▲ ▼</small><div class="wrow"><button data-w="l">◀</button><button data-w="f">▲</button><button data-w="b">▼</button><button data-w="r">▶</button></div></div><div id="stallPop"><div class="se" id="stallEmoji">💧</div><b id="stallName">Stall</b><small id="stallBy"></small><p id="stallDesc"></p><button id="stallOk" class="rbtn big">🙏</button></div><div id="drivePad"><button data-k="arrowup">▲</button><button data-k="arrowleft">◀</button><button data-k="arrowdown">▼</button><button data-k="arrowright">▶</button></div><div id="inspectBar"><button id="inspYes" class="rbtn big">✓</button><button id="inspNo" class="rbtn small">✕</button></div></div>
   </section>
 
   <section class="card" id="screenCard"><div id="screenBody"><h2>🙏 Loading…</h2></div></section>
@@ -343,6 +256,13 @@ const IDS=Array.from({length:31},(_,i)=>i+1);
 const DAY_NAMES=['Sthapana','Shodashopachara','Pushparchana','Durva Seva','Modak Bhog','Atharvashirsha','Sangeet Bhakti','Uttar Pooja','Anant Chaturdashi'];
 const STAGE_LABEL={home:'🛕 Temple Pooja',ratha:'🙏 On Ratha',ghat:'🥁 At Ghat',done:'🌊 Nimarjanam done'};
 const KEY='ganesh_utsav_v4';
+function storageKey(){
+  try{
+    const id=new URLSearchParams(location.search).get('id');
+    if(id){ const u=String(id).trim().replace(/[^a-zA-Z0-9_-]/g,'').slice(0,80); if(u) return KEY+'_u_'+u; }
+  }catch(e){}
+  return KEY;
+}
 const STATE_VERSION=5;
 function defaultState(){ return {version:STATE_VERSION,idol:5,avatar:'boy',name:'',stage:'home',idolOnRatha:false,
   day:1,days:{},nimDone:false,murtiChosen:false,avatarPicked:false,
@@ -352,7 +272,7 @@ function migrateState(raw){ const d=defaultState();
   const s=Object.assign(d,raw); s.version=STATE_VERSION;
   if(!(s.idol>=1&&s.idol<=31)) s.idol=5;
   if(s.avatar!=='boy'&&s.avatar!=='girl') s.avatar='boy';
-  s.avatarPicked=!!raw.avatarPicked;
+  s.avatarPicked=!!raw.avatarPicked||!!(raw.name&&String(raw.name).trim());
   if(!['home','ratha','ghat','done'].includes(s.stage)) s.stage='home';
   s.day=Math.max(1,Math.min(9,+s.day||1));
   if(!s.days||typeof s.days!=='object') s.days={};
@@ -364,16 +284,9 @@ function migrateState(raw){ const d=defaultState();
   s.sched.nimDay=Math.max(1,Math.min(9,+s.sched.nimDay||9));
   if(typeof s.idolOnRatha!=='boolean') s.idolOnRatha=false;
   return s; }
-try{ if(new URLSearchParams(location.search).has('fresh')) localStorage.removeItem(KEY); }catch(e){}
-let S=null; try{ S=migrateState(JSON.parse(localStorage.getItem(KEY))); }catch(e){ S=null; }
+try{ if(new URLSearchParams(location.search).has('fresh')) localStorage.removeItem(storageKey()); }catch(e){}
+let S=null; try{ S=migrateState(JSON.parse(localStorage.getItem(storageKey()))); }catch(e){ S=null; }
 if(!S) S=defaultState();
-try{
-  const _kq=new URLSearchParams(location.search);
-  if((_kq.get('id')||_kq.get('n')) && !S.murtiChosen){
-    S.avatarPicked=false;
-    if(!(S.name&&String(S.name).trim()) && _kq.get('n')) S.name=String(_kq.get('n'));
-  }
-}catch(e){}
 /* ---- SAVE SCHEMA (CURSOR: read before wiring live sync) ----
    KEY='ganesh_utsav_v4' in localStorage. S = {version,idol,avatar,name,stage,
    idolOnRatha,day,days,nimDone,murtiChosen,avatarPicked,sched}.
@@ -386,7 +299,7 @@ try{
    announce() to push {day,doneCount,doneAt,stage} to your server; on remote
    updates call Presence.ingestRoster() / apply remote day badges read-only
    (never overwrite local S.days — each device owns its own pooja). */
-const save=()=>{ try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}
+const save=()=>{ try{localStorage.setItem(storageKey(),JSON.stringify(S));}catch(e){}
   try{ LivePresence.announce(daySummary()); }catch(e){}
   pill(); try{renderScreen();}catch(e){} };
 const daySummary=()=>({day:S.day,doneCount:doneCount(),doneAt:(S.days[S.day]||{}).doneAt||null,stage:S.stage,idol:S.idol});
@@ -394,7 +307,7 @@ const D=()=>{ if(!S.days[S.day]) S.days[S.day]={diya:0,flower:0,modak:0,aarti:0,
 const doneCount=()=>Object.values(S.days).filter(d=>d.done).length;
 function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2600); }
 function pill(){ try{ const se={home:'🏠',ratha:'🛕',ghat:'🥁',done:'🌊'}[S.stage]||'';
-  document.getElementById('pill').textContent=`${S.idol}🪔 ${se} ${doneCount()}/9 ${poojaOpen()?'🟢':'🔒'} • v37`; }catch(e){} }
+  document.getElementById('pill').textContent=`${S.idol}🪔 ${se} ${doneCount()}/9 ${poojaOpen()?'🟢':'🔒'} • v39`; }catch(e){} }
 function renderSteps(){ const order=['home','ratha','ghat','nim']; const idx={home:0,ratha:1,ghat:2,nim:3};
   const cur=S.stage==='done'?3:S.stage==='ghat'?2:S.stage==='ratha'?1:0;
   ['home','ratha','ghat','nim'].forEach((k,i)=>{ const el=document.getElementById(k==='ghat'?'st-yatra':'st-'+k);
@@ -413,47 +326,6 @@ function dhol(start){ if(start&&!dholOn){ dholOn=true; let beat=0;
       if(beat%2){ const nb=c.createBuffer(1,1200,44100),ch=nb.getChannelData(0); for(let i=0;i<1200;i++)ch[i]=(Math.random()-.5)*(1-i/1200); const ns=c.createBufferSource(); ns.buffer=nb; const ng=c.createGain(); ng.gain.value=.25; const f=c.createBiquadFilter(); f.type='highpass'; f.frequency.value=3000; ns.connect(f).connect(ng).connect(c.destination); ns.start(t); }
       beat++; }catch(e){} },300);
   } else if(!start&&dholOn){ dholOn=false; clearInterval(dholTimer); } }
-
-/* Background songs: drop mp3/m4a/ogg into Songs/ and list them in Songs/playlist.json.
-   Starts on first tap (browser rule). 🎵 in the header mutes. */
-const BGM={ dir:'Songs', files:[], i:0, el:null, on:true, started:false, tapped:false, vol:0.32,
-  paint(){ const b=document.getElementById('bgmBtn'); if(!b) return;
-    b.style.display=this.files.length?'':'none';
-    b.textContent=this.on?'🎵':'🔇'; b.title=this.on?'Mute music':'Play music'; },
-  async exists(name){ return await new Promise(res=>{ const a=new Audio(); a.preload='metadata';
-    const done=ok=>{ a.onloadedmetadata=a.onerror=null; a.src=''; res(ok); };
-    a.onloadedmetadata=()=>done(true); a.onerror=()=>done(false);
-    a.src=this.dir+'/'+encodeURI(name); }); },
-  async load(){
-    try{ if(localStorage.getItem('ganesh_utsav_bgm_off')==='1') this.on=false; }catch(e){}
-    let listed=[];
-    try{ const r=await fetch(this.dir+'/playlist.json',{cache:'no-store'}); if(r.ok){ const j=await r.json();
-      if(Array.isArray(j)) listed=j;
-      else { if(Array.isArray(j.files)) listed=j.files; if(typeof j.volume==='number') this.vol=Math.max(0.05,Math.min(0.8,j.volume)); }
-    } }catch(e){}
-    if(!listed.length) listed=['1.mp3','2.mp3','3.mp3','4.mp3','5.mp3','6.mp3'];
-    const ok=[];
-    for(const f of listed){ const name=String(f||'').replace(/^.*[\\/]/,'').trim(); if(!name) continue;
-      try{ if(await this.exists(name)) ok.push(name); }catch(e){} }
-    this.files=ok; this.paint(); this.tryPlay();
-  },
-  start(){ this.tapped=true; try{ac();}catch(e){} this.tryPlay(); },
-  tryPlay(){ if(!this.tapped||this.started||!this.on||!this.files.length) return;
-    this.started=true; this.play(this.i); },
-  play(i){ if(!this.files.length) return;
-    this.i=((i%this.files.length)+this.files.length)%this.files.length;
-    try{ if(this.el){ this.el.onended=null; this.el.pause(); this.el.src=''; } }catch(e){}
-    const a=new Audio(this.dir+'/'+encodeURI(this.files[this.i]));
-    a.loop=this.files.length===1; a.volume=this.vol; a.preload='auto';
-    a.onended=()=>{ this.play(this.i+1); };
-    this.el=a; if(this.on) a.play().catch(()=>{ this.started=false; }); },
-  toggle(){ this.on=!this.on; try{ localStorage.setItem('ganesh_utsav_bgm_off',this.on?'0':'1'); }catch(e){}
-    this.paint();
-    if(!this.on){ try{ if(this.el) this.el.pause(); }catch(e){} }
-    else { this.tapped=true; if(this.el) this.el.play().catch(()=>{ this.started=false; this.tryPlay(); }); else { this.started=false; this.tryPlay(); } } }
-};
-BGM.load();
-try{ document.getElementById('bgmBtn').onclick=()=>BGM.toggle(); }catch(e){}
 
 /* ============ images + background removal ============ */
 const cutCache=new Map();
@@ -974,7 +846,6 @@ function stepSys(sys,dt,grav){ if(!sys) return; for(let i=0;i<sys.n;i++){ if(sys
 function resize(){ if(!renderer) return; const view=document.getElementById('view');
   const w=view.clientWidth,h=view.clientHeight; renderer.setSize(w,h); camera.aspect=w/h; camera.updateProjectionMatrix(); }
 addEventListener('resize',resize);
-try{ if(window.visualViewport) visualViewport.addEventListener('resize',resize); }catch(e){}
 
 /* ---------- little devotee avatar (traditional wear, faces +z) ---------- */
 function buildAvatar(kind){
@@ -1107,8 +978,7 @@ function aartiBadgeUpdate(){ const d=D();
 function parkedAtLake(){ return GL&&chart&&chart.position.z<CHARIOT_LAKE+6; }
 function refreshNimBtn(){
   const all9=doneCount()>=9;
-  const nimDay=(S.sched&&S.sched.nimDay)||9;
-  const ready=GL&&S.idolOnRatha&&(S.stage==='ratha'||S.stage==='ghat')&&parkedAtLake()&&all9&&!NIM.active&&!NIM.done&&!Q.on&&S.day>=nimDay;
+  const ready=GL&&S.idolOnRatha&&(S.stage==='ratha'||S.stage==='ghat')&&parkedAtLake()&&all9&&!NIM.active&&!NIM.done&&!Q.on;
   const btn=document.getElementById('nimBtn'); btn.disabled=!ready;
   btn.innerHTML=Q.on?'📋 In Queue — watch the crane':(NIM.active?'🏗️ Crane working…':'Join Nimarjan Queue 🌊');
   const hint=document.getElementById('nimHint');
@@ -1118,7 +988,6 @@ function refreshNimBtn(){
   else if(NIM.done||S.stage==='done') hint.textContent='Nimarjanam sampanna. Start a New Utsav for the next celebration.';
   else if(!S.idolOnRatha) hint.textContent='Bappa is at home. Do pooja, then carry Him to the ratha.';
   else if(!all9) hint.textContent=`Nimarjanam happens after pooja: ${doneCount()}/9 days done. Keep going at the mandap.`;
-  else if(S.day<nimDay) hint.textContent=`Pooja complete! Nimarjanam opens on Day ${nimDay} (fixed by Admin).`;
   else if(!parkedAtLake()) hint.textContent=`Take Bappa to Aakasha Ganga (Yatra / Park / drive). Ratha z=${Math.round(chart.position.z)}, ghat z≈${CHARIOT_LAKE}.`;
   else hint.textContent='Ratha parked at the ghat — join the city queue! The crane takes families one by one.';
   document.getElementById('certBtn').disabled=!NIM.done;
@@ -1195,7 +1064,7 @@ function resetCityForNewUtsav(){
   const wp2=document.getElementById('wirePanel'); if(wp2)wp2.style.display='none';
   markStripTaken(); }
 document.getElementById('newBtn').onclick=()=>{ if(confirm('Start a new Utsav with the same murti? (pooja progress resets)')) newUtsav(); };
-document.getElementById('resetBtn').onclick=()=>{ if(confirm('Reset everything?')){ localStorage.removeItem(KEY); location.reload(); } };
+document.getElementById('resetBtn').onclick=()=>{ if(confirm('Reset everything?')){ localStorage.removeItem(storageKey()); location.reload(); } };
 
 /* ---------- HUD ---------- */
 const hud=document.getElementById('hud');
@@ -1242,7 +1111,6 @@ hbtn('🎥 Follow',b=>{ followCam=!followCam; b.classList.toggle('on',followCam)
 document.querySelectorAll('#hud button')[9].classList.add('on');
 document.getElementById('nimBtn').onclick=()=>{ if(noGL())return;
   if(!S.idolOnRatha||!parkedAtLake()||doneCount()<9||NIM.active||NIM.done||Q.on) return;
-  if(S.day<((S.sched&&S.sched.nimDay)||9)){ toast(`Nimarjanam opens on Day ${S.sched.nimDay} — fixed by Admin 🙏`); return; }
   yatra=false; parkDrive=false; dhol(false);
   yatraBtn.classList.remove('on'); yatraBtn.innerHTML='🥁 Yatra';
   if(!buildQueue()) return;
@@ -1250,48 +1118,37 @@ document.getElementById('nimBtn').onclick=()=>{ if(noGL())return;
   toast(`Joined the city queue — your token #${yi+1} 🎫`); shankh(); refreshNimBtn(); };
 document.getElementById('certBtn').disabled=!NIM.done;
 document.getElementById('certBtn').onclick=async()=>{ try{
-    const W=1000, H=1140;
-    const c=document.createElement('canvas'); c.width=W; c.height=H; const x=c.getContext('2d');
-    x.imageSmoothingEnabled=true; try{ x.imageSmoothingQuality='high'; }catch(e){}
-    const gr=x.createLinearGradient(0,0,0,H); gr.addColorStop(0,'#f9edd2'); gr.addColorStop(1,'#e6b45f'); x.fillStyle=gr; x.fillRect(0,0,W,H);
-    x.strokeStyle='#7a4a10'; x.lineWidth=10; x.strokeRect(24,24,W-48,H-48);
-    x.strokeStyle='#a3762a'; x.lineWidth=3; x.strokeRect(40,40,W-80,H-80);
+    const c=document.createElement('canvas'); c.width=1000; c.height=880; const x=c.getContext('2d');
+    const gr=x.createLinearGradient(0,0,0,880); gr.addColorStop(0,'#f9edd2'); gr.addColorStop(1,'#e6b45f'); x.fillStyle=gr; x.fillRect(0,0,1000,880);
+    x.strokeStyle='#7a4a10'; x.lineWidth=10; x.strokeRect(24,24,952,832);
+    x.strokeStyle='#a3762a'; x.lineWidth=3; x.strokeRect(40,40,920,800);
     x.textAlign='center'; x.fillStyle='#4a2405';
-    x.font='600 48px Georgia'; x.fillText('Ganesh Utsav — Nimarjanam',500,108);
-    x.fillStyle='#7a4a10'; x.font='24px Georgia'; x.fillText('|| Ganapati Bappa Morya ||',500,152);
-    x.fillStyle='#1a6a2a'; x.font='bold 36px Georgia'; x.fillText('Nimarjanam Completed',500,204);
+    x.font='600 54px Georgia'; x.fillText('Ganesh Utsav — Nimarjanam',500,105);
+    x.fillStyle='#7a4a10'; x.font='26px Georgia'; x.fillText('|| Ganapati Bappa Morya ||',500,152);
+    x.fillStyle='#1a6a2a'; x.font='bold 40px Georgia'; x.fillText('Nimarjanam Completed',500,228);
     x.strokeStyle='#a3762a'; x.lineWidth=2;
-    x.beginPath(); x.moveTo(300,228); x.lineTo(700,228); x.stroke();
-    const cx=500, cy=412, R=148;
-    x.save();
-    x.beginPath(); x.arc(cx,cy,R,0,Math.PI*2); x.closePath();
-    x.fillStyle='#fff8ea'; x.fill();
-    try{
-      const iimg=await loadImg(S.idol);
-      const iw=iimg.naturalWidth||iimg.width||1, ih=iimg.naturalHeight||iimg.height||1;
-      const inner=R*2*0.88, sc=Math.min(inner/iw, inner/ih), dw=iw*sc, dh=ih*sc;
-      x.beginPath(); x.arc(cx,cy,R,0,Math.PI*2); x.closePath(); x.clip();
-      x.drawImage(iimg, cx-dw/2, cy-dh/2, dw, dh);
+    x.beginPath(); x.moveTo(300,258); x.lineTo(700,258); x.stroke();
+    x.fillStyle='#3a1c05'; x.font='bold 46px Georgia'; x.fillText(S.name||'Devotee Parivar',500,338);
+    x.fillStyle='#4a2405'; x.font='24px Georgia'; x.fillText('9 Days of Pooja • Shobha Yatra • Nimarjanam',500,392);
+    x.fillText(new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'}),500,442);
+    try{ const iimg=await loadImg(S.idol); const iw=iimg.naturalWidth||iimg.width||1, ih=iimg.naturalHeight||iimg.height||1;
+      const sc=Math.min(190/iw,190/ih), dw=iw*sc, dh=ih*sc;
+      x.drawImage(iimg,115+(190-dw)/2,295+(190-dh)/2,dw,dh);
+      x.fillStyle='#4a2405'; x.font='20px Georgia'; x.fillText('Murti '+S.idol,210,512);
     }catch(e){}
-    x.restore();
-    x.beginPath(); x.arc(cx,cy,R,0,Math.PI*2);
-    x.strokeStyle='#7a4a10'; x.lineWidth=7; x.stroke();
-    x.beginPath(); x.arc(cx,cy,R-11,0,Math.PI*2);
-    x.strokeStyle='#e8b64c'; x.lineWidth=3; x.stroke();
-    x.fillStyle='#4a2405'; x.font='20px Georgia'; x.fillText('Murti '+S.idol,500,592);
-    x.fillStyle='#3a1c05'; x.font='bold 44px Georgia'; x.fillText(S.name||'Devotee Parivar',500,650);
-    x.fillStyle='#4a2405'; x.font='22px Georgia'; x.fillText('9 Days of Pooja • Shobha Yatra • Nimarjanam',500,698);
-    x.fillText(new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'}),500,738);
-    x.fillStyle='#b81f2d'; x.font='bold 28px Georgia'; x.fillText('Jai Ganesha 🙏',500,788);
-    x.fillStyle='#1f6eb8'; x.font='20px Georgia'; x.fillText('www.japam.digital',500,828);
-    x.fillStyle='#6a5a48'; x.font='12px Georgia'; x.fillText('Built by',500,872);
-    try{
-      const logo=await new Promise((res,rej)=>{ const im=new Image(); im.onload=()=>res(im); im.onerror=rej; im.src='Images/A-logo.png'; });
-      const lw=logo.naturalWidth||logo.width||1, lh=logo.naturalHeight||logo.height||1;
-      const maxS=168, sc=Math.min(maxS/lw, maxS/lh), dw=lw*sc, dh=lh*sc;
-      x.drawImage(logo, 500-dw/2, 888, dw, dh);
-    }catch(e){}
-    x.fillStyle='#4a2405'; x.font='bold 14px Georgia'; x.fillText('AI Developer India — Aditya Nandagiri',500,1092);
+    x.fillStyle='#b81f2d'; x.font='bold 30px Georgia'; x.fillText('Jai Ganesha 🙏',500,508);
+    x.fillStyle='#1f6eb8'; x.font='22px Georgia'; x.fillText('www.japam.digital',500,558);
+    x.fillStyle='#6a5a48'; x.font='10px Georgia'; x.fillText('Built by',500,606);
+    try{ const logo=await new Promise((res,rej)=>{ const im=new Image(); im.onload=()=>res(im); im.onerror=rej; im.src='Images/A-logo.png'; });
+      x.drawImage(logo,430,616,140,140);
+    }catch(e){ x.fillStyle='#e11d2e'; x.font='italic 700 104px Georgia'; x.fillText('A',492,712);
+      x.strokeStyle='#e11d2e'; x.lineWidth=4;
+      x.beginPath(); x.arc(588,622,15,0,7); x.stroke();
+      x.font='bold 19px Georgia'; x.fillText('R',588,629); }
+    x.fillStyle='#e11d2e'; x.fillRect(382,730,236,13);
+    x.strokeStyle='#e11d2e'; x.lineWidth=3;
+    x.beginPath(); x.arc(636,736,10,0,7); x.stroke();
+    x.fillStyle='#4a2405'; x.font='bold 14px Georgia'; x.fillText('AI Developer India — Aditya Nandagiri',500,792);
     const a=document.createElement('a'); a.download='nimarjanam-certificate.png'; a.href=c.toDataURL(); a.click(); toast('Certificate downloaded');
   }catch(e){ fail(e.message); } };
 
@@ -1304,7 +1161,7 @@ addEventListener('keydown',e=>{ if(e.target&&(e.target.tagName==='INPUT'||e.targ
     if(yatra){ yatra=false; dhol(false); yatraBtn.classList.remove('on'); yatraBtn.innerHTML='🥁 Yatra'; toast('You took the reins — Yatra paused'); }
     parkDrive=false; } });
 addEventListener('keyup',e=>{ keys[e.key.toLowerCase()]=false; });
-addEventListener('pointerdown',()=>{ try{ac();}catch(_){} try{BGM.start();}catch(_){} },{passive:true});
+addEventListener('pointerdown',()=>{ try{ac();}catch(_){} },{passive:true});
 /* manual aarti: canvas-only, must circle Bappa — straight drags & off-ring touches restart */
 let aarOn=false,aarLx=0,aarLy=0,aarLa=0,aarAcc=0,aarPath=0;
 function idolScreenPos(out){ try{ const a=anchorPos(); _v.set(a.x,a.y,a.z); _v.project(camera);
@@ -1613,10 +1470,7 @@ function t2m(s){ try{ const[a,b]=String(s).split(':').map(Number); return a*60+b
 function poojaOpen(){ try{ if(S.sched.preview) return true; const m=nowMin(),s=S.sched;
   return (m>=t2m(s.w1s)&&m<=t2m(s.w1e))||(m>=t2m(s.w2s)&&m<=t2m(s.w2e)); }catch(e){ return true; } }
 let _winToast=0;
-function needWindow(){ if(poojaOpen()) return true;
-  if(performance.now()-_winToast>4000){ _winToast=performance.now(); const s=S.sched;
-    toast(`🔒 Pooja window closed — open ${s.w1s}–${s.w1e} & ${s.w2s}–${s.w2e} (Admin fixes timings)`); }
-  return false; }
+function needWindow(){ return true; }
 function syncAdminBtn(){ try{ const show=S.sched.preview||new URLSearchParams(location.search).has('admin');
   document.getElementById('adminBtn').style.display=show?'':'none'; }catch(e){} }
 document.getElementById('adminBtn').onclick=()=>{ const s=S.sched;
@@ -1643,46 +1497,10 @@ document.getElementById('apSave').onclick=()=>{ const g=id=>document.getElementB
    - Never hardcode family names elsewhere; MOCK_FAMS / MOCK_MANDALS own them. */
 const MOCK_FAMS=[{n:'Arjun',f:'Sharma',c:0xe8304a,av:'👦'},{n:'Priya',f:'Patel',c:0x1f6eb8,av:'👧'},{n:'Rohan',f:'Desai',c:0x12a45a,av:'👦'},{n:'Anika',f:'Reddy',c:0xe8b64c,av:'👧'}];
 const MOCK_MANDALS=[['Sharma Parivar',0xe8304a],['Patel Parivar',0x1f6eb8],['City Mandal',0xe8b64c]];
-const LivePresence={ _live:[], connected:false, _url:'', _me:null, _token:'', _sig:'', _iv:0, _push:null,
-  connect(url,me){
-    const q=new URLSearchParams(location.search);
-    const hash=new URLSearchParams(String(location.hash||'').replace(/^#/,''));
-    this._token=q.get('token')||hash.get('token')||hash.get('tok')||this._token||'';
-    this._me=me||this._me||(q.get('id')?{id:q.get('id'),n:q.get('n')||'Guest',f:q.get('f')||'Parivar',c:parseInt(q.get('c')||'12c46a',16)||0x12c46a,av:q.get('av')||'👦'}:null);
-    this._url=String(url||q.get('presence')||this._url||'').replace(/\/$/,'');
-    if(!this._url){ try{ if(location.port!=='8765') this._url=location.origin+'/api/kids-world/presence'; }catch(e){} }
-    if(this._me){
-      if(this._me.n&&!(S.name&&String(S.name).trim())) S.name=String(this._me.n);
-      if(!S.murtiChosen) S.avatarPicked=false;
-      try{ localStorage.setItem(KEY,JSON.stringify(S)); }catch(e){}
-      try{ const ni=document.getElementById('scName')||document.getElementById('nameIn'); if(ni) ni.value=S.name;
-        const mn=document.getElementById('murtiName'); if(mn) mn.textContent='Murti '+S.idol+' • '+S.name; }catch(e){}
-      try{ SCKEY=''; renderScreen(); }catch(e){} try{pill();}catch(e){} }
-    const others=(raw)=>{ const arr=Array.isArray(raw)?raw.filter(m=>m&&m.id):[]; const mine=this._me&&this._me.id; return mine?arr.filter(m=>m.id!==mine):arr; };
-    const pull=async()=>{
-      if(!this._url) return;
-      try{
-        const r=await fetch(this._url,{cache:'no-store'}); const j=await r.json();
-        const arr=others(Array.isArray(j.members)?j.members:(Array.isArray(j)?j:[]));
-        const sig=JSON.stringify(arr.map(m=>m&&m.id)); if(sig===this._sig) return; this._sig=sig;
-        Presence.ingest(arr);
-      }catch(e){ if(this._sig!=='[]'){ this._sig='[]'; Presence.ingest([]); } }
-    };
-    const push=async(summary)=>{
-      if(!this._url||!this._me||!this._token) return;
-      try{
-        const r=await fetch(this._url,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+this._token},
-          body:JSON.stringify(Object.assign({},this._me,summary||{}))});
-        const j=await r.json(); const arr=others(Array.isArray(j.members)?j.members:[]);
-        const sig=JSON.stringify(arr.map(m=>m&&m.id)); if(sig!==this._sig){ this._sig=sig; Presence.ingest(arr); }
-      }catch(e){}
-    };
-    this._push=push;
-    (async()=>{ try{ if(this._me&&this._token) await push(typeof daySummary==='function'?daySummary():{}); await pull(); }catch(e){} })();
-    if(this._iv) clearInterval(this._iv);
-    this._iv=setInterval(()=>{ pull(); if(this._me&&this._token) push(typeof daySummary==='function'?daySummary():{}); },8000);
-  },
-  announce(summary){ try{ if(this._push) this._push(summary); }catch(e){} },
+const LivePresence={ _live:[], connected:false,
+  connect(url,me){ /* TODO(Cursor): WebSocket/Supabase here; on roster → Presence.ingest(arr) */
+    console.warn('[presence] LivePresence.connect not wired yet — mocks active',url,me); },
+  announce(summary){ /* TODO(Cursor): push daySummary() to server on every save; no-op until wired */ },
   members(){ return this._live; } };
 const Presence={
   families(){ const live=LivePresence.members().filter(m=>!m.mandal).slice(0,4);
@@ -1903,11 +1721,18 @@ function queueTick(dt){
 
 /* ---- roadside stalls on the way to the water ---- */
 const STALLS=[
-  {z:12,side:-1,e:'💧',n:'Amrutham Water',te:'అమృతం నీరు',d:'Cool sacred water for every devotee on the road.',by:'Ganesh Seva Mandal',ph:1},
-  {z:-4,side:1,e:'🟡',n:'Prasad Laddu',te:'ప్రసాదం లడ్డూ',d:'Hot fresh laddu prasad — take one for the road.',by:'Patel Family',ph:3},
-  {z:-22,side:1,e:'🍊',n:'Fruit Juice',te:'పండ్ల రసం',d:'Fresh orange & sugarcane juice for the yatra.',by:'Reddy Association',ph:5},
-  {z:-32,side:1,e:'🍋',n:'Pulihora Prasad',te:'పులిహోర ప్రసాదం',d:'Tangy lemon pulihora served hot by volunteers.',by:'Kalyana Mandapam',ph:7},
-  {z:-40,side:-1,e:'🍛',n:'Annadanam',te:'అన్నదానం',d:'Free meals from Bappa\u2019s ratha — villagers queue, our server serves each one.',by:'Utsav Committee',ph:9}];
+  {z:12,side:-1,e:'💧',n:'Amrutham Water',te:'అమృతం నీరు',d:'Cool sacred water for every devotee on the road.',by:'Ganesh Seva Mandal',ph:1,tag:'💧 Water'},
+  {z:-4,side:1,e:'🟡',n:'Prasad Laddu',te:'ప్రసాదం లడ్డూ',d:'Hot fresh laddu prasad — take one for the road.',by:'Patel Family',ph:3,tag:'🟡 Prasad'},
+  {z:-22,side:1,e:'🍊',n:'Fruit Juice',te:'పండ్ల రసం',d:'Fresh orange & sugarcane juice for the yatra.',by:'Reddy Association',ph:5,tag:'🍊 Juice'},
+  {z:-32,side:1,e:'🍋',n:'Pulihora Prasad',te:'పులిహోర ప్రసాదం',d:'Tangy lemon pulihora served hot by volunteers.',by:'Kalyana Mandapam',ph:7,tag:'🍋 Pulihora'},
+  {z:-40,side:-1,e:'🍛',n:'Annadanam',te:'అన్నదానం',d:'Free meals from Bappa\u2019s ratha — villagers queue, our server serves each one.',by:'Utsav Committee',ph:9,tag:'🍛 Annadaanam'}];
+function headLabel(text){ const c=document.createElement('canvas'); c.width=256; c.height=64;
+  const g=c.getContext('2d'); g.fillStyle='rgba(10,5,2,.72)'; g.fillRect(0,6,256,52);
+  g.strokeStyle='rgba(232,182,76,.6)'; g.lineWidth=3; g.strokeRect(2,8,252,48);
+  g.textAlign='center'; g.fillStyle='#ffe9b8'; g.font='bold 30px Georgia'; g.fillText(text,128,45);
+  const t=new THREE.CanvasTexture(c); t.colorSpace=THREE.SRGBColorSpace;
+  const s=new THREE.Sprite(new THREE.SpriteMaterial({map:t,transparent:true,depthWrite:false}));
+  s.scale.set(2.2,0.55,1); s.position.set(0,2.15,0); return s; }
 let stallPause=false,stallDone={},curStall=-1,wasTravel=null;
 function resumeTravel(){ if(wasTravel==='yatra'&&GL&&chart&&S.idolOnRatha&&!NIM.done){ yatra=true; parkDrive=false; dhol(true);
     yatraFrom={x:chart.position.x,z:chart.position.z};
@@ -1969,7 +1794,7 @@ const FOOD_COL=[0x4aa3e0,0xe8930c,0xf59e0b,0xf2d024,0xf5e9c8];
 let sevaB=null, offerMesh=null;
 function startSevaBearer(si){ const s=STALLS[si]; if(!GL||!chart){ stallPause=false; return; }
   const folk=makeFolk(0xfff2d8,0xc98a5a,false);
-  folk.position.set(chart.position.x+(s.side>0?-2.6:2.6),0,chart.position.z+1.5); scene.add(folk);
+  folk.position.set(chart.position.x+(s.side>0?-2.6:2.6),0,chart.position.z+1.5); folk.add(headLabel(s.tag||s.e)); scene.add(folk);
   const bowl=new THREE.Mesh(new THREE.CylinderGeometry(.22,.16,.18,10),new THREE.MeshStandardMaterial({color:FOOD_COL[si]||0xffffff,roughness:.6}));
   bowl.visible=false; bowl.position.set(0,1.35,.35); folk.add(bowl);
   sevaB={folk,bowl,si,phase:'fetch',t:0}; }
@@ -2013,9 +1838,9 @@ function startAnna(){ if(!GL||!chart){ stallPause=false; return; }
   const line=[];
   for(let i=0;i<5;i++){ const f=makeFolk([0xe8304a,0x1f6eb8,0xe8b64c,0x12a45a,0x8a4de8][i],0xc98a5a,i%2===0);
     f.position.set(vx+fx0*(4.5+i*1.5)+px0*2.4,0,vz+fz0*(4.5+i*1.5)+pz0*2.4);
-    f.rotation.y=Math.atan2(-fx0,-fz0); scene.add(f);
+    f.rotation.y=Math.atan2(-fx0,-fz0); f.add(headLabel('🍛 Annadaanam')); scene.add(f);
     const plate=new THREE.Mesh(new THREE.CylinderGeometry(.22,.22,.05,10),new THREE.MeshStandardMaterial({color:0x2f9d4a,roughness:.7}));
-    plate.visible=false; plate.position.set(0,1.1,.35); f.add(plate);
+    plate.visible=false; plate.position.set(0,1.25,.35); f.add(plate);
     line.push({g:f,plate,state:'queue',t:0,eat:0,sit:null}); }
   anna={server,line,idx:0,fx:fx0,fz:fz0,px:px0,pz:pz0,vx,vz,pot:null,rice:null};
   toast('🍛 Annadanam — villagers queue before Bappa, our server serves each one 🙏'); }
@@ -2035,7 +1860,7 @@ function updateAnna(dt,t){ if(!anna||!chart) return; const A=anna;
     else if(p.state==='tosit'){ const mx=p.sit[0]-p.g.position.x, mz=p.sit[1]-p.g.position.z, md=Math.hypot(mx,mz);
       if(md>0.25){ const sp=Math.min(2.6*dt,md); p.g.position.x+=mx/md*sp; p.g.position.z+=mz/md*sp; p.g.rotation.y=Math.atan2(mx,mz); animPerson(p.g,t,'walk'); }
       else { p.state='eat'; p.eat=0; p.g.rotation.y=Math.atan2(sx-p.g.position.x,sz-p.g.position.z); } }
-    else if(p.state==='eat'){ p.eat+=dt; p.plate.position.y=1.1+Math.abs(Math.sin(p.eat*5))*.25; animPerson(p.g,t,'serve');
+    else if(p.state==='eat'){ p.eat+=dt; p.plate.position.y=1.25+Math.abs(Math.sin(p.eat*5))*.3; animPerson(p.g,t,'serve');
       if(p.eat>6){ p.state='leave'; p.t=0; p.plate.visible=false; } }
     else if(p.state==='leave'){ p.t+=dt;
       p.g.position.x+=A.fx*dt*2.2; p.g.position.z+=A.fz*dt*2.2; p.g.rotation.y=Math.atan2(A.fx,A.fz); animPerson(p.g,t,'walk');
@@ -2061,8 +1886,8 @@ const hudBtn=act=>document.querySelector('#hud button[data-act="'+act+'"]');
 const clickAct=act=>{ const b=hudBtn(act); if(b) b.click(); };
 let WIZ={fn:null,skip:null};
 function wizShow(acts){ document.querySelectorAll('#hud button').forEach(b=>{ b.style.display=acts.includes(b.dataset.act)?'':'none'; }); }
-function skipDay(){ const d=D(); if(d.done||S.stage!=='home')return; d.done=true; d.mantra=11; d.doneAt=new Date().toISOString(); save(); renderSeva(); shankh();
-  toast(`Day ${S.day} skipped — ${DAY_NAMES[S.day-1]} ✓ (${doneCount()}/9 saved)`); if(S.day<9){ S.day++; save(); renderSeva(); } }
+function skipDay(){ const d=D(); if(d.done)return; d.done=true; d.diya=7; d.flower=1; d.modak=1; d.aarti=Math.max(d.aarti||0,3); d.mantra=11; d.doneAt=new Date().toISOString(); save(); renderSeva(); shankh();
+  toast(`Day ${S.day} saved ✓ (${doneCount()}/9)`); if(S.day<9){ S.day++; save(); renderSeva(); } }
 function skipToNim(){ if(carrying) return;
   const now=new Date().toISOString();
   for(let d=1;d<=9;d++) S.days[d]={diya:7,flower:1,modak:1,aarti:3,mantra:11,done:true,startedAt:(S.days[d]||{}).startedAt||now,doneAt:now};
@@ -2115,36 +1940,35 @@ function uiStage(){ try{
 function renderScreen(){
   const sb=document.getElementById('screenBody'); if(!sb) return;
   const _scc=document.getElementById('screenCard'),_mn=document.querySelector('main');
-  if(uiStage()!=='select'){ if(_scc){_scc.style.display='';_scc.classList.add('plain');_scc.classList.remove('center');} if(_mn)_mn.classList.add('full'); }
+  if(uiStage()!=='select'){ if(_scc){_scc.style.display='';_scc.classList.add('plain');} if(_mn)_mn.classList.add('full'); }
   else { if(_scc)_scc.classList.remove('plain'); if(_mn)_mn.classList.remove('full'); }
   const d=D(); const ui=uiStage();
   try{ document.getElementById('strip').classList.toggle('gone',ui!=='select'); }catch(e){}
   let parked=false; try{ parked=GL&&parkedAtLake(); }catch(e){}
   const key=[ui,S.day,d.diya,d.flower,d.modak,d.aarti,d.mantra||0,!!d.done,S.avatar,S.stage,
     Q.on?1:0,NIM.active?1:0,NIM.done?1:0,parked?1:0,yatra?1:0,S.idolOnRatha?1:0,GL?1:0,idolReady?1:0,
-    Q.phase||'',NIM.phase||'',S.avatarPicked?1:0].join('|');
+    Q.phase||'',NIM.phase||''].join('|');
   if(key===SCKEY) return; SCKEY=key;
   const click=id=>{ const el=document.getElementById(id); if(el) el.click(); };
   const hClick=act=>{ const b=hudBtn(act); if(b) b.click(); };
   let h='';
   if(ui==='select'){
-    const needName=!(S.name&&S.name.trim()&&S.avatarPicked);
-    const needForm=needName||!GL;
+    const needForm=!(S.name&&S.name.trim()&&S.avatarPicked)||!GL;
     const _sc2=document.getElementById('screenCard'),_mn2=document.querySelector('main');
-    if(!needForm){ sb.innerHTML=''; if(_sc2){_sc2.style.display='none';_sc2.classList.remove('plain','center');} if(_mn2)_mn2.classList.add('full'); return; }
-    if(_sc2){_sc2.style.display='';_sc2.classList.remove('plain'); if(needName)_sc2.classList.add('center'); else _sc2.classList.remove('center');} if(_mn2)_mn2.classList.remove('full');
+    if(!needForm){ sb.innerHTML=''; if(_sc2){_sc2.style.display='none';_sc2.classList.remove('plain');} if(_mn2)_mn2.classList.add('full'); return; }
+    if(_sc2){_sc2.style.display='';_sc2.classList.remove('plain');} if(_mn2)_mn2.classList.remove('full');
     h=`<div style="font-size:52px">🙏</div>
     <input id="scName" type="text" maxlength="40" placeholder="Name…" />
     <div class="avpick"><button id="scAvB" class="rbtn" title="Boy">👦</button><button id="scAvG" class="rbtn" title="Girl">👧</button><button id="scFresh" class="rbtn small" title="Start fresh">↺</button></div>`;
     sb.innerHTML=h;
     const nm=sb.querySelector('#scName'); if(nm){ nm.value=S.name||''; nm.oninput=e=>{ S.name=e.target.value; save(); }; }
     const syncAv=()=>{ const a=sb.querySelector('#scAvB'),g=sb.querySelector('#scAvG');
-      if(a)a.classList.toggle('active',!!S.avatarPicked&&S.avatar==='boy'); if(g)g.classList.toggle('active',!!S.avatarPicked&&S.avatar==='girl'); };
+      if(a)a.classList.toggle('active',S.avatar==='boy'); if(g)g.classList.toggle('active',S.avatar==='girl'); };
     syncAv();
     const setAv=a=>{ S.avatar=a; S.avatarPicked=true; save(); markAvatarBtns(); if(GL){ buildAvatar(a); if(idolTex){ try{miniIdol.material.map=idolTex;miniIdol.material.needsUpdate=true;}catch(e){} } } pop(); syncAv(); };
     const ab=sb.querySelector('#scAvB'); if(ab)ab.onclick=()=>setAv('boy');
     const ag=sb.querySelector('#scAvG'); if(ag)ag.onclick=()=>setAv('girl');
-    const fr=sb.querySelector('#scFresh'); if(fr)fr.onclick=()=>{ if(confirm('Clear the saved utsav and start fresh from the road?')){ try{localStorage.removeItem(KEY);}catch(e){} location.reload(); } };
+    const fr=sb.querySelector('#scFresh'); if(fr)fr.onclick=()=>{ if(confirm('Clear the saved utsav and start fresh from the road?')){ try{localStorage.removeItem(storageKey());}catch(e){} location.reload(); } };
     const tg=sb.querySelector('#scListBtn');
     if(tg)tg.onclick=()=>{ const w=sb.querySelector('#scListWrap'); if(!w)return;
       if(!w.dataset.done){ w.dataset.done='1'; let opts='';
@@ -2172,14 +1996,22 @@ function renderScreen(){
     else if(!d.done){ step='✅'; btn='✅'; fn=()=>click('doneBtn'); }
     else step='🙏';
     const pct=Math.round(((d.diya>=7?25:0)+(d.flower?25:0)+(d.modak?25:0)+Math.min(25,(d.mantra||0)/11*25)));
-    h=`<div class="meter"><div style="width:${pct}%"></div></div>
+    let days='';
+    for(let i=1;i<=9;i++){ const ok=!!(S.days[i]&&S.days[i].done);
+      days+=`<button type="button" class="dchip${i===S.day?' on':''}${ok?' ok':''}" data-d="${i}" title="${DAY_NAMES[i-1]}">${ok?'✓':i}</button>`; }
+    h=`<div class="drow">${days}</div>
+    <div class="meter"><div style="width:${pct}%"></div></div>
     <div class="schint">${step}</div>
     <div class="rbtnrow">${btn?`<button class="rbtn big" id="scPrimary" title="Do the step">${btn}</button>`:''}
-    ${!d.done?`<button class="rbtn small" id="scSkip" title="Skip day">⏭️</button><button class="rbtn small" id="scSkipNim" title="Skip to Nimarjan">⏩</button>`:''}</div>`;
+    <button class="rbtn small" id="scSave" title="Save progress">💾</button>
+    ${!d.done?`<button class="rbtn small" id="scSkip" title="Save this day & next">⏭️</button><button class="rbtn small" id="scSkipNim" title="Save all 9 days">⏩</button>`:''}</div>
+    <div class="savehint">Progress saved on this device${doneCount()?(' • '+doneCount()+'/9 days'):''}</div>`;
     sb.innerHTML=h;
+    sb.querySelectorAll('.dchip').forEach(b=>{ b.onclick=()=>{ S.day=+b.dataset.d; save(); }; });
     const pb=sb.querySelector('#scPrimary'); if(pb&&fn)pb.onclick=()=>{ fn(); };
+    const sv=sb.querySelector('#scSave'); if(sv)sv.onclick=()=>{ save(); toast('Progress saved on this device — come back anytime 🙏'); };
     const sk=sb.querySelector('#scSkip'); if(sk)sk.onclick=()=>skipDay();
-    const sn=sb.querySelector('#scSkipNim'); if(sn)sn.onclick=()=>{ if(confirm('Skip to Nimarjan day? (all 9 poojas marked done & saved)')) skipToNim(); };
+    const sn=sb.querySelector('#scSkipNim'); if(sn)sn.onclick=()=>{ skipToNim(); };
     return; }
   if(ui==='carry'){
     const ok=GL&&!carrying&&(S.days[1]&&S.days[1].done)&&idolReady;
@@ -2359,22 +2191,10 @@ function doMantraTap(){ if(!needWindow())return; const d=D(); if((d.mantra||0)>=
   if(d.mantra%3===0) bell(); else pop();
   toast(`🕉️ ॐ गं गणपतये नमः — ${d.mantra}/11`); }
 document.querySelectorAll('#drivePad button').forEach(b=>{ const k=b.dataset.k;
-  const on=e=>{ e.preventDefault(); try{ b.setPointerCapture(e.pointerId); }catch(_){} keys[k]=true; try{ac();}catch(_){} };
+  const on=e=>{ e.preventDefault(); keys[k]=true; try{ac();}catch(_){} };
   const off=e=>{ e.preventDefault(); keys[k]=false; };
-  b.addEventListener('pointerdown',on,{passive:false}); b.addEventListener('pointerup',off);
+  b.addEventListener('pointerdown',on); b.addEventListener('pointerup',off);
   b.addEventListener('pointerleave',off); b.addEventListener('pointercancel',off); });
-(function(){
-  const block=e=>{ e.preventDefault(); e.stopPropagation(); };
-  document.querySelectorAll('#drivePad button, #wirePanel .wrow button, #skyBtn, #rockBtn, #normBtn, #fsBtn').forEach(b=>{
-    b.addEventListener('contextmenu', block);
-    b.addEventListener('selectstart', block);
-    b.addEventListener('dragstart', block);
-  });
-  document.addEventListener('contextmenu', e=>{
-    const t=e.target;
-    if(t&&t.closest&&t.closest('#drivePad, #wirePanel .wrow, #skyBtn, #rockBtn, #normBtn, #fsBtn, .rbtn')) e.preventDefault();
-  });
-})();
 syncAdminBtn();
 
 /* ---- sky watch + live neighbour yatras + serving stall crews ---- */
@@ -2443,7 +2263,7 @@ function flightsTick(dt){ if(!GL||!flights.length) return;
     const e=f.t<.5?2*f.t*f.t:1-Math.pow(-2*f.t+2,2)/2;
     f.m.position.set(f.fx+(f.tx-f.fx)*e,2.0+Math.sin(e*Math.PI)*.6,f.fz+(f.tz-f.fz)*e); } }
 
-document.getElementById('freshBtn').onclick=()=>{ if(confirm('Start fresh from the road? (clears the saved utsav)')){ try{localStorage.removeItem(KEY);}catch(e){} location.reload(); } };
+document.getElementById('freshBtn').onclick=()=>{ if(confirm('Start fresh from the road? (clears the saved utsav)')){ try{localStorage.removeItem(storageKey());}catch(e){} location.reload(); } };
 
 /* ---- living city: people, traffic, wire event, tour, water anim ---- */
 function makeFolk(shirt,skin,female){ const g=new THREE.Group();
@@ -2473,16 +2293,17 @@ function makeFolk(shirt,skin,female){ const g=new THREE.Group();
   g.userData={armL,armR,legL,legR,ph:Math.random()*7};
   return g; }
 function animPerson(g,t,mode){ const u=g.userData; if(!u||!u.armL) return;
-  if(mode==='drum'){ const s=Math.sin(t*14); u.armL.rotation.x=-.9+s*.5; u.armR.rotation.x=-.9-s*.5;
+  if(mode==='drum'){ const s=Math.sin(t*14); u.armL.rotation.set(-.9+s*.5,0,-.18); u.armR.rotation.set(-.9-s*.5,0,.18);
     u.legL.rotation.x=Math.sin(t*7)*.3; u.legR.rotation.x=-Math.sin(t*7)*.3; }
   else if(mode==='dance'||mode==='cheer'){ u.armL.rotation.set(0,0,2.5+Math.sin(t*5)*.3); u.armR.rotation.set(0,0,-2.5-Math.sin(t*5+1)*.3);
     u.legL.rotation.x=Math.sin(t*8)*.55; u.legR.rotation.x=-Math.sin(t*8)*.55;
     g.position.y=Math.abs(Math.sin(t*8))*.1; }
-  else if(mode==='serve'){ u.armL.rotation.x=-1.1+Math.sin(t*5)*.25; u.armR.rotation.x=-1.1-Math.sin(t*5)*.25;
+  else if(mode==='serve'){ u.armL.rotation.set(-1.15+Math.sin(t*5)*.25,0,-.15); u.armR.rotation.set(-1.15-Math.sin(t*5)*.25,0,.15);
     u.legL.rotation.x=0; u.legR.rotation.x=0; }
-  else if(mode==='walk'){ u.armL.rotation.x=Math.sin(t*8)*.5; u.armR.rotation.x=-Math.sin(t*8)*.5;
+  else if(mode==='walk'){ u.armL.rotation.set(Math.sin(t*8)*.5,0,0); u.armR.rotation.set(-Math.sin(t*8)*.5,0,0);
     u.legL.rotation.x=-Math.sin(t*8)*.5; u.legR.rotation.x=Math.sin(t*8)*.5; }
-  else if(mode==='groove'){ const s=Math.sin(t*3+u.ph); u.armL.rotation.x=s*.25; u.armR.rotation.x=-s*.25;
+  else if(mode==='groove'){ const s=Math.sin(t*3+u.ph); u.armL.rotation.set(s*.25,0,0); u.armR.rotation.set(-s*.25,0,0);
+    u.legL.rotation.x=0; u.legR.rotation.x=0;
     g.rotation.y=Math.sin(t*1.5)*.15; } }
 function followerCrew(b){ const crew=[];
   const d0=makeFolk(0xf3e2c2); const drum=new THREE.Mesh(new THREE.CylinderGeometry(.2,.2,.42,10),
@@ -2570,8 +2391,8 @@ function ytourPos(e,out){ const d=e*YTOURTOT; let i=1;
   out.set(YTOUR[i-1][0]+(YTOUR[i][0]-YTOUR[i-1][0])*t,0,YTOUR[i-1][1]+(YTOUR[i][1]-YTOUR[i-1][1])*t); return out; }
 let lakeWaves=[], lakeFx={};
 document.querySelectorAll('#wirePanel button').forEach(b=>{ const k=b.dataset.w;
-  const on=e=>{ e.preventDefault(); try{ b.setPointerCapture(e.pointerId); }catch(_){} WIRE[k]=1; }; const off=e=>{ e.preventDefault(); WIRE[k]=0; };
-  b.addEventListener('pointerdown',on,{passive:false}); b.addEventListener('pointerup',off);
+  const on=e=>{ e.preventDefault(); WIRE[k]=1; }; const off=e=>{ e.preventDefault(); WIRE[k]=0; };
+  b.addEventListener('pointerdown',on); b.addEventListener('pointerup',off);
   b.addEventListener('pointerleave',off); b.addEventListener('pointercancel',off); });
 document.getElementById('fsBtn').onclick=()=>{ try{
   if(document.fullscreenElement) document.exitFullscreen();
@@ -2880,7 +2701,6 @@ renderStatus();
     renderer.domElement.addEventListener('pointercancel',aartiUp);
     animate(); }
   document.getElementById('loader').style.display='none'; window.__utsavBooted=true;
-  try{ LivePresence.connect(); }catch(e){}
   if(!GL){ toast('3D unavailable — murti photo + pooja panel work below'); return; }
   if(S.murtiChosen) setIdol(S.idol,true);
   if(S.stage==='home') toast('Welcome to the temple — do Day-1 pooja, then carry Bappa to the ratha');

@@ -379,19 +379,43 @@ function readVol(){ try{ const raw=localStorage.getItem(VOL_KEY); if(!raw) retur
 function readPack(){ try{ const p=String(localStorage.getItem(PACK_KEY)||'').toLowerCase(); if(p==='dj') return 'dj'; }catch(e){} return 'classical'; }
 const _vol0=readVol();
 const BGM={
-  files:{ world:'BG music 1 .mp3', sky:'BG MUSIC SKY.mp3', crane:'cranenimarjanam.mp3', yatra1:'YATRA STARTS1.mp3', yatra2:'YATRA STARTS2.mp3' },
-  world:null, sky:null, crane:null, yatra1:null, yatra2:null,
+  shared:{ opening:'Songs/OPENING.mp3', sky:'Songs/SKY.mp3', rock:'Songs/ROCK.mp3' },
+  packs:{
+    classical:{ yatra:['YATRACLASSICAL1.mp3','YATRACLASSICAL2.mp3'], nim:'YATRACLASSICALNIMARJANAM.mp3' },
+    dj:{ yatra:['YATRADJ1.mp3','YATRADJ2.mp3','YATRADJ3.mp3'], nim:'YATRADJNIMARJANAM.mp3' }
+  },
+  opening:null, sky:null, rock:null, nim:null, yatra0:null, yatra1:null, yatra2:null,
   pack:readPack(),
-  level:_vol0.level, muted:_vol0.muted, mode:'world', tok:0, craneOn:false, skyWant:false, yatraWant:false, yatraIdx:0, current:null,
-  keys(){ return ['world','sky','crane','yatra1','yatra2']; },
-  folder(){ return this.pack==='dj'?'DJ':'classical'; },
-  fileOf(which){ return this.files[which]||this.files.world; },
-  src(which, folder){ return encodeURI((folder||this.folder())+'/'+this.fileOf(which)); },
+  level:_vol0.level, muted:_vol0.muted, mode:'opening', tok:0,
+  openWant:false, skyWant:false, rockWant:false, nimWant:false, yatraWant:false, yatraIdx:0, current:null,
+  keys(){ return ['opening','sky','rock','nim','yatra0','yatra1','yatra2']; },
+  folder(pack){ return (pack||this.pack)==='dj'?'DJ':'classical'; },
+  packFiles(pack){ return this.packs[(pack||this.pack)==='dj'?'dj':'classical']; },
+  yatraCount(pack){ return this.packFiles(pack).yatra.length; },
+  isYatra(which){ return typeof which==='string'&&which.indexOf('yatra')===0; },
+  src(which, pack){
+    if(which==='opening'||which==='sky'||which==='rock') return encodeURI(this.shared[which]);
+    const files=this.packFiles(pack);
+    if(which==='nim') return encodeURI(this.folder(pack)+'/'+files.nim);
+    if(this.isYatra(which)){
+      const i=Math.max(0, parseInt(which.slice(5),10)||0);
+      const list=files.yatra;
+      return encodeURI(this.folder(pack)+'/'+list[i%list.length]);
+    }
+    return encodeURI(this.shared.opening);
+  },
   out(){ return (this.muted||this.level<=0.001)?0:this.level; },
-  craneOut(){ return Math.min(1, this.out()*1.3); },
-  desired(){ if(this.craneOn) return 'crane'; if(this.skyWant) return 'sky'; if(this.yatraWant) return this.yatraIdx===1?'yatra2':'yatra1'; return 'world'; },
-  apply(){ const v=this.out(), c=this.craneOut();
-    this.keys().forEach(k=>{ const a=this[k]; if(a) a.volume=k==='crane'?c:v; }); },
+  nimOut(){ return Math.min(1, this.out()*1.3); },
+  desired(){
+    if(this.skyWant) return 'sky';
+    if(this.rockWant) return 'rock';
+    if(this.nimWant) return 'nim';
+    if(this.yatraWant) return 'yatra'+Math.max(0, Math.min(this.yatraIdx, this.yatraCount()-1));
+    if(this.openWant) return 'opening';
+    return null;
+  },
+  apply(){ const v=this.out(), n=this.nimOut();
+    this.keys().forEach(k=>{ const a=this[k]; if(a) a.volume=k==='nim'?n:v; }); },
   save(){ try{ localStorage.setItem(VOL_KEY, JSON.stringify({level:this.level, muted:this.muted})); }catch(e){} },
   savePack(){ try{ localStorage.setItem(PACK_KEY, this.pack); }catch(e){} },
   syncUi(){ const s=document.getElementById('volSlider'), m=document.getElementById('volMute'), d=document.getElementById('djBtn');
@@ -405,45 +429,59 @@ const BGM={
   dump(){ this.keys().forEach(k=>{ const a=this[k]; if(!a) return; this.stop(a);
     try{ a.removeAttribute('src'); a.load(); }catch(e){} this[k]=null; }); this.current=null; },
   setPack(pack){ const next=pack==='dj'?'dj':'classical'; if(next===this.pack&&this[this.desired()]) return;
-    this.pack=next; this._djMiss=0; this.savePack(); this.dump(); this.syncUi(); this.refresh(); },
+    this.pack=next; this.yatraIdx=0; this.savePack(); this.dump(); this.syncUi(); this.refresh(); },
   togglePack(){ this.setPack(this.pack==='dj'?'classical':'dj'); },
   stop(a){ if(!a) return; a.want=false; try{a.pause();}catch(e){} try{a.currentTime=0;}catch(e){} },
   pauseKeep(a){ if(!a) return; a.want=false; try{a.pause();}catch(e){} },
   el(which){ let a=this[which]; if(a) return a;
-    const file=this.fileOf(which);
-    a=new Audio(); a.loop=!(which==='yatra1'||which==='yatra2'); a.preload='auto';
-    a.volume=which==='crane'?this.craneOut():this.out();
+    a=new Audio(); a.loop=!this.isYatra(which); a.preload='auto';
+    a.volume=which==='nim'?this.nimOut():this.out();
     a.addEventListener('error',()=>{
-      if(this.pack==='dj'&&a.dataset.fb!=='c'&&a.dataset.fb!=='r'){
+      if(which==='opening'||which==='sky'||which==='rock') return;
+      if(this.pack==='dj'&&a.dataset.fb!=='c'){
         a.dataset.fb='c';
-        try{ if(!this._djMiss){ this._djMiss=1; toast('DJ songs not in yet — playing classical'); } }catch(e){}
         try{ a.src=this.src(which,'classical'); }catch(e){}
-        return;
       }
-      if(a.dataset.fb!=='r'){ a.dataset.fb='r'; try{ a.src=encodeURI(file); }catch(e){} }
     });
-    if(which==='yatra1'||which==='yatra2'){
-      a.addEventListener('ended',()=>{ if(!this.yatraWant||this.craneOn||this.skyWant) return;
-        this.yatraIdx=which==='yatra1'?1:0; this.current=null; this.refresh(); }); }
+    if(this.isYatra(which)){
+      a.addEventListener('ended',()=>{ if(!this.yatraWant||this.nimWant||this.skyWant||this.rockWant) return;
+        this.yatraIdx=(this.yatraIdx+1)%this.yatraCount(); this.current=null; this.refresh(); }); }
     a.src=this.src(which); this[which]=a; return a; },
-  go(which){ const tok=++this.tok; this.current=which; this.mode=which==='yatra2'||which==='yatra1'?'yatra':which;
+  go(which){ if(!which) return;
+    const tok=++this.tok; this.current=which; this.mode=this.isYatra(which)?'yatra':which;
     this.keys().forEach(k=>{ if(k===which) return; const a=this[k]; if(!a) return;
-      if(k==='crane'||((k==='yatra1'||k==='yatra2')&&!this.yatraWant)) this.stop(a); else this.pauseKeep(a); });
+      if(k==='nim'||(this.isYatra(k)&&!this.yatraWant)) this.stop(a); else this.pauseKeep(a); });
     if(!this.out()) return;
-    const on=this.el(which); on.want=true; on.volume=which==='crane'?this.craneOut():this.out();
-    try{ if(which==='crane') on.currentTime=0;
-      else if((which==='yatra1'||which==='yatra2')&&(on.ended||(on.duration&&on.currentTime>=on.duration-0.2))) on.currentTime=0; }catch(e){}
+    const on=this.el(which); on.want=true; on.volume=which==='nim'?this.nimOut():this.out();
+    try{
+      if(this.isYatra(which)&&(on.ended||(on.duration&&on.currentTime>=on.duration-0.2))) on.currentTime=0;
+    }catch(e){}
     try{ const p=on.play(); if(p&&p.then) p.then(()=>{ if(!on.want||tok!==this.tok) this.pauseKeep(on); }).catch(()=>{}); }catch(e){} },
-  refresh(){ const next=this.desired(); const a=this[next];
+  refresh(){ const next=this.desired();
+    if(!next){ this.keys().forEach(k=>this.pauseKeep(this[k])); this.current=null; return; }
+    const a=this[next];
     if(this.current===next&&a&&a.want&&!a.paused){ this.apply(); return; }
     this.go(next); },
   start(){ this.refresh(); },
-  play(which){ if(which==='sky') this.setSky(true); else this.setSky(false); },
-  setSky(on){ this.skyWant=!!on; this.refresh(); },
-  setYatra(on){ this.yatraWant=!!on; if(on){ this.el('yatra1'); this.el('yatra2'); } else { this.yatraIdx=0; this.stop(this.yatra1); this.stop(this.yatra2); }
+  play(which){
+    if(which==='sky'){ this.skyWant=true; this.rockWant=false; }
+    else if(which==='rock'){ this.rockWant=true; this.skyWant=false; }
+    else { this.skyWant=false; this.rockWant=false; }
+    this.refresh();
+  },
+  setSky(on){ this.skyWant=!!on; if(on) this.rockWant=false; this.refresh(); },
+  setRock(on){ this.rockWant=!!on; if(on) this.skyWant=false; this.refresh(); },
+  setOpening(on){ this.openWant=!!on; this.refresh(); },
+  setYatra(on){ this.yatraWant=!!on;
+    if(on){ this.openWant=true; for(let i=0;i<this.yatraCount();i++) this.el('yatra'+i); }
+    else { this.yatraIdx=0; for(let i=0;i<3;i++) this.stop(this['yatra'+i]); }
     this.refresh(); },
-  playCrane(){ if(this.craneOn) return; this.craneOn=true; this.refresh(); },
-  stopCrane(){ const was=this.craneOn; this.craneOn=false; this.stop(this.crane); if(was) this.refresh(); } };
+  setNim(on){
+    if(on){ if(this.nimWant){ this.refresh(); return; } this.nimWant=true; try{ this.el('nim').currentTime=0; }catch(e){} }
+    else { this.nimWant=false; this.stop(this.nim); }
+    this.refresh(); },
+  playCrane(){ this.setNim(true); },
+  stopCrane(){ this.setNim(false); } };
 window.BGM=BGM;
 (function bindVol(){ const s=document.getElementById('volSlider'), m=document.getElementById('volMute'), bar=document.getElementById('volBar'), d=document.getElementById('djBtn');
   if(!s||!m) return; BGM.syncUi();
@@ -1076,6 +1114,7 @@ async function setIdol(n,first=false){
   S.idol=n; save();
   if(!first&&!S.murtiChosen){ S.murtiChosen=true; save(); document.getElementById('strip').classList.add('gone');
     SHOPW.darshan=false; SHOPW.pause=0; altarHidden=true;
+    try{ ac(); BGM.setOpening(true); }catch(e){}
     if(GL){ if(homeMurtiMesh) homeMurtiMesh.visible=false;
       if(homeGroup&&homeGroup.userData.halo) homeGroup.userData.halo.visible=false;
       try{soldOut();}catch(e){} try{startShopWalk();}catch(e){} } }
@@ -1195,7 +1234,7 @@ document.getElementById('carryBtn').onclick=()=>{
 };
 function newUtsav(){ S.stage='home'; S.idolOnRatha=false; S.day=1; S.days={}; S.nimDone=false;
   NIM.done=false; NIM.active=false; NIM.carrying=false; carrying=false; yatra=false; parkDrive=false; yatraT=0;
-  try{ BGM.setYatra(false); BGM.setSky(false); BGM.stopCrane(); }catch(e){}
+  try{ BGM.setYatra(false); BGM.setSky(false); BGM.setRock(false); BGM.stopCrane(); BGM.setOpening(true); }catch(e){}
   if(GL){ chart.visible=false; chart.position.set(0,0,CHARIOT_START); chartYawTarget=0; mountFreshIdol(true);
     altarHidden=false;
     if(homeMurtiMesh){ homeMurtiMesh.visible=true; homeMurtiMesh.scale.setScalar(1); }
@@ -1475,7 +1514,7 @@ function craneUpdate(dt){
         if(playerCarrier)playerCarrier.visible=false; NIM.carrying=false;
         idolHolder.visible=false; S.idolOnRatha=false; // stays immersed — a fresh idol mounts on New Utsav
         NIM.active=false; NIM.done=true; S.nimDone=true; save();
-        try{ BGM.setYatra(false); BGM.stopCrane(); }catch(e){}
+        try{ BGM.setYatra(false); }catch(e){}
         yawTarget=0.6; cableLen=2.2; craneDest={x:4.5,z:-455};
         setStage('done');
         document.getElementById('certBtn').disabled=false;
@@ -1897,11 +1936,14 @@ function buildQueue(){
       e.b.x=sl[0]; e.b.z=sl[1]; e.b.mode='wait';
       if(e.b.crew) e.b.crew.forEach(f=>{ f.g.visible=true; f.g.position.set(sl[0]+f.side,0,sl[1]+2.6); }); }); }
   document.getElementById('qBoard').style.display='block';
-  renderQueue(); return true; }
+  renderQueue();
+  try{ BGM.setNim(true); }catch(e){}
+  return true; }
 function queueTick(dt){
   if(!Q.on||!GL||NIM.active) return;
   if(Q.idx>=Q.list.length){ Q.on=false; Q.phase=''; craneDest={x:4.5,z:-455};
     document.getElementById('qBoard').style.display='none';
+    try{ BGM.setNim(false); }catch(e){}
     shankh(); toast('City nimarjanam complete — Pudhchya Varshi Lavkar Ya 🙏');
     burst(fw,DROP.x,8,DROP.z,150,7,7,['#ffd93c','#fff']); refreshNimBtn(); return; }
   const e=Q.list[Q.idx];
@@ -2433,6 +2475,7 @@ let skyMode=false,skyWatch={k:'you'},rockView=false;
 function toggleRock(){ rockView=!rockView; if(rockView&&skyMode) toggleSky();
   document.getElementById('rockBtn').classList.toggle('on',rockView);
   controls.maxDistance=rockView?700:160; controls.maxPolarAngle=rockView?Math.PI*0.62:Math.PI*0.52;
+  try{ BGM.play(rockView?'rock':'world'); }catch(e){}
   }
 document.getElementById('rockBtn').onclick=()=>toggleRock();
 function skyPos(out){ let x=0,z=-10;
@@ -2944,7 +2987,11 @@ renderStatus();
       if(tok){ const c=parseInt(q.get('c')||'',16);
         LivePresence.connect(presence,{ id, n:q.get('n')||'Guest', f:q.get('f')||'Parivar', c:Number.isFinite(c)?c:0x12c46a, av:q.get('av')||'👦', eventId:q.get('eventId')||'' }, tok); } }
   }catch(e){}
-  try{ if(S.idolOnRatha&&!S.nimDone&&!NIM.done) BGM.setYatra(true); else BGM.play('world'); }catch(e){}
+  try{
+    BGM.openWant=!!S.murtiChosen;
+    if(S.idolOnRatha&&!S.nimDone&&!NIM.done) BGM.setYatra(true);
+    else BGM.refresh();
+  }catch(e){}
   if(!GL){ toast('3D unavailable — murti photo + pooja panel work below'); return; }
   if(S.murtiChosen) setIdol(S.idol,true);
   if(S.stage==='home') toast('Welcome to the temple — do Day-1 pooja, then carry Bappa to the ratha');
